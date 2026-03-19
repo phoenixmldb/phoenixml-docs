@@ -28,6 +28,12 @@ This documentation assumes you're comfortable with C# and .NET. We'll draw paral
 | SQL | XQuery — query language for hierarchical data |
 | `jq` for JSON | XPath/XQuery — the XML equivalents, with more power |
 
+## Tools
+
+- **[xslt CLI](tools/xslt-cli.md)** — Run XSLT transformations from the command line
+- **[xquery CLI](tools/xquery-cli.md)** — Query XML documents with XQuery expressions
+- **[Crucible](tools/crucible.md)** — Build static documentation sites from Markdown
+
 ## About This Site
 
 This documentation is built with [Crucible](https://github.com/phoenixmldb/crucible), a static site generator powered by the [PhoenixmlDb](https://github.com/phoenixmldb) XSLT 4.0 engine. The site you're reading was transformed from Markdown through XML via XSLT — an example of the technology it teaches.
