@@ -1,7 +1,7 @@
 ---
 title: XQuery vs XSLT
 description: When to use XQuery and when to use XSLT — a practical decision guide
-sort: 4
+sort: 9
 ---
 
 # XQuery vs XSLT

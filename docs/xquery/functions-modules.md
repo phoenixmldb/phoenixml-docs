@@ -1,7 +1,7 @@
 ---
 title: Functions and Modules
 description: Writing reusable XQuery functions and organizing code into modules
-sort: 3
+sort: 8
 ---
 
 # Functions and Modules

@@ -15,6 +15,7 @@ XSLT is how you turn XML data into HTML pages, other XML formats, JSON, CSV, or 
 - **[Your First Transform](first-transform.md)** — A hands-on introduction. Transform XML to HTML, step by step.
 - **[Template Matching](template-matching.md)** — The core paradigm shift: declarative rules instead of imperative code.
 - **[Output Methods](output-methods.md)** — Producing HTML, XML, JSON, CSV, and text from the same source data.
+- **[Extensibility](extensibility.md)** — Custom functions, packages, extension instructions, and .NET integration.
 
 ## Instructions Reference
 
