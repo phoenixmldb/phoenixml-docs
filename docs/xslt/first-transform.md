@@ -127,7 +127,7 @@ Let's mark products over $50:
 </xsl:for-each>
 ```
 
-`xsl:if` is a simple conditional — like C#'s `if` without `else`. For if/else logic, use `xsl:choose` (covered in [Built-in Instructions](instructions.md)).
+`xsl:if` is a simple conditional — like C#'s `if` without `else`. For if/else logic, use `xsl:choose` (covered in [Instructions Reference](instructions/index.md)).
 
 ## Step 4: Accessing Attributes
 
@@ -231,5 +231,5 @@ xslt catalog.xslt catalog.xml -o catalog.html
 This tutorial covered the basics — `xsl:value-of`, `xsl:for-each`, `xsl:if`, `xsl:sort`, attribute value templates, and template matching. The next pages cover:
 
 - [Template Matching](template-matching.md) — the paradigm shift from imperative to declarative
-- [Built-in Instructions](instructions.md) — the complete set of XSLT instructions
+- [Instructions Reference](instructions/index.md) — the complete set of XSLT instructions
 - [Output Methods](output-methods.md) — producing HTML, XML, JSON, and text

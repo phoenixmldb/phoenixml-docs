@@ -10,12 +10,35 @@ XSLT (Extensible Stylesheet Language Transformations) is a declarative language 
 
 XSLT is how you turn XML data into HTML pages, other XML formats, JSON, CSV, or plain text. It's the transformation layer that makes XML practical.
 
-## What's Here
+## Getting Started
 
-- **[Your First Transform](first-transform.md)** — A hands-on introduction. We'll take an XML document and transform it into HTML, step by step.
-- **[Template Matching](template-matching.md)** — The core of XSLT: how template rules match nodes and produce output. This is the paradigm shift from imperative to declarative thinking.
-- **[Built-in Instructions](instructions.md)** — `xsl:for-each`, `xsl:if`, `xsl:choose`, `xsl:variable`, and the other instructions you'll use daily.
+- **[Your First Transform](first-transform.md)** — A hands-on introduction. Transform XML to HTML, step by step.
+- **[Template Matching](template-matching.md)** — The core paradigm shift: declarative rules instead of imperative code.
 - **[Output Methods](output-methods.md)** — Producing HTML, XML, JSON, CSV, and text from the same source data.
+
+## Instructions Reference
+
+The complete set of XSLT 3.0/4.0 instructions, organized by purpose:
+
+- **[Instructions Overview](instructions/index.md)** — Index of all instruction categories
+- **[Output](instructions/output.md)** — value-of, text, sequence, message
+- **[Control Flow](instructions/control-flow.md)** — if, choose, switch (4.0), where-populated
+- **[Variables and Parameters](instructions/variables-parameters.md)** — variable, param, static params, tunnel params
+- **[Iteration and Sorting](instructions/iteration-sorting.md)** — for-each, sort, iterate/break/next-iteration
+- **[Grouping](instructions/grouping.md)** — for-each-group with all four modes
+- **[Copying and Identity](instructions/copying-identity.md)** — copy, copy-of, identity transform pattern
+- **[Node Construction](instructions/node-construction.md)** — element, attribute, namespace, AVTs
+- **[Multiple Outputs](instructions/multiple-outputs.md)** — result-document, named output formats
+- **[Functions](instructions/functions.md)** — Defining reusable XPath functions
+- **[Keys](instructions/keys.md)** — Indexing for fast lookup
+- **[String Analysis](instructions/analyze-string.md)** — Regex-based processing
+- **[Error Handling](instructions/error-handling.md)** — try/catch, assert, fallback
+- **[Merging](instructions/merge.md)** — Combining sorted inputs
+- **[Maps, Arrays, Records](instructions/maps-arrays.md)** — Structured data (3.0/4.0)
+- **[Streaming](instructions/streaming.md)** — Large document processing with accumulators
+- **[Packages](instructions/packages.md)** — Reusable stylesheet libraries
+- **[Dynamic Evaluation](instructions/dynamic-evaluation.md)** — Runtime XPath evaluation
+- **[Number Formatting](instructions/number-formatting.md)** — Numbering, decimal formats, character maps
 
 ## The Mental Model
 

@@ -32,7 +32,7 @@ Returns today's date.
 current-date()   => 2026-03-19
 ```
 
-**C# equivalent:** `DateOnly.FromDateTime(DateTime.Now)` or `DateTime.Today`
+**C# equivalent:** `DateTime.Now.ToString("yyyy-MM-dd")` 
 
 **Note:** The returned date includes timezone information from the evaluation context. Within a single XPath evaluation, `current-date()` always returns the same value — it's captured once at the start, not each time the function is called.
 
@@ -48,7 +48,7 @@ Returns the current time.
 current-time()   => 14:30:00-05:00
 ```
 
-**C# equivalent:** `TimeOnly.FromDateTime(DateTime.Now)`
+**C# equivalent:** `DateTimeOffset.Now.ToString("HH:mm:sszzz")`
 
 ---
 
@@ -62,7 +62,7 @@ Returns the current date and time.
 current-dateTime()   => 2026-03-19T14:30:00-05:00
 ```
 
-**C# equivalent:** `DateTimeOffset.Now`
+**C# equivalent:** `DateTimeOffset.Now.ToString("yyyy-MM-ddTHH:mm:sszzz")`
 
 **Important:** Like `current-date()`, this value is stable within a single evaluation. If your XSLT processes 1000 documents, they all see the same timestamp.
 
