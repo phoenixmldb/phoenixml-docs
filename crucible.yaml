@@ -1,0 +1,5 @@
+# Crucible documentation site configuration
+title: PhoenixML Documentation
+base-url: /
+source: ./docs
+output: ./dist
