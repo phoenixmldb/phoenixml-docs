@@ -13,7 +13,7 @@ XPath is not a standalone tool. It's embedded in XSLT (for matching and selectin
 ## What's Here
 
 - **[Path Expressions](path-expressions.md)** — The core of XPath: navigating the document tree with `/`, `//`, predicates, and axes. This is where most of your day-to-day work happens.
-- **[Functions](functions.md)** — Built-in functions for strings, numbers, dates, sequences, and more. XPath 4.0 has over 200 functions.
+- **[Functions](functions/index.md)** — Comprehensive reference for XPath 4.0's 240+ built-in functions, organized by category: string, numeric, date/time, sequence, map, array, math, higher-order, and more.
 - **[Operators and Comparisons](operators.md)** — Arithmetic, comparison, logical operators, and the difference between value and general comparisons.
 - **[Data Types](data-types.md)** — How XPath's type system works, type casting, and interaction with schema types.
 
