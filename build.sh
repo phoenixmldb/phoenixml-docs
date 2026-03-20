@@ -13,47 +13,75 @@ DOCS_DIR="$SCRIPT_DIR/docs"
 INTERMEDIATE="$SCRIPT_DIR/.intermediate"
 OUTPUT="${1:-$SCRIPT_DIR/dist}"
 
-# .NET XML documentation sources (from monorepo build output)
-XMLDOC_DIR="../phoenixml/TempTestRunner/bin/Debug/net10.0"
+# .NET XML documentation sources
+XMLDOC_DIR="${XMLDOC_DIR:-../phoenixml/TempTestRunner/bin/Debug/net10.0}"
 
+# Internal namespaces to exclude from API docs
+EXCLUDE_NS="PhoenixmlDb.Core.Storage"
+EXCLUDE_NS="$EXCLUDE_NS,PhoenixmlDb.Xdm.Serialization"
+EXCLUDE_NS="$EXCLUDE_NS,PhoenixmlDb.XQuery.Ast"
+EXCLUDE_NS="$EXCLUDE_NS,PhoenixmlDb.XQuery.Analysis"
+EXCLUDE_NS="$EXCLUDE_NS,PhoenixmlDb.XQuery.Execution"
+EXCLUDE_NS="$EXCLUDE_NS,PhoenixmlDb.XQuery.Optimizer"
+EXCLUDE_NS="$EXCLUDE_NS,PhoenixmlDb.XQuery.Parser.Grammar"
+EXCLUDE_NS="$EXCLUDE_NS,PhoenixmlDb.XQuery.Functions"
+EXCLUDE_NS="$EXCLUDE_NS,PhoenixmlDb.Xslt.Ast"
+EXCLUDE_NS="$EXCLUDE_NS,PhoenixmlDb.Xslt.Engine"
+
+TOTAL_START=$(date +%s%N)
 echo "=== PhoenixML Documentation Build ==="
 
 # Step 1: Parse Markdown docs into intermediate XML
 echo ""
-echo "--- Step 1: Parsing Markdown documentation ---"
+echo "--- Parsing Markdown ---"
+STEP_START=$(date +%s%N)
 rm -rf "$INTERMEDIATE" "$OUTPUT"
-dotnet run --no-restore --project "$CRUCIBLE_CLI" -- \
+dotnet run --no-build --project "$CRUCIBLE_CLI" -- \
   build --stage ParseOnly \
   -s "$DOCS_DIR" -o "$INTERMEDIATE" \
   --title "PhoenixML Documentation" \
   2>&1
+STEP_END=$(date +%s%N)
+echo "  $(( (STEP_END - STEP_START) / 1000000 ))ms"
 
-# Step 2: Generate API reference XML using XSLT
+# Step 2: Generate API reference XML (assemblies processed in parallel)
 echo ""
-echo "--- Step 2: Generating API reference from .NET XML docs ---"
-dotnet run --no-restore --project "$API_GENERATOR" -- \
+echo "--- Generating API reference ---"
+STEP_START=$(date +%s%N)
+dotnet run --no-build --project "$API_GENERATOR" -- \
   "$XSLT_STYLESHEET" \
   "$INTERMEDIATE" \
   "$XMLDOC_DIR" \
+  --exclude-namespaces "$EXCLUDE_NS" \
   2>&1
+STEP_END=$(date +%s%N)
+echo "  $(( (STEP_END - STEP_START) / 1000000 ))ms"
 
 # Step 3: Update site manifest with API pages
 echo ""
-echo "--- Step 3: Updating site manifest ---"
+echo "--- Updating manifest ---"
+STEP_START=$(date +%s%N)
 python3 "$SCRIPT_DIR/api/update-manifest.py" "$INTERMEDIATE"
+STEP_END=$(date +%s%N)
+echo "  $(( (STEP_END - STEP_START) / 1000000 ))ms"
 
-# Step 4: Transform combined intermediate to HTML
+# Step 4: Transform to HTML
 echo ""
-echo "--- Step 4: Transforming to HTML ---"
-dotnet run --no-restore --project "$CRUCIBLE_CLI" -- \
+echo "--- Transforming to HTML ---"
+STEP_START=$(date +%s%N)
+dotnet run --no-build --project "$CRUCIBLE_CLI" -- \
   build --stage TransformOnly \
   -s "$INTERMEDIATE" -o "$OUTPUT" \
   --timing \
   2>&1
+STEP_END=$(date +%s%N)
+echo "  $(( (STEP_END - STEP_START) / 1000000 ))ms"
 
 # Cleanup
 rm -rf "$INTERMEDIATE"
 
-echo ""
+TOTAL_END=$(date +%s%N)
 page_count=$(find "$OUTPUT" -name "*.html" | wc -l)
-echo "=== Build complete: $page_count pages in $OUTPUT ==="
+total_seconds=$(( (TOTAL_END - TOTAL_START) / 1000000000 ))
+echo ""
+echo "=== $page_count pages built in ${total_seconds}s ==="

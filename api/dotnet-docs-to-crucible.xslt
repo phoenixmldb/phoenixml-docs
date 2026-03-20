@@ -22,6 +22,9 @@
   <!-- Parameters set by the build script -->
   <xsl:param name="assembly-name" select="''"/>
   <xsl:param name="base-path" select="'api'"/>
+  <!-- Comma-separated list of namespace prefixes to exclude (e.g., "PhoenixmlDb.Core.Storage,PhoenixmlDb.Xslt.Ast") -->
+  <xsl:param name="exclude-namespaces" select="''"/>
+  <xsl:variable name="excluded" select="tokenize($exclude-namespaces, ',')"/>
 
   <!--
     Strategy: Generate one output document per type (class, interface, struct, enum).
@@ -106,7 +109,13 @@
   <!-- ============================================================ -->
   <xsl:template match="/doc">
     <xsl:variable name="asm" select="if ($assembly-name != '') then $assembly-name else assembly/name"/>
-    <xsl:variable name="types" select="members/member[starts-with(@name, 'T:')]"/>
+    <!-- Filter types: exclude namespaces matching the exclude list -->
+    <xsl:variable name="all-types" select="members/member[starts-with(@name, 'T:')]"/>
+    <xsl:variable name="types" select="$all-types[
+      not(some $ex in $excluded satisfies
+        starts-with(my:namespace-of(my:member-name(@name)), $ex)
+      )
+    ]"/>
     <xsl:variable name="all-members" select="members/member"/>
 
     <!-- Generate the namespace index page as the primary output -->
