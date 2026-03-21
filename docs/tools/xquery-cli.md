@@ -313,4 +313,4 @@ watch -n 5 'xquery "count(//error)" /var/log/app/*.xml'
 
 ## Using from .NET Code
 
-The same engine is available as a library. See [XQuery Extensibility](/xquery/extensibility.md) for programmatic usage including setting variables, registering extension functions, and reading results.
+The same engine is available as a library. See [XQuery Extensibility](/language-reference/xquery/extensibility.md) for programmatic usage including setting variables, registering extension functions, and reading results.

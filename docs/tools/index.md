@@ -39,6 +39,6 @@ crucible build
 
 All tools require:
 - **.NET 10 SDK** or later
-- **ICU globalization** — see [Unicode and .NET Requirements](/xml-foundations/unicode-and-dotnet.md) for details
+- **ICU globalization** — see [Unicode and .NET Requirements](/language-reference/xml-foundations/unicode-and-dotnet.md) for details
 
 Ensure `DOTNET_SYSTEM_GLOBALIZATION_INVARIANT` is **not** set to `1` in your environment.

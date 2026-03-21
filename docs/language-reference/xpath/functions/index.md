@@ -45,7 +45,7 @@ XPath's function library is fixed — you cannot define custom functions in XPat
 - In **XQuery**, use `declare function` to define functions callable from XPath expressions within your queries
 - In **.NET**, the PhoenixmlDb engine supports registering extension functions from C# code
 
-See the [XSLT](/xslt/index.md) and [XQuery](/xquery/index.md) sections for details on writing custom functions. The built-in functions documented here are available in all three contexts.
+See the [XSLT](../../xslt/index.md) and [XQuery](../../xquery/index.md) sections for details on writing custom functions. The built-in functions documented here are available in all three contexts.
 
 ## Quick Examples
 

@@ -226,4 +226,4 @@ foreach (var (href, content) in transformer.SecondaryResultDocuments)
     File.WriteAllText(Path.Combine(outputDir, href), content);
 ```
 
-See [XSLT Extensibility](/xslt/extensibility.md) for details on programmatic usage.
+See [XSLT Extensibility](/language-reference/xslt/extensibility.md) for details on programmatic usage.
