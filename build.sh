@@ -6,7 +6,6 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
-CRUCIBLE_CLI="../crucible/src/Crucible.Cli"
 API_GENERATOR="$SCRIPT_DIR/api/ApiDocGenerator"
 XSLT_STYLESHEET="$SCRIPT_DIR/api/dotnet-docs-to-crucible.xslt"
 DOCS_DIR="$SCRIPT_DIR/docs"
@@ -29,17 +28,17 @@ EXCLUDE_NS="$EXCLUDE_NS,PhoenixmlDb.Xslt.Ast"
 EXCLUDE_NS="$EXCLUDE_NS,PhoenixmlDb.Xslt.Engine"
 
 TOTAL_START=$(date +%s%N)
-echo "=== PhoenixML Documentation Build ==="
+echo "=== PhoenixmlDb Documentation Build ==="
 
 # Step 1: Parse Markdown docs into intermediate XML
 echo ""
 echo "--- Parsing Markdown ---"
 STEP_START=$(date +%s%N)
 rm -rf "$INTERMEDIATE" "$OUTPUT"
-dotnet run --no-build --project "$CRUCIBLE_CLI" -- \
+dotnet crucible \
   build --stage ParseOnly \
   -s "$DOCS_DIR" -o "$INTERMEDIATE" \
-  --title "PhoenixML Documentation" \
+  --title "PhoenixmlDb Documentation" \
   2>&1
 STEP_END=$(date +%s%N)
 echo "  $(( (STEP_END - STEP_START) / 1000000 ))ms"
@@ -69,7 +68,7 @@ echo "  $(( (STEP_END - STEP_START) / 1000000 ))ms"
 echo ""
 echo "--- Transforming to HTML ---"
 STEP_START=$(date +%s%N)
-dotnet run --no-build --project "$CRUCIBLE_CLI" -- \
+dotnet crucible \
   build --stage TransformOnly \
   -s "$INTERMEDIATE" -o "$OUTPUT" \
   --timing \

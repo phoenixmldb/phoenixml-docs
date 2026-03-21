@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "crucible.cli": {
+      "version": "1.0.0",
+      "commands": [
+        "crucible"
+      ],
+      "rollForward": false
+    }
+  }
+}
