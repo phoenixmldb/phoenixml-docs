@@ -1,0 +1,459 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>xquery CLI — PhoenixmlDb Documentation</title><meta name="description" content="Command-line XQuery processor — query XML documents from the terminal"><link rel="canonical" href="/tools/xquery-cli.html"><meta property="og:title" content="xquery CLI"><meta property="og:type" content="article"><meta property="og:url" content="/tools/xquery-cli.html"><meta property="og:description" content="Command-line XQuery processor — query XML documents from the terminal"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li class="active"><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="xquery-cli"><a class="anchor" href="#xquery-cli">#</a>xquery CLI</h1><p>The <code>xquery</code> command-line tool executes XQuery expressions against XML files, directories, or URLs. Think of it as <code>jq</code> for XML — but with the full power of XQuery 4.0.</p><h2 id="installation"><a class="anchor" href="#installation">#</a>Installation</h2><pre><code class="language-bash">dotnet tool install -g PhoenixmlDb.XQuery.Cli</code></pre><p>After installation, the <code>xquery</code> command is available globally.</p><h2 id="usage"><a class="anchor" href="#usage">#</a>Usage</h2><pre><code>xquery [options] &lt;expression&gt; [sources...]
+xquery [options] -f &lt;query-file&gt; [sources...]
+command | xquery [options] &lt;expression&gt;</code></pre><h3 id="arguments"><a class="anchor" href="#arguments">#</a>Arguments</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Argument</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>&lt;expression&gt;</code></p>
+          </td>
+          <td>
+            <p>Inline XQuery expression to execute</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[sources...]</code></p>
+          </td>
+          <td>
+            <p>XML files, directories, or URLs to query</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="options"><a class="anchor" href="#options">#</a>Options</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Option</p>
+          </th>
+          <th>
+            <p>Short</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>--file &lt;path&gt;</code></p>
+          </td>
+          <td>
+            <p><code>-f</code></p>
+          </td>
+          <td>
+            <p>Read XQuery from a file instead of inline</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>--output &lt;method&gt;</code></p>
+          </td>
+          <td>
+            <p><code>-o</code></p>
+          </td>
+          <td>
+            <p>Output method: <code>adaptive</code> (default), <code>xml</code>, <code>text</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>--stdin</code></p>
+          </td>
+          <td>
+            <p></p>
+          </td>
+          <td>
+            <p>Read XML input from stdin (waits indefinitely)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>--timeout &lt;ms&gt;</code></p>
+          </td>
+          <td>
+            <p></p>
+          </td>
+          <td>
+            <p>Stdin auto-detection timeout in ms (default: 200)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>--timing</code></p>
+          </td>
+          <td>
+            <p></p>
+          </td>
+          <td>
+            <p>Show parse/compile/execute timing breakdown</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>--plan</code></p>
+          </td>
+          <td>
+            <p></p>
+          </td>
+          <td>
+            <p>Show the execution plan before running</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>--dry-run</code></p>
+          </td>
+          <td>
+            <p></p>
+          </td>
+          <td>
+            <p>Parse and compile only — validate without executing</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>--verbose</code></p>
+          </td>
+          <td>
+            <p><code>-v</code></p>
+          </td>
+          <td>
+            <p>Show detailed error information</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>--help</code></p>
+          </td>
+          <td>
+            <p><code>-h</code></p>
+          </td>
+          <td>
+            <p>Show help message</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>--version</code></p>
+          </td>
+          <td>
+            <p></p>
+          </td>
+          <td>
+            <p>Show version information</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="exit-codes"><a class="anchor" href="#exit-codes">#</a>Exit Codes</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Code</p>
+          </th>
+          <th>
+            <p>Meaning</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>0</p>
+          </td>
+          <td>
+            <p>Success</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>1</p>
+          </td>
+          <td>
+            <p>Usage error</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>2</p>
+          </td>
+          <td>
+            <p>Parse error</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>3</p>
+          </td>
+          <td>
+            <p>Runtime error</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="source-documents"><a class="anchor" href="#source-documents">#</a>Source Documents</h2><p>The <code>xquery</code> tool supports three types of source input:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Source</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong>File</strong></p>
+          </td>
+          <td>
+            <p>Path to an XML file — loaded as a <code>doc()</code> target</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Directory</strong></p>
+          </td>
+          <td>
+            <p>Path to a directory — all <code>*.xml</code> files loaded</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>URL</strong></p>
+          </td>
+          <td>
+            <p>HTTP/HTTPS URL — XML fetched from the network</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>When a <strong>single source</strong> is provided, it becomes the context item (<code>.</code>), so you can write XPath directly:</p><pre><code class="language-bash">xquery '//title' books.xml</code></pre><p>
+      <strong>All sources</strong> are available via <code>doc($uri)</code> by their path or URL. <code>collection()</code> returns all loaded documents.</p><h2 id="examples"><a class="anchor" href="#examples">#</a>Examples</h2><h3 id="quick-queries"><a class="anchor" href="#quick-queries">#</a>Quick Queries</h3><p>The most common use — XPath expressions against a file:</p><pre><code class="language-bash"># Select all titles
+xquery '//title' catalog.xml
+# Count elements
+xquery 'count(//product)' catalog.xml
+# Filter by attribute
+xquery '//product[@category="electronics"]/name' catalog.xml
+# Get attribute values
+xquery '//product/@id' catalog.xml</code></pre><p>
+      <strong>C# developer note:</strong> This is like running LINQ queries from the command line — no project setup, no compilation, just query and get results.</p><h3 id="flwor-queries"><a class="anchor" href="#flwor-queries">#</a>FLWOR Queries</h3><p>Use single quotes to wrap multi-line expressions:</p><pre><code class="language-bash">xquery '
+  for $book in //book
+  where $book/price &gt; 30
+  order by $book/price descending
+  return concat($book/title, " — $", $book/price)
+' catalog.xml</code></pre><h3 id="query-files"><a class="anchor" href="#query-files">#</a>Query Files</h3><p>For complex queries, write them in a <code>.xq</code> file:</p><pre><code class="language-bash">xquery -f report.xq catalog.xml</code></pre><p>
+      <strong>report.xq:</strong>
+    </p><pre><code class="language-xquery">for $cat in distinct-values(//product/@category)
+let $products := //product[@category = $cat]
+order by $cat
+return &lt;category name="{ $cat }"&gt;
+  &lt;count&gt;{ count($products) }&lt;/count&gt;
+  &lt;avg-price&gt;{ format-number(avg($products/price), '#.00') }&lt;/avg-price&gt;
+&lt;/category&gt;</code></pre><h3 id="multiple-source-files"><a class="anchor" href="#multiple-source-files">#</a>Multiple Source Files</h3><p>Query across multiple documents:</p><pre><code class="language-bash"># Multiple files
+xquery 'count(collection()//product)' products.xml orders.xml
+# An entire directory
+xquery 'collection()//error' ./logs/
+# Join data across files
+xquery '
+  for $order in doc("orders.xml")//order
+  let $customer := doc("customers.xml")//customer[@id = $order/@customer-id]
+  return concat($order/@id, ": ", $customer/name)
+' orders.xml customers.xml</code></pre><h3 id="reading-from-stdin"><a class="anchor" href="#reading-from-stdin">#</a>Reading from stdin</h3><p>Pipe XML from another command:</p><pre><code class="language-bash">curl https://api.example.com/data.xml | xquery '//item/name'
+cat data.xml | xquery 'count(//error)'</code></pre><h3 id="json-output"><a class="anchor" href="#json-output">#</a>JSON Output</h3><p>Query XML documents and output results as JSON:</p><pre><code class="language-bash">xquery '
+  array {
+    for $p in //product
+    return map {
+      "name": string($p/name),
+      "price": number($p/price)
+    }
+  }
+' catalog.xml</code></pre><h3 id="working-with-json-input"><a class="anchor" href="#working-with-json-input">#</a>Working with JSON Input</h3><p>Query JSON files using <code>json-doc()</code>:</p><pre><code class="language-bash">xquery '
+  let $data := json-doc("config.json")
+  return $data?settings?theme
+'</code></pre><h3 id="execution-plan"><a class="anchor" href="#execution-plan">#</a>Execution Plan</h3><p>See how the query engine plans to execute your query:</p><pre><code class="language-bash">xquery --plan 'for $x in //product order by $x/price return $x/name' catalog.xml</code></pre><p>This shows the query plan before execution — useful for understanding performance characteristics of complex queries.</p><h3 id="performance-profiling"><a class="anchor" href="#performance-profiling">#</a>Performance Profiling</h3><pre><code class="language-bash">xquery --timing '//product[price &gt; 50]' large-catalog.xml</code></pre><p>Output (to stderr):</p><pre><code>  parse:     1.2 ms
+  compile:   3.4 ms
+  execute:  12.8 ms  (15 results)
+  total:    17.4 ms</code></pre><h3 id="validation-only"><a class="anchor" href="#validation-only">#</a>Validation Only</h3><p>Check that a query compiles without running it:</p><pre><code class="language-bash">xquery --dry-run -f complex-query.xq</code></pre><h2 id="real-world-workflows"><a class="anchor" href="#real-world-workflows">#</a>Real-World Workflows</h2><h3 id="data-extraction"><a class="anchor" href="#data-extraction">#</a>Data Extraction</h3><pre><code class="language-bash"># Extract all email addresses from an XML dataset
+xquery '//contact/email' contacts.xml
+# Get unique categories
+xquery 'distinct-values(//product/@category)' catalog.xml
+# Find duplicates
+xquery '
+  for $name in //product/name
+  group by $n := string($name)
+  where count($name) &gt; 1
+  return concat($n, " (", count($name), " occurrences)")
+' catalog.xml</code></pre><h3 id="data-validation"><a class="anchor" href="#data-validation">#</a>Data Validation</h3><pre><code class="language-bash"># Find products with missing prices
+xquery '//product[not(price)]/@id' catalog.xml
+# Find orders with negative amounts
+xquery '//order[total &lt; 0]' orders.xml
+# Validate email format
+xquery '//email[not(matches(., "^[^@]+@[^@]+\.[^@]+$"))]' contacts.xml</code></pre><h3 id="format-conversion"><a class="anchor" href="#format-conversion">#</a>Format Conversion</h3><pre><code class="language-bash"># XML to CSV
+xquery '
+  string-join((
+    "id,name,price",
+    for $p in //product
+    return string-join(($p/@id, $p/name, $p/price), ",")
+  ), "&amp;#10;")
+' -o text catalog.xml &gt; products.csv
+# XML to Markdown
+xquery '
+  string-join((
+    "# Products",
+    "",
+    for $p in //product
+    return concat("- **", $p/name, "** — $", $p/price)
+  ), "&amp;#10;")
+' -o text catalog.xml &gt; products.md</code></pre><h3 id="aggregation-and-reporting"><a class="anchor" href="#aggregation-and-reporting">#</a>Aggregation and Reporting</h3><pre><code class="language-bash"># Summary statistics
+xquery '
+  let $products := //product
+  return map {
+    "count": count($products),
+    "total": sum($products/price),
+    "average": round(avg($products/price), 2),
+    "min": min($products/price),
+    "max": max($products/price)
+  }
+' catalog.xml</code></pre><h3 id="shell-pipeline-integration"><a class="anchor" href="#shell-pipeline-integration">#</a>Shell Pipeline Integration</h3><pre><code class="language-bash"># Combine with other tools
+xquery '//product/name' catalog.xml | sort | uniq -c | sort -rn
+# Feed into jq for further JSON processing
+xquery 'array { //product ! map { "name": string(name), "price": number(price) } }' catalog.xml \
+  | jq '.[] | select(.price &gt; 50)'
+# Watch for changes
+watch -n 5 'xquery "count(//error)" /var/log/app/*.xml'</code></pre><h2 id="comparison-with-other-tools"><a class="anchor" href="#comparison-with-other-tools">#</a>Comparison with Other Tools</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Task</p>
+          </th>
+          <th>
+            <p>xquery</p>
+          </th>
+          <th>
+            <p>jq</p>
+          </th>
+          <th>
+            <p>xmlstarlet</p>
+          </th>
+          <th>
+            <p>grep</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Query XML</p>
+          </td>
+          <td>
+            <p>Native</p>
+          </td>
+          <td>
+            <p>No XML support</p>
+          </td>
+          <td>
+            <p>Basic XPath 1.0</p>
+          </td>
+          <td>
+            <p>Text only</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Query JSON</p>
+          </td>
+          <td>
+            <p><code>json-doc()</code></p>
+          </td>
+          <td>
+            <p>Native</p>
+          </td>
+          <td>
+            <p>No JSON support</p>
+          </td>
+          <td>
+            <p>Text only</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>FLWOR queries</p>
+          </td>
+          <td>
+            <p>Full XQuery</p>
+          </td>
+          <td>
+            <p>Limited</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Cross-file joins</p>
+          </td>
+          <td>
+            <p><code>doc()</code>, <code>collection()</code></p>
+          </td>
+          <td>
+            <p>Requires scripting</p>
+          </td>
+          <td>
+            <p>Single file</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Format conversion</p>
+          </td>
+          <td>
+            <p>XML/JSON/CSV/text</p>
+          </td>
+          <td>
+            <p>JSON only</p>
+          </td>
+          <td>
+            <p>XML only</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Type-aware</p>
+          </td>
+          <td>
+            <p>xs:date, xs:decimal, etc.</p>
+          </td>
+          <td>
+            <p>Limited</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="using-from-net-code"><a class="anchor" href="#using-from-net-code">#</a>Using from .NET Code</h2><p>The same engine is available as a library. See <a href="/language-reference/xquery/extensibility.html" title="">XQuery Extensibility</a> for programmatic usage including setting variables, registering extension functions, and reading results.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

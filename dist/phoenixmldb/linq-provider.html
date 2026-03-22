@@ -1,0 +1,352 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>LINQ Provider — PhoenixmlDb Documentation</title><meta name="description" content="Query PhoenixmlDb with LINQ — XML navigation, fluent API, and type mapping"><link rel="canonical" href="/phoenixmldb/linq-provider.html"><meta property="og:title" content="LINQ Provider"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/linq-provider.html"><meta property="og:description" content="Query PhoenixmlDb with LINQ — XML navigation, fluent API, and type mapping"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li class="active"><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="linq-provider"><a class="anchor" href="#linq-provider">#</a>LINQ Provider</h1><p>PhoenixmlDb provides a comprehensive LINQ provider that enables querying XML documents using familiar C# syntax. The LINQ queries are translated directly to XQuery AST for optimal performance.</p><h2 id="overview"><a class="anchor" href="#overview">#</a>Overview</h2><p>The LINQ provider offers two approaches:</p><ol><li>
+        <p>
+          <strong>Direct AST Generation</strong> (Recommended) — Generates XQuery AST directly for better optimization</p>
+      </li><li>
+        <p>
+          <strong>String-based Translation</strong> (Legacy) — Generates XQuery strings</p>
+      </li></ol><h2 id="getting-started"><a class="anchor" href="#getting-started">#</a>Getting Started</h2><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><pre><code class="language-csharp">using PhoenixmlDb.Linq;
+using PhoenixmlDb.Query.Execution;
+// Create query engine and provider
+var queryEngine = new QueryEngine(indexConfig);
+var containerId = await database.OpenContainerAsync("books");
+// Create a queryable source
+var books = XmlQuery.FromContainer(containerId, queryEngine);
+// Execute LINQ queries
+var results = await books
+    .Where(e =&gt; e.LocalName == "book")
+    .OrderBy(e =&gt; e.Element("title").Value())
+    .ToListAsync();</code></pre><h3 id="async-operations"><a class="anchor" href="#async-operations">#</a>Async Operations</h3><p>All queries support async execution:</p><pre><code class="language-csharp">// Async enumeration
+await foreach (var book in books.Where(e =&gt; e.LocalName == "book"))
+{
+    Console.WriteLine(book.StringValue);
+}
+// Async methods
+var firstBook = await books.FirstAsync();
+var count = await books.CountAsync();
+var exists = await books.AnyAsync(e =&gt; e.LocalName == "bestseller");</code></pre><h2 id="supported-linq-operations"><a class="anchor" href="#supported-linq-operations">#</a>Supported LINQ Operations</h2><h3 id="filtering"><a class="anchor" href="#filtering">#</a>Filtering</h3><pre><code class="language-csharp">// Where clause
+var fiction = books.Where(e =&gt; e.Element("genre").Value() == "Fiction");
+// Multiple conditions
+var recent = books.Where(e =&gt;
+    e.Element("year").Value() == "2024" &amp;&amp;
+    e.Element("price").Value() &lt; "50");</code></pre><h3 id="projection"><a class="anchor" href="#projection">#</a>Projection</h3><pre><code class="language-csharp">// Select specific data
+var titles = books.Select(e =&gt; e.Element("title").Value());
+// Project to anonymous types
+var summary = books.Select(e =&gt; new {
+    Title = e.Element("title").Value(),
+    Author = e.Element("author").Value()
+});</code></pre><h3 id="ordering"><a class="anchor" href="#ordering">#</a>Ordering</h3><pre><code class="language-csharp">// Single key ordering
+var byTitle = books.OrderBy(e =&gt; e.Element("title").Value());
+// Descending order
+var byDateDesc = books.OrderByDescending(e =&gt; e.Element("date").Value());
+// Multiple keys
+var sorted = books
+    .OrderBy(e =&gt; e.Element("author").Value())
+    .ThenByDescending(e =&gt; e.Element("year").Value());</code></pre><h3 id="aggregation"><a class="anchor" href="#aggregation">#</a>Aggregation</h3><pre><code class="language-csharp">// Count
+var totalBooks = await books.CountAsync();
+var fictionCount = await books.CountAsync(e =&gt; e.Element("genre").Value() == "Fiction");
+// Any/All
+var hasExpensive = await books.AnyAsync(e =&gt; e.Element("price").Value() &gt; "100");
+var allInStock = await books.AllAsync(e =&gt; e.Element("stock").Value() != "0");
+// First/Single
+var firstBook = await books.FirstAsync();
+var singleBestseller = await books.SingleAsync(e =&gt; e.Element("bestseller").Value() == "true");</code></pre><h3 id="pagination"><a class="anchor" href="#pagination">#</a>Pagination</h3><pre><code class="language-csharp">// Take and Skip
+var firstTen = await books.Take(10).ToListAsync();
+var page2 = await books.Skip(10).Take(10).ToListAsync();</code></pre><h3 id="distinct"><a class="anchor" href="#distinct">#</a>Distinct</h3><pre><code class="language-csharp">var uniqueAuthors = await books
+    .Select(e =&gt; e.Element("author").Value())
+    .Distinct()
+    .ToListAsync();</code></pre><h2 id="xml-navigation-extensions"><a class="anchor" href="#xml-navigation-extensions">#</a>XML Navigation Extensions</h2><p>The LINQ provider includes extension methods for XML navigation:</p><h3 id="child-elements"><a class="anchor" href="#child-elements">#</a>Child Elements</h3><pre><code class="language-csharp">// Single child element
+var title = book.Element("title");
+// All child elements
+var children = book.Elements();
+// Named child elements
+var chapters = book.Elements("chapter");</code></pre><h3 id="attributes"><a class="anchor" href="#attributes">#</a>Attributes</h3><pre><code class="language-csharp">// Single attribute
+var id = book.Attribute("id");
+// All attributes
+var attrs = book.Attributes();
+// Named attributes
+var isbnAttrs = book.Attributes("isbn");</code></pre><h3 id="descendant-navigation"><a class="anchor" href="#descendant-navigation">#</a>Descendant Navigation</h3><pre><code class="language-csharp">// All descendants
+var allElements = book.Descendants();
+// Named descendants
+var allParagraphs = book.Descendants("p");</code></pre><h3 id="ancestor-navigation"><a class="anchor" href="#ancestor-navigation">#</a>Ancestor Navigation</h3><pre><code class="language-csharp">// All ancestors
+var parents = element.Ancestors();
+// Named ancestors
+var chapters = paragraph.Ancestors("chapter");</code></pre><h3 id="getting-values"><a class="anchor" href="#getting-values">#</a>Getting Values</h3><pre><code class="language-csharp">// String value of element
+var text = element.Value();
+// Attribute value
+var attrValue = attr.Value();</code></pre><h2 id="fluent-query-api"><a class="anchor" href="#fluent-query-api">#</a>Fluent Query API</h2><p>For complex queries, use the fluent API:</p><pre><code class="language-csharp">using PhoenixmlDb.Linq;
+var query = FluentXmlQuery
+    .From(containerId, queryEngine)
+    .Where(e =&gt; e.Element("genre").Value() == "Fiction")
+    .Let("totalPrice", e =&gt; e.Element("price").Value())
+    .OrderBy(e =&gt; e.Element("title").Value())
+    .Select(e =&gt; new {
+        Title = e.Element("title").Value(),
+        Price = e.Element("price").Value()
+    });
+var results = await query.ExecuteAsync();</code></pre><h3 id="fluent-query-features"><a class="anchor" href="#fluent-query-features">#</a>Fluent Query Features</h3><pre><code class="language-csharp">// Position tracking
+var withPosition = FluentXmlQuery
+    .From(containerId, queryEngine)
+    .WithPosition()
+    .Select(x =&gt; new { Position = x.position, Item = x.item });
+// Group by
+var grouped = FluentXmlQuery
+    .From(containerId, queryEngine)
+    .GroupBy(e =&gt; e.Element("author").Value());
+// Query explanation
+var explanation = query.Explain();
+Console.WriteLine(explanation.AstString);
+Console.WriteLine(explanation.ExecutionPlan);</code></pre><h2 id="query-debugging"><a class="anchor" href="#query-debugging">#</a>Query Debugging</h2><h3 id="view-xquery-ast"><a class="anchor" href="#view-xquery-ast">#</a>View XQuery AST</h3><pre><code class="language-csharp">var query = books.Where(e =&gt; e.LocalName == "book");
+// Get the AST
+var ast = query.GetAst();
+Console.WriteLine(ast?.ToString());
+// Get full explanation
+var explanation = query.Explain();
+Console.WriteLine($"AST: {explanation?.AstString}");
+Console.WriteLine($"Plan: {explanation?.ExecutionPlan}");
+Console.WriteLine($"Compiled: {explanation?.CompilationSucceeded}");</code></pre><h3 id="provider-access"><a class="anchor" href="#provider-access">#</a>Provider Access</h3><pre><code class="language-csharp">// Access the underlying provider
+var provider = books.GetDirectProvider();
+if (provider != null)
+{
+    var compilationResult = provider.Compile(books.Expression);
+    // Inspect compilation result
+}</code></pre><h2 id="type-mapping"><a class="anchor" href="#type-mapping">#</a>Type Mapping</h2><p>The LINQ provider automatically maps .NET types to XDM types:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>.NET Type</p>
+          </th>
+          <th>
+            <p>XDM Type</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>string</code></p>
+          </td>
+          <td>
+            <p><code>xs:string</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>int</code>, <code>long</code></p>
+          </td>
+          <td>
+            <p><code>xs:integer</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>decimal</code></p>
+          </td>
+          <td>
+            <p><code>xs:decimal</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>double</code>, <code>float</code></p>
+          </td>
+          <td>
+            <p><code>xs:double</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>bool</code></p>
+          </td>
+          <td>
+            <p><code>xs:boolean</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>DateTime</code></p>
+          </td>
+          <td>
+            <p><code>xs:dateTime</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>XmlElement</code></p>
+          </td>
+          <td>
+            <p><code>element()</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>XmlAttribute</code></p>
+          </td>
+          <td>
+            <p><code>attribute()</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="custom-type-mapping"><a class="anchor" href="#custom-type-mapping">#</a>Custom Type Mapping</h3><pre><code class="language-csharp">// Create entity mapping for POCOs
+var mapping = new EntityMapping&lt;Book&gt;()
+    .Property(b =&gt; b.Title, "title")
+    .Property(b =&gt; b.Author, "author")
+    .Property(b =&gt; b.Price, "price");</code></pre><h2 id="string-functions"><a class="anchor" href="#string-functions">#</a>String Functions</h2><p>String methods are translated to XQuery functions:</p><pre><code class="language-csharp">// Contains
+books.Where(e =&gt; e.Element("title").Value().Contains("Guide"))
+// StartsWith
+books.Where(e =&gt; e.Element("author").Value().StartsWith("J"))
+// EndsWith
+books.Where(e =&gt; e.Element("title").Value().EndsWith("Edition"))
+// ToLower/ToUpper
+books.Select(e =&gt; e.Element("title").Value().ToLower())
+// Substring
+books.Select(e =&gt; e.Element("title").Value().Substring(0, 10))
+// Trim
+books.Select(e =&gt; e.Element("title").Value().Trim())</code></pre><h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2><h3 id="1-use-direct-provider"><a class="anchor" href="#1-use-direct-provider">#</a>1. Use Direct Provider</h3><pre><code class="language-csharp">// Recommended: Direct AST generation
+var books = XmlQuery.FromContainer(containerId, queryEngine);
+// Legacy: String-based translation
+var books = XmlQuery.FromContainer(containerId, legacyExecutor);</code></pre><h3 id="2-use-async-operations"><a class="anchor" href="#2-use-async-operations">#</a>2. Use Async Operations</h3><pre><code class="language-csharp">// Preferred: Async execution
+var results = await books.ToListAsync();
+// Avoid: Blocking calls on async code
+var results = books.ToList(); // May block thread pool</code></pre><h3 id="3-filter-early"><a class="anchor" href="#3-filter-early">#</a>3. Filter Early</h3><pre><code class="language-csharp">// Good: Filter before projection
+var result = books
+    .Where(e =&gt; e.Element("price").Value() &lt; "50")
+    .Select(e =&gt; e.Element("title").Value());
+// Less efficient: Filter after projection
+var result = books
+    .Select(e =&gt; new { e, price = e.Element("price").Value() })
+    .Where(x =&gt; x.price &lt; "50");</code></pre><h3 id="4-use-pagination"><a class="anchor" href="#4-use-pagination">#</a>4. Use Pagination</h3><pre><code class="language-csharp">// Good: Limit results
+var page = await books.Skip(100).Take(10).ToListAsync();
+// Avoid: Loading everything
+var all = await books.ToListAsync();
+var page = all.Skip(100).Take(10);</code></pre><h3 id="5-inspect-query-plans"><a class="anchor" href="#5-inspect-query-plans">#</a>5. Inspect Query Plans</h3><pre><code class="language-csharp">// Check query efficiency
+var explanation = query.Explain();
+if (!explanation.CompilationSucceeded)
+{
+    foreach (var error in explanation.Errors)
+    {
+        Console.WriteLine($"Error: {error}");
+    }
+}</code></pre><h2 id="linq-to-flwor-mapping"><a class="anchor" href="#linq-to-flwor-mapping">#</a>LINQ to FLWOR Mapping</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>LINQ</p>
+          </th>
+          <th>
+            <p>XQuery FLWOR</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>Where(predicate)</code></p>
+          </td>
+          <td>
+            <p><code>where predicate</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>Select(selector)</code></p>
+          </td>
+          <td>
+            <p><code>return selector</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>SelectMany(collection)</code></p>
+          </td>
+          <td>
+            <p>Nested <code>for</code> clause</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>OrderBy(key)</code></p>
+          </td>
+          <td>
+            <p><code>order by key</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>OrderByDescending(key)</code></p>
+          </td>
+          <td>
+            <p><code>order by key descending</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>Take(n)</code></p>
+          </td>
+          <td>
+            <p><code>subsequence(..., 1, n)</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>Skip(n)</code></p>
+          </td>
+          <td>
+            <p><code>subsequence(..., n+1)</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>First()</code></p>
+          </td>
+          <td>
+            <p><code>[1]</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>Count()</code></p>
+          </td>
+          <td>
+            <p><code>count(...)</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>Any()</code></p>
+          </td>
+          <td>
+            <p><code>exists(...)</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>All(predicate)</code></p>
+          </td>
+          <td>
+            <p><code>empty(... where not(predicate))</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>Distinct()</code></p>
+          </td>
+          <td>
+            <p><code>distinct-values(...)</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="performance-considerations"><a class="anchor" href="#performance-considerations">#</a>Performance Considerations</h2><ol><li>
+        <p>
+          <strong>Index Usage</strong> — The query optimizer will use available indexes when possible</p>
+      </li><li>
+        <p>
+          <strong>Streaming</strong> — Large result sets are streamed rather than loaded into memory</p>
+      </li><li>
+        <p>
+          <strong>Lazy Evaluation</strong> — Queries are only executed when results are enumerated</p>
+      </li><li>
+        <p>
+          <strong>AST Optimization</strong> — Direct AST generation enables better query optimization</p>
+      </li></ol></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

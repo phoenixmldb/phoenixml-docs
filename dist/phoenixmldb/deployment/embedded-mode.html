@@ -1,0 +1,238 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Embedded Mode — PhoenixmlDb Documentation</title><meta name="description" content="Run PhoenixmlDb as an in-process library — no separate server needed"><link rel="canonical" href="/phoenixmldb/deployment/embedded-mode.html"><meta property="og:title" content="Embedded Mode"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/deployment/embedded-mode.html"><meta property="og:description" content="Run PhoenixmlDb as an in-process library — no separate server needed"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li class="active"><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="embedded-mode"><a class="anchor" href="#embedded-mode">#</a>Embedded Mode</h1><p>Embedded mode runs PhoenixmlDb directly within your application process, providing the simplest deployment option with the best performance for single-application scenarios.</p><h2 id="overview"><a class="anchor" href="#overview">#</a>Overview</h2><pre><code>┌─────────────────────────────────────┐
+│         Your Application            │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │       PhoenixmlDb           │   │
+│  │  ┌─────────┐  ┌─────────┐   │   │
+│  │  │ Query   │  │ Storage │   │   │
+│  │  │ Engine  │  │  (LMDB) │   │   │
+│  │  └─────────┘  └─────────┘   │   │
+│  └─────────────────────────────┘   │
+│                                     │
+└─────────────────────────────────────┘
+            │
+            ▼
+    ┌───────────────┐
+    │  Data Files   │
+    │  (data.mdb)   │
+    └───────────────┘</code></pre><h2 id="installation"><a class="anchor" href="#installation">#</a>Installation</h2><pre><code class="language-bash">dotnet add package PhoenixmlDb</code></pre><h2 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h2><pre><code class="language-csharp">using PhoenixmlDb;
+// Open or create database
+using var db = new XmlDatabase("./data");
+// Create container
+var products = db.CreateContainer("products");
+// Store document
+products.PutDocument("p1.xml", "&lt;product&gt;&lt;name&gt;Widget&lt;/name&gt;&lt;/product&gt;");
+// Query
+var results = db.Query("collection('products')//name/text()");</code></pre><h2 id="configuration"><a class="anchor" href="#configuration">#</a>Configuration</h2><pre><code class="language-csharp">var options = new DatabaseOptions
+{
+    MapSize = 1L * 1024 * 1024 * 1024,  // 1 GB
+    MaxContainers = 50,
+    MaxReaders = 126
+};
+using var db = new XmlDatabase("./data", options);</code></pre><h2 id="lifecycle-management"><a class="anchor" href="#lifecycle-management">#</a>Lifecycle Management</h2><h3 id="application-startup"><a class="anchor" href="#application-startup">#</a>Application Startup</h3><pre><code class="language-csharp">public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddSingleton&lt;XmlDatabase&gt;(sp =&gt;
+        {
+            var path = Configuration["Database:Path"];
+            var options = new DatabaseOptions
+            {
+                MapSize = Configuration.GetValue&lt;long&gt;("Database:MapSize")
+            };
+            return new XmlDatabase(path, options);
+        });
+    }
+}</code></pre><h3 id="application-shutdown"><a class="anchor" href="#application-shutdown">#</a>Application Shutdown</h3><pre><code class="language-csharp">public class Shutdown
+{
+    private readonly XmlDatabase _db;
+    public async Task StopAsync(CancellationToken cancellationToken)
+    {
+        // Flush pending writes
+        _db.Flush();
+        // Dispose (closes all handles)
+        _db.Dispose();
+    }
+}</code></pre><h2 id="multi-threading"><a class="anchor" href="#multi-threading">#</a>Multi-Threading</h2><h3 id="thread-safety"><a class="anchor" href="#thread-safety">#</a>Thread Safety</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Operation</p>
+          </th>
+          <th>
+            <p>Thread Safe</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Read queries</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Write operations</p>
+          </td>
+          <td>
+            <p>Single writer</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Read transactions</p>
+          </td>
+          <td>
+            <p>Multiple concurrent</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Write transactions</p>
+          </td>
+          <td>
+            <p>Serialized</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="recommended-pattern"><a class="anchor" href="#recommended-pattern">#</a>Recommended Pattern</h3><pre><code class="language-csharp">public class ProductRepository
+{
+    private readonly XmlDatabase _db;
+    public ProductRepository(XmlDatabase db)
+    {
+        _db = db;
+    }
+    public IEnumerable&lt;string&gt; GetAllProducts()
+    {
+        // Read-only transaction allows concurrent access
+        using var txn = _db.BeginTransaction(readOnly: true);
+        return txn.Query("collection('products')//product").ToList();
+    }
+    public void AddProduct(string xml)
+    {
+        // Write transaction - serialized
+        using var txn = _db.BeginTransaction();
+        txn.GetContainer("products").PutDocument($"p-{Guid.NewGuid()}.xml", xml);
+        txn.Commit();
+    }
+}</code></pre><h2 id="multiple-processes"><a class="anchor" href="#multiple-processes">#</a>Multiple Processes</h2><blockquote>
+      <p>
+        <strong>Warning:</strong> LMDB supports only one writer process at a time.</p>
+    </blockquote><h3 id="read-only-access"><a class="anchor" href="#read-only-access">#</a>Read-Only Access</h3><p>Multiple processes can open the same database read-only:</p><pre><code class="language-csharp">// Process 1 - read/write
+using var db = new XmlDatabase("./shared-data");
+// Process 2 - read-only
+using var db = new XmlDatabase("./shared-data", new DatabaseOptions
+{
+    ReadOnly = true
+});</code></pre><h3 id="file-locking"><a class="anchor" href="#file-locking">#</a>File Locking</h3><p>By default, LMDB uses file locking. For single-process scenarios:</p><pre><code class="language-csharp">var options = new DatabaseOptions
+{
+    NoLock = true  // Only if guaranteed single-process access
+};</code></pre><h2 id="backup-and-recovery"><a class="anchor" href="#backup-and-recovery">#</a>Backup and Recovery</h2><h3 id="online-backup"><a class="anchor" href="#online-backup">#</a>Online Backup</h3><pre><code class="language-csharp">// Backup while application is running
+db.Backup("./backup");</code></pre><h3 id="restore"><a class="anchor" href="#restore">#</a>Restore</h3><pre><code class="language-csharp">// Stop application
+// Copy backup to data directory
+// Restart application
+Directory.Delete("./data", true);
+Directory.Move("./backup", "./data");</code></pre><h2 id="desktop-applications"><a class="anchor" href="#desktop-applications">#</a>Desktop Applications</h2><h3 id="wpf-example"><a class="anchor" href="#wpf-example">#</a>WPF Example</h3><pre><code class="language-csharp">public partial class App : Application
+{
+    public static XmlDatabase Database { get; private set; }
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var dbPath = Path.Combine(appData, "MyApp", "data");
+        Directory.CreateDirectory(dbPath);
+        Database = new XmlDatabase(dbPath);
+        base.OnStartup(e);
+    }
+    protected override void OnExit(ExitEventArgs e)
+    {
+        Database?.Dispose();
+        base.OnExit(e);
+    }
+}</code></pre><h3 id="avalonia-maui-example"><a class="anchor" href="#avalonia-maui-example">#</a>Avalonia/MAUI Example</h3><pre><code class="language-csharp">public static class MauiProgram
+{
+    public static XmlDatabase Database { get; private set; }
+    public static MauiApp CreateMauiApp()
+    {
+        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "data");
+        Database = new XmlDatabase(dbPath);
+        var builder = MauiApp.CreateBuilder();
+        builder.Services.AddSingleton(Database);
+        return builder.Build();
+    }
+}</code></pre><h2 id="asp-net-core"><a class="anchor" href="#asp-net-core">#</a>ASP.NET Core</h2><h3 id="registration"><a class="anchor" href="#registration">#</a>Registration</h3><pre><code class="language-csharp">builder.Services.AddSingleton&lt;XmlDatabase&gt;(sp =&gt;
+{
+    var env = sp.GetRequiredService&lt;IWebHostEnvironment&gt;();
+    var path = Path.Combine(env.ContentRootPath, "data");
+    return new XmlDatabase(path);
+});</code></pre><h3 id="health-check"><a class="anchor" href="#health-check">#</a>Health Check</h3><pre><code class="language-csharp">builder.Services.AddHealthChecks()
+    .AddCheck("database", () =&gt;
+    {
+        try
+        {
+            var db = serviceProvider.GetRequiredService&lt;XmlDatabase&gt;();
+            var count = db.QuerySingle&lt;int&gt;("count(collection('health')//*)");
+            return HealthCheckResult.Healthy();
+        }
+        catch (Exception ex)
+        {
+            return HealthCheckResult.Unhealthy(ex.Message);
+        }
+    });</code></pre><h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2><ol><li>
+        <p>
+          <strong>Single instance</strong> - Create one XmlDatabase per application</p>
+      </li><li>
+        <p>
+          <strong>Dispose properly</strong> - Always dispose on shutdown</p>
+      </li><li>
+        <p>
+          <strong>Use transactions</strong> - For consistent operations</p>
+      </li><li>
+        <p>
+          <strong>Prefer read-only</strong> - When only reading</p>
+      </li><li>
+        <p>
+          <strong>Configure MapSize</strong> - Based on expected data size</p>
+      </li><li>
+        <p>
+          <strong>Regular backups</strong> - Implement backup strategy</p>
+      </li></ol><h2 id="when-to-upgrade"><a class="anchor" href="#when-to-upgrade">#</a>When to Upgrade</h2><p>Consider Server or Cluster mode when:</p><ul><li>
+        <p>Multiple applications need access</p>
+      </li><li>
+        <p>High availability is required</p>
+      </li><li>
+        <p>Data exceeds single machine capacity</p>
+      </li><li>
+        <p>Geographic distribution needed</p>
+      </li></ul><h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Deployment</p>
+          </th>
+          <th>
+            <p>Configuration</p>
+          </th>
+          <th>
+            <p>Optimization</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong><a href="server-mode.html" title="">Server Mode</a></strong>Multi-client access</p>
+          </td>
+          <td>
+            <p><strong><a href="../configuration.html" title="">Configuration</a></strong>Advanced settings</p>
+          </td>
+          <td>
+            <p><strong><a href="../performance-tuning.html" title="">Performance Tuning</a></strong>Optimization</p>
+          </td>
+        </tr>
+      </tbody>
+    </table></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

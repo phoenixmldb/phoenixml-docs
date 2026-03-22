@@ -1,0 +1,364 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Advanced FLWOR — PhoenixmlDb Documentation</title><meta name="description" content="Window clauses, count, group by, while, otherwise — advanced FLWOR patterns"><link rel="canonical" href="/language-reference/xquery/flwor-advanced.html"><meta property="og:title" content="Advanced FLWOR"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xquery/flwor-advanced.html"><meta property="og:description" content="Window clauses, count, group by, while, otherwise — advanced FLWOR patterns"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li class="active"><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="advanced-flwor"><a class="anchor" href="#advanced-flwor">#</a>Advanced FLWOR</h1><p>The <a href="flwor.html" title="">basic FLWOR page</a> covers <code>for</code>, <code>let</code>, <code>where</code>, <code>order by</code>, and <code>return</code>. This page covers the clauses that make FLWOR a genuinely powerful data processing language: window clauses, count, group by, and the XQuery 4.0 additions <code>while</code> and <code>otherwise</code>.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
+        <p>
+          <a href="#window-clauses" title="">Window Clauses</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#count-clause" title="">Count Clause</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#group-by-clause" title="">Group By Clause</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#while-clause" title="">While Clause</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#otherwise-clause" title="">Otherwise Clause</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#combining-clauses" title="">Combining Clauses</a>
+        </p>
+      </li></ul><hr><h2 id="window-clauses"><a class="anchor" href="#window-clauses">#</a>Window Clauses</h2><p>Window clauses partition a sequence into groups of consecutive items called windows. This is essential for time-series analysis, batch processing, and any situation where you need to process items in chunks.</p><p>There are two kinds: <strong>tumbling windows</strong> (non-overlapping) and <strong>sliding windows</strong> (overlapping).</p><h3 id="tumbling-windows"><a class="anchor" href="#tumbling-windows">#</a>Tumbling Windows</h3><p>A tumbling window moves forward without overlap. Each item belongs to exactly one window.</p><pre><code class="language-xquery">(: Split sensor readings into groups of 3 :)
+for tumbling window $batch in (10, 22, 15, 31, 8, 19, 27, 12)
+    start at $s when true()
+    end at $e when $e - $s eq 2
+return &lt;batch avg="{ avg($batch) }"&gt;{ $batch }&lt;/batch&gt;</code></pre><p>
+      <strong>Output:</strong>
+    </p><pre><code class="language-xml">&lt;batch avg="15.666666666666666"&gt;10 22 15&lt;/batch&gt;
+&lt;batch avg="19.333333333333332"&gt;31 8 19&lt;/batch&gt;
+&lt;batch avg="19.5"&gt;27 12&lt;/batch&gt;</code></pre><p>The <code>start</code> condition fires for the first item in each window. The <code>end</code> condition fires when the window should close. The positional variables <code>$s</code> and <code>$e</code> track start and end positions.</p><p>
+      <strong>C# parallel:</strong> <code>Chunk</code> from .NET 6+:</p><pre><code class="language-csharp">int[] readings = { 10, 22, 15, 31, 8, 19, 27, 12 };
+var batches = readings.Chunk(3);
+foreach (var batch in batches)
+    Console.WriteLine($"Avg: {batch.Average()}");</code></pre><h3 id="tumbling-windows-by-value"><a class="anchor" href="#tumbling-windows-by-value">#</a>Tumbling Windows by Value</h3><p>Windows don't have to be fixed-size. You can partition by value conditions:</p><pre><code class="language-xquery">(: Group temperature readings into windows where each window
+   stays within a 5-degree range of its starting value :)
+let $readings := (20, 21, 23, 28, 30, 31, 18, 19, 22)
+for tumbling window $group in $readings
+    start $first when true()
+    end $last next $next when abs($next - $first) &gt; 5
+return &lt;range from="{ min($group) }" to="{ max($group) }"&gt;{ $group }&lt;/range&gt;</code></pre><p>
+      <strong>Output:</strong>
+    </p><pre><code class="language-xml">&lt;range from="20" to="23"&gt;20 21 23&lt;/range&gt;
+&lt;range from="28" to="31"&gt;28 30 31&lt;/range&gt;
+&lt;range from="18" to="22"&gt;18 19 22&lt;/range&gt;</code></pre><h3 id="practical-example-monthly-batching"><a class="anchor" href="#practical-example-monthly-batching">#</a>Practical Example: Monthly Batching</h3><pre><code class="language-xquery">(: Group orders by month :)
+for tumbling window $monthly-orders in (
+    for $o in //orders/order
+    order by xs:date($o/@date)
+    return $o
+)
+    start $first when true()
+    end $last next $next when
+        month-from-date(xs:date($next/@date)) ne month-from-date(xs:date($first/@date))
+        or year-from-date(xs:date($next/@date)) ne year-from-date(xs:date($first/@date))
+return &lt;month
+    period="{ format-date(xs:date($first/@date), '[Y]-[M01]') }"
+    count="{ count($monthly-orders) }"
+    total="{ sum($monthly-orders/total) }"/&gt;</code></pre><h3 id="sliding-windows"><a class="anchor" href="#sliding-windows">#</a>Sliding Windows</h3><p>A sliding window moves one item at a time, so windows overlap. This is the tool for running averages, trend detection, and comparing adjacent items.</p><pre><code class="language-xquery">(: 3-day moving average of stock prices :)
+let $prices := (142.50, 145.20, 143.80, 148.30, 151.00, 149.75, 153.20)
+for sliding window $w in $prices
+    start at $s when true()
+    end at $e when $e - $s eq 2
+return &lt;day position="{ $s }" moving-avg="{ round(avg($w), 2) }"/&gt;</code></pre><p>
+      <strong>Output:</strong>
+    </p><pre><code class="language-xml">&lt;day position="1" moving-avg="143.83"/&gt;
+&lt;day position="2" moving-avg="145.77"/&gt;
+&lt;day position="3" moving-avg="147.7"/&gt;
+&lt;day position="4" moving-avg="149.68"/&gt;
+&lt;day position="5" moving-avg="151.32"/&gt;</code></pre><p>
+      <strong>C# parallel:</strong> There is no built-in sliding window in LINQ. You'd write it manually:</p><pre><code class="language-csharp">decimal[] prices = { 142.50m, 145.20m, 143.80m, 148.30m, 151.00m, 149.75m, 153.20m };
+var movingAvg = Enumerable.Range(0, prices.Length - 2)
+    .Select(i =&gt; new {
+        Position = i + 1,
+        Avg = Math.Round(prices.Skip(i).Take(3).Average(), 2)
+    });</code></pre><h3 id="window-variable-bindings"><a class="anchor" href="#window-variable-bindings">#</a>Window Variable Bindings</h3><p>Window clauses support several positional and value variables:</p><pre><code class="language-xquery">for tumbling window $w in $sequence
+    start $startVal at $startPos previous $prevVal next $nextVal
+        when (condition)
+    end $endVal at $endPos previous $endPrevVal next $endNextVal
+        when (condition)
+return ...</code></pre><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Variable</p>
+          </th>
+          <th>
+            <p>Meaning</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>$startVal</code></p>
+          </td>
+          <td>
+            <p>The value of the item at the start of the window</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>$startPos</code></p>
+          </td>
+          <td>
+            <p>The position (1-based) of the start item</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>$prevVal</code></p>
+          </td>
+          <td>
+            <p>The item before the start item (empty for first window)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>$nextVal</code></p>
+          </td>
+          <td>
+            <p>The item after the start item</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>$endVal</code></p>
+          </td>
+          <td>
+            <p>The value of the item at the end of the window</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>$endPos</code></p>
+          </td>
+          <td>
+            <p>The position of the end item</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><hr><h2 id="count-clause"><a class="anchor" href="#count-clause">#</a>Count Clause</h2><p>The <code>count</code> clause assigns a sequential number to each tuple in the FLWOR pipeline. It looks simple, but it solves a problem the positional <code>at</code> variable cannot: numbering items <strong>after</strong> filtering and ordering.</p><h3 id="count-vs-at"><a class="anchor" href="#count-vs-at">#</a>Count vs At</h3><p>With <code>at</code>, the position reflects the original sequence:</p><pre><code class="language-xquery">(: 'at' shows original positions — gaps after filtering :)
+for $book at $pos in //catalog/book
+where $book/price &gt; 30
+return &lt;result pos="{ $pos }"&gt;{ $book/title/text() }&lt;/result&gt;
+(: pos might be 2, 5, 8 — the original positions :)</code></pre><p>With <code>count</code>, the number is assigned after <code>where</code> and <code>order by</code>:</p><pre><code class="language-xquery">(: 'count' gives clean sequential numbers :)
+for $book in //catalog/book
+where $book/price &gt; 30
+order by $book/price descending
+count $rank
+return &lt;result rank="{ $rank }"&gt;{ $book/title/text() }&lt;/result&gt;
+(: rank is always 1, 2, 3 — sequential after filtering and sorting :)</code></pre><p>
+      <strong>C# parallel:</strong> <code>Select((item, index) =&gt; ...)</code> after <code>Where</code> and <code>OrderBy</code>:</p><pre><code class="language-csharp">var ranked = books
+    .Where(b =&gt; b.Price &gt; 30)
+    .OrderByDescending(b =&gt; b.Price)
+    .Select((book, i) =&gt; new { Rank = i + 1, book.Title });</code></pre><h3 id="practical-example-paginated-results"><a class="anchor" href="#practical-example-paginated-results">#</a>Practical Example: Paginated Results</h3><pre><code class="language-xquery">let $page := 3
+let $page-size := 10
+for $product in //products/product
+order by $product/name
+count $n
+where $n &gt; ($page - 1) * $page-size and $n &lt;= $page * $page-size
+return &lt;item num="{ $n }"&gt;{ $product/name/text() }&lt;/item&gt;</code></pre><p>Note how <code>count</code> is placed between <code>order by</code> and the second <code>where</code>. The position in the FLWOR pipeline matters: <code>count</code> numbers items based on whatever precedes it.</p><h3 id="count-with-group-by"><a class="anchor" href="#count-with-group-by">#</a>Count with Group By</h3><p>
+      <code>count</code> is especially useful after grouping:</p><pre><code class="language-xquery">for $order in //orders/order
+group by $status := $order/@status
+order by count($order) descending
+count $rank
+return &lt;status rank="{ $rank }" name="{ $status }" count="{ count($order) }"/&gt;</code></pre><hr><h2 id="group-by-clause"><a class="anchor" href="#group-by-clause">#</a>Group By Clause</h2><p>The <code>group by</code> clause groups FLWOR iterations by one or more keys. After grouping, all non-grouping variables become sequences containing the values from each group member.</p><h3 id="basic-grouping"><a class="anchor" href="#basic-grouping">#</a>Basic Grouping</h3><pre><code class="language-xquery">for $order in //orders/order
+group by $status := $order/@status
+return &lt;status name="{ $status }" count="{ count($order) }"&gt;
+  { for $o in $order return &lt;order id="{ $o/@id }"/&gt; }
+&lt;/status&gt;</code></pre><p>After <code>group by</code>, <code>$order</code> is no longer a single element. It's a sequence of all orders that share the same <code>$status</code>. This is the key concept.</p><p>
+      <strong>C# parallel:</strong>
+    </p><pre><code class="language-csharp">from order in orders
+group order by order.Status into g
+select new {
+    Status = g.Key,
+    Count = g.Count(),
+    Orders = g.ToList()
+}</code></pre><h3 id="composite-group-keys"><a class="anchor" href="#composite-group-keys">#</a>Composite Group Keys</h3><p>Group by multiple values:</p><pre><code class="language-xquery">for $sale in //sales/sale
+group by $year := year-from-date(xs:date($sale/@date)),
+         $region := $sale/@region
+order by $year, $region
+return &lt;group year="{ $year }" region="{ $region }"
+    total="{ sum($sale/amount) }"
+    count="{ count($sale) }"/&gt;</code></pre><p>
+      <strong>C# parallel:</strong>
+    </p><pre><code class="language-csharp">from sale in sales
+group sale by new { sale.Date.Year, sale.Region } into g
+orderby g.Key.Year, g.Key.Region
+select new { g.Key.Year, g.Key.Region, Total = g.Sum(s =&gt; s.Amount) }</code></pre><h3 id="aggregation-over-groups"><a class="anchor" href="#aggregation-over-groups">#</a>Aggregation Over Groups</h3><p>Because non-grouping variables become sequences after <code>group by</code>, you can aggregate naturally:</p><pre><code class="language-xquery">for $employee in //hr/employee
+let $salary := xs:decimal($employee/salary)
+group by $dept := $employee/@department
+return &lt;department name="{ $dept }"&gt;
+  &lt;headcount&gt;{ count($employee) }&lt;/headcount&gt;
+  &lt;total-salary&gt;{ sum($salary) }&lt;/total-salary&gt;
+  &lt;avg-salary&gt;{ round(avg($salary), 2) }&lt;/avg-salary&gt;
+  &lt;min-salary&gt;{ min($salary) }&lt;/min-salary&gt;
+  &lt;max-salary&gt;{ max($salary) }&lt;/max-salary&gt;
+  &lt;employees&gt;{
+    for $e in $employee
+    order by $e/name
+    return &lt;employee&gt;{ $e/name/text() }&lt;/employee&gt;
+  }&lt;/employees&gt;
+&lt;/department&gt;</code></pre><h3 id="grouping-without-an-explicit-key-variable"><a class="anchor" href="#grouping-without-an-explicit-key-variable">#</a>Grouping Without an Explicit Key Variable</h3><p>If you use an existing variable as the group key, you don't need the <code>:=</code> assignment:</p><pre><code class="language-xquery">for $book in //books/book
+let $category := string($book/@category)
+group by $category
+return &lt;cat name="{ $category }"&gt;{ count($book) } books&lt;/cat&gt;</code></pre><h3 id="practical-example-pivot-table"><a class="anchor" href="#practical-example-pivot-table">#</a>Practical Example: Pivot Table</h3><pre><code class="language-xquery">(: Sales by product and quarter :)
+let $sales := //sales/transaction
+for $t in $sales
+let $product := string($t/@product)
+let $quarter := concat("Q", ceiling(month-from-date(xs:date($t/@date)) div 3))
+group by $product, $quarter
+order by $product, $quarter
+return &lt;cell product="{ $product }" quarter="{ $quarter }"
+    revenue="{ sum($t/amount) }"/&gt;</code></pre><hr><h2 id="while-clause"><a class="anchor" href="#while-clause">#</a>While Clause</h2><p>
+      <em>XQuery 4.0</em>
+    </p><p>The <code>while</code> clause stops FLWOR iteration early when a condition becomes false. This is useful for processing sequences where you want to stop at a boundary rather than filter.</p><pre><code class="language-xquery">(: Process log entries until you hit an error :)
+for $entry in //log/entry
+while $entry/@level ne "ERROR"
+return &lt;processed&gt;{ $entry/message/text() }&lt;/processed&gt;</code></pre><p>Unlike <code>where</code>, which skips non-matching items and continues, <code>while</code> terminates the entire iteration. No items after the first failure are processed.</p><p>
+      <strong>C# parallel:</strong> <code>TakeWhile</code>:</p><pre><code class="language-csharp">var processed = logEntries
+    .TakeWhile(e =&gt; e.Level != "ERROR")
+    .Select(e =&gt; e.Message);</code></pre><h3 id="practical-example-running-total-with-budget-cap"><a class="anchor" href="#practical-example-running-total-with-budget-cap">#</a>Practical Example: Running Total with Budget Cap</h3><pre><code class="language-xquery">for $item in //purchase-requests/item
+order by $item/priority ascending, xs:date($item/requested) ascending
+let $running := sum(
+    for $prev in //purchase-requests/item
+    where $prev/priority &lt; $item/priority
+       or ($prev/priority = $item/priority
+           and xs:date($prev/requested) &lt;= xs:date($item/requested))
+    return xs:decimal($prev/cost)
+)
+while $running &lt;= 50000
+return &lt;approved item="{ $item/@id }" cost="{ $item/cost/text() }"
+    running-total="{ $running }"/&gt;</code></pre><h3 id="while-with-count"><a class="anchor" href="#while-with-count">#</a>While with Count</h3><p>Combine <code>while</code> with <code>count</code> to know how many items were processed:</p><pre><code class="language-xquery">for $reading in //sensor/readings/value
+while xs:decimal($reading) &lt; 100
+count $n
+return ()
+,
+(: $n now holds how many readings were below threshold :)</code></pre><hr><h2 id="otherwise-clause"><a class="anchor" href="#otherwise-clause">#</a>Otherwise Clause</h2><p>
+      <em>XQuery 4.0</em>
+    </p><p>The <code>otherwise</code> clause provides a default result when the entire FLWOR expression produces an empty sequence.</p><pre><code class="language-xquery">for $match in //products/product[contains(name, $search-term)]
+order by $match/name
+return &lt;result&gt;{ $match/name/text() }&lt;/result&gt;
+otherwise &lt;no-results&gt;No products matching "{ $search-term }"&lt;/no-results&gt;</code></pre><p>Without <code>otherwise</code>, an empty result from the FLWOR would produce nothing. With <code>otherwise</code>, you always get at least one item back.</p><p>
+      <strong>C# parallel:</strong> <code>DefaultIfEmpty</code>:</p><pre><code class="language-csharp">var results = products
+    .Where(p =&gt; p.Name.Contains(searchTerm))
+    .OrderBy(p =&gt; p.Name)
+    .Select(p =&gt; p.Name)
+    .DefaultIfEmpty($"No products matching \"{searchTerm}\"");</code></pre><h3 id="practical-example-dashboard-widgets"><a class="anchor" href="#practical-example-dashboard-widgets">#</a>Practical Example: Dashboard Widgets</h3><pre><code class="language-xquery">(: Always return a widget, even if there's no data :)
+&lt;dashboard&gt;{
+  &lt;alerts&gt;{
+    for $alert in //system/alerts/alert
+    where $alert/@severity = "critical"
+    order by xs:dateTime($alert/@timestamp) descending
+    return &lt;item&gt;{ $alert/message/text() }&lt;/item&gt;
+    otherwise &lt;item class="ok"&gt;No critical alerts&lt;/item&gt;
+  }&lt;/alerts&gt;,
+  &lt;recent-orders&gt;{
+    for $order in //orders/order
+    where xs:date($order/@date) &gt;= current-date() - xs:dayTimeDuration("P7D")
+    order by xs:date($order/@date) descending
+    count $n
+    where $n &lt;= 5
+    return &lt;order id="{ $order/@id }" total="{ $order/total/text() }"/&gt;
+    otherwise &lt;none&gt;No orders in the last 7 days&lt;/none&gt;
+  }&lt;/recent-orders&gt;
+}&lt;/dashboard&gt;</code></pre><hr><h2 id="combining-clauses"><a class="anchor" href="#combining-clauses">#</a>Combining Clauses</h2><p>The real power of FLWOR emerges when you combine multiple clauses. Here's the full clause order:</p><pre><code>(for | let | window)+
+where*
+group by?
+order by?
+count?
+where*        (: yes, where can appear again after group/order/count :)
+while?
+return
+otherwise?</code></pre><p>Clauses can be interleaved and repeated. Each clause operates on the result of what precedes it.</p><h3 id="example-sales-report-with-ranking"><a class="anchor" href="#example-sales-report-with-ranking">#</a>Example: Sales Report with Ranking</h3><pre><code class="language-xquery">(: Top 3 product categories by revenue, with product details :)
+for $sale in //sales/transaction
+let $product := //products/product[@id = $sale/@product-id]
+let $revenue := xs:decimal($sale/quantity) * xs:decimal($product/price)
+group by $category := $product/@category
+let $category-revenue := sum($revenue)
+order by $category-revenue descending
+count $rank
+where $rank &lt;= 3
+return &lt;category rank="{ $rank }"
+    name="{ $category }"
+    revenue="{ $category-revenue }"&gt;
+  {
+    for $p in distinct-values($product/@id)
+    let $prod := //products/product[@id = $p]
+    let $prod-revenue := sum(
+      $revenue[index-of($product/@id, $p)]
+    )
+    order by $prod-revenue descending
+    count $prod-rank
+    where $prod-rank &lt;= 5
+    return &lt;product rank="{ $prod-rank }"
+        name="{ $prod/name/text() }"
+        revenue="{ $prod-revenue }"/&gt;
+  }
+&lt;/category&gt;</code></pre><h3 id="example-log-analysis-pipeline"><a class="anchor" href="#example-log-analysis-pipeline">#</a>Example: Log Analysis Pipeline</h3><pre><code class="language-xquery">for $entry in //log/entry
+let $timestamp := xs:dateTime($entry/@timestamp)
+let $hour := hours-from-dateTime($timestamp)
+let $level := string($entry/@level)
+where $level = ("WARN", "ERROR", "FATAL")
+group by $hour, $level
+let $count := count($entry)
+order by $hour, $level
+return &lt;bucket hour="{ $hour }" level="{ $level }" count="{ $count }"&gt;
+  {
+    if ($count &gt; 10) then
+      attribute alert { "high-volume" }
+    else ()
+  }
+  {
+    for $e in $entry
+    order by xs:dateTime($e/@timestamp) descending
+    count $n
+    where $n &lt;= 3
+    return &lt;sample&gt;{ $e/message/text() }&lt;/sample&gt;
+  }
+&lt;/bucket&gt;
+otherwise &lt;clean-log&gt;No warnings or errors found&lt;/clean-log&gt;</code></pre><h3 id="example-full-pipeline-with-multiple-for-clauses"><a class="anchor" href="#example-full-pipeline-with-multiple-for-clauses">#</a>Example: Full Pipeline with Multiple For Clauses</h3><pre><code class="language-xquery">for $customer in //customers/customer
+let $orders := //orders/order[@customer-id = $customer/@id]
+where exists($orders)
+for $order in $orders
+let $items := $order/line-item
+let $order-total := sum(
+  for $item in $items
+  return xs:decimal($item/@qty) * xs:decimal($item/@unit-price)
+)
+group by $customer-id := $customer/@id,
+         $customer-name := $customer/name/text()
+let $total-spend := sum($order-total)
+let $order-count := count($order)
+order by $total-spend descending
+count $rank
+where $rank &lt;= 10
+return &lt;top-customer rank="{ $rank }"&gt;
+  &lt;name&gt;{ $customer-name }&lt;/name&gt;
+  &lt;orders&gt;{ $order-count }&lt;/orders&gt;
+  &lt;total-spend&gt;{ $total-spend }&lt;/total-spend&gt;
+  &lt;avg-order&gt;{ round($total-spend div $order-count, 2) }&lt;/avg-order&gt;
+&lt;/top-customer&gt;</code></pre><p>This single FLWOR expression joins customers and orders, calculates totals, groups by customer, aggregates spending, sorts by total, and returns the top 10. The C# equivalent would require significantly more code:</p><pre><code class="language-csharp">var topCustomers = (
+    from customer in customers
+    let orders = allOrders.Where(o =&gt; o.CustomerId == customer.Id)
+    where orders.Any()
+    from order in orders
+    let orderTotal = order.LineItems.Sum(li =&gt; li.Qty * li.UnitPrice)
+    group new { order, orderTotal }
+        by new { customer.Id, customer.Name } into g
+    let totalSpend = g.Sum(x =&gt; x.orderTotal)
+    let orderCount = g.Count()
+    orderby totalSpend descending
+    select new {
+        g.Key.Name,
+        Orders = orderCount,
+        TotalSpend = totalSpend,
+        AvgOrder = Math.Round(totalSpend / orderCount, 2)
+    }
+).Take(10)
+ .Select((c, i) =&gt; new { Rank = i + 1, c.Name, c.Orders, c.TotalSpend, c.AvgOrder });</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

@@ -1,0 +1,669 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Maps, Arrays, and Records — PhoenixmlDb Documentation</title><meta name="description" content="xsl:map, xsl:array, xsl:record, xsl:for-each-member — structured data in XSLT 3.0/4.0"><link rel="canonical" href="/language-reference/xslt/instructions/maps-arrays.html"><meta property="og:title" content="Maps, Arrays, and Records"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/maps-arrays.html"><meta property="og:description" content="xsl:map, xsl:array, xsl:record, xsl:for-each-member — structured data in XSLT 3.0/4.0"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li class="active"><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="maps-arrays-and-records"><a class="anchor" href="#maps-arrays-and-records">#</a>Maps, Arrays, and Records</h1><p>XSLT 3.0 introduced maps and arrays as first-class data types, bringing key-value pairs and ordered collections into a language that previously only had XML nodes and atomic values. XSLT 4.0 adds records and <code>xsl:for-each-member</code>. If you come from C#, think of maps as <code>Dictionary&lt;string, object&gt;</code>, arrays as <code>List&lt;object&gt;</code>, and records as anonymous types or C# records.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
+        <p>
+          <a href="#xslmap-and-xslmap-entry" title="">xsl:map and xsl:map-entry</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xslarray-and-xslarray-member" title="">xsl:array and xsl:array-member</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xslfor-each-member-xslt-40" title="">xsl:for-each-member (XSLT 4.0)</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xslrecord-xslt-40" title="">xsl:record (XSLT 4.0)</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#json-output-patterns" title="">JSON Output Patterns</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#use-cases" title="">Use Cases</a>
+        </p>
+      </li></ul><hr><h2 id="xsl-map-and-xsl-map-entry"><a class="anchor" href="#xsl-map-and-xsl-map-entry">#</a>xsl:map and xsl:map-entry</h2><p>A map is an unordered collection of key-value pairs. Keys are atomic values (strings, numbers, dates); values can be anything — strings, numbers, nodes, sequences, other maps, or arrays.</p><p>
+      <strong>C# parallel:</strong> <code>Dictionary&lt;string, object&gt;</code> or an anonymous object <code>new { Name = "Alice", Age = 30 }</code>.</p><h3 id="xpath-literal-vs-xsl-map"><a class="anchor" href="#xpath-literal-vs-xsl-map">#</a>XPath Literal vs. xsl:map</h3><p>You can construct maps in pure XPath using the <code>map{}</code> literal syntax:</p><pre><code class="language-xml">&lt;!-- XPath map literal — keys and values are expressions --&gt;
+&lt;xsl:variable name="colors" select="map {
+  'error': 'red',
+  'warning': 'orange',
+  'info': 'blue'
+}"/&gt;</code></pre><p>The <code>xsl:map</code> instruction does the same thing, but allows dynamic construction — the entries can be computed with XSLT instructions:</p><pre><code class="language-xml">&lt;!-- xsl:map — dynamic construction --&gt;
+&lt;xsl:variable name="colors" as="map(xs:string, xs:string)"&gt;
+  &lt;xsl:map&gt;
+    &lt;xsl:map-entry key="'error'" select="'red'"/&gt;
+    &lt;xsl:map-entry key="'warning'" select="'orange'"/&gt;
+    &lt;xsl:map-entry key="'info'" select="'blue'"/&gt;
+  &lt;/xsl:map&gt;
+&lt;/xsl:variable&gt;</code></pre><h3 id="when-to-use-xsl-map-over-xpath-literals"><a class="anchor" href="#when-to-use-xsl-map-over-xpath-literals">#</a>When to Use xsl:map Over XPath Literals</h3><p>Use <code>xsl:map</code> when you need to:</p><ul><li>
+        <p>Build entries conditionally</p>
+      </li><li>
+        <p>Generate entries from iteration</p>
+      </li><li>
+        <p>Include complex computed values</p>
+      </li></ul><pre><code class="language-xml">&lt;!-- Building a map from XML data --&gt;
+&lt;xsl:variable name="config" as="map(*)"&gt;
+  &lt;xsl:map&gt;
+    &lt;!-- Static entries --&gt;
+    &lt;xsl:map-entry key="'version'" select="'2.1'"/&gt;
+    &lt;!-- Conditional entry --&gt;
+    &lt;xsl:if test="$debug-mode"&gt;
+      &lt;xsl:map-entry key="'debug'" select="true()"/&gt;
+    &lt;/xsl:if&gt;
+    &lt;!-- Entries from iteration --&gt;
+    &lt;xsl:for-each select="//setting"&gt;
+      &lt;xsl:map-entry key="string(@name)" select="string(.)"/&gt;
+    &lt;/xsl:for-each&gt;
+  &lt;/xsl:map&gt;
+&lt;/xsl:variable&gt;</code></pre><p>
+      <strong>C# parallel:</strong>
+    </p><pre><code class="language-csharp">var config = new Dictionary&lt;string, object&gt;
+{
+    ["version"] = "2.1"
+};
+if (debugMode)
+    config["debug"] = true;
+foreach (var setting in settings)
+    config[setting.Name] = setting.Value;</code></pre><h3 id="accessing-map-values"><a class="anchor" href="#accessing-map-values">#</a>Accessing Map Values</h3><p>Use the XPath <code>?</code> lookup operator or the <code>map:get()</code> function:</p><pre><code class="language-xml">&lt;!-- Lookup operator (preferred — concise) --&gt;
+&lt;xsl:value-of select="$colors?error"/&gt;          &lt;!-- "red" --&gt;
+&lt;!-- map:get function (equivalent) --&gt;
+&lt;xsl:value-of select="map:get($colors, 'error')"/&gt; &lt;!-- "red" --&gt;
+&lt;!-- Dynamic key lookup --&gt;
+&lt;xsl:variable name="level" select="@level"/&gt;
+&lt;span style="color: {$colors($level)}"&gt;
+  &lt;xsl:value-of select="@message"/&gt;
+&lt;/span&gt;
+&lt;!-- Check if key exists --&gt;
+&lt;xsl:if test="map:contains($config, 'debug')"&gt;
+  &lt;p&gt;Debug mode is active.&lt;/p&gt;
+&lt;/xsl:if&gt;</code></pre><h3 id="useful-map-functions"><a class="anchor" href="#useful-map-functions">#</a>Useful Map Functions</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Function</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+          <th>
+            <p>C# Equivalent</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>map:get($m, $key)</code></p>
+          </td>
+          <td>
+            <p>Get value by key</p>
+          </td>
+          <td>
+            <p><code>dict[key]</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>map:contains($m, $key)</code></p>
+          </td>
+          <td>
+            <p>Check if key exists</p>
+          </td>
+          <td>
+            <p><code>dict.ContainsKey(key)</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>map:keys($m)</code></p>
+          </td>
+          <td>
+            <p>All keys as a sequence</p>
+          </td>
+          <td>
+            <p><code>dict.Keys</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>map:size($m)</code></p>
+          </td>
+          <td>
+            <p>Number of entries</p>
+          </td>
+          <td>
+            <p><code>dict.Count</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>map:put($m, $key, $val)</code></p>
+          </td>
+          <td>
+            <p>New map with added/replaced entry</p>
+          </td>
+          <td>
+            <p>Immutable — returns new dict</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>map:remove($m, $key)</code></p>
+          </td>
+          <td>
+            <p>New map without the key</p>
+          </td>
+          <td>
+            <p>Immutable — returns new dict</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>map:merge($maps)</code></p>
+          </td>
+          <td>
+            <p>Merge multiple maps</p>
+          </td>
+          <td>
+            <p>Multiple <code>dict.Add()</code> calls</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>map:for-each($m, $fn)</code></p>
+          </td>
+          <td>
+            <p>Apply function to each entry</p>
+          </td>
+          <td>
+            <p><code>dict.Select(kv =&gt; fn(kv))</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>map:find($m, $key)</code></p>
+          </td>
+          <td>
+            <p>Deep search for key in nested maps</p>
+          </td>
+          <td>
+            <p>No direct equivalent</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="nested-maps"><a class="anchor" href="#nested-maps">#</a>Nested Maps</h3><p>Maps can contain other maps, building hierarchical data structures:</p><pre><code class="language-xml">&lt;xsl:variable name="api-response" as="map(*)"&gt;
+  &lt;xsl:map&gt;
+    &lt;xsl:map-entry key="'status'" select="200"/&gt;
+    &lt;xsl:map-entry key="'data'"&gt;
+      &lt;xsl:map&gt;
+        &lt;xsl:map-entry key="'user'"&gt;
+          &lt;xsl:map&gt;
+            &lt;xsl:map-entry key="'id'" select="$user-id"/&gt;
+            &lt;xsl:map-entry key="'name'" select="$user-name"/&gt;
+            &lt;xsl:map-entry key="'email'" select="$user-email"/&gt;
+          &lt;/xsl:map&gt;
+        &lt;/xsl:map-entry&gt;
+      &lt;/xsl:map&gt;
+    &lt;/xsl:map-entry&gt;
+  &lt;/xsl:map&gt;
+&lt;/xsl:variable&gt;
+&lt;!-- Access nested values with chained ? --&gt;
+&lt;xsl:value-of select="$api-response?data?user?name"/&gt;</code></pre><hr><h2 id="xsl-array-and-xsl-array-member"><a class="anchor" href="#xsl-array-and-xsl-array-member">#</a>xsl:array and xsl:array-member</h2><p>An array is an ordered collection of values. Unlike sequences, arrays can contain other arrays and maps as individual members, and members can themselves be sequences.</p><p>
+      <strong>C# parallel:</strong> <code>List&lt;object&gt;</code> or <code>object[]</code>.</p><h3 id="xpath-literal-vs-xsl-array"><a class="anchor" href="#xpath-literal-vs-xsl-array">#</a>XPath Literal vs. xsl:array</h3><p>XPath provides square-bracket syntax for array literals:</p><pre><code class="language-xml">&lt;!-- XPath array literal --&gt;
+&lt;xsl:variable name="primes" select="[2, 3, 5, 7, 11, 13]"/&gt;
+&lt;!-- Nested arrays --&gt;
+&lt;xsl:variable name="matrix" select="[[1, 2, 3], [4, 5, 6], [7, 8, 9]]"/&gt;</code></pre><p>The <code>xsl:array</code> instruction allows dynamic construction:</p><pre><code class="language-xml">&lt;!-- xsl:array — dynamic construction --&gt;
+&lt;xsl:variable name="product-names" as="array(xs:string)"&gt;
+  &lt;xsl:array&gt;
+    &lt;xsl:for-each select="//product"&gt;
+      &lt;xsl:array-member select="string(name)"/&gt;
+    &lt;/xsl:for-each&gt;
+  &lt;/xsl:array&gt;
+&lt;/xsl:variable&gt;</code></pre><h3 id="arrays-vs-sequences"><a class="anchor" href="#arrays-vs-sequences">#</a>Arrays vs. Sequences</h3><p>This distinction trips up many newcomers. Both hold ordered collections, but they behave differently:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p></p>
+          </th>
+          <th>
+            <p>Sequence</p>
+          </th>
+          <th>
+            <p>Array</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong>Nesting</strong></p>
+          </td>
+          <td>
+            <p>Sequences flatten automatically: <code>(1, (2, 3))</code> = <code>(1, 2, 3)</code></p>
+          </td>
+          <td>
+            <p>Arrays preserve nesting: <code>[[1], [2, 3]]</code> has 2 members</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Members</strong></p>
+          </td>
+          <td>
+            <p>Atomic values and nodes only</p>
+          </td>
+          <td>
+            <p>Any XDM value, including arrays, maps, and sequences</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Empty</strong></p>
+          </td>
+          <td>
+            <p><code>()</code> is the empty sequence</p>
+          </td>
+          <td>
+            <p><code>[]</code> is an empty array (an array with zero members)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Usage</strong></p>
+          </td>
+          <td>
+            <p>Default for most XPath operations</p>
+          </td>
+          <td>
+            <p>Required for JSON arrays and structured data</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>
+      <strong>C# parallel:</strong> Sequences are like flattened <code>IEnumerable&lt;T&gt;</code>, while arrays are like <code>List&lt;object&gt;</code> that can contain nested lists.</p><h3 id="accessing-array-members"><a class="anchor" href="#accessing-array-members">#</a>Accessing Array Members</h3><pre><code class="language-xml">&lt;!-- By position (1-based) --&gt;
+&lt;xsl:value-of select="$primes(3)"/&gt;     &lt;!-- 5 --&gt;
+&lt;!-- Using the ? lookup operator --&gt;
+&lt;xsl:value-of select="$primes?3"/&gt;      &lt;!-- 5 --&gt;
+&lt;!-- All members as a sequence (the * wildcard) --&gt;
+&lt;xsl:value-of select="$primes?*" separator=", "/&gt; &lt;!-- 2, 3, 5, 7, 11, 13 --&gt;</code></pre><h3 id="useful-array-functions"><a class="anchor" href="#useful-array-functions">#</a>Useful Array Functions</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Function</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+          <th>
+            <p>C# Equivalent</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>array:size($a)</code></p>
+          </td>
+          <td>
+            <p>Number of members</p>
+          </td>
+          <td>
+            <p><code>list.Count</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>array:get($a, $pos)</code></p>
+          </td>
+          <td>
+            <p>Get member by position</p>
+          </td>
+          <td>
+            <p><code>list[pos - 1]</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>array:put($a, $pos, $val)</code></p>
+          </td>
+          <td>
+            <p>New array with replaced member</p>
+          </td>
+          <td>
+            <p>Immutable update</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>array:append($a, $val)</code></p>
+          </td>
+          <td>
+            <p>New array with added member</p>
+          </td>
+          <td>
+            <p><code>list.Add(val)</code> (but immutable)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>array:subarray($a, $start, $len)</code></p>
+          </td>
+          <td>
+            <p>Slice the array</p>
+          </td>
+          <td>
+            <p><code>list.GetRange(start, len)</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>array:remove($a, $pos)</code></p>
+          </td>
+          <td>
+            <p>New array without the member</p>
+          </td>
+          <td>
+            <p><code>list.RemoveAt(pos)</code> (but immutable)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>array:head($a)</code></p>
+          </td>
+          <td>
+            <p>First member</p>
+          </td>
+          <td>
+            <p><code>list[0]</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>array:tail($a)</code></p>
+          </td>
+          <td>
+            <p>All members except the first</p>
+          </td>
+          <td>
+            <p><code>list.Skip(1)</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>array:join($arrays)</code></p>
+          </td>
+          <td>
+            <p>Concatenate arrays</p>
+          </td>
+          <td>
+            <p><code>list1.Concat(list2)</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>array:flatten($a)</code></p>
+          </td>
+          <td>
+            <p>Flatten nested arrays to a sequence</p>
+          </td>
+          <td>
+            <p><code>list.SelectMany(x =&gt; x)</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>array:for-each($a, $fn)</code></p>
+          </td>
+          <td>
+            <p>Apply function to each member</p>
+          </td>
+          <td>
+            <p><code>list.Select(fn)</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>array:filter($a, $fn)</code></p>
+          </td>
+          <td>
+            <p>Keep members matching predicate</p>
+          </td>
+          <td>
+            <p><code>list.Where(fn)</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="building-an-array-from-xml"><a class="anchor" href="#building-an-array-from-xml">#</a>Building an Array from XML</h3><pre><code class="language-xml">&lt;!-- Convert product elements to an array of maps --&gt;
+&lt;xsl:variable name="products-array" as="array(map(*))"&gt;
+  &lt;xsl:array&gt;
+    &lt;xsl:for-each select="//product"&gt;
+      &lt;xsl:array-member&gt;
+        &lt;xsl:map&gt;
+          &lt;xsl:map-entry key="'name'" select="string(name)"/&gt;
+          &lt;xsl:map-entry key="'price'" select="number(price)"/&gt;
+          &lt;xsl:map-entry key="'category'" select="string(@category)"/&gt;
+        &lt;/xsl:map&gt;
+      &lt;/xsl:array-member&gt;
+    &lt;/xsl:for-each&gt;
+  &lt;/xsl:array&gt;
+&lt;/xsl:variable&gt;
+&lt;!-- Access: second product's name --&gt;
+&lt;xsl:value-of select="$products-array(2)?name"/&gt;</code></pre><hr><h2 id="xsl-for-each-member-xslt-4-0"><a class="anchor" href="#xsl-for-each-member-xslt-4-0">#</a>xsl:for-each-member (XSLT 4.0)</h2><p>
+      <code>xsl:for-each-member</code> iterates over the members of an array, binding each member to a variable. This is the array counterpart to <code>xsl:for-each</code> (which iterates over sequences).</p><p>
+      <strong>C# parallel:</strong> <code>foreach (var item in array) { ... }</code></p><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><pre><code class="language-xml">&lt;xsl:variable name="tags" select="['xslt', 'xml', 'transformation']"/&gt;
+&lt;ul&gt;
+  &lt;xsl:for-each-member select="$tags" as="member"&gt;
+    &lt;li&gt;&lt;xsl:value-of select="$member"/&gt;&lt;/li&gt;
+  &lt;/xsl:for-each-member&gt;
+&lt;/ul&gt;</code></pre><p>Output:</p><pre><code class="language-html">&lt;ul&gt;
+  &lt;li&gt;xslt&lt;/li&gt;
+  &lt;li&gt;xml&lt;/li&gt;
+  &lt;li&gt;transformation&lt;/li&gt;
+&lt;/ul&gt;</code></pre><h3 id="why-not-just-use-xsl-for-each"><a class="anchor" href="#why-not-just-use-xsl-for-each">#</a>Why Not Just Use xsl:for-each?</h3><p>When array members are themselves sequences or complex values, <code>xsl:for-each</code> with <code>array:flatten()</code> would lose the member boundaries. <code>xsl:for-each-member</code> preserves each member as a distinct unit:</p><pre><code class="language-xml">&lt;!-- An array where each member is a sequence of names --&gt;
+&lt;xsl:variable name="teams" select="[('Alice', 'Bob'), ('Carol', 'Dave', 'Eve')]"/&gt;
+&lt;!-- for-each-member preserves the grouping --&gt;
+&lt;xsl:for-each-member select="$teams" as="team"&gt;
+  &lt;div class="team"&gt;
+    &lt;xsl:for-each select="$team"&gt;
+      &lt;span&gt;&lt;xsl:value-of select="."/&gt;&lt;/span&gt;
+    &lt;/xsl:for-each&gt;
+  &lt;/div&gt;
+&lt;/xsl:for-each-member&gt;</code></pre><p>Output:</p><pre><code class="language-html">&lt;div class="team"&gt;
+  &lt;span&gt;Alice&lt;/span&gt;
+  &lt;span&gt;Bob&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="team"&gt;
+  &lt;span&gt;Carol&lt;/span&gt;
+  &lt;span&gt;Dave&lt;/span&gt;
+  &lt;span&gt;Eve&lt;/span&gt;
+&lt;/div&gt;</code></pre><h3 id="iterating-over-maps-in-an-array"><a class="anchor" href="#iterating-over-maps-in-an-array">#</a>Iterating Over Maps in an Array</h3><p>A common pattern when working with JSON-like data:</p><pre><code class="language-xml">&lt;xsl:variable name="users" select="[
+  map { 'name': 'Alice', 'role': 'admin' },
+  map { 'name': 'Bob', 'role': 'editor' },
+  map { 'name': 'Carol', 'role': 'viewer' }
+]"/&gt;
+&lt;table&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Role&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;xsl:for-each-member select="$users" as="user"&gt;
+      &lt;tr&gt;
+        &lt;td&gt;&lt;xsl:value-of select="$user?name"/&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;xsl:value-of select="$user?role"/&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/xsl:for-each-member&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre><hr><h2 id="xsl-record-xslt-4-0"><a class="anchor" href="#xsl-record-xslt-4-0">#</a>xsl:record (XSLT 4.0)</h2><p>
+      <code>xsl:record</code> constructs a map with named entries, similar to a C# anonymous type or record. It is syntactic sugar for <code>xsl:map</code> with <code>xsl:map-entry</code>, but with a cleaner, more readable syntax.</p><p>
+      <strong>C# parallel:</strong> Anonymous types <code>new { Name = "Alice", Age = 30 }</code> or records <code>record User(string Name, int Age)</code>.</p><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><pre><code class="language-xml">&lt;xsl:variable name="user" as="map(*)"&gt;
+  &lt;xsl:record&gt;
+    &lt;name&gt;&lt;xsl:value-of select="@name"/&gt;&lt;/name&gt;
+    &lt;age select="xs:integer(@age)"/&gt;
+    &lt;email&gt;&lt;xsl:value-of select="email"/&gt;&lt;/email&gt;
+  &lt;/xsl:record&gt;
+&lt;/xsl:variable&gt;
+&lt;!-- Access like a map --&gt;
+&lt;xsl:value-of select="$user?name"/&gt;</code></pre><p>Each child element of <code>xsl:record</code> becomes a map entry where:</p><ul><li>
+        <p>The element name becomes the string key</p>
+      </li><li>
+        <p>The element's content (or <code>select</code> attribute) becomes the value</p>
+      </li></ul><h3 id="comparison-xsl-record-vs-xsl-map"><a class="anchor" href="#comparison-xsl-record-vs-xsl-map">#</a>Comparison: xsl:record vs. xsl:map</h3><p>The following are equivalent:</p><pre><code class="language-xml">&lt;!-- Using xsl:record (cleaner) --&gt;
+&lt;xsl:record&gt;
+  &lt;name&gt;Alice&lt;/name&gt;
+  &lt;age select="30"/&gt;
+  &lt;active select="true()"/&gt;
+&lt;/xsl:record&gt;
+&lt;!-- Using xsl:map (more verbose) --&gt;
+&lt;xsl:map&gt;
+  &lt;xsl:map-entry key="'name'" select="'Alice'"/&gt;
+  &lt;xsl:map-entry key="'age'" select="30"/&gt;
+  &lt;xsl:map-entry key="'active'" select="true()"/&gt;
+&lt;/xsl:map&gt;</code></pre><p>Use <code>xsl:record</code> when all keys are fixed, known string names. Use <code>xsl:map</code> when keys are dynamic or non-string.</p><h3 id="building-records-from-xml"><a class="anchor" href="#building-records-from-xml">#</a>Building Records from XML</h3><pre><code class="language-xml">&lt;xsl:template match="employee"&gt;
+  &lt;xsl:variable name="emp" as="map(*)"&gt;
+    &lt;xsl:record&gt;
+      &lt;id select="string(@id)"/&gt;
+      &lt;fullName&gt;
+        &lt;xsl:value-of select="concat(firstName, ' ', lastName)"/&gt;
+      &lt;/fullName&gt;
+      &lt;department select="string(@dept)"/&gt;
+      &lt;salary select="xs:decimal(salary)"/&gt;
+      &lt;isManager select="@role = 'manager'"/&gt;
+    &lt;/xsl:record&gt;
+  &lt;/xsl:variable&gt;
+  &lt;!-- Use the record --&gt;
+  &lt;div class="employee-card"&gt;
+    &lt;h3&gt;&lt;xsl:value-of select="$emp?fullName"/&gt;&lt;/h3&gt;
+    &lt;p&gt;Department: &lt;xsl:value-of select="$emp?department"/&gt;&lt;/p&gt;
+    &lt;xsl:if test="$emp?isManager"&gt;
+      &lt;span class="badge"&gt;Manager&lt;/span&gt;
+    &lt;/xsl:if&gt;
+  &lt;/div&gt;
+&lt;/xsl:template&gt;</code></pre><hr><h2 id="json-output-patterns"><a class="anchor" href="#json-output-patterns">#</a>JSON Output Patterns</h2><p>Maps and arrays are the bridge between XML and JSON in XSLT 3.0+. When you serialize a map or array with <code>method="json"</code>, it produces JSON output directly.</p><h3 id="xml-to-json-conversion"><a class="anchor" href="#xml-to-json-conversion">#</a>XML to JSON Conversion</h3><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+  &lt;xsl:output method="json" indent="yes"/&gt;
+  &lt;xsl:template match="/"&gt;
+    &lt;!-- The template result is a map — serialized as JSON --&gt;
+    &lt;xsl:map&gt;
+      &lt;xsl:map-entry key="'catalog'"&gt;
+        &lt;xsl:array&gt;
+          &lt;xsl:for-each select="//product"&gt;
+            &lt;xsl:array-member&gt;
+              &lt;xsl:map&gt;
+                &lt;xsl:map-entry key="'name'" select="string(name)"/&gt;
+                &lt;xsl:map-entry key="'price'" select="number(price)"/&gt;
+                &lt;xsl:map-entry key="'category'" select="string(@category)"/&gt;
+                &lt;xsl:map-entry key="'inStock'" select="stock &gt; 0"/&gt;
+                &lt;xsl:if test="description"&gt;
+                  &lt;xsl:map-entry key="'description'" select="string(description)"/&gt;
+                &lt;/xsl:if&gt;
+              &lt;/xsl:map&gt;
+            &lt;/xsl:array-member&gt;
+          &lt;/xsl:for-each&gt;
+        &lt;/xsl:array&gt;
+      &lt;/xsl:map-entry&gt;
+    &lt;/xsl:map&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</code></pre><p>Output:</p><pre><code class="language-json">{
+  "catalog": [
+    {
+      "name": "Laptop",
+      "price": 999.99,
+      "category": "electronics",
+      "inStock": true,
+      "description": "High-performance laptop"
+    },
+    {
+      "name": "T-Shirt",
+      "price": 19.99,
+      "category": "clothing",
+      "inStock": true
+    }
+  ]
+}</code></pre><p>
+      <strong>C# parallel:</strong>
+    </p><pre><code class="language-csharp">var catalog = new {
+    catalog = products.Select(p =&gt; new {
+        name = p.Name,
+        price = p.Price,
+        category = p.Category,
+        inStock = p.Stock &gt; 0,
+        description = p.Description  // null omitted by some serializers
+    })
+};
+string json = JsonSerializer.Serialize(catalog);</code></pre><h3 id="api-response-construction"><a class="anchor" href="#api-response-construction">#</a>API Response Construction</h3><p>A common pattern for building REST API responses:</p><pre><code class="language-xml">&lt;xsl:template name="api-response"&gt;
+  &lt;xsl:param name="status" as="xs:integer"/&gt;
+  &lt;xsl:param name="data" as="item()*"/&gt;
+  &lt;xsl:param name="message" as="xs:string" select="''"/&gt;
+  &lt;xsl:map&gt;
+    &lt;xsl:map-entry key="'status'" select="$status"/&gt;
+    &lt;xsl:map-entry key="'success'" select="$status ge 200 and $status lt 300"/&gt;
+    &lt;xsl:if test="$message != ''"&gt;
+      &lt;xsl:map-entry key="'message'" select="$message"/&gt;
+    &lt;/xsl:if&gt;
+    &lt;xsl:map-entry key="'data'" select="$data"/&gt;
+    &lt;xsl:map-entry key="'timestamp'" select="string(current-dateTime())"/&gt;
+  &lt;/xsl:map&gt;
+&lt;/xsl:template&gt;</code></pre><h3 id="reading-json-input"><a class="anchor" href="#reading-json-input">#</a>Reading JSON Input</h3><p>XSLT 3.0 can also read JSON into maps and arrays using <code>json-doc()</code> or <code>parse-json()</code>:</p><pre><code class="language-xml">&lt;!-- Load a JSON configuration file --&gt;
+&lt;xsl:variable name="config" select="json-doc('config.json')"/&gt;
+&lt;!-- Access values --&gt;
+&lt;xsl:value-of select="$config?database?host"/&gt;
+&lt;xsl:value-of select="$config?database?port"/&gt;
+&lt;!-- Iterate over array members --&gt;
+&lt;xsl:for-each select="$config?allowedOrigins?*"&gt;
+  &lt;origin&gt;&lt;xsl:value-of select="."/&gt;&lt;/origin&gt;
+&lt;/xsl:for-each&gt;</code></pre><hr><h2 id="use-cases"><a class="anchor" href="#use-cases">#</a>Use Cases</h2><h3 id="building-configuration-from-xml"><a class="anchor" href="#building-configuration-from-xml">#</a>Building Configuration from XML</h3><pre><code class="language-xml">&lt;xsl:variable name="app-config" as="map(*)"&gt;
+  &lt;xsl:map&gt;
+    &lt;xsl:for-each select="configuration/appSettings/add"&gt;
+      &lt;xsl:map-entry key="string(@key)" select="string(@value)"/&gt;
+    &lt;/xsl:for-each&gt;
+  &lt;/xsl:map&gt;
+&lt;/xsl:variable&gt;
+&lt;!-- Usage --&gt;
+&lt;connection-string&gt;
+  &lt;xsl:value-of select="$app-config?connectionString"/&gt;
+&lt;/connection-string&gt;</code></pre><h3 id="lookup-tables"><a class="anchor" href="#lookup-tables">#</a>Lookup Tables</h3><p>Maps make excellent lookup tables, replacing verbose <code>xsl:choose</code> chains:</p><pre><code class="language-xml">&lt;!-- Instead of a 50-line xsl:choose --&gt;
+&lt;xsl:variable name="country-names" select="map {
+  'US': 'United States',
+  'GB': 'United Kingdom',
+  'DE': 'Germany',
+  'FR': 'France',
+  'JP': 'Japan'
+}"/&gt;
+&lt;!-- Fast O(1) lookup --&gt;
+&lt;xsl:value-of select="$country-names(@country-code)"/&gt;</code></pre><p>
+      <strong>C# parallel:</strong>
+    </p><pre><code class="language-csharp">var countryNames = new Dictionary&lt;string, string&gt;
+{
+    ["US"] = "United States",
+    ["GB"] = "United Kingdom",
+    ["DE"] = "Germany",
+    ["FR"] = "France",
+    ["JP"] = "Japan"
+};
+var name = countryNames[countryCode];</code></pre><h3 id="data-transformation-pipeline"><a class="anchor" href="#data-transformation-pipeline">#</a>Data Transformation Pipeline</h3><p>Combine maps and arrays to transform XML into structured data for further processing:</p><pre><code class="language-xml">&lt;!-- Step 1: Transform XML to structured data --&gt;
+&lt;xsl:variable name="order-data" as="map(*)"&gt;
+  &lt;xsl:map&gt;
+    &lt;xsl:map-entry key="'orderId'" select="string(@id)"/&gt;
+    &lt;xsl:map-entry key="'items'"&gt;
+      &lt;xsl:array&gt;
+        &lt;xsl:for-each select="item"&gt;
+          &lt;xsl:array-member&gt;
+            &lt;xsl:map&gt;
+              &lt;xsl:map-entry key="'sku'" select="string(@sku)"/&gt;
+              &lt;xsl:map-entry key="'quantity'" select="xs:integer(@qty)"/&gt;
+              &lt;xsl:map-entry key="'unitPrice'" select="xs:decimal(@price)"/&gt;
+              &lt;xsl:map-entry key="'lineTotal'"
+                             select="xs:decimal(@qty) * xs:decimal(@price)"/&gt;
+            &lt;/xsl:map&gt;
+          &lt;/xsl:array-member&gt;
+        &lt;/xsl:for-each&gt;
+      &lt;/xsl:array&gt;
+    &lt;/xsl:map-entry&gt;
+    &lt;xsl:map-entry key="'total'"
+                   select="sum(item/(xs:decimal(@qty) * xs:decimal(@price)))"/&gt;
+  &lt;/xsl:map&gt;
+&lt;/xsl:variable&gt;
+&lt;!-- Step 2: Use the structured data --&gt;
+&lt;invoice&gt;
+  &lt;order-id&gt;&lt;xsl:value-of select="$order-data?orderId"/&gt;&lt;/order-id&gt;
+  &lt;total&gt;&lt;xsl:value-of select="format-number($order-data?total, '$#,##0.00')"/&gt;&lt;/total&gt;
+&lt;/invoice&gt;</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

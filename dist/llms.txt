@@ -1,0 +1,116 @@
+# PhoenixmlDb Documentation
+
+> PhoenixmlDb Documentation — documentation site
+
+- [Home](/index.html): PhoenixmlDb — Modern XML/JSON document database for .NET
+- [Release Notes](/release-notes.html): PhoenixmlDb version history and changelog
+
+## getting-started
+
+- [First Application](/getting-started/first-application.html): Build a complete library management app with PhoenixmlDb
+- [Getting Started](/getting-started/index.html): Install PhoenixmlDb and run your first query in minutes
+- [Installation](/getting-started/installation.html): Platform requirements, NuGet packages, and building from source
+- [Quick Start](/getting-started/quick-start.html): Your first PhoenixmlDb query in 5 minutes
+
+## language-reference
+
+- [Language Reference](/language-reference/index.html): XPath, XSLT, and XQuery documentation for .NET developers
+- [Document Structure](/language-reference/xml-foundations/document-structure.html): XML elements, attributes, and the document tree explained for JSON developers
+- [XML Foundations](/language-reference/xml-foundations/index.html): XML essentials for developers coming from JSON
+- [Namespaces](/language-reference/xml-foundations/namespaces.html): XML namespaces explained practically — when you need them and how to handle them
+- [Unicode and .NET Requirements](/language-reference/xml-foundations/unicode-and-dotnet.html): ICU globalization requirements, Unicode normalization, collation, and platform setup for PhoenixmlDb
+- [Working with JSON](/language-reference/xml-foundations/working-with-json.html): Parsing, querying, transforming, and outputting JSON with XPath, XSLT, and XQuery
+- [The XQuery and XPath Data Model](/language-reference/xml-foundations/xdm.html): How XPath, XSLT, and XQuery see your XML documents
+- [XML vs JSON](/language-reference/xml-foundations/xml-vs-json.html): Side-by-side comparison of XML and JSON for developers who think in JSON
+- [Data Types](/language-reference/xpath/data-types.html): XPath's type system — atomic types, sequences, type casting, and schema interaction
+- [Array Functions](/language-reference/xpath/functions/array.html): XPath ordered array operations — like List<T> in .NET
+- [Boolean Functions](/language-reference/xpath/functions/boolean.html): XPath boolean construction and logic functions
+- [Date and Time Functions](/language-reference/xpath/functions/date-time.html): XPath date/time construction, extraction, formatting, and timezone handling
+- [Formatting Functions](/language-reference/xpath/functions/formatting.html): XPath number formatting, date formatting, serialization, and URI handling
+- [Higher-Order Functions](/language-reference/xpath/functions/higher-order.html): XPath functions that take functions — map, filter, fold, and more
+- [Functions](/language-reference/xpath/functions/index.html): Comprehensive reference for XPath 4.0's 240+ built-in functions
+- [Map Functions](/language-reference/xpath/functions/map.html): XPath map operations — key-value data structures like Dictionary in .NET
+- [Math Functions](/language-reference/xpath/functions/math.html): XPath math functions — trigonometry, logarithms, exponents, and constants
+- [Node Functions](/language-reference/xpath/functions/node.html): XPath node properties, names, namespaces, and document access functions
+- [Numeric Functions](/language-reference/xpath/functions/numeric.html): XPath numeric functions — arithmetic, rounding, aggregation
+- [Sequence Functions](/language-reference/xpath/functions/sequence.html): XPath sequence operations — filtering, ordering, set operations, scanning
+- [String Functions](/language-reference/xpath/functions/string.html): XPath string manipulation, searching, regex, Unicode, and URI functions
+- [Type Constructors](/language-reference/xpath/functions/type-constructors.html): XPath type casting and XSD type constructor functions
+- [XPath](/language-reference/xpath/index.html): XPath query language for XML — the LINQ of the XML world
+- [Operators and Comparisons](/language-reference/xpath/operators.html): XPath arithmetic, comparison, and logical operators with important semantic differences from C#
+- [Path Expressions](/language-reference/xpath/path-expressions.html): Navigate XML trees with XPath path expressions, axes, and predicates
+- [Conditionals and Error Handling](/language-reference/xquery/conditionals.html): if/then/else, switch, typeswitch, try/catch, and the otherwise operator
+- [Constructors](/language-reference/xquery/constructors.html): Building new XML elements, attributes, and documents in XQuery
+- [Extensibility](/language-reference/xquery/extensibility.html): Extending XQuery with custom functions, modules, external functions, and .NET integration
+- [FLWOR Expressions](/language-reference/xquery/flwor.html): XQuery's For-Let-Where-Order-Return expressions — LINQ query syntax for XML
+- [Advanced FLWOR](/language-reference/xquery/flwor-advanced.html): Window clauses, count, group by, while, otherwise — advanced FLWOR patterns
+- [Full-Text Search](/language-reference/xquery/full-text.html): XQuery Full-Text — ft:contains, match options, scoring, and search expressions
+- [Functions and Modules](/language-reference/xquery/functions-modules.html): Writing reusable XQuery functions and organizing code into modules
+- [XQuery](/language-reference/xquery/index.html): Query and construct XML with XQuery — SQL for hierarchical data
+- [Operators](/language-reference/xquery/operators.html): XQuery comparison, arithmetic, sequence, and navigation operators
+- [Prolog and Declarations](/language-reference/xquery/prolog.html): XQuery prolog — module declarations, namespace imports, options, and configuration
+- [Type System](/language-reference/xquery/types.html): XQuery types, sequence types, records, enums, union types, and type testing
+- [Update Facility](/language-reference/xquery/update-facility.html): XQuery Update — insert, delete, replace, rename, and transform expressions
+- [XQuery vs XSLT](/language-reference/xquery/xquery-vs-xslt.html): When to use XQuery and when to use XSLT — a practical decision guide
+- [Extensibility](/language-reference/xslt/extensibility.html): Extending XSLT with custom functions, packages, extension instructions, and .NET integration
+- [Your First Transform](/language-reference/xslt/first-transform.html): Hands-on introduction to XSLT — transforming XML to HTML step by step
+- [XSLT](/language-reference/xslt/index.html): Transform XML documents with XSLT — the declarative transformation language
+- [String Analysis](/language-reference/xslt/instructions/analyze-string.html): xsl:analyze-string — regex-based string processing in XSLT
+- [Control Flow](/language-reference/xslt/instructions/control-flow.html): xsl:if, xsl:choose, xsl:switch, xsl:where-populated, xsl:on-empty
+- [Copying and Identity Transform](/language-reference/xslt/instructions/copying-identity.html): xsl:copy, xsl:copy-of, and the identity transform pattern
+- [Dynamic Evaluation](/language-reference/xslt/instructions/dynamic-evaluation.html): xsl:evaluate — runtime XPath evaluation from string expressions
+- [Error Handling](/language-reference/xslt/instructions/error-handling.html): xsl:try/catch, xsl:assert, xsl:fallback — handling errors and asserting conditions
+- [User-Defined Functions](/language-reference/xslt/instructions/functions.html): xsl:function — defining reusable functions callable from XPath expressions
+- [Grouping](/language-reference/xslt/instructions/grouping.html): xsl:for-each-group — all four grouping modes with examples
+- [Instructions Reference](/language-reference/xslt/instructions/index.html): Complete reference for all XSLT 3.0/4.0 instructions
+- [Iteration and Sorting](/language-reference/xslt/instructions/iteration-sorting.html): xsl:for-each, xsl:sort, xsl:perform-sort, xsl:iterate with break and next-iteration
+- [Keys and Cross-References](/language-reference/xslt/instructions/keys.html): xsl:key — indexing documents for fast lookup with key() function
+- [Maps, Arrays, and Records](/language-reference/xslt/instructions/maps-arrays.html): xsl:map, xsl:array, xsl:record, xsl:for-each-member — structured data in XSLT 3.0/4.0
+- [Merging](/language-reference/xslt/instructions/merge.html): xsl:merge — combining multiple sorted input sources into a single output
+- [Multiple Output Documents](/language-reference/xslt/instructions/multiple-outputs.html): xsl:result-document and xsl:output — generating multiple files and controlling serialization
+- [Node Construction](/language-reference/xslt/instructions/node-construction.html): xsl:element, xsl:attribute, xsl:namespace, xsl:document — building nodes with dynamic names
+- [Number Formatting](/language-reference/xslt/instructions/number-formatting.html): xsl:number, xsl:decimal-format, xsl:character-map — numbering and format customization
+- [Output Instructions](/language-reference/xslt/instructions/output.html): xsl:value-of, xsl:text, xsl:comment, xsl:processing-instruction, xsl:sequence, xsl:message
+- [Packages](/language-reference/xslt/instructions/packages.html): xsl:use-package, xsl:accept, xsl:override, xsl:expose — reusable stylesheet libraries
+- [Streaming and Accumulators](/language-reference/xslt/instructions/streaming.html): xsl:source-document, xsl:accumulator, xsl:fork — processing large documents efficiently
+- [Variables and Parameters](/language-reference/xslt/instructions/variables-parameters.html): xsl:variable, xsl:param, static parameters, tunnel parameters, with-param
+- [Output Methods](/language-reference/xslt/output-methods.html): Producing HTML, XML, JSON, CSV, and text from XSLT transforms
+- [Template Matching](/language-reference/xslt/template-matching.html): How XSLT template rules match nodes and produce output — the declarative paradigm shift
+
+## phoenixmldb
+
+- [Containers API](/phoenixmldb/api-reference/containers.html): Container creation, configuration, operations, and management
+- [Documents API](/phoenixmldb/api-reference/documents.html): Document storage, retrieval, metadata, bulk operations, and error handling
+- [API Reference](/phoenixmldb/api-reference/index.html): PhoenixmlDb .NET API — interfaces, classes, and usage patterns
+- [Indexes API](/phoenixmldb/api-reference/indexes.html): Index creation, management, statistics, and query optimization
+- [Queries API](/phoenixmldb/api-reference/queries.html): XQuery execution, parameters, results, explain plans, and prepared queries
+- [Transactions API](/phoenixmldb/api-reference/transactions.html): Transaction lifecycle, commit/rollback, error handling, and patterns
+- [Configuration](/phoenixmldb/configuration.html): Database options, environment variables, logging, and connection strings
+- [Core Concepts](/phoenixmldb/core-concepts.html): Containers, documents, the XDM, and shredded node storage
+- [Database Extensions](/phoenixmldb/database-extensions.html): Custom XQuery functions, dbxml:metadata(), and extension development
+- [Cluster Mode](/phoenixmldb/deployment/cluster-mode.html): Multi-node deployment with Raft consensus, sharding, and distributed transactions
+- [Embedded Mode](/phoenixmldb/deployment/embedded-mode.html): Run PhoenixmlDb as an in-process library — no separate server needed
+- [Deployment](/phoenixmldb/deployment/index.html): Run PhoenixmlDb as an embedded library, standalone server, or distributed cluster
+- [Server Mode](/phoenixmldb/deployment/server-mode.html): Standalone server with gRPC API, authentication, TLS, and Docker deployment
+- [Documents & Storage](/phoenixmldb/documents-and-storage.html): Storing and retrieving XML and JSON documents in containers
+- [PhoenixmlDb](/phoenixmldb/index.html): Modern embedded XML/JSON document database for .NET
+- [Indexing](/phoenixmldb/indexing.html): Path, value, full-text, structural, name, and metadata indexes
+- [JSON Support](/phoenixmldb/json-support/index.html): Store, query, and index JSON documents with PhoenixmlDb
+- [JSON Indexing](/phoenixmldb/json-support/json-indexing.html): How JSON documents get full indexing through the XML storage path
+- [JSON Queries](/phoenixmldb/json-support/json-queries.html): XQuery patterns for querying JSON documents stored in PhoenixmlDb
+- [JSON Storage](/phoenixmldb/json-support/json-storage.html): How JSON documents are stored, the XML mapping, and storage options
+- [LINQ Provider](/phoenixmldb/linq-provider.html): Query PhoenixmlDb with LINQ — XML navigation, fluent API, and type mapping
+- [Migration Guide](/phoenixmldb/migration-guide.html): Migrate from Berkeley DB XML, eXist-db, MarkLogic, MongoDB, or SQL
+- [Mobile Development](/phoenixmldb/mobile-development.html): PhoenixmlDb on .NET MAUI, iOS, Android, and offline-first patterns
+- [Performance Tuning](/phoenixmldb/performance-tuning.html): Query optimization, storage tuning, memory management, and monitoring
+- [Transactions](/phoenixmldb/transactions.html): ACID transactions with MVCC via LMDB
+- [Troubleshooting](/phoenixmldb/troubleshooting.html): Common issues and solutions for storage, queries, transactions, and clusters
+- [XDM Data Model](/phoenixmldb/xdm-data-model.html): The XQuery Data Model — how PhoenixmlDb represents documents internally
+
+## tools
+
+- [Crucible](/tools/crucible.html): Static documentation generator — Markdown to XML to XSLT to HTML
+- [Tools](/tools/index.html): PhoenixmlDb command-line tools — xslt, xquery, and crucible
+- [xquery CLI](/tools/xquery-cli.html): Command-line XQuery processor — query XML documents from the terminal
+- [xslt CLI](/tools/xslt-cli.html): Command-line XSLT 3.0/4.0 processor — transform XML documents from the terminal
+

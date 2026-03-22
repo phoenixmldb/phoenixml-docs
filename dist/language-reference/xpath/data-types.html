@@ -1,0 +1,275 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Data Types — PhoenixmlDb Documentation</title><meta name="description" content="XPath's type system — atomic types, sequences, type casting, and schema interaction"><link rel="canonical" href="/language-reference/xpath/data-types.html"><meta property="og:title" content="Data Types"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xpath/data-types.html"><meta property="og:description" content="XPath's type system — atomic types, sequences, type casting, and schema interaction"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li class="active"><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="data-types"><a class="anchor" href="#data-types">#</a>Data Types</h1><p>XPath has a richer type system than JSON or most dynamically-typed languages. Understanding it prevents subtle bugs in comparisons, function calls, and XSLT template matching.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
+        <p>
+          <a href="#the-type-hierarchy" title="">The Type Hierarchy</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#atomic-types-in-practice" title="">Atomic Types in Practice</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#type-casting" title="">Type Casting</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#sequence-types" title="">Sequence Types</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#type-testing" title="">Type Testing</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#common-type-pitfalls" title="">Common Type Pitfalls</a>
+        </p>
+      </li></ul><hr><h2 id="the-type-hierarchy"><a class="anchor" href="#the-type-hierarchy">#</a>The Type Hierarchy</h2><p>Every value in XPath is an <strong>item</strong> in a <strong>sequence</strong>. Items are either <strong>nodes</strong> (from the XML tree) or <strong>atomic values</strong> (strings, numbers, dates, etc.).</p><pre><code>item()
+├── node()
+│   ├── document-node()
+│   ├── element()
+│   ├── attribute()
+│   ├── text()
+│   ├── comment()
+│   ├── processing-instruction()
+│   └── namespace-node()
+├── xs:anyAtomicType
+│   ├── xs:string
+│   ├── xs:boolean
+│   ├── xs:decimal
+│   │   └── xs:integer
+│   │       ├── xs:long
+│   │       │   └── xs:int
+│   │       │       └── xs:short
+│   │       │           └── xs:byte
+│   │       └── xs:nonNegativeInteger
+│   │           └── xs:positiveInteger
+│   ├── xs:double
+│   ├── xs:float
+│   ├── xs:date
+│   ├── xs:dateTime
+│   ├── xs:time
+│   ├── xs:duration
+│   │   ├── xs:dayTimeDuration
+│   │   └── xs:yearMonthDuration
+│   ├── xs:anyURI
+│   ├── xs:QName
+│   ├── xs:hexBinary
+│   ├── xs:base64Binary
+│   └── xs:untypedAtomic
+├── function(*)
+├── map(*)
+└── array(*)</code></pre><p>
+      <strong>C# parallel:</strong> This is like the .NET type hierarchy (<code>object</code> → <code>ValueType</code> → <code>int</code>, <code>string</code>, <code>DateTime</code>, etc.), but with date/time types as first-class citizens rather than library types.</p><hr><h2 id="atomic-types-in-practice"><a class="anchor" href="#atomic-types-in-practice">#</a>Atomic Types in Practice</h2><h3 id="numeric-types"><a class="anchor" href="#numeric-types">#</a>Numeric Types</h3><p>XPath has four numeric types with automatic promotion:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Type</p>
+          </th>
+          <th>
+            <p>Range</p>
+          </th>
+          <th>
+            <p>Precision</p>
+          </th>
+          <th>
+            <p>C# Equivalent</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>xs:integer</code></p>
+          </td>
+          <td>
+            <p>Arbitrary</p>
+          </td>
+          <td>
+            <p>Exact</p>
+          </td>
+          <td>
+            <p><code>BigInteger</code> (unbounded)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:decimal</code></p>
+          </td>
+          <td>
+            <p>Arbitrary</p>
+          </td>
+          <td>
+            <p>Exact</p>
+          </td>
+          <td>
+            <p><code>decimal</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:float</code></p>
+          </td>
+          <td>
+            <p>±3.4 × 10³⁸</p>
+          </td>
+          <td>
+            <p>~7 digits</p>
+          </td>
+          <td>
+            <p><code>float</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:double</code></p>
+          </td>
+          <td>
+            <p>±1.7 × 10³⁰⁸</p>
+          </td>
+          <td>
+            <p>~15 digits</p>
+          </td>
+          <td>
+            <p><code>double</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>
+      <strong>Promotion rules</strong> (automatic, like C#):</p><pre><code>integer → decimal → float → double</code></pre><pre><code class="language-xpath">5 + 3           =&gt; 8          (: integer + integer = integer :)
+5 + 3.0         =&gt; 8.0        (: integer + decimal = decimal :)
+5 + 3.0e0       =&gt; 8.0e0      (: integer + double = double :)</code></pre><p>
+      <strong>The <code>xs:untypedAtomic</code> gotcha:</strong> When you read a value from an XML element or attribute without a schema, it's <code>xs:untypedAtomic</code> — not <code>xs:string</code>. XPath automatically casts <code>untypedAtomic</code> to the required type in comparisons and arithmetic:</p><pre><code class="language-xpath">&lt;price&gt;39.99&lt;/price&gt;
+(: //price is xs:untypedAtomic, automatically cast to xs:double for comparison :)
+//price &gt; 30   =&gt; true</code></pre><p>This is convenient but means type errors surface at runtime, not compile time.</p><h3 id="string-type"><a class="anchor" href="#string-type">#</a>String Type</h3><p>Strings in XPath are sequences of Unicode characters. They're immutable, like C# strings.</p><pre><code class="language-xpath">"hello"                        (: string literal :)
+'hello'                        (: also valid — single or double quotes :)
+""                             (: empty string :)</code></pre><p>
+      <strong>String vs untypedAtomic:</strong> An element's text content is <code>xs:untypedAtomic</code>, not <code>xs:string</code>. In most contexts this doesn't matter because they convert automatically. But <code>xs:string</code> values compare using collation, while <code>xs:untypedAtomic</code> values promote to the type of the other operand.</p><h3 id="boolean-type"><a class="anchor" href="#boolean-type">#</a>Boolean Type</h3><p>XPath booleans behave like C# booleans, but XPath has <a href="functions/boolean.html" title="">effective boolean value</a> rules that automatically convert other types:</p><pre><code class="language-xpath">boolean("hello")   =&gt; true    (: non-empty string :)
+boolean("")        =&gt; false   (: empty string :)
+boolean(42)        =&gt; true    (: non-zero :)
+boolean(0)         =&gt; false   (: zero :)</code></pre><h3 id="date-and-time-types"><a class="anchor" href="#date-and-time-types">#</a>Date and Time Types</h3><p>These are first-class types — not strings:</p><pre><code class="language-xpath">xs:date("2026-03-19")                    (: date :)
+xs:time("14:30:00")                      (: time :)
+xs:dateTime("2026-03-19T14:30:00")       (: date + time :)
+xs:duration("P1Y2M3D")                   (: duration :)
+xs:dayTimeDuration("PT5H30M")            (: days/hours/minutes/seconds :)
+xs:yearMonthDuration("P1Y6M")            (: years/months :)</code></pre><p>
+      <strong>Date arithmetic works natively:</strong>
+    </p><pre><code class="language-xpath">xs:date("2026-03-19") + xs:dayTimeDuration("P7D")
+=&gt; 2026-03-26          (: add 7 days :)
+xs:date("2026-12-31") - xs:date("2026-01-01")
+=&gt; P365D               (: difference as duration :)
+xs:date("2026-03-19") &gt; xs:date("2025-12-25")
+=&gt; true                (: date comparison :)</code></pre><p>In C#, you'd need <code>DateTime.AddDays(7)</code>, <code>date2 - date1</code>, etc. XPath uses standard operators.</p><hr><h2 id="type-casting"><a class="anchor" href="#type-casting">#</a>Type Casting</h2><h3 id="explicit-casting-with-constructor-functions"><a class="anchor" href="#explicit-casting-with-constructor-functions">#</a>Explicit Casting with Constructor Functions</h3><pre><code class="language-xpath">xs:integer("42")           =&gt; 42
+xs:date("2026-03-19")     =&gt; typed date
+xs:double(42)              =&gt; 42.0e0
+xs:string(42)              =&gt; "42"</code></pre><p>See <a href="functions/type-constructors.html" title="">Type Constructors</a> for the full list.</p><h3 id="the-expression"><a class="anchor" href="#the-expression">#</a>The <code>cast as</code> Expression</h3><p>An alternative syntax for type casting:</p><pre><code class="language-xpath">"42" cast as xs:integer       =&gt; 42
+42 cast as xs:string          =&gt; "42"
+"true" cast as xs:boolean     =&gt; true</code></pre><h3 id="the-test"><a class="anchor" href="#the-test">#</a>The <code>castable as</code> Test</h3><p>Tests whether a cast would succeed without actually performing it:</p><pre><code class="language-xpath">"42" castable as xs:integer     =&gt; true
+"abc" castable as xs:integer    =&gt; false
+"2026-03-19" castable as xs:date =&gt; true</code></pre><p>
+      <strong>C# equivalent:</strong> <code>int.TryParse("42", out _)</code></p><p>
+      <strong>Practical pattern — safe type conversion:</strong>
+    </p><pre><code class="language-xpath">if ("42" castable as xs:integer)
+then xs:integer("42")
+else 0</code></pre><h3 id="the-assertion"><a class="anchor" href="#the-assertion">#</a>The <code>treat as</code> Assertion</h3><p>Asserts a type at compile time without converting. Raises an error if the type doesn't match at runtime:</p><pre><code class="language-xpath">$value treat as xs:integer    (: assert $value is an integer :)</code></pre><p>
+      <strong>C# equivalent:</strong> <code>(int)value</code> — a cast that throws <code>InvalidCastException</code> on failure.</p><h3 id="the-test"><a class="anchor" href="#the-test">#</a>The <code>instance of</code> Test</h3><p>Tests whether a value is of a given type:</p><pre><code class="language-xpath">42 instance of xs:integer         =&gt; true
+42 instance of xs:string          =&gt; false
+"hello" instance of xs:string     =&gt; true
+(1, 2, 3) instance of xs:integer+ =&gt; true  (: sequence of one or more integers :)</code></pre><p>
+      <strong>C# equivalent:</strong> <code>value is int</code></p><hr><h2 id="sequence-types"><a class="anchor" href="#sequence-types">#</a>Sequence Types</h2><p>Sequence types describe the structure of sequences. They're used in function signatures, variable declarations, and type tests.</p><h3 id="occurrence-indicators"><a class="anchor" href="#occurrence-indicators">#</a>Occurrence Indicators</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Indicator</p>
+          </th>
+          <th>
+            <p>Meaning</p>
+          </th>
+          <th>
+            <p>C# Equivalent</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>(none)</p>
+          </td>
+          <td>
+            <p>Exactly one</p>
+          </td>
+          <td>
+            <p><code>T</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>?</code></p>
+          </td>
+          <td>
+            <p>Zero or one</p>
+          </td>
+          <td>
+            <p><code>T?</code> or <code>Nullable&lt;T&gt;</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>*</code></p>
+          </td>
+          <td>
+            <p>Zero or more</p>
+          </td>
+          <td>
+            <p><code>IEnumerable&lt;T&gt;</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>+</code></p>
+          </td>
+          <td>
+            <p>One or more</p>
+          </td>
+          <td>
+            <p>(no direct equivalent — non-empty enumerable)</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><pre><code class="language-xpath">xs:integer             (: exactly one integer :)
+xs:integer?            (: zero or one integer :)
+xs:integer*            (: zero or more integers :)
+xs:integer+            (: one or more integers :)
+item()*                (: any sequence of any items :)
+node()                 (: exactly one node :)
+element(book)          (: exactly one element named "book" :)</code></pre><h3 id="function-types"><a class="anchor" href="#function-types">#</a>Function Types</h3><p>Functions are first-class values with typed signatures:</p><pre><code class="language-xpath">function(xs:integer) as xs:integer         (: function taking and returning an integer :)
+function(xs:string, xs:string) as xs:boolean (: predicate on two strings :)
+function(*) as item()*                      (: any function :)</code></pre><p>
+      <strong>C# equivalent:</strong> <code>Func&lt;int, int&gt;</code>, <code>Func&lt;string, string, bool&gt;</code></p><h3 id="map-and-array-types"><a class="anchor" href="#map-and-array-types">#</a>Map and Array Types</h3><pre><code class="language-xpath">map(xs:string, xs:integer)     (: map from strings to integers :)
+map(*)                          (: any map :)
+array(xs:string)               (: array of strings :)
+array(*)                        (: any array :)</code></pre><p>
+      <strong>C# equivalent:</strong> <code>Dictionary&lt;string, int&gt;</code>, <code>List&lt;string&gt;</code></p><hr><h2 id="type-testing"><a class="anchor" href="#type-testing">#</a>Type Testing</h2><h3 id=""><a class="anchor" href="#">#</a>
+      <code>instance of</code>
+    </h3><p>Runtime type check:</p><pre><code class="language-xpath">let $value := //price/text()
+return
+  if ($value instance of xs:decimal) then "decimal"
+  else if ($value instance of xs:string) then "string"
+  else "unknown"</code></pre><h3 id="xpath-4-0"><a class="anchor" href="#xpath-4-0">#</a>
+      <code>type()</code> (XPath 4.0)</h3><p>Returns the type name as a string:</p><pre><code class="language-xpath">type(42)                   =&gt; "xs:integer"
+type("hello")              =&gt; "xs:string"
+type(xs:date("2026-03-19")) =&gt; "xs:date"
+type(//price)              =&gt; type of the price node's value</code></pre><p>
+      <strong>C# equivalent:</strong> <code>value.GetType().Name</code></p><hr><h2 id="common-type-pitfalls"><a class="anchor" href="#common-type-pitfalls">#</a>Common Type Pitfalls</h2><h3 id="1-untyped-attribute-comparisons"><a class="anchor" href="#1-untyped-attribute-comparisons">#</a>1. Untyped Attribute Comparisons</h3><pre><code class="language-xpath">(: @price is xs:untypedAtomic, not a number :)
+//item[@price &gt; 10]          (: works — untypedAtomic auto-casts to double :)
+//item[@price &gt; "10"]        (: WRONG — string comparison! "9" &gt; "10" is true :)</code></pre><p>
+      <strong>Rule:</strong> When comparing with a number literal, XPath casts the untyped value to a number. When comparing with a string literal, it does string comparison. Be explicit about which you want.</p><h3 id="2-empty-sequence-vs-empty-string"><a class="anchor" href="#2-empty-sequence-vs-empty-string">#</a>2. Empty Sequence vs Empty String</h3><pre><code class="language-xpath">() = ""                      (: false — empty sequence is not empty string :)
+string(())                   =&gt; ""   (: but converting empty sequence gives empty string :)
+//nonexistent = ""           (: false — no nodes, not empty text :)
+//nonexistent/text() = ""   (: false for the same reason :)</code></pre><h3 id="3-numeric-string-comparison"><a class="anchor" href="#3-numeric-string-comparison">#</a>3. Numeric String Comparison</h3><pre><code class="language-xpath">"9" &gt; "10"                   =&gt; true   (: string comparison — "9" sorts after "1" :)
+9 &gt; 10                       =&gt; false  (: numeric comparison :)
+xs:integer("9") &gt; xs:integer("10")  =&gt; false  (: explicit numeric :)</code></pre><p>
+      <strong>Rule:</strong> If you want numeric comparison, make sure at least one operand is a number.</p><h3 id="4-date-string-comparison"><a class="anchor" href="#4-date-string-comparison">#</a>4. Date String Comparison</h3><pre><code class="language-xpath">"2026-03-19" &gt; "2025-12-25"  =&gt; true   (: works by accident — ISO format sorts correctly :)
+xs:date("2026-03-19") &gt; xs:date("2025-12-25")  =&gt; true  (: correct — typed date comparison :)</code></pre><p>ISO 8601 date strings happen to sort correctly as strings, but this is coincidental. Always use typed dates for reliable comparison, especially with non-ISO formats.</p><h3 id="5-division-returns-decimal-not-integer"><a class="anchor" href="#5-division-returns-decimal-not-integer">#</a>5. Division Returns Decimal, Not Integer</h3><pre><code class="language-xpath">10 div 3     =&gt; 3.333...   (: not 3! :)
+10 idiv 3    =&gt; 3           (: use idiv for integer division :)</code></pre><p>
+      <strong>C# difference:</strong> In C#, <code>10 / 3</code> returns <code>3</code> (integer division when both operands are integers). XPath's <code>div</code> always returns a decimal/double result.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

@@ -1,0 +1,576 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Streaming and Accumulators — PhoenixmlDb Documentation</title><meta name="description" content="xsl:source-document, xsl:accumulator, xsl:fork — processing large documents efficiently"><link rel="canonical" href="/language-reference/xslt/instructions/streaming.html"><meta property="og:title" content="Streaming and Accumulators"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/streaming.html"><meta property="og:description" content="xsl:source-document, xsl:accumulator, xsl:fork — processing large documents efficiently"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li class="active"><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="streaming-and-accumulators"><a class="anchor" href="#streaming-and-accumulators">#</a>Streaming and Accumulators</h1><p>When a document is too large to fit in memory — tens of gigabytes of log data, massive data exports, or continuous feeds — XSLT 3.0's streaming features let you process it in a single pass without building the entire tree. If you have worked with <code>IAsyncEnumerable</code>, <code>Utf8JsonReader</code>, or <code>System.IO.Pipelines</code> in C#, the motivation is the same: process data as it flows through, never holding more than a small window in memory.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
+        <p>
+          <a href="#the-streaming-concept" title="">The Streaming Concept</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xslsource-document" title="">xsl:source-document</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xslaccumulator-and-xslaccumulator-rule" title="">xsl:accumulator and xsl:accumulator-rule</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xslfork" title="">xsl:fork</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#streamability-rules" title="">Streamability Rules</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#use-accumulators-on-modes" title="">use-accumulators on Modes</a>
+        </p>
+      </li></ul><hr><h2 id="the-streaming-concept"><a class="anchor" href="#the-streaming-concept">#</a>The Streaming Concept</h2><p>In conventional (non-streaming) XSLT processing, the entire input document is parsed into an in-memory tree before any templates execute. This is fine for documents up to a few hundred megabytes, but fails for larger documents.</p><p>Streaming changes the execution model: the processor reads the document as a stream of events (start-element, text, end-element) and executes templates as each node passes by. At any point, only the current node and its ancestors are in memory.</p><h3 id="when-you-need-streaming"><a class="anchor" href="#when-you-need-streaming">#</a>When You Need Streaming</h3><ul><li>
+        <p>The document is too large for available memory (multi-gigabyte XML exports)</p>
+      </li><li>
+        <p>You want to start producing output before the entire input is read</p>
+      </li><li>
+        <p>You are processing a continuous feed that never ends</p>
+      </li><li>
+        <p>You want to minimize memory footprint even for moderate-sized documents</p>
+      </li></ul><h3 id="when-you-do-not-need-streaming"><a class="anchor" href="#when-you-do-not-need-streaming">#</a>When You Do Not Need Streaming</h3><ul><li>
+        <p>Documents fit comfortably in memory (most XML files)</p>
+      </li><li>
+        <p>You need random access to the document (looking backward or forward freely)</p>
+      </li><li>
+        <p>The transformation requires multiple passes over the same data</p>
+      </li></ul><p>
+      <strong>C# parallel:</strong> The same trade-off exists in .NET. <code>XmlDocument</code> or <code>XDocument</code> loads everything into memory (like non-streaming XSLT). <code>XmlReader</code> and <code>Utf8JsonReader</code> stream through the data, but you lose the ability to navigate freely:</p><pre><code class="language-csharp">// Non-streaming: full tree in memory
+var doc = XDocument.Load("huge-file.xml");
+var items = doc.Descendants("item").Where(x =&gt; ...);
+// Streaming: one node at a time
+using var reader = XmlReader.Create("huge-file.xml");
+while (reader.Read())
+{
+    if (reader.NodeType == XmlNodeType.Element &amp;&amp; reader.Name == "item")
+    {
+        // Process one item at a time
+    }
+}</code></pre><p>XSLT streaming gives you the memory efficiency of <code>XmlReader</code> with the declarative power of templates.</p><hr><h2 id="xsl-source-document"><a class="anchor" href="#xsl-source-document">#</a>xsl:source-document</h2><p>
+      <code>xsl:source-document</code> (XSLT 3.0) loads an external document, optionally in streaming mode. It replaces the <code>doc()</code> function when you need streaming access.</p><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><pre><code class="language-xml">&lt;!-- Non-streaming (same as doc()) --&gt;
+&lt;xsl:source-document href="data.xml"&gt;
+  &lt;xsl:apply-templates select="./catalog/product"/&gt;
+&lt;/xsl:source-document&gt;
+&lt;!-- Streaming mode --&gt;
+&lt;xsl:source-document href="huge-data.xml" streamable="yes"&gt;
+  &lt;xsl:apply-templates select="./catalog/product" mode="streaming"/&gt;
+&lt;/xsl:source-document&gt;</code></pre><h3 id="attributes"><a class="anchor" href="#attributes">#</a>Attributes</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Attribute</p>
+          </th>
+          <th>
+            <p>Values</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>href</code></p>
+          </td>
+          <td>
+            <p>URI</p>
+          </td>
+          <td>
+            <p>The document to load</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>streamable</code></p>
+          </td>
+          <td>
+            <p><code>yes</code>, <code>no</code></p>
+          </td>
+          <td>
+            <p>Whether to process the document as a stream</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>use-accumulators</code></p>
+          </td>
+          <td>
+            <p>Space-separated list of accumulator names</p>
+          </td>
+          <td>
+            <p>Which accumulators to apply to this document</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>validation</code></p>
+          </td>
+          <td>
+            <p><code>strict</code>, <code>lax</code>, <code>preserve</code>, <code>strip</code></p>
+          </td>
+          <td>
+            <p>Schema validation mode</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="streaming-example-extracting-from-a-large-file"><a class="anchor" href="#streaming-example-extracting-from-a-large-file">#</a>Streaming Example: Extracting from a Large File</h3><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+  &lt;xsl:mode name="streaming" streamable="yes"/&gt;
+  &lt;xsl:template match="/"&gt;
+    &lt;summary&gt;
+      &lt;xsl:source-document href="transactions.xml" streamable="yes"&gt;
+        &lt;xsl:apply-templates select="./transactions/transaction" mode="streaming"/&gt;
+      &lt;/xsl:source-document&gt;
+    &lt;/summary&gt;
+  &lt;/xsl:template&gt;
+  &lt;xsl:template match="transaction[@amount &gt; 10000]" mode="streaming"&gt;
+    &lt;large-transaction id="{@id}" amount="{@amount}" date="{@date}"/&gt;
+  &lt;/xsl:template&gt;
+  &lt;!-- Skip transactions under the threshold --&gt;
+  &lt;xsl:template match="transaction" mode="streaming"/&gt;
+&lt;/xsl:stylesheet&gt;</code></pre><p>This stylesheet reads a potentially enormous transactions file and outputs only those exceeding $10,000, without ever loading the whole file into memory.</p><h3 id="replacing-doc-with-xsl-source-document"><a class="anchor" href="#replacing-doc-with-xsl-source-document">#</a>Replacing doc() with xsl:source-document</h3><p>The <code>doc()</code> function always builds a full in-memory tree. If you are migrating to streaming, replace <code>doc()</code> calls with <code>xsl:source-document</code>:</p><pre><code class="language-xml">&lt;!-- Before: non-streaming --&gt;
+&lt;xsl:variable name="data" select="doc('large-file.xml')"/&gt;
+&lt;xsl:for-each select="$data//record"&gt;
+  &lt;!-- ... --&gt;
+&lt;/xsl:for-each&gt;
+&lt;!-- After: streaming --&gt;
+&lt;xsl:source-document href="large-file.xml" streamable="yes"&gt;
+  &lt;xsl:for-each select="./records/record"&gt;
+    &lt;!-- ... --&gt;
+  &lt;/xsl:for-each&gt;
+&lt;/xsl:source-document&gt;</code></pre><p>Note the change from <code>$data//record</code> (using the <code>//</code> descendant axis, which requires random access) to <code>./records/record</code> (a direct child path, which is streamable).</p><hr><h2 id="xsl-accumulator-and-xsl-accumulator-rule"><a class="anchor" href="#xsl-accumulator-and-xsl-accumulator-rule">#</a>xsl:accumulator and xsl:accumulator-rule</h2><p>Accumulators maintain running state as the processor streams through a document. They solve the problem that streaming templates cannot look backward — once a node has passed, it is gone. An accumulator watches the stream and updates a value as each matching node passes by.</p><p>
+      <strong>C# parallel:</strong> Think of accumulators like <code>Aggregate()</code> over an <code>IAsyncEnumerable</code>, or like registering callbacks on a SAX parser that update shared state:</p><pre><code class="language-csharp">decimal runningTotal = 0;
+int count = 0;
+await foreach (var transaction in streamReader.ReadTransactionsAsync())
+{
+    runningTotal += transaction.Amount;
+    count++;
+}</code></pre><h3 id="declaring-an-accumulator"><a class="anchor" href="#declaring-an-accumulator">#</a>Declaring an Accumulator</h3><p>Accumulators are top-level declarations (children of <code>xsl:stylesheet</code>):</p><pre><code class="language-xml">&lt;xsl:accumulator name="total-amount"
+                 as="xs:decimal"
+                 initial-value="0"
+                 streamable="yes"&gt;
+  &lt;xsl:accumulator-rule match="transaction"
+                        phase="end"
+                        select="$value + xs:decimal(@amount)"/&gt;
+&lt;/xsl:accumulator&gt;</code></pre><h3 id="accumulator-parts"><a class="anchor" href="#accumulator-parts">#</a>Accumulator Parts</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Part</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>name</code></p>
+          </td>
+          <td>
+            <p>Unique name for the accumulator</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>as</code></p>
+          </td>
+          <td>
+            <p>Data type of the accumulated value</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>initial-value</code></p>
+          </td>
+          <td>
+            <p>Starting value before any nodes are processed</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>streamable</code></p>
+          </td>
+          <td>
+            <p>Whether this accumulator is used in streaming mode</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xsl:accumulator-rule</code></p>
+          </td>
+          <td>
+            <p>One or more rules that update the value</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="xsl-accumulator-rule"><a class="anchor" href="#xsl-accumulator-rule">#</a>xsl:accumulator-rule</h3><p>Each rule specifies when and how to update the accumulated value:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Attribute</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>match</code></p>
+          </td>
+          <td>
+            <p>Pattern — which nodes trigger this rule</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>phase</code></p>
+          </td>
+          <td>
+            <p><code>start</code> or <code>end</code> — fire when the element opens or closes</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>select</code></p>
+          </td>
+          <td>
+            <p>New value expression (can reference <code>$value</code> for current accumulated value)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>new-value</code></p>
+          </td>
+          <td>
+            <p>Alternative to <code>select</code> for complex computation</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="phase-start-vs-end"><a class="anchor" href="#phase-start-vs-end">#</a>Phase: start vs. end</h3><ul><li>
+        <p>
+          <strong>
+            <code>start</code>
+          </strong> — fires when the opening tag is encountered. At this point, the element's attributes are available, but child content has not been read yet.</p>
+      </li><li>
+        <p>
+          <strong>
+            <code>end</code>
+          </strong> — fires when the closing tag is encountered. At this point, the element's text content has been read (but not stored in memory).</p>
+      </li></ul><pre><code class="language-xml">&lt;!-- Count elements as they open --&gt;
+&lt;xsl:accumulator name="element-count"
+                 as="xs:integer"
+                 initial-value="0"
+                 streamable="yes"&gt;
+  &lt;xsl:accumulator-rule match="transaction" phase="start"
+                        select="$value + 1"/&gt;
+&lt;/xsl:accumulator&gt;</code></pre><h3 id="reading-accumulator-values"><a class="anchor" href="#reading-accumulator-values">#</a>Reading Accumulator Values</h3><p>Two functions retrieve the accumulated value at any point during processing:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Function</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>accumulator-before('name')</code></p>
+          </td>
+          <td>
+            <p>Value of the accumulator before the current node was processed</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>accumulator-after('name')</code></p>
+          </td>
+          <td>
+            <p>Value of the accumulator after the current node was processed</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><pre><code class="language-xml">&lt;xsl:template match="transaction" mode="streaming"&gt;
+  &lt;row&gt;
+    &lt;number&gt;&lt;xsl:value-of select="accumulator-after('element-count')"/&gt;&lt;/number&gt;
+    &lt;amount&gt;&lt;xsl:value-of select="@amount"/&gt;&lt;/amount&gt;
+    &lt;running-total&gt;&lt;xsl:value-of select="accumulator-after('total-amount')"/&gt;&lt;/running-total&gt;
+  &lt;/row&gt;
+&lt;/xsl:template&gt;</code></pre><h3 id="complete-accumulator-example-log-file-statistics"><a class="anchor" href="#complete-accumulator-example-log-file-statistics">#</a>Complete Accumulator Example: Log File Statistics</h3><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                version="3.0"&gt;
+  &lt;xsl:mode name="streaming" streamable="yes" use-accumulators="entry-count error-count max-response-time"/&gt;
+  &lt;xsl:output method="xml" indent="yes"/&gt;
+  &lt;!-- Count all entries --&gt;
+  &lt;xsl:accumulator name="entry-count" as="xs:integer"
+                   initial-value="0" streamable="yes"&gt;
+    &lt;xsl:accumulator-rule match="entry" phase="start"
+                          select="$value + 1"/&gt;
+  &lt;/xsl:accumulator&gt;
+  &lt;!-- Count error entries --&gt;
+  &lt;xsl:accumulator name="error-count" as="xs:integer"
+                   initial-value="0" streamable="yes"&gt;
+    &lt;xsl:accumulator-rule match="entry[@level='ERROR']" phase="start"
+                          select="$value + 1"/&gt;
+  &lt;/xsl:accumulator&gt;
+  &lt;!-- Track maximum response time --&gt;
+  &lt;xsl:accumulator name="max-response-time" as="xs:decimal"
+                   initial-value="0" streamable="yes"&gt;
+    &lt;xsl:accumulator-rule match="entry[@response-ms]" phase="start"
+                          select="max(($value, xs:decimal(@response-ms)))"/&gt;
+  &lt;/xsl:accumulator&gt;
+  &lt;xsl:template match="/"&gt;
+    &lt;xsl:source-document href="access-log.xml" streamable="yes"&gt;
+      &lt;xsl:apply-templates select="." mode="streaming"/&gt;
+    &lt;/xsl:source-document&gt;
+  &lt;/xsl:template&gt;
+  &lt;xsl:template match="log" mode="streaming"&gt;
+    &lt;log-summary&gt;
+      &lt;total-entries&gt;&lt;xsl:value-of select="accumulator-after('entry-count')"/&gt;&lt;/total-entries&gt;
+      &lt;error-entries&gt;&lt;xsl:value-of select="accumulator-after('error-count')"/&gt;&lt;/error-entries&gt;
+      &lt;max-response-time-ms&gt;&lt;xsl:value-of select="accumulator-after('max-response-time')"/&gt;&lt;/max-response-time-ms&gt;
+    &lt;/log-summary&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</code></pre><p>Input (<code>access-log.xml</code>, potentially gigabytes):</p><pre><code class="language-xml">&lt;log&gt;
+  &lt;entry timestamp="2025-03-15T08:00:01" level="INFO" response-ms="45"/&gt;
+  &lt;entry timestamp="2025-03-15T08:00:02" level="INFO" response-ms="120"/&gt;
+  &lt;entry timestamp="2025-03-15T08:00:03" level="ERROR" response-ms="5023"/&gt;
+  &lt;!-- ... millions more entries ... --&gt;
+&lt;/log&gt;</code></pre><p>Output:</p><pre><code class="language-xml">&lt;log-summary&gt;
+  &lt;total-entries&gt;3847291&lt;/total-entries&gt;
+  &lt;error-entries&gt;12847&lt;/error-entries&gt;
+  &lt;max-response-time-ms&gt;15234&lt;/max-response-time-ms&gt;
+&lt;/log-summary&gt;</code></pre><h3 id="use-cases-for-accumulators"><a class="anchor" href="#use-cases-for-accumulators">#</a>Use Cases for Accumulators</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Use Case</p>
+          </th>
+          <th>
+            <p>Accumulator Pattern</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Running total</p>
+          </td>
+          <td>
+            <p><code>select="$value + @amount"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Counting</p>
+          </td>
+          <td>
+            <p><code>select="$value + 1"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Maximum value</p>
+          </td>
+          <td>
+            <p><code>select="max(($value, @val))"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Minimum value</p>
+          </td>
+          <td>
+            <p><code>select="if ($value = 0) then @val else min(($value, @val))"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Context tracking</p>
+          </td>
+          <td>
+            <p><code>select="@category"</code> (track the current section/category)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Last-seen value</p>
+          </td>
+          <td>
+            <p><code>select="@id"</code> (remember the most recent ID)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Collecting distinct values</p>
+          </td>
+          <td>
+            <p><code>select="distinct-values(($value, @type))"</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="context-tracking-accumulator"><a class="anchor" href="#context-tracking-accumulator">#</a>Context Tracking Accumulator</h3><p>A powerful pattern: track which section you are in while streaming, so inner elements can reference the current section name without looking backward:</p><pre><code class="language-xml">&lt;xsl:accumulator name="current-section" as="xs:string"
+                 initial-value="''" streamable="yes"&gt;
+  &lt;xsl:accumulator-rule match="section" phase="start"
+                        select="string(@name)"/&gt;
+&lt;/xsl:accumulator&gt;
+&lt;xsl:template match="entry" mode="streaming"&gt;
+  &lt;row section="{accumulator-before('current-section')}"&gt;
+    &lt;xsl:value-of select="@message"/&gt;
+  &lt;/row&gt;
+&lt;/xsl:template&gt;</code></pre><hr><h2 id="xsl-fork"><a class="anchor" href="#xsl-fork">#</a>xsl:fork</h2><p>
+      <code>xsl:fork</code> splits processing into independent branches that each consume the streamed document independently. Without <code>xsl:fork</code>, a streaming template can only make one downward pass through the children. With <code>xsl:fork</code>, you can process the same children in multiple ways simultaneously.</p><p>
+      <strong>C# parallel:</strong> Think of <code>xsl:fork</code> like <code>Channel&lt;T&gt;</code> fan-out, or <code>tee</code> in Unix — one input stream split to multiple consumers:</p><pre><code class="language-csharp">// Conceptually similar: multiple consumers of the same stream
+var channel = Channel.CreateUnbounded&lt;XmlNode&gt;();
+Task.WhenAll(
+    ProcessErrors(channel.Reader),
+    ComputeStats(channel.Reader),
+    GenerateReport(channel.Reader)
+);</code></pre><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><pre><code class="language-xml">&lt;xsl:template match="log" mode="streaming"&gt;
+  &lt;report&gt;
+    &lt;xsl:fork&gt;
+      &lt;!-- Branch 1: extract errors --&gt;
+      &lt;xsl:sequence&gt;
+        &lt;errors&gt;
+          &lt;xsl:apply-templates select="entry[@level='ERROR']" mode="streaming"/&gt;
+        &lt;/errors&gt;
+      &lt;/xsl:sequence&gt;
+      &lt;!-- Branch 2: extract warnings --&gt;
+      &lt;xsl:sequence&gt;
+        &lt;warnings&gt;
+          &lt;xsl:apply-templates select="entry[@level='WARN']" mode="streaming"/&gt;
+        &lt;/warnings&gt;
+      &lt;/xsl:sequence&gt;
+      &lt;!-- Branch 3: count by for-each-group (if supported in streaming) --&gt;
+      &lt;xsl:sequence&gt;
+        &lt;summary&gt;
+          &lt;xsl:for-each-group select="entry" group-by="@level"&gt;
+            &lt;level name="{current-grouping-key()}" count="{count(current-group())}"/&gt;
+          &lt;/xsl:for-each-group&gt;
+        &lt;/summary&gt;
+      &lt;/xsl:sequence&gt;
+    &lt;/xsl:fork&gt;
+  &lt;/report&gt;
+&lt;/xsl:template&gt;</code></pre><p>Each <code>xsl:sequence</code> inside <code>xsl:fork</code> is an independent branch. The processor feeds each branch from the same stream of events. The branches cannot communicate with each other, but they can each produce output that is concatenated in order.</p><h3 id="when-to-use-xsl-fork"><a class="anchor" href="#when-to-use-xsl-fork">#</a>When to Use xsl:fork</h3><p>Use <code>xsl:fork</code> when a single streaming pass needs to produce multiple independent outputs from the same data:</p><ul><li>
+        <p>Generating both a summary and detail view in one pass</p>
+      </li><li>
+        <p>Writing to multiple result documents from the same streamed input</p>
+      </li><li>
+        <p>Applying different filters to the same stream</p>
+      </li></ul><p>Without <code>xsl:fork</code>, you would need multiple passes over the document (defeating the purpose of streaming) or would need to handle everything in a single set of templates.</p><hr><h2 id="streamability-rules"><a class="anchor" href="#streamability-rules">#</a>Streamability Rules</h2><p>Not every XSLT stylesheet can be executed in streaming mode. The processor enforces streamability rules that ensure the transformation can work in a single forward pass.</p><h3 id="core-principle"><a class="anchor" href="#core-principle">#</a>Core Principle</h3><p>In streaming mode, a node is available only while the processor is "positioned" on it. Once the processor moves past a node, it is gone. This means:</p><ul><li>
+        <p>You can read <strong>attributes</strong> and <strong>namespace nodes</strong> of the current element (they arrive with the start tag)</p>
+      </li><li>
+        <p>You can process <strong>child nodes</strong> in document order (one at a time, as they stream by)</p>
+      </li><li>
+        <p>You <strong>cannot</strong> go backward (no preceding siblings, no ancestor's other children)</p>
+      </li><li>
+        <p>You <strong>cannot</strong> read the same child node twice</p>
+      </li></ul><h3 id="consuming-vs-non-consuming-operations"><a class="anchor" href="#consuming-vs-non-consuming-operations">#</a>Consuming vs. Non-Consuming Operations</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Operation Type</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+          <th>
+            <p>Examples</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong>Non-consuming</strong></p>
+          </td>
+          <td>
+            <p>Reads data available without advancing the stream</p>
+          </td>
+          <td>
+            <p><code>@attribute</code>, <code>name()</code>, <code>position()</code>, <code>accumulator-before()</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Consuming</strong></p>
+          </td>
+          <td>
+            <p>Reads child content, advancing the stream</p>
+          </td>
+          <td>
+            <p><code>string(.)</code>, <code>xsl:apply-templates</code>, <code>xsl:for-each select="child"</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>The key rule: <strong>you can perform at most one consuming operation on any given node.</strong> You cannot, for example, both <code>xsl:apply-templates</code> to the children and then <code>xsl:value-of select="."</code> on the same element — both consume the children.</p><h3 id="grounded-vs-free-ranging-expressions"><a class="anchor" href="#grounded-vs-free-ranging-expressions">#</a>Grounded vs. Free-Ranging Expressions</h3><ul><li>
+        <p>
+          <strong>Grounded expression:</strong> Evaluates to a value without navigating through streamed content. Examples: <code>@id</code>, <code>$variable</code>, <code>position()</code>, literal values.</p>
+      </li><li>
+        <p>
+          <strong>Free-ranging expression:</strong> Navigates through descendant content. Examples: <code>.//item</code>, <code>string(.)</code>, <code>sum(item/price)</code>.</p>
+      </li></ul><p>A streamable template can use one free-ranging expression (consuming the children), but everything else must be grounded.</p><h3 id="making-templates-streamable"><a class="anchor" href="#making-templates-streamable">#</a>Making Templates Streamable</h3><p>Here are common patterns and their streamable alternatives:</p><pre><code class="language-xml">&lt;!-- NOT STREAMABLE: uses descendant axis --&gt;
+&lt;xsl:template match="catalog"&gt;
+  &lt;xsl:value-of select="count(.//product)"/&gt;
+&lt;/xsl:template&gt;
+&lt;!-- STREAMABLE: use an accumulator instead --&gt;
+&lt;xsl:accumulator name="product-count" as="xs:integer"
+                 initial-value="0" streamable="yes"&gt;
+  &lt;xsl:accumulator-rule match="product" phase="start"
+                        select="$value + 1"/&gt;
+&lt;/xsl:accumulator&gt;
+&lt;xsl:template match="catalog" mode="streaming"&gt;
+  &lt;count&gt;&lt;xsl:value-of select="accumulator-after('product-count')"/&gt;&lt;/count&gt;
+&lt;/xsl:template&gt;</code></pre><pre><code class="language-xml">&lt;!-- NOT STREAMABLE: reads children twice --&gt;
+&lt;xsl:template match="product"&gt;
+  &lt;name&gt;&lt;xsl:value-of select="name"/&gt;&lt;/name&gt;
+  &lt;price&gt;&lt;xsl:value-of select="price"/&gt;&lt;/price&gt;
+&lt;/xsl:template&gt;
+&lt;!-- STREAMABLE: use copy-of or apply-templates (one consuming operation) --&gt;
+&lt;xsl:template match="product" mode="streaming"&gt;
+  &lt;xsl:copy-of select="."/&gt;
+&lt;/xsl:template&gt;
+&lt;!-- OR: use xsl:fork to split the processing --&gt;
+&lt;xsl:template match="product" mode="streaming"&gt;
+  &lt;xsl:fork&gt;
+    &lt;xsl:sequence&gt;
+      &lt;name&gt;&lt;xsl:value-of select="name"/&gt;&lt;/name&gt;
+    &lt;/xsl:sequence&gt;
+    &lt;xsl:sequence&gt;
+      &lt;price&gt;&lt;xsl:value-of select="price"/&gt;&lt;/price&gt;
+    &lt;/xsl:sequence&gt;
+  &lt;/xsl:fork&gt;
+&lt;/xsl:template&gt;</code></pre><h3 id="streamability-checklist"><a class="anchor" href="#streamability-checklist">#</a>Streamability Checklist</h3><p>Before making a stylesheet streamable, verify:</p><ol><li>
+        <p>Templates process children in document order only (no backward navigation)</p>
+      </li><li>
+        <p>Each template performs at most one consuming operation on the streamed input</p>
+      </li><li>
+        <p>Conditions and computations use only attributes, accumulators, or variables (not child content multiple times)</p>
+      </li><li>
+        <p>The <code>xsl:mode</code> declaration includes <code>streamable="yes"</code></p>
+      </li><li>
+        <p>Accumulators are declared with <code>streamable="yes"</code></p>
+      </li></ol><hr><h2 id="use-accumulators-on-modes"><a class="anchor" href="#use-accumulators-on-modes">#</a>use-accumulators on Modes</h2><p>For accumulators to fire during streaming, the mode must declare which accumulators it uses. This is a whitelist — unlisted accumulators are not evaluated, which saves processing time.</p><pre><code class="language-xml">&lt;!-- Declare a streamable mode with specific accumulators --&gt;
+&lt;xsl:mode name="streaming"
+          streamable="yes"
+          use-accumulators="entry-count error-count max-response-time"/&gt;</code></pre><p>You can also use the <code>#all</code> token to enable all accumulators:</p><pre><code class="language-xml">&lt;xsl:mode name="streaming"
+          streamable="yes"
+          use-accumulators="#all"/&gt;</code></pre><p>And on <code>xsl:source-document</code>:</p><pre><code class="language-xml">&lt;xsl:source-document href="data.xml"
+                     streamable="yes"
+                     use-accumulators="record-count running-total"&gt;
+  &lt;xsl:apply-templates select="." mode="streaming"/&gt;
+&lt;/xsl:source-document&gt;</code></pre><h3 id="why-the-whitelist"><a class="anchor" href="#why-the-whitelist">#</a>Why the Whitelist?</h3><p>Evaluating accumulators has a cost — each accumulator-rule must be tested against every node in the stream. By declaring which accumulators a mode uses, the processor can skip unnecessary evaluations. This matters when streaming millions of nodes per second.</p><p>
+      <strong>C# parallel:</strong> This is similar to subscribing to specific events rather than receiving all events:</p><pre><code class="language-csharp">// Only subscribe to the events you need
+stream.OnError += HandleError;
+stream.OnLargeTransaction += TrackMaxAmount;
+// Not subscribing to OnInfo saves processing time</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

@@ -1,0 +1,376 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Cluster Mode — PhoenixmlDb Documentation</title><meta name="description" content="Multi-node deployment with Raft consensus, sharding, and distributed transactions"><link rel="canonical" href="/phoenixmldb/deployment/cluster-mode.html"><meta property="og:title" content="Cluster Mode"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/deployment/cluster-mode.html"><meta property="og:description" content="Multi-node deployment with Raft consensus, sharding, and distributed transactions"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li class="active"><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="cluster-mode"><a class="anchor" href="#cluster-mode">#</a>Cluster Mode</h1><p>Cluster mode provides high availability, fault tolerance, and horizontal scaling through distributed deployment.</p><h2 id="overview"><a class="anchor" href="#overview">#</a>Overview</h2><pre><code>              ┌───────────────────────────────────────┐
+              │              Cluster                   │
+              │                                        │
+┌─────────┐   │   ┌───────┐   ┌───────┐   ┌───────┐   │
+│ Client  │──▶│   │Node 1 │◀─▶│Node 2 │◀─▶│Node 3 │   │
+└─────────┘   │   │Leader │   │Follower│  │Follower│  │
+              │   └───────┘   └───────┘   └───────┘   │
+              │       │           │           │        │
+              │       ▼           ▼           ▼        │
+              │   ┌───────┐   ┌───────┐   ┌───────┐   │
+              │   │ Data  │   │ Data  │   │ Data  │   │
+              │   │Shard 1│   │Shard 2│   │Shard 3│   │
+              │   └───────┘   └───────┘   └───────┘   │
+              └───────────────────────────────────────┘</code></pre><h2 id="key-features"><a class="anchor" href="#key-features">#</a>Key Features</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Feature</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong>Raft Consensus</strong></p>
+          </td>
+          <td>
+            <p>Leader election and log replication</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Sharding</strong></p>
+          </td>
+          <td>
+            <p>Distribute data across nodes</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Replication</strong></p>
+          </td>
+          <td>
+            <p>Multiple copies for fault tolerance</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Auto-failover</strong></p>
+          </td>
+          <td>
+            <p>Automatic leader election</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Distributed Transactions</strong></p>
+          </td>
+          <td>
+            <p>2PC across shards</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="installation"><a class="anchor" href="#installation">#</a>Installation</h2><pre><code class="language-bash">dotnet add package PhoenixmlDb.Cluster</code></pre><h2 id="cluster-setup"><a class="anchor" href="#cluster-setup">#</a>Cluster Setup</h2><h3 id="initialize-cluster"><a class="anchor" href="#initialize-cluster">#</a>Initialize Cluster</h3><pre><code class="language-bash"># On first node
+phoenixmldb-cluster init \
+    --node-id node1 \
+    --cluster-id my-cluster \
+    --peers node2:5433,node3:5433
+# On other nodes
+phoenixmldb-cluster join \
+    --node-id node2 \
+    --cluster-id my-cluster \
+    --bootstrap-peer node1:5433</code></pre><h3 id="start-nodes"><a class="anchor" href="#start-nodes">#</a>Start Nodes</h3><pre><code class="language-bash"># Node 1
+phoenixmldb-server \
+    --cluster \
+    --node-id node1 \
+    --data /data/node1 \
+    --port 5432 \
+    --raft-port 5433
+# Node 2
+phoenixmldb-server \
+    --cluster \
+    --node-id node2 \
+    --data /data/node2 \
+    --port 5432 \
+    --raft-port 5433
+# Node 3
+phoenixmldb-server \
+    --cluster \
+    --node-id node3 \
+    --data /data/node3 \
+    --port 5432 \
+    --raft-port 5433</code></pre><h2 id="configuration"><a class="anchor" href="#configuration">#</a>Configuration</h2><h3 id="cluster-configuration"><a class="anchor" href="#cluster-configuration">#</a>Cluster Configuration</h3><pre><code class="language-json">{
+    "cluster": {
+        "enabled": true,
+        "nodeId": "node1",
+        "clusterId": "my-cluster",
+        "peers": [
+            {"id": "node2", "address": "10.0.0.2:5433"},
+            {"id": "node3", "address": "10.0.0.3:5433"}
+        ]
+    },
+    "raft": {
+        "electionTimeout": "150-300ms",
+        "heartbeatInterval": "50ms",
+        "snapshotThreshold": 10000,
+        "maxLogEntries": 100000
+    },
+    "sharding": {
+        "enabled": true,
+        "shardCount": 16,
+        "replicationFactor": 3
+    }
+}</code></pre><h3 id="raft-settings"><a class="anchor" href="#raft-settings">#</a>Raft Settings</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Setting</p>
+          </th>
+          <th>
+            <p>Default</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>electionTimeout</code></p>
+          </td>
+          <td>
+            <p>150-300ms</p>
+          </td>
+          <td>
+            <p>Random timeout for elections</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>heartbeatInterval</code></p>
+          </td>
+          <td>
+            <p>50ms</p>
+          </td>
+          <td>
+            <p>Leader heartbeat frequency</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>snapshotThreshold</code></p>
+          </td>
+          <td>
+            <p>10000</p>
+          </td>
+          <td>
+            <p>Log entries before snapshot</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>maxLogEntries</code></p>
+          </td>
+          <td>
+            <p>100000</p>
+          </td>
+          <td>
+            <p>Max log entries to keep</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="sharding-settings"><a class="anchor" href="#sharding-settings">#</a>Sharding Settings</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Setting</p>
+          </th>
+          <th>
+            <p>Default</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>shardCount</code></p>
+          </td>
+          <td>
+            <p>16</p>
+          </td>
+          <td>
+            <p>Number of shards</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>replicationFactor</code></p>
+          </td>
+          <td>
+            <p>3</p>
+          </td>
+          <td>
+            <p>Copies per shard</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>rebalanceThreshold</code></p>
+          </td>
+          <td>
+            <p>10%</p>
+          </td>
+          <td>
+            <p>Imbalance threshold</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="client-connection"><a class="anchor" href="#client-connection">#</a>Client Connection</h2><h3 id="connect-to-cluster"><a class="anchor" href="#connect-to-cluster">#</a>Connect to Cluster</h3><pre><code class="language-csharp">var options = new ClusterClientOptions
+{
+    Nodes = [
+        "node1.example.com:5432",
+        "node2.example.com:5432",
+        "node3.example.com:5432"
+    ],
+    LoadBalancing = LoadBalanceStrategy.RoundRobin
+};
+var client = new PhoenixmlClusterClient(options);</code></pre><h3 id="automatic-failover"><a class="anchor" href="#automatic-failover">#</a>Automatic Failover</h3><pre><code class="language-csharp">var options = new ClusterClientOptions
+{
+    Nodes = ["node1:5432", "node2:5432", "node3:5432"],
+    RetryPolicy = new RetryPolicy
+    {
+        MaxRetries = 3,
+        RetryDelay = TimeSpan.FromMilliseconds(100),
+        ExponentialBackoff = true
+    }
+};
+// Client automatically retries on node failure
+var client = new PhoenixmlClusterClient(options);</code></pre><h2 id="sharding"><a class="anchor" href="#sharding">#</a>Sharding</h2><h3 id="shard-key"><a class="anchor" href="#shard-key">#</a>Shard Key</h3><pre><code class="language-csharp">// Documents are sharded by container + document name
+// Customize shard key:
+var options = new ContainerOptions
+{
+    ShardKeyPath = "/order/customerId"  // Shard by customer
+};
+var container = await client.CreateContainerAsync("orders", options);</code></pre><h3 id="cross-shard-queries"><a class="anchor" href="#cross-shard-queries">#</a>Cross-Shard Queries</h3><pre><code class="language-csharp">// Queries across shards are automatic
+var results = await client.QueryAsync("""
+    for $order in collection('orders')//order
+    where $order/total &gt; 1000
+    return $order
+    """);</code></pre><h3 id="shard-local-queries"><a class="anchor" href="#shard-local-queries">#</a>Shard-Local Queries</h3><pre><code class="language-csharp">// Force query to specific shard for efficiency
+var results = await client.QueryAsync("""
+    for $order in collection('orders')//order
+    where $order/customerId = 'C123'
+    return $order
+    """,
+    new QueryOptions { ShardKey = "C123" });</code></pre><h2 id="distributed-transactions"><a class="anchor" href="#distributed-transactions">#</a>Distributed Transactions</h2><h3 id="basic-transaction"><a class="anchor" href="#basic-transaction">#</a>Basic Transaction</h3><pre><code class="language-csharp">await using var txn = await client.BeginDistributedTransactionAsync();
+// Operations may span multiple shards
+await txn.PutDocumentAsync("orders", "o1.xml", order1Xml);
+await txn.PutDocumentAsync("inventory", "i1.xml", inventory1Xml);
+// Two-phase commit ensures atomicity
+await txn.CommitAsync();</code></pre><h3 id="transaction-isolation"><a class="anchor" href="#transaction-isolation">#</a>Transaction Isolation</h3><pre><code class="language-csharp">var options = new TransactionOptions
+{
+    IsolationLevel = IsolationLevel.Serializable,
+    Timeout = TimeSpan.FromSeconds(30)
+};
+await using var txn = await client.BeginDistributedTransactionAsync(options);</code></pre><h2 id="monitoring"><a class="anchor" href="#monitoring">#</a>Monitoring</h2><h3 id="cluster-status"><a class="anchor" href="#cluster-status">#</a>Cluster Status</h3><pre><code class="language-bash">phoenixmldb-cluster status
+# Cluster: my-cluster
+# Leader: node1
+# Nodes:
+#   node1: healthy (leader)
+#   node2: healthy (follower)
+#   node3: healthy (follower)
+# Shards: 16 (balanced)</code></pre><h3 id="node-metrics"><a class="anchor" href="#node-metrics">#</a>Node Metrics</h3><pre><code class="language-bash">curl http://node1:5432/cluster/metrics</code></pre><h2 id="operations"><a class="anchor" href="#operations">#</a>Operations</h2><h3 id="add-node"><a class="anchor" href="#add-node">#</a>Add Node</h3><pre><code class="language-bash"># On new node
+phoenixmldb-cluster join \
+    --node-id node4 \
+    --bootstrap-peer node1:5433
+# Cluster will rebalance automatically</code></pre><h3 id="remove-node"><a class="anchor" href="#remove-node">#</a>Remove Node</h3><pre><code class="language-bash">phoenixmldb-cluster remove-node node4
+# Data is migrated before removal</code></pre><h3 id="force-leader-election"><a class="anchor" href="#force-leader-election">#</a>Force Leader Election</h3><pre><code class="language-bash">phoenixmldb-cluster transfer-leadership --to node2</code></pre><h3 id="rebalance-shards"><a class="anchor" href="#rebalance-shards">#</a>Rebalance Shards</h3><pre><code class="language-bash">phoenixmldb-cluster rebalance
+# Redistributes shards for even load</code></pre><h2 id="failure-handling"><a class="anchor" href="#failure-handling">#</a>Failure Handling</h2><h3 id="node-failure"><a class="anchor" href="#node-failure">#</a>Node Failure</h3><ol><li>
+        <p>Raft detects missing heartbeats</p>
+      </li><li>
+        <p>Election timeout triggers</p>
+      </li><li>
+        <p>New leader elected</p>
+      </li><li>
+        <p>Clients automatically reconnect</p>
+      </li></ol><h3 id="network-partition"><a class="anchor" href="#network-partition">#</a>Network Partition</h3><ul><li>
+        <p>Majority partition continues operating</p>
+      </li><li>
+        <p>Minority partition becomes read-only</p>
+      </li><li>
+        <p>Automatic recovery when healed</p>
+      </li></ul><h3 id="data-recovery"><a class="anchor" href="#data-recovery">#</a>Data Recovery</h3><pre><code class="language-bash"># Restore node from backup
+phoenixmldb-cluster restore-node node3 --from backup.tar
+# Or rebuild from other nodes
+phoenixmldb-cluster rebuild-node node3</code></pre><h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2><ol><li>
+        <p>
+          <strong>Odd number of nodes</strong> - 3 or 5 for proper quorum</p>
+      </li><li>
+        <p>
+          <strong>Geographic distribution</strong> - Across availability zones</p>
+      </li><li>
+        <p>
+          <strong>Dedicated network</strong> - Low-latency for Raft</p>
+      </li><li>
+        <p>
+          <strong>Monitor cluster health</strong> - Set up alerts</p>
+      </li><li>
+        <p>
+          <strong>Test failover</strong> - Regular disaster recovery drills</p>
+      </li><li>
+        <p>
+          <strong>Backup strategy</strong> - Despite replication</p>
+      </li></ol><h2 id="docker-compose-example"><a class="anchor" href="#docker-compose-example">#</a>Docker Compose Example</h2><pre><code class="language-yaml">version: '3'
+services:
+  node1:
+    image: phoenixmldb/server:latest
+    command: ["--cluster", "--node-id", "node1", "--peers", "node2:5433,node3:5433"]
+    ports:
+      - "5432:5432"
+    volumes:
+      - node1-data:/data
+  node2:
+    image: phoenixmldb/server:latest
+    command: ["--cluster", "--node-id", "node2", "--peers", "node1:5433,node3:5433"]
+    ports:
+      - "5433:5432"
+    volumes:
+      - node2-data:/data
+  node3:
+    image: phoenixmldb/server:latest
+    command: ["--cluster", "--node-id", "node3", "--peers", "node1:5433,node2:5433"]
+    ports:
+      - "5434:5432"
+    volumes:
+      - node3-data:/data
+volumes:
+  node1-data:
+  node2-data:
+  node3-data:</code></pre><h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Deployment</p>
+          </th>
+          <th>
+            <p>Configuration</p>
+          </th>
+          <th>
+            <p>Support</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong><a href="server-mode.html" title="">Server Mode</a></strong>Single server setup</p>
+          </td>
+          <td>
+            <p><strong><a href="../configuration.html" title="">Configuration</a></strong>Cluster settings</p>
+          </td>
+          <td>
+            <p><strong><a href="../troubleshooting.html" title="">Troubleshooting</a></strong>Cluster issues</p>
+          </td>
+        </tr>
+      </tbody>
+    </table></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

@@ -1,0 +1,393 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Indexing — PhoenixmlDb Documentation</title><meta name="description" content="Path, value, full-text, structural, name, and metadata indexes"><link rel="canonical" href="/phoenixmldb/indexing.html"><meta property="og:title" content="Indexing"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/indexing.html"><meta property="og:description" content="Path, value, full-text, structural, name, and metadata indexes"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li class="active"><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="indexing"><a class="anchor" href="#indexing">#</a>Indexing</h1><p>Indexes dramatically improve query performance by providing fast access paths to your data. PhoenixmlDb supports multiple index types optimized for different query patterns.</p><h2 id="index-types"><a class="anchor" href="#index-types">#</a>Index Types</h2><h3 id="path-index"><a class="anchor" href="#path-index">#</a>Path Index</h3><p>Path indexes accelerate queries that navigate to specific elements or attributes by path.</p><pre><code class="language-csharp">// Create path index
+container.CreateIndex(new PathIndex("price-idx", "/product/price"));
+// Queries that benefit:
+// - collection('products')/product/price
+// - collection('products')//product/price
+// - $doc/product/price</code></pre><p>
+      <strong>Multi-path index:</strong>
+    </p><pre><code class="language-csharp">container.CreateIndex(new PathIndex("product-paths",
+    "/product/name",
+    "/product/category",
+    "/product/price"));</code></pre><h3 id="value-index"><a class="anchor" href="#value-index">#</a>Value Index</h3><p>Value indexes enable efficient range queries and sorting on typed values.</p><pre><code class="language-csharp">// Numeric value index
+container.CreateIndex(new ValueIndex("price-val",
+    "/product/price",
+    ValueType.Decimal));
+// Date value index
+container.CreateIndex(new ValueIndex("date-val",
+    "/order/orderDate",
+    ValueType.Date));
+// String value index
+container.CreateIndex(new ValueIndex("name-val",
+    "/customer/name",
+    ValueType.String));</code></pre><p>
+      <strong>Supported value types:</strong>
+    </p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>ValueType</p>
+          </th>
+          <th>
+            <p>XSD Type</p>
+          </th>
+          <th>
+            <p>Use Case</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>String</code></p>
+          </td>
+          <td>
+            <p>xs:string</p>
+          </td>
+          <td>
+            <p>Text comparisons, sorting</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>Integer</code></p>
+          </td>
+          <td>
+            <p>xs:integer</p>
+          </td>
+          <td>
+            <p>Whole number ranges</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>Decimal</code></p>
+          </td>
+          <td>
+            <p>xs:decimal</p>
+          </td>
+          <td>
+            <p>Precise decimal ranges</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>Double</code></p>
+          </td>
+          <td>
+            <p>xs:double</p>
+          </td>
+          <td>
+            <p>Scientific calculations</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>Date</code></p>
+          </td>
+          <td>
+            <p>xs:date</p>
+          </td>
+          <td>
+            <p>Date ranges</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>DateTime</code></p>
+          </td>
+          <td>
+            <p>xs:dateTime</p>
+          </td>
+          <td>
+            <p>Timestamp ranges</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>Boolean</code></p>
+          </td>
+          <td>
+            <p>xs:boolean</p>
+          </td>
+          <td>
+            <p>True/false filtering</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>
+      <strong>Queries that benefit:</strong>
+    </p><pre><code class="language-xquery">(: Range queries :)
+//product[price &gt; 10 and price &lt; 100]
+(: Sorting :)
+for $p in //product order by $p/price return $p
+(: Min/Max :)
+min(//product/price)</code></pre><h3 id="full-text-index"><a class="anchor" href="#full-text-index">#</a>Full-Text Index</h3><p>Full-text indexes support natural language search with tokenization, stemming, and relevance ranking.</p><pre><code class="language-csharp">// Basic full-text index
+container.CreateIndex(new FullTextIndex("desc-ft",
+    "/product/description"));
+// With custom options
+container.CreateIndex(new FullTextIndex("content-ft",
+    "/article/content",
+    new FullTextOptions
+    {
+        Language = "en",
+        Stemming = true,
+        StopWords = true,
+        CaseSensitive = false,
+        MinTokenLength = 2
+    }));</code></pre><p>
+      <strong>Queries that benefit:</strong>
+    </p><pre><code class="language-xquery">(: Contains search :)
+//product[contains(description, 'wireless')]
+(: Full-text functions :)
+//product[ft:contains(description, 'wireless bluetooth')]
+(: Phrase search :)
+//product[ft:contains(description, '"noise canceling"')]
+(: Boolean operators :)
+//product[ft:contains(description, 'wireless AND NOT wired')]</code></pre><h3 id="structural-index"><a class="anchor" href="#structural-index">#</a>Structural Index</h3><p>Structural indexes accelerate navigation queries (parent, child, sibling, ancestor, descendant).</p><pre><code class="language-csharp">// Enable structural indexing for a container
+container.CreateIndex(new StructuralIndex("struct-idx"));</code></pre><p>
+      <strong>Queries that benefit:</strong>
+    </p><pre><code class="language-xquery">(: Parent/child navigation :)
+$element/parent::*
+$element/child::item
+(: Ancestor/descendant :)
+$element/ancestor::section
+$element//nested-item
+(: Sibling navigation :)
+$element/following-sibling::*
+$element/preceding-sibling::*</code></pre><h3 id="metadata-index"><a class="anchor" href="#metadata-index">#</a>Metadata Index</h3><p>Metadata indexes allow efficient queries on document metadata.</p><pre><code class="language-csharp">container.CreateIndex(new MetadataIndex("meta-idx",
+    "author", "created", "version"));</code></pre><p>
+      <strong>Queries that benefit:</strong>
+    </p><pre><code class="language-xquery">(: Filter by metadata :)
+for $doc in collection('products')
+where doc-metadata($doc, 'author') = 'admin'
+return $doc</code></pre><h2 id="creating-indexes"><a class="anchor" href="#creating-indexes">#</a>Creating Indexes</h2><h3 id="during-container-creation"><a class="anchor" href="#during-container-creation">#</a>During Container Creation</h3><pre><code class="language-csharp">var container = db.CreateContainer("products", new ContainerOptions
+{
+    Indexes =
+    [
+        new PathIndex("paths", "/product/name", "/product/category"),
+        new ValueIndex("price", "/product/price", ValueType.Decimal),
+        new FullTextIndex("search", "/product/description")
+    ]
+});</code></pre><h3 id="on-existing-container"><a class="anchor" href="#on-existing-container">#</a>On Existing Container</h3><pre><code class="language-csharp">var container = db.GetContainer("products");
+// Create if not exists
+container.CreateIndexIfNotExists(new PathIndex("name-idx", "/product/name"));
+// Force recreation
+container.CreateIndex(new PathIndex("name-idx", "/product/name"),
+    recreateIfExists: true);</code></pre><h3 id="deferred-indexing"><a class="anchor" href="#deferred-indexing">#</a>Deferred Indexing</h3><p>For bulk imports, defer indexing for better performance:</p><pre><code class="language-csharp">// Disable auto-indexing
+container.SetOption("IndexOnStore", false);
+// Bulk import
+using (var txn = db.BeginTransaction())
+{
+    foreach (var doc in documents)
+    {
+        container.PutDocument(doc.Name, doc.Content);
+    }
+    txn.Commit();
+}
+// Rebuild indexes
+container.RebuildIndexes();
+// Re-enable auto-indexing
+container.SetOption("IndexOnStore", true);</code></pre><h2 id="managing-indexes"><a class="anchor" href="#managing-indexes">#</a>Managing Indexes</h2><h3 id="list-indexes"><a class="anchor" href="#list-indexes">#</a>List Indexes</h3><pre><code class="language-csharp">foreach (var index in container.ListIndexes())
+{
+    Console.WriteLine($"{index.Name}: {index.Type}");
+    Console.WriteLine($"  Paths: {string.Join(", ", index.Paths)}");
+    Console.WriteLine($"  Size: {index.SizeBytes} bytes");
+    Console.WriteLine($"  Entries: {index.EntryCount}");
+}</code></pre><h3 id="drop-index"><a class="anchor" href="#drop-index">#</a>Drop Index</h3><pre><code class="language-csharp">container.DropIndex("old-index");</code></pre><h3 id="rebuild-index"><a class="anchor" href="#rebuild-index">#</a>Rebuild Index</h3><pre><code class="language-csharp">// Rebuild specific index
+container.RebuildIndex("price-idx");
+// Rebuild all indexes
+container.RebuildIndexes();</code></pre><h3 id="index-statistics"><a class="anchor" href="#index-statistics">#</a>Index Statistics</h3><pre><code class="language-csharp">var stats = container.GetIndexStats("price-idx");
+Console.WriteLine($"Entries: {stats.EntryCount}");
+Console.WriteLine($"Size: {stats.SizeBytes}");
+Console.WriteLine($"Depth: {stats.TreeDepth}");
+Console.WriteLine($"Fragmentation: {stats.Fragmentation:P}");</code></pre><h2 id="query-optimization"><a class="anchor" href="#query-optimization">#</a>Query Optimization</h2><h3 id="explain-plan"><a class="anchor" href="#explain-plan">#</a>Explain Plan</h3><pre><code class="language-csharp">var plan = db.Explain("""
+    for $p in collection('products')//product
+    where $p/price &gt; 100
+    order by $p/name
+    return $p
+    """);
+Console.WriteLine(plan.ToString());</code></pre><p>Output:</p><pre><code>Query Plan:
+├─ For: $p
+│  ├─ Source: collection('products')//product
+│  │  └─ Index: path-idx (estimated: 1000 nodes)
+│  ├─ Where: $p/price &gt; 100
+│  │  └─ Index: price-val (estimated: 250 matches)
+│  └─ OrderBy: $p/name
+│     └─ Index: name-val (sorted access)
+└─ Return: $p
+Estimated cost: 250
+Index usage: 3 indexes</code></pre><h3 id="index-hints"><a class="anchor" href="#index-hints">#</a>Index Hints</h3><pre><code class="language-csharp">// Force specific index usage
+var results = db.Query("""
+    (: pragma index=price-idx :)
+    for $p in collection('products')//product
+    where $p/price &gt; 100
+    return $p
+    """);
+// Disable index usage (for testing)
+var results = db.Query("""
+    (: pragma no-index :)
+    for $p in collection('products')//product
+    return $p
+    """);</code></pre><h2 id="index-selection-guidelines"><a class="anchor" href="#index-selection-guidelines">#</a>Index Selection Guidelines</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Query Pattern</p>
+          </th>
+          <th>
+            <p>Recommended Index</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Navigate to element/attribute</p>
+          </td>
+          <td>
+            <p>Path Index</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Equality comparison</p>
+          </td>
+          <td>
+            <p>Value Index or Path Index</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Range comparison (&lt;, &gt;, between)</p>
+          </td>
+          <td>
+            <p>Value Index</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Sorting (order by)</p>
+          </td>
+          <td>
+            <p>Value Index</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Text search</p>
+          </td>
+          <td>
+            <p>Full-Text Index</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Tree navigation (parent, ancestor)</p>
+          </td>
+          <td>
+            <p>Structural Index</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Metadata filtering</p>
+          </td>
+          <td>
+            <p>Metadata Index</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2><p>
+      <strong>Do:</strong>
+    </p><ol><li>
+        <p>
+          <strong>Index frequently queried paths</strong> — Start with your most common queries</p>
+      </li><li>
+        <p>
+          <strong>Use appropriate value types</strong> — Match the index type to your data</p>
+      </li><li>
+        <p>
+          <strong>Create composite indexes</strong> — Combine related paths in one index</p>
+      </li><li>
+        <p>
+          <strong>Monitor index usage</strong> — Use explain plans to verify indexes are used</p>
+      </li><li>
+        <p>
+          <strong>Rebuild after bulk updates</strong> — Fragmented indexes slow queries</p>
+      </li></ol><p>
+      <strong>Don't:</strong>
+    </p><ol><li>
+        <p>
+          <strong>Over-index</strong> — Each index adds storage and write overhead</p>
+      </li><li>
+        <p>
+          <strong>Index rarely queried paths</strong> — Unused indexes waste resources</p>
+      </li><li>
+        <p>
+          <strong>Use wrong value types</strong> — String indexes won't help numeric ranges</p>
+      </li><li>
+        <p>
+          <strong>Forget to rebuild</strong> — After bulk deletes, indexes may be fragmented</p>
+      </li></ol><h2 id="performance-impact"><a class="anchor" href="#performance-impact">#</a>Performance Impact</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Operation</p>
+          </th>
+          <th>
+            <p>Without Index</p>
+          </th>
+          <th>
+            <p>With Index</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Path lookup</p>
+          </td>
+          <td>
+            <p>O(n) scan</p>
+          </td>
+          <td>
+            <p>O(log n)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Range query</p>
+          </td>
+          <td>
+            <p>O(n) scan</p>
+          </td>
+          <td>
+            <p>O(log n + k)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Full-text search</p>
+          </td>
+          <td>
+            <p>O(n) scan</p>
+          </td>
+          <td>
+            <p>O(k)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Sort</p>
+          </td>
+          <td>
+            <p>O(n log n)</p>
+          </td>
+          <td>
+            <p>O(n) or O(k)</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>Where n = total nodes, k = matching nodes</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

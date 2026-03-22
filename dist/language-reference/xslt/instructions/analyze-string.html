@@ -1,0 +1,593 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>String Analysis — PhoenixmlDb Documentation</title><meta name="description" content="xsl:analyze-string — regex-based string processing in XSLT"><link rel="canonical" href="/language-reference/xslt/instructions/analyze-string.html"><meta property="og:title" content="String Analysis"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/analyze-string.html"><meta property="og:description" content="xsl:analyze-string — regex-based string processing in XSLT"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li class="active"><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="string-analysis"><a class="anchor" href="#string-analysis">#</a>String Analysis</h1><p>
+      <code>xsl:analyze-string</code> applies a regular expression to a string and processes the matched and unmatched portions separately. It is the XSLT equivalent of iterating over regex matches — you get fine-grained control over how each match is transformed into output.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
+        <p>
+          <a href="#xslanalyze-string" title="">xsl:analyze-string</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xslmatching-substring" title="">xsl:matching-substring</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xslnon-matching-substring" title="">xsl:non-matching-substring</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#capture-groups" title="">Capture Groups</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#regex-flags" title="">Regex Flags</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#comparison-with-replace" title="">Comparison with replace()</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#common-patterns" title="">Common Patterns</a>
+        </p>
+      </li></ul><hr><h2 id="xsl-analyze-string"><a class="anchor" href="#xsl-analyze-string">#</a>xsl:analyze-string</h2><p>The instruction takes a string and a regular expression. It splits the string into alternating matching and non-matching segments, then processes each segment with the corresponding child instruction.</p><pre><code class="language-xml">&lt;xsl:analyze-string select="$input" regex="pattern"&gt;
+  &lt;xsl:matching-substring&gt;
+    &lt;!-- what to do with matched portions --&gt;
+  &lt;/xsl:matching-substring&gt;
+  &lt;xsl:non-matching-substring&gt;
+    &lt;!-- what to do with unmatched portions --&gt;
+  &lt;/xsl:non-matching-substring&gt;
+&lt;/xsl:analyze-string&gt;</code></pre><h3 id="attributes"><a class="anchor" href="#attributes">#</a>Attributes</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Attribute</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>select</code></p>
+          </td>
+          <td>
+            <p>XPath expression that evaluates to the string to analyze</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>regex</code></p>
+          </td>
+          <td>
+            <p>The regular expression pattern (uses XPath/XML Schema regex syntax)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>flags</code></p>
+          </td>
+          <td>
+            <p>Optional regex flags: <code>i</code>, <code>m</code>, <code>s</code>, <code>x</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="basic-example"><a class="anchor" href="#basic-example">#</a>Basic Example</h3><p>Detect and linkify email addresses in text:</p><pre><code class="language-xml">&lt;xsl:template match="description"&gt;
+  &lt;p&gt;
+    &lt;xsl:analyze-string select="." regex="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{{2,}}"&gt;
+      &lt;xsl:matching-substring&gt;
+        &lt;a href="mailto:{.}"&gt;&lt;xsl:value-of select="."/&gt;&lt;/a&gt;
+      &lt;/xsl:matching-substring&gt;
+      &lt;xsl:non-matching-substring&gt;
+        &lt;xsl:value-of select="."/&gt;
+      &lt;/xsl:non-matching-substring&gt;
+    &lt;/xsl:analyze-string&gt;
+  &lt;/p&gt;
+&lt;/xsl:template&gt;</code></pre><p>Given <code>&lt;description&gt;Contact us at support@example.com or sales@example.com for details.&lt;/description&gt;</code>, output:</p><pre><code class="language-html">&lt;p&gt;Contact us at &lt;a href="mailto:support@example.com"&gt;support@example.com&lt;/a&gt;
+or &lt;a href="mailto:sales@example.com"&gt;sales@example.com&lt;/a&gt; for details.&lt;/p&gt;</code></pre><p>
+      <strong>Important:</strong> Inside the <code>regex</code> attribute, curly braces must be doubled (<code>{{</code> and <code>}}</code>) because the attribute is an AVT. A single <code>{</code> would be interpreted as the start of an XPath expression.</p><p>
+      <strong>C# parallel:</strong>
+    </p><pre><code class="language-csharp">var result = Regex.Replace(input, @"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}",
+    match =&gt; $"&lt;a href=\"mailto:{match.Value}\"&gt;{match.Value}&lt;/a&gt;");</code></pre><hr><h2 id="xsl-matching-substring"><a class="anchor" href="#xsl-matching-substring">#</a>xsl:matching-substring</h2><p>Processes each portion of the string that matches the regex. Inside this element:</p><ul><li>
+        <p>
+          <strong>
+            <code>.</code> (dot)</strong> refers to the matched substring (as a string, not a node)</p>
+      </li><li>
+        <p>
+          <strong>
+            <code>regex-group(N)</code>
+          </strong> returns the Nth capture group</p>
+      </li></ul><pre><code class="language-xml">&lt;xsl:analyze-string select="'Price: $29.99, Discount: $5.00'" regex="\$(\d+\.\d{{2}})"&gt;
+  &lt;xsl:matching-substring&gt;
+    &lt;span class="price"&gt;&lt;xsl:value-of select="."/&gt;&lt;/span&gt;
+  &lt;/xsl:matching-substring&gt;
+  &lt;xsl:non-matching-substring&gt;
+    &lt;xsl:value-of select="."/&gt;
+  &lt;/xsl:non-matching-substring&gt;
+&lt;/xsl:analyze-string&gt;</code></pre><p>Output:</p><pre><code class="language-html">Price: &lt;span class="price"&gt;$29.99&lt;/span&gt;, Discount: &lt;span class="price"&gt;$5.00&lt;/span&gt;</code></pre><hr><h2 id="xsl-non-matching-substring"><a class="anchor" href="#xsl-non-matching-substring">#</a>xsl:non-matching-substring</h2><p>Processes each portion of the string between matches. If omitted, non-matching text is discarded.</p><pre><code class="language-xml">&lt;!-- Extract only the numbers, ignoring everything else --&gt;
+&lt;xsl:analyze-string select="'Order #12345, Items: 3, Total: $99.50'" regex="\d+\.?\d*"&gt;
+  &lt;xsl:matching-substring&gt;
+    &lt;number&gt;&lt;xsl:value-of select="."/&gt;&lt;/number&gt;
+  &lt;/xsl:matching-substring&gt;
+  &lt;!-- non-matching-substring omitted: non-numeric text is dropped --&gt;
+&lt;/xsl:analyze-string&gt;</code></pre><p>Output:</p><pre><code class="language-xml">&lt;number&gt;12345&lt;/number&gt;
+&lt;number&gt;3&lt;/number&gt;
+&lt;number&gt;99.50&lt;/number&gt;</code></pre><h3 id="both-are-optional"><a class="anchor" href="#both-are-optional">#</a>Both Are Optional</h3><p>You can include either, both, or neither (though neither would be pointless). The order does not matter — <code>xsl:matching-substring</code> and <code>xsl:non-matching-substring</code> can appear in any order as children of <code>xsl:analyze-string</code>.</p><hr><h2 id="capture-groups"><a class="anchor" href="#capture-groups">#</a>Capture Groups</h2><p>Parentheses in the regex define capture groups. The <code>regex-group(N)</code> function returns the string matched by the Nth group. Group 0 is the entire match (same as <code>.</code>).</p><h3 id="example-parsing-a-date-string"><a class="anchor" href="#example-parsing-a-date-string">#</a>Example: Parsing a Date String</h3><pre><code class="language-xml">&lt;xsl:analyze-string select="'2026-03-19'" regex="(\d{{4}})-(\d{{2}})-(\d{{2}})"&gt;
+  &lt;xsl:matching-substring&gt;
+    &lt;date&gt;
+      &lt;year&gt;&lt;xsl:value-of select="regex-group(1)"/&gt;&lt;/year&gt;
+      &lt;month&gt;&lt;xsl:value-of select="regex-group(2)"/&gt;&lt;/month&gt;
+      &lt;day&gt;&lt;xsl:value-of select="regex-group(3)"/&gt;&lt;/day&gt;
+    &lt;/date&gt;
+  &lt;/xsl:matching-substring&gt;
+&lt;/xsl:analyze-string&gt;</code></pre><p>Output:</p><pre><code class="language-xml">&lt;date&gt;
+  &lt;year&gt;2026&lt;/year&gt;
+  &lt;month&gt;03&lt;/month&gt;
+  &lt;day&gt;19&lt;/day&gt;
+&lt;/date&gt;</code></pre><h3 id="example-parsing-key-value-pairs"><a class="anchor" href="#example-parsing-key-value-pairs">#</a>Example: Parsing Key-Value Pairs</h3><pre><code class="language-xml">&lt;xsl:variable name="input" select="'name=Widget;category=electronics;price=29.99'"/&gt;
+&lt;xsl:analyze-string select="$input" regex="([^=;]+)=([^;]+)"&gt;
+  &lt;xsl:matching-substring&gt;
+    &lt;field name="{regex-group(1)}"&gt;
+      &lt;xsl:value-of select="regex-group(2)"/&gt;
+    &lt;/field&gt;
+  &lt;/xsl:matching-substring&gt;
+&lt;/xsl:analyze-string&gt;</code></pre><p>Output:</p><pre><code class="language-xml">&lt;field name="name"&gt;Widget&lt;/field&gt;
+&lt;field name="category"&gt;electronics&lt;/field&gt;
+&lt;field name="price"&gt;29.99&lt;/field&gt;</code></pre><h3 id="nested-groups"><a class="anchor" href="#nested-groups">#</a>Nested Groups</h3><p>Groups are numbered by the position of their opening parenthesis, left to right:</p><pre><code class="language-xml">&lt;!-- regex: ((https?)://([^/]+))(/.*)? --&gt;
+&lt;!-- Group 1: full authority (https://example.com) --&gt;
+&lt;!-- Group 2: scheme (https) --&gt;
+&lt;!-- Group 3: host (example.com) --&gt;
+&lt;!-- Group 4: path (/products/123) --&gt;
+&lt;xsl:analyze-string select="$url" regex="((https?)://([^/]+))(/.*)?"&gt;
+  &lt;xsl:matching-substring&gt;
+    &lt;url&gt;
+      &lt;scheme&gt;&lt;xsl:value-of select="regex-group(2)"/&gt;&lt;/scheme&gt;
+      &lt;host&gt;&lt;xsl:value-of select="regex-group(3)"/&gt;&lt;/host&gt;
+      &lt;path&gt;&lt;xsl:value-of select="regex-group(4)"/&gt;&lt;/path&gt;
+    &lt;/url&gt;
+  &lt;/xsl:matching-substring&gt;
+&lt;/xsl:analyze-string&gt;</code></pre><p>
+      <strong>C# parallel:</strong> <code>regex-group(N)</code> is equivalent to <code>match.Groups[N].Value</code>:</p><pre><code class="language-csharp">var match = Regex.Match(url, @"((https?)://([^/]+))(/.*)?");
+var scheme = match.Groups[2].Value;  // "https"
+var host = match.Groups[3].Value;    // "example.com"
+var path = match.Groups[4].Value;    // "/products/123"</code></pre><hr><h2 id="regex-flags"><a class="anchor" href="#regex-flags">#</a>Regex Flags</h2><p>The <code>flags</code> attribute accepts a string of flag characters that modify regex behavior. These are the same flags used by the XPath <code>matches()</code>, <code>replace()</code>, and <code>tokenize()</code> functions:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Flag</p>
+          </th>
+          <th>
+            <p>Name</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>i</code></p>
+          </td>
+          <td>
+            <p>Case-insensitive</p>
+          </td>
+          <td>
+            <p><code>a</code> matches both <code>a</code> and <code>A</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>m</code></p>
+          </td>
+          <td>
+            <p>Multi-line</p>
+          </td>
+          <td>
+            <p><code>^</code> and <code>$</code> match start/end of each line, not just the string</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>s</code></p>
+          </td>
+          <td>
+            <p>Dot-all</p>
+          </td>
+          <td>
+            <p><code>.</code> matches newline characters (by default it does not)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>x</code></p>
+          </td>
+          <td>
+            <p>Extended</p>
+          </td>
+          <td>
+            <p>Whitespace in the regex is ignored (for readability); use <code>\s</code> for literal whitespace</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="examples"><a class="anchor" href="#examples">#</a>Examples</h3><pre><code class="language-xml">&lt;!-- Case-insensitive matching --&gt;
+&lt;xsl:analyze-string select="$text" regex="error|warning|info" flags="i"&gt;
+  &lt;xsl:matching-substring&gt;
+    &lt;span class="{lower-case(.)}"&gt;&lt;xsl:value-of select="."/&gt;&lt;/span&gt;
+  &lt;/xsl:matching-substring&gt;
+  &lt;xsl:non-matching-substring&gt;
+    &lt;xsl:value-of select="."/&gt;
+  &lt;/xsl:non-matching-substring&gt;
+&lt;/xsl:analyze-string&gt;
+&lt;!-- Matches "Error", "WARNING", "Info", etc. --&gt;
+&lt;!-- Extended mode for readable complex patterns --&gt;
+&lt;xsl:analyze-string select="$text" flags="x"
+    regex="(\d{{1,3}}) \.(\d{{1,3}}) \.(\d{{1,3}}) \.(\d{{1,3}})"&gt;
+  &lt;xsl:matching-substring&gt;
+    &lt;ip&gt;&lt;xsl:value-of select="."/&gt;&lt;/ip&gt;
+  &lt;/xsl:matching-substring&gt;
+&lt;/xsl:analyze-string&gt;</code></pre><h3 id="regex-syntax-notes"><a class="anchor" href="#regex-syntax-notes">#</a>Regex Syntax Notes</h3><p>XSLT uses XML Schema regular expressions (with XPath extensions), not Perl-compatible regexes. Key differences from C#'s <code>System.Text.RegularExpressions</code>:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Feature</p>
+          </th>
+          <th>
+            <p>C# (.NET Regex)</p>
+          </th>
+          <th>
+            <p>XSLT/XPath Regex</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Anchors</p>
+          </td>
+          <td>
+            <p><code>^</code>, <code>$</code></p>
+          </td>
+          <td>
+            <p><code>^</code>, <code>$</code> (only with <code>m</code> flag; regex always matches full segments)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Lazy quantifiers</p>
+          </td>
+          <td>
+            <p><code>*?</code>, <code>+?</code></p>
+          </td>
+          <td>
+            <p><code>*?</code>, <code>+?</code> (supported)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Backreferences</p>
+          </td>
+          <td>
+            <p><code>\1</code>, <code>\2</code></p>
+          </td>
+          <td>
+            <p>Not supported in match/replace (only in <code>regex-group()</code> for <code>analyze-string</code>)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Lookahead/lookbehind</p>
+          </td>
+          <td>
+            <p><code>(?=...)</code>, <code>(?&lt;=...)</code></p>
+          </td>
+          <td>
+            <p>Not supported</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Named groups</p>
+          </td>
+          <td>
+            <p><code>(?&lt;name&gt;...)</code></p>
+          </td>
+          <td>
+            <p>Not supported</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Character class subtraction</p>
+          </td>
+          <td>
+            <p>Not standard</p>
+          </td>
+          <td>
+            <p><code>[a-z-[aeiou]]</code> (vowels removed from a-z)</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>The lack of lookahead/lookbehind means some complex patterns require different approaches in XSLT — often by using <code>xsl:analyze-string</code> with simpler patterns and handling the logic in the matching/non-matching substring bodies.</p><hr><h2 id="comparison-with-replace"><a class="anchor" href="#comparison-with-replace">#</a>Comparison with replace()</h2><p>XPath provides a <code>replace()</code> function for simple regex substitutions. When should you use each?</p><h3 id="replace"><a class="anchor" href="#replace">#</a>replace()</h3><p>Best for simple text-to-text substitutions where the output is a plain string:</p><pre><code class="language-xml">&lt;!-- Simple substitution --&gt;
+&lt;xsl:value-of select="replace($text, '\bfoo\b', 'bar')"/&gt;
+&lt;!-- Using capture groups in replacement --&gt;
+&lt;xsl:value-of select="replace($phone, '(\d{3})(\d{3})(\d{4})', '($1) $2-$3')"/&gt;
+&lt;!-- Remove all non-alphanumeric characters --&gt;
+&lt;xsl:value-of select="replace($text, '[^a-zA-Z0-9\s]', '')"/&gt;</code></pre><h3 id="xsl-analyze-string"><a class="anchor" href="#xsl-analyze-string">#</a>xsl:analyze-string</h3><p>Use when:</p><ol><li>
+        <p>
+          <strong>You need to produce markup</strong> (elements, attributes) from the matches — <code>replace()</code> can only produce strings</p>
+      </li><li>
+        <p>
+          <strong>Different matches need different treatment</strong> — the matching-substring body can use <code>xsl:choose</code> or other conditionals</p>
+      </li><li>
+        <p>
+          <strong>You need multiple capture groups</strong> processed independently</p>
+      </li><li>
+        <p>
+          <strong>The non-matching portions also need transformation</strong>
+        </p>
+      </li></ol><pre><code class="language-xml">&lt;!-- replace() CANNOT do this — it can only produce strings, not elements --&gt;
+&lt;xsl:analyze-string select="$text" regex="https?://\S+"&gt;
+  &lt;xsl:matching-substring&gt;
+    &lt;a href="{.}"&gt;&lt;xsl:value-of select="."/&gt;&lt;/a&gt;
+  &lt;/xsl:matching-substring&gt;
+  &lt;xsl:non-matching-substring&gt;
+    &lt;xsl:value-of select="."/&gt;
+  &lt;/xsl:non-matching-substring&gt;
+&lt;/xsl:analyze-string&gt;</code></pre><h3 id="decision-guide"><a class="anchor" href="#decision-guide">#</a>Decision Guide</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Need</p>
+          </th>
+          <th>
+            <p>Use</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Replace text with text</p>
+          </td>
+          <td>
+            <p><code>replace()</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Remove characters</p>
+          </td>
+          <td>
+            <p><code>replace($text, 'pattern', '')</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Wrap matches in elements</p>
+          </td>
+          <td>
+            <p><code>xsl:analyze-string</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Extract structured data from strings</p>
+          </td>
+          <td>
+            <p><code>xsl:analyze-string</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Simple find-and-replace</p>
+          </td>
+          <td>
+            <p><code>replace()</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Different handling for matched vs. unmatched</p>
+          </td>
+          <td>
+            <p><code>xsl:analyze-string</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><hr><h2 id="common-patterns"><a class="anchor" href="#common-patterns">#</a>Common Patterns</h2><h3 id="syntax-highlighting"><a class="anchor" href="#syntax-highlighting">#</a>Syntax Highlighting</h3><p>Highlight keywords in a code snippet:</p><pre><code class="language-xml">&lt;xsl:template match="code[@language='sql']"&gt;
+  &lt;pre class="code sql"&gt;
+    &lt;xsl:analyze-string select="."
+        regex="(SELECT|FROM|WHERE|JOIN|ON|AND|OR|INSERT|UPDATE|DELETE|CREATE|DROP|ALTER|ORDER\s+BY|GROUP\s+BY|HAVING|LIMIT|OFFSET|AS|IN|NOT|NULL|IS|LIKE|BETWEEN|EXISTS|DISTINCT|SET|INTO|VALUES)"
+        flags="i"&gt;
+      &lt;xsl:matching-substring&gt;
+        &lt;span class="keyword"&gt;&lt;xsl:value-of select="upper-case(.)"/&gt;&lt;/span&gt;
+      &lt;/xsl:matching-substring&gt;
+      &lt;xsl:non-matching-substring&gt;
+        &lt;!-- Highlight strings within non-keyword text --&gt;
+        &lt;xsl:analyze-string select="." regex="'[^']*'"&gt;
+          &lt;xsl:matching-substring&gt;
+            &lt;span class="string"&gt;&lt;xsl:value-of select="."/&gt;&lt;/span&gt;
+          &lt;/xsl:matching-substring&gt;
+          &lt;xsl:non-matching-substring&gt;
+            &lt;xsl:value-of select="."/&gt;
+          &lt;/xsl:non-matching-substring&gt;
+        &lt;/xsl:analyze-string&gt;
+      &lt;/xsl:non-matching-substring&gt;
+    &lt;/xsl:analyze-string&gt;
+  &lt;/pre&gt;
+&lt;/xsl:template&gt;</code></pre><p>This nests two <code>xsl:analyze-string</code> calls — first to highlight keywords, then to highlight string literals in the remaining text.</p><h3 id="link-detection-in-text"><a class="anchor" href="#link-detection-in-text">#</a>Link Detection in Text</h3><p>Convert URLs and email addresses in plain text to clickable links:</p><pre><code class="language-xml">&lt;xsl:function name="my:linkify" as="node()*"&gt;
+  &lt;xsl:param name="text" as="xs:string"/&gt;
+  &lt;xsl:analyze-string select="$text"
+      regex="(https?://[^\s&amp;lt;&amp;gt;&amp;quot;]+)|([\w.+-]+@[\w.-]+\.\w{{2,}})"&gt;
+    &lt;xsl:matching-substring&gt;
+      &lt;xsl:choose&gt;
+        &lt;xsl:when test="regex-group(1)"&gt;
+          &lt;a href="{.}" target="_blank"&gt;&lt;xsl:value-of select="."/&gt;&lt;/a&gt;
+        &lt;/xsl:when&gt;
+        &lt;xsl:when test="regex-group(2)"&gt;
+          &lt;a href="mailto:{.}"&gt;&lt;xsl:value-of select="."/&gt;&lt;/a&gt;
+        &lt;/xsl:when&gt;
+      &lt;/xsl:choose&gt;
+    &lt;/xsl:matching-substring&gt;
+    &lt;xsl:non-matching-substring&gt;
+      &lt;xsl:value-of select="."/&gt;
+    &lt;/xsl:non-matching-substring&gt;
+  &lt;/xsl:analyze-string&gt;
+&lt;/xsl:function&gt;
+&lt;!-- Usage --&gt;
+&lt;xsl:template match="comment"&gt;
+  &lt;p class="comment"&gt;
+    &lt;xsl:sequence select="my:linkify(string(.))"/&gt;
+  &lt;/p&gt;
+&lt;/xsl:template&gt;</code></pre><h3 id="data-extraction-from-formatted-strings"><a class="anchor" href="#data-extraction-from-formatted-strings">#</a>Data Extraction from Formatted Strings</h3><p>Parse a price string like "$1,234.56" into a number:</p><pre><code class="language-xml">&lt;xsl:function name="my:parse-price" as="xs:decimal"&gt;
+  &lt;xsl:param name="price-string" as="xs:string"/&gt;
+  &lt;xsl:variable name="cleaned" select="replace($price-string, '[$,\s]', '')"/&gt;
+  &lt;xsl:sequence select="xs:decimal($cleaned)"/&gt;
+&lt;/xsl:function&gt;
+&lt;!-- For more complex parsing, use analyze-string --&gt;
+&lt;xsl:function name="my:parse-money" as="map(xs:string, item())"&gt;
+  &lt;xsl:param name="text" as="xs:string"/&gt;
+  &lt;xsl:variable name="result" as="map(xs:string, item())*"&gt;
+    &lt;xsl:analyze-string select="$text" regex="([A-Z]{{3}}|\$|€|£)\s*([0-9,]+\.?\d*)"&gt;
+      &lt;xsl:matching-substring&gt;
+        &lt;xsl:sequence select="map {
+          'currency': regex-group(1),
+          'amount': xs:decimal(replace(regex-group(2), ',', ''))
+        }"/&gt;
+      &lt;/xsl:matching-substring&gt;
+    &lt;/xsl:analyze-string&gt;
+  &lt;/xsl:variable&gt;
+  &lt;xsl:sequence select="$result[1]"/&gt;
+&lt;/xsl:function&gt;</code></pre><h3 id="markdown-like-formatting"><a class="anchor" href="#markdown-like-formatting">#</a>Markdown-Like Formatting</h3><p>Convert simple markup conventions in plain text:</p><pre><code class="language-xml">&lt;xsl:function name="my:simple-format" as="node()*"&gt;
+  &lt;xsl:param name="text" as="xs:string"/&gt;
+  &lt;!-- Bold: **text** --&gt;
+  &lt;xsl:analyze-string select="$text" regex="\*\*([^*]+)\*\*"&gt;
+    &lt;xsl:matching-substring&gt;
+      &lt;strong&gt;&lt;xsl:value-of select="regex-group(1)"/&gt;&lt;/strong&gt;
+    &lt;/xsl:matching-substring&gt;
+    &lt;xsl:non-matching-substring&gt;
+      &lt;!-- Italic: *text* --&gt;
+      &lt;xsl:analyze-string select="." regex="\*([^*]+)\*"&gt;
+        &lt;xsl:matching-substring&gt;
+          &lt;em&gt;&lt;xsl:value-of select="regex-group(1)"/&gt;&lt;/em&gt;
+        &lt;/xsl:matching-substring&gt;
+        &lt;xsl:non-matching-substring&gt;
+          &lt;!-- Code: `text` --&gt;
+          &lt;xsl:analyze-string select="." regex="`([^`]+)`"&gt;
+            &lt;xsl:matching-substring&gt;
+              &lt;code&gt;&lt;xsl:value-of select="regex-group(1)"/&gt;&lt;/code&gt;
+            &lt;/xsl:matching-substring&gt;
+            &lt;xsl:non-matching-substring&gt;
+              &lt;xsl:value-of select="."/&gt;
+            &lt;/xsl:non-matching-substring&gt;
+          &lt;/xsl:analyze-string&gt;
+        &lt;/xsl:non-matching-substring&gt;
+      &lt;/xsl:analyze-string&gt;
+    &lt;/xsl:non-matching-substring&gt;
+  &lt;/xsl:analyze-string&gt;
+&lt;/xsl:function&gt;</code></pre><h3 id="csv-line-parser"><a class="anchor" href="#csv-line-parser">#</a>CSV Line Parser</h3><p>Parse a single CSV line into fields, handling quoted fields:</p><pre><code class="language-xml">&lt;xsl:function name="my:parse-csv-line" as="xs:string*"&gt;
+  &lt;xsl:param name="line" as="xs:string"/&gt;
+  &lt;xsl:analyze-string select="$line" regex='("([^"]*(?:""[^"]*)*)"|([^,]*))(?:,|$)'&gt;
+    &lt;xsl:matching-substring&gt;
+      &lt;xsl:choose&gt;
+        &lt;xsl:when test="regex-group(2)"&gt;
+          &lt;!-- Quoted field: unescape doubled quotes --&gt;
+          &lt;xsl:sequence select="replace(regex-group(2), '&amp;quot;&amp;quot;', '&amp;quot;')"/&gt;
+        &lt;/xsl:when&gt;
+        &lt;xsl:otherwise&gt;
+          &lt;!-- Unquoted field --&gt;
+          &lt;xsl:sequence select="regex-group(3)"/&gt;
+        &lt;/xsl:otherwise&gt;
+      &lt;/xsl:choose&gt;
+    &lt;/xsl:matching-substring&gt;
+  &lt;/xsl:analyze-string&gt;
+&lt;/xsl:function&gt;</code></pre><p>
+      <strong>C# parallel summary:</strong>
+    </p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>XSLT</p>
+          </th>
+          <th>
+            <p>C#</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>xsl:analyze-string</code></p>
+          </td>
+          <td>
+            <p><code>Regex.Matches()</code> + loop, or <code>MatchEvaluator</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xsl:matching-substring</code></p>
+          </td>
+          <td>
+            <p>Code inside the match loop</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xsl:non-matching-substring</code></p>
+          </td>
+          <td>
+            <p>Text between matches</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>regex-group(N)</code></p>
+          </td>
+          <td>
+            <p><code>match.Groups[N].Value</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>replace($s, $pat, $rep)</code></p>
+          </td>
+          <td>
+            <p><code>Regex.Replace(s, pat, rep)</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>flags="i"</code></p>
+          </td>
+          <td>
+            <p><code>RegexOptions.IgnoreCase</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>flags="s"</code></p>
+          </td>
+          <td>
+            <p><code>RegexOptions.Singleline</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>flags="m"</code></p>
+          </td>
+          <td>
+            <p><code>RegexOptions.Multiline</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>flags="x"</code></p>
+          </td>
+          <td>
+            <p><code>RegexOptions.IgnorePatternWhitespace</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

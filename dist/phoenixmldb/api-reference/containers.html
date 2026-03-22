@@ -1,0 +1,215 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Containers API — PhoenixmlDb Documentation</title><meta name="description" content="Container creation, configuration, operations, and management"><link rel="canonical" href="/phoenixmldb/api-reference/containers.html"><meta property="og:title" content="Containers API"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/api-reference/containers.html"><meta property="og:description" content="Container creation, configuration, operations, and management"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li class="active"><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="container-api"><a class="anchor" href="#container-api">#</a>Container API</h1><p>Containers organize documents into logical groups within a database.</p><h2 id="creating-containers"><a class="anchor" href="#creating-containers">#</a>Creating Containers</h2><h3 id="basic-creation"><a class="anchor" href="#basic-creation">#</a>Basic Creation</h3><pre><code class="language-csharp">var container = db.CreateContainer("products");</code></pre><h3 id="with-options"><a class="anchor" href="#with-options">#</a>With Options</h3><pre><code class="language-csharp">var container = db.CreateContainer("orders", new ContainerOptions
+{
+    ValidationMode = ValidationMode.WellFormed,
+    PreserveWhitespace = false,
+    DefaultNamespaces = new Dictionary&lt;string, string&gt;
+    {
+        [""] = "http://example.com/orders",
+        ["xsi"] = "http://www.w3.org/2001/XMLSchema-instance"
+    },
+    IndexOnStore = true
+});</code></pre><h3 id="open-or-create"><a class="anchor" href="#open-or-create">#</a>Open or Create</h3><pre><code class="language-csharp">// Creates if doesn't exist, opens if exists
+var container = db.OpenOrCreateContainer("products");</code></pre><h2 id="containeroptions"><a class="anchor" href="#containeroptions">#</a>ContainerOptions</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Property</p>
+          </th>
+          <th>
+            <p>Type</p>
+          </th>
+          <th>
+            <p>Default</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>ValidationMode</code></p>
+          </td>
+          <td>
+            <p><code>ValidationMode</code></p>
+          </td>
+          <td>
+            <p><code>WellFormed</code></p>
+          </td>
+          <td>
+            <p>Document validation level</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>PreserveWhitespace</code></p>
+          </td>
+          <td>
+            <p><code>bool</code></p>
+          </td>
+          <td>
+            <p><code>true</code></p>
+          </td>
+          <td>
+            <p>Keep whitespace-only text nodes</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>DefaultNamespaces</code></p>
+          </td>
+          <td>
+            <p><code>Dictionary&lt;string, string&gt;</code></p>
+          </td>
+          <td>
+            <p>Empty</p>
+          </td>
+          <td>
+            <p>Default namespace bindings</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>IndexOnStore</code></p>
+          </td>
+          <td>
+            <p><code>bool</code></p>
+          </td>
+          <td>
+            <p><code>true</code></p>
+          </td>
+          <td>
+            <p>Auto-index documents when stored</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>JsonSchema</code></p>
+          </td>
+          <td>
+            <p><code>string</code></p>
+          </td>
+          <td>
+            <p><code>null</code></p>
+          </td>
+          <td>
+            <p>JSON Schema for validation</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="validationmode"><a class="anchor" href="#validationmode">#</a>ValidationMode</h3><pre><code class="language-csharp">enum ValidationMode
+{
+    None,        // No validation
+    WellFormed,  // XML well-formedness only
+    DTD,         // Validate against DTD
+    Schema       // Validate against XML Schema
+}</code></pre><h2 id="getting-containers"><a class="anchor" href="#getting-containers">#</a>Getting Containers</h2><pre><code class="language-csharp">// Get existing container (throws if not found)
+var container = db.GetContainer("products");
+// Try get pattern
+if (db.TryGetContainer("products", out var container))
+{
+    // Use container
+}</code></pre><h2 id="listing-containers"><a class="anchor" href="#listing-containers">#</a>Listing Containers</h2><pre><code class="language-csharp">foreach (var name in db.ListContainers())
+{
+    Console.WriteLine(name);
+}
+// With info
+foreach (var name in db.ListContainers())
+{
+    var info = db.GetContainerInfo(name);
+    Console.WriteLine($"{name}: {info.DocumentCount} documents, {info.SizeBytes} bytes");
+}</code></pre><h2 id="container-information"><a class="anchor" href="#container-information">#</a>Container Information</h2><pre><code class="language-csharp">var info = db.GetContainerInfo("products");
+Console.WriteLine($"Name: {info.Name}");
+Console.WriteLine($"Documents: {info.DocumentCount}");
+Console.WriteLine($"Size: {info.SizeBytes} bytes");
+Console.WriteLine($"Created: {info.CreatedAt}");
+Console.WriteLine($"Modified: {info.ModifiedAt}");
+Console.WriteLine($"Indexes: {info.IndexCount}");</code></pre><h2 id="deleting-containers"><a class="anchor" href="#deleting-containers">#</a>Deleting Containers</h2><pre><code class="language-csharp">// Delete container and all its documents
+db.DeleteContainer("temp-data");
+// Safe delete
+if (db.ContainerExists("temp-data"))
+{
+    db.DeleteContainer("temp-data");
+}</code></pre><blockquote>
+      <p>
+        <strong>Warning:</strong> Deleting a container removes all documents and indexes. This operation cannot be undone.</p>
+    </blockquote><h2 id="container-settings"><a class="anchor" href="#container-settings">#</a>Container Settings</h2><h3 id="get-set-options"><a class="anchor" href="#get-set-options">#</a>Get/Set Options</h3><pre><code class="language-csharp">// Get current option
+var preserveWs = container.GetOption&lt;bool&gt;("PreserveWhitespace");
+// Set option
+container.SetOption("IndexOnStore", false);</code></pre><h3 id="available-options"><a class="anchor" href="#available-options">#</a>Available Options</h3><pre><code class="language-csharp">container.SetOption("PreserveWhitespace", true);
+container.SetOption("IndexOnStore", true);
+container.SetOption("ValidationMode", "WellFormed");</code></pre><h2 id="statistics"><a class="anchor" href="#statistics">#</a>Statistics</h2><pre><code class="language-csharp">var stats = container.GetStatistics();
+Console.WriteLine($"Document count: {stats.DocumentCount}");
+Console.WriteLine($"Total nodes: {stats.TotalNodeCount}");
+Console.WriteLine($"Storage size: {stats.StorageSizeBytes}");
+Console.WriteLine($"Index size: {stats.IndexSizeBytes}");
+Console.WriteLine($"Average doc size: {stats.AverageDocumentSize}");</code></pre><h2 id="in-transactions"><a class="anchor" href="#in-transactions">#</a>In Transactions</h2><pre><code class="language-csharp">using (var txn = db.BeginTransaction())
+{
+    // Get container in transaction context
+    var container = txn.GetContainer("products");
+    // Operations are isolated
+    container.PutDocument("p1.xml", xml1);
+    container.PutDocument("p2.xml", xml2);
+    // Commit or rollback
+    txn.Commit();
+}</code></pre><h2 id="error-handling"><a class="anchor" href="#error-handling">#</a>Error Handling</h2><pre><code class="language-csharp">try
+{
+    var container = db.GetContainer("nonexistent");
+}
+catch (ContainerNotFoundException ex)
+{
+    Console.WriteLine($"Container '{ex.ContainerName}' not found");
+}
+try
+{
+    db.CreateContainer("existing");
+}
+catch (ContainerExistsException ex)
+{
+    Console.WriteLine($"Container '{ex.ContainerName}' already exists");
+}</code></pre><h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2><ol><li>
+        <p>
+          <strong>Meaningful names</strong> - Use descriptive container names</p>
+      </li><li>
+        <p>
+          <strong>Group related documents</strong> - Keep related data together</p>
+      </li><li>
+        <p>
+          <strong>Consider query patterns</strong> - Documents queried together should be in the same container</p>
+      </li><li>
+        <p>
+          <strong>Use transactions</strong> - For multi-document operations</p>
+      </li><li>
+        <p>
+          <strong>Monitor size</strong> - Large containers may benefit from partitioning</p>
+      </li></ol><h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Documentation</p>
+          </th>
+          <th>
+            <p>API Reference</p>
+          </th>
+          <th>
+            <p>Advanced Topics</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong><a href="documents.html" title="">Document API</a></strong>Document operations</p>
+          </td>
+          <td>
+            <p><strong><a href="indexes.html" title="">Index API</a></strong>Container indexes</p>
+          </td>
+          <td>
+            <p><strong><a href="transactions.html" title="">Transaction API</a></strong>Transactional access</p>
+          </td>
+        </tr>
+      </tbody>
+    </table></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

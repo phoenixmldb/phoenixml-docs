@@ -1,0 +1,890 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Operators — PhoenixmlDb Documentation</title><meta name="description" content="XQuery comparison, arithmetic, sequence, and navigation operators"><link rel="canonical" href="/language-reference/xquery/operators.html"><meta property="og:title" content="Operators"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xquery/operators.html"><meta property="og:description" content="XQuery comparison, arithmetic, sequence, and navigation operators"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li class="active"><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="operators"><a class="anchor" href="#operators">#</a>Operators</h1><p>XQuery inherits most of its operators from XPath and adds several of its own. This page covers all the operators you'll use in XQuery, with particular attention to the ones that have no C# equivalent.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
+        <p>
+          <a href="#arithmetic-operators" title="">Arithmetic Operators</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#comparison-operators" title="">Comparison Operators</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#node-comparison" title="">Node Comparison</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#logical-operators" title="">Logical Operators</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#sequence-operators" title="">Sequence Operators</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#range-operator" title="">Range Operator</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#string-concatenation" title="">String Concatenation</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#simple-map-operator" title="">Simple Map Operator</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#arrow-operators" title="">Arrow Operators</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#lookup-operator" title="">Lookup Operator</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#otherwise-operator" title="">Otherwise Operator</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#operator-precedence" title="">Operator Precedence</a>
+        </p>
+      </li></ul><hr><h2 id="arithmetic-operators"><a class="anchor" href="#arithmetic-operators">#</a>Arithmetic Operators</h2><p>XQuery uses the same arithmetic operators as XPath:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Operator</p>
+          </th>
+          <th>
+            <p>Meaning</p>
+          </th>
+          <th>
+            <p>Example</p>
+          </th>
+          <th>
+            <p>Result</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>+</code></p>
+          </td>
+          <td>
+            <p>Addition</p>
+          </td>
+          <td>
+            <p><code>5 + 3</code></p>
+          </td>
+          <td>
+            <p><code>8</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>-</code></p>
+          </td>
+          <td>
+            <p>Subtraction</p>
+          </td>
+          <td>
+            <p><code>5 - 3</code></p>
+          </td>
+          <td>
+            <p><code>2</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>*</code></p>
+          </td>
+          <td>
+            <p>Multiplication</p>
+          </td>
+          <td>
+            <p><code>5 * 3</code></p>
+          </td>
+          <td>
+            <p><code>15</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>div</code></p>
+          </td>
+          <td>
+            <p>Decimal division</p>
+          </td>
+          <td>
+            <p><code>7 div 2</code></p>
+          </td>
+          <td>
+            <p><code>3.5</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>idiv</code></p>
+          </td>
+          <td>
+            <p>Integer division</p>
+          </td>
+          <td>
+            <p><code>7 idiv 2</code></p>
+          </td>
+          <td>
+            <p><code>3</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>mod</code></p>
+          </td>
+          <td>
+            <p>Modulo (remainder)</p>
+          </td>
+          <td>
+            <p><code>7 mod 2</code></p>
+          </td>
+          <td>
+            <p><code>1</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>-</code> (unary)</p>
+          </td>
+          <td>
+            <p>Negation</p>
+          </td>
+          <td>
+            <p><code>-$x</code></p>
+          </td>
+          <td>
+            <p>negated value</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>
+      <strong>C# parallel:</strong> <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> (integer or decimal depending on operands), <code>%</code></p><p>Note: XQuery uses <code>div</code> instead of <code>/</code> for division because <code>/</code> is already the path separator. This catches every C# developer at least once.</p><pre><code class="language-xquery">(: Tax calculation :)
+let $subtotal := 149.99
+let $tax-rate := 0.08
+let $tax := round($subtotal * $tax-rate, 2)
+let $total := $subtotal + $tax
+return map {
+  "subtotal": $subtotal,
+  "tax": $tax,
+  "total": $total
+}</code></pre><h3 id="type-rules"><a class="anchor" href="#type-rules">#</a>Type Rules</h3><p>Arithmetic follows XQuery's type promotion rules:</p><ul><li>
+        <p>
+          <code>integer + integer</code> produces <code>integer</code></p>
+      </li><li>
+        <p>
+          <code>integer + decimal</code> produces <code>decimal</code></p>
+      </li><li>
+        <p>
+          <code>decimal + double</code> produces <code>double</code></p>
+      </li><li>
+        <p>Any arithmetic with <code>double</code> produces <code>double</code></p>
+      </li></ul><pre><code class="language-xquery">5 + 3          (: xs:integer  → 8 :)
+5 + 3.0        (: xs:decimal  → 8.0 :)
+5 + 3.0e0      (: xs:double   → 8.0E0 :)</code></pre><hr><h2 id="comparison-operators"><a class="anchor" href="#comparison-operators">#</a>Comparison Operators</h2><p>XQuery has two sets of comparison operators, and understanding the difference is critical.</p><h3 id="general-comparison"><a class="anchor" href="#general-comparison">#</a>General Comparison</h3><p>General comparison operators compare sequences. If <strong>any</strong> item in the left sequence matches <strong>any</strong> item in the right sequence, the result is true.</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Operator</p>
+          </th>
+          <th>
+            <p>Meaning</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>=</code></p>
+          </td>
+          <td>
+            <p>Equal (existential)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>!=</code></p>
+          </td>
+          <td>
+            <p>Not equal (existential)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>&lt;</code></p>
+          </td>
+          <td>
+            <p>Less than</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>&gt;</code></p>
+          </td>
+          <td>
+            <p>Greater than</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>&lt;=</code></p>
+          </td>
+          <td>
+            <p>Less than or equal</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>&gt;=</code></p>
+          </td>
+          <td>
+            <p>Greater than or equal</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><pre><code class="language-xquery">(: Returns true if ANY tag equals "sale" :)
+$product/tag = "sale"
+(: This is often what you want in XQuery — it checks all child elements :)
+//book[author = "Knuth"]</code></pre><p>
+      <strong>Warning:</strong> <code>!=</code> does not mean "no item equals." It means "at least one item does not equal":</p><pre><code class="language-xquery">let $tags := ("red", "blue", "green")
+return $tags != "red"
+(: true! Because "blue" != "red" and "green" != "red" :)</code></pre><h3 id="value-comparison"><a class="anchor" href="#value-comparison">#</a>Value Comparison</h3><p>Value comparison operators compare single values. They raise an error if either side is a sequence of more than one item.</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Operator</p>
+          </th>
+          <th>
+            <p>Meaning</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>eq</code></p>
+          </td>
+          <td>
+            <p>Equal</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>ne</code></p>
+          </td>
+          <td>
+            <p>Not equal</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>lt</code></p>
+          </td>
+          <td>
+            <p>Less than</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>gt</code></p>
+          </td>
+          <td>
+            <p>Greater than</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>le</code></p>
+          </td>
+          <td>
+            <p>Less than or equal</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>ge</code></p>
+          </td>
+          <td>
+            <p>Greater than or equal</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><pre><code class="language-xquery">(: Strict single-value comparison :)
+$order/@status eq "shipped"
+count($items) gt 10
+$price le 99.99</code></pre><p>
+      <strong>When to use which:</strong>
+    </p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Scenario</p>
+          </th>
+          <th>
+            <p>Use</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Comparing an attribute/element to a value</p>
+          </td>
+          <td>
+            <p>General <code>=</code> (handles empty gracefully)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Comparing two known single values</p>
+          </td>
+          <td>
+            <p>Value <code>eq</code> (catches bugs with multi-value sequences)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Inside a <code>where</code> clause with computed values</p>
+          </td>
+          <td>
+            <p>Value <code>eq</code> (more precise)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>XPath predicates on child elements</p>
+          </td>
+          <td>
+            <p>General <code>=</code> (existential match across children)</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>
+      <strong>C# parallel:</strong> C# has only one set: <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. The general/value distinction is unique to XQuery/XPath.</p><hr><h2 id="node-comparison"><a class="anchor" href="#node-comparison">#</a>Node Comparison</h2><p>These operators compare XML nodes by identity or document position. They have no direct C# equivalent.</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Operator</p>
+          </th>
+          <th>
+            <p>Meaning</p>
+          </th>
+          <th>
+            <p>Example</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>is</code></p>
+          </td>
+          <td>
+            <p>Same node identity</p>
+          </td>
+          <td>
+            <p><code>$a is $b</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>&lt;&lt;</code></p>
+          </td>
+          <td>
+            <p>Before in document order</p>
+          </td>
+          <td>
+            <p><code>$a &lt;&lt; $b</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>&gt;&gt;</code></p>
+          </td>
+          <td>
+            <p>After in document order</p>
+          </td>
+          <td>
+            <p><code>$a &gt;&gt; $b</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="node-identity"><a class="anchor" href="#node-identity">#</a>Node Identity (<code>is</code>)</h3><p>Two node references point to the <strong>same</strong> node (not just equal content):</p><pre><code class="language-xquery">let $first := (//product)[1]
+let $same := (//product)[1]
+let $different := (//product)[2]
+return (
+  $first is $same,      (: true — same node :)
+  $first is $different   (: false — different node :)
+)</code></pre><p>This is like C#'s <code>Object.ReferenceEquals</code>:</p><pre><code class="language-csharp">Object.ReferenceEquals(firstNode, sameNode)  // true
+Object.ReferenceEquals(firstNode, differentNode)  // false</code></pre><h3 id="document-order-and"><a class="anchor" href="#document-order-and">#</a>Document Order (<code>&lt;&lt;</code> and <code>&gt;&gt;</code>)</h3><p>Tests whether one node appears before or after another in the document:</p><pre><code class="language-xquery">let $intro := //chapter[@id = "intro"]
+let $conclusion := //chapter[@id = "conclusion"]
+return $intro &lt;&lt; $conclusion
+(: true if intro comes before conclusion in the document :)</code></pre><p>
+      <strong>Practical use:</strong> Ensuring correct ordering in cross-references:</p><pre><code class="language-xquery">for $ref in //cross-ref
+let $target := //*[@id = $ref/@target]
+return &lt;ref forward="{ $ref &gt;&gt; $target }"&gt;
+  { $ref/@target/string() }
+&lt;/ref&gt;</code></pre><hr><h2 id="logical-operators"><a class="anchor" href="#logical-operators">#</a>Logical Operators</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Operator</p>
+          </th>
+          <th>
+            <p>Meaning</p>
+          </th>
+          <th>
+            <p>C# Equivalent</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>and</code></p>
+          </td>
+          <td>
+            <p>Logical AND</p>
+          </td>
+          <td>
+            <p><code>&amp;&amp;</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>or</code></p>
+          </td>
+          <td>
+            <p>Logical OR</p>
+          </td>
+          <td>
+            <p><code>\|\|</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>not(...)</code></p>
+          </td>
+          <td>
+            <p>Logical NOT (function)</p>
+          </td>
+          <td>
+            <p><code>!</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><pre><code class="language-xquery">for $product in //product
+where $product/price &gt; 10 and $product/price &lt; 100
+  and ($product/@category = "electronics" or $product/@category = "tools")
+  and not($product/@discontinued = "true")
+return $product/name</code></pre><p>Note: <code>not</code> is a function, not an operator. You write <code>not($expr)</code>, not <code>not $expr</code>.</p><hr><h2 id="sequence-operators"><a class="anchor" href="#sequence-operators">#</a>Sequence Operators</h2><p>These operators work on sequences of nodes, performing set operations. They always return results in document order with duplicates removed.</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Operator</p>
+          </th>
+          <th>
+            <p>Meaning</p>
+          </th>
+          <th>
+            <p>C# Parallel</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>union</code> or <code>\|</code></p>
+          </td>
+          <td>
+            <p>All nodes from both sequences</p>
+          </td>
+          <td>
+            <p><code>Union()</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>intersect</code></p>
+          </td>
+          <td>
+            <p>Nodes in both sequences</p>
+          </td>
+          <td>
+            <p><code>Intersect()</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>except</code></p>
+          </td>
+          <td>
+            <p>Nodes in first but not second</p>
+          </td>
+          <td>
+            <p><code>Except()</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><pre><code class="language-xquery">(: All products that are either featured OR on sale :)
+//product[@featured = "true"] union //product[@on-sale = "true"]
+(: Products that are both featured AND on sale :)
+//product[@featured = "true"] intersect //product[@on-sale = "true"]
+(: Featured products that are NOT discontinued :)
+//product[@featured = "true"] except //product[@discontinued = "true"]</code></pre><h3 id="practical-example-navigation-menu"><a class="anchor" href="#practical-example-navigation-menu">#</a>Practical Example: Navigation Menu</h3><pre><code class="language-xquery">(: Show all pages, but highlight the ones in the current section :)
+let $all-pages := //sitemap/page
+let $current-section := //sitemap/section[@id = $current-section-id]/page
+let $other-pages := $all-pages except $current-section
+return &lt;nav&gt;
+  &lt;h3&gt;Current Section&lt;/h3&gt;
+  &lt;ul&gt;{ for $p in $current-section return &lt;li class="current"&gt;{ $p/@title/string() }&lt;/li&gt; }&lt;/ul&gt;
+  &lt;h3&gt;Other Pages&lt;/h3&gt;
+  &lt;ul&gt;{ for $p in $other-pages return &lt;li&gt;{ $p/@title/string() }&lt;/li&gt; }&lt;/ul&gt;
+&lt;/nav&gt;</code></pre><p>
+      <strong>Important:</strong> These operators work on <strong>nodes</strong>, not atomic values. For set operations on atomic values, use <code>distinct-values()</code> and sequence comparisons.</p><hr><h2 id="range-operator"><a class="anchor" href="#range-operator">#</a>Range Operator</h2><p>The <code>to</code> operator generates a sequence of consecutive integers:</p><pre><code class="language-xquery">1 to 5           (: (1, 2, 3, 4, 5) :)
+3 to 7           (: (3, 4, 5, 6, 7) :)
+$start to $end   (: dynamic range :)</code></pre><p>
+      <strong>C# parallel:</strong> <code>Enumerable.Range(start, count)</code>:</p><pre><code class="language-csharp">Enumerable.Range(1, 5)  // {1, 2, 3, 4, 5}</code></pre><h3 id="common-uses"><a class="anchor" href="#common-uses">#</a>Common Uses</h3><p>
+      <strong>Pagination:</strong>
+    </p><pre><code class="language-xquery">let $page := 2
+let $size := 10
+let $positions := (($page - 1) * $size + 1) to ($page * $size)
+for $product at $pos in //products/product
+where $pos = $positions
+return $product</code></pre><p>
+      <strong>Generating repeated structures:</strong>
+    </p><pre><code class="language-xquery">&lt;table&gt;{
+  for $row in 1 to 10
+  return &lt;tr&gt;{
+    for $col in 1 to 5
+    return &lt;td&gt;R{ $row }C{ $col }&lt;/td&gt;
+  }&lt;/tr&gt;
+}&lt;/table&gt;</code></pre><p>
+      <strong>Reverse range:</strong> If <code>start &gt; end</code>, the result is empty:</p><pre><code class="language-xquery">5 to 1   (: empty sequence :)
+(: To count down, use reverse() :)
+reverse(1 to 5)  (: (5, 4, 3, 2, 1) :)</code></pre><hr><h2 id="string-concatenation"><a class="anchor" href="#string-concatenation">#</a>String Concatenation</h2><p>
+      <em>XQuery 3.1+</em>
+    </p><p>The <code>||</code> operator concatenates strings:</p><pre><code class="language-xquery">"Hello" || " " || "World"     (: "Hello World" :)
+$first-name || " " || $last-name
+"Item #" || $position || ": " || $name</code></pre><p>
+      <strong>C# parallel:</strong> <code>+</code> or string interpolation:</p><pre><code class="language-csharp">firstName + " " + lastName
+$"Item #{position}: {name}"</code></pre><p>Before 3.1, you had to use <code>concat()</code>:</p><pre><code class="language-xquery">concat("Hello", " ", "World")
+concat($first-name, " ", $last-name)</code></pre><p>The <code>||</code> operator atomizes its operands and converts them to strings automatically. This means you can concatenate non-string values without explicit casting:</p><pre><code class="language-xquery">"Price: $" || $product/price || " (qty: " || $item/@qty || ")"
+(: Works even though price and qty might be untyped :)</code></pre><hr><h2 id="simple-map-operator"><a class="anchor" href="#simple-map-operator">#</a>Simple Map Operator</h2><p>
+      <em>XQuery 3.1+</em>
+    </p><p>The <code>!</code> operator applies an expression to each item in a sequence. It's XQuery's version of <code>Select()</code> / <code>map()</code>:</p><pre><code class="language-xquery">(1, 2, 3, 4, 5) ! (. * 2)
+(: Result: (2, 4, 6, 8, 10) :)</code></pre><p>Inside the right-hand expression, <code>.</code> (the context item) refers to the current item.</p><p>
+      <strong>C# parallel:</strong> <code>Select()</code>:</p><pre><code class="language-csharp">new[] { 1, 2, 3, 4, 5 }.Select(x =&gt; x * 2)</code></pre><h3 id="practical-uses"><a class="anchor" href="#practical-uses">#</a>Practical Uses</h3><p>
+      <strong>Transform values:</strong>
+    </p><pre><code class="language-xquery">//product/name ! upper-case(.)
+(: All product names in uppercase :)
+//order/total ! format-number(., "#,##0.00")
+(: All order totals formatted :)</code></pre><p>
+      <strong>Extract and transform:</strong>
+    </p><pre><code class="language-xquery">//employee ! map {
+  "name": ./name/string(),
+  "department": ./@dept/string(),
+  "salary": xs:decimal(./salary)
+}</code></pre><p>
+      <strong>Chaining:</strong>
+    </p><pre><code class="language-xquery">(1 to 10) ! (. * .) ! (. + 1)
+(: Squares each number, then adds 1: (2, 5, 10, 17, 26, 37, 50, 65, 82, 101) :)</code></pre><h3 id="map-operator-vs-path-expressions"><a class="anchor" href="#map-operator-vs-path-expressions">#</a>Map Operator vs Path Expressions</h3><p>The <code>!</code> operator is similar to <code>/</code> but more general:</p><pre><code class="language-xquery">$doc/catalog/product/name    (: navigates child axes — nodes only :)
+$doc/catalog/product/name ! upper-case(.)  (: applies a function to each result :)
+(: ! works with any expression, not just axis steps :)
+("hello", "world") ! string-length(.)   (: (5, 5) :)</code></pre><hr><h2 id="arrow-operators"><a class="anchor" href="#arrow-operators">#</a>Arrow Operators</h2><h3 id="fat-arrow"><a class="anchor" href="#fat-arrow">#</a>Fat Arrow (<code>=&gt;</code>)</h3><p>
+      <em>XQuery 3.1+</em>
+    </p><p>The <code>=&gt;</code> operator pipes a value into a function as its first argument. It enables left-to-right chaining instead of nested function calls:</p><pre><code class="language-xquery">(: Without arrow — nested, read inside-out :)
+upper-case(normalize-space(substring($text, 1, 50)))
+(: With arrow — left-to-right pipeline :)
+$text =&gt; substring(1, 50) =&gt; normalize-space() =&gt; upper-case()</code></pre><p>
+      <strong>C# parallel:</strong> LINQ method chaining or the pipe proposal:</p><pre><code class="language-csharp">text.Substring(0, 50).Trim().ToUpper()</code></pre><p>The left-hand value becomes the <strong>first</strong> argument of the function. Additional arguments follow:</p><pre><code class="language-xquery">"hello world" =&gt; substring(1, 5)
+(: equivalent to: substring("hello world", 1, 5) :)
+(: Result: "hello" :)</code></pre><h3 id="practical-example-data-cleaning-pipeline"><a class="anchor" href="#practical-example-data-cleaning-pipeline">#</a>Practical Example: Data Cleaning Pipeline</h3><pre><code class="language-xquery">declare function local:clean-text($text as xs:string) as xs:string {
+  $text
+    =&gt; normalize-space()
+    =&gt; replace("&amp;amp;", "and")
+    =&gt; replace("\s+", " ")
+    =&gt; lower-case()
+};</code></pre><h3 id="thin-arrow"><a class="anchor" href="#thin-arrow">#</a>Thin Arrow (<code>-&gt;</code>)</h3><p>
+      <em>XQuery 4.0</em>
+    </p><p>The <code>-&gt;</code> (thin arrow) operator is similar to <code>=&gt;</code> but calls the function as a <strong>method on the item</strong>. The key difference: <code>-&gt;</code> passes the left-hand side as the context item (<code>.</code>), while <code>=&gt;</code> passes it as the first argument.</p><pre><code class="language-xquery">(: Thin arrow — treats function as a method :)
+"  Hello World  " -&gt; normalize-space() -&gt; upper-case()
+(: Works with user-defined functions :)
+$order -&gt; local:calculate-total() -&gt; local:apply-discount(0.1)</code></pre><p>The thin arrow is especially useful for chaining operations on maps and arrays:</p><pre><code class="language-xquery">let $data := map { "name": "Alice", "scores": [85, 92, 78] }
+return $data -&gt; map:get("scores") -&gt; array:size()
+(: Result: 3 :)</code></pre><hr><h2 id="lookup-operator"><a class="anchor" href="#lookup-operator">#</a>Lookup Operator</h2><p>
+      <em>XQuery 3.1+</em>
+    </p><p>The <code>?</code> operator accesses values in maps and arrays. It replaces verbose function calls with concise syntax.</p><h3 id="map-lookup"><a class="anchor" href="#map-lookup">#</a>Map Lookup</h3><pre><code class="language-xquery">let $config := map {
+  "host": "localhost",
+  "port": 8080,
+  "debug": true()
+}
+return (
+  $config?host,       (: "localhost" :)
+  $config?port,       (: 8080 :)
+  $config?debug       (: true :)
+)</code></pre><p>
+      <strong>C# parallel:</strong> Dictionary or object property access:</p><pre><code class="language-csharp">config["host"]    // Dictionary
+config.Host       // Object property</code></pre><h3 id="array-lookup"><a class="anchor" href="#array-lookup">#</a>Array Lookup</h3><p>Arrays use 1-based integer positions:</p><pre><code class="language-xquery">let $colors := ["red", "green", "blue"]
+return (
+  $colors?1,       (: "red" :)
+  $colors?2,       (: "green" :)
+  $colors?3        (: "blue" :)
+)</code></pre><p>
+      <strong>C# parallel:</strong> <code>colors[0]</code>, <code>colors[1]</code>, <code>colors[2]</code> (note: C# is 0-based, XQuery is 1-based).</p><h3 id="wildcard-lookup"><a class="anchor" href="#wildcard-lookup">#</a>Wildcard Lookup (<code>?*</code>)</h3><p>Returns all values from a map or all items from an array:</p><pre><code class="language-xquery">let $prices := map { "widget": 9.99, "gadget": 29.99, "tool": 14.50 }
+return sum($prices?*)
+(: Result: 54.48 — sum of all values :)
+let $matrix := [[1, 2], [3, 4], [5, 6]]
+return $matrix?*
+(: Result: [1, 2], [3, 4], [5, 6] — all arrays from the outer array :)</code></pre><h3 id="chained-lookups"><a class="anchor" href="#chained-lookups">#</a>Chained Lookups</h3><p>Navigate nested structures:</p><pre><code class="language-xquery">let $data := map {
+  "users": [
+    map { "name": "Alice", "role": "admin" },
+    map { "name": "Bob", "role": "editor" }
+  ]
+}
+return (
+  $data?users,          (: the array of user maps :)
+  $data?users?1,        (: map { "name": "Alice", "role": "admin" } :)
+  $data?users?1?name,   (: "Alice" :)
+  $data?users?*?name    (: ("Alice", "Bob") — all names :)
+)</code></pre><h3 id="variable-key-lookup"><a class="anchor" href="#variable-key-lookup">#</a>Variable Key Lookup</h3><p>Use parentheses for dynamic keys:</p><pre><code class="language-xquery">let $field := "name"
+return $user?($field)
+(: Same as $user?name when $field = "name" :)</code></pre><hr><h2 id="otherwise-operator"><a class="anchor" href="#otherwise-operator">#</a>Otherwise Operator</h2><p>
+      <em>XQuery 4.0</em>
+    </p><p>The <code>otherwise</code> operator returns the right-hand side when the left-hand side is the empty sequence:</p><pre><code class="language-xquery">$user/email otherwise "no-email@example.com"</code></pre><p>This is covered in detail on the <a href="conditionals.html#otherwise-operator" title="">Conditionals and Error Handling</a> page. Here it is listed for completeness in the operator reference.</p><p>
+      <strong>C# parallel:</strong> <code>??</code> (null-coalescing):</p><pre><code class="language-csharp">user.Email ?? "no-email@example.com"</code></pre><hr><h2 id="operator-precedence"><a class="anchor" href="#operator-precedence">#</a>Operator Precedence</h2><p>From highest (binds tightest) to lowest:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Precedence</p>
+          </th>
+          <th>
+            <p>Operators</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>1</p>
+          </td>
+          <td>
+            <p><code>?</code></p>
+          </td>
+          <td>
+            <p>Lookup</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>2</p>
+          </td>
+          <td>
+            <p><code>/</code>, <code>//</code></p>
+          </td>
+          <td>
+            <p>Path steps</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>3</p>
+          </td>
+          <td>
+            <p><code>!</code></p>
+          </td>
+          <td>
+            <p>Simple map</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>4</p>
+          </td>
+          <td>
+            <p><code>[]</code></p>
+          </td>
+          <td>
+            <p>Predicate</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>5</p>
+          </td>
+          <td>
+            <p>Unary <code>-</code>, <code>+</code></p>
+          </td>
+          <td>
+            <p>Unary arithmetic</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>6</p>
+          </td>
+          <td>
+            <p><code>cast as</code>, <code>castable as</code></p>
+          </td>
+          <td>
+            <p>Type casting</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>7</p>
+          </td>
+          <td>
+            <p><code>treat as</code></p>
+          </td>
+          <td>
+            <p>Type assertion</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>8</p>
+          </td>
+          <td>
+            <p><code>instance of</code></p>
+          </td>
+          <td>
+            <p>Type testing</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>9</p>
+          </td>
+          <td>
+            <p><code>intersect</code>, <code>except</code></p>
+          </td>
+          <td>
+            <p>Sequence intersection/difference</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>10</p>
+          </td>
+          <td>
+            <p><code>union</code>, <code>\|</code></p>
+          </td>
+          <td>
+            <p>Sequence union</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>11</p>
+          </td>
+          <td>
+            <p><code>=&gt;</code>, <code>-&gt;</code></p>
+          </td>
+          <td>
+            <p>Arrow operators</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>12</p>
+          </td>
+          <td>
+            <p><code>*</code>, <code>div</code>, <code>idiv</code>, <code>mod</code></p>
+          </td>
+          <td>
+            <p>Multiplicative</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>13</p>
+          </td>
+          <td>
+            <p><code>+</code>, <code>-</code></p>
+          </td>
+          <td>
+            <p>Additive</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>14</p>
+          </td>
+          <td>
+            <p><code>\|\|</code></p>
+          </td>
+          <td>
+            <p>String concatenation</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>15</p>
+          </td>
+          <td>
+            <p><code>to</code></p>
+          </td>
+          <td>
+            <p>Range</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>16</p>
+          </td>
+          <td>
+            <p><code>otherwise</code></p>
+          </td>
+          <td>
+            <p>Fallback</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>17</p>
+          </td>
+          <td>
+            <p><code>eq</code>, <code>ne</code>, <code>lt</code>, <code>le</code>, <code>gt</code>, <code>ge</code>, <code>=</code>, <code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>is</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code></p>
+          </td>
+          <td>
+            <p>Comparison</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>18</p>
+          </td>
+          <td>
+            <p><code>and</code></p>
+          </td>
+          <td>
+            <p>Logical AND</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>19</p>
+          </td>
+          <td>
+            <p><code>or</code></p>
+          </td>
+          <td>
+            <p>Logical OR</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>When in doubt, use parentheses. They cost nothing and prevent subtle bugs:</p><pre><code class="language-xquery">(: Ambiguous — does 'otherwise' or 'gt' bind tighter? :)
+$count otherwise 0 gt 5
+(: Clear :)
+($count otherwise 0) gt 5</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

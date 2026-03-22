@@ -1,0 +1,225 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Server Mode — PhoenixmlDb Documentation</title><meta name="description" content="Standalone server with gRPC API, authentication, TLS, and Docker deployment"><link rel="canonical" href="/phoenixmldb/deployment/server-mode.html"><meta property="og:title" content="Server Mode"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/deployment/server-mode.html"><meta property="og:description" content="Standalone server with gRPC API, authentication, TLS, and Docker deployment"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li class="active"><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="server-mode"><a class="anchor" href="#server-mode">#</a>Server Mode</h1><p>Server mode runs PhoenixmlDb as a standalone service, allowing multiple clients to connect via gRPC.</p><h2 id="overview"><a class="anchor" href="#overview">#</a>Overview</h2><pre><code>┌─────────┐     ┌──────────────────────────────┐
+│ Client  │────▶│     PhoenixmlDb Server       │
+│  App 1  │     │  ┌────────────────────────┐  │
+└─────────┘     │  │    gRPC Service        │  │
+                │  └────────────────────────┘  │
+┌─────────┐     │  ┌────────────────────────┐  │
+│ Client  │────▶│  │    Query Engine        │  │
+│  App 2  │     │  └────────────────────────┘  │
+└─────────┘     │  ┌────────────────────────┐  │
+                │  │    Storage (LMDB)      │  │
+┌─────────┐     │  └────────────────────────┘  │
+│ Client  │────▶│                              │
+│  App 3  │     └──────────────────────────────┘
+└─────────┘</code></pre><h2 id="installation"><a class="anchor" href="#installation">#</a>Installation</h2><h3 id="server-package"><a class="anchor" href="#server-package">#</a>Server Package</h3><pre><code class="language-bash"># Install as global tool
+dotnet tool install -g PhoenixmlDb.Server
+# Or as project dependency
+dotnet add package PhoenixmlDb.Server</code></pre><h3 id="client-sdk"><a class="anchor" href="#client-sdk">#</a>Client SDK</h3><pre><code class="language-bash">dotnet add package PhoenixmlDb.Client</code></pre><h2 id="starting-the-server"><a class="anchor" href="#starting-the-server">#</a>Starting the Server</h2><h3 id="command-line"><a class="anchor" href="#command-line">#</a>Command Line</h3><pre><code class="language-bash"># Basic start
+phoenixmldb-server --data ./data --port 5432
+# With options
+phoenixmldb-server \
+    --data ./data \
+    --port 5432 \
+    --host 0.0.0.0 \
+    --max-connections 100 \
+    --tls-cert ./cert.pem \
+    --tls-key ./key.pem</code></pre><h3 id="as-windows-service"><a class="anchor" href="#as-windows-service">#</a>As Windows Service</h3><pre><code class="language-bash"># Install as service
+phoenixmldb-server install --service-name PhoenixmlDb
+# Start service
+net start PhoenixmlDb</code></pre><h3 id="as-systemd-service"><a class="anchor" href="#as-systemd-service">#</a>As systemd Service</h3><pre><code class="language-ini"># /etc/systemd/system/phoenixmldb.service
+[Unit]
+Description=PhoenixmlDb Server
+After=network.target
+[Service]
+Type=simple
+User=phoenixmldb
+ExecStart=/usr/local/bin/phoenixmldb-server --data /var/lib/phoenixmldb --port 5432
+Restart=always
+[Install]
+WantedBy=multi-user.target</code></pre><pre><code class="language-bash">sudo systemctl enable phoenixmldb
+sudo systemctl start phoenixmldb</code></pre><h2 id="server-configuration"><a class="anchor" href="#server-configuration">#</a>Server Configuration</h2><h3 id="configuration-file"><a class="anchor" href="#configuration-file">#</a>Configuration File</h3><pre><code class="language-json">{
+    "server": {
+        "host": "0.0.0.0",
+        "port": 5432,
+        "maxConnections": 100,
+        "connectionTimeout": "30s"
+    },
+    "storage": {
+        "path": "/var/lib/phoenixmldb",
+        "mapSize": "10GB",
+        "maxContainers": 100
+    },
+    "authentication": {
+        "enabled": true,
+        "type": "basic",
+        "users": {
+            "admin": "hashed-password"
+        }
+    },
+    "tls": {
+        "enabled": true,
+        "certificate": "/etc/phoenixmldb/cert.pem",
+        "key": "/etc/phoenixmldb/key.pem"
+    },
+    "logging": {
+        "level": "Information",
+        "file": "/var/log/phoenixmldb/server.log"
+    }
+}</code></pre><h3 id="environment-variables"><a class="anchor" href="#environment-variables">#</a>Environment Variables</h3><pre><code class="language-bash">export PHOENIXMLDB_HOST=0.0.0.0
+export PHOENIXMLDB_PORT=5432
+export PHOENIXMLDB_DATA=/var/lib/phoenixmldb
+export PHOENIXMLDB_TLS_CERT=/etc/phoenixmldb/cert.pem</code></pre><h2 id="client-connection"><a class="anchor" href="#client-connection">#</a>Client Connection</h2><h3 id="basic-connection"><a class="anchor" href="#basic-connection">#</a>Basic Connection</h3><pre><code class="language-csharp">using PhoenixmlDb.Client;
+var client = new PhoenixmlClient("localhost:5432");
+// Create container
+await client.CreateContainerAsync("products");
+// Store document
+await client.PutDocumentAsync("products", "p1.xml", "&lt;product/&gt;");
+// Query
+var results = await client.QueryAsync("collection('products')//product");</code></pre><h3 id="with-authentication"><a class="anchor" href="#with-authentication">#</a>With Authentication</h3><pre><code class="language-csharp">var options = new ClientOptions
+{
+    Host = "localhost",
+    Port = 5432,
+    Username = "admin",
+    Password = "secret"
+};
+var client = new PhoenixmlClient(options);</code></pre><h3 id="with-tls"><a class="anchor" href="#with-tls">#</a>With TLS</h3><pre><code class="language-csharp">var options = new ClientOptions
+{
+    Host = "db.example.com",
+    Port = 5432,
+    UseTls = true,
+    TlsServerName = "db.example.com"  // For certificate validation
+};
+var client = new PhoenixmlClient(options);</code></pre><h3 id="connection-string"><a class="anchor" href="#connection-string">#</a>Connection String</h3><pre><code class="language-csharp">var client = new PhoenixmlClient(
+    "Host=localhost;Port=5432;Username=admin;Password=secret;UseTls=true");</code></pre><h2 id="authentication"><a class="anchor" href="#authentication">#</a>Authentication</h2><h3 id="basic-authentication"><a class="anchor" href="#basic-authentication">#</a>Basic Authentication</h3><pre><code class="language-json">{
+    "authentication": {
+        "enabled": true,
+        "type": "basic",
+        "users": {
+            "admin": "$2a$10$...",  // bcrypt hash
+            "reader": "$2a$10$..."
+        }
+    }
+}</code></pre><h3 id="api-keys"><a class="anchor" href="#api-keys">#</a>API Keys</h3><pre><code class="language-json">{
+    "authentication": {
+        "enabled": true,
+        "type": "apikey",
+        "keys": {
+            "app1": "key-hash-1",
+            "app2": "key-hash-2"
+        }
+    }
+}</code></pre><h3 id="role-based-access"><a class="anchor" href="#role-based-access">#</a>Role-Based Access</h3><pre><code class="language-json">{
+    "authorization": {
+        "roles": {
+            "admin": ["*"],
+            "reader": ["query", "get"],
+            "writer": ["query", "get", "put", "delete"]
+        },
+        "userRoles": {
+            "admin": "admin",
+            "app1": "writer",
+            "app2": "reader"
+        }
+    }
+}</code></pre><h2 id="tls-configuration"><a class="anchor" href="#tls-configuration">#</a>TLS Configuration</h2><h3 id="generate-certificates"><a class="anchor" href="#generate-certificates">#</a>Generate Certificates</h3><pre><code class="language-bash"># Generate self-signed certificate
+openssl req -x509 -newkey rsa:4096 \
+    -keyout key.pem -out cert.pem \
+    -days 365 -nodes \
+    -subj "/CN=phoenixmldb"</code></pre><h3 id="configure-server"><a class="anchor" href="#configure-server">#</a>Configure Server</h3><pre><code class="language-json">{
+    "tls": {
+        "enabled": true,
+        "certificate": "./cert.pem",
+        "key": "./key.pem",
+        "clientCertificates": false  // Require client certs
+    }
+}</code></pre><h2 id="load-balancing"><a class="anchor" href="#load-balancing">#</a>Load Balancing</h2><h3 id="haproxy-configuration"><a class="anchor" href="#haproxy-configuration">#</a>HAProxy Configuration</h3><pre><code>frontend phoenixmldb
+    bind *:5432
+    default_backend phoenixmldb_servers
+backend phoenixmldb_servers
+    balance roundrobin
+    server server1 10.0.0.1:5432 check
+    server server2 10.0.0.2:5432 check</code></pre><h3 id="read-replicas"><a class="anchor" href="#read-replicas">#</a>Read Replicas</h3><pre><code class="language-csharp">var options = new ClientOptions
+{
+    WriteHost = "primary.db.local:5432",
+    ReadHosts = ["replica1.db.local:5432", "replica2.db.local:5432"]
+};
+var client = new PhoenixmlClient(options);
+// Writes go to primary
+await client.PutDocumentAsync(...);
+// Reads distributed to replicas
+var results = await client.QueryAsync(...);</code></pre><h2 id="monitoring"><a class="anchor" href="#monitoring">#</a>Monitoring</h2><h3 id="health-endpoint"><a class="anchor" href="#health-endpoint">#</a>Health Endpoint</h3><pre><code class="language-bash">curl http://localhost:5432/health
+# {"status":"healthy","version":"1.0.0","uptime":"3d 4h"}</code></pre><h3 id="metrics-endpoint"><a class="anchor" href="#metrics-endpoint">#</a>Metrics Endpoint</h3><pre><code class="language-bash">curl http://localhost:5432/metrics
+# Prometheus format metrics</code></pre><h3 id="grafana-dashboard"><a class="anchor" href="#grafana-dashboard">#</a>Grafana Dashboard</h3><p>Import the PhoenixmlDb dashboard for visualization of:</p><ul><li>
+        <p>Query throughput</p>
+      </li><li>
+        <p>Response times</p>
+      </li><li>
+        <p>Connection count</p>
+      </li><li>
+        <p>Error rates</p>
+      </li><li>
+        <p>Storage metrics</p>
+      </li></ul><h2 id="docker-deployment"><a class="anchor" href="#docker-deployment">#</a>Docker Deployment</h2><h3 id="dockerfile"><a class="anchor" href="#dockerfile">#</a>Dockerfile</h3><pre><code class="language-dockerfile">FROM mcr.microsoft.com/dotnet/runtime:10.0
+COPY phoenixmldb-server /app/
+WORKDIR /app
+EXPOSE 5432
+VOLUME /data
+CMD ["./phoenixmldb-server", "--data", "/data"]</code></pre><h3 id="docker-compose"><a class="anchor" href="#docker-compose">#</a>Docker Compose</h3><pre><code class="language-yaml">version: '3'
+services:
+  phoenixmldb:
+    image: phoenixmldb/server:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - phoenixmldb-data:/data
+    environment:
+      - PHOENIXMLDB_MAP_SIZE=10GB
+volumes:
+  phoenixmldb-data:</code></pre><h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2><ol><li>
+        <p>
+          <strong>Enable TLS</strong> - Always use TLS in production</p>
+      </li><li>
+        <p>
+          <strong>Use authentication</strong> - Secure access to your data</p>
+      </li><li>
+        <p>
+          <strong>Monitor health</strong> - Set up health checks and alerts</p>
+      </li><li>
+        <p>
+          <strong>Regular backups</strong> - Implement backup strategy</p>
+      </li><li>
+        <p>
+          <strong>Limit connections</strong> - Set appropriate max connections</p>
+      </li><li>
+        <p>
+          <strong>Use connection pooling</strong> - In client applications</p>
+      </li></ol><h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>High Availability</p>
+          </th>
+          <th>
+            <p>Configuration</p>
+          </th>
+          <th>
+            <p>Support</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong><a href="cluster-mode.html" title="">Cluster Mode</a></strong>High availability</p>
+          </td>
+          <td>
+            <p><strong><a href="../configuration.html" title="">Configuration</a></strong>All settings</p>
+          </td>
+          <td>
+            <p><strong><a href="../troubleshooting.html" title="">Troubleshooting</a></strong>Problem solving</p>
+          </td>
+        </tr>
+      </tbody>
+    </table></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

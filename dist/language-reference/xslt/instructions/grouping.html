@@ -1,0 +1,444 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Grouping — PhoenixmlDb Documentation</title><meta name="description" content="xsl:for-each-group — all four grouping modes with examples"><link rel="canonical" href="/language-reference/xslt/instructions/grouping.html"><meta property="og:title" content="Grouping"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/grouping.html"><meta property="og:description" content="xsl:for-each-group — all four grouping modes with examples"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li class="active"><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="grouping"><a class="anchor" href="#grouping">#</a>Grouping</h1><p>
+      <code>xsl:for-each-group</code> is one of the most powerful XSLT instructions. It takes a flat sequence and organizes it into groups using one of four modes. Before XSLT 2.0, grouping required the "Muenchian method" — a clever but cryptic hack using keys. Now it is a first-class operation.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
+        <p>
+          <a href="#group-by" title="">group-by</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#group-adjacent" title="">group-adjacent</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#group-starting-with" title="">group-starting-with</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#group-ending-with" title="">group-ending-with</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#sorting-within-groups" title="">Sorting Within Groups</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#nested-grouping" title="">Nested Grouping</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#real-world-examples" title="">Real-World Examples</a>
+        </p>
+      </li></ul><hr><h2 id="the-four-grouping-modes"><a class="anchor" href="#the-four-grouping-modes">#</a>The Four Grouping Modes</h2><p>All four modes use the same instruction, <code>xsl:for-each-group</code>, with different attributes to select the mode. Inside the body, two functions are always available:</p><ul><li>
+        <p>
+          <strong>
+            <code>current-group()</code>
+          </strong> — the sequence of all items in the current group</p>
+      </li><li>
+        <p>
+          <strong>
+            <code>current-grouping-key()</code>
+          </strong> — the key value for the current group (for <code>group-by</code> and <code>group-adjacent</code>)</p>
+      </li></ul><hr><h2 id="group-by"><a class="anchor" href="#group-by">#</a>group-by</h2><p>Groups items by a computed key. All items with the same key value are placed in the same group, regardless of their position in the sequence.</p><p>
+      <strong>C# parallel:</strong> <code>items.GroupBy(x =&gt; x.Category)</code></p><h3 id="basic-example"><a class="anchor" href="#basic-example">#</a>Basic Example</h3><p>Given this product catalog:</p><pre><code class="language-xml">&lt;catalog&gt;
+  &lt;product category="electronics"&gt;&lt;name&gt;Laptop&lt;/name&gt;&lt;price&gt;999.99&lt;/price&gt;&lt;/product&gt;
+  &lt;product category="clothing"&gt;&lt;name&gt;T-Shirt&lt;/name&gt;&lt;price&gt;19.99&lt;/price&gt;&lt;/product&gt;
+  &lt;product category="electronics"&gt;&lt;name&gt;Phone&lt;/name&gt;&lt;price&gt;699.99&lt;/price&gt;&lt;/product&gt;
+  &lt;product category="clothing"&gt;&lt;name&gt;Jacket&lt;/name&gt;&lt;price&gt;89.99&lt;/price&gt;&lt;/product&gt;
+  &lt;product category="books"&gt;&lt;name&gt;XSLT Guide&lt;/name&gt;&lt;price&gt;49.99&lt;/price&gt;&lt;/product&gt;
+  &lt;product category="electronics"&gt;&lt;name&gt;Tablet&lt;/name&gt;&lt;price&gt;449.99&lt;/price&gt;&lt;/product&gt;
+&lt;/catalog&gt;</code></pre><pre><code class="language-xml">&lt;xsl:for-each-group select="catalog/product" group-by="@category"&gt;
+  &lt;section&gt;
+    &lt;h2&gt;&lt;xsl:value-of select="current-grouping-key()"/&gt;&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;xsl:for-each select="current-group()"&gt;
+        &lt;li&gt;&lt;xsl:value-of select="name"/&gt; — $&lt;xsl:value-of select="price"/&gt;&lt;/li&gt;
+      &lt;/xsl:for-each&gt;
+    &lt;/ul&gt;
+  &lt;/section&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><p>Output:</p><pre><code class="language-html">&lt;section&gt;
+  &lt;h2&gt;electronics&lt;/h2&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Laptop — $999.99&lt;/li&gt;
+    &lt;li&gt;Phone — $699.99&lt;/li&gt;
+    &lt;li&gt;Tablet — $449.99&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/section&gt;
+&lt;section&gt;
+  &lt;h2&gt;clothing&lt;/h2&gt;
+  &lt;ul&gt;
+    &lt;li&gt;T-Shirt — $19.99&lt;/li&gt;
+    &lt;li&gt;Jacket — $89.99&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/section&gt;
+&lt;section&gt;
+  &lt;h2&gt;books&lt;/h2&gt;
+  &lt;ul&gt;
+    &lt;li&gt;XSLT Guide — $49.99&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/section&gt;</code></pre><h3 id="group-order"><a class="anchor" href="#group-order">#</a>Group Order</h3><p>The groups appear in the order of the first occurrence of each key in the input sequence. In the example above, "electronics" appears first because the first product is in that category.</p><h3 id="composite-keys"><a class="anchor" href="#composite-keys">#</a>Composite Keys</h3><p>Use <code>composite="yes"</code> (XSLT 3.0) to group by multiple values:</p><pre><code class="language-xml">&lt;xsl:for-each-group select="//product" group-by="@category" composite="yes"&gt;
+  &lt;!-- groups by category --&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><p>For grouping by multiple independent keys, concatenate them:</p><pre><code class="language-xml">&lt;!-- Group by category AND status --&gt;
+&lt;xsl:for-each-group select="//product"
+                    group-by="concat(@category, '|', @status)"&gt;
+  &lt;xsl:variable name="parts" select="tokenize(current-grouping-key(), '\|')"/&gt;
+  &lt;h3&gt;&lt;xsl:value-of select="$parts[1]"/&gt; — &lt;xsl:value-of select="$parts[2]"/&gt;&lt;/h3&gt;
+  &lt;!-- ... --&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><p>Or more cleanly, use a composite grouping key with a sequence:</p><pre><code class="language-xml">&lt;xsl:for-each-group select="//product"
+                    group-by="@category, @status" composite="yes"&gt;
+  &lt;!-- current-grouping-key() returns a sequence of two values --&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><h3 id="aggregate-functions-on-groups"><a class="anchor" href="#aggregate-functions-on-groups">#</a>Aggregate Functions on Groups</h3><p>Since <code>current-group()</code> returns all items in the group, you can compute aggregates:</p><pre><code class="language-xml">&lt;xsl:for-each-group select="//product" group-by="@category"&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;xsl:value-of select="current-grouping-key()"/&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;xsl:value-of select="count(current-group())"/&gt;&lt;/td&gt;
+    &lt;td&gt;$&lt;xsl:value-of select="format-number(sum(current-group()/price), '#,##0.00')"/&gt;&lt;/td&gt;
+    &lt;td&gt;$&lt;xsl:value-of select="format-number(avg(current-group()/price), '#,##0.00')"/&gt;&lt;/td&gt;
+    &lt;td&gt;$&lt;xsl:value-of select="min(current-group()/price)"/&gt;–$&lt;xsl:value-of select="max(current-group()/price)"/&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><p>
+      <strong>C# parallel:</strong>
+    </p><pre><code class="language-csharp">var summary = products
+    .GroupBy(p =&gt; p.Category)
+    .Select(g =&gt; new {
+        Category = g.Key,
+        Count = g.Count(),
+        Total = g.Sum(p =&gt; p.Price),
+        Average = g.Average(p =&gt; p.Price),
+        Min = g.Min(p =&gt; p.Price),
+        Max = g.Max(p =&gt; p.Price)
+    });</code></pre><hr><h2 id="group-adjacent"><a class="anchor" href="#group-adjacent">#</a>group-adjacent</h2><p>Groups consecutive items that have the same key. Items with the same key that are not adjacent form separate groups.</p><p>
+      <strong>C# parallel:</strong> There is no built-in LINQ equivalent. The closest is <code>MoreLINQ.GroupAdjacent()</code> or manually implementing "chunk by" logic.</p><h3 id="when-to-use-group-adjacent"><a class="anchor" href="#when-to-use-group-adjacent">#</a>When to Use group-adjacent</h3><p>Use <code>group-adjacent</code> when the order matters and you want to group runs of consecutive items. Classic use cases:</p><ul><li>
+        <p>Converting flat data into nested structures</p>
+      </li><li>
+        <p>Grouping consecutive paragraphs with the same style</p>
+      </li><li>
+        <p>Collapsing adjacent duplicate values</p>
+      </li></ul><h3 id="example-flat-to-nested"><a class="anchor" href="#example-flat-to-nested">#</a>Example: Flat to Nested</h3><p>Given a flat list where items should be grouped by their type:</p><pre><code class="language-xml">&lt;entries&gt;
+  &lt;entry type="header"&gt;Introduction&lt;/entry&gt;
+  &lt;entry type="body"&gt;First paragraph.&lt;/entry&gt;
+  &lt;entry type="body"&gt;Second paragraph.&lt;/entry&gt;
+  &lt;entry type="header"&gt;Methods&lt;/entry&gt;
+  &lt;entry type="body"&gt;Third paragraph.&lt;/entry&gt;
+  &lt;entry type="body"&gt;Fourth paragraph.&lt;/entry&gt;
+  &lt;entry type="body"&gt;Fifth paragraph.&lt;/entry&gt;
+&lt;/entries&gt;</code></pre><pre><code class="language-xml">&lt;xsl:for-each-group select="entries/entry" group-adjacent="@type"&gt;
+  &lt;xsl:choose&gt;
+    &lt;xsl:when test="current-grouping-key() = 'header'"&gt;
+      &lt;xsl:for-each select="current-group()"&gt;
+        &lt;h2&gt;&lt;xsl:value-of select="."/&gt;&lt;/h2&gt;
+      &lt;/xsl:for-each&gt;
+    &lt;/xsl:when&gt;
+    &lt;xsl:when test="current-grouping-key() = 'body'"&gt;
+      &lt;div class="section"&gt;
+        &lt;xsl:for-each select="current-group()"&gt;
+          &lt;p&gt;&lt;xsl:value-of select="."/&gt;&lt;/p&gt;
+        &lt;/xsl:for-each&gt;
+      &lt;/div&gt;
+    &lt;/xsl:when&gt;
+  &lt;/xsl:choose&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><p>Output:</p><pre><code class="language-html">&lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;div class="section"&gt;
+  &lt;p&gt;First paragraph.&lt;/p&gt;
+  &lt;p&gt;Second paragraph.&lt;/p&gt;
+&lt;/div&gt;
+&lt;h2&gt;Methods&lt;/h2&gt;
+&lt;div class="section"&gt;
+  &lt;p&gt;Third paragraph.&lt;/p&gt;
+  &lt;p&gt;Fourth paragraph.&lt;/p&gt;
+  &lt;p&gt;Fifth paragraph.&lt;/p&gt;
+&lt;/div&gt;</code></pre><h3 id="group-adjacent-vs-group-by"><a class="anchor" href="#group-adjacent-vs-group-by">#</a>group-adjacent vs. group-by</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p></p>
+          </th>
+          <th>
+            <p><code>group-by</code></p>
+          </th>
+          <th>
+            <p><code>group-adjacent</code></p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong>Scope</strong></p>
+          </td>
+          <td>
+            <p>All items in the sequence</p>
+          </td>
+          <td>
+            <p>Only consecutive items</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Same key, non-adjacent</strong></p>
+          </td>
+          <td>
+            <p>Same group</p>
+          </td>
+          <td>
+            <p>Different groups</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Use case</strong></p>
+          </td>
+          <td>
+            <p>Categorization</p>
+          </td>
+          <td>
+            <p>Run-length grouping</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><pre><code class="language-xml">&lt;!-- Given: A, A, B, B, A, A --&gt;
+&lt;!-- group-by="." produces 2 groups: (A,A,A,A) and (B,B) --&gt;
+&lt;!-- group-adjacent="." produces 3 groups: (A,A), (B,B), (A,A) --&gt;</code></pre><hr><h2 id="group-starting-with"><a class="anchor" href="#group-starting-with">#</a>group-starting-with</h2><p>Starts a new group whenever an item matches a pattern. All items after the matching item (up to the next match) belong to the same group.</p><p>
+      <strong>C# parallel:</strong> No direct equivalent. Closest is splitting a list at elements matching a predicate.</p><h3 id="when-to-use-group-starting-with"><a class="anchor" href="#when-to-use-group-starting-with">#</a>When to Use group-starting-with</h3><p>The classic use case is splitting flat HTML into sections based on headings:</p><pre><code class="language-xml">&lt;body&gt;
+  &lt;h2&gt;Introduction&lt;/h2&gt;
+  &lt;p&gt;Welcome to the guide.&lt;/p&gt;
+  &lt;p&gt;This covers XSLT grouping.&lt;/p&gt;
+  &lt;h2&gt;Getting Started&lt;/h2&gt;
+  &lt;p&gt;First, install the processor.&lt;/p&gt;
+  &lt;h2&gt;Advanced Topics&lt;/h2&gt;
+  &lt;p&gt;Nested grouping is powerful.&lt;/p&gt;
+  &lt;p&gt;Streaming is efficient.&lt;/p&gt;
+&lt;/body&gt;</code></pre><pre><code class="language-xml">&lt;xsl:for-each-group select="body/*" group-starting-with="h2"&gt;
+  &lt;section&gt;
+    &lt;xsl:apply-templates select="current-group()"/&gt;
+  &lt;/section&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><p>Output:</p><pre><code class="language-html">&lt;section&gt;
+  &lt;h2&gt;Introduction&lt;/h2&gt;
+  &lt;p&gt;Welcome to the guide.&lt;/p&gt;
+  &lt;p&gt;This covers XSLT grouping.&lt;/p&gt;
+&lt;/section&gt;
+&lt;section&gt;
+  &lt;h2&gt;Getting Started&lt;/h2&gt;
+  &lt;p&gt;First, install the processor.&lt;/p&gt;
+&lt;/section&gt;
+&lt;section&gt;
+  &lt;h2&gt;Advanced Topics&lt;/h2&gt;
+  &lt;p&gt;Nested grouping is powerful.&lt;/p&gt;
+  &lt;p&gt;Streaming is efficient.&lt;/p&gt;
+&lt;/section&gt;</code></pre><h3 id="pattern-vs-expression"><a class="anchor" href="#pattern-vs-expression">#</a>Pattern vs. Expression</h3><p>
+      <code>group-starting-with</code> uses a <strong>match pattern</strong> (like <code>xsl:template match</code>), not a grouping key expression. It tests each item against the pattern — when it matches, a new group begins.</p><pre><code class="language-xml">&lt;!-- Start new group at any heading (h1 through h6) --&gt;
+&lt;xsl:for-each-group select="body/*"
+                    group-starting-with="h1 | h2 | h3 | h4 | h5 | h6"&gt;
+  &lt;section class="level-{local-name(current-group()[1])}"&gt;
+    &lt;xsl:apply-templates select="current-group()"/&gt;
+  &lt;/section&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><h3 id="handling-items-before-the-first-match"><a class="anchor" href="#handling-items-before-the-first-match">#</a>Handling Items Before the First Match</h3><p>If the sequence starts with items that do not match the pattern, they form their own group. This "preamble" group has no starting match:</p><pre><code class="language-xml">&lt;body&gt;
+  &lt;p&gt;This comes before any heading.&lt;/p&gt;
+  &lt;h2&gt;First Section&lt;/h2&gt;
+  &lt;p&gt;Content.&lt;/p&gt;
+&lt;/body&gt;</code></pre><p>The first group contains just <code>&lt;p&gt;This comes before any heading.&lt;/p&gt;</code> — it has no <code>h2</code>.</p><p>To handle this, check whether the first item in the group matches:</p><pre><code class="language-xml">&lt;xsl:for-each-group select="body/*" group-starting-with="h2"&gt;
+  &lt;xsl:choose&gt;
+    &lt;xsl:when test="self::h2"&gt;
+      &lt;section&gt;
+        &lt;xsl:apply-templates select="current-group()"/&gt;
+      &lt;/section&gt;
+    &lt;/xsl:when&gt;
+    &lt;xsl:otherwise&gt;
+      &lt;!-- Preamble content before the first heading --&gt;
+      &lt;div class="preamble"&gt;
+        &lt;xsl:apply-templates select="current-group()"/&gt;
+      &lt;/div&gt;
+    &lt;/xsl:otherwise&gt;
+  &lt;/xsl:choose&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><hr><h2 id="group-ending-with"><a class="anchor" href="#group-ending-with">#</a>group-ending-with</h2><p>Ends the current group when an item matches a pattern. The matching item is the last item in its group.</p><p>
+      <strong>C# parallel:</strong> No direct equivalent. It is the mirror image of <code>group-starting-with</code>.</p><h3 id="when-to-use-group-ending-with"><a class="anchor" href="#when-to-use-group-ending-with">#</a>When to Use group-ending-with</h3><p>Use when a marker indicates the end of a group rather than the start. Common use cases:</p><ul><li>
+        <p>Page breaks (the break marker ends a page)</p>
+      </li><li>
+        <p>Sentence boundaries</p>
+      </li><li>
+        <p>Record delimiters in flat files</p>
+      </li></ul><h3 id="example-page-breaks"><a class="anchor" href="#example-page-breaks">#</a>Example: Page Breaks</h3><pre><code class="language-xml">&lt;document&gt;
+  &lt;para&gt;First paragraph.&lt;/para&gt;
+  &lt;para&gt;Second paragraph.&lt;/para&gt;
+  &lt;page-break/&gt;
+  &lt;para&gt;Third paragraph (page 2).&lt;/para&gt;
+  &lt;para&gt;Fourth paragraph.&lt;/para&gt;
+  &lt;para&gt;Fifth paragraph.&lt;/para&gt;
+  &lt;page-break/&gt;
+  &lt;para&gt;Sixth paragraph (page 3).&lt;/para&gt;
+&lt;/document&gt;</code></pre><pre><code class="language-xml">&lt;xsl:for-each-group select="document/*" group-ending-with="page-break"&gt;
+  &lt;div class="page" id="page-{position()}"&gt;
+    &lt;xsl:apply-templates select="current-group()[not(self::page-break)]"/&gt;
+  &lt;/div&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><p>Output:</p><pre><code class="language-html">&lt;div class="page" id="page-1"&gt;
+  &lt;p&gt;First paragraph.&lt;/p&gt;
+  &lt;p&gt;Second paragraph.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="page" id="page-2"&gt;
+  &lt;p&gt;Third paragraph (page 2).&lt;/p&gt;
+  &lt;p&gt;Fourth paragraph.&lt;/p&gt;
+  &lt;p&gt;Fifth paragraph.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="page" id="page-3"&gt;
+  &lt;p&gt;Sixth paragraph (page 3).&lt;/p&gt;
+&lt;/div&gt;</code></pre><p>Note that we filter out the <code>page-break</code> elements from the output using <code>[not(self::page-break)]</code>.</p><h3 id="trailing-items"><a class="anchor" href="#trailing-items">#</a>Trailing Items</h3><p>If the sequence ends without a match, the remaining items form a final group. In the example above, the paragraph after the last <code>page-break</code> forms its own page — no trailing <code>page-break</code> is needed.</p><hr><h2 id="sorting-within-groups"><a class="anchor" href="#sorting-within-groups">#</a>Sorting Within Groups</h2><p>You can sort the groups themselves and sort items within each group independently.</p><h3 id="sorting-groups"><a class="anchor" href="#sorting-groups">#</a>Sorting Groups</h3><p>Add <code>xsl:sort</code> as a child of <code>xsl:for-each-group</code> to control the order of groups:</p><pre><code class="language-xml">&lt;!-- Sort categories alphabetically --&gt;
+&lt;xsl:for-each-group select="//product" group-by="@category"&gt;
+  &lt;xsl:sort select="current-grouping-key()"/&gt;
+  &lt;section&gt;
+    &lt;h2&gt;&lt;xsl:value-of select="current-grouping-key()"/&gt;&lt;/h2&gt;
+    &lt;xsl:apply-templates select="current-group()"/&gt;
+  &lt;/section&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><h3 id="sorting-items-within-groups"><a class="anchor" href="#sorting-items-within-groups">#</a>Sorting Items Within Groups</h3><p>Use a nested <code>xsl:for-each</code> with <code>xsl:sort</code> inside the group body:</p><pre><code class="language-xml">&lt;xsl:for-each-group select="//product" group-by="@category"&gt;
+  &lt;xsl:sort select="current-grouping-key()"/&gt;
+  &lt;section&gt;
+    &lt;h2&gt;&lt;xsl:value-of select="current-grouping-key()"/&gt;&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;!-- Sort products within each category by price --&gt;
+      &lt;xsl:for-each select="current-group()"&gt;
+        &lt;xsl:sort select="price" data-type="number"/&gt;
+        &lt;li&gt;&lt;xsl:value-of select="name"/&gt; — $&lt;xsl:value-of select="price"/&gt;&lt;/li&gt;
+      &lt;/xsl:for-each&gt;
+    &lt;/ul&gt;
+  &lt;/section&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><h3 id="sorting-groups-by-aggregate"><a class="anchor" href="#sorting-groups-by-aggregate">#</a>Sorting Groups by Aggregate</h3><p>Sort groups by a computed value like count or total:</p><pre><code class="language-xml">&lt;!-- Show categories with the most products first --&gt;
+&lt;xsl:for-each-group select="//product" group-by="@category"&gt;
+  &lt;xsl:sort select="count(current-group())" data-type="number" order="descending"/&gt;
+  &lt;h2&gt;
+    &lt;xsl:value-of select="current-grouping-key()"/&gt;
+    (&lt;xsl:value-of select="count(current-group())"/&gt; products)
+  &lt;/h2&gt;
+  &lt;xsl:apply-templates select="current-group()"/&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><hr><h2 id="nested-grouping"><a class="anchor" href="#nested-grouping">#</a>Nested Grouping</h2><p>You can nest <code>xsl:for-each-group</code> to create multi-level hierarchies.</p><h3 id="example-products-by-category-then-by-price-range"><a class="anchor" href="#example-products-by-category-then-by-price-range">#</a>Example: Products by Category, Then by Price Range</h3><pre><code class="language-xml">&lt;xsl:for-each-group select="//product" group-by="@category"&gt;
+  &lt;xsl:sort select="current-grouping-key()"/&gt;
+  &lt;section class="category"&gt;
+    &lt;h2&gt;&lt;xsl:value-of select="current-grouping-key()"/&gt;&lt;/h2&gt;
+    &lt;!-- Nested grouping: within each category, group by price range --&gt;
+    &lt;xsl:for-each-group select="current-group()"
+                        group-by="if (price &gt;= 100) then 'premium'
+                                  else if (price &gt;= 25) then 'standard'
+                                  else 'budget'"&gt;
+      &lt;xsl:sort select="if (current-grouping-key() = 'premium') then 1
+                         else if (current-grouping-key() = 'standard') then 2
+                         else 3"
+                data-type="number"/&gt;
+      &lt;div class="price-tier"&gt;
+        &lt;h3&gt;&lt;xsl:value-of select="current-grouping-key()"/&gt;&lt;/h3&gt;
+        &lt;ul&gt;
+          &lt;xsl:for-each select="current-group()"&gt;
+            &lt;xsl:sort select="price" data-type="number" order="descending"/&gt;
+            &lt;li&gt;&lt;xsl:value-of select="name"/&gt; — $&lt;xsl:value-of select="price"/&gt;&lt;/li&gt;
+          &lt;/xsl:for-each&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/xsl:for-each-group&gt;
+  &lt;/section&gt;
+&lt;/xsl:for-each-group&gt;</code></pre><p>
+      <strong>C# parallel:</strong>
+    </p><pre><code class="language-csharp">var grouped = products
+    .GroupBy(p =&gt; p.Category)
+    .OrderBy(g =&gt; g.Key)
+    .Select(catGroup =&gt; new {
+        Category = catGroup.Key,
+        Tiers = catGroup
+            .GroupBy(p =&gt; p.Price &gt;= 100 ? "premium" : p.Price &gt;= 25 ? "standard" : "budget")
+            .OrderBy(t =&gt; t.Key == "premium" ? 1 : t.Key == "standard" ? 2 : 3)
+    });</code></pre><hr><h2 id="real-world-examples"><a class="anchor" href="#real-world-examples">#</a>Real-World Examples</h2><h3 id="categorized-product-listing"><a class="anchor" href="#categorized-product-listing">#</a>Categorized Product Listing</h3><p>A complete example that builds a categorized product page with navigation:</p><pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
+  &lt;!-- Build navigation --&gt;
+  &lt;nav&gt;
+    &lt;ul&gt;
+      &lt;xsl:for-each-group select="product" group-by="@category"&gt;
+        &lt;xsl:sort select="current-grouping-key()"/&gt;
+        &lt;li&gt;
+          &lt;a href="#{translate(current-grouping-key(), ' ', '-')}"&gt;
+            &lt;xsl:value-of select="current-grouping-key()"/&gt;
+            (&lt;xsl:value-of select="count(current-group())"/&gt;)
+          &lt;/a&gt;
+        &lt;/li&gt;
+      &lt;/xsl:for-each-group&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+  &lt;!-- Build content sections --&gt;
+  &lt;xsl:for-each-group select="product" group-by="@category"&gt;
+    &lt;xsl:sort select="current-grouping-key()"/&gt;
+    &lt;section id="{translate(current-grouping-key(), ' ', '-')}"&gt;
+      &lt;h2&gt;&lt;xsl:value-of select="current-grouping-key()"/&gt;&lt;/h2&gt;
+      &lt;table&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;&lt;th&gt;Product&lt;/th&gt;&lt;th&gt;Price&lt;/th&gt;&lt;th&gt;In Stock&lt;/th&gt;&lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          &lt;xsl:for-each select="current-group()"&gt;
+            &lt;xsl:sort select="name"/&gt;
+            &lt;tr&gt;
+              &lt;td&gt;&lt;xsl:value-of select="name"/&gt;&lt;/td&gt;
+              &lt;td&gt;$&lt;xsl:value-of select="format-number(price, '#,##0.00')"/&gt;&lt;/td&gt;
+              &lt;td&gt;&lt;xsl:value-of select="stock"/&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/xsl:for-each&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/section&gt;
+  &lt;/xsl:for-each-group&gt;
+&lt;/xsl:template&gt;</code></pre><h3 id="converting-flat-data-to-hierarchical-xml"><a class="anchor" href="#converting-flat-data-to-hierarchical-xml">#</a>Converting Flat Data to Hierarchical XML</h3><p>Transform a flat CSV-style structure into nested XML:</p><pre><code class="language-xml">&lt;!-- Input: flat rows with department and employee data --&gt;
+&lt;employees&gt;
+  &lt;employee department="Engineering" team="Backend"&gt;&lt;name&gt;Alice&lt;/name&gt;&lt;/employee&gt;
+  &lt;employee department="Engineering" team="Frontend"&gt;&lt;name&gt;Bob&lt;/name&gt;&lt;/employee&gt;
+  &lt;employee department="Marketing" team="Content"&gt;&lt;name&gt;Carol&lt;/name&gt;&lt;/employee&gt;
+  &lt;employee department="Engineering" team="Backend"&gt;&lt;name&gt;Dave&lt;/name&gt;&lt;/employee&gt;
+  &lt;employee department="Marketing" team="Content"&gt;&lt;name&gt;Eve&lt;/name&gt;&lt;/employee&gt;
+&lt;/employees&gt;</code></pre><pre><code class="language-xml">&lt;!-- Output: hierarchical structure --&gt;
+&lt;xsl:template match="employees"&gt;
+  &lt;organization&gt;
+    &lt;xsl:for-each-group select="employee" group-by="@department"&gt;
+      &lt;xsl:sort select="current-grouping-key()"/&gt;
+      &lt;department name="{current-grouping-key()}"&gt;
+        &lt;xsl:for-each-group select="current-group()" group-by="@team"&gt;
+          &lt;xsl:sort select="current-grouping-key()"/&gt;
+          &lt;team name="{current-grouping-key()}"&gt;
+            &lt;xsl:for-each select="current-group()"&gt;
+              &lt;xsl:sort select="name"/&gt;
+              &lt;member&gt;&lt;xsl:value-of select="name"/&gt;&lt;/member&gt;
+            &lt;/xsl:for-each&gt;
+          &lt;/team&gt;
+        &lt;/xsl:for-each-group&gt;
+      &lt;/department&gt;
+    &lt;/xsl:for-each-group&gt;
+  &lt;/organization&gt;
+&lt;/xsl:template&gt;</code></pre><p>Output:</p><pre><code class="language-xml">&lt;organization&gt;
+  &lt;department name="Engineering"&gt;
+    &lt;team name="Backend"&gt;
+      &lt;member&gt;Alice&lt;/member&gt;
+      &lt;member&gt;Dave&lt;/member&gt;
+    &lt;/team&gt;
+    &lt;team name="Frontend"&gt;
+      &lt;member&gt;Bob&lt;/member&gt;
+    &lt;/team&gt;
+  &lt;/department&gt;
+  &lt;department name="Marketing"&gt;
+    &lt;team name="Content"&gt;
+      &lt;member&gt;Carol&lt;/member&gt;
+      &lt;member&gt;Eve&lt;/member&gt;
+    &lt;/team&gt;
+  &lt;/department&gt;
+&lt;/organization&gt;</code></pre><h3 id="splitting-a-document-into-chapters"><a class="anchor" href="#splitting-a-document-into-chapters">#</a>Splitting a Document into Chapters</h3><p>Using <code>group-starting-with</code> to split a flat document into chapter files:</p><pre><code class="language-xml">&lt;xsl:template match="book"&gt;
+  &lt;xsl:for-each-group select="*" group-starting-with="chapter-title"&gt;
+    &lt;xsl:result-document href="chapter-{position()}.html"&gt;
+      &lt;html&gt;
+        &lt;head&gt;
+          &lt;title&gt;&lt;xsl:value-of select="current-group()[self::chapter-title]"/&gt;&lt;/title&gt;
+        &lt;/head&gt;
+        &lt;body&gt;
+          &lt;xsl:apply-templates select="current-group()"/&gt;
+          &lt;!-- Navigation links --&gt;
+          &lt;nav&gt;
+            &lt;xsl:if test="position() &gt; 1"&gt;
+              &lt;a href="chapter-{position() - 1}.html"&gt;Previous&lt;/a&gt;
+            &lt;/xsl:if&gt;
+            &lt;xsl:if test="position() != last()"&gt;
+              &lt;a href="chapter-{position() + 1}.html"&gt;Next&lt;/a&gt;
+            &lt;/xsl:if&gt;
+          &lt;/nav&gt;
+        &lt;/body&gt;
+      &lt;/html&gt;
+    &lt;/xsl:result-document&gt;
+  &lt;/xsl:for-each-group&gt;
+&lt;/xsl:template&gt;</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

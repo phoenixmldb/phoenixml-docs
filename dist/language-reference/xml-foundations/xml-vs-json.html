@@ -1,0 +1,217 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>XML vs JSON — PhoenixmlDb Documentation</title><meta name="description" content="Side-by-side comparison of XML and JSON for developers who think in JSON"><link rel="canonical" href="/language-reference/xml-foundations/xml-vs-json.html"><meta property="og:title" content="XML vs JSON"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xml-foundations/xml-vs-json.html"><meta property="og:description" content="Side-by-side comparison of XML and JSON for developers who think in JSON"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li class="active"><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="xml-vs-json"><a class="anchor" href="#xml-vs-json">#</a>XML vs JSON</h1><p>You already know JSON. Let's use that as a bridge to understanding XML.</p><h2 id="the-same-data-two-ways"><a class="anchor" href="#the-same-data-two-ways">#</a>The Same Data, Two Ways</h2><p>
+      <strong>JSON:</strong>
+    </p><pre><code class="language-json">{
+  "order": {
+    "id": "12345",
+    "date": "2026-03-19",
+    "customer": {
+      "name": "Acme Corp",
+      "email": "orders@acme.com"
+    },
+    "items": [
+      { "sku": "WIDGET-1", "qty": 10, "price": 9.99 },
+      { "sku": "GADGET-2", "qty": 5, "price": 24.50 }
+    ]
+  }
+}</code></pre><p>
+      <strong>XML:</strong>
+    </p><pre><code class="language-xml">&lt;order id="12345" date="2026-03-19"&gt;
+  &lt;customer&gt;
+    &lt;name&gt;Acme Corp&lt;/name&gt;
+    &lt;email&gt;orders@acme.com&lt;/email&gt;
+  &lt;/customer&gt;
+  &lt;items&gt;
+    &lt;item sku="WIDGET-1" qty="10" price="9.99"/&gt;
+    &lt;item sku="GADGET-2" qty="5" price="24.50"/&gt;
+  &lt;/items&gt;
+&lt;/order&gt;</code></pre><p>They carry the same information. The differences are in what each format <em>enables</em>.</p><h2 id="key-differences"><a class="anchor" href="#key-differences">#</a>Key Differences</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Aspect</p>
+          </th>
+          <th>
+            <p>JSON</p>
+          </th>
+          <th>
+            <p>XML</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong>Attributes</strong></p>
+          </td>
+          <td>
+            <p>No equivalent</p>
+          </td>
+          <td>
+            <p>Metadata on elements (<code>id="12345"</code>)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Mixed content</strong></p>
+          </td>
+          <td>
+            <p>Not possible</p>
+          </td>
+          <td>
+            <p>Text and elements can mix (<code>&lt;p&gt;Click &lt;a&gt;here&lt;/a&gt;&lt;/p&gt;</code>)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Namespaces</strong></p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>Yes — avoids name collisions in combined documents</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Schema validation</strong></p>
+          </td>
+          <td>
+            <p>JSON Schema (optional)</p>
+          </td>
+          <td>
+            <p>XSD, RelaxNG, Schematron (mature ecosystem)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Transformation</strong></p>
+          </td>
+          <td>
+            <p>Roll your own</p>
+          </td>
+          <td>
+            <p>XSLT — a dedicated language</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Query</strong></p>
+          </td>
+          <td>
+            <p>JSONPath (limited)</p>
+          </td>
+          <td>
+            <p>XPath/XQuery — standardized, powerful</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Comments</strong></p>
+          </td>
+          <td>
+            <p>Not allowed</p>
+          </td>
+          <td>
+            <p><code>&lt;!-- supported --&gt;</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Document order</strong></p>
+          </td>
+          <td>
+            <p>Objects unordered</p>
+          </td>
+          <td>
+            <p>Elements preserve order</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="when-xml-wins"><a class="anchor" href="#when-xml-wins">#</a>When XML Wins</h2><ul><li>
+        <p>
+          <strong>Document processing</strong> — mixed content (text + markup) is XML's strength</p>
+      </li><li>
+        <p>
+          <strong>Enterprise integration</strong> — many standards (HL7, FpML, XBRL, DITA) are XML-native</p>
+      </li><li>
+        <p>
+          <strong>Transformation pipelines</strong> — XSLT can reshape documents declaratively</p>
+      </li><li>
+        <p>
+          <strong>Validation</strong> — XSD provides type-safe contracts between systems</p>
+      </li><li>
+        <p>
+          <strong>Querying hierarchical data</strong> — XPath/XQuery handle deep nesting naturally</p>
+      </li></ul><h2 id="when-json-wins"><a class="anchor" href="#when-json-wins">#</a>When JSON Wins</h2><ul><li>
+        <p>
+          <strong>Web APIs</strong> — lighter wire format, native to JavaScript</p>
+      </li><li>
+        <p>
+          <strong>Configuration</strong> — simpler for flat key-value data</p>
+      </li><li>
+        <p>
+          <strong>Developer familiarity</strong> — most developers encounter JSON first</p>
+      </li></ul><h2 id="the-net-perspective"><a class="anchor" href="#the-net-perspective">#</a>The .NET Perspective</h2><p>In .NET, you have tools for both:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Task</p>
+          </th>
+          <th>
+            <p>JSON</p>
+          </th>
+          <th>
+            <p>XML</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Parse</p>
+          </td>
+          <td>
+            <p><code>System.Text.Json</code></p>
+          </td>
+          <td>
+            <p><code>System.Xml.Linq</code> (LINQ to XML)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Serialize</p>
+          </td>
+          <td>
+            <p><code>JsonSerializer</code></p>
+          </td>
+          <td>
+            <p><code>XmlSerializer</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Query</p>
+          </td>
+          <td>
+            <p>LINQ + <code>JsonElement</code></p>
+          </td>
+          <td>
+            <p>LINQ to XML / XPath</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Transform</p>
+          </td>
+          <td>
+            <p>Manual code</p>
+          </td>
+          <td>
+            <p>XSLT via PhoenixmlDb</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>The key insight: JSON tools in .NET are general-purpose. XML tools are <em>specialized</em> — and that specialization is what makes them powerful for the right problems.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

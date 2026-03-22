@@ -1,0 +1,313 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Date and Time Functions — PhoenixmlDb Documentation</title><meta name="description" content="XPath date/time construction, extraction, formatting, and timezone handling"><link rel="canonical" href="/language-reference/xpath/functions/date-time.html"><meta property="og:title" content="Date and Time Functions"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xpath/functions/date-time.html"><meta property="og:description" content="XPath date/time construction, extraction, formatting, and timezone handling"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li class="active"><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="date-and-time-functions"><a class="anchor" href="#date-and-time-functions">#</a>Date and Time Functions</h1><p>XPath has first-class date and time types — unlike JSON where dates are just strings. This means you can compare dates, extract components, add durations, and format for display without parsing strings yourself.</p><p>If you've struggled with <code>DateTime.Parse()</code> and format strings in C#, XPath's approach will feel more structured.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
+        <p>
+          <a href="#current-date-and-time" title="">Current Date and Time</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#component-extraction" title="">Component Extraction</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#timezone-operations" title="">Timezone Operations</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#construction" title="">Construction</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#formatting" title="">Formatting</a>
+        </p>
+      </li></ul><hr><h2 id="current-date-and-time"><a class="anchor" href="#current-date-and-time">#</a>Current Date and Time</h2><h3 id="current-date"><a class="anchor" href="#current-date">#</a>current-date()</h3><p>Returns today's date.</p><p>
+      <strong>Signature:</strong> <code>current-date() as xs:date</code></p><pre><code class="language-xpath">current-date()   =&gt; 2026-03-19</code></pre><p>
+      <strong>C# equivalent:</strong> <code>DateTime.Now.ToString("yyyy-MM-dd")</code></p><p>
+      <strong>Note:</strong> The returned date includes timezone information from the evaluation context. Within a single XPath evaluation, <code>current-date()</code> always returns the same value — it's captured once at the start, not each time the function is called.</p><hr><h3 id="current-time"><a class="anchor" href="#current-time">#</a>current-time()</h3><p>Returns the current time.</p><p>
+      <strong>Signature:</strong> <code>current-time() as xs:time</code></p><pre><code class="language-xpath">current-time()   =&gt; 14:30:00-05:00</code></pre><p>
+      <strong>C# equivalent:</strong> <code>DateTimeOffset.Now.ToString("HH:mm:sszzz")</code></p><hr><h3 id="current-datetime"><a class="anchor" href="#current-datetime">#</a>current-dateTime()</h3><p>Returns the current date and time.</p><p>
+      <strong>Signature:</strong> <code>current-dateTime() as xs:dateTime</code></p><pre><code class="language-xpath">current-dateTime()   =&gt; 2026-03-19T14:30:00-05:00</code></pre><p>
+      <strong>C# equivalent:</strong> <code>DateTimeOffset.Now.ToString("yyyy-MM-ddTHH:mm:sszzz")</code></p><p>
+      <strong>Important:</strong> Like <code>current-date()</code>, this value is stable within a single evaluation. If your XSLT processes 1000 documents, they all see the same timestamp.</p><hr><h2 id="component-extraction"><a class="anchor" href="#component-extraction">#</a>Component Extraction</h2><p>These functions extract parts from date, time, and dateTime values. Each has variants for date, time, and dateTime inputs.</p><h3 id="year-from-date-year-from-datetime"><a class="anchor" href="#year-from-date-year-from-datetime">#</a>year-from-date() / year-from-dateTime()</h3><p>
+      <strong>Signature:</strong> <code>year-from-date($value as xs:date?) as xs:integer?</code></p><pre><code class="language-xpath">year-from-date(xs:date("2026-03-19"))         =&gt; 2026
+year-from-dateTime(current-dateTime())        =&gt; 2026</code></pre><p>
+      <strong>C# equivalent:</strong> <code>date.Year</code></p><hr><h3 id="month-from-date-month-from-datetime"><a class="anchor" href="#month-from-date-month-from-datetime">#</a>month-from-date() / month-from-dateTime()</h3><p>
+      <strong>Signature:</strong> <code>month-from-date($value as xs:date?) as xs:integer?</code></p><pre><code class="language-xpath">month-from-date(xs:date("2026-03-19"))        =&gt; 3</code></pre><p>
+      <strong>C# equivalent:</strong> <code>date.Month</code></p><hr><h3 id="day-from-date-day-from-datetime"><a class="anchor" href="#day-from-date-day-from-datetime">#</a>day-from-date() / day-from-dateTime()</h3><p>
+      <strong>Signature:</strong> <code>day-from-date($value as xs:date?) as xs:integer?</code></p><pre><code class="language-xpath">day-from-date(xs:date("2026-03-19"))          =&gt; 19</code></pre><p>
+      <strong>C# equivalent:</strong> <code>date.Day</code></p><hr><h3 id="hours-from-time-hours-from-datetime"><a class="anchor" href="#hours-from-time-hours-from-datetime">#</a>hours-from-time() / hours-from-dateTime()</h3><p>
+      <strong>Signature:</strong> <code>hours-from-time($value as xs:time?) as xs:integer?</code></p><pre><code class="language-xpath">hours-from-time(xs:time("14:30:00"))          =&gt; 14</code></pre><p>
+      <strong>C# equivalent:</strong> <code>time.Hour</code></p><hr><h3 id="minutes-from-time-minutes-from-datetime"><a class="anchor" href="#minutes-from-time-minutes-from-datetime">#</a>minutes-from-time() / minutes-from-dateTime()</h3><pre><code class="language-xpath">minutes-from-time(xs:time("14:30:00"))        =&gt; 30</code></pre><hr><h3 id="seconds-from-time-seconds-from-datetime"><a class="anchor" href="#seconds-from-time-seconds-from-datetime">#</a>seconds-from-time() / seconds-from-dateTime()</h3><pre><code class="language-xpath">seconds-from-time(xs:time("14:30:45.5"))      =&gt; 45.5</code></pre><p>
+      <strong>Note:</strong> Returns a <code>xs:decimal</code>, not an integer — it includes fractional seconds.</p><hr><h3 id="duration-component-extraction"><a class="anchor" href="#duration-component-extraction">#</a>Duration Component Extraction</h3><p>For <code>xs:duration</code>, <code>xs:yearMonthDuration</code>, and <code>xs:dayTimeDuration</code>:</p><pre><code class="language-xpath">years-from-duration(xs:yearMonthDuration("P2Y3M"))   =&gt; 2
+months-from-duration(xs:yearMonthDuration("P2Y3M"))  =&gt; 3
+days-from-duration(xs:dayTimeDuration("P5DT3H"))     =&gt; 5
+hours-from-duration(xs:dayTimeDuration("P5DT3H"))    =&gt; 3</code></pre><p>
+      <strong>C# equivalent:</strong> <code>timeSpan.Days</code>, <code>timeSpan.Hours</code>, etc.</p><hr><h2 id="timezone-operations"><a class="anchor" href="#timezone-operations">#</a>Timezone Operations</h2><h3 id="timezone-from-date-timezone-from-datetime-timezone-from-time"><a class="anchor" href="#timezone-from-date-timezone-from-datetime-timezone-from-time">#</a>timezone-from-date() / timezone-from-dateTime() / timezone-from-time()</h3><p>Extracts the timezone as a <code>dayTimeDuration</code>.</p><pre><code class="language-xpath">timezone-from-date(xs:date("2026-03-19-05:00"))   =&gt; -PT5H
+timezone-from-dateTime(current-dateTime())          =&gt; timezone of eval context</code></pre><p>
+      <strong>C# equivalent:</strong> <code>dateTimeOffset.Offset</code></p><hr><h3 id="adjust-datetime-to-timezone"><a class="anchor" href="#adjust-datetime-to-timezone">#</a>adjust-dateTime-to-timezone()</h3><p>Adjusts a dateTime to a different timezone.</p><p>
+      <strong>Signature:</strong> <code>adjust-dateTime-to-timezone($value as xs:dateTime?, $timezone as xs:dayTimeDuration?) as xs:dateTime?</code></p><pre><code class="language-xpath">(: Convert from UTC to US Eastern :)
+adjust-dateTime-to-timezone(
+  xs:dateTime("2026-03-19T14:00:00Z"),
+  xs:dayTimeDuration("-PT5H")
+)
+=&gt; 2026-03-19T09:00:00-05:00
+(: Strip timezone — make it "local" :)
+adjust-dateTime-to-timezone(
+  xs:dateTime("2026-03-19T14:00:00Z"),
+  ()
+)
+=&gt; 2026-03-19T14:00:00</code></pre><p>
+      <strong>C# equivalent:</strong> <code>dateTimeOffset.ToOffset(new TimeSpan(-5, 0, 0))</code></p><p>Variants: <code>adjust-date-to-timezone()</code>, <code>adjust-time-to-timezone()</code></p><hr><h2 id="construction"><a class="anchor" href="#construction">#</a>Construction</h2><h3 id="datetime"><a class="anchor" href="#datetime">#</a>dateTime()</h3><p>Constructs a <code>xs:dateTime</code> from separate date and time values.</p><p>
+      <strong>Signature:</strong> <code>dateTime($date as xs:date?, $time as xs:time?) as xs:dateTime?</code></p><pre><code class="language-xpath">dateTime(xs:date("2026-03-19"), xs:time("14:30:00"))
+=&gt; 2026-03-19T14:30:00</code></pre><p>
+      <strong>C# equivalent:</strong> <code>new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second)</code></p><hr><h2 id="formatting"><a class="anchor" href="#formatting">#</a>Formatting</h2><h3 id="format-date"><a class="anchor" href="#format-date">#</a>format-date()</h3><p>Formats a date as a human-readable string using a picture string.</p><p>
+      <strong>Signature:</strong> <code>format-date($value as xs:date?, $picture as xs:string, $language as xs:string?, $calendar as xs:string?, $place as xs:string?) as xs:string?</code></p><pre><code class="language-xpath">format-date(current-date(), "[MNn] [D], [Y]")
+=&gt; "March 19, 2026"
+format-date(current-date(), "[D01]/[M01]/[Y]")
+=&gt; "19/03/2026"
+format-date(current-date(), "[FNn], [MNn] [D]")
+=&gt; "Thursday, March 19"
+format-date(current-date(), "[Y]-[M01]-[D01]")
+=&gt; "2026-03-19"</code></pre><p>
+      <strong>Picture string components:</strong>
+    </p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Component</p>
+          </th>
+          <th>
+            <p>Meaning</p>
+          </th>
+          <th>
+            <p>Example</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>[Y]</code></p>
+          </td>
+          <td>
+            <p>Year</p>
+          </td>
+          <td>
+            <p>2026</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[M]</code></p>
+          </td>
+          <td>
+            <p>Month number</p>
+          </td>
+          <td>
+            <p>3</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[M01]</code></p>
+          </td>
+          <td>
+            <p>Month zero-padded</p>
+          </td>
+          <td>
+            <p>03</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[MNn]</code></p>
+          </td>
+          <td>
+            <p>Month name</p>
+          </td>
+          <td>
+            <p>March</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[D]</code></p>
+          </td>
+          <td>
+            <p>Day</p>
+          </td>
+          <td>
+            <p>19</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[D01]</code></p>
+          </td>
+          <td>
+            <p>Day zero-padded</p>
+          </td>
+          <td>
+            <p>19</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[FNn]</code></p>
+          </td>
+          <td>
+            <p>Day of week name</p>
+          </td>
+          <td>
+            <p>Thursday</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[F1]</code></p>
+          </td>
+          <td>
+            <p>Day of week number</p>
+          </td>
+          <td>
+            <p>4</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>
+      <strong>C# equivalent:</strong> <code>date.ToString("MMMM d, yyyy")</code> — but XPath's picture strings use a different syntax from .NET format strings.</p><hr><h3 id="format-datetime"><a class="anchor" href="#format-datetime">#</a>format-dateTime()</h3><p>Formats a dateTime value.</p><p>
+      <strong>Signature:</strong> <code>format-dateTime($value as xs:dateTime?, $picture as xs:string, ...) as xs:string?</code></p><pre><code class="language-xpath">format-dateTime(current-dateTime(), "[MNn] [D], [Y] at [h]:[m01] [PN]")
+=&gt; "March 19, 2026 at 2:30 PM"
+format-dateTime(current-dateTime(), "[Y]-[M01]-[D01]T[H01]:[m01]:[s01]")
+=&gt; "2026-03-19T14:30:00"</code></pre><p>
+      <strong>Additional components:</strong>
+    </p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Component</p>
+          </th>
+          <th>
+            <p>Meaning</p>
+          </th>
+          <th>
+            <p>Example</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>[H]</code></p>
+          </td>
+          <td>
+            <p>Hour (24h)</p>
+          </td>
+          <td>
+            <p>14</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[H01]</code></p>
+          </td>
+          <td>
+            <p>Hour zero-padded (24h)</p>
+          </td>
+          <td>
+            <p>14</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[h]</code></p>
+          </td>
+          <td>
+            <p>Hour (12h)</p>
+          </td>
+          <td>
+            <p>2</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[m]</code></p>
+          </td>
+          <td>
+            <p>Minute</p>
+          </td>
+          <td>
+            <p>30</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[m01]</code></p>
+          </td>
+          <td>
+            <p>Minute zero-padded</p>
+          </td>
+          <td>
+            <p>30</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[s]</code></p>
+          </td>
+          <td>
+            <p>Second</p>
+          </td>
+          <td>
+            <p>0</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[s01]</code></p>
+          </td>
+          <td>
+            <p>Second zero-padded</p>
+          </td>
+          <td>
+            <p>00</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[PN]</code></p>
+          </td>
+          <td>
+            <p>AM/PM</p>
+          </td>
+          <td>
+            <p>PM</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[Z]</code></p>
+          </td>
+          <td>
+            <p>Timezone</p>
+          </td>
+          <td>
+            <p>-05:00</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>[ZN]</code></p>
+          </td>
+          <td>
+            <p>Timezone name</p>
+          </td>
+          <td>
+            <p>EST</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><hr><h3 id="format-time"><a class="anchor" href="#format-time">#</a>format-time()</h3><p>Formats a time value.</p><pre><code class="language-xpath">format-time(xs:time("14:30:00"), "[h]:[m01] [PN]")
+=&gt; "2:30 PM"
+format-time(xs:time("09:05:30"), "[H01]:[m01]:[s01]")
+=&gt; "09:05:30"</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

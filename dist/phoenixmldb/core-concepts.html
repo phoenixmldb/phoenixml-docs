@@ -1,0 +1,89 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Core Concepts — PhoenixmlDb Documentation</title><meta name="description" content="Containers, documents, the XDM, and shredded node storage"><link rel="canonical" href="/phoenixmldb/core-concepts.html"><meta property="og:title" content="Core Concepts"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/core-concepts.html"><meta property="og:description" content="Containers, documents, the XDM, and shredded node storage"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li class="active"><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="core-concepts"><a class="anchor" href="#core-concepts">#</a>Core Concepts</h1><p>Understanding the fundamental concepts of PhoenixmlDb will help you design efficient applications and write optimal queries.</p><h2 id="architecture-overview"><a class="anchor" href="#architecture-overview">#</a>Architecture Overview</h2><p>PhoenixmlDb is built on a layered architecture:</p><pre><code>┌─────────────────────────────────────────────────────────┐
+│                    Application Layer                     │
+│         (Your C# Application / gRPC Clients)            │
+├─────────────────────────────────────────────────────────┤
+│                      Query Layer                         │
+│   XQuery Engine │ XSLT Processor │ LINQ Provider        │
+├─────────────────────────────────────────────────────────┤
+│                    Indexing Layer                        │
+│   Path │ Value │ Full-Text │ Structural Indexes         │
+├─────────────────────────────────────────────────────────┤
+│                  Data Model Layer                        │
+│              XQuery Data Model (XDM)                     │
+├─────────────────────────────────────────────────────────┤
+│                    Storage Layer                         │
+│                 LMDB Key-Value Store                     │
+└─────────────────────────────────────────────────────────┘</code></pre><h2 id="key-components"><a class="anchor" href="#key-components">#</a>Key Components</h2><h3 id="database"><a class="anchor" href="#database">#</a>Database</h3><p>The top-level container that manages all data. A database maps to a directory on disk containing LMDB data files.</p><pre><code class="language-csharp">using var db = new XmlDatabase("./mydata");</code></pre><h3 id="containers"><a class="anchor" href="#containers">#</a>Containers</h3><p>Logical groupings of related documents within a database. Similar to tables in relational databases or collections in document databases.</p><pre><code class="language-csharp">var orders = db.CreateContainer("orders");
+var customers = db.CreateContainer("customers");</code></pre><h3 id="documents"><a class="anchor" href="#documents">#</a>Documents</h3><p>Individual XML or JSON documents stored within containers. Each document has a unique name within its container.</p><pre><code class="language-csharp">container.PutDocument("order-001.xml", xmlContent);</code></pre><h3 id="nodes"><a class="anchor" href="#nodes">#</a>Nodes</h3><p>The atomic units of the XQuery Data Model. Documents are decomposed into nodes for efficient storage and querying.</p><h2 id="shredded-node-storage"><a class="anchor" href="#shredded-node-storage">#</a>Shredded Node Storage</h2><p>PhoenixmlDb stores XML and JSON documents using a technique called <strong>node shredding</strong>: each XDM node (element, attribute, text node, comment, etc.) is serialized into its own LMDB key-value entry rather than storing the document as a serialized string. This design enables:</p><ul><li>
+        <p>
+          <strong>Fine-grained access</strong> — queries can retrieve individual nodes without deserializing entire documents</p>
+      </li><li>
+        <p>
+          <strong>Partial updates</strong> — XQuery Update expressions (e.g., <code>replace value of node</code>) modify only the affected node entries, not the whole document</p>
+      </li><li>
+        <p>
+          <strong>Efficient indexing</strong> — index entries point directly to node-level keys, so the engine fetches only matching nodes</p>
+      </li></ul><h2 id="the-identifier-hierarchy"><a class="anchor" href="#the-identifier-hierarchy">#</a>The Identifier Hierarchy</h2><p>Every object in PhoenixmlDb is identified by a strongly-typed integer value:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Type</p>
+          </th>
+          <th>
+            <p>.NET type</p>
+          </th>
+          <th>
+            <p>Scope</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>ContainerId</code></p>
+          </td>
+          <td>
+            <p><code>uint</code></p>
+          </td>
+          <td>
+            <p>Unique within a database</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>DocumentId</code></p>
+          </td>
+          <td>
+            <p><code>ulong</code></p>
+          </td>
+          <td>
+            <p>Unique within a container</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>NodeId</code></p>
+          </td>
+          <td>
+            <p><code>ulong</code></p>
+          </td>
+          <td>
+            <p>Unique within a document</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>A node is fully addressed by the triple <code>(ContainerId, DocumentId, NodeId)</code>. LMDB keys are constructed from this triple, giving O(log n) lookup for any node in the database.</p><h2 id="document-reassembly"><a class="anchor" href="#document-reassembly">#</a>Document Reassembly</h2><p>When a document is retrieved in full, PhoenixmlDb performs a <strong>tree traversal</strong> over the structural index:</p><ol><li>
+        <p>Resolve the <code>DocumentId</code> from the document name.</p>
+      </li><li>
+        <p>Fetch the document root node.</p>
+      </li><li>
+        <p>Walk the parent-child index recursively to emit child nodes in document order.</p>
+      </li><li>
+        <p>Serialize the resulting node sequence back to XML or JSON.</p>
+      </li></ol><p>For query results that return only a subtree, the engine stops traversal at the requested root, so only the required nodes are read from LMDB.</p><h2 id="namespace-interning"><a class="anchor" href="#namespace-interning">#</a>Namespace Interning</h2><p>Namespace URIs are <strong>interned</strong>: each unique URI is stored once and assigned a <code>NamespaceId</code> (<code>uint</code>). Node entries reference the <code>NamespaceId</code> rather than the full URI string. This keeps node records compact and makes namespace-aware comparisons a fast integer equality check rather than a string comparison.</p><h2 id="data-flow"><a class="anchor" href="#data-flow">#</a>Data Flow</h2><pre><code>XML Document → Parser → XDM Nodes → Storage
+                           ↓
+                       Indexing
+                           ↓
+Query → Parser → AST → Optimizer → Executor → Results</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

@@ -1,0 +1,217 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Performance Tuning — PhoenixmlDb Documentation</title><meta name="description" content="Query optimization, storage tuning, memory management, and monitoring"><link rel="canonical" href="/phoenixmldb/performance-tuning.html"><meta property="og:title" content="Performance Tuning"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/performance-tuning.html"><meta property="og:description" content="Query optimization, storage tuning, memory management, and monitoring"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li class="active"><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="performance-tuning"><a class="anchor" href="#performance-tuning">#</a>Performance Tuning</h1><p>Optimize PhoenixmlDb for your specific workload with these tuning guidelines.</p><h2 id="query-optimization"><a class="anchor" href="#query-optimization">#</a>Query Optimization</h2><h3 id="use-indexes"><a class="anchor" href="#use-indexes">#</a>Use Indexes</h3><p>The most important optimization is proper indexing:</p><pre><code class="language-csharp">// Create indexes for frequently queried paths
+container.CreateIndex(new PathIndex("product-idx",
+    "/product/name", "/product/category"));
+container.CreateIndex(new ValueIndex("price-idx",
+    "/product/price", ValueType.Decimal));</code></pre><h3 id="check-query-plans"><a class="anchor" href="#check-query-plans">#</a>Check Query Plans</h3><pre><code class="language-csharp">var plan = db.Explain(query);
+Console.WriteLine(plan);
+// Verify indexes are used
+if (!plan.IndexesUsed.Any())
+{
+    Console.WriteLine("Warning: Full scan, consider adding indexes");
+}</code></pre><h3 id="optimize-xquery"><a class="anchor" href="#optimize-xquery">#</a>Optimize XQuery</h3><pre><code class="language-xquery">(: Good - filter early :)
+for $p in collection('products')//product[category = 'Electronics']
+where $p/price &gt; 100
+return $p
+(: Less efficient - filter late :)
+for $p in collection('products')//product
+where $p/category = 'Electronics' and $p/price &gt; 100
+return $p</code></pre><h3 id="limit-results"><a class="anchor" href="#limit-results">#</a>Limit Results</h3><pre><code class="language-xquery">(: Always limit when you don't need all results :)
+(for $p in collection('products')//product
+ order by $p/date descending
+ return $p)[position() &lt;= 100]</code></pre><h3 id="use-parameters"><a class="anchor" href="#use-parameters">#</a>Use Parameters</h3><pre><code class="language-csharp">// Good - compiled once, parameters bound
+var prepared = db.Prepare("""
+    for $p in //product where $p/category = $cat return $p
+    """);
+var results = prepared.Execute(new QueryParameters { ["cat"] = "Electronics" });
+// Bad - recompiled every time
+var results = db.Query($"for $p in //product where $p/category = '{category}' return $p");</code></pre><h2 id="storage-optimization"><a class="anchor" href="#storage-optimization">#</a>Storage Optimization</h2><h3 id="appropriate-map-size"><a class="anchor" href="#appropriate-map-size">#</a>Appropriate Map Size</h3><pre><code class="language-csharp">// Too small causes "map full" errors
+// Too large wastes address space
+var options = new DatabaseOptions
+{
+    MapSize = dataSize * 2  // 2x expected data size
+};</code></pre><h3 id="sync-mode"><a class="anchor" href="#sync-mode">#</a>Sync Mode</h3><pre><code class="language-csharp">// For highest performance (reduced durability)
+var options = new DatabaseOptions
+{
+    NoMetaSync = true  // ~10% faster commits
+};
+// For bulk imports (recoverable data)
+var options = new DatabaseOptions
+{
+    NoSync = true  // ~50% faster, but data at risk
+};</code></pre><h3 id="batch-writes"><a class="anchor" href="#batch-writes">#</a>Batch Writes</h3><pre><code class="language-csharp">// Good - single transaction for multiple writes
+using (var txn = db.BeginTransaction())
+{
+    foreach (var doc in documents)
+    {
+        container.PutDocument(doc.Name, doc.Content);
+    }
+    txn.Commit();
+}
+// Bad - separate transaction for each write
+foreach (var doc in documents)
+{
+    container.PutDocument(doc.Name, doc.Content);
+}</code></pre><h2 id="memory-management"><a class="anchor" href="#memory-management">#</a>Memory Management</h2><h3 id="read-only-transactions"><a class="anchor" href="#read-only-transactions">#</a>Read-Only Transactions</h3><pre><code class="language-csharp">// Prefer read-only - no write locks, concurrent access
+using (var txn = db.BeginTransaction(readOnly: true))
+{
+    // Multiple concurrent readers allowed
+}</code></pre><h3 id="dispose-promptly"><a class="anchor" href="#dispose-promptly">#</a>Dispose Promptly</h3><pre><code class="language-csharp">// Good - dispose immediately
+using (var txn = db.BeginTransaction(readOnly: true))
+{
+    var result = txn.Query(xquery);
+    ProcessResults(result.ToList());
+}
+// Bad - holding transaction open
+var txn = db.BeginTransaction(readOnly: true);
+var result = txn.Query(xquery);
+// ... long processing ...
+txn.Dispose();  // Blocks other writers</code></pre><h3 id="stream-large-documents"><a class="anchor" href="#stream-large-documents">#</a>Stream Large Documents</h3><pre><code class="language-csharp">// Good - streaming for large documents
+using var stream = container.GetDocumentAsStream("large.xml");
+ProcessStream(stream);
+// Bad - loads entire document into memory
+var xml = container.GetDocument("large.xml");</code></pre><h2 id="index-tuning"><a class="anchor" href="#index-tuning">#</a>Index Tuning</h2><h3 id="index-selectivity"><a class="anchor" href="#index-selectivity">#</a>Index Selectivity</h3><p>High-selectivity indexes are more effective:</p><pre><code class="language-csharp">// Good - unique or high cardinality
+container.CreateIndex(new PathIndex("id-idx", "/@id"));
+container.CreateIndex(new ValueIndex("email-idx", "/user/email", ValueType.String));
+// Less effective - low cardinality
+container.CreateIndex(new PathIndex("status-idx", "/order/status"));  // Only few values</code></pre><h3 id="composite-indexes"><a class="anchor" href="#composite-indexes">#</a>Composite Indexes</h3><pre><code class="language-csharp">// Single index for common query pattern
+container.CreateIndex(new PathIndex("order-lookup",
+    "/order/customerId", "/order/date", "/order/status"));</code></pre><h3 id="index-maintenance"><a class="anchor" href="#index-maintenance">#</a>Index Maintenance</h3><pre><code class="language-csharp">// Rebuild fragmented indexes
+var stats = container.GetIndexStats("price-idx");
+if (stats.Fragmentation &gt; 0.3)  // &gt; 30% fragmented
+{
+    container.RebuildIndex("price-idx");
+}</code></pre><h2 id="monitoring"><a class="anchor" href="#monitoring">#</a>Monitoring</h2><h3 id="database-statistics"><a class="anchor" href="#database-statistics">#</a>Database Statistics</h3><pre><code class="language-csharp">var stats = db.GetStatistics();
+Console.WriteLine($"Containers: {stats.ContainerCount}");
+Console.WriteLine($"Documents: {stats.DocumentCount}");
+Console.WriteLine($"Size: {stats.UsedBytes / 1024 / 1024} MB");
+Console.WriteLine($"Readers: {stats.ActiveReaders}");</code></pre><h3 id="query-metrics"><a class="anchor" href="#query-metrics">#</a>Query Metrics</h3><pre><code class="language-csharp">var options = new QueryOptions
+{
+    CollectMetrics = true
+};
+var results = db.Query(xquery, options);
+Console.WriteLine($"Parse time: {results.Metrics.ParseTime}");
+Console.WriteLine($"Optimize time: {results.Metrics.OptimizeTime}");
+Console.WriteLine($"Execute time: {results.Metrics.ExecuteTime}");
+Console.WriteLine($"Rows scanned: {results.Metrics.RowsScanned}");
+Console.WriteLine($"Index hits: {results.Metrics.IndexHits}");</code></pre><h2 id="benchmarking"><a class="anchor" href="#benchmarking">#</a>Benchmarking</h2><h3 id="measure-operations"><a class="anchor" href="#measure-operations">#</a>Measure Operations</h3><pre><code class="language-csharp">var sw = Stopwatch.StartNew();
+for (int i = 0; i &lt; iterations; i++)
+{
+    db.Query(xquery);
+}
+sw.Stop();
+Console.WriteLine($"Avg: {sw.ElapsedMilliseconds / iterations} ms/query");</code></pre><h3 id="compare-approaches"><a class="anchor" href="#compare-approaches">#</a>Compare Approaches</h3><pre><code class="language-csharp">// Test different index configurations
+var configs = new[]
+{
+    () =&gt; container.CreateIndex(new PathIndex("p1", "/a/b")),
+    () =&gt; container.CreateIndex(new ValueIndex("v1", "/a/b", ValueType.String)),
+    () =&gt; { /* no index */ }
+};
+foreach (var config in configs)
+{
+    ResetDatabase();
+    config();
+    var time = BenchmarkQuery(query);
+    Console.WriteLine($"Time: {time}");
+}</code></pre><h2 id="common-bottlenecks"><a class="anchor" href="#common-bottlenecks">#</a>Common Bottlenecks</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Symptom</p>
+          </th>
+          <th>
+            <p>Likely Cause</p>
+          </th>
+          <th>
+            <p>Solution</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Slow queries</p>
+          </td>
+          <td>
+            <p>Missing index</p>
+          </td>
+          <td>
+            <p>Add appropriate index</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>High memory</p>
+          </td>
+          <td>
+            <p>Large transactions</p>
+          </td>
+          <td>
+            <p>Use smaller batches</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Slow writes</p>
+          </td>
+          <td>
+            <p>Sync overhead</p>
+          </td>
+          <td>
+            <p>Use NoMetaSync or batch</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Lock contention</p>
+          </td>
+          <td>
+            <p>Long transactions</p>
+          </td>
+          <td>
+            <p>Keep transactions short</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>"Map full"</p>
+          </td>
+          <td>
+            <p>Insufficient size</p>
+          </td>
+          <td>
+            <p>Increase MapSize</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="platform-tuning"><a class="anchor" href="#platform-tuning">#</a>Platform Tuning</h2><h3 id="linux"><a class="anchor" href="#linux">#</a>Linux</h3><pre><code class="language-bash"># Increase max open files
+ulimit -n 65536
+# Disable transparent huge pages (can hurt LMDB)
+echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled</code></pre><h3 id="windows"><a class="anchor" href="#windows">#</a>Windows</h3><pre><code class="language-powershell"># Increase working set
+# Use SSD storage
+# Disable antivirus scanning on data directory</code></pre><h2 id="best-practices-summary"><a class="anchor" href="#best-practices-summary">#</a>Best Practices Summary</h2><ol><li>
+        <p>
+          <strong>Index first</strong> — Create indexes for query patterns</p>
+      </li><li>
+        <p>
+          <strong>Batch writes</strong> — Group writes in transactions</p>
+      </li><li>
+        <p>
+          <strong>Use read-only</strong> — When only reading</p>
+      </li><li>
+        <p>
+          <strong>Check plans</strong> — Verify index usage</p>
+      </li><li>
+        <p>
+          <strong>Monitor metrics</strong> — Track performance over time</p>
+      </li><li>
+        <p>
+          <strong>Keep transactions short</strong> — Minimize lock duration</p>
+      </li><li>
+        <p>
+          <strong>Stream large data</strong> — Avoid loading into memory</p>
+      </li><li>
+        <p>
+          <strong>SSD storage</strong> — For production workloads</p>
+      </li></ol></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

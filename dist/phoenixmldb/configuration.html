@@ -1,0 +1,346 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Configuration — PhoenixmlDb Documentation</title><meta name="description" content="Database options, environment variables, logging, and connection strings"><link rel="canonical" href="/phoenixmldb/configuration.html"><meta property="og:title" content="Configuration"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/configuration.html"><meta property="og:description" content="Database options, environment variables, logging, and connection strings"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li class="active"><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="configuration"><a class="anchor" href="#configuration">#</a>Configuration</h1><p>This guide covers PhoenixmlDb configuration options for storage, performance, and behavior.</p><h2 id="database-options"><a class="anchor" href="#database-options">#</a>Database Options</h2><h3 id="basic-configuration"><a class="anchor" href="#basic-configuration">#</a>Basic Configuration</h3><pre><code class="language-csharp">var options = new DatabaseOptions
+{
+    MapSize = 10L * 1024 * 1024 * 1024,  // 10 GB
+    MaxContainers = 100,
+    MaxReaders = 126
+};
+using var db = new XmlDatabase("./data", options);</code></pre><h3 id="all-options"><a class="anchor" href="#all-options">#</a>All Options</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Option</p>
+          </th>
+          <th>
+            <p>Type</p>
+          </th>
+          <th>
+            <p>Default</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>MapSize</code></p>
+          </td>
+          <td>
+            <p><code>long</code></p>
+          </td>
+          <td>
+            <p>1 GB</p>
+          </td>
+          <td>
+            <p>Maximum database size</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>MaxContainers</code></p>
+          </td>
+          <td>
+            <p><code>int</code></p>
+          </td>
+          <td>
+            <p>50</p>
+          </td>
+          <td>
+            <p>Maximum containers (databases)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>MaxReaders</code></p>
+          </td>
+          <td>
+            <p><code>int</code></p>
+          </td>
+          <td>
+            <p>126</p>
+          </td>
+          <td>
+            <p>Maximum concurrent readers</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>NoSync</code></p>
+          </td>
+          <td>
+            <p><code>bool</code></p>
+          </td>
+          <td>
+            <p><code>false</code></p>
+          </td>
+          <td>
+            <p>Don't sync on commit</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>NoMetaSync</code></p>
+          </td>
+          <td>
+            <p><code>bool</code></p>
+          </td>
+          <td>
+            <p><code>false</code></p>
+          </td>
+          <td>
+            <p>Don't sync metadata</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>ReadOnly</code></p>
+          </td>
+          <td>
+            <p><code>bool</code></p>
+          </td>
+          <td>
+            <p><code>false</code></p>
+          </td>
+          <td>
+            <p>Open read-only</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>WriteMap</code></p>
+          </td>
+          <td>
+            <p><code>bool</code></p>
+          </td>
+          <td>
+            <p><code>false</code></p>
+          </td>
+          <td>
+            <p>Use writable memory map</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>NoLock</code></p>
+          </td>
+          <td>
+            <p><code>bool</code></p>
+          </td>
+          <td>
+            <p><code>false</code></p>
+          </td>
+          <td>
+            <p>Don't use file locking</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="environment-variables"><a class="anchor" href="#environment-variables">#</a>Environment Variables</h2><pre><code class="language-bash"># Override default map size
+export PHOENIXMLDB_MAP_SIZE=10737418240
+# Set maximum readers
+export PHOENIXMLDB_MAX_READERS=256
+# Enable debug logging
+export PHOENIXMLDB_LOG_LEVEL=Debug</code></pre><h2 id="configuration-file"><a class="anchor" href="#configuration-file">#</a>Configuration File</h2><p>Create <code>phoenixmldb.json</code> in the database directory:</p><pre><code class="language-json">{
+    "storage": {
+        "mapSize": "10GB",
+        "maxContainers": 100,
+        "maxReaders": 126,
+        "syncMode": "normal"
+    },
+    "query": {
+        "defaultTimeout": "30s",
+        "maxResults": 10000,
+        "enableOptimizer": true
+    },
+    "indexing": {
+        "autoIndex": true,
+        "defaultIndexOptions": {
+            "pathIndex": true,
+            "valueIndex": false
+        }
+    },
+    "logging": {
+        "level": "Information",
+        "file": "logs/phoenixmldb.log"
+    }
+}</code></pre><h3 id="load-configuration"><a class="anchor" href="#load-configuration">#</a>Load Configuration</h3><pre><code class="language-csharp">var config = PhoenixmlDbConfiguration.Load("./data/phoenixmldb.json");
+using var db = new XmlDatabase("./data", config.ToOptions());</code></pre><h2 id="logging"><a class="anchor" href="#logging">#</a>Logging</h2><h3 id="configure-logging"><a class="anchor" href="#configure-logging">#</a>Configure Logging</h3><pre><code class="language-csharp">var options = new DatabaseOptions
+{
+    Logger = LoggerFactory.Create(builder =&gt;
+    {
+        builder.AddConsole();
+        builder.SetMinimumLevel(LogLevel.Information);
+    }).CreateLogger&lt;XmlDatabase&gt;()
+};</code></pre><h3 id="log-categories"><a class="anchor" href="#log-categories">#</a>Log Categories</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Category</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>PhoenixmlDb.Storage</code></p>
+          </td>
+          <td>
+            <p>Storage operations</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>PhoenixmlDb.Query</code></p>
+          </td>
+          <td>
+            <p>Query execution</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>PhoenixmlDb.Index</code></p>
+          </td>
+          <td>
+            <p>Index operations</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>PhoenixmlDb.Transaction</code></p>
+          </td>
+          <td>
+            <p>Transaction lifecycle</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="query-settings"><a class="anchor" href="#query-settings">#</a>Query Settings</h2><pre><code class="language-csharp">var queryOptions = new QueryOptions
+{
+    Timeout = TimeSpan.FromSeconds(30),
+    MaxResults = 10000,
+    EnableOptimizer = true,
+    EnableParallelExecution = false,
+    DefaultCollation = "http://www.w3.org/2005/xpath-functions/collation/caseblind"
+};
+var results = db.Query(xquery, parameters, queryOptions);</code></pre><h2 id="index-settings"><a class="anchor" href="#index-settings">#</a>Index Settings</h2><h3 id="default-index-options"><a class="anchor" href="#default-index-options">#</a>Default Index Options</h3><pre><code class="language-csharp">var containerOptions = new ContainerOptions
+{
+    IndexOnStore = true,
+    DefaultIndexes =
+    [
+        new PathIndex("id-idx", "/@id"),
+        new PathIndex("name-idx", "/*/name")
+    ]
+};
+var container = db.CreateContainer("products", containerOptions);</code></pre><h3 id="full-text-defaults"><a class="anchor" href="#full-text-defaults">#</a>Full-Text Defaults</h3><pre><code class="language-csharp">var ftOptions = new FullTextOptions
+{
+    Language = "en",
+    Stemming = true,
+    StopWords = true,
+    MinTokenLength = 2
+};
+container.CreateIndex(new FullTextIndex("search", "//text()", ftOptions));</code></pre><h2 id="connection-strings"><a class="anchor" href="#connection-strings">#</a>Connection Strings</h2><pre><code class="language-csharp">// Simple path
+var db = new XmlDatabase("./data");
+// With options in string
+var db = new XmlDatabase("./data;MapSize=10GB;ReadOnly=true");
+// Parse connection string
+var connStr = new ConnectionString("Path=./data;MapSize=10GB");
+var db = new XmlDatabase(connStr);</code></pre><h3 id="connection-string-parameters"><a class="anchor" href="#connection-string-parameters">#</a>Connection String Parameters</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Parameter</p>
+          </th>
+          <th>
+            <p>Example</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>Path</code></p>
+          </td>
+          <td>
+            <p><code>./data</code></p>
+          </td>
+          <td>
+            <p>Database directory</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>MapSize</code></p>
+          </td>
+          <td>
+            <p><code>10GB</code></p>
+          </td>
+          <td>
+            <p>Maximum size</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>ReadOnly</code></p>
+          </td>
+          <td>
+            <p><code>true</code></p>
+          </td>
+          <td>
+            <p>Read-only mode</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>NoSync</code></p>
+          </td>
+          <td>
+            <p><code>true</code></p>
+          </td>
+          <td>
+            <p>Disable sync</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="runtime-configuration"><a class="anchor" href="#runtime-configuration">#</a>Runtime Configuration</h2><h3 id="modify-settings"><a class="anchor" href="#modify-settings">#</a>Modify Settings</h3><pre><code class="language-csharp">// Some settings can be changed at runtime
+db.SetOption("QueryTimeout", TimeSpan.FromSeconds(60));
+db.SetOption("MaxResults", 50000);</code></pre><h3 id="get-current-settings"><a class="anchor" href="#get-current-settings">#</a>Get Current Settings</h3><pre><code class="language-csharp">var mapSize = db.GetOption&lt;long&gt;("MapSize");
+var maxReaders = db.GetOption&lt;int&gt;("MaxReaders");</code></pre><h2 id="server-configuration"><a class="anchor" href="#server-configuration">#</a>Server Configuration</h2><p>For server mode, additional settings are available:</p><pre><code class="language-json">{
+    "server": {
+        "host": "0.0.0.0",
+        "port": 5432,
+        "maxConnections": 100,
+        "authentication": {
+            "enabled": true,
+            "type": "basic"
+        },
+        "tls": {
+            "enabled": true,
+            "certificate": "/path/to/cert.pem",
+            "key": "/path/to/key.pem"
+        }
+    }
+}</code></pre><h2 id="cluster-configuration"><a class="anchor" href="#cluster-configuration">#</a>Cluster Configuration</h2><p>For cluster mode:</p><pre><code class="language-json">{
+    "cluster": {
+        "nodeId": "node-1",
+        "peers": [
+            "node-2:5433",
+            "node-3:5433"
+        ],
+        "raft": {
+            "electionTimeout": "150ms",
+            "heartbeatInterval": "50ms"
+        },
+        "sharding": {
+            "enabled": true,
+            "shardCount": 16,
+            "replicationFactor": 3
+        }
+    }
+}</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

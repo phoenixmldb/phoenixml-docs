@@ -1,0 +1,343 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Migration Guide — PhoenixmlDb Documentation</title><meta name="description" content="Migrate from Berkeley DB XML, eXist-db, MarkLogic, MongoDB, or SQL"><link rel="canonical" href="/phoenixmldb/migration-guide.html"><meta property="og:title" content="Migration Guide"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/migration-guide.html"><meta property="og:description" content="Migrate from Berkeley DB XML, eXist-db, MarkLogic, MongoDB, or SQL"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li class="active"><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="migration-guide"><a class="anchor" href="#migration-guide">#</a>Migration Guide</h1><p>This guide helps you migrate to PhoenixmlDb from other XML databases or document stores.</p><h2 id="from-berkeley-db-xml"><a class="anchor" href="#from-berkeley-db-xml">#</a>From Berkeley DB XML</h2><p>PhoenixmlDb is designed as a modern replacement for Oracle Berkeley DB XML.</p><h3 id="conceptual-mapping"><a class="anchor" href="#conceptual-mapping">#</a>Conceptual Mapping</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Berkeley DB XML</p>
+          </th>
+          <th>
+            <p>PhoenixmlDb</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Environment</p>
+          </td>
+          <td>
+            <p>XmlDatabase</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Container</p>
+          </td>
+          <td>
+            <p>Container</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Document</p>
+          </td>
+          <td>
+            <p>Document</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>XmlManager</p>
+          </td>
+          <td>
+            <p>XmlDatabase</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>XmlQueryContext</p>
+          </td>
+          <td>
+            <p>QueryParameters</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>XmlResults</p>
+          </td>
+          <td>
+            <p>IQueryResult</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="code-migration"><a class="anchor" href="#code-migration">#</a>Code Migration</h3><p>
+      <strong>Berkeley DB XML:</strong>
+    </p><pre><code class="language-c++">XmlManager mgr;
+XmlContainer container = mgr.openContainer("products.dbxml");
+XmlDocument doc = mgr.createDocument();
+doc.setContent("&lt;product&gt;&lt;name&gt;Widget&lt;/name&gt;&lt;/product&gt;");
+container.putDocument(doc, context);
+XmlQueryContext qc = mgr.createQueryContext();
+XmlResults results = mgr.query("collection('products')//name", qc);</code></pre><p>
+      <strong>PhoenixmlDb:</strong>
+    </p><pre><code class="language-csharp">using var db = new XmlDatabase("./data");
+var container = db.CreateContainer("products");
+container.PutDocument("p1.xml", "&lt;product&gt;&lt;name&gt;Widget&lt;/name&gt;&lt;/product&gt;");
+var results = db.Query("collection('products')//name");</code></pre><h3 id="index-migration"><a class="anchor" href="#index-migration">#</a>Index Migration</h3><pre><code class="language-csharp">// Berkeley DB XML index specification: "node-element-equality-string"
+// PhoenixmlDb equivalent:
+container.CreateIndex(new PathIndex("name-idx", "/product/name"));
+container.CreateIndex(new ValueIndex("name-val-idx", "/product/name", ValueType.String));</code></pre><h3 id="data-migration"><a class="anchor" href="#data-migration">#</a>Data Migration</h3><pre><code class="language-csharp">// Export from Berkeley DB XML (using their tools)
+// Import to PhoenixmlDb:
+foreach (var file in Directory.GetFiles("./export", "*.xml"))
+{
+    var name = Path.GetFileName(file);
+    var content = File.ReadAllText(file);
+    container.PutDocument(name, content);
+}</code></pre><h2 id="from-exist-db"><a class="anchor" href="#from-exist-db">#</a>From eXist-db</h2><h3 id="conceptual-mapping"><a class="anchor" href="#conceptual-mapping">#</a>Conceptual Mapping</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>eXist-db</p>
+          </th>
+          <th>
+            <p>PhoenixmlDb</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Database</p>
+          </td>
+          <td>
+            <p>XmlDatabase</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Collection</p>
+          </td>
+          <td>
+            <p>Container</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Resource</p>
+          </td>
+          <td>
+            <p>Document</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>XQuery</p>
+          </td>
+          <td>
+            <p>XQuery</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="code-migration"><a class="anchor" href="#code-migration">#</a>Code Migration</h3><p>
+      <strong>eXist-db (Java):</strong>
+    </p><pre><code class="language-java">Collection collection = DatabaseManager.getCollection("xmldb:exist:///db/products");
+XMLResource resource = (XMLResource) collection.createResource("p1.xml", "XMLResource");
+resource.setContent("&lt;product/&gt;");
+collection.storeResource(resource);
+XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
+ResourceSet result = service.query("//product");</code></pre><p>
+      <strong>PhoenixmlDb:</strong>
+    </p><pre><code class="language-csharp">using var db = new XmlDatabase("./data");
+var container = db.CreateContainer("products");
+container.PutDocument("p1.xml", "&lt;product/&gt;");
+var results = db.Query("collection('products')//product");</code></pre><h2 id="from-marklogic"><a class="anchor" href="#from-marklogic">#</a>From MarkLogic</h2><h3 id="conceptual-mapping"><a class="anchor" href="#conceptual-mapping">#</a>Conceptual Mapping</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>MarkLogic</p>
+          </th>
+          <th>
+            <p>PhoenixmlDb</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Database</p>
+          </td>
+          <td>
+            <p>XmlDatabase</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Collection</p>
+          </td>
+          <td>
+            <p>Container (via metadata)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Document</p>
+          </td>
+          <td>
+            <p>Document</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Range Index</p>
+          </td>
+          <td>
+            <p>Value Index</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Element Index</p>
+          </td>
+          <td>
+            <p>Path Index</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="code-migration"><a class="anchor" href="#code-migration">#</a>Code Migration</h3><p>
+      <strong>MarkLogic (XQuery):</strong>
+    </p><pre><code class="language-xquery">xdmp:document-insert("/products/p1.xml", &lt;product/&gt;,
+    (), "products")
+for $p in fn:collection("products")//product
+return $p</code></pre><p>
+      <strong>PhoenixmlDb:</strong>
+    </p><pre><code class="language-csharp">container.PutDocument("products/p1.xml", "&lt;product/&gt;");
+var results = db.Query("collection('products')//product");</code></pre><h2 id="from-mongodb"><a class="anchor" href="#from-mongodb">#</a>From MongoDB</h2><h3 id="conceptual-mapping"><a class="anchor" href="#conceptual-mapping">#</a>Conceptual Mapping</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>MongoDB</p>
+          </th>
+          <th>
+            <p>PhoenixmlDb</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Database</p>
+          </td>
+          <td>
+            <p>XmlDatabase</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Collection</p>
+          </td>
+          <td>
+            <p>Container</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Document (BSON)</p>
+          </td>
+          <td>
+            <p>Document (XML/JSON)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Find query</p>
+          </td>
+          <td>
+            <p>XQuery/XPath</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="data-migration"><a class="anchor" href="#data-migration">#</a>Data Migration</h3><pre><code class="language-csharp">// Export from MongoDB as JSON
+// Import to PhoenixmlDb:
+var container = db.CreateContainer("products");
+foreach (var doc in mongoCollection.Find(_ =&gt; true))
+{
+    var json = doc.ToJson();
+    container.PutJsonDocument($"{doc["_id"]}.json", json);
+}</code></pre><h3 id="query-migration"><a class="anchor" href="#query-migration">#</a>Query Migration</h3><p>
+      <strong>MongoDB:</strong>
+    </p><pre><code class="language-javascript">db.products.find({ category: "Electronics", price: { $lt: 100 } })</code></pre><p>
+      <strong>PhoenixmlDb:</strong>
+    </p><pre><code class="language-xquery">for $p in collection('products')/map
+where $p/category = 'Electronics' and $p/price &lt; 100
+return $p</code></pre><h2 id="from-sql-relational"><a class="anchor" href="#from-sql-relational">#</a>From SQL/Relational</h2><h3 id="data-export"><a class="anchor" href="#data-export">#</a>Data Export</h3><pre><code class="language-sql">-- Export as XML
+SELECT * FROM Products
+FOR XML PATH('product'), ROOT('products')</code></pre><h3 id="import-to-phoenixmldb"><a class="anchor" href="#import-to-phoenixmldb">#</a>Import to PhoenixmlDb</h3><pre><code class="language-csharp">// Store entire export
+container.PutDocument("products.xml", exportedXml);
+// Or individual documents
+foreach (var row in table.Rows)
+{
+    var xml = $"""
+        &lt;product id="{row["Id"]}"&gt;
+            &lt;name&gt;{row["Name"]}&lt;/name&gt;
+            &lt;price&gt;{row["Price"]}&lt;/price&gt;
+        &lt;/product&gt;
+        """;
+    container.PutDocument($"p{row["Id"]}.xml", xml);
+}</code></pre><h3 id="query-migration"><a class="anchor" href="#query-migration">#</a>Query Migration</h3><p>
+      <strong>SQL:</strong>
+    </p><pre><code class="language-sql">SELECT Name, Price FROM Products
+WHERE Category = 'Electronics'
+ORDER BY Price DESC</code></pre><p>
+      <strong>XQuery:</strong>
+    </p><pre><code class="language-xquery">for $p in collection('products')//product
+where $p/category = 'Electronics'
+order by $p/price descending
+return &lt;result&gt;
+    &lt;name&gt;{$p/name/text()}&lt;/name&gt;
+    &lt;price&gt;{$p/price/text()}&lt;/price&gt;
+&lt;/result&gt;</code></pre><h2 id="migration-checklist"><a class="anchor" href="#migration-checklist">#</a>Migration Checklist</h2><h3 id="planning"><a class="anchor" href="#planning">#</a>Planning</h3><ul><li>
+        <p> Document current schema/structure</p>
+      </li><li>
+        <p> Map concepts to PhoenixmlDb</p>
+      </li><li>
+        <p> Identify required indexes</p>
+      </li><li>
+        <p> Plan downtime window</p>
+      </li><li>
+        <p> Create rollback plan</p>
+      </li></ul><h3 id="execution"><a class="anchor" href="#execution">#</a>Execution</h3><ul><li>
+        <p> Set up PhoenixmlDb environment</p>
+      </li><li>
+        <p> Create containers</p>
+      </li><li>
+        <p> Export source data</p>
+      </li><li>
+        <p> Transform if needed</p>
+      </li><li>
+        <p> Import data</p>
+      </li><li>
+        <p> Create indexes</p>
+      </li><li>
+        <p> Verify data integrity</p>
+      </li><li>
+        <p> Update application code</p>
+      </li><li>
+        <p> Test thoroughly</p>
+      </li></ul><h3 id="validation"><a class="anchor" href="#validation">#</a>Validation</h3><ul><li>
+        <p> Document count matches</p>
+      </li><li>
+        <p> Sample queries return correct results</p>
+      </li><li>
+        <p> Performance acceptable</p>
+      </li><li>
+        <p> All features working</p>
+      </li></ul><h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2><ol><li>
+        <p>
+          <strong>Test in staging</strong> — Always test migration first</p>
+      </li><li>
+        <p>
+          <strong>Validate data</strong> — Compare counts and samples</p>
+      </li><li>
+        <p>
+          <strong>Plan indexes</strong> — Create before importing large datasets</p>
+      </li><li>
+        <p>
+          <strong>Batch imports</strong> — Use transactions for bulk loading</p>
+      </li><li>
+        <p>
+          <strong>Keep backups</strong> — Of both source and destination</p>
+      </li><li>
+        <p>
+          <strong>Monitor performance</strong> — After migration</p>
+      </li></ol></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

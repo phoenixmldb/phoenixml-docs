@@ -1,0 +1,817 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Packages — PhoenixmlDb Documentation</title><meta name="description" content="xsl:use-package, xsl:accept, xsl:override, xsl:expose — reusable stylesheet libraries"><link rel="canonical" href="/language-reference/xslt/instructions/packages.html"><meta property="og:title" content="Packages"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/packages.html"><meta property="og:description" content="xsl:use-package, xsl:accept, xsl:override, xsl:expose — reusable stylesheet libraries"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li class="active"><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="packages"><a class="anchor" href="#packages">#</a>Packages</h1><p>XSLT 3.0 introduces packages — a system for bundling stylesheets into reusable, encapsulated libraries with controlled visibility. If you have worked with NuGet packages, C# assemblies, and access modifiers (<code>public</code>, <code>internal</code>, <code>sealed</code>), you already understand the motivation: ship reusable code with a clean public API while hiding implementation details.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
+        <p>
+          <a href="#why-packages" title="">Why Packages?</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xslpackage--declaring-a-package" title="">xsl:package — Declaring a Package</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xslexpose--controlling-visibility" title="">xsl:expose — Controlling Visibility</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xsluse-package--importing-a-package" title="">xsl:use-package — Importing a Package</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xslaccept--adjusting-imported-visibility" title="">xsl:accept — Adjusting Imported Visibility</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xsloverride--overriding-package-components" title="">xsl:override — Overriding Package Components</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#the-visibility-system" title="">The Visibility System</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#comparison-with-xslimport-and-xslinclude" title="">Comparison with xsl:import and xsl:include</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#design-patterns" title="">Design Patterns</a>
+        </p>
+      </li></ul><hr><h2 id="why-packages"><a class="anchor" href="#why-packages">#</a>Why Packages?</h2><p>Before XSLT 3.0, stylesheet reuse relied on <code>xsl:import</code> and <code>xsl:include</code>. These work, but they have problems:</p><ul><li>
+        <p>
+          <strong>No encapsulation:</strong> Every template, function, and variable in an imported stylesheet is visible to the importing stylesheet. Internal helpers leak into the public API.</p>
+      </li><li>
+        <p>
+          <strong>Name collisions:</strong> Two imported stylesheets that define the same template or function conflict unpredictably.</p>
+      </li><li>
+        <p>
+          <strong>Fragile overriding:</strong> Import precedence rules are subtle and easy to get wrong.</p>
+      </li><li>
+        <p>
+          <strong>No versioning:</strong> There is no way to specify which version of a library you depend on.</p>
+      </li></ul><p>Packages solve all of these problems.</p><p>
+      <strong>C# parallel:</strong>
+    </p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>XSLT Concept</p>
+          </th>
+          <th>
+            <p>C# Equivalent</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>xsl:package</code></p>
+          </td>
+          <td>
+            <p>A NuGet package / class library assembly</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xsl:expose visibility="public"</code></p>
+          </td>
+          <td>
+            <p><code>public</code> access modifier</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xsl:expose visibility="private"</code></p>
+          </td>
+          <td>
+            <p><code>private</code> / <code>internal</code> access modifier</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xsl:expose visibility="final"</code></p>
+          </td>
+          <td>
+            <p><code>sealed</code> class / non-virtual method</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xsl:expose visibility="abstract"</code></p>
+          </td>
+          <td>
+            <p><code>abstract</code> method</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xsl:use-package</code></p>
+          </td>
+          <td>
+            <p><code>&lt;PackageReference&gt;</code> in .csproj</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xsl:override</code></p>
+          </td>
+          <td>
+            <p><code>override</code> keyword on virtual methods</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xsl:accept</code></p>
+          </td>
+          <td>
+            <p>Controlling which types are visible via <code>using</code> / <code>global using</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><hr><h2 id="xsl-package-declaring-a-package"><a class="anchor" href="#xsl-package-declaring-a-package">#</a>xsl:package — Declaring a Package</h2><p>A package is declared using <code>xsl:package</code> as the root element instead of <code>xsl:stylesheet</code>:</p><pre><code class="language-xml">&lt;xsl:package
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:html="http://example.com/html-utils"
+    name="http://example.com/html-utils"
+    package-version="2.1.0"
+    version="3.0"
+    declared-modes="yes"&gt;
+  &lt;!-- Package components: templates, functions, variables, modes --&gt;
+  &lt;xsl:function name="html:escape" as="xs:string" visibility="public"&gt;
+    &lt;xsl:param name="text" as="xs:string"/&gt;
+    &lt;xsl:sequence select="replace(replace(replace($text, '&amp;amp;', '&amp;amp;amp;'),
+                          '&amp;lt;', '&amp;amp;lt;'), '&amp;gt;', '&amp;amp;gt;')"/&gt;
+  &lt;/xsl:function&gt;
+  &lt;xsl:function name="html:wrap-tag" as="xs:string" visibility="public"&gt;
+    &lt;xsl:param name="tag" as="xs:string"/&gt;
+    &lt;xsl:param name="content" as="xs:string"/&gt;
+    &lt;xsl:sequence select="concat('&amp;lt;', $tag, '&amp;gt;', html:escape($content), '&amp;lt;/', $tag, '&amp;gt;')"/&gt;
+  &lt;/xsl:function&gt;
+  &lt;!-- Internal helper — not accessible outside the package --&gt;
+  &lt;xsl:function name="html:internal-sanitize" as="xs:string" visibility="private"&gt;
+    &lt;xsl:param name="text" as="xs:string"/&gt;
+    &lt;xsl:sequence select="replace($text, '[^\p{L}\p{N}\s]', '')"/&gt;
+  &lt;/xsl:function&gt;
+&lt;/xsl:package&gt;</code></pre><h3 id="key-attributes"><a class="anchor" href="#key-attributes">#</a>Key Attributes</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Attribute</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+          <th>
+            <p>Example</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>name</code></p>
+          </td>
+          <td>
+            <p>Unique package identifier (typically a URI)</p>
+          </td>
+          <td>
+            <p><code>"http://example.com/html-utils"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>package-version</code></p>
+          </td>
+          <td>
+            <p>Semantic version of the package</p>
+          </td>
+          <td>
+            <p><code>"2.1.0"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>version</code></p>
+          </td>
+          <td>
+            <p>XSLT version</p>
+          </td>
+          <td>
+            <p><code>"3.0"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>declared-modes</code></p>
+          </td>
+          <td>
+            <p>If <code>yes</code>, only explicitly declared modes are public</p>
+          </td>
+          <td>
+            <p><code>"yes"</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="declared-modes"><a class="anchor" href="#declared-modes">#</a>declared-modes</h3><p>When <code>declared-modes="yes"</code>, modes must be explicitly declared with <code>xsl:mode</code> to be accessible. This prevents accidental mode leakage:</p><pre><code class="language-xml">&lt;xsl:package name="http://example.com/formatter"
+             package-version="1.0.0" version="3.0"
+             declared-modes="yes"&gt;
+  &lt;!-- This mode is accessible to users of the package --&gt;
+  &lt;xsl:mode name="format" visibility="public"/&gt;
+  &lt;!-- This mode is internal --&gt;
+  &lt;xsl:mode name="internal-cleanup" visibility="private"/&gt;
+  &lt;xsl:template match="*" mode="format"&gt;
+    &lt;!-- ... --&gt;
+  &lt;/xsl:template&gt;
+  &lt;xsl:template match="*" mode="internal-cleanup"&gt;
+    &lt;!-- ... --&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:package&gt;</code></pre><hr><h2 id="xsl-expose-controlling-visibility"><a class="anchor" href="#xsl-expose-controlling-visibility">#</a>xsl:expose — Controlling Visibility</h2><p>
+      <code>xsl:expose</code> sets the visibility of components declared within the package. It appears as a top-level element inside <code>xsl:package</code>.</p><h3 id="setting-visibility-on-individual-components"><a class="anchor" href="#setting-visibility-on-individual-components">#</a>Setting Visibility on Individual Components</h3><p>The simplest approach is to set <code>visibility</code> directly on each component:</p><pre><code class="language-xml">&lt;xsl:function name="my:public-function" visibility="public"&gt;...&lt;/xsl:function&gt;
+&lt;xsl:function name="my:private-helper" visibility="private"&gt;...&lt;/xsl:function&gt;
+&lt;xsl:template name="main-output" visibility="public"&gt;...&lt;/xsl:template&gt;
+&lt;xsl:variable name="internal-config" visibility="private" select="42"/&gt;</code></pre><h3 id="bulk-visibility-with-xsl-expose"><a class="anchor" href="#bulk-visibility-with-xsl-expose">#</a>Bulk Visibility with xsl:expose</h3><p>For packages with many components, <code>xsl:expose</code> sets visibility by pattern:</p><pre><code class="language-xml">&lt;xsl:package name="http://example.com/utils" package-version="1.0.0" version="3.0"&gt;
+  &lt;!-- Make all functions public by default --&gt;
+  &lt;xsl:expose component="function" names="*" visibility="public"/&gt;
+  &lt;!-- But hide internal helpers --&gt;
+  &lt;xsl:expose component="function" names="my:internal-*" visibility="private"/&gt;
+  &lt;!-- Make all variables private by default --&gt;
+  &lt;xsl:expose component="variable" names="*" visibility="private"/&gt;
+  &lt;!-- Expose specific variables --&gt;
+  &lt;xsl:expose component="variable" names="my:version my:config" visibility="public"/&gt;
+&lt;/xsl:package&gt;</code></pre><h3 id="xsl-expose-attributes"><a class="anchor" href="#xsl-expose-attributes">#</a>xsl:expose Attributes</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Attribute</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>component</code></p>
+          </td>
+          <td>
+            <p>Type of component: <code>template</code>, <code>function</code>, <code>variable</code>, <code>attribute-set</code>, <code>mode</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>names</code></p>
+          </td>
+          <td>
+            <p>Space-separated list of component names, or <code>*</code> for all</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>visibility</code></p>
+          </td>
+          <td>
+            <p><code>public</code>, <code>private</code>, <code>final</code>, <code>abstract</code>, <code>hidden</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><hr><h2 id="xsl-use-package-importing-a-package"><a class="anchor" href="#xsl-use-package-importing-a-package">#</a>xsl:use-package — Importing a Package</h2><p>To use a package in your stylesheet, add <code>xsl:use-package</code> as a top-level declaration:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:html="http://example.com/html-utils"
+                version="3.0"&gt;
+  &lt;xsl:use-package name="http://example.com/html-utils"
+                   package-version="2.1"/&gt;
+  &lt;xsl:template match="paragraph"&gt;
+    &lt;p&gt;&lt;xsl:value-of select="html:escape(.)"/&gt;&lt;/p&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</code></pre><h3 id="version-selection"><a class="anchor" href="#version-selection">#</a>Version Selection</h3><p>The <code>package-version</code> attribute supports version ranges:</p><pre><code class="language-xml">&lt;!-- Exact version --&gt;
+&lt;xsl:use-package name="http://example.com/lib" package-version="2.1.0"/&gt;
+&lt;!-- Minimum version --&gt;
+&lt;xsl:use-package name="http://example.com/lib" package-version="2.0"/&gt;
+&lt;!-- Version range --&gt;
+&lt;xsl:use-package name="http://example.com/lib" package-version="2.*"/&gt;</code></pre><p>The processor selects the highest available version that matches the constraint.</p><h3 id="package-catalog"><a class="anchor" href="#package-catalog">#</a>Package Catalog</h3><p>How does the processor find the package file? Through a <strong>package catalog</strong> — a configuration that maps package names and versions to file locations. The catalog format is processor-specific. A typical catalog might look like:</p><pre><code class="language-xml">&lt;!-- Saxon-style package catalog --&gt;
+&lt;catalog&gt;
+  &lt;package name="http://example.com/html-utils"
+           version="2.1.0"
+           source-location="packages/html-utils-2.1.0.xsl"/&gt;
+  &lt;package name="http://example.com/date-utils"
+           version="1.0.0"
+           source-location="packages/date-utils-1.0.0.xsl"/&gt;
+&lt;/catalog&gt;</code></pre><p>
+      <strong>C# parallel:</strong> This is like NuGet package resolution — the package name and version constraint are resolved to a specific <code>.nupkg</code> file from configured sources.</p><hr><h2 id="xsl-accept-adjusting-imported-visibility"><a class="anchor" href="#xsl-accept-adjusting-imported-visibility">#</a>xsl:accept — Adjusting Imported Visibility</h2><p>When you import a package, you may not need all of its public components. <code>xsl:accept</code> lets you narrow the visibility of imported components — you can hide components you do not use or rename them to avoid conflicts.</p><pre><code class="language-xml">&lt;xsl:use-package name="http://example.com/html-utils" package-version="2.1"&gt;
+  &lt;!-- Accept only the functions we need, hide the rest --&gt;
+  &lt;xsl:accept component="function" names="html:escape" visibility="public"/&gt;
+  &lt;xsl:accept component="function" names="*" visibility="hidden"/&gt;
+&lt;/xsl:use-package&gt;</code></pre><h3 id="visibility-narrowing-rules"><a class="anchor" href="#visibility-narrowing-rules">#</a>Visibility Narrowing Rules</h3><p>
+      <code>xsl:accept</code> can only narrow visibility — it cannot make a private component public. The allowed transitions:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Original</p>
+          </th>
+          <th>
+            <p>Can Be Changed To</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>public</code></p>
+          </td>
+          <td>
+            <p><code>public</code>, <code>private</code>, <code>hidden</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>final</code></p>
+          </td>
+          <td>
+            <p><code>final</code>, <code>private</code>, <code>hidden</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>abstract</code></p>
+          </td>
+          <td>
+            <p>Cannot be hidden (must be overridden)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>private</code></p>
+          </td>
+          <td>
+            <p>Cannot be changed (already invisible)</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="why-use-xsl-accept"><a class="anchor" href="#why-use-xsl-accept">#</a>Why Use xsl:accept?</h3><ul><li>
+        <p>
+          <strong>Avoid name collisions:</strong> If two packages export functions with the same name, hide one.</p>
+      </li><li>
+        <p>
+          <strong>Minimize API surface:</strong> Only expose what your stylesheet actually uses.</p>
+      </li><li>
+        <p>
+          <strong>Documentation:</strong> Makes it clear which parts of the package your stylesheet depends on.</p>
+      </li></ul><p>
+      <strong>C# parallel:</strong> This is like choosing specific types to import with <code>using static</code> rather than importing an entire namespace, or using <code>[assembly: InternalsVisibleTo]</code> selectively.</p><hr><h2 id="xsl-override-overriding-package-components"><a class="anchor" href="#xsl-override-overriding-package-components">#</a>xsl:override — Overriding Package Components</h2><p>When a package declares components as <code>public</code> (overridable) or <code>abstract</code> (must be overridden), the using stylesheet can provide replacement implementations:</p><pre><code class="language-xml">&lt;xsl:use-package name="http://example.com/report-generator" package-version="1.0"&gt;
+  &lt;xsl:override&gt;
+    &lt;!-- Replace the package's header template with our own --&gt;
+    &lt;xsl:template name="report-header"&gt;
+      &lt;header&gt;
+        &lt;h1&gt;Custom Report — &lt;xsl:value-of select="$report-title"/&gt;&lt;/h1&gt;
+        &lt;p&gt;Generated: &lt;xsl:value-of select="current-dateTime()"/&gt;&lt;/p&gt;
+      &lt;/header&gt;
+    &lt;/xsl:template&gt;
+    &lt;!-- Replace a function --&gt;
+    &lt;xsl:function name="rpt:format-date" as="xs:string"&gt;
+      &lt;xsl:param name="date" as="xs:date"/&gt;
+      &lt;xsl:sequence select="format-date($date, '[D01]/[M01]/[Y0001]')"/&gt;
+    &lt;/xsl:function&gt;
+  &lt;/xsl:override&gt;
+&lt;/xsl:use-package&gt;</code></pre><h3 id="what-can-be-overridden"><a class="anchor" href="#what-can-be-overridden">#</a>What Can Be Overridden?</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Component Visibility</p>
+          </th>
+          <th>
+            <p>Can Be Overridden?</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>public</code></p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>abstract</code></p>
+          </td>
+          <td>
+            <p>Must be overridden</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>final</code></p>
+          </td>
+          <td>
+            <p>No — compile-time error if you try</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>private</code></p>
+          </td>
+          <td>
+            <p>No — not visible</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>hidden</code></p>
+          </td>
+          <td>
+            <p>No — not visible</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="abstract-components"><a class="anchor" href="#abstract-components">#</a>Abstract Components</h3><p>A package can declare abstract components that must be provided by the user:</p><pre><code class="language-xml">&lt;!-- In the package --&gt;
+&lt;xsl:package name="http://example.com/report-generator"
+             package-version="1.0.0" version="3.0"&gt;
+  &lt;!-- Abstract template — user MUST override this --&gt;
+  &lt;xsl:template name="report-header" visibility="abstract"/&gt;
+  &lt;!-- Abstract function — user MUST provide implementation --&gt;
+  &lt;xsl:function name="rpt:format-currency" as="xs:string" visibility="abstract"&gt;
+    &lt;xsl:param name="amount" as="xs:decimal"/&gt;
+  &lt;/xsl:function&gt;
+  &lt;!-- Concrete template that calls the abstract ones --&gt;
+  &lt;xsl:template name="generate-report" visibility="final"&gt;
+    &lt;html&gt;
+      &lt;body&gt;
+        &lt;xsl:call-template name="report-header"/&gt;
+        &lt;xsl:for-each select="//line-item"&gt;
+          &lt;p&gt;&lt;xsl:value-of select="rpt:format-currency(@amount)"/&gt;&lt;/p&gt;
+        &lt;/xsl:for-each&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:package&gt;</code></pre><p>
+      <strong>C# parallel:</strong> This is exactly like abstract methods in a base class:</p><pre><code class="language-csharp">public abstract class ReportGenerator
+{
+    protected abstract string FormatHeader();
+    protected abstract string FormatCurrency(decimal amount);
+    // Sealed method that calls the abstract ones
+    public sealed string GenerateReport(IEnumerable&lt;LineItem&gt; items)
+    {
+        var sb = new StringBuilder();
+        sb.Append(FormatHeader());
+        foreach (var item in items)
+            sb.AppendLine(FormatCurrency(item.Amount));
+        return sb.ToString();
+    }
+}</code></pre><hr><h2 id="the-visibility-system"><a class="anchor" href="#the-visibility-system">#</a>The Visibility System</h2><p>XSLT 3.0 defines five visibility levels for package components:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Visibility</p>
+          </th>
+          <th>
+            <p>Accessible Outside Package?</p>
+          </th>
+          <th>
+            <p>Can Be Overridden?</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>public</code></p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>Full access, can be customized</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>final</code></p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>Full access, cannot be changed</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>abstract</code></p>
+          </td>
+          <td>
+            <p>Yes (signature only)</p>
+          </td>
+          <td>
+            <p>Must be</p>
+          </td>
+          <td>
+            <p>No implementation — user must provide one</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>private</code></p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>Internal to the package</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>hidden</code></p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>Like private, but also hidden from <code>xsl:accept</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="choosing-the-right-visibility"><a class="anchor" href="#choosing-the-right-visibility">#</a>Choosing the Right Visibility</h3><ul><li>
+        <p>
+          <strong>
+            <code>public</code>
+          </strong> — Use for templates and functions that users might want to customize. This is the equivalent of a <code>virtual</code> method in C#.</p>
+      </li><li>
+        <p>
+          <strong>
+            <code>final</code>
+          </strong> — Use for components that form the package's core logic and must not be altered. This is the equivalent of a <code>sealed</code> method.</p>
+      </li><li>
+        <p>
+          <strong>
+            <code>abstract</code>
+          </strong> — Use for extension points where the package cannot provide a default implementation. This is the equivalent of an <code>abstract</code> method.</p>
+      </li><li>
+        <p>
+          <strong>
+            <code>private</code>
+          </strong> — Use for internal helpers that support the public API. This is the equivalent of <code>private</code> or <code>internal</code>.</p>
+      </li><li>
+        <p>
+          <strong>
+            <code>hidden</code>
+          </strong> — Like <code>private</code>, but even more restricted. Hidden components cannot be referenced by <code>xsl:accept</code> in the using stylesheet. Use this for implementation details that should be completely invisible.</p>
+      </li></ul><h3 id="default-visibility"><a class="anchor" href="#default-visibility">#</a>Default Visibility</h3><p>If no visibility is specified, the default depends on the component type:</p><ul><li>
+        <p>Templates (named and match): <code>private</code> by default</p>
+      </li><li>
+        <p>Functions: <code>private</code> by default</p>
+      </li><li>
+        <p>Variables and parameters: <code>private</code> by default</p>
+      </li><li>
+        <p>Modes: depends on <code>declared-modes</code> attribute</p>
+      </li></ul><p>To make a useful package, you must explicitly mark components as <code>public</code>, <code>final</code>, or <code>abstract</code>.</p><hr><h2 id="comparison-with-xsl-import-and-xsl-include"><a class="anchor" href="#comparison-with-xsl-import-and-xsl-include">#</a>Comparison with xsl:import and xsl:include</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Feature</p>
+          </th>
+          <th>
+            <p><code>xsl:import</code> / <code>xsl:include</code></p>
+          </th>
+          <th>
+            <p><code>xsl:use-package</code></p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong>Encapsulation</strong></p>
+          </td>
+          <td>
+            <p>None — everything is visible</p>
+          </td>
+          <td>
+            <p>Full visibility control</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Name collisions</strong></p>
+          </td>
+          <td>
+            <p>Resolved by import precedence</p>
+          </td>
+          <td>
+            <p>Avoided by private/hidden</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Overriding</strong></p>
+          </td>
+          <td>
+            <p>Import precedence (fragile)</p>
+          </td>
+          <td>
+            <p>Explicit <code>xsl:override</code> (clear)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Versioning</strong></p>
+          </td>
+          <td>
+            <p>None</p>
+          </td>
+          <td>
+            <p><code>package-version</code> attribute</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Circular dependencies</strong></p>
+          </td>
+          <td>
+            <p>Allowed with <code>xsl:include</code>, problematic with <code>xsl:import</code></p>
+          </td>
+          <td>
+            <p>Not allowed</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Compilation</strong></p>
+          </td>
+          <td>
+            <p>Each import is recompiled</p>
+          </td>
+          <td>
+            <p>Packages can be pre-compiled</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Best for</strong></p>
+          </td>
+          <td>
+            <p>Simple reuse within a project</p>
+          </td>
+          <td>
+            <p>Library distribution, team collaboration</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="migration-path"><a class="anchor" href="#migration-path">#</a>Migration Path</h3><p>You can migrate from <code>xsl:import</code> to packages incrementally:</p><pre><code class="language-xml">&lt;!-- Before: using xsl:import --&gt;
+&lt;xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+  &lt;xsl:import href="utils.xsl"/&gt;
+  &lt;xsl:import href="formatting.xsl"/&gt;
+  &lt;!-- ... --&gt;
+&lt;/xsl:stylesheet&gt;
+&lt;!-- After: using packages --&gt;
+&lt;xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+  &lt;xsl:use-package name="http://mycompany.com/xslt/utils" package-version="1.0"/&gt;
+  &lt;xsl:use-package name="http://mycompany.com/xslt/formatting" package-version="1.0"/&gt;
+  &lt;!-- ... --&gt;
+&lt;/xsl:stylesheet&gt;</code></pre><p>The imported stylesheets become packages by changing <code>xsl:stylesheet</code> to <code>xsl:package</code> and adding visibility declarations.</p><hr><h2 id="design-patterns"><a class="anchor" href="#design-patterns">#</a>Design Patterns</h2><h3 id="theme-package-base-override"><a class="anchor" href="#theme-package-base-override">#</a>Theme Package (Base + Override)</h3><p>A base package provides default rendering, and theme packages override the visual presentation:</p><pre><code class="language-xml">&lt;!-- Base package: report-base --&gt;
+&lt;xsl:package name="http://example.com/report-base"
+             package-version="1.0.0" version="3.0"&gt;
+  &lt;xsl:template name="page-header" visibility="public"&gt;
+    &lt;header&gt;&lt;h1&gt;Default Report&lt;/h1&gt;&lt;/header&gt;
+  &lt;/xsl:template&gt;
+  &lt;xsl:template name="page-footer" visibility="public"&gt;
+    &lt;footer&gt;&lt;p&gt;Generated by Report Engine&lt;/p&gt;&lt;/footer&gt;
+  &lt;/xsl:template&gt;
+  &lt;xsl:template name="render-table" visibility="final"&gt;
+    &lt;xsl:param name="data"/&gt;
+    &lt;xsl:call-template name="page-header"/&gt;
+    &lt;table&gt;
+      &lt;xsl:apply-templates select="$data"/&gt;
+    &lt;/table&gt;
+    &lt;xsl:call-template name="page-footer"/&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:package&gt;</code></pre><pre><code class="language-xml">&lt;!-- Theme stylesheet: corporate branding --&gt;
+&lt;xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+  &lt;xsl:use-package name="http://example.com/report-base" package-version="1.0"&gt;
+    &lt;xsl:override&gt;
+      &lt;xsl:template name="page-header"&gt;
+        &lt;header class="corporate"&gt;
+          &lt;img src="logo.png" alt="Company Logo"/&gt;
+          &lt;h1&gt;Corporate Report&lt;/h1&gt;
+        &lt;/header&gt;
+      &lt;/xsl:template&gt;
+      &lt;xsl:template name="page-footer"&gt;
+        &lt;footer class="corporate"&gt;
+          &lt;p&gt;Confidential — Internal Use Only&lt;/p&gt;
+          &lt;p&gt;Generated: &lt;xsl:value-of select="format-dateTime(current-dateTime(),
+                         '[D01] [MNn] [Y0001] at [H01]:[m01]')"/&gt;&lt;/p&gt;
+        &lt;/footer&gt;
+      &lt;/xsl:template&gt;
+    &lt;/xsl:override&gt;
+  &lt;/xsl:use-package&gt;
+&lt;/xsl:stylesheet&gt;</code></pre><h3 id="utility-package"><a class="anchor" href="#utility-package">#</a>Utility Package</h3><p>A collection of reusable functions with no templates:</p><pre><code class="language-xml">&lt;xsl:package name="http://example.com/string-utils"
+             package-version="1.0.0" version="3.0"
+             xmlns:str="http://example.com/string-utils"&gt;
+  &lt;xsl:expose component="function" names="*" visibility="final"/&gt;
+  &lt;xsl:function name="str:title-case" as="xs:string"&gt;
+    &lt;xsl:param name="input" as="xs:string"/&gt;
+    &lt;xsl:sequence select="string-join(
+      for $word in tokenize($input, '\s+')
+      return concat(upper-case(substring($word, 1, 1)),
+                    lower-case(substring($word, 2))),
+      ' ')"/&gt;
+  &lt;/xsl:function&gt;
+  &lt;xsl:function name="str:truncate" as="xs:string"&gt;
+    &lt;xsl:param name="input" as="xs:string"/&gt;
+    &lt;xsl:param name="max-length" as="xs:integer"/&gt;
+    &lt;xsl:sequence select="if (string-length($input) le $max-length)
+                          then $input
+                          else concat(substring($input, 1, $max-length - 3), '...')"/&gt;
+  &lt;/xsl:function&gt;
+  &lt;xsl:function name="str:slug" as="xs:string"&gt;
+    &lt;xsl:param name="input" as="xs:string"/&gt;
+    &lt;xsl:sequence select="lower-case(replace(normalize-space($input), '\s+', '-'))"/&gt;
+  &lt;/xsl:function&gt;
+&lt;/xsl:package&gt;</code></pre><p>Usage:</p><pre><code class="language-xml">&lt;xsl:stylesheet version="3.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:str="http://example.com/string-utils"&gt;
+  &lt;xsl:use-package name="http://example.com/string-utils" package-version="1.0"/&gt;
+  &lt;xsl:template match="article"&gt;
+    &lt;div id="{str:slug(title)}"&gt;
+      &lt;h2&gt;&lt;xsl:value-of select="str:title-case(title)"/&gt;&lt;/h2&gt;
+      &lt;p&gt;&lt;xsl:value-of select="str:truncate(description, 200)"/&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</code></pre><h3 id="component-library-with-abstract-extension-points"><a class="anchor" href="#component-library-with-abstract-extension-points">#</a>Component Library with Abstract Extension Points</h3><p>A package that requires the user to provide specific implementations:</p><pre><code class="language-xml">&lt;xsl:package name="http://example.com/email-template"
+             package-version="1.0.0" version="3.0"
+             xmlns:email="http://example.com/email-template"&gt;
+  &lt;!-- User must provide these --&gt;
+  &lt;xsl:variable name="email:company-name" as="xs:string" visibility="abstract"/&gt;
+  &lt;xsl:variable name="email:primary-color" as="xs:string" visibility="abstract"/&gt;
+  &lt;xsl:template name="email:custom-content" visibility="abstract"/&gt;
+  &lt;!-- Package provides the structure --&gt;
+  &lt;xsl:template name="email:render" visibility="final"&gt;
+    &lt;html&gt;
+      &lt;head&gt;
+        &lt;style&gt;
+          .header { background-color: &lt;xsl:value-of select="$email:primary-color"/&gt;; }
+        &lt;/style&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;div class="header"&gt;
+          &lt;h1&gt;&lt;xsl:value-of select="$email:company-name"/&gt;&lt;/h1&gt;
+        &lt;/div&gt;
+        &lt;div class="content"&gt;
+          &lt;xsl:call-template name="email:custom-content"/&gt;
+        &lt;/div&gt;
+        &lt;div class="footer"&gt;
+          &lt;p&gt;Sent by &lt;xsl:value-of select="$email:company-name"/&gt;&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:package&gt;</code></pre><pre><code class="language-xml">&lt;!-- User's stylesheet --&gt;
+&lt;xsl:stylesheet version="3.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:email="http://example.com/email-template"&gt;
+  &lt;xsl:use-package name="http://example.com/email-template" package-version="1.0"&gt;
+    &lt;xsl:override&gt;
+      &lt;xsl:variable name="email:company-name" select="'Acme Corp'" visibility="public"/&gt;
+      &lt;xsl:variable name="email:primary-color" select="'#2563eb'" visibility="public"/&gt;
+      &lt;xsl:template name="email:custom-content"&gt;
+        &lt;h2&gt;Your Order Confirmation&lt;/h2&gt;
+        &lt;p&gt;Thank you for your purchase.&lt;/p&gt;
+        &lt;xsl:apply-templates select="//order-item"/&gt;
+      &lt;/xsl:template&gt;
+    &lt;/xsl:override&gt;
+  &lt;/xsl:use-package&gt;
+  &lt;xsl:template match="/"&gt;
+    &lt;xsl:call-template name="email:render"/&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</code></pre><p>
+      <strong>C# parallel:</strong> This pattern mirrors dependency injection or the Template Method design pattern:</p><pre><code class="language-csharp">public abstract class EmailTemplate
+{
+    protected abstract string CompanyName { get; }
+    protected abstract string PrimaryColor { get; }
+    protected abstract string RenderContent();
+    public sealed string Render() =&gt;
+        $"""
+        &lt;html&gt;
+          &lt;body&gt;
+            &lt;div style="background:{PrimaryColor}"&gt;&lt;h1&gt;{CompanyName}&lt;/h1&gt;&lt;/div&gt;
+            &lt;div&gt;{RenderContent()}&lt;/div&gt;
+            &lt;div&gt;&lt;p&gt;Sent by {CompanyName}&lt;/p&gt;&lt;/div&gt;
+          &lt;/body&gt;
+        &lt;/html&gt;
+        """;
+}</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

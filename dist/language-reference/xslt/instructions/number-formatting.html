@@ -1,0 +1,742 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Number Formatting — PhoenixmlDb Documentation</title><meta name="description" content="xsl:number, xsl:decimal-format, xsl:character-map — numbering and format customization"><link rel="canonical" href="/language-reference/xslt/instructions/number-formatting.html"><meta property="og:title" content="Number Formatting"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/number-formatting.html"><meta property="og:description" content="xsl:number, xsl:decimal-format, xsl:character-map — numbering and format customization"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li class="active"><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="number-formatting"><a class="anchor" href="#number-formatting">#</a>Number Formatting</h1><p>XSLT provides three instructions for controlling how numbers and characters appear in the output: <code>xsl:number</code> for generating formatted counters and numbering schemes, <code>xsl:decimal-format</code> for customizing how <code>format-number()</code> renders decimal values, and <code>xsl:character-map</code> for post-serialization character substitutions.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
+        <p>
+          <a href="#xslnumber" title="">xsl:number</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xsldecimal-format" title="">xsl:decimal-format</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xslcharacter-map-and-xsloutput-character" title="">xsl:character-map and xsl:output-character</a>
+        </p>
+      </li></ul><hr><h2 id="xsl-number"><a class="anchor" href="#xsl-number">#</a>xsl:number</h2><p>
+      <code>xsl:number</code> generates a formatted number, most commonly used for numbering items in the output — chapter numbers, list item numbers, footnote markers, and outline numbering.</p><p>
+      <strong>C# parallel:</strong> There is no single C# equivalent. <code>xsl:number</code> combines counting logic (like LINQ's <code>IndexOf</code> or list position) with format strings (like <code>ToString("D3")</code> for zero-padding or custom Roman numeral formatters).</p><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><pre><code class="language-xml">&lt;!-- Number each product in document order --&gt;
+&lt;xsl:template match="product"&gt;
+  &lt;div&gt;
+    &lt;xsl:number/&gt;. &lt;xsl:value-of select="name"/&gt;
+  &lt;/div&gt;
+&lt;/xsl:template&gt;</code></pre><p>Output:</p><pre><code>1. Laptop
+2. Phone
+3. Tablet</code></pre><h3 id="how-xsl-number-counts"><a class="anchor" href="#how-xsl-number-counts">#</a>How xsl:number Counts</h3><p>
+      <code>xsl:number</code> does not simply use <code>position()</code>. It counts nodes in the source document based on the <code>level</code>, <code>count</code>, and <code>from</code> attributes. This distinction matters: <code>position()</code> reflects processing order (which can be affected by sorting), while <code>xsl:number</code> reflects document structure.</p><h3 id="the-level-attribute"><a class="anchor" href="#the-level-attribute">#</a>The level Attribute</h3><p>The <code>level</code> attribute controls the counting scope:</p><h4 id="level-single-default"><a class="anchor" href="#level-single-default">#</a>level="single" (Default)</h4><p>Counts siblings of the same type. This is the most common mode.</p><pre><code class="language-xml">&lt;!-- Number each item within its parent --&gt;
+&lt;xsl:template match="item"&gt;
+  &lt;xsl:number level="single" count="item"/&gt;
+  &lt;xsl:text&gt;. &lt;/xsl:text&gt;
+  &lt;xsl:value-of select="."/&gt;
+&lt;/xsl:template&gt;</code></pre><p>Given:</p><pre><code class="language-xml">&lt;list&gt;
+  &lt;item&gt;First&lt;/item&gt;
+  &lt;item&gt;Second&lt;/item&gt;
+  &lt;item&gt;Third&lt;/item&gt;
+&lt;/list&gt;</code></pre><p>Output: <code>1. First</code>, <code>2. Second</code>, <code>3. Third</code></p><h4 id="level-multiple"><a class="anchor" href="#level-multiple">#</a>level="multiple"</h4><p>Counts at multiple levels of the hierarchy, producing composite numbers like <code>1.1</code>, <code>1.2</code>, <code>2.1</code>. This is the key to outline numbering.</p><pre><code class="language-xml">&lt;xsl:template match="section/title"&gt;
+  &lt;xsl:number level="multiple" count="section" format="1.1"/&gt;
+  &lt;xsl:text&gt; &lt;/xsl:text&gt;
+  &lt;xsl:value-of select="."/&gt;
+&lt;/xsl:template&gt;</code></pre><p>Given:</p><pre><code class="language-xml">&lt;document&gt;
+  &lt;section&gt;
+    &lt;title&gt;Introduction&lt;/title&gt;
+    &lt;section&gt;
+      &lt;title&gt;Background&lt;/title&gt;
+    &lt;/section&gt;
+    &lt;section&gt;
+      &lt;title&gt;Scope&lt;/title&gt;
+    &lt;/section&gt;
+  &lt;/section&gt;
+  &lt;section&gt;
+    &lt;title&gt;Methods&lt;/title&gt;
+    &lt;section&gt;
+      &lt;title&gt;Data Collection&lt;/title&gt;
+    &lt;/section&gt;
+  &lt;/section&gt;
+&lt;/document&gt;</code></pre><p>Output:</p><pre><code>1 Introduction
+1.1 Background
+1.2 Scope
+2 Methods
+2.1 Data Collection</code></pre><h4 id="level-any"><a class="anchor" href="#level-any">#</a>level="any"</h4><p>Counts all matching nodes in the document, regardless of hierarchy. Useful for footnotes or sequential numbering across sections.</p><pre><code class="language-xml">&lt;xsl:template match="footnote"&gt;
+  &lt;sup&gt;
+    &lt;xsl:number level="any" count="footnote" format="1"/&gt;
+  &lt;/sup&gt;
+&lt;/xsl:template&gt;</code></pre><p>No matter how deeply nested footnotes are in sections, they get sequential numbers: 1, 2, 3, 4, ...</p><h3 id="the-count-and-from-attributes"><a class="anchor" href="#the-count-and-from-attributes">#</a>The count and from Attributes</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Attribute</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+          <th>
+            <p>Default</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>count</code></p>
+          </td>
+          <td>
+            <p>Pattern matching nodes to count</p>
+          </td>
+          <td>
+            <p>Current node's type</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>from</code></p>
+          </td>
+          <td>
+            <p>Pattern marking where counting restarts</p>
+          </td>
+          <td>
+            <p>Document root</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><pre><code class="language-xml">&lt;!-- Count items, restarting at each section --&gt;
+&lt;xsl:template match="item"&gt;
+  &lt;xsl:number level="any" count="item" from="section"/&gt;
+  &lt;xsl:text&gt;. &lt;/xsl:text&gt;
+  &lt;xsl:value-of select="."/&gt;
+&lt;/xsl:template&gt;</code></pre><p>In this example, each <code>section</code> resets the count. Items in the first section are numbered 1, 2, 3; items in the second section start over at 1.</p><h3 id="the-format-attribute"><a class="anchor" href="#the-format-attribute">#</a>The format Attribute</h3><p>The <code>format</code> attribute controls the output style. The first character (or characters) of the format string determines the numbering system:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Format</p>
+          </th>
+          <th>
+            <p>Output</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>"1"</code></p>
+          </td>
+          <td>
+            <p>1, 2, 3, ...</p>
+          </td>
+          <td>
+            <p>Arabic numerals (default)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>"01"</code></p>
+          </td>
+          <td>
+            <p>01, 02, ..., 10, 11, ...</p>
+          </td>
+          <td>
+            <p>Zero-padded arabic</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>"001"</code></p>
+          </td>
+          <td>
+            <p>001, 002, ..., 010, ...</p>
+          </td>
+          <td>
+            <p>Three-digit zero-padded</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>"a"</code></p>
+          </td>
+          <td>
+            <p>a, b, c, ..., z, aa, ab, ...</p>
+          </td>
+          <td>
+            <p>Lowercase alphabetic</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>"A"</code></p>
+          </td>
+          <td>
+            <p>A, B, C, ..., Z, AA, AB, ...</p>
+          </td>
+          <td>
+            <p>Uppercase alphabetic</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>"i"</code></p>
+          </td>
+          <td>
+            <p>i, ii, iii, iv, v, ...</p>
+          </td>
+          <td>
+            <p>Lowercase Roman numerals</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>"I"</code></p>
+          </td>
+          <td>
+            <p>I, II, III, IV, V, ...</p>
+          </td>
+          <td>
+            <p>Uppercase Roman numerals</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>"w"</code></p>
+          </td>
+          <td>
+            <p>one, two, three, ...</p>
+          </td>
+          <td>
+            <p>Words (lowercase)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>"W"</code></p>
+          </td>
+          <td>
+            <p>ONE, TWO, THREE, ...</p>
+          </td>
+          <td>
+            <p>Words (uppercase)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>"Ww"</code></p>
+          </td>
+          <td>
+            <p>One, Two, Three, ...</p>
+          </td>
+          <td>
+            <p>Words (title case)</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h4 id="multi-level-format-strings"><a class="anchor" href="#multi-level-format-strings">#</a>Multi-Level Format Strings</h4><p>For <code>level="multiple"</code>, the format string includes separators:</p><pre><code class="language-xml">&lt;!-- Chapter.Section numbering --&gt;
+&lt;xsl:number level="multiple" count="chapter|section" format="1.1"/&gt;
+&lt;!-- Output: 1.1, 1.2, 2.1, etc. --&gt;
+&lt;!-- Chapter.Section.Subsection with different styles --&gt;
+&lt;xsl:number level="multiple" count="chapter|section|subsection" format="I.A.1"/&gt;
+&lt;!-- Output: I.A.1, I.A.2, I.B.1, II.A.1, etc. --&gt;
+&lt;!-- Legal document style --&gt;
+&lt;xsl:number level="multiple" count="part|section|clause" format="1.1.a"/&gt;
+&lt;!-- Output: 1.1.a, 1.1.b, 1.2.a, 2.1.a, etc. --&gt;
+&lt;!-- Outline style with parentheses --&gt;
+&lt;xsl:number level="multiple" count="section" format="I.A.1.a)"/&gt;
+&lt;!-- Output: I.A.1.a), etc. --&gt;</code></pre><h3 id="the-ordinal-attribute"><a class="anchor" href="#the-ordinal-attribute">#</a>The ordinal Attribute</h3><p>The <code>ordinal</code> attribute produces ordinal suffixes (1st, 2nd, 3rd). Support varies by processor and language:</p><pre><code class="language-xml">&lt;xsl:number value="position()" format="1" ordinal="yes"/&gt;
+&lt;!-- Output: 1st, 2nd, 3rd, 4th, ... --&gt;</code></pre><h3 id="the-grouping-separator-and-grouping-size-attributes"><a class="anchor" href="#the-grouping-separator-and-grouping-size-attributes">#</a>The grouping-separator and grouping-size Attributes</h3><p>For large numbers, add thousands separators:</p><pre><code class="language-xml">&lt;xsl:number value="$total-count" grouping-separator="," grouping-size="3"/&gt;
+&lt;!-- Output: 1,234,567 --&gt;</code></pre><h3 id="using-value-instead-of-counting"><a class="anchor" href="#using-value-instead-of-counting">#</a>Using value Instead of Counting</h3><p>Instead of counting nodes, you can format a specific number:</p><pre><code class="language-xml">&lt;!-- Format a calculated value --&gt;
+&lt;xsl:number value="count(//error)" format="1"/&gt;
+&lt;!-- Format a number as Roman numerals --&gt;
+&lt;xsl:number value="$chapter-number" format="I"/&gt;
+&lt;!-- Format as words --&gt;
+&lt;xsl:number value="$position" format="Ww"/&gt;
+&lt;!-- Output: "One", "Two", "Three", ... --&gt;</code></pre><h3 id="complete-example-document-with-multi-level-numbering"><a class="anchor" href="#complete-example-document-with-multi-level-numbering">#</a>Complete Example: Document with Multi-Level Numbering</h3><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+  &lt;xsl:output method="html" indent="yes"/&gt;
+  &lt;xsl:template match="document"&gt;
+    &lt;html&gt;
+      &lt;body&gt;
+        &lt;!-- Table of Contents --&gt;
+        &lt;nav&gt;
+          &lt;h2&gt;Table of Contents&lt;/h2&gt;
+          &lt;xsl:apply-templates select=".//section" mode="toc"/&gt;
+        &lt;/nav&gt;
+        &lt;!-- Content --&gt;
+        &lt;xsl:apply-templates/&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  &lt;/xsl:template&gt;
+  &lt;!-- TOC entry with multi-level numbering --&gt;
+  &lt;xsl:template match="section" mode="toc"&gt;
+    &lt;p style="margin-left: {count(ancestor::section) * 20}px"&gt;
+      &lt;a href="#section-{generate-id()}"&gt;
+        &lt;xsl:number level="multiple" count="section" format="1.1"/&gt;
+        &lt;xsl:text&gt; &lt;/xsl:text&gt;
+        &lt;xsl:value-of select="title"/&gt;
+      &lt;/a&gt;
+    &lt;/p&gt;
+  &lt;/xsl:template&gt;
+  &lt;!-- Section content with numbered heading --&gt;
+  &lt;xsl:template match="section"&gt;
+    &lt;xsl:variable name="depth" select="count(ancestor::section) + 1"/&gt;
+    &lt;div class="section" id="section-{generate-id()}"&gt;
+      &lt;xsl:element name="h{min(($depth + 1, 6))}"&gt;
+        &lt;xsl:number level="multiple" count="section" format="1.1"/&gt;
+        &lt;xsl:text&gt; &lt;/xsl:text&gt;
+        &lt;xsl:value-of select="title"/&gt;
+      &lt;/xsl:element&gt;
+      &lt;xsl:apply-templates select="* except title"/&gt;
+    &lt;/div&gt;
+  &lt;/xsl:template&gt;
+  &lt;xsl:template match="para"&gt;
+    &lt;p&gt;&lt;xsl:apply-templates/&gt;&lt;/p&gt;
+  &lt;/xsl:template&gt;
+  &lt;!-- Footnotes numbered across the entire document --&gt;
+  &lt;xsl:template match="footnote"&gt;
+    &lt;xsl:variable name="num"&gt;
+      &lt;xsl:number level="any" count="footnote"/&gt;
+    &lt;/xsl:variable&gt;
+    &lt;sup&gt;&lt;a href="#fn-{$num}"&gt;[&lt;xsl:value-of select="$num"/&gt;]&lt;/a&gt;&lt;/sup&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</code></pre><h3 id="use-cases-for-xsl-number"><a class="anchor" href="#use-cases-for-xsl-number">#</a>Use Cases for xsl:number</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Use Case</p>
+          </th>
+          <th>
+            <p>Configuration</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Simple list numbering</p>
+          </td>
+          <td>
+            <p><code>&lt;xsl:number/&gt;</code> (defaults)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Chapter numbering</p>
+          </td>
+          <td>
+            <p><code>level="single" count="chapter" format="1"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Section outline (1.1, 1.2)</p>
+          </td>
+          <td>
+            <p><code>level="multiple" count="chapter\|section" format="1.1"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Footnote numbering</p>
+          </td>
+          <td>
+            <p><code>level="any" count="footnote"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Appendix letters</p>
+          </td>
+          <td>
+            <p><code>level="single" count="appendix" format="A"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Roman numeral preface pages</p>
+          </td>
+          <td>
+            <p><code>level="single" count="preface-page" format="i"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Zero-padded item codes</p>
+          </td>
+          <td>
+            <p><code>value="@id" format="001"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Numbered within each chapter</p>
+          </td>
+          <td>
+            <p><code>level="any" count="figure" from="chapter"</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><hr><h2 id="xsl-decimal-format"><a class="anchor" href="#xsl-decimal-format">#</a>xsl:decimal-format</h2><p>
+      <code>xsl:decimal-format</code> declares a named (or default) decimal format that controls how the <code>format-number()</code> function renders numeric values. This is a top-level declaration.</p><p>
+      <strong>C# parallel:</strong> <code>CultureInfo.NumberFormat</code> or custom <code>NumberFormatInfo</code>:</p><pre><code class="language-csharp">var nfi = new NumberFormatInfo
+{
+    NumberDecimalSeparator = ",",
+    NumberGroupSeparator = ".",
+    CurrencySymbol = "EUR"
+};
+var formatted = amount.ToString("#,##0.00", nfi);</code></pre><h3 id="default-format"><a class="anchor" href="#default-format">#</a>Default Format</h3><p>Without any <code>xsl:decimal-format</code> declaration, <code>format-number()</code> uses US/English conventions:</p><pre><code class="language-xml">&lt;xsl:value-of select="format-number(1234567.89, '#,##0.00')"/&gt;
+&lt;!-- Output: 1,234,567.89 --&gt;</code></pre><h3 id="declaring-a-named-format"><a class="anchor" href="#declaring-a-named-format">#</a>Declaring a Named Format</h3><pre><code class="language-xml">&lt;xsl:decimal-format name="european"
+                    decimal-separator=","
+                    grouping-separator="."/&gt;
+&lt;xsl:decimal-format name="swiss"
+                    decimal-separator="."
+                    grouping-separator="'"/&gt;</code></pre><p>Using named formats:</p><pre><code class="language-xml">&lt;!-- US format (default) --&gt;
+&lt;xsl:value-of select="format-number(1234567.89, '#,##0.00')"/&gt;
+&lt;!-- Output: 1,234,567.89 --&gt;
+&lt;!-- European format --&gt;
+&lt;xsl:value-of select="format-number(1234567.89, '#.##0,00', 'european')"/&gt;
+&lt;!-- Output: 1.234.567,89 --&gt;
+&lt;!-- Swiss format --&gt;
+&lt;xsl:value-of select="format-number(1234567.89, '#''##0.00', 'swiss')"/&gt;
+&lt;!-- Output: 1'234'567.89 --&gt;</code></pre><h3 id="all-properties"><a class="anchor" href="#all-properties">#</a>All Properties</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Property</p>
+          </th>
+          <th>
+            <p>Default</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>decimal-separator</code></p>
+          </td>
+          <td>
+            <p><code>.</code></p>
+          </td>
+          <td>
+            <p>Character separating integer from fractional part</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>grouping-separator</code></p>
+          </td>
+          <td>
+            <p><code>,</code></p>
+          </td>
+          <td>
+            <p>Character separating digit groups (thousands)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>infinity</code></p>
+          </td>
+          <td>
+            <p><code>Infinity</code></p>
+          </td>
+          <td>
+            <p>String representation of positive infinity</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>minus-sign</code></p>
+          </td>
+          <td>
+            <p><code>-</code></p>
+          </td>
+          <td>
+            <p>Character for negative numbers</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>NaN</code></p>
+          </td>
+          <td>
+            <p><code>NaN</code></p>
+          </td>
+          <td>
+            <p>String representation of Not-a-Number</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>percent</code></p>
+          </td>
+          <td>
+            <p><code>%</code></p>
+          </td>
+          <td>
+            <p>Percent sign character</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>per-mille</code></p>
+          </td>
+          <td>
+            <p><code>\u2030</code></p>
+          </td>
+          <td>
+            <p>Per-mille sign character</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>zero-digit</code></p>
+          </td>
+          <td>
+            <p><code>0</code></p>
+          </td>
+          <td>
+            <p>Character representing a mandatory digit</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>digit</code></p>
+          </td>
+          <td>
+            <p><code>#</code></p>
+          </td>
+          <td>
+            <p>Character representing an optional digit</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>pattern-separator</code></p>
+          </td>
+          <td>
+            <p><code>;</code></p>
+          </td>
+          <td>
+            <p>Separates positive and negative sub-patterns</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>exponent-separator</code></p>
+          </td>
+          <td>
+            <p><code>e</code></p>
+          </td>
+          <td>
+            <p>Character separating mantissa from exponent</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="format-pattern-syntax"><a class="anchor" href="#format-pattern-syntax">#</a>Format Pattern Syntax</h3><p>The <code>format-number()</code> pattern uses these symbols:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Symbol</p>
+          </th>
+          <th>
+            <p>Meaning</p>
+          </th>
+          <th>
+            <p>Example</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>0</code></p>
+          </td>
+          <td>
+            <p>Mandatory digit (shows zero if absent)</p>
+          </td>
+          <td>
+            <p><code>format-number(5, '000')</code> = <code>005</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>#</code></p>
+          </td>
+          <td>
+            <p>Optional digit (suppressed if zero)</p>
+          </td>
+          <td>
+            <p><code>format-number(5, '###')</code> = <code>5</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>.</code></p>
+          </td>
+          <td>
+            <p>Decimal point</p>
+          </td>
+          <td>
+            <p><code>format-number(3.14, '#.00')</code> = <code>3.14</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>,</code></p>
+          </td>
+          <td>
+            <p>Grouping separator</p>
+          </td>
+          <td>
+            <p><code>format-number(1000, '#,##0')</code> = <code>1,000</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>%</code></p>
+          </td>
+          <td>
+            <p>Multiply by 100 and show percent</p>
+          </td>
+          <td>
+            <p><code>format-number(0.15, '#0%')</code> = <code>15%</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>E</code></p>
+          </td>
+          <td>
+            <p>Scientific notation</p>
+          </td>
+          <td>
+            <p><code>format-number(1500, '0.##E0')</code> = <code>1.5E3</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="positive-and-negative-patterns"><a class="anchor" href="#positive-and-negative-patterns">#</a>Positive and Negative Patterns</h3><p>Use the pattern separator (<code>;</code>) to define separate formats for positive and negative numbers:</p><pre><code class="language-xml">&lt;xsl:value-of select="format-number(-42, '#,##0;(#,##0)')"/&gt;
+&lt;!-- Output: (42) --&gt;
+&lt;xsl:value-of select="format-number(42, '#,##0;(#,##0)')"/&gt;
+&lt;!-- Output: 42 --&gt;
+&lt;xsl:value-of select="format-number(-1500, '+#,##0;-#,##0')"/&gt;
+&lt;!-- Output: -1,500 --&gt;
+&lt;xsl:value-of select="format-number(1500, '+#,##0;-#,##0')"/&gt;
+&lt;!-- Output: +1,500 --&gt;</code></pre><h3 id="real-world-example-multi-locale-financial-report"><a class="anchor" href="#real-world-example-multi-locale-financial-report">#</a>Real-World Example: Multi-Locale Financial Report</h3><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+  &lt;xsl:decimal-format name="us"
+                      decimal-separator="."
+                      grouping-separator=","/&gt;
+  &lt;xsl:decimal-format name="de"
+                      decimal-separator=","
+                      grouping-separator="."/&gt;
+  &lt;xsl:decimal-format name="fr"
+                      decimal-separator=","
+                      grouping-separator=" "/&gt;
+  &lt;xsl:param name="locale" select="'us'"/&gt;
+  &lt;xsl:template match="financial-report"&gt;
+    &lt;table&gt;
+      &lt;tr&gt;
+        &lt;th&gt;Item&lt;/th&gt;
+        &lt;th&gt;Amount&lt;/th&gt;
+      &lt;/tr&gt;
+      &lt;xsl:for-each select="line-item"&gt;
+        &lt;tr&gt;
+          &lt;td&gt;&lt;xsl:value-of select="@name"/&gt;&lt;/td&gt;
+          &lt;td&gt;
+            &lt;xsl:choose&gt;
+              &lt;xsl:when test="$locale = 'us'"&gt;
+                $&lt;xsl:value-of select="format-number(@amount, '#,##0.00', 'us')"/&gt;
+              &lt;/xsl:when&gt;
+              &lt;xsl:when test="$locale = 'de'"&gt;
+                &lt;xsl:value-of select="format-number(@amount, '#.##0,00', 'de')"/&gt; EUR
+              &lt;/xsl:when&gt;
+              &lt;xsl:when test="$locale = 'fr'"&gt;
+                &lt;xsl:value-of select="format-number(@amount, '# ##0,00', 'fr')"/&gt; EUR
+              &lt;/xsl:when&gt;
+            &lt;/xsl:choose&gt;
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/xsl:for-each&gt;
+    &lt;/table&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</code></pre><p>Output for <code>$locale = 'de'</code> with amount 1234567.89:</p><pre><code>1.234.567,89 EUR</code></pre><hr><h2 id="xsl-character-map-and-xsl-output-character"><a class="anchor" href="#xsl-character-map-and-xsl-output-character">#</a>xsl:character-map and xsl:output-character</h2><p>
+      <code>xsl:character-map</code> defines a mapping from single characters to replacement strings that is applied during serialization. Unlike most XSLT processing (which operates on the data model), character maps operate on the serialized output bytes.</p><p>
+      <strong>C# parallel:</strong> <code>string.Replace()</code> applied to the final output, or custom <code>TextWriter</code> that substitutes characters:</p><pre><code class="language-csharp">// Character substitution during output
+output = output
+    .Replace("\u00A0", "&amp;nbsp;")
+    .Replace("\u2018", "&amp;lsquo;")
+    .Replace("\u2019", "&amp;rsquo;");</code></pre><h3 id="why-character-maps"><a class="anchor" href="#why-character-maps">#</a>Why Character Maps?</h3><p>The XML serializer normally escapes certain characters:</p><ul><li>
+        <p>
+          <code>&lt;</code> becomes <code>&amp;lt;</code></p>
+      </li><li>
+        <p>
+          <code>&gt;</code> becomes <code>&amp;gt;</code></p>
+      </li><li>
+        <p>
+          <code>&amp;</code> becomes <code>&amp;amp;</code></p>
+      </li></ul><p>Sometimes you need to output characters that would otherwise be escaped, or you need to replace characters with multi-character strings. Character maps let you do this without resorting to <code>disable-output-escaping</code>.</p><h3 id="declaring-a-character-map"><a class="anchor" href="#declaring-a-character-map">#</a>Declaring a Character Map</h3><pre><code class="language-xml">&lt;xsl:character-map name="html-entities"&gt;
+  &lt;xsl:output-character character="&amp;#x00A0;" string="&amp;amp;nbsp;"/&gt;
+  &lt;xsl:output-character character="&amp;#x00A9;" string="&amp;amp;copy;"/&gt;
+  &lt;xsl:output-character character="&amp;#x00AE;" string="&amp;amp;reg;"/&gt;
+  &lt;xsl:output-character character="&amp;#x2122;" string="&amp;amp;trade;"/&gt;
+&lt;/xsl:character-map&gt;</code></pre><h3 id="activating-a-character-map"><a class="anchor" href="#activating-a-character-map">#</a>Activating a Character Map</h3><p>Reference the character map from <code>xsl:output</code>:</p><pre><code class="language-xml">&lt;xsl:output method="html" use-character-maps="html-entities"/&gt;</code></pre><p>Now, whenever the serializer encounters the non-breaking space character (U+00A0) in the output, it writes the literal string <code>&amp;nbsp;</code> instead.</p><h3 id="use-case-smart-quote-replacement"><a class="anchor" href="#use-case-smart-quote-replacement">#</a>Use Case: Smart Quote Replacement</h3><p>Replace Unicode smart quotes with HTML entities for compatibility:</p><pre><code class="language-xml">&lt;xsl:character-map name="smart-quotes"&gt;
+  &lt;xsl:output-character character="&amp;#x2018;" string="&amp;amp;lsquo;"/&gt;  &lt;!-- left single --&gt;
+  &lt;xsl:output-character character="&amp;#x2019;" string="&amp;amp;rsquo;"/&gt;  &lt;!-- right single --&gt;
+  &lt;xsl:output-character character="&amp;#x201C;" string="&amp;amp;ldquo;"/&gt;  &lt;!-- left double --&gt;
+  &lt;xsl:output-character character="&amp;#x201D;" string="&amp;amp;rdquo;"/&gt;  &lt;!-- right double --&gt;
+  &lt;xsl:output-character character="&amp;#x2014;" string="&amp;amp;mdash;"/&gt;  &lt;!-- em dash --&gt;
+  &lt;xsl:output-character character="&amp;#x2013;" string="&amp;amp;ndash;"/&gt;  &lt;!-- en dash --&gt;
+&lt;/xsl:character-map&gt;
+&lt;xsl:output method="html" use-character-maps="smart-quotes"/&gt;</code></pre><h3 id="use-case-outputting-raw-markup-characters"><a class="anchor" href="#use-case-outputting-raw-markup-characters">#</a>Use Case: Outputting Raw Markup Characters</h3><p>Sometimes you need to output characters that the XML serializer would escape. Use a placeholder character mapped to the raw string:</p><pre><code class="language-xml">&lt;xsl:character-map name="raw-markup"&gt;
+  &lt;!-- Map a private-use character to a literal &lt; --&gt;
+  &lt;xsl:output-character character="&amp;#xE001;" string="&amp;lt;"/&gt;
+  &lt;xsl:output-character character="&amp;#xE002;" string="&amp;gt;"/&gt;
+&lt;/xsl:character-map&gt;
+&lt;xsl:output method="xml" use-character-maps="raw-markup"/&gt;</code></pre><p>Then in your templates, use the placeholder characters:</p><pre><code class="language-xml">&lt;xsl:template match="code-sample"&gt;
+  &lt;!-- These private-use characters will become &lt; and &gt; in the output --&gt;
+  &lt;xsl:value-of select="translate(., '&amp;lt;&amp;gt;', '&amp;#xE001;&amp;#xE002;')"/&gt;
+&lt;/xsl:template&gt;</code></pre><p>This approach is cleaner than <code>disable-output-escaping</code> because it works with any output method and does not break the XSLT data model.</p><h3 id="composing-character-maps"><a class="anchor" href="#composing-character-maps">#</a>Composing Character Maps</h3><p>A character map can reference other character maps with <code>use-character-maps</code>:</p><pre><code class="language-xml">&lt;xsl:character-map name="html-entities"&gt;
+  &lt;xsl:output-character character="&amp;#x00A0;" string="&amp;amp;nbsp;"/&gt;
+  &lt;xsl:output-character character="&amp;#x00A9;" string="&amp;amp;copy;"/&gt;
+&lt;/xsl:character-map&gt;
+&lt;xsl:character-map name="smart-quotes"&gt;
+  &lt;xsl:output-character character="&amp;#x2018;" string="&amp;amp;lsquo;"/&gt;
+  &lt;xsl:output-character character="&amp;#x2019;" string="&amp;amp;rsquo;"/&gt;
+&lt;/xsl:character-map&gt;
+&lt;!-- Combined map includes both --&gt;
+&lt;xsl:character-map name="all-substitutions"
+                   use-character-maps="html-entities smart-quotes"&gt;
+  &lt;!-- Additional mappings specific to this map --&gt;
+  &lt;xsl:output-character character="&amp;#x2122;" string="&amp;amp;trade;"/&gt;
+&lt;/xsl:character-map&gt;
+&lt;xsl:output method="html" use-character-maps="all-substitutions"/&gt;</code></pre><h3 id="complete-example-html-output-with-entity-preservation"><a class="anchor" href="#complete-example-html-output-with-entity-preservation">#</a>Complete Example: HTML Output with Entity Preservation</h3><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+  &lt;xsl:character-map name="html-compat"&gt;
+    &lt;!-- Non-breaking space --&gt;
+    &lt;xsl:output-character character="&amp;#x00A0;" string="&amp;amp;nbsp;"/&gt;
+    &lt;!-- Typography --&gt;
+    &lt;xsl:output-character character="&amp;#x2018;" string="&amp;amp;lsquo;"/&gt;
+    &lt;xsl:output-character character="&amp;#x2019;" string="&amp;amp;rsquo;"/&gt;
+    &lt;xsl:output-character character="&amp;#x201C;" string="&amp;amp;ldquo;"/&gt;
+    &lt;xsl:output-character character="&amp;#x201D;" string="&amp;amp;rdquo;"/&gt;
+    &lt;xsl:output-character character="&amp;#x2014;" string="&amp;amp;mdash;"/&gt;
+    &lt;!-- Symbols --&gt;
+    &lt;xsl:output-character character="&amp;#x00A9;" string="&amp;amp;copy;"/&gt;
+    &lt;xsl:output-character character="&amp;#x00AE;" string="&amp;amp;reg;"/&gt;
+  &lt;/xsl:character-map&gt;
+  &lt;xsl:output method="html" indent="yes" use-character-maps="html-compat"/&gt;
+  &lt;xsl:template match="article"&gt;
+    &lt;html&gt;
+      &lt;head&gt;&lt;title&gt;&lt;xsl:value-of select="title"/&gt;&lt;/title&gt;&lt;/head&gt;
+      &lt;body&gt;
+        &lt;h1&gt;&lt;xsl:value-of select="title"/&gt;&lt;/h1&gt;
+        &lt;!-- Content with smart quotes and special characters
+             will be serialized using HTML entities --&gt;
+        &lt;xsl:apply-templates select="body/*"/&gt;
+        &lt;footer&gt;
+          &lt;p&gt;&amp;#x00A9; 2025 &amp;#x2014; All rights reserved.&lt;/p&gt;
+          &lt;!-- Outputs: &amp;copy; 2025 &amp;mdash; All rights reserved. --&gt;
+        &lt;/footer&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  &lt;/xsl:template&gt;
+  &lt;xsl:template match="p"&gt;
+    &lt;p&gt;&lt;xsl:apply-templates/&gt;&lt;/p&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

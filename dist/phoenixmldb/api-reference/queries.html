@@ -1,0 +1,262 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Queries API — PhoenixmlDb Documentation</title><meta name="description" content="XQuery execution, parameters, results, explain plans, and prepared queries"><link rel="canonical" href="/phoenixmldb/api-reference/queries.html"><meta property="og:title" content="Queries API"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/api-reference/queries.html"><meta property="og:description" content="XQuery execution, parameters, results, explain plans, and prepared queries"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li class="active"><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="query-api"><a class="anchor" href="#query-api">#</a>Query API</h1><p>The Query API provides methods for executing XQuery queries and processing results.</p><h2 id="basic-queries"><a class="anchor" href="#basic-queries">#</a>Basic Queries</h2><h3 id="execute-query"><a class="anchor" href="#execute-query">#</a>Execute Query</h3><pre><code class="language-csharp">// Simple query
+var results = db.Query("collection('products')//product/name/text()");
+foreach (var name in results)
+{
+    Console.WriteLine(name);
+}</code></pre><h3 id="query-single-value"><a class="anchor" href="#query-single-value">#</a>Query Single Value</h3><pre><code class="language-csharp">// Get single result
+int count = db.QuerySingle&lt;int&gt;("count(collection('products')//product)");
+decimal total = db.QuerySingle&lt;decimal&gt;("sum(collection('orders')//order/total)");
+string name = db.QuerySingle&lt;string&gt;(
+    "collection('products')//product[@id='123']/name/text()");</code></pre><h3 id="query-with-default"><a class="anchor" href="#query-with-default">#</a>Query with Default</h3><pre><code class="language-csharp">// Returns default(T) if no results
+string name = db.QuerySingleOrDefault&lt;string&gt;(
+    "collection('products')//product[@id='999']/name/text()");
+// Returns null if not found
+int count = db.QuerySingleOrDefault&lt;int&gt;("count(//nonexistent)");
+// Returns 0</code></pre><h2 id="parameterized-queries"><a class="anchor" href="#parameterized-queries">#</a>Parameterized Queries</h2><h3 id="basic-parameters"><a class="anchor" href="#basic-parameters">#</a>Basic Parameters</h3><pre><code class="language-csharp">var results = db.Query("""
+    for $p in collection('products')//product
+    where $p/price &lt; $maxPrice
+    return $p/name/text()
+    """,
+    new QueryParameters
+    {
+        ["maxPrice"] = 100.0
+    });</code></pre><h3 id="multiple-parameters"><a class="anchor" href="#multiple-parameters">#</a>Multiple Parameters</h3><pre><code class="language-csharp">var results = db.Query("""
+    for $p in collection('products')//product
+    where $p/category = $category
+      and $p/price &gt;= $minPrice
+      and $p/price &lt;= $maxPrice
+    order by $p/name
+    return $p
+    """,
+    new QueryParameters
+    {
+        ["category"] = "Electronics",
+        ["minPrice"] = 50.0,
+        ["maxPrice"] = 500.0
+    });</code></pre><h3 id="parameter-types"><a class="anchor" href="#parameter-types">#</a>Parameter Types</h3><pre><code class="language-csharp">var parameters = new QueryParameters
+{
+    ["stringParam"] = "text",
+    ["intParam"] = 42,
+    ["decimalParam"] = 3.14m,
+    ["boolParam"] = true,
+    ["dateParam"] = DateTime.Now,
+    ["listParam"] = new[] { "a", "b", "c" }
+};</code></pre><h2 id="query-results"><a class="anchor" href="#query-results">#</a>Query Results</h2><h3 id="iqueryresult"><a class="anchor" href="#iqueryresult">#</a>IQueryResult</h3><pre><code class="language-csharp">IQueryResult results = db.Query(xquery);
+// Properties
+int count = results.Count;
+bool isEmpty = results.IsEmpty;
+// Iteration
+foreach (string item in results)
+{
+    Console.WriteLine(item);
+}
+// Access methods
+string first = results.First();
+string firstOrDefault = results.FirstOrDefault();
+// Typed conversion
+IEnumerable&lt;int&gt; numbers = results.As&lt;int&gt;();
+IEnumerable&lt;decimal&gt; prices = results.As&lt;decimal&gt;();</code></pre><h3 id="typed-results"><a class="anchor" href="#typed-results">#</a>Typed Results</h3><pre><code class="language-csharp">// Query returns integers
+var counts = db.Query("(1, 2, 3, 4, 5)").As&lt;int&gt;();
+// Query returns decimals
+var prices = db.Query("//product/price").As&lt;decimal&gt;();
+// Query returns dates
+var dates = db.Query("//order/date").As&lt;DateTime&gt;();</code></pre><h2 id="xquery-update"><a class="anchor" href="#xquery-update">#</a>XQuery Update</h2><h3 id="execute-updates"><a class="anchor" href="#execute-updates">#</a>Execute Updates</h3><pre><code class="language-csharp">// Update documents (no return value)
+db.Execute("""
+    replace value of node doc('products/p1.xml')/product/price
+    with 29.99
+    """);
+// Insert
+db.Execute("""
+    insert node &lt;rating&gt;5&lt;/rating&gt;
+    into doc('products/p1.xml')/product
+    """);
+// Delete
+db.Execute("""
+    delete node //product[@discontinued='true']
+    """);</code></pre><h3 id="parameterized-updates"><a class="anchor" href="#parameterized-updates">#</a>Parameterized Updates</h3><pre><code class="language-csharp">db.Execute("""
+    replace value of node doc('products/' || $docName)/product/price
+    with $newPrice
+    """,
+    new QueryParameters
+    {
+        ["docName"] = "widget.xml",
+        ["newPrice"] = 24.99
+    });</code></pre><h2 id="in-transactions"><a class="anchor" href="#in-transactions">#</a>In Transactions</h2><h3 id="read-query"><a class="anchor" href="#read-query">#</a>Read Query</h3><pre><code class="language-csharp">using (var txn = db.BeginTransaction(readOnly: true))
+{
+    // Snapshot isolation - consistent view
+    var products = txn.Query("collection('products')//product");
+    var orders = txn.Query("collection('orders')//order");
+    // Process with guaranteed consistency
+}</code></pre><h3 id="update-in-transaction"><a class="anchor" href="#update-in-transaction">#</a>Update in Transaction</h3><pre><code class="language-csharp">using (var txn = db.BeginTransaction())
+{
+    // Check condition
+    var exists = txn.QuerySingle&lt;bool&gt;(
+        "exists(collection('products')//product[@id=$id])",
+        new QueryParameters { ["id"] = "123" });
+    if (!exists)
+    {
+        // Insert new product
+        txn.GetContainer("products").PutDocument("p123.xml", productXml);
+    }
+    else
+    {
+        // Update existing
+        txn.Execute("""
+            replace value of node
+            collection('products')//product[@id='123']/price
+            with 29.99
+            """);
+    }
+    txn.Commit();
+}</code></pre><h2 id="query-options"><a class="anchor" href="#query-options">#</a>Query Options</h2><pre><code class="language-csharp">var options = new QueryOptions
+{
+    Timeout = TimeSpan.FromSeconds(30),
+    MaxResults = 1000,
+    DefaultContainer = "products"
+};
+var results = db.Query(xquery, parameters, options);</code></pre><h2 id="explain-plan"><a class="anchor" href="#explain-plan">#</a>Explain Plan</h2><pre><code class="language-csharp">var plan = db.Explain("""
+    for $p in collection('products')//product
+    where $p/price &gt; 100
+    order by $p/name
+    return $p
+    """);
+Console.WriteLine(plan.ToString());
+Console.WriteLine($"Estimated cost: {plan.EstimatedCost}");
+Console.WriteLine($"Indexes used: {string.Join(", ", plan.IndexesUsed)}");</code></pre><h2 id="prepared-queries"><a class="anchor" href="#prepared-queries">#</a>Prepared Queries</h2><pre><code class="language-csharp">// Compile once, execute many times
+var prepared = db.Prepare("""
+    for $p in collection('products')//product
+    where $p/category = $category
+    return $p/name/text()
+    """);
+// Execute with different parameters
+var electronics = prepared.Execute(new QueryParameters { ["category"] = "Electronics" });
+var clothing = prepared.Execute(new QueryParameters { ["category"] = "Clothing" });
+// Dispose when done
+prepared.Dispose();</code></pre><h2 id="error-handling"><a class="anchor" href="#error-handling">#</a>Error Handling</h2><pre><code class="language-csharp">try
+{
+    var results = db.Query(xquery);
+}
+catch (XQueryParseException ex)
+{
+    // Syntax error
+    Console.WriteLine($"Parse error at line {ex.Line}, column {ex.Column}");
+    Console.WriteLine($"Message: {ex.Message}");
+}
+catch (XQueryRuntimeException ex)
+{
+    // Runtime error
+    Console.WriteLine($"Runtime error: {ex.ErrorCode}");
+    Console.WriteLine($"Message: {ex.Message}");
+}
+catch (QueryTimeoutException ex)
+{
+    Console.WriteLine("Query timed out");
+}</code></pre><h3 id="common-error-codes"><a class="anchor" href="#common-error-codes">#</a>Common Error Codes</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Code</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>XPST0003</code></p>
+          </td>
+          <td>
+            <p>Static error (syntax)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>XPST0008</code></p>
+          </td>
+          <td>
+            <p>Undefined variable</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>XPST0017</code></p>
+          </td>
+          <td>
+            <p>Unknown function</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>XPTY0004</code></p>
+          </td>
+          <td>
+            <p>Type error</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>FOAR0001</code></p>
+          </td>
+          <td>
+            <p>Division by zero</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>FORG0001</code></p>
+          </td>
+          <td>
+            <p>Invalid value for cast</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2><ol><li>
+        <p>
+          <strong>Use parameters</strong> - Never concatenate user input into queries</p>
+      </li><li>
+        <p>
+          <strong>Limit results</strong> - Use <code>[position() &lt;= $limit]</code> for large result sets</p>
+      </li><li>
+        <p>
+          <strong>Use prepared queries</strong> - For frequently executed queries</p>
+      </li><li>
+        <p>
+          <strong>Check explain plans</strong> - Verify index usage</p>
+      </li><li>
+        <p>
+          <strong>Handle errors</strong> - Catch and handle query exceptions</p>
+      </li><li>
+        <p>
+          <strong>Use transactions</strong> - For consistent multi-query operations</p>
+      </li></ol><h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Language Reference</p>
+          </th>
+          <th>
+            <p>Performance</p>
+          </th>
+          <th>
+            <p>Transactions</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong><a href="../../language-reference/xquery/index.html" title="">XQuery Guide</a></strong>XQuery language reference</p>
+          </td>
+          <td>
+            <p><strong><a href="indexes.html" title="">Index API</a></strong>Optimize queries with indexes</p>
+          </td>
+          <td>
+            <p><strong><a href="transactions.html" title="">Transaction API</a></strong>Transactional queries</p>
+          </td>
+        </tr>
+      </tbody>
+    </table></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

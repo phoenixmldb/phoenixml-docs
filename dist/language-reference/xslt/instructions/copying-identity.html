@@ -1,0 +1,398 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Copying and Identity Transform — PhoenixmlDb Documentation</title><meta name="description" content="xsl:copy, xsl:copy-of, and the identity transform pattern"><link rel="canonical" href="/language-reference/xslt/instructions/copying-identity.html"><meta property="og:title" content="Copying and Identity Transform"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/copying-identity.html"><meta property="og:description" content="xsl:copy, xsl:copy-of, and the identity transform pattern"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li class="active"><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="copying-and-identity-transform"><a class="anchor" href="#copying-and-identity-transform">#</a>Copying and Identity Transform</h1><p>Copying is one of the most common XSLT operations. Whether you are passing through most of a document unchanged, selectively modifying a few elements, or restructuring content, the copy instructions and the identity transform pattern are your primary tools.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
+        <p>
+          <a href="#xslcopy" title="">xsl:copy</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#xslcopy-of" title="">xsl:copy-of</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#the-identity-transform" title="">The Identity Transform</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#on-no-match-behaviors" title="">on-no-match Behaviors</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#practical-patterns" title="">Practical Patterns</a>
+        </p>
+      </li></ul><hr><h2 id="xsl-copy"><a class="anchor" href="#xsl-copy">#</a>xsl:copy</h2><p>Creates a shallow copy of the current node — the node itself, but <strong>not</strong> its children, attributes, or namespaces (unless you explicitly process them).</p><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><pre><code class="language-xml">&lt;xsl:template match="product"&gt;
+  &lt;xsl:copy&gt;
+    &lt;!-- Inside here, we are "inside" the copied &lt;product&gt; element --&gt;
+    &lt;!-- But it has no attributes or children yet — we must add them --&gt;
+    &lt;xsl:apply-templates select="@* | node()"/&gt;
+  &lt;/xsl:copy&gt;
+&lt;/xsl:template&gt;</code></pre><p>
+      <code>xsl:copy</code> copies:</p><ul><li>
+        <p>
+          <strong>Element nodes:</strong> Creates the element with the same name and namespace, but no attributes or children</p>
+      </li><li>
+        <p>
+          <strong>Attribute nodes:</strong> Creates the attribute with the same name, namespace, and value</p>
+      </li><li>
+        <p>
+          <strong>Text nodes:</strong> Creates a text node with the same content</p>
+      </li><li>
+        <p>
+          <strong>Comment nodes:</strong> Creates a comment with the same content</p>
+      </li><li>
+        <p>
+          <strong>Processing instruction nodes:</strong> Creates a PI with the same target and content</p>
+      </li><li>
+        <p>
+          <strong>Document nodes:</strong> Creates a new document node</p>
+      </li></ul><h3 id="copy-namespaces-attribute"><a class="anchor" href="#copy-namespaces-attribute">#</a>copy-namespaces Attribute</h3><p>By default, <code>xsl:copy</code> copies all in-scope namespace declarations. You can suppress this:</p><pre><code class="language-xml">&lt;xsl:copy copy-namespaces="no"&gt;
+  &lt;xsl:apply-templates select="@* | node()"/&gt;
+&lt;/xsl:copy&gt;</code></pre><p>This is useful when you want to clean up namespace declarations that are no longer needed.</p><hr><h2 id="xsl-copy-of"><a class="anchor" href="#xsl-copy-of">#</a>xsl:copy-of</h2><p>Creates a deep copy of a node — the node, all its attributes, children, descendants, and namespace declarations. No further processing is done on the copied content.</p><pre><code class="language-xml">&lt;!-- Deep copy a single element with all its content --&gt;
+&lt;xsl:copy-of select="product"/&gt;
+&lt;!-- Deep copy all products --&gt;
+&lt;xsl:copy-of select="//product"/&gt;
+&lt;!-- Deep copy a variable's content --&gt;
+&lt;xsl:copy-of select="$saved-fragment"/&gt;</code></pre><h3 id="copy-of-vs-copy"><a class="anchor" href="#copy-of-vs-copy">#</a>copy-of vs. copy</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p></p>
+          </th>
+          <th>
+            <p><code>xsl:copy</code></p>
+          </th>
+          <th>
+            <p><code>xsl:copy-of</code></p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong>Depth</strong></p>
+          </td>
+          <td>
+            <p>Shallow (node only)</p>
+          </td>
+          <td>
+            <p>Deep (entire subtree)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Processing</strong></p>
+          </td>
+          <td>
+            <p>You control what goes inside</p>
+          </td>
+          <td>
+            <p>None — exact replica</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Use case</strong></p>
+          </td>
+          <td>
+            <p>Modify-and-copy</p>
+          </td>
+          <td>
+            <p>Pass-through</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Attributes</strong></p>
+          </td>
+          <td>
+            <p>Must be explicitly included</p>
+          </td>
+          <td>
+            <p>Automatically included</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><pre><code class="language-xml">&lt;!-- xsl:copy: shallow, you must fill it --&gt;
+&lt;xsl:template match="product"&gt;
+  &lt;xsl:copy&gt;
+    &lt;xsl:copy-of select="@*"/&gt;          &lt;!-- copy all attributes --&gt;
+    &lt;xsl:apply-templates select="node()"/&gt;  &lt;!-- process children --&gt;
+  &lt;/xsl:copy&gt;
+&lt;/xsl:template&gt;
+&lt;!-- xsl:copy-of: deep, exact replica --&gt;
+&lt;xsl:copy-of select="product"/&gt;</code></pre><h3 id="copy-of-vs-sequence"><a class="anchor" href="#copy-of-vs-sequence">#</a>copy-of vs. sequence</h3><p>
+      <code>xsl:copy-of</code> creates a new, independent copy of the nodes. <code>xsl:sequence</code> returns a reference to the original nodes:</p><pre><code class="language-xml">&lt;!-- copy-of: new nodes, no connection to source --&gt;
+&lt;xsl:variable name="snapshot"&gt;
+  &lt;xsl:copy-of select="//product"/&gt;
+&lt;/xsl:variable&gt;
+&lt;!-- Nodes in $snapshot have no parent in the source tree --&gt;
+&lt;!-- sequence: references to original nodes --&gt;
+&lt;xsl:variable name="refs" as="element(product)*"&gt;
+  &lt;xsl:sequence select="//product"/&gt;
+&lt;/xsl:variable&gt;
+&lt;!-- Nodes in $refs ARE the original nodes — ancestor::catalog still works --&gt;</code></pre><p>
+      <strong>C# parallel:</strong>
+    </p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>XSLT</p>
+          </th>
+          <th>
+            <p>C#</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>xsl:copy-of</code></p>
+          </td>
+          <td>
+            <p>Deep clone: <code>node.DeepClone()</code> or <code>with { }</code> on a record (new object)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xsl:sequence</code></p>
+          </td>
+          <td>
+            <p>Reference: <code>var x = obj;</code> (same object)</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><hr><h2 id="the-identity-transform"><a class="anchor" href="#the-identity-transform">#</a>The Identity Transform</h2><p>The identity transform copies an entire document unchanged. It is the foundation for the "modify-and-copy" pattern — the most common XSLT design pattern.</p><h3 id="xslt-1-0-version-verbose"><a class="anchor" href="#xslt-1-0-version-verbose">#</a>XSLT 1.0 Version (Verbose)</h3><pre><code class="language-xml">&lt;!-- Copy everything by default --&gt;
+&lt;xsl:template match="@* | node()"&gt;
+  &lt;xsl:copy&gt;
+    &lt;xsl:apply-templates select="@* | node()"/&gt;
+  &lt;/xsl:copy&gt;
+&lt;/xsl:template&gt;</code></pre><p>This single template handles every node type:</p><ol><li>
+        <p>
+          <strong>
+            <code>@*</code>
+          </strong> matches any attribute — <code>xsl:copy</code> copies it</p>
+      </li><li>
+        <p>
+          <strong>
+            <code>node()</code>
+          </strong> matches elements, text, comments, and PIs — <code>xsl:copy</code> creates a shallow copy, then <code>xsl:apply-templates</code> recursively processes children and attributes</p>
+      </li></ol><p>The result: a bit-for-bit copy of the entire input document. On its own, this is useless. The power comes from adding override templates that handle specific nodes differently while everything else passes through unchanged.</p><h3 id="xslt-3-0-version-concise"><a class="anchor" href="#xslt-3-0-version-concise">#</a>XSLT 3.0 Version (Concise)</h3><p>XSLT 3.0 lets you declare the identity transform behavior on a mode, eliminating the need for the explicit template:</p><pre><code class="language-xml">&lt;xsl:mode on-no-match="shallow-copy"/&gt;</code></pre><p>This single declaration says: "For any node that does not match an explicit template, do a shallow copy and process its children." It replaces the entire identity template.</p><p>Your stylesheet then only contains templates for the nodes you want to change:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+  &lt;xsl:mode on-no-match="shallow-copy"/&gt;
+  &lt;!-- Only this template is needed — everything else passes through --&gt;
+  &lt;xsl:template match="price"&gt;
+    &lt;price currency="USD"&gt;&lt;xsl:value-of select=". * 1.1"/&gt;&lt;/price&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</code></pre><p>
+      <strong>C# parallel:</strong> This is the visitor pattern. In C#:</p><pre><code class="language-csharp">class PriceAdjuster : XmlVisitor
+{
+    // Override only what you need to change
+    public override XElement VisitElement(XElement element)
+    {
+        if (element.Name == "price")
+            return new XElement("price",
+                new XAttribute("currency", "USD"),
+                (decimal)element * 1.1m);
+        // Default: visit children (identity behavior)
+        return base.VisitElement(element);
+    }
+}</code></pre><hr><h2 id="on-no-match-behaviors"><a class="anchor" href="#on-no-match-behaviors">#</a>on-no-match Behaviors</h2><p>The <code>on-no-match</code> attribute on <code>xsl:mode</code> controls what happens to nodes that do not match any explicit template. XSLT 3.0 defines six behaviors:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Value</p>
+          </th>
+          <th>
+            <p>Behavior</p>
+          </th>
+          <th>
+            <p>Use Case</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>shallow-copy</code></p>
+          </td>
+          <td>
+            <p>Copy the node, process children</p>
+          </td>
+          <td>
+            <p>Identity transform (most common)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>deep-copy</code></p>
+          </td>
+          <td>
+            <p>Copy the node and all descendants without processing</p>
+          </td>
+          <td>
+            <p>Pass-through with no modification possible</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>text-only-copy</code></p>
+          </td>
+          <td>
+            <p>Output only text content (XSLT 1.0 built-in behavior)</p>
+          </td>
+          <td>
+            <p>Default if <code>on-no-match</code> is not specified</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>shallow-skip</code></p>
+          </td>
+          <td>
+            <p>Skip the node, but process its children</p>
+          </td>
+          <td>
+            <p>Strip wrappers, keep content</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>deep-skip</code></p>
+          </td>
+          <td>
+            <p>Skip the node and all descendants</p>
+          </td>
+          <td>
+            <p>Suppress unmatched content entirely</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>fail</code></p>
+          </td>
+          <td>
+            <p>Raise an error</p>
+          </td>
+          <td>
+            <p>Ensure every node type is explicitly handled</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="shallow-copy-identity"><a class="anchor" href="#shallow-copy-identity">#</a>shallow-copy (Identity)</h3><pre><code class="language-xml">&lt;xsl:mode on-no-match="shallow-copy"/&gt;</code></pre><p>This is the default for modify-and-copy stylesheets. Every unmatched node is copied; only your explicit templates alter the output.</p><h3 id="deep-copy"><a class="anchor" href="#deep-copy">#</a>deep-copy</h3><pre><code class="language-xml">&lt;xsl:mode on-no-match="deep-copy"/&gt;</code></pre><p>Like <code>shallow-copy</code>, but unmatched nodes are deep-copied without processing their children. This means templates cannot fire on descendants of unmatched nodes. Rarely used.</p><h3 id="text-only-copy"><a class="anchor" href="#text-only-copy">#</a>text-only-copy</h3><pre><code class="language-xml">&lt;xsl:mode on-no-match="text-only-copy"/&gt;</code></pre><p>This is the XSLT 1.0 / 2.0 default behavior (the built-in template rules). Unmatched elements are skipped but their children are processed, so text content bubbles up. This is why an XSLT stylesheet with no templates outputs all the text from the document.</p><h3 id="shallow-skip"><a class="anchor" href="#shallow-skip">#</a>shallow-skip</h3><pre><code class="language-xml">&lt;xsl:mode on-no-match="shallow-skip"/&gt;</code></pre><p>Unmatched nodes are dropped from the output, but their children are still processed. Use this when you want to strip all wrapper elements and only keep content that your templates explicitly handle.</p><pre><code class="language-xml">&lt;!-- Strip all formatting elements, keep only the text they wrap --&gt;
+&lt;xsl:mode on-no-match="shallow-skip"/&gt;
+&lt;xsl:template match="p | li | td"&gt;
+  &lt;xsl:copy&gt;
+    &lt;xsl:apply-templates/&gt;
+  &lt;/xsl:copy&gt;
+&lt;/xsl:template&gt;
+&lt;!-- Result: &lt;b&gt;, &lt;i&gt;, &lt;span&gt;, etc. are stripped; their text content remains --&gt;</code></pre><h3 id="deep-skip"><a class="anchor" href="#deep-skip">#</a>deep-skip</h3><pre><code class="language-xml">&lt;xsl:mode on-no-match="deep-skip"/&gt;</code></pre><p>Unmatched nodes and all their descendants are completely suppressed. Only nodes that match an explicit template appear in the output.</p><h3 id="fail"><a class="anchor" href="#fail">#</a>fail</h3><pre><code class="language-xml">&lt;xsl:mode on-no-match="fail"/&gt;</code></pre><p>Raises an error if any node does not match a template. Use this during development to ensure complete coverage — every element type in your input must have a matching template.</p><hr><h2 id="practical-patterns"><a class="anchor" href="#practical-patterns">#</a>Practical Patterns</h2><p>All of the following patterns assume you have the identity transform in place (either the XSLT 1.0 template or <code>&lt;xsl:mode on-no-match="shallow-copy"/&gt;</code>).</p><h3 id="modifying-attribute-values"><a class="anchor" href="#modifying-attribute-values">#</a>Modifying Attribute Values</h3><p>Change a specific attribute while preserving everything else:</p><pre><code class="language-xml">&lt;xsl:mode on-no-match="shallow-copy"/&gt;
+&lt;!-- Update all prices by 10% --&gt;
+&lt;xsl:template match="product/price/text()"&gt;
+  &lt;xsl:value-of select=". * 1.1"/&gt;
+&lt;/xsl:template&gt;</code></pre><p>Or modify an attribute:</p><pre><code class="language-xml">&lt;!-- Change status from "draft" to "published" --&gt;
+&lt;xsl:template match="product/@status[. = 'draft']"&gt;
+  &lt;xsl:attribute name="status"&gt;published&lt;/xsl:attribute&gt;
+&lt;/xsl:template&gt;</code></pre><h3 id="adding-attributes"><a class="anchor" href="#adding-attributes">#</a>Adding Attributes</h3><pre><code class="language-xml">&lt;!-- Add a "processed" timestamp to every product --&gt;
+&lt;xsl:template match="product"&gt;
+  &lt;xsl:copy&gt;
+    &lt;xsl:apply-templates select="@*"/&gt;
+    &lt;xsl:attribute name="processed"&gt;&lt;xsl:value-of select="current-dateTime()"/&gt;&lt;/xsl:attribute&gt;
+    &lt;xsl:apply-templates select="node()"/&gt;
+  &lt;/xsl:copy&gt;
+&lt;/xsl:template&gt;</code></pre><p>
+      <strong>Note:</strong> The order matters — attributes must be added before any child nodes. <code>xsl:attribute</code> after a child element is an error.</p><h3 id="removing-attributes"><a class="anchor" href="#removing-attributes">#</a>Removing Attributes</h3><pre><code class="language-xml">&lt;!-- Remove the "internal-notes" attribute from all elements --&gt;
+&lt;xsl:template match="@internal-notes"/&gt;
+&lt;!-- Remove all "debug-*" attributes --&gt;
+&lt;xsl:template match="@*[starts-with(local-name(), 'debug-')]"/&gt;</code></pre><p>An empty template matches the node and produces nothing — effectively deleting it from the output.</p><h3 id="renaming-elements"><a class="anchor" href="#renaming-elements">#</a>Renaming Elements</h3><pre><code class="language-xml">&lt;!-- Rename &lt;item&gt; to &lt;product&gt; --&gt;
+&lt;xsl:template match="item"&gt;
+  &lt;product&gt;
+    &lt;xsl:apply-templates select="@* | node()"/&gt;
+  &lt;/product&gt;
+&lt;/xsl:template&gt;
+&lt;!-- Rename &lt;desc&gt; to &lt;description&gt; --&gt;
+&lt;xsl:template match="desc"&gt;
+  &lt;description&gt;
+    &lt;xsl:apply-templates select="@* | node()"/&gt;
+  &lt;/description&gt;
+&lt;/xsl:template&gt;</code></pre><h3 id="filtering-elements-suppressing-nodes"><a class="anchor" href="#filtering-elements-suppressing-nodes">#</a>Filtering Elements (Suppressing Nodes)</h3><pre><code class="language-xml">&lt;!-- Remove all &lt;internal-notes&gt; elements --&gt;
+&lt;xsl:template match="internal-notes"/&gt;
+&lt;!-- Remove products that are discontinued --&gt;
+&lt;xsl:template match="product[@status = 'discontinued']"/&gt;
+&lt;!-- Remove empty elements --&gt;
+&lt;xsl:template match="*[not(node()) and not(@*)]"/&gt;</code></pre><h3 id="adding-new-child-elements"><a class="anchor" href="#adding-new-child-elements">#</a>Adding New Child Elements</h3><pre><code class="language-xml">&lt;!-- Add a calculated &lt;total&gt; element to each order-item --&gt;
+&lt;xsl:template match="order-item"&gt;
+  &lt;xsl:copy&gt;
+    &lt;xsl:apply-templates select="@* | node()"/&gt;
+    &lt;!-- Add new element after existing children --&gt;
+    &lt;total&gt;&lt;xsl:value-of select="price * quantity"/&gt;&lt;/total&gt;
+  &lt;/xsl:copy&gt;
+&lt;/xsl:template&gt;</code></pre><h3 id="wrapping-elements"><a class="anchor" href="#wrapping-elements">#</a>Wrapping Elements</h3><pre><code class="language-xml">&lt;!-- Wrap each &lt;product&gt; in a &lt;div&gt; --&gt;
+&lt;xsl:template match="product"&gt;
+  &lt;div class="product-wrapper"&gt;
+    &lt;xsl:copy&gt;
+      &lt;xsl:apply-templates select="@* | node()"/&gt;
+    &lt;/xsl:copy&gt;
+  &lt;/div&gt;
+&lt;/xsl:template&gt;</code></pre><h3 id="unwrapping-elements"><a class="anchor" href="#unwrapping-elements">#</a>Unwrapping Elements</h3><pre><code class="language-xml">&lt;!-- Remove the &lt;wrapper&gt; element but keep its content --&gt;
+&lt;xsl:template match="wrapper"&gt;
+  &lt;xsl:apply-templates select="node()"/&gt;
+&lt;/xsl:template&gt;</code></pre><h3 id="restructuring-moving-elements"><a class="anchor" href="#restructuring-moving-elements">#</a>Restructuring (Moving Elements)</h3><pre><code class="language-xml">&lt;!-- Move &lt;price&gt; from being a child of &lt;details&gt; to a direct child of &lt;product&gt; --&gt;
+&lt;xsl:template match="product"&gt;
+  &lt;xsl:copy&gt;
+    &lt;xsl:apply-templates select="@*"/&gt;
+    &lt;!-- Pull price out of details --&gt;
+    &lt;xsl:apply-templates select="details/price"/&gt;
+    &lt;xsl:apply-templates select="node()"/&gt;
+  &lt;/xsl:copy&gt;
+&lt;/xsl:template&gt;
+&lt;!-- Suppress price in its original location (it was already output above) --&gt;
+&lt;xsl:template match="details/price"/&gt;</code></pre><h3 id="conditional-modification"><a class="anchor" href="#conditional-modification">#</a>Conditional Modification</h3><pre><code class="language-xml">&lt;!-- Only modify products in the "electronics" category --&gt;
+&lt;xsl:template match="product[@category = 'electronics']/price/text()"&gt;
+  &lt;xsl:value-of select=". * 0.9"/&gt;  &lt;!-- 10% discount on electronics --&gt;
+&lt;/xsl:template&gt;
+&lt;!-- All other products pass through unchanged (identity transform handles them) --&gt;</code></pre><h3 id="complete-example-document-migration"><a class="anchor" href="#complete-example-document-migration">#</a>Complete Example: Document Migration</h3><p>Here is a realistic stylesheet that migrates a product catalog from an old schema to a new one:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+  &lt;xsl:mode on-no-match="shallow-copy"/&gt;
+  &lt;!-- Rename root element --&gt;
+  &lt;xsl:template match="product-list"&gt;
+    &lt;catalog version="2.0"&gt;
+      &lt;xsl:apply-templates select="@* | node()"/&gt;
+    &lt;/catalog&gt;
+  &lt;/xsl:template&gt;
+  &lt;!-- Rename item to product, add required ID if missing --&gt;
+  &lt;xsl:template match="item"&gt;
+    &lt;product&gt;
+      &lt;xsl:if test="not(@id)"&gt;
+        &lt;xsl:attribute name="id" select="generate-id()"/&gt;
+      &lt;/xsl:if&gt;
+      &lt;xsl:apply-templates select="@* | node()"/&gt;
+    &lt;/product&gt;
+  &lt;/xsl:template&gt;
+  &lt;!-- Rename desc to description --&gt;
+  &lt;xsl:template match="item/desc"&gt;
+    &lt;description&gt;&lt;xsl:apply-templates/&gt;&lt;/description&gt;
+  &lt;/xsl:template&gt;
+  &lt;!-- Convert price from string to structured element --&gt;
+  &lt;xsl:template match="item/cost"&gt;
+    &lt;price currency="{(@currency, 'USD')[1]}"&gt;
+      &lt;xsl:value-of select="format-number(number(.), '#0.00')"/&gt;
+    &lt;/price&gt;
+  &lt;/xsl:template&gt;
+  &lt;!-- Remove deprecated elements --&gt;
+  &lt;xsl:template match="legacy-code | internal-ref"/&gt;
+  &lt;!-- Remove deprecated attributes --&gt;
+  &lt;xsl:template match="@old-system-id"/&gt;
+&lt;/xsl:stylesheet&gt;</code></pre><p>
+      <strong>C# parallel:</strong> The entire identity-transform-with-overrides pattern is the <strong>visitor pattern</strong>. In C#, you would write:</p><pre><code class="language-csharp">// C# visitor pattern equivalent
+class SchemaMigrationVisitor : XmlVisitor
+{
+    protected override XElement Visit(XElement element) =&gt; element.Name.LocalName switch
+    {
+        "product-list" =&gt; new XElement("catalog", new XAttribute("version", "2.0"),
+                              element.Attributes().Select(Visit),
+                              element.Elements().Select(Visit)),
+        "item"         =&gt; new XElement("product", /* ... */),
+        "desc"         =&gt; new XElement("description", element.Value),
+        "legacy-code"  =&gt; null, // suppress
+        _              =&gt; base.Visit(element)  // identity (pass through)
+    };
+}</code></pre><p>Or using C# 9+ record expressions for immutable modification:</p><pre><code class="language-csharp">// Record-style immutable modification (conceptually similar)
+var updated = original with { Price = original.Price * 1.1m };</code></pre><p>The XSLT approach is more concise for XML-to-XML transformations because the identity transform handles the boilerplate of copying every node you did not explicitly change.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

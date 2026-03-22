@@ -1,0 +1,623 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Type System — PhoenixmlDb Documentation</title><meta name="description" content="XQuery types, sequence types, records, enums, union types, and type testing"><link rel="canonical" href="/language-reference/xquery/types.html"><meta property="og:title" content="Type System"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xquery/types.html"><meta property="og:description" content="XQuery types, sequence types, records, enums, union types, and type testing"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li class="active"><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="type-system"><a class="anchor" href="#type-system">#</a>Type System</h1><p>XQuery has a rich, formally specified type system built on XML Schema. If you're coming from C#, many concepts will be familiar — atomic types, function types, records — but the details differ in important ways. The biggest difference: everything in XQuery is a <strong>sequence</strong>, and the type system reflects that.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
+        <p>
+          <a href="#atomic-types" title="">Atomic Types</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#sequence-types" title="">Sequence Types</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#function-types" title="">Function Types</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#record-types" title="">Record Types</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#enum-types" title="">Enum Types</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#union-types" title="">Union Types</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#type-testing-and-casting" title="">Type Testing and Casting</a>
+        </p>
+      </li><li>
+        <p>
+          <a href="#type-promotion" title="">Type Promotion</a>
+        </p>
+      </li></ul><hr><h2 id="atomic-types"><a class="anchor" href="#atomic-types">#</a>Atomic Types</h2><p>Atomic types are the building blocks. They're derived from XML Schema and prefixed with <code>xs:</code>.</p><h3 id="commonly-used-types"><a class="anchor" href="#commonly-used-types">#</a>Commonly Used Types</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>XQuery Type</p>
+          </th>
+          <th>
+            <p>C# Equivalent</p>
+          </th>
+          <th>
+            <p>Example</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>xs:string</code></p>
+          </td>
+          <td>
+            <p><code>string</code></p>
+          </td>
+          <td>
+            <p><code>"hello"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:integer</code></p>
+          </td>
+          <td>
+            <p><code>long</code></p>
+          </td>
+          <td>
+            <p><code>42</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:decimal</code></p>
+          </td>
+          <td>
+            <p><code>decimal</code></p>
+          </td>
+          <td>
+            <p><code>3.14</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:double</code></p>
+          </td>
+          <td>
+            <p><code>double</code></p>
+          </td>
+          <td>
+            <p><code>3.14e0</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:boolean</code></p>
+          </td>
+          <td>
+            <p><code>bool</code></p>
+          </td>
+          <td>
+            <p><code>true()</code>, <code>false()</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:date</code></p>
+          </td>
+          <td>
+            <p><code>DateTime</code> (date only)</p>
+          </td>
+          <td>
+            <p><code>xs:date("2026-03-19")</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:dateTime</code></p>
+          </td>
+          <td>
+            <p><code>DateTime</code></p>
+          </td>
+          <td>
+            <p><code>xs:dateTime("2026-03-19T14:30:00")</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:time</code></p>
+          </td>
+          <td>
+            <p><code>TimeSpan</code></p>
+          </td>
+          <td>
+            <p><code>xs:time("14:30:00")</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:duration</code></p>
+          </td>
+          <td>
+            <p><code>TimeSpan</code></p>
+          </td>
+          <td>
+            <p><code>xs:duration("P1Y2M3D")</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:float</code></p>
+          </td>
+          <td>
+            <p><code>float</code></p>
+          </td>
+          <td>
+            <p><code>1.5e0</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:anyURI</code></p>
+          </td>
+          <td>
+            <p><code>Uri</code></p>
+          </td>
+          <td>
+            <p><code>xs:anyURI("https://example.com")</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:QName</code></p>
+          </td>
+          <td>
+            <p>—</p>
+          </td>
+          <td>
+            <p><code>xs:QName("xsl:template")</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:base64Binary</code></p>
+          </td>
+          <td>
+            <p><code>byte[]</code></p>
+          </td>
+          <td>
+            <p>Base64-encoded binary</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>xs:hexBinary</code></p>
+          </td>
+          <td>
+            <p><code>byte[]</code></p>
+          </td>
+          <td>
+            <p>Hex-encoded binary</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h3 id="date-and-time-types-in-detail"><a class="anchor" href="#date-and-time-types-in-detail">#</a>Date and Time Types in Detail</h3><p>Dates trip up many developers. XQuery follows ISO 8601 strictly:</p><pre><code class="language-xquery">(: Date — year, month, day :)
+xs:date("2026-03-19")
+(: DateTime — date plus time :)
+xs:dateTime("2026-03-19T14:30:00")
+(: DateTime with timezone :)
+xs:dateTime("2026-03-19T14:30:00-05:00")
+(: Current date/time functions :)
+current-date()      (: today as xs:date :)
+current-dateTime()  (: now as xs:dateTime :)
+current-time()      (: current time as xs:time :)</code></pre><p>
+      <strong>C# parallel:</strong>
+    </p><pre><code class="language-csharp">// Date string
+DateTime.Now.ToString("yyyy-MM-dd")            // "2026-03-19"
+// DateTime string
+DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")   // "2026-03-19T14:30:00"
+// Timezone-aware
+DateTimeOffset.Now.ToString("yyyy-MM-ddTHH:mm:sszzz") // with offset</code></pre><h3 id="numeric-type-hierarchy"><a class="anchor" href="#numeric-type-hierarchy">#</a>Numeric Type Hierarchy</h3><p>XQuery's numeric types form a hierarchy. This matters for arithmetic:</p><pre><code>xs:double
+  ↑ (promotes from)
+xs:float
+  ↑ (promotes from)
+xs:decimal
+  ↑ (subtype)
+xs:integer
+  ↑ (subtypes)
+xs:long, xs:int, xs:short, xs:byte, xs:nonNegativeInteger, etc.</code></pre><p>In practice, you'll mostly use <code>xs:integer</code>, <code>xs:decimal</code>, and <code>xs:double</code>:</p><pre><code class="language-xquery">(: Integer literal :)
+42
+(: Decimal literal — has a dot :)
+3.14
+(: Double literal — has an exponent :)
+3.14e0
+(: Explicit construction :)
+xs:integer("42")
+xs:decimal("3.14")
+xs:double("3.14")</code></pre><h3 id="untyped-data"><a class="anchor" href="#untyped-data">#</a>Untyped Data</h3><p>When you read XML without a schema, text content is <code>xs:untypedAtomic</code>. XQuery automatically converts untyped values during comparisons and arithmetic, but explicit casting is safer:</p><pre><code class="language-xquery">(: $book/price is xs:untypedAtomic from unvalidated XML :)
+let $price := $book/price
+(: Implicit conversion — works but fragile :)
+$price &gt; 30
+(: Explicit casting — clearer, fails fast on bad data :)
+xs:decimal($price) &gt; 30</code></pre><p>
+      <strong>C# parallel:</strong> Like the difference between <code>dynamic</code> and strongly-typed properties:</p><pre><code class="language-csharp">// Implicit (like untyped XQuery)
+dynamic price = element.Value;  // risky
+// Explicit (like xs:decimal cast)
+decimal price = (decimal)element;  // clear</code></pre><hr><h2 id="sequence-types"><a class="anchor" href="#sequence-types">#</a>Sequence Types</h2><p>Every value in XQuery is a sequence. Sequence types describe what's in the sequence and how many items are allowed.</p><h3 id="occurrence-indicators"><a class="anchor" href="#occurrence-indicators">#</a>Occurrence Indicators</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Indicator</p>
+          </th>
+          <th>
+            <p>Meaning</p>
+          </th>
+          <th>
+            <p>C# Parallel</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>(none)</p>
+          </td>
+          <td>
+            <p>Exactly one</p>
+          </td>
+          <td>
+            <p><code>T</code> (non-nullable)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>?</code></p>
+          </td>
+          <td>
+            <p>Zero or one</p>
+          </td>
+          <td>
+            <p><code>T?</code> (nullable)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>*</code></p>
+          </td>
+          <td>
+            <p>Zero or more</p>
+          </td>
+          <td>
+            <p><code>IEnumerable&lt;T&gt;</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>+</code></p>
+          </td>
+          <td>
+            <p>One or more</p>
+          </td>
+          <td>
+            <p><code>IEnumerable&lt;T&gt;</code> (non-empty)</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><pre><code class="language-xquery">declare function local:example(
+  $required as xs:string,           (: exactly one string :)
+  $optional as xs:string?,          (: zero or one string :)
+  $multiple as xs:string*,          (: any number of strings :)
+  $at-least-one as xs:string+       (: one or more strings :)
+) as xs:string* {                   (: returns zero or more strings :)
+  ...
+};</code></pre><p>
+      <strong>C# parallel:</strong>
+    </p><pre><code class="language-csharp">IEnumerable&lt;string&gt; Example(
+    string required,                // non-null
+    string? optional,               // nullable
+    IEnumerable&lt;string&gt; multiple,   // any count
+    IEnumerable&lt;string&gt; atLeastOne  // non-empty (by convention)
+) { ... }</code></pre><h3 id="item-type-specifiers"><a class="anchor" href="#item-type-specifiers">#</a>Item Type Specifiers</h3><p>Beyond atomic types, you can specify node types and other item types:</p><pre><code class="language-xquery">(: Node types :)
+node()                  (: any node :)
+element()               (: any element :)
+element(product)        (: element named "product" :)
+attribute()             (: any attribute :)
+attribute(id)           (: attribute named "id" :)
+text()                  (: text node :)
+comment()               (: comment node :)
+document-node()         (: document node :)
+processing-instruction()(: processing instruction :)
+(: General item types :)
+item()                  (: any item — node or atomic :)
+map(*)                  (: any map :)
+array(*)                (: any array :)
+function(*)             (: any function :)</code></pre><h3 id="practical-examples"><a class="anchor" href="#practical-examples">#</a>Practical Examples</h3><pre><code class="language-xquery">(: Accept any XML elements, return a map :)
+declare function local:summarize($nodes as element()*) as map(*) {
+  map {
+    "count": count($nodes),
+    "names": array { distinct-values($nodes ! local-name(.)) }
+  }
+};
+(: Accept a document, return elements :)
+declare function local:extract-data(
+  $doc as document-node()
+) as element(record)* {
+  $doc//record
+};</code></pre><hr><h2 id="function-types"><a class="anchor" href="#function-types">#</a>Function Types</h2><p>Functions are first-class values in XQuery. You can declare the type of a function parameter or variable:</p><pre><code class="language-xquery">(: A function that takes an integer and returns a boolean :)
+function(xs:integer) as xs:boolean
+(: A function that takes two strings and returns a string :)
+function(xs:string, xs:string) as xs:string
+(: Any function :)
+function(*)</code></pre><h3 id="using-function-types"><a class="anchor" href="#using-function-types">#</a>Using Function Types</h3><pre><code class="language-xquery">(: Higher-order function: filter with a custom predicate :)
+declare function local:filter(
+  $items as item()*,
+  $predicate as function(item()) as xs:boolean
+) as item()* {
+  for $item in $items
+  where $predicate($item)
+  return $item
+};
+(: Usage :)
+local:filter(
+  //product,
+  function($p) { xs:decimal($p/price) &gt; 50 }
+)</code></pre><p>
+      <strong>C# parallel:</strong>
+    </p><pre><code class="language-csharp">IEnumerable&lt;T&gt; Filter&lt;T&gt;(IEnumerable&lt;T&gt; items, Func&lt;T, bool&gt; predicate)
+    =&gt; items.Where(predicate);
+Filter(products, p =&gt; p.Price &gt; 50);</code></pre><h3 id="storing-functions-in-variables"><a class="anchor" href="#storing-functions-in-variables">#</a>Storing Functions in Variables</h3><pre><code class="language-xquery">let $transforms := map {
+  "upper": upper-case#1,
+  "lower": lower-case#1,
+  "trim":  normalize-space#1
+}
+let $fn := $transforms?upper
+return $fn("hello")
+(: Result: "HELLO" :)</code></pre><p>The <code>#1</code> syntax creates a named function reference. The number indicates the arity (number of arguments).</p><hr><h2 id="record-types"><a class="anchor" href="#record-types">#</a>Record Types</h2><p>
+      <em>XQuery 4.0</em>
+    </p><p>Record types define the shape of a map with named, typed fields. They're XQuery's answer to C# records and TypeScript interfaces.</p><pre><code class="language-xquery">declare function local:create-user(
+  $name as xs:string,
+  $email as xs:string,
+  $age as xs:integer
+) as record(name as xs:string, email as xs:string, age as xs:integer) {
+  map { "name": $name, "email": $email, "age": $age }
+};</code></pre><p>
+      <strong>C# parallel:</strong>
+    </p><pre><code class="language-csharp">public record User(string Name, string Email, int Age);
+User CreateUser(string name, string email, int age)
+    =&gt; new User(name, email, age);</code></pre><h3 id="optional-fields"><a class="anchor" href="#optional-fields">#</a>Optional Fields</h3><p>Use <code>?</code> to mark fields as optional:</p><pre><code class="language-xquery">declare function local:parse-address(
+  $node as element(address)
+) as record(
+  street as xs:string,
+  city as xs:string,
+  state as xs:string,
+  zip as xs:string,
+  apartment as xs:string?    (: optional :)
+) {
+  map {
+    "street": string($node/street),
+    "city": string($node/city),
+    "state": string($node/state),
+    "zip": string($node/zip),
+    "apartment": string($node/apartment)[. ne ""]
+  }
+};</code></pre><h3 id="extensible-records"><a class="anchor" href="#extensible-records">#</a>Extensible Records</h3><p>Use <code>*</code> to allow additional fields beyond those declared:</p><pre><code class="language-xquery">(: Accepts a map with at least "id" and "name", but may have more :)
+declare function local:display(
+  $item as record(id as xs:string, name as xs:string, *)
+) as element(div) {
+  &lt;div id="{ $item?id }"&gt;{ $item?name }&lt;/div&gt;
+};
+(: This works — extra fields are allowed :)
+local:display(map {
+  "id": "42",
+  "name": "Widget",
+  "price": 9.99,
+  "category": "tools"
+})</code></pre><h3 id="practical-example-api-response-types"><a class="anchor" href="#practical-example-api-response-types">#</a>Practical Example: API Response Types</h3><pre><code class="language-xquery">(: Define response shapes :)
+declare function local:success(
+  $data as item()*
+) as record(status as xs:string, data as item()*) {
+  map { "status": "ok", "data": $data }
+};
+declare function local:error-response(
+  $code as xs:integer,
+  $message as xs:string
+) as record(status as xs:string, error as record(code as xs:integer, message as xs:string)) {
+  map {
+    "status": "error",
+    "error": map { "code": $code, "message": $message }
+  }
+};
+(: Usage :)
+let $result := try {
+  let $data := collection("products")//product[@id = $id]
+  return if (exists($data)) then
+    local:success($data)
+  else
+    local:error-response(404, "Product not found")
+} catch * {
+  local:error-response(500, $err:description)
+}
+return serialize($result, map { "method": "json", "indent": true() })</code></pre><hr><h2 id="enum-types"><a class="anchor" href="#enum-types">#</a>Enum Types</h2><p>
+      <em>XQuery 4.0</em>
+    </p><p>Enum types restrict a value to a fixed set of string options. They catch invalid values at type-checking time.</p><pre><code class="language-xquery">declare function local:set-priority(
+  $task as element(task),
+  $priority as enum("low", "medium", "high", "critical")
+) as element(task) {
+  copy $t := $task
+  modify replace value of node $t/@priority with $priority
+  return $t
+};
+(: Valid :)
+local:set-priority($task, "high")
+(: Type error — "urgent" is not in the enum :)
+local:set-priority($task, "urgent")</code></pre><p>
+      <strong>C# parallel:</strong>
+    </p><pre><code class="language-csharp">public enum Priority { Low, Medium, High, Critical }
+Task SetPriority(Task task, Priority priority) { ... }</code></pre><h3 id="using-enums-in-sequence-types"><a class="anchor" href="#using-enums-in-sequence-types">#</a>Using Enums in Sequence Types</h3><pre><code class="language-xquery">declare function local:filter-by-status(
+  $orders as element(order)*,
+  $status as enum("pending", "approved", "shipped", "delivered")+
+) as element(order)* {
+  $orders[$status = @status]
+};
+(: Filter for multiple statuses :)
+local:filter-by-status(//order, ("pending", "approved"))</code></pre><h3 id="enum-in-record-types"><a class="anchor" href="#enum-in-record-types">#</a>Enum in Record Types</h3><pre><code class="language-xquery">declare function local:create-ticket(
+  $title as xs:string,
+  $priority as enum("low", "medium", "high"),
+  $type as enum("bug", "feature", "task")
+) as record(
+  title as xs:string,
+  priority as enum("low", "medium", "high"),
+  type as enum("bug", "feature", "task"),
+  created as xs:dateTime
+) {
+  map {
+    "title": $title,
+    "priority": $priority,
+    "type": $type,
+    "created": current-dateTime()
+  }
+};</code></pre><hr><h2 id="union-types"><a class="anchor" href="#union-types">#</a>Union Types</h2><p>
+      <em>XQuery 4.0</em>
+    </p><p>Union types allow a value to be one of several types. This is useful for functions that accept different input formats.</p><pre><code class="language-xquery">(: Accept either a string or a date :)
+declare function local:format-date(
+  $input as union(xs:string, xs:date, xs:dateTime)
+) as xs:string {
+  let $date := typeswitch ($input)
+    case xs:date return $input
+    case xs:dateTime return xs:date($input)
+    case xs:string return xs:date($input)
+    default return error((), "Unexpected type")
+  return format-date($date, "[MNn] [D], [Y]")
+};
+(: All of these work :)
+local:format-date(xs:date("2026-03-19"))
+local:format-date(xs:dateTime("2026-03-19T10:30:00"))
+local:format-date("2026-03-19")</code></pre><p>
+      <strong>C# parallel:</strong> C# doesn't have union types natively, but you can approximate them with method overloading or the <code>OneOf</code> library:</p><pre><code class="language-csharp">// Overloaded methods
+string FormatDate(DateTime date) =&gt; date.ToString("MMMM d, yyyy");
+string FormatDate(string dateStr) =&gt; FormatDate(DateTime.Parse(dateStr));</code></pre><h3 id="practical-example-flexible-input"><a class="anchor" href="#practical-example-flexible-input">#</a>Practical Example: Flexible Input</h3><pre><code class="language-xquery">(: A function that accepts IDs as strings or integers :)
+declare function local:find-product(
+  $id as union(xs:string, xs:integer)
+) as element(product)? {
+  let $str-id := string($id)
+  return collection("products")//product[@id = $str-id]
+};
+(: Both work :)
+local:find-product("PRD-001")
+local:find-product(42)</code></pre><h3 id="union-vs-sequence-of-item"><a class="anchor" href="#union-vs-sequence-of-item">#</a>Union vs Sequence of item()</h3><p>Don't confuse union types with <code>item()</code>. A union type is restrictive — it limits which types are accepted. <code>item()</code> accepts anything:</p><pre><code class="language-xquery">(: Too permissive — accepts nodes, functions, maps, anything :)
+declare function local:loose($x as item()) as xs:string { ... };
+(: Precise — only these three types :)
+declare function local:strict($x as union(xs:string, xs:integer, xs:decimal)) as xs:string { ... };</code></pre><hr><h2 id="type-testing-and-casting"><a class="anchor" href="#type-testing-and-casting">#</a>Type Testing and Casting</h2><p>XQuery provides four type-related expressions for testing, asserting, and converting types.</p><h3 id="instance-of"><a class="anchor" href="#instance-of">#</a>instance of</h3><p>Tests whether a value matches a type. Returns <code>xs:boolean</code>.</p><pre><code class="language-xquery">42 instance of xs:integer                (: true :)
+42 instance of xs:string                 (: false :)
+(1, 2, 3) instance of xs:integer+       (: true :)
+() instance of xs:integer?              (: true — empty matches ? :)
+&lt;product/&gt; instance of element()         (: true :)</code></pre><p>
+      <strong>C# parallel:</strong> <code>is</code>:</p><pre><code class="language-csharp">42 is int      // true
+42 is string   // false</code></pre><h3 id="practical-use-defensive-programming"><a class="anchor" href="#practical-use-defensive-programming">#</a>Practical Use: Defensive Programming</h3><pre><code class="language-xquery">declare function local:process($input as item()*) as item()* {
+  if ($input instance of element()+) then
+    (: Process as XML elements :)
+    for $e in $input return local:transform-element($e)
+  else if ($input instance of map(*)) then
+    (: Process as a map :)
+    local:transform-map($input)
+  else if ($input instance of xs:string+) then
+    (: Process as strings :)
+    $input ! upper-case(.)
+  else
+    error((), "Unsupported input type")
+};</code></pre><h3 id="castable-as"><a class="anchor" href="#castable-as">#</a>castable as</h3><p>Tests whether a value <strong>can</strong> be cast to a type. Returns <code>xs:boolean</code>. Does not perform the cast.</p><pre><code class="language-xquery">"42" castable as xs:integer        (: true :)
+"hello" castable as xs:integer     (: false :)
+"2026-03-19" castable as xs:date   (: true :)
+"not-a-date" castable as xs:date   (: false :)</code></pre><p>
+      <strong>C# parallel:</strong> <code>TryParse</code> pattern:</p><pre><code class="language-csharp">int.TryParse("42", out _)               // true
+int.TryParse("hello", out _)            // false
+DateTime.TryParse("2026-03-19", out _)  // true</code></pre><p>
+      <strong>Common pattern: safe conversion:</strong>
+    </p><pre><code class="language-xquery">let $price := if ($value castable as xs:decimal) then
+  xs:decimal($value)
+else
+  0.0</code></pre><h3 id="cast-as"><a class="anchor" href="#cast-as">#</a>cast as</h3><p>Converts a value to a different type. Raises an error if the conversion fails.</p><pre><code class="language-xquery">"42" cast as xs:integer          (: 42 :)
+"3.14" cast as xs:decimal        (: 3.14 :)
+"2026-03-19" cast as xs:date     (: xs:date value :)
+42 cast as xs:string             (: "42" :)</code></pre><p>
+      <strong>C# parallel:</strong> Explicit casts:</p><pre><code class="language-csharp">(int)"42"          // InvalidCast — C# can't do this
+int.Parse("42")    // 42 — closer equivalent
+(decimal)42        // 42m</code></pre><h3 id="treat-as"><a class="anchor" href="#treat-as">#</a>treat as</h3><p>Asserts that a value is a certain type <strong>without converting it</strong>. If the value doesn't match, it raises a type error. This is a compile-time/static-type hint, not a runtime conversion.</p><pre><code class="language-xquery">$value treat as xs:integer</code></pre><p>
+      <code>treat as</code> is useful when the static type checker can't infer the type, but you know it at development time:</p><pre><code class="language-xquery">(: The XQuery engine might not know that $data/age is always an integer :)
+let $age := ($data/age) treat as xs:integer
+return $age + 1</code></pre><p>
+      <strong>C# parallel:</strong> Somewhat like a direct cast <code>(int)value</code> — it asserts the type without conversion:</p><pre><code class="language-csharp">int age = (int)data.Age;  // throws InvalidCastException if wrong type</code></pre><h3 id="summary-table"><a class="anchor" href="#summary-table">#</a>Summary Table</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Expression</p>
+          </th>
+          <th>
+            <p>Purpose</p>
+          </th>
+          <th>
+            <p>On Failure</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>instance of</code></p>
+          </td>
+          <td>
+            <p>Test if value matches type</p>
+          </td>
+          <td>
+            <p>Returns <code>false</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>castable as</code></p>
+          </td>
+          <td>
+            <p>Test if value can be converted</p>
+          </td>
+          <td>
+            <p>Returns <code>false</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>cast as</code></p>
+          </td>
+          <td>
+            <p>Convert value to type</p>
+          </td>
+          <td>
+            <p>Raises error</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>treat as</code></p>
+          </td>
+          <td>
+            <p>Assert value is type (no conversion)</p>
+          </td>
+          <td>
+            <p>Raises error</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><hr><h2 id="type-promotion"><a class="anchor" href="#type-promotion">#</a>Type Promotion</h2><p>XQuery automatically promotes (widens) certain types during operations. Understanding this prevents surprises.</p><h3 id="numeric-promotion"><a class="anchor" href="#numeric-promotion">#</a>Numeric Promotion</h3><pre><code>xs:integer → xs:decimal → xs:float → xs:double</code></pre><p>When you mix numeric types in arithmetic, the narrower type promotes:</p><pre><code class="language-xquery">42 + 3.14        (: integer + decimal → decimal: 45.14 :)
+42 + 3.14e0      (: integer + double → double: 4.514E1 :)</code></pre><h3 id="string-uri-promotion"><a class="anchor" href="#string-uri-promotion">#</a>String/URI Promotion</h3><pre><code>xs:anyURI → xs:string</code></pre><p>URIs can be used wherever strings are expected:</p><pre><code class="language-xquery">let $uri := xs:anyURI("https://example.com")
+return contains($uri, "example")   (: true — URI promoted to string :)</code></pre><h3 id="subtype-substitution"><a class="anchor" href="#subtype-substitution">#</a>Subtype Substitution</h3><p>A subtype can always be used where a supertype is expected:</p><pre><code class="language-xquery">(: xs:integer is a subtype of xs:decimal :)
+declare function local:add-tax($amount as xs:decimal) as xs:decimal {
+  $amount * 1.08
+};
+local:add-tax(100)   (: passing xs:integer where xs:decimal expected — OK :)</code></pre><h3 id="no-implicit-node-to-atomic-promotion"><a class="anchor" href="#no-implicit-node-to-atomic-promotion">#</a>No Implicit Node-to-Atomic Promotion</h3><p>Unlike some operations, general function calls do <strong>not</strong> automatically extract text from nodes:</p><pre><code class="language-xquery">(: This works — comparison atomizes automatically :)
+//product/price &gt; 50
+(: This might fail — string function expects xs:string?, gets element :)
+declare function local:greet($name as xs:string) as xs:string {
+  "Hello, " || $name
+};
+local:greet(//user/name)  (: type error if //user/name returns an element :)
+local:greet(string(//user/name))  (: correct — explicit conversion :)</code></pre><p>Be explicit about conversions from nodes to atomic values using <code>string()</code>, <code>data()</code>, or <code>xs:decimal()</code>. This is one of the most common sources of type errors for developers new to XQuery.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

@@ -1,0 +1,219 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Quick Start — PhoenixmlDb Documentation</title><meta name="description" content="Your first PhoenixmlDb query in 5 minutes"><link rel="canonical" href="/getting-started/quick-start.html"><meta property="og:title" content="Quick Start"><meta property="og:type" content="article"><meta property="og:url" content="/getting-started/quick-start.html"><meta property="og:description" content="Your first PhoenixmlDb query in 5 minutes"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li class="active"><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="quick-start"><a class="anchor" href="#quick-start">#</a>Quick Start</h1><p>This guide provides hands-on examples to get you productive with PhoenixmlDb quickly.</p><h2 id="creating-a-database"><a class="anchor" href="#creating-a-database">#</a>Creating a Database</h2><p>A database is a directory containing all your containers, documents, and indexes:</p><pre><code class="language-csharp">using PhoenixmlDb;
+// Create database in specified directory
+using var db = new XmlDatabase("./data/myapp");
+// Or with custom options
+var options = new DatabaseOptions
+{
+    MapSize = 10L * 1024 * 1024 * 1024, // 10 GB
+    MaxContainers = 100,
+    MaxReaders = 126
+};
+using var db2 = new XmlDatabase("./data/myapp", options);</code></pre><blockquote>
+      <p>
+        <strong>Note:</strong> Always dispose the database when done. Using the <code>using</code> statement ensures proper cleanup.</p>
+    </blockquote><h2 id="working-with-containers"><a class="anchor" href="#working-with-containers">#</a>Working with Containers</h2><p>Containers organize your documents into logical groups:</p><pre><code class="language-csharp">// Create a container
+var customers = db.CreateContainer("customers");
+// Create with options
+var orders = db.CreateContainer("orders", new ContainerOptions
+{
+    ValidationMode = ValidationMode.WellFormed,
+    PreserveWhitespace = false
+});
+// Get existing container
+var existing = db.GetContainer("customers");
+// List all containers
+foreach (var name in db.ListContainers())
+{
+    Console.WriteLine(name);
+}
+// Delete a container (and all its documents)
+db.DeleteContainer("temp");</code></pre><h2 id="storing-documents"><a class="anchor" href="#storing-documents">#</a>Storing Documents</h2><h3 id="xml-documents"><a class="anchor" href="#xml-documents">#</a>XML Documents</h3><pre><code class="language-csharp">var container = db.GetContainer("products");
+// Store from string
+container.PutDocument("product1.xml", """
+    &lt;product&gt;
+        &lt;name&gt;Widget&lt;/name&gt;
+        &lt;price&gt;19.99&lt;/price&gt;
+    &lt;/product&gt;
+    """);
+// Store from file
+container.PutDocument("product2.xml", File.ReadAllText("product.xml"));
+// Store from stream
+using var stream = File.OpenRead("large-product.xml");
+container.PutDocument("product3.xml", stream);
+// Store with metadata
+container.PutDocument("product4.xml", xmlContent, new DocumentMetadata
+{
+    ["author"] = "john.doe",
+    ["created"] = DateTime.UtcNow.ToString("O"),
+    ["version"] = "1.0"
+});</code></pre><h3 id="json-documents"><a class="anchor" href="#json-documents">#</a>JSON Documents</h3><pre><code class="language-csharp">var container = db.GetContainer("api-data");
+// Store JSON document
+container.PutJsonDocument("user1.json", """
+    {
+        "id": 1,
+        "name": "Alice",
+        "email": "alice@example.com",
+        "roles": ["admin", "user"]
+    }
+    """);
+// JSON is automatically converted to XML internally
+// but can be queried and retrieved as JSON</code></pre><h2 id="retrieving-documents"><a class="anchor" href="#retrieving-documents">#</a>Retrieving Documents</h2><pre><code class="language-csharp">var container = db.GetContainer("products");
+// Get document as string
+string xml = container.GetDocument("product1.xml");
+// Check if document exists
+if (container.DocumentExists("product1.xml"))
+{
+    // ...
+}
+// Get document metadata
+var metadata = container.GetMetadata("product1.xml");
+Console.WriteLine($"Author: {metadata["author"]}");
+// List documents
+foreach (var docName in container.ListDocuments())
+{
+    Console.WriteLine(docName);
+}
+// List with prefix filter
+foreach (var docName in container.ListDocuments(prefix: "product"))
+{
+    Console.WriteLine(docName);
+}</code></pre><h2 id="querying-with-xquery"><a class="anchor" href="#querying-with-xquery">#</a>Querying with XQuery</h2><h3 id="basic-queries"><a class="anchor" href="#basic-queries">#</a>Basic Queries</h3><pre><code class="language-csharp">// Simple path query
+var titles = db.Query("collection('books')//title/text()");
+// Query with FLWOR expression
+var results = db.Query("""
+    for $book in collection('books')//book
+    where $book/year &gt; 2020
+    order by $book/title
+    return $book/title/text()
+    """);
+// Iterate results
+foreach (var result in results)
+{
+    Console.WriteLine(result);
+}</code></pre><h3 id="parameterized-queries"><a class="anchor" href="#parameterized-queries">#</a>Parameterized Queries</h3><pre><code class="language-csharp">// Bind parameters to avoid injection
+var results = db.Query("""
+    for $p in collection('products')//product
+    where $p/price &lt;= $maxPrice
+      and $p/category = $category
+    return $p
+    """,
+    new QueryParameters
+    {
+        ["maxPrice"] = 100.0,
+        ["category"] = "Electronics"
+    });</code></pre><h3 id="aggregate-queries"><a class="anchor" href="#aggregate-queries">#</a>Aggregate Queries</h3><pre><code class="language-csharp">// Count
+var count = db.QuerySingle&lt;int&gt;("count(collection('orders')//order)");
+// Sum
+var total = db.QuerySingle&lt;decimal&gt;("""
+    sum(collection('orders')//order/total)
+    """);
+// Average
+var avgPrice = db.QuerySingle&lt;decimal&gt;("""
+    avg(collection('products')//product/price)
+    """);</code></pre><h2 id="using-transactions"><a class="anchor" href="#using-transactions">#</a>Using Transactions</h2><pre><code class="language-csharp">// Read-only transaction (snapshot isolation)
+using (var txn = db.BeginTransaction(readOnly: true))
+{
+    var results = txn.Query("collection('data')//item");
+    // Results reflect consistent snapshot
+}
+// Read-write transaction
+using (var txn = db.BeginTransaction())
+{
+    var container = txn.GetContainer("inventory");
+    // Multiple operations in single transaction
+    container.PutDocument("item1.xml", newXml1);
+    container.PutDocument("item2.xml", newXml2);
+    container.DeleteDocument("old-item.xml");
+    // Commit all changes atomically
+    txn.Commit();
+}
+// If Commit() not called, transaction is rolled back on dispose</code></pre><h2 id="creating-indexes"><a class="anchor" href="#creating-indexes">#</a>Creating Indexes</h2><pre><code class="language-csharp">var container = db.GetContainer("products");
+// Path index for fast element lookup
+container.CreateIndex(new PathIndex("price-idx", "/product/price"));
+// Value index for range queries
+container.CreateIndex(new ValueIndex("price-val-idx", "/product/price",
+    ValueType.Decimal));
+// Full-text index for search
+container.CreateIndex(new FullTextIndex("desc-ft-idx", "/product/description"));
+// Composite index
+container.CreateIndex(new PathIndex("cat-name-idx",
+    "/product/category", "/product/name"));</code></pre><h2 id="complete-example"><a class="anchor" href="#complete-example">#</a>Complete Example</h2><pre><code class="language-csharp">using PhoenixmlDb;
+// Setup
+using var db = new XmlDatabase("./bookstore");
+var books = db.CreateContainer("books");
+// Create indexes for better query performance
+books.CreateIndex(new ValueIndex("year-idx", "/book/year", ValueType.Integer));
+books.CreateIndex(new FullTextIndex("title-idx", "/book/title"));
+// Add sample data
+books.PutDocument("book1.xml", """
+    &lt;book isbn="978-0-13-468599-1"&gt;
+        &lt;title&gt;The Pragmatic Programmer&lt;/title&gt;
+        &lt;author&gt;David Thomas&lt;/author&gt;
+        &lt;author&gt;Andrew Hunt&lt;/author&gt;
+        &lt;year&gt;2019&lt;/year&gt;
+        &lt;price&gt;49.99&lt;/price&gt;
+    &lt;/book&gt;
+    """);
+books.PutDocument("book2.xml", """
+    &lt;book isbn="978-0-596-51774-8"&gt;
+        &lt;title&gt;JavaScript: The Good Parts&lt;/title&gt;
+        &lt;author&gt;Douglas Crockford&lt;/author&gt;
+        &lt;year&gt;2008&lt;/year&gt;
+        &lt;price&gt;29.99&lt;/price&gt;
+    &lt;/book&gt;
+    """);
+// Query: Find books by year range
+var recentBooks = db.Query("""
+    for $b in collection('books')//book
+    where $b/year &gt;= 2015
+    order by $b/year descending
+    return &lt;result&gt;
+        &lt;title&gt;{$b/title/text()}&lt;/title&gt;
+        &lt;year&gt;{$b/year/text()}&lt;/year&gt;
+    &lt;/result&gt;
+    """);
+Console.WriteLine("Recent books:");
+foreach (var book in recentBooks)
+{
+    Console.WriteLine(book);
+}
+// Full-text search
+var searchResults = db.Query("""
+    for $b in collection('books')//book
+    where contains($b/title, 'Pragmatic')
+    return $b/title/text()
+    """);
+Console.WriteLine("\nSearch results:");
+foreach (var title in searchResults)
+{
+    Console.WriteLine(title);
+}</code></pre><h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Build an App</p>
+          </th>
+          <th>
+            <p>Understand Architecture</p>
+          </th>
+          <th>
+            <p>Master XQuery</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong><a href="first-application.html" title="">First Application</a></strong>Build a complete application with PhoenixmlDb.</p>
+          </td>
+          <td>
+            <p><strong><a href="../phoenixmldb/core-concepts.html" title="">Core Concepts</a></strong>Understand the architecture and design principles.</p>
+          </td>
+          <td>
+            <p><strong><a href="../language-reference/xquery/index.html" title="">XQuery Guide</a></strong>Master XQuery for powerful document queries.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

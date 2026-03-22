@@ -1,0 +1,311 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Transactions — PhoenixmlDb Documentation</title><meta name="description" content="ACID transactions with MVCC via LMDB"><link rel="canonical" href="/phoenixmldb/transactions.html"><meta property="og:title" content="Transactions"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/transactions.html"><meta property="og:description" content="ACID transactions with MVCC via LMDB"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li class="active"><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="transactions"><a class="anchor" href="#transactions">#</a>Transactions</h1><p>PhoenixmlDb provides full ACID transaction support with MVCC (Multi-Version Concurrency Control) for high-performance concurrent access.</p><h2 id="acid-properties"><a class="anchor" href="#acid-properties">#</a>ACID Properties</h2><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Property</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><strong>Atomicity</strong></p>
+          </td>
+          <td>
+            <p>All operations in a transaction succeed or all fail</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Consistency</strong></p>
+          </td>
+          <td>
+            <p>Database remains in a valid state after each transaction</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Isolation</strong></p>
+          </td>
+          <td>
+            <p>Concurrent transactions don't interfere with each other</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>Durability</strong></p>
+          </td>
+          <td>
+            <p>Committed transactions survive system failures</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="transaction-types"><a class="anchor" href="#transaction-types">#</a>Transaction Types</h2><h3 id="read-only-transactions"><a class="anchor" href="#read-only-transactions">#</a>Read-Only Transactions</h3><p>Read-only transactions provide a consistent snapshot view of the database:</p><pre><code class="language-csharp">using (var txn = db.BeginTransaction(readOnly: true))
+{
+    // All reads see a consistent snapshot
+    var products = txn.Query("collection('products')//product");
+    var orders = txn.Query("collection('orders')//order");
+    // Snapshot remains stable even if other transactions commit
+    foreach (var product in products)
+    {
+        // Process with guaranteed consistency
+    }
+}
+// No commit needed - read-only transaction auto-completes</code></pre><p>
+      <strong>Characteristics:</strong>
+    </p><ul><li>
+        <p>Multiple concurrent read transactions allowed</p>
+      </li><li>
+        <p>No locks on data</p>
+      </li><li>
+        <p>Sees data as of transaction start time</p>
+      </li><li>
+        <p>Cannot modify data</p>
+      </li></ul><h3 id="read-write-transactions"><a class="anchor" href="#read-write-transactions">#</a>Read-Write Transactions</h3><p>Read-write transactions can modify data:</p><pre><code class="language-csharp">using (var txn = db.BeginTransaction())
+{
+    var container = txn.GetContainer("inventory");
+    // Read current state
+    var item = txn.QuerySingle&lt;string&gt;(
+        "doc('inventory/item-001.xml')/item/quantity/text()");
+    // Modify
+    container.PutDocument("item-001.xml", newXml);
+    container.DeleteDocument("old-item.xml");
+    // Commit all changes atomically
+    txn.Commit();
+}
+// If Commit() not called, transaction is rolled back</code></pre><p>
+      <strong>Characteristics:</strong>
+    </p><ul><li>
+        <p>Only one write transaction at a time</p>
+      </li><li>
+        <p>Readers don't block writers, writers don't block readers</p>
+      </li><li>
+        <p>Changes are isolated until commit</p>
+      </li><li>
+        <p>Automatic rollback if not committed</p>
+      </li></ul><h2 id="mvcc-multi-version-concurrency-control"><a class="anchor" href="#mvcc-multi-version-concurrency-control">#</a>MVCC (Multi-Version Concurrency Control)</h2><p>PhoenixmlDb uses MVCC to allow concurrent access without locking:</p><pre><code>Time →
+Writer Transaction:
+    Begin ──────────────────────── Commit
+           │  Put(A')  Put(B')  │
+           │                    │
+           ▼                    ▼
+Reader 1:  Begin ─────────────────────────── End
+           Sees: A, B (original versions)
+Reader 2:                         Begin ──── End
+                                  Sees: A', B' (committed versions)</code></pre><h3 id="snapshot-isolation"><a class="anchor" href="#snapshot-isolation">#</a>Snapshot Isolation</h3><p>Each transaction sees a consistent snapshot:</p><pre><code class="language-csharp">// Transaction 1 starts
+using var txn1 = db.BeginTransaction(readOnly: true);
+// Transaction 2 modifies data
+using (var txn2 = db.BeginTransaction())
+{
+    txn2.GetContainer("data").PutDocument("doc.xml", "&lt;new&gt;data&lt;/new&gt;");
+    txn2.Commit();
+}
+// Transaction 1 still sees old data (snapshot isolation)
+var doc = txn1.Query("doc('data/doc.xml')").First();
+// Returns original content, not "&lt;new&gt;data&lt;/new&gt;"</code></pre><h2 id="transaction-patterns"><a class="anchor" href="#transaction-patterns">#</a>Transaction Patterns</h2><h3 id="unit-of-work-pattern"><a class="anchor" href="#unit-of-work-pattern">#</a>Unit of Work Pattern</h3><pre><code class="language-csharp">public class OrderService
+{
+    private readonly XmlDatabase _db;
+    public void PlaceOrder(Order order)
+    {
+        using var txn = _db.BeginTransaction();
+        try
+        {
+            // 1. Validate inventory
+            foreach (var item in order.Items)
+            {
+                var available = txn.QuerySingle&lt;int&gt;($"""
+                    doc('inventory/{item.ProductId}.xml')
+                    /product/quantity/number()
+                    """);
+                if (available &lt; item.Quantity)
+                    throw new InsufficientInventoryException(item.ProductId);
+            }
+            // 2. Create order document
+            txn.GetContainer("orders").PutDocument(
+                $"order-{order.Id}.xml",
+                SerializeOrder(order));
+            // 3. Update inventory
+            foreach (var item in order.Items)
+            {
+                txn.Execute($"""
+                    let $product := doc('inventory/{item.ProductId}.xml')/product
+                    let $newQty := $product/quantity - {item.Quantity}
+                    return replace value of node $product/quantity with $newQty
+                    """);
+            }
+            // 4. Commit all changes
+            txn.Commit();
+        }
+        catch
+        {
+            // Automatic rollback on exception
+            throw;
+        }
+    }
+}</code></pre><h3 id="retry-pattern"><a class="anchor" href="#retry-pattern">#</a>Retry Pattern</h3><pre><code class="language-csharp">public async Task&lt;T&gt; ExecuteWithRetry&lt;T&gt;(
+    Func&lt;ITransaction, T&gt; operation,
+    int maxRetries = 3)
+{
+    for (int attempt = 1; attempt &lt;= maxRetries; attempt++)
+    {
+        try
+        {
+            using var txn = _db.BeginTransaction();
+            var result = operation(txn);
+            txn.Commit();
+            return result;
+        }
+        catch (TransactionConflictException) when (attempt &lt; maxRetries)
+        {
+            // Wait before retry
+            await Task.Delay(TimeSpan.FromMilliseconds(100 * attempt));
+        }
+    }
+    throw new TransactionFailedException("Max retries exceeded");
+}
+// Usage
+var result = await ExecuteWithRetry(txn =&gt;
+{
+    // Operations that might conflict
+    return txn.Query("...");
+});</code></pre><h3 id="batch-processing-pattern"><a class="anchor" href="#batch-processing-pattern">#</a>Batch Processing Pattern</h3><pre><code class="language-csharp">public void ImportDocuments(IEnumerable&lt;string&gt; documents)
+{
+    const int batchSize = 100;
+    var batch = new List&lt;string&gt;();
+    foreach (var doc in documents)
+    {
+        batch.Add(doc);
+        if (batch.Count &gt;= batchSize)
+        {
+            ProcessBatch(batch);
+            batch.Clear();
+        }
+    }
+    if (batch.Any())
+    {
+        ProcessBatch(batch);
+    }
+}
+private void ProcessBatch(List&lt;string&gt; documents)
+{
+    using var txn = _db.BeginTransaction();
+    var container = txn.GetContainer("imports");
+    foreach (var doc in documents)
+    {
+        container.PutDocument($"doc-{Guid.NewGuid()}.xml", doc);
+    }
+    txn.Commit();
+}</code></pre><h2 id="distributed-transactions"><a class="anchor" href="#distributed-transactions">#</a>Distributed Transactions</h2><p>For cluster deployments, PhoenixmlDb supports distributed transactions with two-phase commit (2PC):</p><pre><code class="language-csharp">// Distributed transaction across shards
+using var txn = cluster.BeginDistributedTransaction();
+// Operations may span multiple nodes
+txn.Execute("insert node &lt;item/&gt; into doc('shard1/data.xml')/root");
+txn.Execute("insert node &lt;item/&gt; into doc('shard2/data.xml')/root");
+// Two-phase commit ensures atomicity across nodes
+await txn.CommitAsync();</code></pre><h3 id="2pc-protocol"><a class="anchor" href="#2pc-protocol">#</a>2PC Protocol</h3><pre><code>Phase 1 (Prepare):
+    Coordinator → Participant 1: PREPARE
+    Coordinator → Participant 2: PREPARE
+    Participant 1 → Coordinator: VOTE_COMMIT
+    Participant 2 → Coordinator: VOTE_COMMIT
+Phase 2 (Commit):
+    Coordinator → Participant 1: COMMIT
+    Coordinator → Participant 2: COMMIT
+    Participant 1 → Coordinator: ACK
+    Participant 2 → Coordinator: ACK</code></pre><h2 id="transaction-options"><a class="anchor" href="#transaction-options">#</a>Transaction Options</h2><pre><code class="language-csharp">var options = new TransactionOptions
+{
+    Timeout = TimeSpan.FromSeconds(30),
+    IsolationLevel = IsolationLevel.Snapshot,
+    MaxRetries = 3
+};
+using var txn = db.BeginTransaction(options);</code></pre><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Option</p>
+          </th>
+          <th>
+            <p>Description</p>
+          </th>
+          <th>
+            <p>Default</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>Timeout</code></p>
+          </td>
+          <td>
+            <p>Maximum transaction duration</p>
+          </td>
+          <td>
+            <p>60 seconds</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>IsolationLevel</code></p>
+          </td>
+          <td>
+            <p>Snapshot or Serializable</p>
+          </td>
+          <td>
+            <p>Snapshot</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>MaxRetries</code></p>
+          </td>
+          <td>
+            <p>Auto-retry on conflict</p>
+          </td>
+          <td>
+            <p>0</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="error-handling"><a class="anchor" href="#error-handling">#</a>Error Handling</h2><pre><code class="language-csharp">try
+{
+    using var txn = db.BeginTransaction();
+    // Operations...
+    txn.Commit();
+}
+catch (TransactionConflictException ex)
+{
+    // Another transaction modified the same data
+    Console.WriteLine($"Conflict: {ex.Message}");
+}
+catch (TransactionTimeoutException ex)
+{
+    // Transaction exceeded timeout
+    Console.WriteLine($"Timeout: {ex.Message}");
+}
+catch (TransactionAbortedException ex)
+{
+    // Transaction was aborted (e.g., by deadlock detection)
+    Console.WriteLine($"Aborted: {ex.Message}");
+}</code></pre><h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2><ol><li>
+        <p>
+          <strong>Keep transactions short</strong> — Long transactions block writers and consume resources</p>
+      </li><li>
+        <p>
+          <strong>Use read-only when possible</strong> — Read-only transactions are cheaper and don't block</p>
+      </li><li>
+        <p>
+          <strong>Batch writes</strong> — Group multiple writes in a single transaction</p>
+      </li><li>
+        <p>
+          <strong>Handle conflicts</strong> — Implement retry logic for conflict-prone operations</p>
+      </li><li>
+        <p>
+          <strong>Don't hold transactions across async boundaries</strong> — Complete transactions synchronously</p>
+      </li><li>
+        <p>
+          <strong>Always dispose</strong> — Use <code>using</code> statements to ensure cleanup</p>
+      </li></ol></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

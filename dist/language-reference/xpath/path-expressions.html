@@ -1,0 +1,160 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Path Expressions — PhoenixmlDb Documentation</title><meta name="description" content="Navigate XML trees with XPath path expressions, axes, and predicates"><link rel="canonical" href="/language-reference/xpath/path-expressions.html"><meta property="og:title" content="Path Expressions"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xpath/path-expressions.html"><meta property="og:description" content="Navigate XML trees with XPath path expressions, axes, and predicates"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li class="active"><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="path-expressions"><a class="anchor" href="#path-expressions">#</a>Path Expressions</h1><p>Path expressions are the core of XPath. They navigate the document tree by following steps separated by <code>/</code>, much like file system paths.</p><h2 id="basic-navigation"><a class="anchor" href="#basic-navigation">#</a>Basic Navigation</h2><pre><code>/            =&gt; the document root
+/catalog     =&gt; the root element (if named "catalog")
+/catalog/book =&gt; all &lt;book&gt; children of &lt;catalog&gt;</code></pre><p>Each step selects a set of nodes. The next step runs from each selected node.</p><h3 id="the-linq-parallel"><a class="anchor" href="#the-linq-parallel">#</a>The LINQ Parallel</h3><table>
+      <thead>
+        <tr>
+          <th>
+            <p>XPath</p>
+          </th>
+          <th>
+            <p>LINQ to XML</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>/catalog</code></p>
+          </td>
+          <td>
+            <p><code>doc.Root</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>/catalog/book</code></p>
+          </td>
+          <td>
+            <p><code>doc.Root.Elements("book")</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>/catalog/book/title</code></p>
+          </td>
+          <td>
+            <p><code>doc.Root.Elements("book").Elements("title")</code></p>
+          </td>
+        </tr>
+      </tbody>
+    </table><h2 id="descendant-shortcut"><a class="anchor" href="#descendant-shortcut">#</a>Descendant Shortcut: <code>//</code></h2><p>
+      <code>//</code> selects descendants at any depth — like <code>Descendants()</code> in LINQ:</p><pre><code>//title        =&gt; every &lt;title&gt; element in the document
+//book/title   =&gt; every &lt;title&gt; that is a child of a &lt;book&gt;, at any depth</code></pre><p>Use <code>//</code> sparingly in large documents — it searches the entire subtree.</p><h2 id="predicates-filtering"><a class="anchor" href="#predicates-filtering">#</a>Predicates: Filtering</h2><p>Square brackets filter the selected nodes, like <code>.Where()</code> in LINQ:</p><pre><code>/catalog/book[1]                    =&gt; first book (XPath is 1-based!)
+/catalog/book[last()]               =&gt; last book
+/catalog/book[price &gt; 40]           =&gt; books where price &gt; 40
+/catalog/book[@category='data']     =&gt; books with category attribute = "data"
+/catalog/book[author='Bill Wagner'] =&gt; books by Bill Wagner</code></pre><p>Predicates can be combined:</p><pre><code>/catalog/book[@category='programming'][price &lt; 50]</code></pre><p>This selects programming books under $50 — equivalent to chaining <code>.Where()</code> calls.</p><h2 id="attributes"><a class="anchor" href="#attributes">#</a>Attributes: <code>@</code></h2><p>The <code>@</code> prefix selects attributes:</p><pre><code>/catalog/book/@isbn        =&gt; all isbn attributes
+/catalog/book/@category    =&gt; all category attributes</code></pre><h2 id="axes-navigating-in-every-direction"><a class="anchor" href="#axes-navigating-in-every-direction">#</a>Axes: Navigating in Every Direction</h2><p>By default, XPath navigates to <strong>children</strong>. But the tree has more relationships. Axes let you navigate in any direction:</p><table>
+      <thead>
+        <tr>
+          <th>
+            <p>Axis</p>
+          </th>
+          <th>
+            <p>Direction</p>
+          </th>
+          <th>
+            <p>LINQ Equivalent</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p><code>child::</code></p>
+          </td>
+          <td>
+            <p>Children (default)</p>
+          </td>
+          <td>
+            <p><code>.Elements()</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>parent::</code></p>
+          </td>
+          <td>
+            <p>Parent</p>
+          </td>
+          <td>
+            <p><code>.Parent</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>ancestor::</code></p>
+          </td>
+          <td>
+            <p>All ancestors</p>
+          </td>
+          <td>
+            <p><code>.Ancestors()</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>descendant::</code></p>
+          </td>
+          <td>
+            <p>All descendants</p>
+          </td>
+          <td>
+            <p><code>.Descendants()</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>following-sibling::</code></p>
+          </td>
+          <td>
+            <p>Siblings after</p>
+          </td>
+          <td>
+            <p><code>.ElementsAfterSelf()</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>preceding-sibling::</code></p>
+          </td>
+          <td>
+            <p>Siblings before</p>
+          </td>
+          <td>
+            <p><code>.ElementsBeforeSelf()</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>attribute::</code></p>
+          </td>
+          <td>
+            <p>Attributes</p>
+          </td>
+          <td>
+            <p><code>.Attributes()</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>self::</code></p>
+          </td>
+          <td>
+            <p>The node itself</p>
+          </td>
+          <td>
+            <p>(identity)</p>
+          </td>
+        </tr>
+      </tbody>
+    </table><p>Most axes have shortcuts:</p><pre><code>child::book     =&gt; book        (child is the default axis)
+attribute::isbn =&gt; @isbn       (@ is shorthand for attribute::)
+parent::*       =&gt; ..          (.. is shorthand for parent)
+self::*         =&gt; .           (. is shorthand for self)</code></pre><h2 id="wildcards"><a class="anchor" href="#wildcards">#</a>Wildcards</h2><pre><code>/catalog/*       =&gt; all children of catalog (any element)
+/catalog/book/@* =&gt; all attributes of book elements
+//*/title        =&gt; title elements that are grandchildren of anything</code></pre><h2 id="combining-paths-union"><a class="anchor" href="#combining-paths-union">#</a>Combining Paths: Union</h2><p>The <code>|</code> operator combines results from multiple paths:</p><pre><code>//title | //author    =&gt; all title and author elements</code></pre><p>Like LINQ's <code>.Union()</code> — but preserves document order.</p><h2 id="putting-it-together"><a class="anchor" href="#putting-it-together">#</a>Putting It Together</h2><p>A real-world example — find all books published after 2010 with a price in USD:</p><pre><code class="language-xpath">/catalog/book[published &gt; '2010-01-01']
+             [price/@currency='USD']
+             /title</code></pre><p>This reads naturally: "from the catalog, select books published after 2010 with USD pricing, then get their titles."</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>

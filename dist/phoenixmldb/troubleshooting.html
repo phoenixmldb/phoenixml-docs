@@ -1,0 +1,250 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Troubleshooting — PhoenixmlDb Documentation</title><meta name="description" content="Common issues and solutions for storage, queries, transactions, and clusters"><link rel="canonical" href="/phoenixmldb/troubleshooting.html"><meta property="og:title" content="Troubleshooting"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/troubleshooting.html"><meta property="og:description" content="Common issues and solutions for storage, queries, transactions, and clusters"><link rel="stylesheet" href="/css/style.css"><script>
+          (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
+        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li class="active"><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="troubleshooting"><a class="anchor" href="#troubleshooting">#</a>Troubleshooting</h1><p>Common issues and their solutions when working with PhoenixmlDb.</p><h2 id="storage-issues"><a class="anchor" href="#storage-issues">#</a>Storage Issues</h2><h3 id="map-full-error"><a class="anchor" href="#map-full-error">#</a>"Map full" Error</h3><p>
+      <strong>Symptom:</strong> <code>MDB_MAP_FULL: Environment mapsize limit reached</code></p><p>
+      <strong>Cause:</strong> Database size exceeded configured MapSize.</p><p>
+      <strong>Solution:</strong>
+    </p><pre><code class="language-csharp">// Increase MapSize
+db.Resize(currentMapSize * 2);
+// Or set larger initial size
+var options = new DatabaseOptions
+{
+    MapSize = 20L * 1024 * 1024 * 1024  // 20 GB
+};</code></pre><h3 id="max-readers-reached"><a class="anchor" href="#max-readers-reached">#</a>"Max readers reached"</h3><p>
+      <strong>Symptom:</strong> <code>MDB_READERS_FULL: Environment maxreaders limit reached</code></p><p>
+      <strong>Cause:</strong> Too many concurrent read transactions.</p><p>
+      <strong>Solution:</strong>
+    </p><pre><code class="language-csharp">// Increase max readers
+var options = new DatabaseOptions
+{
+    MaxReaders = 256
+};
+// Or ensure transactions are being disposed
+using (var txn = db.BeginTransaction(readOnly: true))
+{
+    // Always dispose transactions
+}</code></pre><h3 id="database-corruption"><a class="anchor" href="#database-corruption">#</a>Database Corruption</h3><p>
+      <strong>Symptom:</strong> Errors on startup, data inconsistency</p><p>
+      <strong>Cause:</strong> Unclean shutdown, disk failure</p><p>
+      <strong>Solution:</strong>
+    </p><pre><code class="language-bash"># Check database integrity
+phoenixmldb-admin check ./data
+# If corruption detected, restore from backup
+phoenixmldb-admin restore ./data --from backup.tar</code></pre><h2 id="query-issues"><a class="anchor" href="#query-issues">#</a>Query Issues</h2><h3 id="slow-queries"><a class="anchor" href="#slow-queries">#</a>Slow Queries</h3><p>
+      <strong>Symptom:</strong> Queries take longer than expected</p><p>
+      <strong>Diagnosis:</strong>
+    </p><pre><code class="language-csharp">var plan = db.Explain(query);
+Console.WriteLine(plan);
+// Check if indexes are being used</code></pre><p>
+      <strong>Solutions:</strong>
+    </p><ol><li>
+        <p>Add appropriate indexes</p>
+      </li><li>
+        <p>Rewrite query to filter early</p>
+      </li><li>
+        <p>Limit result size</p>
+      </li><li>
+        <p>Use parameters instead of string concatenation</p>
+      </li></ol><h3 id="query-parse-errors"><a class="anchor" href="#query-parse-errors">#</a>Query Parse Errors</h3><p>
+      <strong>Symptom:</strong> <code>XQueryParseException</code></p><p>
+      <strong>Common causes:</strong>
+    </p><ul><li>
+        <p>Missing quotes around strings</p>
+      </li><li>
+        <p>Invalid XPath syntax</p>
+      </li><li>
+        <p>Mismatched brackets</p>
+      </li><li>
+        <p>Reserved word used as variable</p>
+      </li></ul><p>
+      <strong>Example fixes:</strong>
+    </p><pre><code class="language-xquery">(: Wrong :)
+for $x in //item where name = test return $x
+(: Correct - quote the string :)
+for $x in //item where name = 'test' return $x
+(: Wrong :)
+for $for in //item return $for
+(: Correct - don't use reserved words :)
+for $item in //item return $item</code></pre><h3 id="type-errors"><a class="anchor" href="#type-errors">#</a>Type Errors</h3><p>
+      <strong>Symptom:</strong> <code>XPTY0004: Type error</code></p><p>
+      <strong>Solution:</strong>
+    </p><pre><code class="language-xquery">(: Wrong - comparing string to number :)
+//product[price &gt; '100']
+(: Correct - use number :)
+//product[xs:decimal(price) &gt; 100]</code></pre><h2 id="transaction-issues"><a class="anchor" href="#transaction-issues">#</a>Transaction Issues</h2><h3 id="deadlock"><a class="anchor" href="#deadlock">#</a>Deadlock</h3><p>
+      <strong>Symptom:</strong> Transaction hangs or times out</p><p>
+      <strong>Cause:</strong> Multiple transactions waiting on each other</p><p>
+      <strong>Solution:</strong>
+    </p><pre><code class="language-csharp">// Use retry pattern
+public T ExecuteWithRetry&lt;T&gt;(Func&lt;ITransaction, T&gt; operation)
+{
+    for (int i = 0; i &lt; 3; i++)
+    {
+        try
+        {
+            using var txn = db.BeginTransaction();
+            var result = operation(txn);
+            txn.Commit();
+            return result;
+        }
+        catch (TransactionConflictException)
+        {
+            Thread.Sleep(100 * (i + 1));
+        }
+    }
+    throw new Exception("Max retries exceeded");
+}</code></pre><h3 id="transaction-timeout"><a class="anchor" href="#transaction-timeout">#</a>Transaction Timeout</h3><p>
+      <strong>Symptom:</strong> <code>TransactionTimeoutException</code></p><p>
+      <strong>Solution:</strong>
+    </p><pre><code class="language-csharp">// Increase timeout
+var options = new TransactionOptions
+{
+    Timeout = TimeSpan.FromMinutes(5)
+};
+// Or break into smaller transactions</code></pre><h3 id="write-blocked"><a class="anchor" href="#write-blocked">#</a>Write Blocked</h3><p>
+      <strong>Symptom:</strong> Write operations hang</p><p>
+      <strong>Cause:</strong> Long-running read transaction blocking writes</p><p>
+      <strong>Solution:</strong>
+    </p><ul><li>
+        <p>Ensure read transactions are disposed promptly</p>
+      </li><li>
+        <p>Use shorter transactions</p>
+      </li><li>
+        <p>Don't hold transactions across async operations</p>
+      </li></ul><h2 id="connection-issues"><a class="anchor" href="#connection-issues">#</a>Connection Issues</h2><h3 id="cannot-connect-to-server"><a class="anchor" href="#cannot-connect-to-server">#</a>Cannot Connect to Server</h3><p>
+      <strong>Symptom:</strong> <code>ConnectionRefusedException</code></p><p>
+      <strong>Checklist:</strong>
+    </p><ol><li>
+        <p>Server is running: <code>phoenixmldb-server status</code></p>
+      </li><li>
+        <p>Port is correct</p>
+      </li><li>
+        <p>Firewall allows connection</p>
+      </li><li>
+        <p>TLS certificate is valid</p>
+      </li></ol><h3 id="authentication-failed"><a class="anchor" href="#authentication-failed">#</a>Authentication Failed</h3><p>
+      <strong>Symptom:</strong> <code>AuthenticationException</code></p><p>
+      <strong>Checklist:</strong>
+    </p><ol><li>
+        <p>Username and password correct</p>
+      </li><li>
+        <p>User exists in server config</p>
+      </li><li>
+        <p>API key is valid (if using)</p>
+      </li></ol><h3 id="tls-errors"><a class="anchor" href="#tls-errors">#</a>TLS Errors</h3><p>
+      <strong>Symptom:</strong> SSL/TLS handshake failed</p><p>
+      <strong>Solutions:</strong>
+    </p><pre><code class="language-csharp">// Trust self-signed certificate
+var options = new ClientOptions
+{
+    TlsSkipVerify = true  // Only for development
+};
+// Or specify certificate
+var options = new ClientOptions
+{
+    TlsCaCertificate = "/path/to/ca.crt"
+};</code></pre><h2 id="cluster-issues"><a class="anchor" href="#cluster-issues">#</a>Cluster Issues</h2><h3 id="split-brain"><a class="anchor" href="#split-brain">#</a>Split Brain</h3><p>
+      <strong>Symptom:</strong> Multiple nodes claim to be leader</p><p>
+      <strong>Cause:</strong> Network partition with nodes unable to communicate</p><p>
+      <strong>Solution:</strong>
+    </p><ol><li>
+        <p>Restore network connectivity</p>
+      </li><li>
+        <p>If persistent, restart minority partition</p>
+      </li><li>
+        <p>Check firewall rules between nodes</p>
+      </li></ol><h3 id="node-won-t-join"><a class="anchor" href="#node-won-t-join">#</a>Node Won't Join</h3><p>
+      <strong>Symptom:</strong> New node cannot join cluster</p><p>
+      <strong>Checklist:</strong>
+    </p><ol><li>
+        <p>Cluster ID matches</p>
+      </li><li>
+        <p>Network connectivity to peers</p>
+      </li><li>
+        <p>Raft ports open</p>
+      </li><li>
+        <p>Configuration correct</p>
+      </li></ol><h3 id="replication-lag"><a class="anchor" href="#replication-lag">#</a>Replication Lag</h3><p>
+      <strong>Symptom:</strong> Followers behind leader</p><p>
+      <strong>Diagnosis:</strong>
+    </p><pre><code class="language-bash">phoenixmldb-cluster status
+# Shows replication status for each node</code></pre><p>
+      <strong>Solutions:</strong>
+    </p><ol><li>
+        <p>Check network bandwidth</p>
+      </li><li>
+        <p>Reduce write load</p>
+      </li><li>
+        <p>Increase snapshot frequency</p>
+      </li></ol><h2 id="performance-issues"><a class="anchor" href="#performance-issues">#</a>Performance Issues</h2><h3 id="high-memory-usage"><a class="anchor" href="#high-memory-usage">#</a>High Memory Usage</h3><p>
+      <strong>Causes and solutions:</strong>
+    </p><ol><li>
+        <p>
+          <strong>Large transactions</strong> — Use smaller batches</p>
+      </li><li>
+        <p>
+          <strong>Unclosed transactions</strong> — Ensure disposal</p>
+      </li><li>
+        <p>
+          <strong>Large documents in memory</strong> — Use streaming</p>
+      </li><li>
+        <p>
+          <strong>Many readers</strong> — Reduce max readers</p>
+      </li></ol><h3 id="high-cpu-usage"><a class="anchor" href="#high-cpu-usage">#</a>High CPU Usage</h3><p>
+      <strong>Causes and solutions:</strong>
+    </p><ol><li>
+        <p>
+          <strong>Complex queries</strong> — Optimize or add indexes</p>
+      </li><li>
+        <p>
+          <strong>Full scans</strong> — Add path/value indexes</p>
+      </li><li>
+        <p>
+          <strong>XPath compilation</strong> — Use prepared queries</p>
+      </li></ol><h3 id="high-disk-i-o"><a class="anchor" href="#high-disk-i-o">#</a>High Disk I/O</h3><p>
+      <strong>Causes and solutions:</strong>
+    </p><ol><li>
+        <p>
+          <strong>Frequent syncs</strong> — Consider NoMetaSync</p>
+      </li><li>
+        <p>
+          <strong>Large writes</strong> — Batch in transactions</p>
+      </li><li>
+        <p>
+          <strong>No SSD</strong> — Upgrade to SSD storage</p>
+      </li></ol><h2 id="logging-and-diagnostics"><a class="anchor" href="#logging-and-diagnostics">#</a>Logging and Diagnostics</h2><h3 id="enable-debug-logging"><a class="anchor" href="#enable-debug-logging">#</a>Enable Debug Logging</h3><pre><code class="language-csharp">var options = new DatabaseOptions
+{
+    Logger = LoggerFactory.Create(builder =&gt;
+    {
+        builder.AddConsole();
+        builder.SetMinimumLevel(LogLevel.Debug);
+    }).CreateLogger&lt;XmlDatabase&gt;()
+};</code></pre><h3 id="query-metrics"><a class="anchor" href="#query-metrics">#</a>Query Metrics</h3><pre><code class="language-csharp">var options = new QueryOptions
+{
+    CollectMetrics = true
+};
+var result = db.Query(xquery, options);
+Console.WriteLine($"Parse: {result.Metrics.ParseTime}");
+Console.WriteLine($"Execute: {result.Metrics.ExecuteTime}");
+Console.WriteLine($"Rows scanned: {result.Metrics.RowsScanned}");</code></pre><h3 id="database-statistics"><a class="anchor" href="#database-statistics">#</a>Database Statistics</h3><pre><code class="language-csharp">var stats = db.GetStatistics();
+Console.WriteLine($"Containers: {stats.ContainerCount}");
+Console.WriteLine($"Documents: {stats.DocumentCount}");
+Console.WriteLine($"Size: {stats.UsedBytes / 1024 / 1024} MB");
+Console.WriteLine($"Readers: {stats.ActiveReaders}");</code></pre><h2 id="getting-help"><a class="anchor" href="#getting-help">#</a>Getting Help</h2><p>If you can't resolve an issue:</p><ol><li>
+        <p>Check the <a href="index.html" title="">documentation</a></p>
+      </li><li>
+        <p>Search <a href="https://github.com/endpointsystems/phoenixml/issues" title="">GitHub Issues</a></p>
+      </li><li>
+        <p>Create a new issue with:</p>
+        <ul><li>
+            <p>PhoenixmlDb version</p>
+          </li><li>
+            <p>.NET version</p>
+          </li><li>
+            <p>Operating system</p>
+          </li><li>
+            <p>Minimal reproduction code</p>
+          </li><li>
+            <p>Full error message and stack trace</p>
+          </li></ul>
+      </li></ol></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
