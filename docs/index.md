@@ -1,32 +1,40 @@
 ---
 title: Home
-description: XPath, XSLT, and XQuery documentation for .NET developers
+description: PhoenixmlDb — Modern XML/JSON document database for .NET
 sort: 0
 ---
 
-# PhoenixML Documentation
+# PhoenixmlDb Documentation
 
-A practical guide to XPath, XSLT, and XQuery for .NET developers who work with data integration.
+PhoenixmlDb is a modern, cross-platform embedded XML/JSON document database for .NET. Store, query, and transform documents with the full power of XQuery 4.0 and XSLT 4.0 — no Saxon dependency, no license fees.
 
-If you've spent your career working with JSON and REST APIs, you might wonder why XML technologies still matter. The answer is simple: XML remains the backbone of enterprise data exchange, document processing, healthcare (HL7/FHIR), financial services (FpML, SWIFT), government standards, and publishing. When you need to transform, query, or validate structured documents at scale, XPath, XSLT, and XQuery are purpose-built tools that no amount of `System.Text.Json` will replace.
+## Get Started
 
-This documentation assumes you're comfortable with C# and .NET. We'll draw parallels to LINQ, JSON processing, and other patterns you already know — then show you where XML technologies go further.
+New to PhoenixmlDb? Start here:
 
-## Where to Start
+- **[Installation](getting-started/installation.md)** — NuGet packages, platform requirements, building from source
+- **[Quick Start](getting-started/quick-start.md)** — Your first query in 5 minutes
+- **[First Application](getting-started/first-application.md)** — Build a complete app with PhoenixmlDb
 
-- **[XML Foundations](xml-foundations/index.md)** — If you're new to XML or need a refresher, start here. We cover just enough to be productive, drawing comparisons to JSON along the way.
-- **[XPath](xpath/index.md)** — The query language for XML. Think of it as LINQ expressions for XML trees — but standardized, portable, and incredibly powerful.
-- **[XSLT](xslt/index.md)** — Transform XML documents into HTML, other XML formats, JSON, CSV, or plain text. If you've ever written a Razor view or a string template, XSLT is the industrial-strength version.
-- **[XQuery](xquery/index.md)** — A full programming language for querying and constructing XML. Where XPath selects nodes, XQuery builds new documents from them.
+## Build with PhoenixmlDb
 
-## Why These Tools?
+Everything you need to build applications with the database:
 
-| If you know... | Then you'll appreciate... |
-|----------------|--------------------------|
-| LINQ to XML | XPath — same idea, standardized syntax |
-| Razor / Handlebars | XSLT — declarative template-based transforms |
-| SQL | XQuery — query language for hierarchical data |
-| `jq` for JSON | XPath/XQuery — the XML equivalents, with more power |
+- **[Core Concepts](phoenixmldb/core-concepts.md)** — Containers, documents, the XDM, and shredded storage
+- **[JSON Support](phoenixmldb/json-support/index.md)** — Store and query JSON with full indexing
+- **[Indexing](phoenixmldb/indexing.md)** — Path, value, full-text, structural, and metadata indexes
+- **[Transactions](phoenixmldb/transactions.md)** — ACID guarantees with MVCC
+- **[Deployment](phoenixmldb/deployment/index.md)** — Embedded, server, and cluster modes
+- **[API Reference](phoenixmldb/api-reference/index.md)** — Complete .NET API documentation
+
+## Learn XPath, XSLT, and XQuery
+
+Comprehensive language references for the XML technology stack — written for .NET developers:
+
+- **[XML Foundations](language-reference/xml-foundations/index.md)** — XML essentials, including working with JSON
+- **[XPath](language-reference/xpath/index.md)** — The query language for XML — like LINQ, but standardized
+- **[XSLT](language-reference/xslt/index.md)** — Declarative document transformations
+- **[XQuery](language-reference/xquery/index.md)** — A full programming language for querying and constructing XML
 
 ## Tools
 
