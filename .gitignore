@@ -4,3 +4,10 @@ intermediate/
 .DS_Store
 bin/
 obj/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
