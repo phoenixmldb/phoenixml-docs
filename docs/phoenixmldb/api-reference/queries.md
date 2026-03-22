@@ -310,4 +310,4 @@ catch (QueryTimeoutException ex)
 
 | Language Reference | Performance | Transactions |
 |-------------------|-------------|--------------|
-| **[XQuery Guide](../xquery-guide.md)**<br>XQuery language reference | **[Index API](indexes.md)**<br>Optimize queries with indexes | **[Transaction API](transactions.md)**<br>Transactional queries |
+| **[XQuery Guide](../../language-reference/xquery/index.md)**<br>XQuery language reference | **[Index API](indexes.md)**<br>Optimize queries with indexes | **[Transaction API](transactions.md)**<br>Transactional queries |

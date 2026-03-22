@@ -314,4 +314,4 @@ serialize(
 
 | Storage | Indexing | Functions |
 |---------|----------|-----------|
-| **[JSON Storage](json-storage.md)**<br>Storage options | **[JSON Indexing](json-indexing.md)**<br>Optimize query performance | **[Functions and Operators](../functions-and-operators.md)**<br>XQuery functions |
+| **[JSON Storage](json-storage.md)**<br>Storage options | **[JSON Indexing](json-indexing.md)**<br>Optimize query performance | **[Functions and Operators](../../language-reference/xpath/functions/index.md)**<br>XQuery functions |

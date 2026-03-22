@@ -373,4 +373,4 @@ volumes:
 
 | High Availability | Configuration | Support |
 |-------------------|---------------|---------|
-| **[Cluster Mode](cluster-mode.md)**<br>High availability | **[Configuration](configuration.md)**<br>All settings | **[Troubleshooting](troubleshooting.md)**<br>Problem solving |
+| **[Cluster Mode](cluster-mode.md)**<br>High availability | **[Configuration](../configuration.md)**<br>All settings | **[Troubleshooting](../troubleshooting.md)**<br>Problem solving |

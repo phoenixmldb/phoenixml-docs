@@ -310,4 +310,4 @@ foreach (var title in searchResults)
 
 | Build an App | Understand Architecture | Master XQuery |
 |---|---|---|
-| **[First Application](first-application.md)**<br>Build a complete application with PhoenixmlDb. | **[Core Concepts](../concepts/core-concepts.md)**<br>Understand the architecture and design principles. | **[XQuery Guide](../xquery/xquery-guide.md)**<br>Master XQuery for powerful document queries. |
+| **[First Application](first-application.md)**<br>Build a complete application with PhoenixmlDb. | **[Core Concepts](../phoenixmldb/core-concepts.md)**<br>Understand the architecture and design principles. | **[XQuery Guide](../language-reference/xquery/index.md)**<br>Master XQuery for powerful document queries. |

@@ -158,4 +158,4 @@ PhoenixmlDb also ships a `JsonDocumentStore` class for lightweight in-memory JSO
 
 | Storage | Queries | Containers |
 |---------|---------|------------|
-| **[JSON Storage](json-storage.md)**<br>Storage options and validation | **[JSON Queries](json-queries.md)**<br>XQuery patterns for JSON | **[Containers](../containers.md)**<br>Container configuration |
+| **[JSON Storage](json-storage.md)**<br>Storage options and validation | **[JSON Queries](json-queries.md)**<br>XQuery patterns for JSON | **[Containers](../api-reference/containers.md)**<br>Container configuration |

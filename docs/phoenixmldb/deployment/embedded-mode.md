@@ -297,4 +297,4 @@ Consider Server or Cluster mode when:
 
 | Deployment | Configuration | Optimization |
 |------------|---------------|--------------|
-| **[Server Mode](server-mode.md)**<br>Multi-client access | **[Configuration](configuration.md)**<br>Advanced settings | **[Performance Tuning](performance-tuning.md)**<br>Optimization |
+| **[Server Mode](server-mode.md)**<br>Multi-client access | **[Configuration](../configuration.md)**<br>Advanced settings | **[Performance Tuning](../performance-tuning.md)**<br>Optimization |

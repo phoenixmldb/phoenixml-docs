@@ -142,4 +142,4 @@ dotnet pack -c Release
 
 | Learn Basics | Configure | Deploy |
 |---|---|---|
-| **[Quick Start](quick-start.md)**<br>Learn the basics with hands-on examples. | **[Configuration](../reference/configuration.md)**<br>Configure storage and performance options. | **[Deployment](../deployment/overview.md)**<br>Deploy in server or cluster mode. |
+| **[Quick Start](quick-start.md)**<br>Learn the basics with hands-on examples. | **[Configuration](../phoenixmldb/configuration.md)**<br>Configure storage and performance options. | **[Deployment](../phoenixmldb/deployment/index.md)**<br>Deploy in server or cluster mode. |

@@ -363,4 +363,4 @@ volumes:
 
 | Deployment | Configuration | Support |
 |------------|---------------|---------|
-| **[Server Mode](server-mode.md)**<br>Single server setup | **[Configuration](configuration.md)**<br>Cluster settings | **[Troubleshooting](troubleshooting.md)**<br>Cluster issues |
+| **[Server Mode](server-mode.md)**<br>Single server setup | **[Configuration](../configuration.md)**<br>Cluster settings | **[Troubleshooting](../troubleshooting.md)**<br>Cluster issues |

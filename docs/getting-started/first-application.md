@@ -490,4 +490,4 @@ dotnet run
 
 | Architecture | Querying | Performance |
 |---|---|---|
-| **[Core Concepts](../concepts/core-concepts.md)**<br>Deep dive into PhoenixmlDb architecture | **[XQuery Guide](../xquery/xquery-guide.md)**<br>Master XQuery for complex queries | **[Indexing](../reference/indexing.md)**<br>Optimize query performance |
+| **[Core Concepts](../phoenixmldb/core-concepts.md)**<br>Deep dive into PhoenixmlDb architecture | **[XQuery Guide](../language-reference/xquery/index.md)**<br>Master XQuery for complex queries | **[Indexing](../phoenixmldb/indexing.md)**<br>Optimize query performance |
