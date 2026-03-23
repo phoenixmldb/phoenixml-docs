@@ -33,6 +33,19 @@ Direct constructors look like XML literals with embedded expressions in curly br
 
 This creates an XML element literally — no query needed.
 
+### Nested Elements and Dynamic Content
+
+Direct constructors can contain static and dynamic content freely mixed, including nested elements with embedded expressions:
+
+```xquery
+<root>
+  <item name="test">{current-dateTime()}</item>
+  <nested><child>text</child></nested>
+</root>
+```
+
+This produces exactly the XML you see, with `{current-dateTime()}` replaced by the current timestamp. The power of direct constructors is that the query output mirrors the structure of the XML you are building.
+
 ### Embedded Expressions
 
 Curly braces `{}` embed XPath/XQuery expressions:
@@ -197,6 +210,31 @@ element { QName("http://www.w3.org/2005/Atom", "feed") } {
   element { QName("http://www.w3.org/2005/Atom", "title") } { $title }
 }
 ```
+
+---
+
+## String Constructors
+
+XQuery 3.1 introduces string constructors using backtick syntax. These are useful when building strings that contain characters that would otherwise need escaping (curly braces, quotes, etc.):
+
+```xquery
+(: Basic string constructor :)
+let $name := "World"
+return ``[Hello, `{$name}`! This is a {literal brace}.]``
+(: Result: "Hello, World! This is a {literal brace}." :)
+```
+
+Inside a string constructor (delimited by `` ``[ `` and `` ]`` ``), only expressions wrapped in `` `{ `` and `` }` `` are evaluated. Everything else is literal text, including curly braces.
+
+```xquery
+(: Generating JSON-like strings :)
+let $id := 42
+let $label := "Widget"
+return ``[{"id": `{$id}`, "label": "`{$label}`"}]``
+(: Result: '{"id": 42, "label": "Widget"}' :)
+```
+
+String constructors are particularly useful for generating code, templates, or any output where the text itself contains XQuery's special characters.
 
 ---
 

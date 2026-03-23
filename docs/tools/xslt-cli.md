@@ -2,6 +2,7 @@
 title: xslt CLI
 description: Command-line XSLT 3.0/4.0 processor — transform XML documents from the terminal
 sort: 1
+version: 1.1.0
 ---
 
 # xslt CLI
@@ -42,6 +43,7 @@ command | xslt [options] <stylesheet>
 | `--timing` | | Show parse/compile/transform timing breakdown |
 | `--trace` | | Log template matching, function calls, built-in rules |
 | `--dry-run` | | Parse and compile only — validate without executing |
+| `--stream` | | Use streaming for large files (lower memory usage) |
 | `--verbose` | `-v` | Show detailed error information (stack traces) |
 | `--help` | `-h` | Show help message |
 | `--version` | | Show version information |
@@ -160,6 +162,17 @@ xslt --dry-run style.xsl
 ```
 
 Exits with code 0 if the stylesheet is valid, 2 if there are errors. Useful in CI/CD pipelines.
+
+## Streaming
+
+For large XML files where memory is a concern, use `--stream` to process input without loading the entire document into memory. This uses `TransformAsync(Stream, Stream)` under the hood — forward-only XmlReader-based processing rather than building a full in-memory tree.
+
+```bash
+xslt --stream style.xsl large-input.xml
+xslt --stream -o result.html style.xsl large-input.xml
+```
+
+Streaming requires the stylesheet to be written for streamability (`xsl:mode streamable="yes"` or `xsl:source-document streamable="yes"`). Non-streamable constructs will cause a compile-time error.
 
 ## Real-World Workflows
 

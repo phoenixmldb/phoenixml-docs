@@ -14,6 +14,7 @@ One of XSLT's greatest strengths is producing multiple output formats from the s
 - [XML Output](#xml-output)
 - [Text Output](#text-output)
 - [JSON Output](#json-output)
+- [CSV Output](#csv-output)
 - [Adaptive Output](#adaptive-output)
 - [Multiple Outputs in One Stylesheet](#multiple-outputs-in-one-stylesheet)
 - [Serialization Parameters](#serialization-parameters)
@@ -239,6 +240,46 @@ XSLT 3.0 can produce JSON directly. The approach uses XPath maps and arrays:
 
 ---
 
+## CSV Output
+
+PhoenixmlDb supports `method="csv"` as a built-in output method for producing comma-separated values directly, without manually building CSV with `method="text"`:
+
+```xml
+<xsl:output method="csv" encoding="UTF-8"/>
+
+<xsl:template match="catalog">
+  <!-- Header row -->
+  <csv>
+    <row>
+      <field>ID</field>
+      <field>Name</field>
+      <field>Price</field>
+      <field>Category</field>
+    </row>
+    <xsl:for-each select="product">
+      <row>
+        <field><xsl:value-of select="@id"/></field>
+        <field><xsl:value-of select="name"/></field>
+        <field><xsl:value-of select="price"/></field>
+        <field><xsl:value-of select="@category"/></field>
+      </row>
+    </xsl:for-each>
+  </csv>
+</xsl:template>
+```
+
+**Output:**
+```csv
+ID,Name,Price,Category
+P001,Wireless Mouse,29.99,electronics
+P002,Mechanical Keyboard,89.99,electronics
+P003,USB-C Hub,45.00,accessories
+```
+
+The CSV output method handles quoting of fields that contain commas, double quotes, or newlines automatically. For more control over CSV formatting with `method="text"`, see the [Text Output](#text-output) section above.
+
+---
+
 ## Adaptive Output
 
 XSLT 3.0's adaptive output method automatically chooses the serialization based on the result type:
@@ -301,18 +342,65 @@ The full set of `xsl:output` attributes:
 
 | Attribute | Values | Default | Description |
 |-----------|--------|---------|-------------|
-| `method` | `html`, `xml`, `xhtml`, `text`, `json`, `adaptive` | `xml` | Output format |
+| `method` | `html`, `xml`, `xhtml`, `text`, `json`, `csv`, `adaptive` | `xml` | Output format |
 | `html-version` | `5` | | HTML version (use `5` for HTML5) |
-| `indent` | `yes`, `no` | `no` | Pretty-print the output |
+| `indent` | `yes`, `no` | `no` | Pretty-print the output (XML, HTML, XHTML) |
 | `encoding` | `UTF-8`, `ISO-8859-1`, etc. | `UTF-8` | Character encoding |
 | `omit-xml-declaration` | `yes`, `no` | `no` (xml), `yes` (html) | Include `<?xml?>` |
 | `standalone` | `yes`, `no`, `omit` | `omit` | XML standalone declaration |
 | `doctype-system` | URI | | System DOCTYPE identifier |
 | `doctype-public` | String | | Public DOCTYPE identifier |
-| `cdata-section-elements` | Space-separated names | | Elements to output as CDATA |
+| `cdata-section-elements` | Space-separated names | | Elements to output as CDATA sections |
+| `suppress-indentation` | Space-separated element names | | Elements whose content should not be indented even when `indent="yes"` |
+| `byte-order-mark` | `yes`, `no` | `no` | Whether to emit a BOM at the start of the output |
+| `escape-uri-attributes` | `yes`, `no` | `yes` (html/xhtml) | Whether to percent-encode non-ASCII characters in URI-valued attributes |
+| `json-node-output-method` | Method name | `xml` | Serialization method for nodes within JSON output (used when JSON output contains XML nodes) |
 | `media-type` | MIME type | | Output MIME type hint |
 | `include-content-type` | `yes`, `no` | `yes` (html) | Include `<meta>` content type |
 | `item-separator` | String | | Separator between sequence items (text mode) |
+
+### DOCTYPE Declarations
+
+Use `doctype-public` and `doctype-system` to produce DOCTYPE declarations in the output:
+
+```xml
+<!-- HTML 4.01 Transitional -->
+<xsl:output method="html"
+            doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
+            doctype-system="http://www.w3.org/TR/html4/loose.dtd"/>
+
+<!-- XHTML 1.0 Strict -->
+<xsl:output method="xhtml"
+            doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
+            doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
+```
+
+For HTML5, use `html-version="5"` instead, which outputs `<!DOCTYPE html>` automatically.
+
+### Suppress Indentation
+
+When `indent="yes"` is set, some elements should not have their content reformatted (for example, `<pre>` or `<code>` blocks). Use `suppress-indentation` to list those elements:
+
+```xml
+<xsl:output method="html" html-version="5" indent="yes"
+            suppress-indentation="pre code textarea"/>
+```
+
+### Byte Order Mark
+
+Some systems require a BOM (byte order mark) at the beginning of the file:
+
+```xml
+<xsl:output method="xml" encoding="UTF-8" byte-order-mark="yes"/>
+```
+
+### JSON Node Output Method
+
+When producing JSON output that may contain XML nodes (for example, mixed content), `json-node-output-method` controls how those nodes are serialized within the JSON string:
+
+```xml
+<xsl:output method="json" indent="yes" json-node-output-method="html"/>
+```
 
 ### Named Output Definitions
 

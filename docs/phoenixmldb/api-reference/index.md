@@ -74,6 +74,9 @@ Create and manage indexes for query optimization.
 ### [Transaction API](transactions.md)
 ACID transactions and concurrent access control.
 
+### [XSLT API](xslt-api.md)
+XsltTransformer — stream-based transforms, result document handling, source/mode selection, and collection binding.
+
 ## Quick Reference
 
 ### Common Operations

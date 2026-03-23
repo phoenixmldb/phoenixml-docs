@@ -8,6 +8,8 @@ sort: 7
 
 XQuery was originally a read-only language. The Update Facility (XUF) adds the ability to modify XML data while preserving XQuery's functional semantics. Updates don't happen immediately — they're collected into a **Pending Update List** and applied atomically at the end.
 
+The Update Facility is **fully operational** in PhoenixmlDb. All update expressions — `insert`, `delete`, `replace`, `rename`, and `transform` (copy-modify-return) — are fully implemented and execute against the `InMemoryUpdatableNodeStore`. This means updates are applied in-memory with full Pending Update List semantics, atomic application, and conflict detection.
+
 If you're coming from C#, think of it as a combination of Entity Framework's change tracking (modifications are staged, then flushed) and LINQ to XML's mutation methods (`Add`, `Remove`, `ReplaceWith`).
 
 ## Contents
@@ -548,6 +550,32 @@ return (
   else
     ()
 )
+```
+
+---
+
+## InMemoryUpdatableNodeStore
+
+All update operations execute against the `InMemoryUpdatableNodeStore`, which provides a mutable node store optimized for XQuery Update:
+
+- **Full PUL support** — Pending Update Lists are collected, validated for conflicts, and applied atomically
+- **Node identity preservation** — Nodes retain their identity across updates (important for `replace value of node` which modifies content without replacing the node)
+- **Deep copy semantics** — The `transform` (copy-modify-return) expression creates true deep copies, so the original nodes are never affected
+- **Conflict detection** — Conflicting updates on the same node (e.g., two `replace node` on the same target) are detected and reported as errors
+
+```csharp
+// From C#, execute an update query
+var engine = new XQueryEngine();
+engine.SetVariable("order-id", "O100");
+engine.SetVariable("new-status", "shipped");
+
+await engine.ExecuteAsync(@"
+  let $order := //order[@id = $order-id]
+  return (
+    replace value of node $order/@status with $new-status,
+    insert node <shipped-date>{ current-date() }</shipped-date> as last into $order
+  )
+");
 ```
 
 ---

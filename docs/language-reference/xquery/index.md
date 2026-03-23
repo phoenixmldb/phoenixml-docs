@@ -25,6 +25,49 @@ If XPath is `SELECT column FROM table WHERE condition`, XQuery is the full SQL w
 - **[Prolog and Declarations](prolog.md)** — Module declarations, namespace imports, options, and configuration.
 - **[Extensibility](extensibility.md)** — Custom functions, modules, external functions, and .NET integration.
 
+## Key Features
+
+### Direct Element Constructors
+
+XQuery can build XML inline using XML-literal syntax with embedded expressions in curly braces `{}`. This is one of XQuery's most powerful features — your query output looks like the XML it produces:
+
+```xquery
+<root>
+  <item name="test">{current-dateTime()}</item>
+  <nested><child>text</child></nested>
+</root>
+```
+
+See **[Constructors](constructors.md)** for full details on direct and computed constructors.
+
+### String Constructors
+
+XQuery 3.1+ supports string constructors using backtick syntax for creating strings that contain curly braces or other characters that are awkward to escape:
+
+```xquery
+``[This string contains {$variable} interpolation and literal { braces }]``
+```
+
+The content between `` ``[ `` and `` ]`` `` is treated as a string template. Expressions inside `{` `}` are evaluated and interpolated. To include a literal curly brace, double it: `{{` or `}}`.
+
+### Annotations
+
+Function and variable declarations can carry annotations that control visibility and behavior:
+
+```xquery
+(: Public function — accessible to importers :)
+declare %public function local:format($x) { ... };
+
+(: Private function — internal to this module :)
+declare %private function local:helper($x) { ... };
+
+(: Annotations can also carry application-specific metadata :)
+declare %rest:path("/api/users") %rest:GET
+function local:get-users() { ... };
+```
+
+Annotations are declared with `%name` or `%name("value")` before the `function` or `variable` keyword. The built-in annotations `%public` and `%private` control visibility in library modules.
+
 ## The LINQ Parallel
 
 XQuery's FLWOR expression maps almost directly to LINQ query syntax:

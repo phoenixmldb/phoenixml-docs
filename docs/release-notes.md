@@ -4,6 +4,48 @@ description: PhoenixmlDb version history and changelog
 sort: 5
 ---
 
+## Version 1.1.0 (March 2026)
+
+Major update focused on standards compliance, streaming, and API completeness.
+
+### XSLT Engine
+
+- **Streaming execution**: XmlReader-based forward-only processing for `xsl:source-document streamable="yes"` and `xsl:mode streamable="yes"`
+- **Stream API**: `TransformAsync(TextReader)`, `TransformAsync(Stream)`, `TransformAsync(TextWriter)`, `TransformAsync(Stream, Stream)`, `ResultDocumentHandler`
+- **Serialization**: `indent="yes"` (XML, HTML, XHTML), DOCTYPE generation, `suppress-indentation`, `byte-order-mark`, `escape-uri-attributes`
+- **xsl:record**: Proper XDM map construction
+- **xsl:expose**: Full package visibility control (conformance tests enabled)
+- **Error handling**: Proper XTSE0020 for invalid `on-no-match`/`on-multiple-match` values
+- **System properties**: `supports-streaming=yes`, `supports-namespace-axis=yes`, `xpath-version=4.0`
+
+### XQuery Engine
+
+- **Direct element constructors**: `<element>text {expr}</element>` with ANTLR lexer modes
+- **XQuery Update Facility**: Full execution (insert, delete, replace, rename, transform copy-modify-return)
+- **Annotations**: `%public`, `%private`, `%updating` on function/variable declarations
+- **String constructors**: `` ``[Hello `{$name}`!]`` `` backtick interpolation
+- **Module imports**: Parsed with XQST0059 error when resolver not configured
+- **UCA collations**: Unicode Collation Algorithm with lang/strength/fallback parameters
+- **External variables**: `SetExternalVariable()` API with XPDY0002 for unbound
+- **JSON serialization**: Maps/arrays serialize as JSON, `declare option output:method "json"` support
+- **Node constructors**: All constructor types (element, attribute, text, comment, PI, document) fully operational
+
+### CLI Tools
+
+- **xslt CLI**: `--stream` flag for large file processing, version 1.1.0
+- **xquery CLI**: `--output json` flag, auto-detect serialization options, version 1.1.0
+- CLI tools moved into engine repos (same CI, same release)
+
+### Quality
+
+- 843 XQuery tests (including 30 integration tests through XQueryFacade)
+- 300 XSLT tests (including 36 integration tests through XsltTransformer)
+- Zero TODOs in source
+- Zero silent exception swallowing
+- All README claims verified by tests
+
+---
+
 ## Version 1.0.0
 
 **Release Date:** 2025
@@ -68,7 +110,7 @@ This is the initial release. No upgrade path needed.
 
 ## Roadmap
 
-### Version 1.1 (Planned)
+### Version 1.2 (Planned)
 
 - Full XML Schema validation
 - XQuery Full-Text extension
@@ -76,7 +118,7 @@ This is the initial release. No upgrade path needed.
 - GraphQL API
 - More XSLT 4.0 features
 
-### Version 1.2 (Planned)
+### Version 1.3 (Planned)
 
 - Change data capture (CDC)
 - Event sourcing support
@@ -105,7 +147,7 @@ We welcome contributions! See our [Contributing Guide](https://github.com/endpoi
 
 ## License
 
-PhoenixmlDb is licensed under the MIT License.
+PhoenixmlDb is licensed under the Apache 2.0 License.
 
 ## Acknowledgments
 

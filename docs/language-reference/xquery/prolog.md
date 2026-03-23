@@ -224,6 +224,32 @@ str:capitalize("hello world")
 (: Result: "Hello World" :)
 ```
 
+### Importing Modules with Annotated Declarations
+
+When a library module uses `%public` and `%private` annotations, only the `%public` (or unannotated, which defaults to public) declarations are visible to the importer:
+
+```xquery
+(: strings.xqm :)
+module namespace str = "http://example.com/strings";
+
+declare %public function str:capitalize($text as xs:string) as xs:string {
+  str:apply-case-rule($text, "upper")
+};
+
+declare %private function str:apply-case-rule($text as xs:string, $rule as xs:string) as xs:string {
+  (: internal implementation — not visible to importers :)
+  ...
+};
+```
+
+```xquery
+(: main.xq :)
+import module namespace str = "http://example.com/strings" at "strings.xqm";
+
+str:capitalize("hello")         (: OK — %public :)
+(: str:apply-case-rule(...)     ERROR — %private, not accessible :)
+```
+
 **C# parallel:**
 ```csharp
 // C# project reference + using
@@ -325,6 +351,39 @@ public static IEnumerable<Order> GetOrders(string userId, int page, int pageSize
 }
 ```
 
+### Annotations on Declarations
+
+Variable and function declarations can carry **annotations** that control visibility and convey metadata. Annotations are prefixed with `%` and appear before the `variable` or `function` keyword:
+
+```xquery
+(: Visibility annotations :)
+declare %public variable $api-version := "2.0";
+declare %private variable $internal-key := "abc123";
+
+(: Function annotations :)
+declare %public function local:get-data() { collection("data") };
+declare %private function local:validate($x) { ... };
+```
+
+The two built-in annotations are:
+
+| Annotation | Meaning | Default |
+|------------|---------|---------|
+| `%public` | Visible to importing modules | Yes (functions and variables are public by default) |
+| `%private` | Hidden from importing modules | No |
+
+Processors and frameworks may define additional annotations. For example, REST API frameworks often use annotations like `%rest:path("/endpoint")` and `%rest:GET` to bind XQuery functions to HTTP routes.
+
+**C# parallel:**
+```csharp
+// Annotations are like C# access modifiers + attributes
+public static string ApiVersion = "2.0";         // %public
+private static string InternalKey = "abc123";     // %private
+
+[HttpGet("/endpoint")]                            // %rest:path, %rest:GET
+public IActionResult GetData() { ... }
+```
+
 ### Complex Variable Values
 
 Variables can hold any XQuery value — sequences, maps, arrays, XML nodes:
@@ -382,6 +441,27 @@ declare option output:indent "yes";
 (: Output as plain text :)
 declare option output:method "text";
 ```
+
+**JSON serialization** is a common use case — output XQuery maps and arrays as JSON:
+
+```xquery
+declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
+declare option output:method "json";
+declare option output:indent "yes";
+
+map {
+  "users": array {
+    for $u in collection("users")/user
+    return map {
+      "id": string($u/@id),
+      "name": string($u/name),
+      "email": string($u/email)
+    }
+  }
+}
+```
+
+This query produces formatted JSON output directly, combining XQuery's data querying with JSON serialization.
 
 Common serialization options:
 

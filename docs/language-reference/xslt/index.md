@@ -41,6 +41,21 @@ The complete set of XSLT 3.0/4.0 instructions, organized by purpose:
 - **[Dynamic Evaluation](instructions/dynamic-evaluation.md)** — Runtime XPath evaluation
 - **[Number Formatting](instructions/number-formatting.md)** — Numbering, decimal formats, character maps
 
+## Streaming
+
+PhoenixmlDb supports XSLT 3.0 streaming for processing documents that are too large to fit in memory. Streaming processes the input as a forward-only event stream, never building the full tree.
+
+- **[Streaming and Accumulators](instructions/streaming.md)** — `xsl:mode streamable="yes"`, `xsl:source-document`, accumulators, `xsl:fork`, and streamability rules.
+
+Key capabilities:
+
+- **Primary source streaming** — Declare `xsl:mode streamable="yes"` to stream the principal input document via XmlReader
+- **External document streaming** — Use `xsl:source-document streamable="yes"` to stream documents loaded during transformation
+- **Accumulators** — Maintain running state (counts, totals, max values) as nodes flow past
+- **Static streamability checking** — The compiler analyzes your stylesheet and reports streamability violations at compile time
+- **`system-property('xsl:supports-streaming')`** returns `"yes"`
+- **Limitations:** `last()` is not available in streaming mode; `xsl:fork` branches execute sequentially (not in parallel)
+
 ## The Mental Model
 
 If you're a C# developer, think of XSLT like this:

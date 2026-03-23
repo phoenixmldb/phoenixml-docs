@@ -2,6 +2,7 @@
 title: xquery CLI
 description: Command-line XQuery processor — query XML documents from the terminal
 sort: 2
+version: 1.1.0
 ---
 
 # xquery CLI
@@ -36,7 +37,7 @@ command | xquery [options] <expression>
 | Option | Short | Description |
 |--------|-------|-------------|
 | `--file <path>` | `-f` | Read XQuery from a file instead of inline |
-| `--output <method>` | `-o` | Output method: `adaptive` (default), `xml`, `text` |
+| `--output <method>` | `-o` | Output method: `adaptive` (default), `xml`, `text`, `json` |
 | `--stdin` | | Read XML input from stdin (waits indefinitely) |
 | `--timeout <ms>` | | Stdin auto-detection timeout in ms (default: 200) |
 | `--timing` | | Show parse/compile/execute timing breakdown |
@@ -157,7 +158,16 @@ cat data.xml | xquery 'count(//error)'
 
 ### JSON Output
 
-Query XML documents and output results as JSON:
+Use `--output json` (or `-o json`) to serialize maps and arrays as JSON instead of the default adaptive output:
+
+```bash
+xquery -o json 'map { "name": "test", "count": 42 }'
+xquery -f query-with-json-option.xq data.xml
+```
+
+The second form works because `--output json` is also auto-detected from a `declare option output:method "json"` declaration in the query file. When that option is present, the CLI picks up the serialization method without requiring an explicit flag.
+
+For more complex results:
 
 ```bash
 xquery '

@@ -19,6 +19,45 @@ When a document is too large to fit in memory — tens of gigabytes of log data,
 
 ---
 
+## Primary Source Streaming
+
+The simplest way to enable streaming is to declare a streamable mode for the primary input document. When the default mode (or a named mode) is streamable, the XSLT processor reads the principal source document through an XmlReader rather than building a full in-memory tree:
+
+```xml
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0">
+
+  <!-- Stream the primary source document -->
+  <xsl:mode streamable="yes"/>
+
+  <xsl:template match="/">
+    <summary>
+      <xsl:apply-templates select="catalog/product"/>
+    </summary>
+  </xsl:template>
+
+  <xsl:template match="product">
+    <item name="{@name}" price="{@price}"/>
+  </xsl:template>
+
+</xsl:stylesheet>
+```
+
+With `xsl:mode streamable="yes"` on the unnamed (default) mode, the initial `apply-templates` call reads the input document as a stream. No tree is built for the primary source.
+
+### Detecting Streaming Support
+
+You can check at compile time whether the processor supports streaming:
+
+```xml
+<xsl:if test="system-property('xsl:supports-streaming') = 'yes'">
+  <!-- streaming-specific logic -->
+</xsl:if>
+```
+
+`system-property('xsl:supports-streaming')` returns `"yes"` in PhoenixmlDb.
+
+---
+
 ## The Streaming Concept
 
 In conventional (non-streaming) XSLT processing, the entire input document is parsed into an in-memory tree before any templates execute. This is fine for documents up to a few hundred megabytes, but fails for larger documents.
@@ -518,3 +557,39 @@ stream.OnError += HandleError;
 stream.OnLargeTransaction += TrackMaxAmount;
 // Not subscribing to OnInfo saves processing time
 ```
+
+---
+
+## Streaming Limitations
+
+While streaming enables processing of arbitrarily large documents, it imposes certain restrictions:
+
+### `last()` is Not Available
+
+In streaming mode, the processor does not know the total size of the sequence being iterated. The `last()` function — which returns the size of the current sequence — is therefore unavailable:
+
+```xml
+<!-- NOT AVAILABLE in streaming mode -->
+<xsl:template match="item" mode="streaming">
+  <xsl:if test="position() = last()">  <!-- ERROR: last() not supported -->
+    <final-item/>
+  </xsl:if>
+</xsl:template>
+
+<!-- WORKAROUND: use an accumulator to detect the last item after the fact,
+     or restructure the logic to not depend on last() -->
+```
+
+If you need to know when you are processing the final item, consider using an accumulator to track state, or post-process the output.
+
+### `xsl:fork` Executes Sequentially
+
+Although `xsl:fork` is conceptually a parallel construct (splitting the stream to multiple consumers), in PhoenixmlDb the branches execute **sequentially**, not in parallel. Each branch processes the stream independently, but one at a time. The output of all branches is concatenated in document order.
+
+This means `xsl:fork` is functionally correct — it produces the right output — but does not provide a parallelism performance benefit. It remains useful for structuring streaming stylesheets where multiple independent consuming operations are needed on the same streamed input.
+
+### Other Restrictions
+
+- **No backward navigation** — Axes like `preceding-sibling`, `preceding`, and `ancestor` content are not available (ancestor *names* and *attributes* are available via accumulators or `ancestor::*/name()`)
+- **Single consuming operation per node** — Each template can perform at most one operation that reads child content
+- **No `xsl:number` with `level="any"`** — This requires counting across the entire document, which is incompatible with streaming
