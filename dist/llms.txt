@@ -85,6 +85,7 @@
 - [Indexes API](/phoenixmldb/api-reference/indexes.html): Index creation, management, statistics, and query optimization
 - [Queries API](/phoenixmldb/api-reference/queries.html): XQuery execution, parameters, results, explain plans, and prepared queries
 - [Transactions API](/phoenixmldb/api-reference/transactions.html): Transaction lifecycle, commit/rollback, error handling, and patterns
+- [XSLT API](/phoenixmldb/api-reference/xslt-api.html): XsltTransformer .NET API — transform XML with XSLT from C#
 - [Configuration](/phoenixmldb/configuration.html): Database options, environment variables, logging, and connection strings
 - [Core Concepts](/phoenixmldb/core-concepts.html): Containers, documents, the XDM, and shredded node storage
 - [Database Extensions](/phoenixmldb/database-extensions.html): Custom XQuery functions, dbxml:metadata(), and extension development
