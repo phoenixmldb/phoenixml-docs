@@ -1,20 +1,31 @@
 ---
 title: Tools
-description: PhoenixmlDb command-line tools — xslt, xquery, and crucible
+description: PhoenixmlDb command-line tools and MCP servers
 sort: 4
 ---
 
 # Tools
 
-PhoenixmlDb provides three command-line tools for working with XML technologies on .NET:
+## Command-Line Tools
 
 | Tool | Purpose | Install |
 |------|---------|---------|
 | **[xslt](xslt-cli.md)** | Run XSLT 3.0/4.0 transformations | `dotnet tool install -g PhoenixmlDb.Xslt.Cli` |
 | **[xquery](xquery-cli.md)** | Execute XQuery expressions against XML | `dotnet tool install -g PhoenixmlDb.XQuery.Cli` |
-| **[crucible](crucible.md)** | Generate static documentation sites | `dotnet tool install -g Crucible.Cli` |
+| **[crucible](crucible.md)** | Generate static documentation sites | `dotnet tool install -g crucible` |
 
 All three are .NET global tools — install once, use from anywhere on the command line.
+
+## MCP Servers
+
+AI-native tools that give language models (Claude, GPT, etc.) access to spec reference and engine execution via the [Model Context Protocol](https://modelcontextprotocol.io).
+
+| Server | Purpose | Install |
+|--------|---------|---------|
+| **[xslt-mcp](xslt-mcp.md)** | XSLT spec lookup + transform/validate/XPath | `dotnet tool install -g xslt-mcp` or [download binary](https://github.com/phoenixmldb/xslt-mcp/releases) |
+| **[xquery-mcp](xquery-mcp.md)** | XQuery spec lookup + evaluate/validate/XPath | `dotnet tool install -g xquery-mcp` or [download binary](https://github.com/phoenixmldb/xquery-mcp/releases) |
+
+MCP servers are also available as self-contained binaries — no .NET SDK required.
 
 ## Quick Start
 
