@@ -1,5 +1,673 @@
 # PhoenixmlDb Documentation
 
+## ContainerId
+> Unique identifier for a container.
+URL: /api/core/containerid.html
+
+ContainerId Namespace: PhoenixmlDb.Core Unique identifier for a container. Constructors #ctor(UInt32) Unique identifier for a container.
+
+---
+
+## ContainerInfo
+> Information about a container.
+URL: /api/core/containerinfo.html
+
+ContainerInfo Namespace: PhoenixmlDb.Core Information about a container.
+
+---
+
+## ContainerNotFoundException
+> Thrown when a container is not found.
+URL: /api/core/containernotfoundexception.html
+
+ContainerNotFoundException Namespace: PhoenixmlDb.Core Thrown when a container is not found.
+
+---
+
+## ContainerOptions
+> Container configuration options.
+URL: /api/core/containeroptions.html
+
+ContainerOptions Namespace: PhoenixmlDb.Core Container configuration options. Properties Name Description DefaultNamespaces Default namespace bindings (prefix → URI). Indexes Index configuration for this container. PreserveWhitespace Whether to preserve whitespace in documents. ValidationMode Document validation mode.
+
+---
+
+## ContentType
+> Document content type.
+URL: /api/core/contenttype.html
+
+ContentType Namespace: PhoenixmlDb.Core Document content type.
+
+---
+
+## DatabaseStatistics
+> Database-level statistics.
+URL: /api/core/databasestatistics.html
+
+DatabaseStatistics Namespace: PhoenixmlDb.Core Database-level statistics.
+
+---
+
+## DocumentExistsException
+> Thrown when a document already exists and overwrite is not allowed.
+URL: /api/core/documentexistsexception.html
+
+DocumentExistsException Namespace: PhoenixmlDb.Core Thrown when a document already exists and overwrite is not allowed.
+
+---
+
+## DocumentId
+> Unique identifier for a document within a container.
+URL: /api/core/documentid.html
+
+DocumentId Namespace: PhoenixmlDb.Core Unique identifier for a document within a container. Constructors #ctor(UInt64) Unique identifier for a document within a container.
+
+---
+
+## DocumentInfo
+> Information about a stored document.
+URL: /api/core/documentinfo.html
+
+DocumentInfo Namespace: PhoenixmlDb.Core Information about a stored document.
+
+---
+
+## DocumentNotFoundException
+> Thrown when a document is not found.
+URL: /api/core/documentnotfoundexception.html
+
+DocumentNotFoundException Namespace: PhoenixmlDb.Core Thrown when a document is not found.
+
+---
+
+## DocumentOptions
+> Options for storing a document.
+URL: /api/core/documentoptions.html
+
+DocumentOptions Namespace: PhoenixmlDb.Core Options for storing a document. Properties Name Description ContentType Content type (xml or json). Auto-detected if not specified. Metadata Initial metadata to attach to the document. Overwrite Whether to overwrite an existing document with the same name.
+
+---
+
+## DocumentParseException
+> Thrown when document content is malformed.
+URL: /api/core/documentparseexception.html
+
+DocumentParseException Namespace: PhoenixmlDb.Core Thrown when document content is malformed.
+
+---
+
+## FullTextIndexDefinition
+> Full-text index definition.
+URL: /api/core/fulltextindexdefinition.html
+
+FullTextIndexDefinition Namespace: PhoenixmlDb.Core Full-text index definition.
+
+---
+
+## FullTextIndexOptions
+> Options for full-text indexing.
+URL: /api/core/fulltextindexoptions.html
+
+FullTextIndexOptions Namespace: PhoenixmlDb.Core Options for full-text indexing.
+
+---
+
+## IContainer
+> A container holding a collection of documents with shared configuration.
+URL: /api/core/icontainer.html
+
+IContainer Namespace: PhoenixmlDb.Core A container holding a collection of documents with shared configuration. Properties Name Description Id Container identifier. Name Container name. Options Container configuration. Methods DeleteDocumentAsync(String,Threading.CancellationToken) Deletes a document. Returns:  True if the document existed and was deleted. DocumentExistsAsync(String,Threading.CancellationToken) Checks if a document exists. GetAllMetadataAsync(String,Threading.CancellationToken) Gets all metadata for a document. GetDocumentAsync(String,Threading.CancellationToken) Gets a document by name. Parameters: name  — Document name. cancellationToken  — Cancellation token. Returns:  The document, or null if not found. GetMetadataAsync(String,String,Threading.CancellationToken) Gets document metadata. ListDocumentsAsync(String,Threading.CancellationToken) Lists documents matching a name prefix. ListDocumentsAsync(Threading.CancellationToken) Lists all documents in the container. PutDocumentAsync(String,IO.Stream,PhoenixmlDb.Core.DocumentOptions,Threading.CancellationToken) Stores a document from a stream. PutDocumentAsync(String,String,PhoenixmlDb.Core.DocumentOptions,Threading.CancellationToken) Stores a document in the container. Parameters: name  — Document name (URI-like identifier). content  — XML or JSON content. options  — Document options. cancellationToken  — Cancellation token. QueryAsync(String,Collections.Generic.IReadOnlyDictionary<String,Object>,Threading.CancellationToken) Executes an XQuery query against this container. Parameters: query  — XQuery expression. variables  — External variable bindings. cancellationToken  — Cancellation token. QueryMetadataAsync(String,Object,Threading.CancellationToken) Queries documents by metadata. SetMetadataAsync(String,String,Object,Threading.CancellationToken) Sets document metadata.
+
+---
+
+## IDocument
+> A stored document with content and metadata.
+URL: /api/core/idocument.html
+
+IDocument Namespace: PhoenixmlDb.Core A stored document with content and metadata. Properties Name Description Container Container this document belongs to. ContentType Content type (XML or JSON). Created When the document was created. Id Document identifier. Modified When the document was last modified. Name Document name (URI-like identifier). SizeBytes Document size in bytes. Methods GetAllMetadataAsync(Threading.CancellationToken) Gets all metadata. GetContentAsync(Threading.CancellationToken) Gets the document content as a string. GetContentStreamAsync(Threading.CancellationToken) Gets the document content as a stream. GetMetadataAsync(String,Threading.CancellationToken) Gets a metadata value. GetRootNodeAsync(Threading.CancellationToken) Gets the root node of the document.
+
+---
+
+## IDocumentDatabase
+> Root entry point for XmlDb database operations.
+URL: /api/core/idocumentdatabase.html
+
+IDocumentDatabase Namespace: PhoenixmlDb.Core Root entry point for XmlDb database operations. Properties Name Description Path Gets the database path. Statistics Gets database statistics. Methods BeginRead Begins a read-only transaction. BeginWriteAsync(Threading.CancellationToken) Begins a read-write transaction. Only one write transaction can be active at a time. Additional calls will block until the current write transaction completes. BeginWriteAsync(TimeSpan,Threading.CancellationToken) Begins a read-write transaction with a timeout. CreateContainerAsync(String,Action<PhoenixmlDb.Core.ContainerOptions>,Threading.CancellationToken) Creates a new container with the specified configuration. Parameters: name  — Container name (must be unique). configure  — Optional configuration action. cancellationToken  — Cancellation token. Returns:  The created container. DeleteContainerAsync(String,Threading.CancellationToken) Deletes a container and all its contents. FlushAsync(Threading.CancellationToken) Flushes any buffered data to disk. ListContainersAsync(Threading.CancellationToken) Lists all containers. OpenContainerAsync(String,Threading.CancellationToken) Opens an existing container. Parameters: name  — Container name. cancellationToken  — Cancellation token. Returns:  The container, or null if not found. OpenOrCreateContainerAsync(String,Action<PhoenixmlDb.Core.ContainerOptions>,Threading.CancellationToken) Opens a container, creating it if it doesn't exist.
+
+---
+
+## PhoenixmlDb.Core API Reference
+> API documentation for the PhoenixmlDb.Core library
+URL: /api/core/index.html
+
+PhoenixmlDb.Core API Reference 
+          This reference is auto-generated from the .NET XML documentation
+          for the  PhoenixmlDb.Core  assembly.
+         PhoenixmlDb.Core Type Description ContainerId Unique identifier for a container. ContainerInfo Information about a container. ContainerNotFoundException Thrown when a container is not found. ContainerOptions Container configuration options. ContentType Document content type. DatabaseStatistics Database-level statistics. DocumentExistsException Thrown when a document already exists and overwrite is not allowed. DocumentId Unique identifier for a document within a container. DocumentInfo Information about a stored document. DocumentNotFoundException Thrown when a document is not found. DocumentOptions Options for storing a document. DocumentParseException Thrown when document content is malformed. FullTextIndexDefinition Full-text index definition. FullTextIndexOptions Options for full-text indexing. IContainer A container holding a collection of documents with shared configuration. IDocument A stored document with content and metadata. IDocumentDatabase Root entry point for XmlDb database operations. IndexConfiguration Configuration for container indexes. IndexDefinition Base type for index definitions. IReadTransaction A read-only transaction providing snapshot isolation. IWriteTransaction A read-write transaction with full ACID guarantees. IXdmNode Base interface for XDM nodes. MetadataIndexDefinition Metadata index definition. NameIndexDefinition Name index definition. NamespaceId Interned namespace URI identifier. NodeId Unique identifier for a node within a document. PathIndexDefinition Path index definition. QName Qualified name (namespace + local name). TransactionException Thrown when a transaction operation fails. TransactionTimeoutException Thrown when a write transaction cannot be acquired within the timeout. ValidationMode Document validation mode. ValueIndexDefinition Value index definition. XdmNodeKind XDM node kinds per XQuery Data Model specification. XdmValueType XDM value types for index typing. XmlDbException Base exception for XmlDb errors. XQueryException Thrown when an XQuery parse or execution error occurs.
+
+---
+
+## IndexConfiguration
+> Configuration for container indexes.
+URL: /api/core/indexconfiguration.html
+
+IndexConfiguration Namespace: PhoenixmlDb.Core Configuration for container indexes. Methods AddFullTextIndex(String,PhoenixmlDb.Core.FullTextIndexOptions) Adds a full-text index for text search. Parameters: pathPattern  — Path to index (null for all text content). options  — Tokenization and analysis options. AddMetadataIndex(String,PhoenixmlDb.Core.XdmValueType) Adds a metadata index for document-level queries. AddNameIndex(String) Adds a name index for fast element/attribute lookup. Parameters: namespaceUri  — Namespace to index (null = all namespaces). AddPathIndex(String) Adds a path index for specific path patterns. Parameters: pathPattern  — XPath-like pattern: //customer/address, /root/item/@id Supports: / (child), // (descendant), @ (attribute), * (wildcard) AddValueIndex(String,PhoenixmlDb.Core.XdmValueType,String) Adds a value index for typed comparisons and range queries. Parameters: pathPattern  — Path to the element/attribute to index. valueType  — XDM type for value conversion. collation  — Collation for string ordering (null for binary). EnableStructuralIndex(Boolean) Enables or disables structural indexing for axis navigation. Enabled by default.
+
+---
+
+## IndexDefinition
+> Base type for index definitions.
+URL: /api/core/indexdefinition.html
+
+IndexDefinition Namespace: PhoenixmlDb.Core Base type for index definitions.
+
+---
+
+## IReadTransaction
+> A read-only transaction providing snapshot isolation.
+URL: /api/core/ireadtransaction.html
+
+IReadTransaction Namespace: PhoenixmlDb.Core A read-only transaction providing snapshot isolation. Properties Name Description IsActive Whether the transaction is still active. TransactionId The transaction ID (snapshot version). Methods GetDocumentAsync(PhoenixmlDb.Core.ContainerId,String,Threading.CancellationToken) Gets a document by name within this transaction's snapshot. ListDocumentsAsync(PhoenixmlDb.Core.ContainerId,Threading.CancellationToken) Lists all documents in a container. QueryAsync(PhoenixmlDb.Core.ContainerId,String,Collections.Generic.IReadOnlyDictionary<String,Object>,Threading.CancellationToken) Queries documents within this transaction's snapshot.
+
+---
+
+## IWriteTransaction
+> A read-write transaction with full ACID guarantees.
+URL: /api/core/iwritetransaction.html
+
+IWriteTransaction Namespace: PhoenixmlDb.Core A read-write transaction with full ACID guarantees. Methods CommitAsync(Threading.CancellationToken) Commits all changes. DeleteDocumentAsync(PhoenixmlDb.Core.ContainerId,String,Threading.CancellationToken) Deletes a document. PutDocumentAsync(PhoenixmlDb.Core.ContainerId,String,String,PhoenixmlDb.Core.DocumentOptions,Threading.CancellationToken) Inserts or updates a document. RollbackAsync(Threading.CancellationToken) Rolls back all changes. SetMetadataAsync(PhoenixmlDb.Core.ContainerId,String,String,Object,Threading.CancellationToken) Sets document metadata.
+
+---
+
+## IXdmNode
+> Base interface for XDM nodes.
+URL: /api/core/ixdmnode.html
+
+IXdmNode Namespace: PhoenixmlDb.Core Base interface for XDM nodes. Properties Name Description Id Node identifier. NodeKind The kind of node (element, attribute, text, etc.). NodeName Node name (for elements, attributes, PIs). Parent Parent node, if any. StringValue String value of the node.
+
+---
+
+## MetadataIndexDefinition
+> Metadata index definition.
+URL: /api/core/metadataindexdefinition.html
+
+MetadataIndexDefinition Namespace: PhoenixmlDb.Core Metadata index definition.
+
+---
+
+## NameIndexDefinition
+> Name index definition.
+URL: /api/core/nameindexdefinition.html
+
+NameIndexDefinition Namespace: PhoenixmlDb.Core Name index definition.
+
+---
+
+## NamespaceId
+> Interned namespace URI identifier.
+URL: /api/core/namespaceid.html
+
+NamespaceId Namespace: PhoenixmlDb.Core Interned namespace URI identifier. Constructors #ctor(UInt32) Interned namespace URI identifier. Properties Name Description Array http://www.w3.org/2005/xpath-functions/array Dbxml http://phoenixml.endpointsystems.com/dbxml Fn http://www.w3.org/2005/xpath-functions Map http://www.w3.org/2005/xpath-functions/map Math http://www.w3.org/2005/xpath-functions/math None No namespace. Xml http://www.w3.org/XML/1998/namespace Xmlns http://www.w3.org/2000/xmlns/ Xsd http://www.w3.org/2001/XMLSchema Xsi http://www.w3.org/2001/XMLSchema-instance Xslt http://www.w3.org/1999/XSL/Transform Fields Name Description FirstUserNamespaceId First ID available for user namespaces.
+
+---
+
+## NodeId
+> Unique identifier for a node within a document.
+URL: /api/core/nodeid.html
+
+NodeId Namespace: PhoenixmlDb.Core Unique identifier for a node within a document. Constructors #ctor(UInt64) Unique identifier for a node within a document.
+
+---
+
+## PathIndexDefinition
+> Path index definition.
+URL: /api/core/pathindexdefinition.html
+
+PathIndexDefinition Namespace: PhoenixmlDb.Core Path index definition.
+
+---
+
+## QName
+> Qualified name (namespace + local name).
+URL: /api/core/qname.html
+
+QName Namespace: PhoenixmlDb.Core Qualified name (namespace + local name). Properties Name Description ExpandedNamespace When non-null, holds the namespace URI from EQName syntax (Q{uri}local). Takes precedence over NamespaceId for namespace resolution. Affects ToString() output (uses Q{uri}local format when prefix is absent). ResolvedNamespace Gets the resolved namespace name, preferring ExpandedNamespace, then ResolvedNamespaceUri. Returns null if neither is available. RuntimeNamespace When non-null, holds the resolved namespace for runtime-created QNames (e.g., from fn:QName() or xs:QName()). Does NOT affect ToString() output. Used by namespace-uri-from-QName() and QName eq comparison.
+
+---
+
+## TransactionException
+> Thrown when a transaction operation fails.
+URL: /api/core/transactionexception.html
+
+TransactionException Namespace: PhoenixmlDb.Core Thrown when a transaction operation fails.
+
+---
+
+## TransactionTimeoutException
+> Thrown when a write transaction cannot be acquired within the timeout.
+URL: /api/core/transactiontimeoutexception.html
+
+TransactionTimeoutException Namespace: PhoenixmlDb.Core Thrown when a write transaction cannot be acquired within the timeout.
+
+---
+
+## ValidationMode
+> Document validation mode.
+URL: /api/core/validationmode.html
+
+ValidationMode Namespace: PhoenixmlDb.Core Document validation mode. Fields Name Description None No validation. Schema Validate against XML Schema if specified. WellFormed Validate well-formedness only.
+
+---
+
+## ValueIndexDefinition
+> Value index definition.
+URL: /api/core/valueindexdefinition.html
+
+ValueIndexDefinition Namespace: PhoenixmlDb.Core Value index definition.
+
+---
+
+## XdmNodeKind
+> XDM node kinds per XQuery Data Model specification.
+URL: /api/core/xdmnodekind.html
+
+XdmNodeKind Namespace: PhoenixmlDb.Core XDM node kinds per XQuery Data Model specification.
+
+---
+
+## XdmValueType
+> XDM value types for index typing.
+URL: /api/core/xdmvaluetype.html
+
+XdmValueType Namespace: PhoenixmlDb.Core XDM value types for index typing.
+
+---
+
+## XmlDbException
+> Base exception for XmlDb errors.
+URL: /api/core/xmldbexception.html
+
+XmlDbException Namespace: PhoenixmlDb.Core Base exception for XmlDb errors.
+
+---
+
+## XQueryException
+> Thrown when an XQuery parse or execution error occurs.
+URL: /api/core/xqueryexception.html
+
+XQueryException Namespace: PhoenixmlDb.Core Thrown when an XQuery parse or execution error occurs.
+
+---
+
+## DayTimeDuration
+> Represents an xs:dayTimeDuration value as total seconds (decimal). Unlike TimeSpan, this handles arbitrarily large durations (e.g., P1234567890D).
+URL: /api/xdm/daytimeduration.html
+
+DayTimeDuration Namespace: PhoenixmlDb.Xdm Represents an xs:dayTimeDuration value as total seconds (decimal). Unlike TimeSpan, this handles arbitrarily large durations (e.g., P1234567890D). Constructors #ctor(Decimal) Represents an xs:dayTimeDuration value as total seconds (decimal). Unlike TimeSpan, this handles arbitrarily large durations (e.g., P1234567890D). Methods ToTimeSpan Converts to TimeSpan if within range, otherwise throws.
+
+---
+
+## PhoenixmlDb.Xdm API Reference
+> API documentation for the PhoenixmlDb.Xdm library
+URL: /api/xdm/index.html
+
+PhoenixmlDb.Xdm API Reference 
+          This reference is auto-generated from the .NET XML documentation
+          for the  PhoenixmlDb.Xdm  assembly.
+         PhoenixmlDb.Xdm Type Description DayTimeDuration Represents an xs:dayTimeDuration value as total seconds (decimal). Unlike TimeSpan, this handles arbitrarily large durations (e.g., P1234567890D). NamespaceBinding A namespace prefix binding. TextNodeItem Lightweight text node marker for sequence accumulators. Distinguishes text nodes (from xsl:text, xsl:value-of, literal text) from atomic string values (from xsl:sequence, XPath expressions). Used for correct XSLT 3.0 §5.7.2 simple content construction. XdmQName Represents an expanded QName (namespace URI + local name). XdmType XDM atomic value types based on XML Schema. XdmTypeName Represents a type name (for type annotations). XdmValue Represents an XDM atomic value. XsAnyUri Wrapper type for xs:anyURI values. Implements IConvertible so it can participate in string operations. XsDate Represents an xs:date value with optional timezone. Unlike DateOnly, this preserves timezone offset information. XsDateTime Represents an xs:dateTime value with explicit timezone tracking. Unlike DateTimeOffset, this distinguishes "no timezone" from UTC. XsDuration Represents an xs:duration value with both month and day-time components. Unlike TimeSpan (which only has day-time), this preserves the year/month facets. XsGDay XSD xs:gDay value (e.g. "---25"). XsGMonth XSD xs:gMonth value (e.g. "--12"). XsGMonthDay XSD xs:gMonthDay value (e.g. "--12-25"). XsGYear XSD xs:gYear value (e.g. "2005"). XsGYearMonth XSD xs:gYearMonth value (e.g. "2005-10"). XsTime Represents an xs:time value with optional timezone and fractional seconds. Unlike TimeOnly, this preserves timezone offset information. XsUntypedAtomic Wrapper type for xs:untypedAtomic values, distinguishing them from xs:string. Implements IConvertible so it can participate in arithmetic and comparisons. YearMonthDuration Represents an xs:yearMonthDuration value as a count of months. Unlike TimeSpan, this correctly supports month-based date arithmetic. PhoenixmlDb.Xdm.Nodes Type Description XdmAttribute Represents an XML attribute. XdmComment Represents an XML comment. XdmDocument Represents an XML document root. XdmElement Represents an XML element. XdmNamespace Represents an in-scope namespace binding on an element. These are typically not stored separately but computed from element declarations. XdmNode Base type for all XDM nodes. XdmProcessingInstruction Represents an XML processing instruction. XdmText Represents character data content. PhoenixmlDb.Xdm.Parsing Type Description ParseResult Result of parsing an XML document. XmlDocumentParser Parses XML content into XDM nodes. XmlSerializer Serializes XDM nodes to XML.
+
+---
+
+## NamespaceBinding
+> A namespace prefix binding.
+URL: /api/xdm/namespacebinding.html
+
+NamespaceBinding Namespace: PhoenixmlDb.Xdm A namespace prefix binding. Constructors #ctor(String,PhoenixmlDb.Core.NamespaceId) A namespace prefix binding.
+
+---
+
+## ParseResult
+> Result of parsing an XML document.
+URL: /api/xdm/parseresult.html
+
+ParseResult Namespace: PhoenixmlDb.Xdm.Parsing Result of parsing an XML document. Properties Name Description Document The document node. NodeCount Total number of nodes. Nodes All nodes in document order.
+
+---
+
+## TextNodeItem
+> Lightweight text node marker for sequence accumulators. Distinguishes text nodes (from xsl:text, xsl:value-of, literal text) from atomic string values (from xsl:sequence, XPath expressions). Used for correct XSLT 3.0 §5.7.2 simple content construction.
+URL: /api/xdm/textnodeitem.html
+
+TextNodeItem Namespace: PhoenixmlDb.Xdm Lightweight text node marker for sequence accumulators. Distinguishes text nodes (from xsl:text, xsl:value-of, literal text) from atomic string values (from xsl:sequence, XPath expressions). Used for correct XSLT 3.0 §5.7.2 simple content construction. Constructors #ctor(String) Lightweight text node marker for sequence accumulators. Distinguishes text nodes (from xsl:text, xsl:value-of, literal text) from atomic string values (from xsl:sequence, XPath expressions). Used for correct XSLT 3.0 §5.7.2 simple content construction.
+
+---
+
+## XdmAttribute
+> Represents an XML attribute.
+URL: /api/xdm/xdmattribute.html
+
+XdmAttribute Namespace: PhoenixmlDb.Xdm.Nodes Represents an XML attribute. Properties Name Description IsId Whether this attribute is an ID attribute (from DTD or xml:id). LocalName The attribute's local name. Namespace The attribute's namespace URI (interned). Prefix Prefix used in the original document. TypeAnnotation Type annotation (default: xs:untypedAtomic). Value The attribute's string value.
+
+---
+
+## XdmComment
+> Represents an XML comment.
+URL: /api/xdm/xdmcomment.html
+
+XdmComment Namespace: PhoenixmlDb.Xdm.Nodes Represents an XML comment. Properties Name Description Value The comment text (without delimiters).
+
+---
+
+## XdmDocument
+> Represents an XML document root.
+URL: /api/xdm/xdmdocument.html
+
+XdmDocument Namespace: PhoenixmlDb.Xdm.Nodes Represents an XML document root. Properties Name Description Children Child nodes (element, comment, processing-instruction only - per XDM spec, no text children). DocumentElement The document element (first element child). DocumentElementLocalName Local name of the document element, for efficient document-node(element(name)) type checks. DocumentUri The document URI (dm:document-uri). EmptyChildren Creates an empty document children list. StringValue String value requires tree traversal - returns empty string. Use a tree walker to compute actual string value. Fields Name Description _stringValue Sets the computed string value (after tree traversal).
+
+---
+
+## XdmElement
+> Represents an XML element.
+URL: /api/xdm/xdmelement.html
+
+XdmElement Namespace: PhoenixmlDb.Xdm.Nodes Represents an XML element. Properties Name Description Attributes Attribute nodes. Children Child nodes (element, text, comment, processing-instruction). EmptyAttributes Creates empty attribute list. EmptyChildren Creates empty children list. EmptyNamespaceDeclarations Creates empty namespace declarations list. LocalName The element's local name. Namespace The element's namespace URI (interned). NamespaceDeclarations In-scope namespace declarations at this element. Prefix Prefix used in the original document (for serialization). StringValue String value requires tree traversal - returns empty string by default. Use a tree walker to compute actual string value. TypeAnnotation Type annotation (default: xs:untyped). Fields Name Description _stringValue Sets the computed string value (after tree traversal).
+
+---
+
+## XdmNamespace
+> Represents an in-scope namespace binding on an element. These are typically not stored separately but computed from element declarations.
+URL: /api/xdm/xdmnamespace.html
+
+XdmNamespace Namespace: PhoenixmlDb.Xdm.Nodes Represents an in-scope namespace binding on an element. These are typically not stored separately but computed from element declarations. Properties Name Description Prefix The namespace prefix (empty string for default namespace). Uri The namespace URI.
+
+---
+
+## XdmNode
+> Base type for all XDM nodes.
+URL: /api/xdm/xdmnode.html
+
+XdmNode Namespace: PhoenixmlDb.Xdm.Nodes Base type for all XDM nodes. Properties Name Description BaseUri Base URI for this node (dm:base-uri). CopySourceBaseUri Base URI inherited from xsl:copy source element. Used as fallback for orphaned nodes (no parent, no xml:base). Unlike BaseUri (entity-derived, overrides parent), this is only used when no parent base URI is available. Document The document containing this node. Id Unique identifier for this node. IsAttribute Returns true if this node is an attribute node. IsComment Returns true if this node is a comment node. IsDocument Returns true if this node is a document node. IsElement Returns true if this node is an element node. IsNamespace Returns true if this node is a namespace node. IsProcessingInstruction Returns true if this node is a processing instruction node. IsText Returns true if this node is a text node. NodeKind The kind of this node. NodeName The name of this node (dm:node-name), if any. Parent Parent node, if any. Document nodes have no parent. StringValue The string value of this node (dm:string-value). For nodes with children, this requires tree traversal. TypedValue The typed value of this node (dm:typed-value). Methods Is(PhoenixmlDb.Core.XdmNodeKind) Returns true if this node has the specified node kind. ToString Returns the string value of this node (dm:string-value).
+
+---
+
+## XdmProcessingInstruction
+> Represents an XML processing instruction.
+URL: /api/xdm/xdmprocessinginstruction.html
+
+XdmProcessingInstruction Namespace: PhoenixmlDb.Xdm.Nodes Represents an XML processing instruction. Properties Name Description Target The target (name) of the PI. Value The content of the PI.
+
+---
+
+## XdmQName
+> Represents an expanded QName (namespace URI + local name).
+URL: /api/xdm/xdmqname.html
+
+XdmQName Namespace: PhoenixmlDb.Xdm Represents an expanded QName (namespace URI + local name). Properties Name Description IsUnqualified Returns true if this QName has no namespace. PrefixedName Returns the prefixed form (prefix:localname) if prefix is set, otherwise just the local name. Methods Local(String) Creates a QName with no namespace.
+
+---
+
+## XdmText
+> Represents character data content.
+URL: /api/xdm/xdmtext.html
+
+XdmText Namespace: PhoenixmlDb.Xdm.Nodes Represents character data content. Properties Name Description Value The text content. Never empty (empty text nodes are not stored).
+
+---
+
+## XdmType
+> XDM atomic value types based on XML Schema.
+URL: /api/xdm/xdmtype.html
+
+XdmType Namespace: PhoenixmlDb.Xdm XDM atomic value types based on XML Schema.
+
+---
+
+## XdmTypeName
+> Represents a type name (for type annotations).
+URL: /api/xdm/xdmtypename.html
+
+XdmTypeName Namespace: PhoenixmlDb.Xdm Represents a type name (for type annotations). Properties Name Description AnyAtomicType xs:anyAtomicType - base of all atomic types. AnySimpleType xs:anySimpleType - base of all simple types. AnyType xs:anyType - the root of the type hierarchy. AnyUri xs:anyURI Base64Binary xs:base64Binary Boolean xs:boolean Date xs:date DateTime xs:dateTime Duration xs:duration HexBinary xs:hexBinary QName xs:QName Time xs:time Untyped xs:untyped - for unvalidated element content. UntypedAtomic xs:untypedAtomic - for unvalidated atomic values. XsDecimal xs:decimal XsDouble xs:double XsFloat xs:float XsInteger xs:integer XsString xs:string
+
+---
+
+## XdmValue
+> Represents an XDM atomic value.
+URL: /api/xdm/xdmvalue.html
+
+XdmValue Namespace: PhoenixmlDb.Xdm Represents an XDM atomic value. Properties Name Description RawValue Gets the raw value object.
+
+---
+
+## XmlDocumentParser
+> Parses XML content into XDM nodes.
+URL: /api/xdm/xmldocumentparser.html
+
+XmlDocumentParser Namespace: PhoenixmlDb.Xdm.Parsing Parses XML content into XDM nodes. Constructors #ctor(PhoenixmlDb.Core.DocumentId,PhoenixmlDb.Core.NodeId,Func<String,PhoenixmlDb.Core.NamespaceId>,Boolean) Creates a new XML parser. Parameters: documentId  — The document ID for all nodes. startNodeId  — The starting node ID. namespaceResolver  — Function to resolve namespace URIs to IDs. preserveWhitespace  — Whether to preserve whitespace-only text nodes. Methods Parse(IO.Stream,String) Parses XML content from a stream. Parse(IO.TextReader,String) Parses XML content from a TextReader. Parse(String,String) Parses XML content from a string.
+
+---
+
+## XmlSerializer
+> Serializes XDM nodes to XML.
+URL: /api/xdm/xmlserializer.html
+
+XmlSerializer Namespace: PhoenixmlDb.Xdm.Parsing Serializes XDM nodes to XML. Constructors #ctor(Func<PhoenixmlDb.Core.NodeId,PhoenixmlDb.Xdm.Nodes.XdmNode>,Func<PhoenixmlDb.Core.NamespaceId,String>,Boolean) Creates a new XML serializer. Parameters: nodeResolver  — Function to resolve node IDs to nodes. namespaceResolver  — Function to resolve namespace IDs to URIs. indent  — Whether to indent the output. Methods Serialize(PhoenixmlDb.Xdm.Nodes.XdmDocument,IO.TextWriter) Serializes to a TextWriter. Serialize(PhoenixmlDb.Xdm.Nodes.XdmDocument) Serializes a document to XML. Serialize(PhoenixmlDb.Xdm.Nodes.XdmNode) Serializes a node to XML.
+
+---
+
+## XsAnyUri
+> Wrapper type for xs:anyURI values. Implements IConvertible so it can participate in string operations.
+URL: /api/xdm/xsanyuri.html
+
+XsAnyUri Namespace: PhoenixmlDb.Xdm Wrapper type for xs:anyURI values. Implements IConvertible so it can participate in string operations. Constructors #ctor(String) Wrapper type for xs:anyURI values. Implements IConvertible so it can participate in string operations.
+
+---
+
+## XsDate
+> Represents an xs:date value with optional timezone. Unlike DateOnly, this preserves timezone offset information.
+URL: /api/xdm/xsdate.html
+
+XsDate Namespace: PhoenixmlDb.Xdm Represents an xs:date value with optional timezone. Unlike DateOnly, this preserves timezone offset information. Constructors #ctor(DateOnly,Nullable<TimeSpan>) Represents an xs:date value with optional timezone. Unlike DateOnly, this preserves timezone offset information. Properties Name Description EffectiveYear The effective year, using ExtendedYear if available, otherwise Date.Year. ExtendedYear Extended year for dates outside the .NET DateOnly range (years < 1 or > 9999). When non-null, this is the true year; Date.Year is clamped for month/day storage. Methods ToUtcTicks Converts this date to UTC ticks for comparison, using midnight as the time component. Falls back to year comparison for extended dates.
+
+---
+
+## XsDateTime
+> Represents an xs:dateTime value with explicit timezone tracking. Unlike DateTimeOffset, this distinguishes "no timezone" from UTC.
+URL: /api/xdm/xsdatetime.html
+
+XsDateTime Namespace: PhoenixmlDb.Xdm Represents an xs:dateTime value with explicit timezone tracking. Unlike DateTimeOffset, this distinguishes "no timezone" from UTC. Constructors #ctor(DateTimeOffset,Boolean) Represents an xs:dateTime value with explicit timezone tracking. Unlike DateTimeOffset, this distinguishes "no timezone" from UTC. Properties Name Description EffectiveYear The effective year, using ExtendedYear if available, otherwise Value.Year. ExtendedYear Extended year for dateTimes outside the .NET DateTimeOffset range (years < 1 or > 9999). When non-null, this is the true year; Value.Year is clamped for time storage. FractionalTicks Fractional seconds preserved from parsing (sub-tick precision not needed, but format is preserved). Methods DaysInMonthProleptic(Int64,Int32) Returns the number of days in a given month for a proleptic Gregorian year. IsLeapYearProleptic(Int64) Determines if a year is a leap year in the proleptic Gregorian calendar. XSD uses proleptic Gregorian where year 0 exists (= 1 BC in astronomical year numbering).
+
+---
+
+## XsDuration
+> Represents an xs:duration value with both month and day-time components. Unlike TimeSpan (which only has day-time), this preserves the year/month facets.
+URL: /api/xdm/xsduration.html
+
+XsDuration Namespace: PhoenixmlDb.Xdm Represents an xs:duration value with both month and day-time components. Unlike TimeSpan (which only has day-time), this preserves the year/month facets. Constructors #ctor(Int32,TimeSpan) Represents an xs:duration value with both month and day-time components. Unlike TimeSpan (which only has day-time), this preserves the year/month facets.
+
+---
+
+## XsGDay
+> XSD xs:gDay value (e.g. "---25").
+URL: /api/xdm/xsgday.html
+
+XsGDay Namespace: PhoenixmlDb.Xdm XSD xs:gDay value (e.g. "---25"). Constructors #ctor(String) XSD xs:gDay value (e.g. "---25").
+
+---
+
+## XsGMonth
+> XSD xs:gMonth value (e.g. "--12").
+URL: /api/xdm/xsgmonth.html
+
+XsGMonth Namespace: PhoenixmlDb.Xdm XSD xs:gMonth value (e.g. "--12"). Constructors #ctor(String) XSD xs:gMonth value (e.g. "--12").
+
+---
+
+## XsGMonthDay
+> XSD xs:gMonthDay value (e.g. "--12-25").
+URL: /api/xdm/xsgmonthday.html
+
+XsGMonthDay Namespace: PhoenixmlDb.Xdm XSD xs:gMonthDay value (e.g. "--12-25"). Constructors #ctor(String) XSD xs:gMonthDay value (e.g. "--12-25").
+
+---
+
+## XsGYear
+> XSD xs:gYear value (e.g. "2005").
+URL: /api/xdm/xsgyear.html
+
+XsGYear Namespace: PhoenixmlDb.Xdm XSD xs:gYear value (e.g. "2005"). Constructors #ctor(String) XSD xs:gYear value (e.g. "2005").
+
+---
+
+## XsGYearMonth
+> XSD xs:gYearMonth value (e.g. "2005-10").
+URL: /api/xdm/xsgyearmonth.html
+
+XsGYearMonth Namespace: PhoenixmlDb.Xdm XSD xs:gYearMonth value (e.g. "2005-10"). Constructors #ctor(String) XSD xs:gYearMonth value (e.g. "2005-10").
+
+---
+
+## XsTime
+> Represents an xs:time value with optional timezone and fractional seconds. Unlike TimeOnly, this preserves timezone offset information.
+URL: /api/xdm/xstime.html
+
+XsTime Namespace: PhoenixmlDb.Xdm Represents an xs:time value with optional timezone and fractional seconds. Unlike TimeOnly, this preserves timezone offset information. Constructors #ctor(TimeOnly,Nullable<TimeSpan>,Int32) Represents an xs:time value with optional timezone and fractional seconds. Unlike TimeOnly, this preserves timezone offset information. Methods ToUtcTicks Converts this time to UTC ticks for comparison. Per XPath F&O §10.4, uses the system implicit timezone when timezone is absent.
+
+---
+
+## XsUntypedAtomic
+> Wrapper type for xs:untypedAtomic values, distinguishing them from xs:string. Implements IConvertible so it can participate in arithmetic and comparisons.
+URL: /api/xdm/xsuntypedatomic.html
+
+XsUntypedAtomic Namespace: PhoenixmlDb.Xdm Wrapper type for xs:untypedAtomic values, distinguishing them from xs:string. Implements IConvertible so it can participate in arithmetic and comparisons. Constructors #ctor(String) Wrapper type for xs:untypedAtomic values, distinguishing them from xs:string. Implements IConvertible so it can participate in arithmetic and comparisons.
+
+---
+
+## YearMonthDuration
+> Represents an xs:yearMonthDuration value as a count of months. Unlike TimeSpan, this correctly supports month-based date arithmetic.
+URL: /api/xdm/yearmonthduration.html
+
+YearMonthDuration Namespace: PhoenixmlDb.Xdm Represents an xs:yearMonthDuration value as a count of months. Unlike TimeSpan, this correctly supports month-based date arithmetic. Constructors #ctor(Int32) Represents an xs:yearMonthDuration value as a count of months. Unlike TimeSpan, this correctly supports month-based date arithmetic.
+
+---
+
+## DelegateMetadataProvider
+> Adapter that wraps delegate-based metadata resolution into the interface.
+URL: /api/xquery/delegatemetadataprovider.html
+
+DelegateMetadataProvider Namespace: PhoenixmlDb.XQuery Adapter that wraps delegate-based metadata resolution into the interface.
+
+---
+
+## DelegateNodeProvider
+> Adapter that wraps delegate-based node loading into the interface.
+URL: /api/xquery/delegatenodeprovider.html
+
+DelegateNodeProvider Namespace: PhoenixmlDb.XQuery Adapter that wraps delegate-based node loading into the interface.
+
+---
+
+## IDocumentResolver
+> Resolves document URIs to XDM documents for fn:doc() and fn:collection(). Implementations can load from files, URLs, databases, or any other source.
+URL: /api/xquery/idocumentresolver.html
+
+IDocumentResolver Namespace: PhoenixmlDb.XQuery Resolves document URIs to XDM documents for fn:doc() and fn:collection(). Implementations can load from files, URLs, databases, or any other source. Methods IsDocumentAvailable(String) Checks whether a document is available at the given URI. Parameters: uri  — The document URI. Returns:  True if the document exists and can be loaded. ResolveCollection(String) Returns all documents in a named collection. Parameters: uri  — The collection URI, or null for the default collection. Returns:  All document nodes in the collection. ResolveDocument(String) Loads a document by URI. Parameters: uri  — The document URI (file path, URL, or logical name). Returns:  The document node, or null if the document cannot be resolved.
+
+---
+
+## IMetadataProvider
+> Provides document metadata resolution for the XQuery execution engine.
+URL: /api/xquery/imetadataprovider.html
+
+IMetadataProvider Namespace: PhoenixmlDb.XQuery Provides document metadata resolution for the XQuery execution engine. Methods GetAllMetadata(PhoenixmlDb.Core.DocumentId) Resolves all metadata key-value pairs for a document. Parameters: documentId  — The document to query. Returns:  All metadata key-value pairs. GetMetadata(PhoenixmlDb.Core.DocumentId,String) Resolves a single metadata value by document ID and key. Parameters: documentId  — The document to query. key  — The metadata key. Returns:  The raw byte value, or null if the key does not exist.
+
+---
+
+## PhoenixmlDb.XQuery API Reference
+> API documentation for the PhoenixmlDb.XQuery library
+URL: /api/xquery/index.html
+
+PhoenixmlDb.XQuery API Reference 
+          This reference is auto-generated from the .NET XML documentation
+          for the  PhoenixmlDb.XQuery  assembly.
+         PhoenixmlDb.XQuery Type Description DelegateMetadataProvider Adapter that wraps delegate-based metadata resolution into the interface. DelegateNodeProvider Adapter that wraps delegate-based node loading into the interface. IDocumentResolver Resolves document URIs to XDM documents for fn:doc() and fn:collection(). Implementations can load from files, URLs, databases, or any other source. IMetadataProvider Provides document metadata resolution for the XQuery execution engine. INodeProvider Provides node resolution for the XQuery execution engine. Implementations can load nodes from storage, in-memory documents, or any other source. PhoenixmlDb.XQuery.Parser Type Description ParseError A single parse error with location information. XQueryAstBuilder Converts an ANTLR parse tree into the XQuery AST node types. XQueryErrorListener ANTLR error listener that collects parse errors. Implements both lexer and parser error listener interfaces. XQueryParseException Exception thrown when XQuery parsing fails. XQueryParserFacade Public API for parsing XQuery strings into AST expressions.
+
+---
+
+## INodeProvider
+> Provides node resolution for the XQuery execution engine. Implementations can load nodes from storage, in-memory documents, or any other source.
+URL: /api/xquery/inodeprovider.html
+
+INodeProvider Namespace: PhoenixmlDb.XQuery Provides node resolution for the XQuery execution engine. Implementations can load nodes from storage, in-memory documents, or any other source. Methods GetNode(PhoenixmlDb.Core.NodeId) Loads a node by its identifier. Parameters: nodeId  — The identifier of the node to load. Returns:  The node, or null if not found.
+
+---
+
+## ParseError
+> A single parse error with location information.
+URL: /api/xquery/parseerror.html
+
+ParseError Namespace: PhoenixmlDb.XQuery.Parser A single parse error with location information. Constructors #ctor(String,Int32,Int32) A single parse error with location information.
+
+---
+
+## XQueryAstBuilder
+> Converts an ANTLR parse tree into the XQuery AST node types.
+URL: /api/xquery/xqueryastbuilder.html
+
+XQueryAstBuilder Namespace: PhoenixmlDb.XQuery.Parser Converts an ANTLR parse tree into the XQuery AST node types. Methods BuildRelativePathExpression(PhoenixmlDb.XQuery.Parser.Grammar.XQueryParser.RelativePathExprContext,Boolean,PhoenixmlDb.XQuery.Ast.SourceLocation,Boolean) Builds a path expression from a relative path, properly handling postfix expression steps (parenthesized expressions, function calls, etc.) at any position. When a postfix step appears in the middle of a path (e.g., A/(expr)/B), it is converted to a SimpleMapExpression mapping operation.
+
+---
+
+## XQueryErrorListener
+> ANTLR error listener that collects parse errors. Implements both lexer and parser error listener interfaces.
+URL: /api/xquery/xqueryerrorlistener.html
+
+XQueryErrorListener Namespace: PhoenixmlDb.XQuery.Parser ANTLR error listener that collects parse errors. Implements both lexer and parser error listener interfaces. Methods SyntaxError(IO.TextWriter,Antlr4.Runtime.IRecognizer,Antlr4.Runtime.IToken,Int32,Int32,String,Antlr4.Runtime.RecognitionException) Parser syntax error handler. SyntaxError(IO.TextWriter,Antlr4.Runtime.IRecognizer,Int32,Int32,Int32,String,Antlr4.Runtime.RecognitionException) Lexer syntax error handler.
+
+---
+
+## XQueryParseException
+> Exception thrown when XQuery parsing fails.
+URL: /api/xquery/xqueryparseexception.html
+
+XQueryParseException Namespace: PhoenixmlDb.XQuery.Parser Exception thrown when XQuery parsing fails.
+
+---
+
+## XQueryParserFacade
+> Public API for parsing XQuery strings into AST expressions.
+URL: /api/xquery/xqueryparserfacade.html
+
+XQueryParserFacade Namespace: PhoenixmlDb.XQuery.Parser Public API for parsing XQuery strings into AST expressions. Methods Parse(String) Parses an XQuery expression string into an AST. Parameters: xquery  — The XQuery source text. Returns:  The parsed expression AST. Exceptions: XQueryParseException  — If the input has syntax errors. TryParse(String,Collections.Generic.IReadOnlyList<PhoenixmlDb.XQuery.Parser.ParseError>@) Tries to parse an XQuery expression, returning null on failure.
+
+---
+
+## PhoenixmlDb.Xslt API Reference
+> API documentation for the PhoenixmlDb.Xslt library
+URL: /api/xslt/index.html
+
+PhoenixmlDb.Xslt API Reference 
+          This reference is auto-generated from the .NET XML documentation
+          for the  PhoenixmlDb.Xslt  assembly.
+         PhoenixmlDb.Xslt Type Description XQueryExpressionParser Adapts XQueryParserFacade to IExpressionParser for XSLT stylesheet parsing. XsltTransformer Public API for XSLT transformations. Provides a simple interface for loading stylesheets and transforming XML.
+
+---
+
+## XQueryExpressionParser
+> Adapts XQueryParserFacade to IExpressionParser for XSLT stylesheet parsing.
+URL: /api/xslt/xqueryexpressionparser.html
+
+XQueryExpressionParser Namespace: PhoenixmlDb.Xslt Adapts XQueryParserFacade to IExpressionParser for XSLT stylesheet parsing.
+
+---
+
+## XsltTransformer
+> Public API for XSLT transformations. Provides a simple interface for loading stylesheets and transforming XML.
+URL: /api/xslt/xslttransformer.html
+
+XsltTransformer Namespace: PhoenixmlDb.Xslt Public API for XSLT transformations. Provides a simple interface for loading stylesheets and transforming XML. Properties Name Description SecondaryResultDocuments Secondary result documents produced by xsl:result-document, keyed by href URI. Populated after each call to TransformAsync. Methods AddInitialFunctionArgument(Object) Adds a positional argument for the initial function call. LoadStylesheetAsync(String,Uri,Collections.Generic.Dictionary<String,String>) Loads an XSLT stylesheet from a string. SetCollection(String,Collections.Generic.List<String>) Registers a named collection of document file paths for fn:collection(). SetInitialFunction(String,String) Sets the initial function to call (XSLT 3.0 "call function" invocation). SetInitialMode(String,String) Sets the initial mode. SetInitialModeSelect(String) Sets an XPath expression to determine the initial match selection for the initial mode. The expression is evaluated with the source document as context, and templates are applied to each item in the resulting sequence. SetInitialTemplate(String,String) Sets the initial named template. SetInitialTemplateParameter(PhoenixmlDb.Core.QName,Object) Sets an initial template parameter (passed via xsl:with-param to the initial template call). SetInitialTunnelParameter(PhoenixmlDb.Core.QName,Object) Sets an initial template tunnel parameter. SetParameter(String,Object) Sets a stylesheet parameter with a typed value. SetParameter(String,String) Sets a stylesheet parameter with a string value. SetSourceDocumentUri(Uri) Sets the URI of the source document (for base-uri/document-uri resolution). SetSourceSelect(String) Sets an XPath expression to select the initial context node from the source document. Example: "/doc" selects the document element named "doc" instead of the document root. TransformAsync(String,Threading.CancellationToken) Transforms an XML string using the loaded stylesheet.
+
+---
+
 ## First Application
 > Build a complete library management app with PhoenixmlDb
 URL: /getting-started/first-application.html
@@ -730,12 +1398,7 @@ string.Compare("ä", "z", false, german);   // ä before z
 // Swedish comparison
 var swedish = new CultureInfo("sv-SE");
 string.Compare("ä", "z", false, swedish);  // ä after z Collation in PhoenixmlDb PhoenixmlDb supports the W3C Unicode Collation Algorithm (UCA) with language parameters: http://www.w3.org/2013/collation/UCA?lang=en
-http://www.w3.org/2013/collation/UCA?lang=de&strength=secondary Strength levels: 
-| Level | Ignores | Example |
-|-------|---------|---------|
-| Primary | Case + accents | a = á = A |
-| Secondary | Case only | a = A ≠ á |
-| Tertiary (default) | Nothing | a ≠ A ≠ á | Regular Expressions XPath/XQuery regex uses Unicode character classes: matches("café123", "\p{L}+")    (: matches "café" — Unicode letters :)
+http://www.w3.org/2013/collation/UCA?lang=de&strength=secondary Strength levels: Level Ignores Example Primary Case + accents a = á = A Secondary Case only a = A ≠ á Tertiary (default) Nothing a ≠ A ≠ á Regular Expressions XPath/XQuery regex uses Unicode character classes: matches("café123", "\p{L}+")    (: matches "café" — Unicode letters :)
 matches("café123", "\p{N}+")    (: matches "123" — Unicode numbers :)
 matches("café", "\p{Ll}+")      (: matches "caf" — lowercase letters :)
 matches("Ω", "\p{Lu}")          (: true — uppercase Greek letter :) In invariant mode ,  \p{L}  may not recognize all Unicode letters — it might miss accented characters, non-Latin scripts, or characters added in recent Unicode versions. XPath vs .NET Regex Differences Feature XPath Regex .NET Regex Syntax base XML Schema regex Perl-compatible Anchoring Implicit full match Partial match unless  ^...$ Character classes \p{L} ,  \p{Lu} ,  \p{IsGreek} Same (with ICU) Backreferences in match Not supported Supported Backreferences in replace $1 ,  $2 $1 ,  $2 Named groups Not supported (?<name>...) Lookahead/lookbehind Not supported Supported Flags i ,  m ,  s ,  x RegexOptions  enum The most important difference:  XPath  matches()  tests the entire string by default. matches("hello world", "hello")  is  false  because "hello" doesn't match the whole string. You need  matches("hello world", ".*hello.*")  or  contains()  instead. Common Issues and Solutions Issue: normalize-unicode() Throws PlatformNotSupportedException Cause:  Invariant globalization mode is active. Fix: # Check for the environment variable
@@ -1140,14 +1803,7 @@ boolean("")         => false    (: empty string :)
 boolean(42)         => true     (: non-zero number :)
 boolean(0)          => false    (: zero :)
 boolean(())         => false    (: empty sequence :)
-boolean((1, 2))     => true     (: non-empty sequence starting with a node or value :) Effective boolean value rules: 
-| Input | Result |
-|-------|--------|
-| Empty sequence  ()  |  false  |
-| Sequence starting with a node |  true  |
-| Single  xs:boolean  | Its value |
-| Single  xs:string  |  true  if non-empty |
-| Single number |  true  if non-zero and not NaN | C# equivalent:  There's no single C# equivalent — C# doesn't implicitly convert strings or numbers to booleans. Why this matters:  In XPath, you can write  if (//error) then ...  and it works — the sequence of error nodes is automatically converted to  true  if any exist. You don't need  if (count(//error) > 0) . true() Returns  true . Needed because XPath doesn't have boolean literals. Signature: true() as xs:boolean true()   => true Note:  Unlike C#'s  true , this is a function call with parentheses. XPath 4.0 also allows the keyword  true  without parentheses in some contexts. false() Returns  false . Signature: false() as xs:boolean false()   => false not() Logical negation. Signature: not($value as item()*) as xs:boolean not(true())               => false
+boolean((1, 2))     => true     (: non-empty sequence starting with a node or value :) Effective boolean value rules: Input Result Empty sequence  () false Sequence starting with a node true Single  xs:boolean Its value Single  xs:string true  if non-empty Single number true  if non-zero and not NaN C# equivalent:  There's no single C# equivalent — C# doesn't implicitly convert strings or numbers to booleans. Why this matters:  In XPath, you can write  if (//error) then ...  and it works — the sequence of error nodes is automatically converted to  true  if any exist. You don't need  if (count(//error) > 0) . true() Returns  true . Needed because XPath doesn't have boolean literals. Signature: true() as xs:boolean true()   => true Note:  Unlike C#'s  true , this is a function call with parentheses. XPath 4.0 also allows the keyword  true  without parentheses in some contexts. false() Returns  false . Signature: false() as xs:boolean false()   => false not() Logical negation. Signature: not($value as item()*) as xs:boolean not(true())               => false
 not(false())              => true
 not(())                   => true    (: empty sequence is "falsy" :)
 not(//error)              => true if no error elements exist
@@ -1536,13 +2192,7 @@ translate("(555) 123-4567", "()-", "")  => "555 1234567"
 translate("ABC", "ABC", "abc")         => "abc" C# equivalent:  Multiple  Replace()  calls, or  string.Create  with a character map. Practical example  — stripping punctuation from phone numbers: translate(@phone, "()- .", "") Note: translate()  maps characters 1:1. For pattern-based replacement, use  replace()  with regex. Regular Expressions XPath uses the same regex syntax as XML Schema (which is close to but not identical to .NET's  System.Text.RegularExpressions ). matches() Tests whether a string matches a regular expression. Signature: matches($value as xs:string?, $pattern as xs:string, $flags as xs:string?) as xs:boolean matches("hello", "^h.*o$")            => true
 matches("Hello", "hello", "i")        => true   (: case-insensitive :)
 matches("2026-03-19", "\d{4}-\d{2}-\d{2}") => true
-matches("abc123", "[0-9]+")           => true   (: contains digits :) Flags: 
-| Flag | Meaning | C# Equivalent |
-|------|---------|---------------|
-|  i  | Case-insensitive |  RegexOptions.IgnoreCase  |
-|  m  | Multiline (^ and $ match line boundaries) |  RegexOptions.Multiline  |
-|  s  | Dot matches newlines |  RegexOptions.Singleline  |
-|  x  | Allow whitespace and comments in pattern |  RegexOptions.IgnorePatternWhitespace  | C# equivalent: Regex.IsMatch("hello", "^h.*o$") Practical example  — validating email-like patterns: //user[matches(email, "^[^@]+@[^@]+\.[^@]+$")] replace() Replaces parts of a string matching a regex pattern. Signature: replace($value as xs:string?, $pattern as xs:string, $replacement as xs:string, $flags as xs:string?) as xs:string replace("hello world", "world", "XPath")        => "hello XPath"
+matches("abc123", "[0-9]+")           => true   (: contains digits :) Flags: Flag Meaning C# Equivalent i Case-insensitive RegexOptions.IgnoreCase m Multiline (^ and $ match line boundaries) RegexOptions.Multiline s Dot matches newlines RegexOptions.Singleline x Allow whitespace and comments in pattern RegexOptions.IgnorePatternWhitespace C# equivalent: Regex.IsMatch("hello", "^h.*o$") Practical example  — validating email-like patterns: //user[matches(email, "^[^@]+@[^@]+\.[^@]+$")] replace() Replaces parts of a string matching a regex pattern. Signature: replace($value as xs:string?, $pattern as xs:string, $replacement as xs:string, $flags as xs:string?) as xs:string replace("hello world", "world", "XPath")        => "hello XPath"
 replace("2026-03-19", "(\d{4})-(\d{2})-(\d{2})", "$2/$3/$1")
                                                   => "03/19/2026"
 replace("  hello  ", "^\s+|\s+$", "")            => "hello" (: trim :)
@@ -10254,6 +10904,61 @@ catch (QueryTimeoutException ex)
 
 ---
 
+## Resource Policy
+URL: /phoenixmldb/api-reference/resource-policy.html
+
+Resource Policy Control what external resources XSLT and XQuery code can access. Essential for running transformations in server environments where untrusted stylesheets or queries must be sandboxed. Quick Start // Lock down for server use — no filesystem, no network
+var transformer = new XsltTransformer();
+transformer.ResourcePolicy = ResourcePolicy.ServerDefault;
+await transformer.LoadStylesheetAsync(stylesheet);
+var result = await transformer.TransformAsync(inputXml);
+// doc('file:///etc/passwd') → ResourceAccessDeniedException Presets ResourcePolicy.ServerDefault Denies all external access by default. Only documents pre-loaded by the application or served by a custom resolver are accessible. Limits: 100 document loads, 10 result documents, 10 MB output. ResourcePolicy.InMemoryOnly No external access at all. Only in-memory documents provided via a custom  IResourceResolver . ResourcePolicy.Unrestricted Backwards-compatible default. All schemes allowed, file-only resolution (same as no policy). Builder API // Allow HTTPS reads from a specific domain
+transformer.ResourcePolicy = ResourcePolicy.CreateBuilder()
+    .AllowReadFrom("https", host: "api.example.com")
+    .AllowReadFrom("https", host: "cdn.example.com", pathPrefix: "/schemas/")
+    .WithMaxDocumentLoads(100)
+    .Build();
+// Separate read and write policies
+transformer.ResourcePolicy = ResourcePolicy.CreateBuilder()
+    .AllowReadFrom("https")
+    .AllowWriteTo("s3")
+    .WithMaxResultDocuments(10)
+    .Build();
+// Allow imports from specific paths
+transformer.ResourcePolicy = ResourcePolicy.CreateBuilder()
+    .AllowImportFrom("file", pathPrefix: "/app/stylesheets/")
+    .AllowReadFrom("https")
+    .Build(); Custom Resource Resolver The  IResourceResolver  interface lets you plug in any storage backend. XSLT/XQuery code uses standard functions ( doc() ,  unparsed-text() ,  collection() ) and your resolver handles the URI. public class S3ResourceResolver : ResourceResolverBase
+{
+    private readonly IAmazonS3 _s3;
+    private readonly string _bucket;
+    public S3ResourceResolver(IAmazonS3 s3, string bucket)
+    {
+        _s3 = s3;
+        _bucket = bucket;
+    }
+    public override XdmDocument? ResolveDocument(string uri, ResourceAccessKind access)
+    {
+        if (!uri.StartsWith("s3://")) return null;
+        var key = uri.Replace("s3://", "").TrimStart('/');
+        var response = _s3.GetObjectAsync(_bucket, key).Result;
+        using var reader = new StreamReader(response.ResponseStream);
+        var xml = reader.ReadToEnd();
+        var store = new XdmDocumentStore();
+        return store.LoadFromString(xml, uri);
+    }
+}
+// Wire it up
+transformer.ResourcePolicy = ResourcePolicy.CreateBuilder()
+    .WithResourceResolver(new S3ResourceResolver(s3Client, "my-bucket"))
+    .AllowReadFrom("s3")
+    .Build(); Now XSLT code can do: <xsl:variable name="config" select="doc('s3://my-bucket/config.xml')"/> IResourceResolver Methods Method Purpose ResolveDocument(uri, access) Load XML documents ( doc() ,  document() ) ResolveText(uri, encoding) Load text files ( unparsed-text() ) ResolveCollection(uri) Load document collections ( collection() ) OpenResultDocument(href) Write output ( xsl:result-document ) ResolveStylesheetModule(href, baseUri) Load stylesheets ( xsl:import ,  xsl:include ) IsDocumentAvailable(uri) Check availability ( doc-available() ) IsTextAvailable(uri) Check availability ( unparsed-text-available() ) Use  ResourceResolverBase  as a base class — it returns  null  for all methods, so you only override what you need. What Gets Controlled Access Point Read Policy Write Policy Import Policy doc() ,  document() AllowedSchemes / ReadRules — — unparsed-text() AllowedSchemes / ReadRules — — collection() AllowedSchemes / ReadRules — — xsl:result-document — AllowedWriteSchemes / WriteRules — xsl:import ,  xsl:include — — AllowedSchemes / ImportRules Resource Budgets Property Default (Unrestricted) Default (ServerDefault) Purpose MaxDocumentLoads 0 (unlimited) 100 Limit  doc()  calls MaxResultDocuments 1000 10 Limit  xsl:result-document MaxOutputSize 50 MB 10 MB Limit primary output size MaxUnparsedTextLoads 0 (unlimited) 50 Limit  unparsed-text()  calls XQuery The same  ResourcePolicy  works on  XQueryFacade : var xquery = new XQueryFacade();
+xquery.ResourcePolicy = ResourcePolicy.ServerDefault;
+var result = await xquery.EvaluateAsync("doc('file:///etc/passwd')");
+// → ResourceAccessDeniedException Comparison with Saxon Feature Saxon PhoenixmlDb Protocol filtering AllowedProtocols  (comma-separated string) AllowedSchemes  (typed set) Host/path scoping No Yes — per-host, per-path rules Separate read/write No Yes —  AllowedSchemes  vs  AllowedWriteSchemes Custom resolver ResourceResolver  callback IResourceResolver  with typed methods per resource type Default Allow all ServerDefault  denies all Resource budgets No Max document loads, result documents, output size, text loads Import filtering No Yes — separate  ImportRules
+
+---
+
 ## Transactions API
 > Transaction lifecycle, commit/rollback, error handling, and patterns
 URL: /phoenixmldb/api-reference/transactions.html
@@ -12087,6 +12792,75 @@ if (!explanation.CompilationSucceeded)
 
 ---
 
+## Metadata
+> Unlimited namespace-key-value metadata on every document
+URL: /phoenixmldb/metadata.html
+
+Metadata Every document in PhoenixmlDb can carry unlimited metadata — arbitrary key-value pairs stored alongside the document content. Metadata is stored in a dedicated LMDB database, indexed for fast lookups, and participates in ACID transactions. The metadata model uses a  namespace-key-value  pattern inspired by Oracle Berkeley DB XML. The namespace dimension allows the same key name under different namespaces — critical for enterprise integrations where multiple systems attach metadata to the same document. Storing Metadata Simple Key-Value // Set metadata with a flat key
+await container.SetMetadataAsync("invoice.xml", "status", "pending");
+await container.SetMetadataAsync("invoice.xml", "priority", "high");
+// Retrieve
+var status = await container.GetMetadataAsync("invoice.xml", "status");
+// "pending" Namespaced Keys When multiple systems need to attach metadata to the same document, use namespaced keys to avoid collisions: // BizTalk context properties
+await container.SetMetadataAsync("message.xml", "biztalk", "status", "received");
+await container.SetMetadataAsync("message.xml", "biztalk", "port", "ReceivePort1");
+// Custom application metadata
+await container.SetMetadataAsync("message.xml", "app", "status", "processed");
+await container.SetMetadataAsync("message.xml", "app", "processor", "OrderService");
+// Both "status" keys coexist — different namespaces
+var btStatus = await container.GetMetadataAsync("message.xml", "biztalk", "status");
+// "received"
+var appStatus = await container.GetMetadataAsync("message.xml", "app", "status");
+// "processed" How It Works Namespaced keys are stored as  "namespace:key"  strings in LMDB. The colon is the separator. This means: SetMetadataAsync("doc", "source", "type", "api")  stores key  "source:type"  with value  "api" SetMetadataAsync("doc", "status", "active")  stores key  "status"  with value  "active"  (flat key, no namespace) Both forms coexist on the same document Retrieving Metadata Single Key // Flat key
+var value = await container.GetMetadataAsync("doc.xml", "status");
+// Namespaced key
+var value = await container.GetMetadataAsync("doc.xml", "source", "type"); All Metadata var allMeta = await container.GetAllMetadataAsync("doc.xml");
+// Returns: { "status": "active", "source:type": "api", "source:path": "/data/imports" } Filter by Namespace var sourceMeta = await container.GetMetadataByNamespaceAsync("doc.xml", "source");
+// Returns only keys starting with "source:":
+// { "source:type": "api", "source:path": "/data/imports" } Querying by Metadata Find documents that have a specific metadata value: // Find all documents with status = "pending"
+await foreach (var doc in container.QueryMetadataAsync("status", "pending"))
+{
+    Console.WriteLine(doc.Name);
+}
+// Find documents in a namespace
+await foreach (var doc in container.QueryMetadataAsync("biztalk:status", "received"))
+{
+    Console.WriteLine(doc.Name);
+} Metadata in Transactions Metadata operations participate in ACID transactions: await using var txn = await db.BeginWriteAsync();
+// Store document and set metadata atomically
+await txn.PutDocumentAsync(containerId, "order.xml", orderXml);
+await txn.SetMetadataAsync(containerId, "order.xml", "workflow", "status", "new");
+await txn.SetMetadataAsync(containerId, "order.xml", "workflow", "step", "validation");
+await txn.CommitAsync();
+// Both document and metadata are committed together — or neither is Metadata Indexing Metadata keys can be indexed for fast lookups: var container = await db.OpenOrCreateContainerAsync("orders", opts =>
+{
+    opts.Indexes
+        .AddMetadataIndex("status", XdmValueType.XdmString)
+        .AddMetadataIndex("biztalk:status", XdmValueType.XdmString)
+        .AddMetadataIndex("workflow:step", XdmValueType.XdmString);
+}); Indexed metadata queries use the B+ tree index instead of scanning all documents. Accessing Metadata in XQuery The  dbxml:metadata()  function retrieves metadata from within XQuery expressions: (: Get metadata for the current document :)
+dbxml:metadata('status')
+(: Get namespaced metadata :)
+dbxml:metadata('biztalk:status')
+(: Filter documents by metadata :)
+for $doc in collection('orders')
+where dbxml:metadata($doc, 'workflow:status') = 'pending'
+return $doc Use Cases Enterprise Integration (BizTalk Migration) BizTalk message context properties map directly to namespaced metadata: // Store BizTalk context properties as metadata
+await container.SetMetadataAsync("msg.xml", "BTS", "MessageType", messageType);
+await container.SetMetadataAsync("msg.xml", "BTS", "ReceivePortName", portName);
+await container.SetMetadataAsync("msg.xml", "BTS", "InboundTransportType", "FILE");
+await container.SetMetadataAsync("msg.xml", "APP", "CorrelationId", correlationId); Document Workflow Track document lifecycle without modifying the document content: await container.SetMetadataAsync("report.xml", "workflow", "status", "draft");
+await container.SetMetadataAsync("report.xml", "workflow", "author", "alice");
+await container.SetMetadataAsync("report.xml", "workflow", "created", DateTime.UtcNow);
+// Later...
+await container.SetMetadataAsync("report.xml", "workflow", "status", "reviewed");
+await container.SetMetadataAsync("report.xml", "workflow", "reviewer", "bob"); Content Classification Attach tags and categories without schema changes: await container.SetMetadataAsync("article.xml", "taxonomy", "category", "technology");
+await container.SetMetadataAsync("article.xml", "taxonomy", "tags", "xml,database,dotnet");
+await container.SetMetadataAsync("article.xml", "audit", "imported-from", "legacy-cms");
+await container.SetMetadataAsync("article.xml", "audit", "import-date", DateTime.UtcNow); Best Practices Use namespaces  for metadata from different systems or concerns Index frequently queried keys  — unindexed metadata queries scan all documents Keep values small  — metadata is serialized as JSON bytes in LMDB Use transactions  for multi-key updates that must be atomic Prefer string keys  — the colon convention is simple and readable Next Steps Storage Querying Extensions Documents & Storage Document operations Indexing Index optimization Database Extensions dbxml:metadata() function
+
+---
+
 ## Migration Guide
 > Migrate from Berkeley DB XML, eXist-db, MarkLogic, MongoDB, or SQL
 URL: /phoenixmldb/migration-guide.html
@@ -12951,10 +13725,10 @@ jobs:
 ---
 
 ## Tools
-> PhoenixmlDb command-line tools — xslt, xquery, and crucible
+> PhoenixmlDb command-line tools and MCP servers
 URL: /tools/index.html
 
-Tools PhoenixmlDb provides three command-line tools for working with XML technologies on .NET: Tool Purpose Install xslt Run XSLT 3.0/4.0 transformations dotnet tool install -g PhoenixmlDb.Xslt.Cli xquery Execute XQuery expressions against XML dotnet tool install -g PhoenixmlDb.XQuery.Cli crucible Generate static documentation sites dotnet tool install -g Crucible.Cli All three are .NET global tools — install once, use from anywhere on the command line. Quick Start # Install the tools
+Tools Command-Line Tools Tool Purpose Install xslt Run XSLT 3.0/4.0 transformations dotnet tool install -g PhoenixmlDb.Xslt.Cli xquery Execute XQuery expressions against XML dotnet tool install -g PhoenixmlDb.XQuery.Cli crucible Generate static documentation sites dotnet tool install -g crucible All three are .NET global tools — install once, use from anywhere on the command line. MCP Servers AI-native tools that give language models (Claude, GPT, etc.) access to spec reference and engine execution via the  Model Context Protocol . Server Purpose Install xslt-mcp XSLT spec lookup + transform/validate/XPath dotnet tool install -g xslt-mcp  or  download binary xquery-mcp XQuery spec lookup + evaluate/validate/XPath dotnet tool install -g xquery-mcp  or  download binary MCP servers are also available as self-contained binaries — no .NET SDK required. Quick Start # Install the tools
 dotnet tool install -g PhoenixmlDb.Xslt.Cli
 dotnet tool install -g PhoenixmlDb.XQuery.Cli
 dotnet tool install -g Crucible.Cli
@@ -13068,6 +13842,26 @@ watch -n 5 'xquery "count(//error)" /var/log/app/*.xml' Comparison with Other To
 
 ---
 
+## XQuery MCP Server
+URL: /tools/xquery-mcp.html
+
+XQuery MCP Server An  MCP  server that gives AI agents access to XQuery spec reference and the PhoenixmlDb XQuery engine. Look up expressions, functions, and error codes. Validate and execute queries. Install Self-contained binary (no .NET required) Download from  GitHub Releases : Platform Binary Linux x64 xquery-mcp-linux-x64 Linux ARM64 xquery-mcp-linux-arm64 macOS x64 xquery-mcp-osx-x64 macOS ARM64 xquery-mcp-osx-arm64 Windows x64 xquery-mcp-win-x64.exe .NET tool dotnet tool install -g xquery-mcp Configure Claude Code Add to  .mcp.json  in your project root: {
+  "mcpServers": {
+    "xquery": {
+      "command": "xquery-mcp"
+    }
+  }
+} Claude Desktop Add to  claude_desktop_config.json : {
+  "mcpServers": {
+    "xquery": {
+      "command": "xquery-mcp",
+      "args": []
+    }
+  }
+} Tools Spec Reference xquery_lookup_expression  — Look up XQuery expressions (FLWOR, path, typeswitch, etc.) xquery_lookup_function  — Look up XPath/XQuery functions (signature, parameters, examples) xquery_lookup_prolog  — Look up prolog declarations (namespaces, functions, modules) xquery_lookup_error_code  — Look up error codes with descriptions and fix suggestions xquery_search  — Full-text search across all spec entries xquery_list_expressions  — List all expression types xquery_list_functions  — List all functions by category Execution xquery_evaluate  — Execute an XQuery expression with optional XML input xquery_validate  — Compile a query without executing xpath_evaluate  — Evaluate an XPath expression against XML xquery_explain_error  — Explain an error code with causes and fixes Utilities xml_validate_schema  — Validate XML against an XSD schema xml_format  — Pretty-print XML How It Works The server bundles spec reference files covering XQuery 3.1, XPath 3.1, Functions & Operators, and the Update Facility. At startup, it loads them into an in-memory index. Lookup tools search the index; execution tools delegate to the PhoenixmlDb.XQuery engine. Source github.com/phoenixmldb/xquery-mcp
+
+---
+
 ## xslt CLI
 > Command-line XSLT 3.0/4.0 processor — transform XML documents from the terminal
 URL: /tools/xslt-cli.html
@@ -13105,6 +13899,26 @@ var html = await transformer.TransformAsync(
 // Handle secondary result documents
 foreach (var (href, content) in transformer.SecondaryResultDocuments)
     File.WriteAllText(Path.Combine(outputDir, href), content); See  XSLT Extensibility  for details on programmatic usage.
+
+---
+
+## XSLT MCP Server
+URL: /tools/xslt-mcp.html
+
+XSLT MCP Server An  MCP  server that gives AI agents access to XSLT spec reference and the PhoenixmlDb XSLT engine. Look up instructions, functions, and error codes. Validate and execute stylesheets. Install Self-contained binary (no .NET required) Download from  GitHub Releases : Platform Binary Linux x64 xslt-mcp-linux-x64 Linux ARM64 xslt-mcp-linux-arm64 macOS x64 xslt-mcp-osx-x64 macOS ARM64 xslt-mcp-osx-arm64 Windows x64 xslt-mcp-win-x64.exe .NET tool dotnet tool install -g xslt-mcp Configure Claude Code Add to  .mcp.json  in your project root: {
+  "mcpServers": {
+    "xslt": {
+      "command": "xslt-mcp"
+    }
+  }
+} Claude Desktop Add to  claude_desktop_config.json : {
+  "mcpServers": {
+    "xslt": {
+      "command": "xslt-mcp",
+      "args": []
+    }
+  }
+} Tools Spec Reference xslt_lookup_instruction  — Look up any XSLT instruction (attributes, content model, examples) xslt_lookup_function  — Look up XPath/XSLT functions (signature, parameters, return type) xslt_lookup_output_method  — Look up output methods (xml, html, json, text, etc.) xslt_lookup_error_code  — Look up error codes with descriptions and fix suggestions xslt_search  — Full-text search across all 295 spec entries xslt_list_instructions  — List all 74 XSLT instructions xslt_list_functions  — List all 163 functions by category Execution xslt_transform  — Run an XSLT transformation and get the output xslt_validate  — Compile a stylesheet without executing xpath_evaluate  — Evaluate an XPath expression against XML xslt_explain_error  — Explain an error code with causes and fixes Utilities xml_validate_schema  — Validate XML against an XSD schema xml_format  — Pretty-print XML How It Works The server bundles 295 spec reference files covering XSLT 3.0/4.0, XPath 3.1, and Functions & Operators. At startup, it loads them into an in-memory index. Lookup tools search the index; execution tools delegate to the PhoenixmlDb.Xslt engine. When installed as a dotnet tool or self-contained binary, spec files are embedded as assembly resources. For local development, override the spec path: XSLT_SPEC_PATH=/path/to/spec xslt-mcp Source github.com/phoenixmldb/xslt-mcp
 
 ---
 

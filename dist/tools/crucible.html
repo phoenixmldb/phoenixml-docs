@@ -1,259 +1,1178 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Crucible — PhoenixmlDb Documentation</title><meta name="description" content="Static documentation generator — Markdown to XML to XSLT to HTML"><link rel="canonical" href="/tools/crucible.html"><meta property="og:title" content="Crucible"><meta property="og:type" content="article"><meta property="og:url" content="/tools/crucible.html"><meta property="og:description" content="Static documentation generator — Markdown to XML to XSLT to HTML"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Crucible — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="Static documentation generator — Markdown to XML to XSLT to HTML">
+            <link rel="canonical" href="/tools/crucible.html">
+              <meta property="og:title" content="Crucible">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/tools/crucible.html">
+                    <meta property="og:description" content="Static documentation generator — Markdown to XML to XSLT to HTML">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li class="active"><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="crucible"><a class="anchor" href="#crucible">#</a>Crucible</h1><p>Crucible is a static documentation generator that transforms Markdown into HTML through an XML intermediate representation and XSLT 4.0 transformation. It's built with the PhoenixmlDb XSLT engine — the same documentation site you're reading was built with Crucible.</p><h2 id="installation"><a class="anchor" href="#installation">#</a>Installation</h2><pre><code class="language-bash">dotnet tool install -g Crucible.Cli</code></pre><h2 id="quick-start"><a class="anchor" href="#quick-start">#</a>Quick Start</h2><pre><code class="language-bash"># Create a new documentation project
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li class="active"><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">Tools
+                                </p>
+                                <h1 class="page-title">Crucible
+                                </h1>
+                                <p class="page-subtitle">Static documentation generator — Markdown to XML to XSLT to HTML
+                                </p>
+                                <h1 id="crucible"><a class="anchor" href="#crucible">#</a>Crucible
+                                </h1>
+                                <p>Crucible is a static documentation generator that transforms Markdown into HTML through an XML intermediate representation and XSLT 4.0 transformation. It's built with the PhoenixmlDb XSLT engine — the same documentation site you're reading was built with Crucible.
+                                </p>
+                                <h2 id="installation"><a class="anchor" href="#installation">#</a>Installation
+                                </h2>
+                                <figure class="code">
+                                  <figcaption><span class="lang">bash</span>
+                                  </figcaption>
+                                  <pre><code class="language-bash">dotnet tool install -g Crucible.Cli</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="quick-start"><a class="anchor" href="#quick-start">#</a>Quick Start
+                                </h2>
+                                <figure class="code">
+                                  <figcaption><span class="lang">bash</span>
+                                  </figcaption>
+                                  <pre><code class="language-bash"># Create a new documentation project
 crucible init
 # Build the site
 crucible build
 # View the result
-open dist/index.html</code></pre><p>That's it. <code>crucible init</code> creates a <code>crucible.yaml</code> config file and a starter <code>docs/index.md</code>. <code>crucible build</code> generates a complete static site in <code>dist/</code>.</p><h2 id="how-it-works"><a class="anchor" href="#how-it-works">#</a>How It Works</h2><pre><code>Markdown (.md) → Parse → XML (intermediate) → XSLT Transform → HTML (static site)</code></pre><ol><li>
-        <p>
-          <strong>Parse</strong>: Markdown files with YAML frontmatter are parsed, transformed into an XML intermediate representation, and a site manifest is built from the directory structure.</p>
-      </li><li>
-        <p>
-          <strong>Transform</strong>: XSLT stylesheets transform each XML document into HTML, generating navigation, SEO metadata, and a sitemap.</p>
-      </li><li>
-        <p>
-          <strong>Output</strong>: A complete static site ready for deployment to Cloudflare Pages, GitHub Pages, Netlify, or any static hosting.</p>
-      </li></ol><h2 id="commands"><a class="anchor" href="#commands">#</a>Commands</h2><h3 id="crucible-init"><a class="anchor" href="#crucible-init">#</a>crucible init</h3><p>Scaffolds a new documentation project in the current directory.</p><pre><code class="language-bash">crucible init
-crucible init --force    # Overwrite existing crucible.yaml</code></pre><p>Creates:</p><ul><li>
-        <p>
-          <code>crucible.yaml</code> — site configuration with commented defaults</p>
-      </li><li>
-        <p>
-          <code>docs/index.md</code> — starter homepage with example frontmatter</p>
-      </li></ul><h3 id="crucible-build"><a class="anchor" href="#crucible-build">#</a>crucible build</h3><p>Builds the documentation site.</p><pre><code class="language-bash">crucible build [options]</code></pre><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Option</p>
-          </th>
-          <th>
-            <p>Short</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-          <th>
-            <p>Default</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>--source &lt;dir&gt;</code></p>
-          </td>
-          <td>
-            <p><code>-s</code></p>
-          </td>
-          <td>
-            <p>Source directory containing <code>.md</code> files</p>
-          </td>
-          <td>
-            <p><code>./docs</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>--output &lt;dir&gt;</code></p>
-          </td>
-          <td>
-            <p><code>-o</code></p>
-          </td>
-          <td>
-            <p>Output directory for generated site</p>
-          </td>
-          <td>
-            <p><code>./dist</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>--theme &lt;dir&gt;</code></p>
-          </td>
-          <td>
-            <p><code>-t</code></p>
-          </td>
-          <td>
-            <p>Custom theme directory</p>
-          </td>
-          <td>
-            <p>built-in default</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>--base-url &lt;url&gt;</code></p>
-          </td>
-          <td>
-            <p></p>
-          </td>
-          <td>
-            <p>Base URL for links and sitemap</p>
-          </td>
-          <td>
-            <p><code>/</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>--title &lt;title&gt;</code></p>
-          </td>
-          <td>
-            <p></p>
-          </td>
-          <td>
-            <p>Site title</p>
-          </td>
-          <td>
-            <p>from root <code>index.md</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>--stage &lt;stage&gt;</code></p>
-          </td>
-          <td>
-            <p></p>
-          </td>
-          <td>
-            <p>Build stage: <code>Full</code>, <code>ParseOnly</code>, <code>TransformOnly</code></p>
-          </td>
-          <td>
-            <p><code>Full</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>--clean</code></p>
-          </td>
-          <td>
-            <p></p>
-          </td>
-          <td>
-            <p>Delete output directory before building</p>
-          </td>
-          <td>
-            <p></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>--include-drafts</code></p>
-          </td>
-          <td>
-            <p></p>
-          </td>
-          <td>
-            <p>Include pages marked <code>draft: true</code></p>
-          </td>
-          <td>
-            <p></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>--strict</code></p>
-          </td>
-          <td>
-            <p></p>
-          </td>
-          <td>
-            <p>Treat warnings as errors</p>
-          </td>
-          <td>
-            <p></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>--verbose</code></p>
-          </td>
-          <td>
-            <p><code>-v</code></p>
-          </td>
-          <td>
-            <p>Verbose output</p>
-          </td>
-          <td>
-            <p></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>--timing</code></p>
-          </td>
-          <td>
-            <p></p>
-          </td>
-          <td>
-            <p>Show per-stage timing</p>
-          </td>
-          <td>
-            <p></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>--help</code></p>
-          </td>
-          <td>
-            <p><code>-h</code></p>
-          </td>
-          <td>
-            <p>Show help</p>
-          </td>
-          <td>
-            <p></p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="exit-codes"><a class="anchor" href="#exit-codes">#</a>Exit Codes</h3><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Code</p>
-          </th>
-          <th>
-            <p>Meaning</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>0</p>
-          </td>
-          <td>
-            <p>Success</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>1</p>
-          </td>
-          <td>
-            <p>Usage error (bad arguments, missing source directory)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>2</p>
-          </td>
-          <td>
-            <p>Parse error (invalid Markdown or YAML)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>3</p>
-          </td>
-          <td>
-            <p>Transform error (XSLT failure)</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h2 id="configuration"><a class="anchor" href="#configuration">#</a>Configuration</h2><h3 id="crucible-yaml"><a class="anchor" href="#crucible-yaml">#</a>crucible.yaml</h3><p>The optional configuration file. CLI flags override config values.</p><pre><code class="language-yaml"># Site metadata
+open dist/index.html</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>That's it. <code>crucible init</code> creates a <code>crucible.yaml</code> config file and a starter <code>docs/index.md</code>. <code>crucible build</code> generates a complete static site in <code>dist/</code>.
+                                </p>
+                                <h2 id="how-it-works"><a class="anchor" href="#how-it-works">#</a>How It Works
+                                </h2>
+                                <figure class="code">
+                                  <pre><code>Markdown (.md) → Parse → XML (intermediate) → XSLT Transform → HTML (static site)</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <ol>
+                                  <li>
+        
+                                    <p>
+          <strong>Parse</strong>: Markdown files with YAML frontmatter are parsed, transformed into an XML intermediate representation, and a site manifest is built from the directory structure.
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Transform</strong>: XSLT stylesheets transform each XML document into HTML, generating navigation, SEO metadata, and a sitemap.
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Output</strong>: A complete static site ready for deployment to Cloudflare Pages, GitHub Pages, Netlify, or any static hosting.
+                                    </p>
+      
+                                  </li>
+                                </ol>
+                                <h2 id="commands"><a class="anchor" href="#commands">#</a>Commands
+                                </h2>
+                                <h3 id="crucible-init"><a class="anchor" href="#crucible-init">#</a>crucible init
+                                </h3>
+                                <p>Scaffolds a new documentation project in the current directory.
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">bash</span>
+                                  </figcaption>
+                                  <pre><code class="language-bash">crucible init
+crucible init --force    # Overwrite existing crucible.yaml</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>Creates:
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <code>crucible.yaml</code> — site configuration with commented defaults
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <code>docs/index.md</code> — starter homepage with example frontmatter
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <h3 id="crucible-build"><a class="anchor" href="#crucible-build">#</a>crucible build
+                                </h3>
+                                <p>Builds the documentation site.
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">bash</span>
+                                  </figcaption>
+                                  <pre><code class="language-bash">crucible build [options]</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <div class="table-wrap">
+                                  <table>
+      
+                                    <thead>
+        
+                                      <tr>
+          
+                                        <th>
+            
+                                          <p>Option
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Short
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Description
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Default
+                                          </p>
+          
+                                        </th>
+        
+                                      </tr>
+      
+                                    </thead>
+      
+                                    <tbody>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>--source &lt;dir&gt;</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>-s</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Source directory containing <code>.md</code> files
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>./docs</code>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>--output &lt;dir&gt;</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>-o</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Output directory for generated site
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>./dist</code>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>--theme &lt;dir&gt;</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>-t</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Custom theme directory
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>built-in default
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>--base-url &lt;url&gt;</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Base URL for links and sitemap
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>/</code>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>--title &lt;title&gt;</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Site title
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>from root <code>index.md</code>
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>--stage &lt;stage&gt;</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Build stage: <code>Full</code>, <code>ParseOnly</code>, <code>TransformOnly</code>
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>Full</code>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>--clean</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Delete output directory before building
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>--include-drafts</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Include pages marked <code>draft: true</code>
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>--strict</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Treat warnings as errors
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>--verbose</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>-v</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Verbose output
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>--timing</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Show per-stage timing
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>--help</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>-h</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Show help
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+      
+                                    </tbody>
+    
+                                  </table>
+                                </div>
+                                <h3 id="exit-codes"><a class="anchor" href="#exit-codes">#</a>Exit Codes
+                                </h3>
+                                <div class="table-wrap">
+                                  <table>
+      
+                                    <thead>
+        
+                                      <tr>
+          
+                                        <th>
+            
+                                          <p>Code
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Meaning
+                                          </p>
+          
+                                        </th>
+        
+                                      </tr>
+      
+                                    </thead>
+      
+                                    <tbody>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>0
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Success
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>1
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Usage error (bad arguments, missing source directory)
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>2
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Parse error (invalid Markdown or YAML)
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>3
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Transform error (XSLT failure)
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+      
+                                    </tbody>
+    
+                                  </table>
+                                </div>
+                                <h2 id="configuration"><a class="anchor" href="#configuration">#</a>Configuration
+                                </h2>
+                                <h3 id="crucible-yaml"><a class="anchor" href="#crucible-yaml">#</a>crucible.yaml
+                                </h3>
+                                <p>The optional configuration file. CLI flags override config values.
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">yaml</span>
+                                  </figcaption>
+                                  <pre><code class="language-yaml"># Site metadata
 title: My Documentation
 base-url: /
 # Directories
@@ -263,7 +1182,19 @@ output: ./dist
 # theme: ./my-theme
 # Extensions
 # extensions:
-#   - Crucible.Extensions.Mermaid</code></pre><p>All fields have sensible defaults. The config file is never required — you can run <code>crucible build</code> with just a <code>docs/</code> directory.</p><h2 id="writing-documentation"><a class="anchor" href="#writing-documentation">#</a>Writing Documentation</h2><h3 id="directory-structure"><a class="anchor" href="#directory-structure">#</a>Directory Structure</h3><p>Your documentation is a directory of Markdown files. The directory structure becomes the site navigation:</p><pre><code>docs/
+#   - Crucible.Extensions.Mermaid</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>All fields have sensible defaults. The config file is never required — you can run <code>crucible build</code> with just a <code>docs/</code> directory.
+                                </p>
+                                <h2 id="writing-documentation"><a class="anchor" href="#writing-documentation">#</a>Writing Documentation
+                                </h2>
+                                <h3 id="directory-structure"><a class="anchor" href="#directory-structure">#</a>Directory Structure
+                                </h3>
+                                <p>Your documentation is a directory of Markdown files. The directory structure becomes the site navigation:
+                                </p>
+                                <figure class="code">
+                                  <pre><code>docs/
 ├── index.md                    → Homepage
 ├── getting-started/
 │   ├── index.md                → Section landing page
@@ -273,20 +1204,48 @@ output: ./dist
 │   ├── authentication.md       → Guides &gt; Authentication
 │   └── deployment.md           → Guides &gt; Deployment
 └── reference/
-    └── api.md                  → Reference &gt; API</code></pre><ul><li>
-        <p>
-          <strong>Files</strong> become pages</p>
-      </li><li>
-        <p>
-          <strong>Directories</strong> become navigation sections</p>
-      </li><li>
-        <p>
+    └── api.md                  → Reference &gt; API</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <strong>Files</strong> become pages
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Directories</strong> become navigation sections
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
           <strong>
             <code>index.md</code>
-          </strong> in a directory provides the section title (if present)</p>
-      </li><li>
-        <p>Directories without <code>index.md</code> use the directory name (title-cased) as the section title</p>
-      </li></ul><h3 id="yaml-frontmatter"><a class="anchor" href="#yaml-frontmatter">#</a>YAML Frontmatter</h3><p>Every Markdown file starts with YAML frontmatter:</p><pre><code class="language-markdown">---
+          </strong> in a directory provides the section title (if present)
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Directories without <code>index.md</code> use the directory name (title-cased) as the section title
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <h3 id="yaml-frontmatter"><a class="anchor" href="#yaml-frontmatter">#</a>YAML Frontmatter
+                                </h3>
+                                <p>Every Markdown file starts with YAML frontmatter:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">markdown</span>
+                                  </figcaption>
+                                  <pre><code class="language-markdown">---
 title: Installation
 description: How to install the project
 sort: 1
@@ -296,131 +1255,327 @@ tags:
   - setup
 ---
 # Installation
-Your content here...</code></pre><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Field</p>
-          </th>
-          <th>
-            <p>Type</p>
-          </th>
-          <th>
-            <p>Required</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>title</code></p>
-          </td>
-          <td>
-            <p>string</p>
-          </td>
-          <td>
-            <p><strong>yes</strong></p>
-          </td>
-          <td>
-            <p>Page title (used in navigation, <code>&lt;title&gt;</code>, Open Graph)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>description</code></p>
-          </td>
-          <td>
-            <p>string</p>
-          </td>
-          <td>
-            <p>no</p>
-          </td>
-          <td>
-            <p>Page description (used in <code>&lt;meta&gt;</code> and search results)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>sort</code></p>
-          </td>
-          <td>
-            <p>integer</p>
-          </td>
-          <td>
-            <p>no</p>
-          </td>
-          <td>
-            <p>Sort order within the section (sorted pages come first, then alphabetical)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>updated</code></p>
-          </td>
-          <td>
-            <p>date</p>
-          </td>
-          <td>
-            <p>no</p>
-          </td>
-          <td>
-            <p>Last updated date (used in sitemap <code>&lt;lastmod&gt;</code>)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>tags</code></p>
-          </td>
-          <td>
-            <p>string[]</p>
-          </td>
-          <td>
-            <p>no</p>
-          </td>
-          <td>
-            <p>Tags for categorization</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>draft</code></p>
-          </td>
-          <td>
-            <p>bool</p>
-          </td>
-          <td>
-            <p>no</p>
-          </td>
-          <td>
-            <p>If <code>true</code>, excluded from build (unless <code>--include-drafts</code>)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>template</code></p>
-          </td>
-          <td>
-            <p>string</p>
-          </td>
-          <td>
-            <p>no</p>
-          </td>
-          <td>
-            <p>Override XSLT template for this page</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="markdown-features"><a class="anchor" href="#markdown-features">#</a>Markdown Features</h3><p>Crucible supports standard Markdown with these extensions:</p><p>
-      <strong>Fenced code blocks</strong> with language syntax:</p><pre><code class="language-markdown">```csharp
+Your content here...</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <div class="table-wrap">
+                                  <table>
+      
+                                    <thead>
+        
+                                      <tr>
+          
+                                        <th>
+            
+                                          <p>Field
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Type
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Required
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Description
+                                          </p>
+          
+                                        </th>
+        
+                                      </tr>
+      
+                                    </thead>
+      
+                                    <tbody>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>title</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>string
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>yes</strong>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Page title (used in navigation, <code>&lt;title&gt;</code>, Open Graph)
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>description</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>string
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>no
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Page description (used in <code>&lt;meta&gt;</code> and search results)
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>sort</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>integer
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>no
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Sort order within the section (sorted pages come first, then alphabetical)
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>updated</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>date
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>no
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Last updated date (used in sitemap <code>&lt;lastmod&gt;</code>)
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>tags</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>string[]
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>no
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Tags for categorization
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>draft</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>bool
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>no
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>If <code>true</code>, excluded from build (unless <code>--include-drafts</code>)
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>template</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>string
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>no
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Override XSLT template for this page
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+      
+                                    </tbody>
+    
+                                  </table>
+                                </div>
+                                <h3 id="markdown-features"><a class="anchor" href="#markdown-features">#</a>Markdown Features
+                                </h3>
+                                <p>Crucible supports standard Markdown with these extensions:
+                                </p>
+                                <p>
+      <strong>Fenced code blocks</strong> with language syntax:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">markdown</span>
+                                  </figcaption>
+                                  <pre><code class="language-markdown">```csharp
 var x = 42;
-```</code></pre><p>
-      <strong>Tables</strong> (GFM pipe tables):</p><pre><code class="language-markdown">| Column A | Column B |
+```</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <strong>Tables</strong> (GFM pipe tables):
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">markdown</span>
+                                  </figcaption>
+                                  <pre><code class="language-markdown">| Column A | Column B |
 |----------|----------|
-| Value 1  | Value 2  |</code></pre><p>
-      <strong>Admonitions</strong> using custom container syntax:</p><pre><code class="language-markdown">::: note
+| Value 1  | Value 2  |</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <strong>Admonitions</strong> using custom container syntax:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">markdown</span>
+                                  </figcaption>
+                                  <pre><code class="language-markdown">::: note
 This is a note admonition.
 :::
 ::: warning
@@ -428,64 +1583,234 @@ Be careful with this setting.
 :::
 ::: tip
 Here's a helpful tip.
-:::</code></pre><p>Supported types: <code>note</code>, <code>warning</code>, <code>tip</code>, <code>important</code>, <code>caution</code>.</p><p>
-      <strong>Mermaid diagrams</strong> (rendered client-side):</p><pre><code class="language-markdown">```mermaid
+:::</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>Supported types: <code>note</code>, <code>warning</code>, <code>tip</code>, <code>important</code>, <code>caution</code>.
+                                </p>
+                                <p>
+      <strong>Mermaid diagrams</strong> (rendered client-side):
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">markdown</span>
+                                  </figcaption>
+                                  <pre><code class="language-markdown">```mermaid
 graph LR; A--&gt;B; B--&gt;C;
-```</code></pre><h3 id="internal-links"><a class="anchor" href="#internal-links">#</a>Internal Links</h3><p>Link between documentation pages using relative or root-relative paths:</p><pre><code class="language-markdown">&lt;!-- Relative link (from current file's location) --&gt;
+```</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="internal-links"><a class="anchor" href="#internal-links">#</a>Internal Links
+                                </h3>
+                                <p>Link between documentation pages using relative or root-relative paths:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">markdown</span>
+                                  </figcaption>
+                                  <pre><code class="language-markdown">&lt;!-- Relative link (from current file's location) --&gt;
 See [Installation](../getting-started/installation.md)
 &lt;!-- Root-relative link (from docs/ root) --&gt;
-See [Installation](/getting-started/installation.md)</code></pre><p>Crucible automatically rewrites <code>.md</code> links to <code>.html</code> in the output and warns about broken links.</p><h2 id="features"><a class="anchor" href="#features">#</a>Features</h2><h3 id="search"><a class="anchor" href="#search">#</a>Search</h3><p>Crucible generates a client-side search index during build. Search is powered by <a href="https://lunrjs.com/" title="">Lunr.js</a> — no server required. The search box appears in the sidebar and provides instant fuzzy search across all page titles, descriptions, headings, and content.</p><h3 id="seo"><a class="anchor" href="#seo">#</a>SEO</h3><p>Every generated page includes:</p><ul><li>
-        <p>
-          <code>&lt;title&gt;</code> — page title + site title</p>
-      </li><li>
-        <p>
-          <code>&lt;meta name="description"&gt;</code> — from frontmatter</p>
-      </li><li>
-        <p>
-          <code>&lt;link rel="canonical"&gt;</code> — from base URL + page path</p>
-      </li><li>
-        <p>Open Graph tags (<code>og:title</code>, <code>og:description</code>, <code>og:url</code>, <code>og:type</code>)</p>
-      </li><li>
-        <p>
-          <code>sitemap.xml</code> with <code>&lt;lastmod&gt;</code> dates</p>
-      </li></ul><h3 id="dark-mode"><a class="anchor" href="#dark-mode">#</a>Dark Mode</h3><p>The default theme includes automatic dark mode that respects your system preference. A toggle button in the header lets you switch manually, and your preference is saved across pages.</p><h3 id="navigation"><a class="anchor" href="#navigation">#</a>Navigation</h3><p>Navigation is automatically generated from the directory structure:</p><ul><li>
-        <p>Sidebar with nested sections</p>
-      </li><li>
-        <p>Active page highlighting</p>
-      </li><li>
-        <p>Collapsible sections on mobile</p>
-      </li></ul><h3 id="responsive-design"><a class="anchor" href="#responsive-design">#</a>Responsive Design</h3><p>The default theme is fully responsive. The sidebar collapses into a hamburger menu on mobile devices.</p><h2 id="staged-builds"><a class="anchor" href="#staged-builds">#</a>Staged Builds</h2><p>For debugging or advanced workflows, you can run individual stages:</p><pre><code class="language-bash"># Stage 1: Parse Markdown → XML intermediate
+See [Installation](/getting-started/installation.md)</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>Crucible automatically rewrites <code>.md</code> links to <code>.html</code> in the output and warns about broken links.
+                                </p>
+                                <h2 id="features"><a class="anchor" href="#features">#</a>Features
+                                </h2>
+                                <h3 id="search"><a class="anchor" href="#search">#</a>Search
+                                </h3>
+                                <p>Crucible generates a client-side search index during build. Search is powered by <a href="https://lunrjs.com/">Lunr.js</a> — no server required. The search box appears in the sidebar and provides instant fuzzy search across all page titles, descriptions, headings, and content.
+                                </p>
+                                <h3 id="seo"><a class="anchor" href="#seo">#</a>SEO
+                                </h3>
+                                <p>Every generated page includes:
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <code>&lt;title&gt;</code> — page title + site title
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <code>&lt;meta name="description"&gt;</code> — from frontmatter
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <code>&lt;link rel="canonical"&gt;</code> — from base URL + page path
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Open Graph tags (<code>og:title</code>, <code>og:description</code>, <code>og:url</code>, <code>og:type</code>)
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <code>sitemap.xml</code> with <code>&lt;lastmod&gt;</code> dates
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <h3 id="dark-mode"><a class="anchor" href="#dark-mode">#</a>Dark Mode
+                                </h3>
+                                <p>The default theme includes automatic dark mode that respects your system preference. A toggle button in the header lets you switch manually, and your preference is saved across pages.
+                                </p>
+                                <h3 id="navigation"><a class="anchor" href="#navigation">#</a>Navigation
+                                </h3>
+                                <p>Navigation is automatically generated from the directory structure:
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>Sidebar with nested sections
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Active page highlighting
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Collapsible sections on mobile
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <h3 id="responsive-design"><a class="anchor" href="#responsive-design">#</a>Responsive Design
+                                </h3>
+                                <p>The default theme is fully responsive. The sidebar collapses into a hamburger menu on mobile devices.
+                                </p>
+                                <h2 id="staged-builds"><a class="anchor" href="#staged-builds">#</a>Staged Builds
+                                </h2>
+                                <p>For debugging or advanced workflows, you can run individual stages:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">bash</span>
+                                  </figcaption>
+                                  <pre><code class="language-bash"># Stage 1: Parse Markdown → XML intermediate
 crucible build --stage ParseOnly -o ./intermediate
 # Inspect the XML output
 cat intermediate/index.xml
 cat intermediate/site-manifest.xml
 # Stage 2: Transform XML → HTML
-crucible build --stage TransformOnly -s ./intermediate -o ./dist</code></pre><p>This is useful for:</p><ul><li>
-        <p>Inspecting the XML intermediate representation</p>
-      </li><li>
-        <p>Debugging XSLT template issues</p>
-      </li><li>
-        <p>Custom post-processing between stages</p>
-      </li></ul><h2 id="custom-themes"><a class="anchor" href="#custom-themes">#</a>Custom Themes</h2><p>Create a directory with XSLT stylesheets and static assets:</p><pre><code>my-theme/
+crucible build --stage TransformOnly -s ./intermediate -o ./dist</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>This is useful for:
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>Inspecting the XML intermediate representation
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Debugging XSLT template issues
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Custom post-processing between stages
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <h2 id="custom-themes"><a class="anchor" href="#custom-themes">#</a>Custom Themes
+                                </h2>
+                                <p>Create a directory with XSLT stylesheets and static assets:
+                                </p>
+                                <figure class="code">
+                                  <pre><code>my-theme/
 ├── page.xslt           # Main page transform
 ├── navigation.xslt     # Navigation component (optional)
 ├── sitemap.xslt         # Sitemap generator
 ├── css/
 │   └── style.css
 └── js/
-    └── theme.js</code></pre><p>Use with:</p><pre><code class="language-bash">crucible build --theme ./my-theme</code></pre><p>Or in <code>crucible.yaml</code>:</p><pre><code class="language-yaml">theme: ./my-theme</code></pre><p>The <code>page.xslt</code> receives these parameters:</p><ul><li>
-        <p>
-          <code>$site-manifest-uri</code> — path to the site manifest XML</p>
-      </li><li>
-        <p>
-          <code>$base-url</code> — base URL prefix</p>
-      </li><li>
-        <p>
-          <code>$site-title</code> — site title</p>
-      </li><li>
-        <p>
-          <code>$current-path</code> — current page path (for navigation highlighting)</p>
-      </li></ul><p>The input document follows the Crucible XML schema — see the <a href="https://github.com/phoenixmldb/crucible" title="">design spec</a> for element details.</p><h2 id="extensions"><a class="anchor" href="#extensions">#</a>Extensions</h2><p>Crucible supports extensions that hook into the Markdown-to-XML pipeline. The built-in Mermaid extension is an example — it intercepts fenced code blocks with <code>mermaid</code> language and emits a <code>&lt;mermaid&gt;</code> XML element instead of a <code>&lt;code-block&gt;</code>.</p><h3 id="plugin-directory"><a class="anchor" href="#plugin-directory">#</a>Plugin Directory</h3><p>Place extension DLLs in a <code>plugins/</code> directory next to your <code>crucible.yaml</code>. Crucible loads them automatically.</p><h3 id="writing-extensions"><a class="anchor" href="#writing-extensions">#</a>Writing Extensions</h3><p>Extensions implement <code>ICrucibleExtension</code> from the <code>Crucible.Core</code> NuGet package:</p><pre><code class="language-csharp">using Crucible.Core.Extensions;
+    └── theme.js</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>Use with:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">bash</span>
+                                  </figcaption>
+                                  <pre><code class="language-bash">crucible build --theme ./my-theme</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>Or in <code>crucible.yaml</code>:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">yaml</span>
+                                  </figcaption>
+                                  <pre><code class="language-yaml">theme: ./my-theme</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>The <code>page.xslt</code> receives these parameters:
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <code>$site-manifest-uri</code> — path to the site manifest XML
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <code>$base-url</code> — base URL prefix
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <code>$site-title</code> — site title
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <code>$current-path</code> — current page path (for navigation highlighting)
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <p>The input document follows the Crucible XML schema — see the <a href="https://github.com/phoenixmldb/crucible">design spec</a> for element details.
+                                </p>
+                                <h2 id="extensions"><a class="anchor" href="#extensions">#</a>Extensions
+                                </h2>
+                                <p>Crucible supports extensions that hook into the Markdown-to-XML pipeline. The built-in Mermaid extension is an example — it intercepts fenced code blocks with <code>mermaid</code> language and emits a <code>&lt;mermaid&gt;</code> XML element instead of a <code>&lt;code-block&gt;</code>.
+                                </p>
+                                <h3 id="plugin-directory"><a class="anchor" href="#plugin-directory">#</a>Plugin Directory
+                                </h3>
+                                <p>Place extension DLLs in a <code>plugins/</code> directory next to your <code>crucible.yaml</code>. Crucible loads them automatically.
+                                </p>
+                                <h3 id="writing-extensions"><a class="anchor" href="#writing-extensions">#</a>Writing Extensions
+                                </h3>
+                                <p>Extensions implement <code>ICrucibleExtension</code> from the <code>Crucible.Core</code> NuGet package:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">using Crucible.Core.Extensions;
 using Markdig.Syntax;
 public class MyExtension : ICrucibleExtension
 {
@@ -503,9 +1828,27 @@ public class MyExtension : ICrucibleExtension
         // Return JS/CSS assets to include in the output
         yield break;
     }
-}</code></pre><h2 id="deployment"><a class="anchor" href="#deployment">#</a>Deployment</h2><h3 id="cloudflare-pages"><a class="anchor" href="#cloudflare-pages">#</a>Cloudflare Pages</h3><pre><code class="language-yaml"># Build command
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="deployment"><a class="anchor" href="#deployment">#</a>Deployment
+                                </h2>
+                                <h3 id="cloudflare-pages"><a class="anchor" href="#cloudflare-pages">#</a>Cloudflare Pages
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">yaml</span>
+                                  </figcaption>
+                                  <pre><code class="language-yaml"># Build command
 crucible build --base-url https://docs.example.com
-# Output directory: dist</code></pre><h3 id="github-pages"><a class="anchor" href="#github-pages">#</a>GitHub Pages</h3><pre><code class="language-yaml"># .github/workflows/deploy.yml
+# Output directory: dist</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="github-pages"><a class="anchor" href="#github-pages">#</a>GitHub Pages
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">yaml</span>
+                                  </figcaption>
+                                  <pre><code class="language-yaml"># .github/workflows/deploy.yml
 name: Deploy Docs
 on:
   push:
@@ -532,7 +1875,116 @@ jobs:
       name: github-pages
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/deploy-pages@v4</code></pre><h3 id="netlify"><a class="anchor" href="#netlify">#</a>Netlify</h3><pre><code class="language-toml"># netlify.toml
+      - uses: actions/deploy-pages@v4</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="netlify"><a class="anchor" href="#netlify">#</a>Netlify
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">toml</span>
+                                  </figcaption>
+                                  <pre><code class="language-toml"># netlify.toml
 [build]
   command = "dotnet tool install -g Crucible.Cli &amp;&amp; crucible build"
-  publish = "dist"</code></pre><h3 id="any-static-host"><a class="anchor" href="#any-static-host">#</a>Any Static Host</h3><p>Crucible generates a self-contained <code>dist/</code> directory. Upload it anywhere that serves static files.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+  publish = "dist"</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="any-static-host"><a class="anchor" href="#any-static-host">#</a>Any Static Host
+                                </h3>
+                                <p>Crucible generates a self-contained <code>dist/</code> directory. Upload it anywhere that serves static files.
+                                </p>
+                              </article>
+                            </main>
+                            <aside class="toc" aria-label="On this page">
+                              <p class="toc-label">On this page
+                              </p>
+                              <ul>
+                                <li class="toc-h2"><a href="#installation">Installation</a>
+                                </li>
+                                <li class="toc-h2"><a href="#quick-start">Quick Start</a>
+                                </li>
+                                <li class="toc-h2"><a href="#how-it-works">How It Works</a>
+                                </li>
+                                <li class="toc-h2"><a href="#commands">Commands</a>
+                                </li>
+                                <li class="toc-h3"><a href="#crucible-init">crucible init</a>
+                                </li>
+                                <li class="toc-h3"><a href="#crucible-build">crucible build</a>
+                                </li>
+                                <li class="toc-h3"><a href="#exit-codes">Exit Codes</a>
+                                </li>
+                                <li class="toc-h2"><a href="#configuration">Configuration</a>
+                                </li>
+                                <li class="toc-h3"><a href="#crucible-yaml">crucible.yaml</a>
+                                </li>
+                                <li class="toc-h2"><a href="#writing-documentation">Writing Documentation</a>
+                                </li>
+                                <li class="toc-h3"><a href="#directory-structure">Directory Structure</a>
+                                </li>
+                                <li class="toc-h3"><a href="#yaml-frontmatter">YAML Frontmatter</a>
+                                </li>
+                                <li class="toc-h3"><a href="#markdown-features">Markdown Features</a>
+                                </li>
+                                <li class="toc-h3"><a href="#internal-links">Internal Links</a>
+                                </li>
+                                <li class="toc-h2"><a href="#features">Features</a>
+                                </li>
+                                <li class="toc-h3"><a href="#search">Search</a>
+                                </li>
+                                <li class="toc-h3"><a href="#seo">SEO</a>
+                                </li>
+                                <li class="toc-h3"><a href="#dark-mode">Dark Mode</a>
+                                </li>
+                                <li class="toc-h3"><a href="#navigation">Navigation</a>
+                                </li>
+                                <li class="toc-h3"><a href="#responsive-design">Responsive Design</a>
+                                </li>
+                                <li class="toc-h2"><a href="#staged-builds">Staged Builds</a>
+                                </li>
+                                <li class="toc-h2"><a href="#custom-themes">Custom Themes</a>
+                                </li>
+                                <li class="toc-h2"><a href="#extensions">Extensions</a>
+                                </li>
+                                <li class="toc-h3"><a href="#plugin-directory">Plugin Directory</a>
+                                </li>
+                                <li class="toc-h3"><a href="#writing-extensions">Writing Extensions</a>
+                                </li>
+                                <li class="toc-h2"><a href="#deployment">Deployment</a>
+                                </li>
+                                <li class="toc-h3"><a href="#cloudflare-pages">Cloudflare Pages</a>
+                                </li>
+                                <li class="toc-h3"><a href="#github-pages">GitHub Pages</a>
+                                </li>
+                                <li class="toc-h3"><a href="#netlify">Netlify</a>
+                                </li>
+                                <li class="toc-h3"><a href="#any-static-host">Any Static Host</a>
+                                </li>
+                              </ul>
+                            </aside>
+                          </div>
+                          <div class="search-overlay" id="search-overlay" hidden="hidden">
+                            <div class="search-backdrop">
+                            </div>
+                            <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                              <div class="search-results" id="search-results">
+                              </div>
+                            </div>
+                          </div>
+                          <footer class="site-footer">
+                            <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                            </p>
+                          </footer>
+                          <script src="https://unpkg.com/lunr/lunr.js">
+                          </script>
+                          <script src="/js/prism.js">
+                          </script>
+                          <script src="/js/search.js">
+                          </script>
+                          <script src="/js/theme.js">
+                          </script>
+                          <script src="/js/toc.js">
+                          </script>
+                          <script src="/js/copy.js">
+                          </script>
+                        </body>
+                      </html>

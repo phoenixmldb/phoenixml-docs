@@ -3,3 +3,4 @@ title: PhoenixmlDb Documentation
 base-url: /
 source: ./docs
 output: ./dist
+theme: modern

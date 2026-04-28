@@ -5,6 +5,91 @@
 - [Home](/index.html): PhoenixmlDb — Modern XML/JSON document database for .NET
 - [Release Notes](/release-notes.html): PhoenixmlDb version history and changelog
 
+## api
+
+- [ContainerId](/api/core/containerid.html): Unique identifier for a container.
+- [ContainerInfo](/api/core/containerinfo.html): Information about a container.
+- [ContainerNotFoundException](/api/core/containernotfoundexception.html): Thrown when a container is not found.
+- [ContainerOptions](/api/core/containeroptions.html): Container configuration options.
+- [ContentType](/api/core/contenttype.html): Document content type.
+- [DatabaseStatistics](/api/core/databasestatistics.html): Database-level statistics.
+- [DocumentExistsException](/api/core/documentexistsexception.html): Thrown when a document already exists and overwrite is not allowed.
+- [DocumentId](/api/core/documentid.html): Unique identifier for a document within a container.
+- [DocumentInfo](/api/core/documentinfo.html): Information about a stored document.
+- [DocumentNotFoundException](/api/core/documentnotfoundexception.html): Thrown when a document is not found.
+- [DocumentOptions](/api/core/documentoptions.html): Options for storing a document.
+- [DocumentParseException](/api/core/documentparseexception.html): Thrown when document content is malformed.
+- [FullTextIndexDefinition](/api/core/fulltextindexdefinition.html): Full-text index definition.
+- [FullTextIndexOptions](/api/core/fulltextindexoptions.html): Options for full-text indexing.
+- [IContainer](/api/core/icontainer.html): A container holding a collection of documents with shared configuration.
+- [IDocument](/api/core/idocument.html): A stored document with content and metadata.
+- [IDocumentDatabase](/api/core/idocumentdatabase.html): Root entry point for XmlDb database operations.
+- [PhoenixmlDb.Core API Reference](/api/core/index.html): API documentation for the PhoenixmlDb.Core library
+- [IndexConfiguration](/api/core/indexconfiguration.html): Configuration for container indexes.
+- [IndexDefinition](/api/core/indexdefinition.html): Base type for index definitions.
+- [IReadTransaction](/api/core/ireadtransaction.html): A read-only transaction providing snapshot isolation.
+- [IWriteTransaction](/api/core/iwritetransaction.html): A read-write transaction with full ACID guarantees.
+- [IXdmNode](/api/core/ixdmnode.html): Base interface for XDM nodes.
+- [MetadataIndexDefinition](/api/core/metadataindexdefinition.html): Metadata index definition.
+- [NameIndexDefinition](/api/core/nameindexdefinition.html): Name index definition.
+- [NamespaceId](/api/core/namespaceid.html): Interned namespace URI identifier.
+- [NodeId](/api/core/nodeid.html): Unique identifier for a node within a document.
+- [PathIndexDefinition](/api/core/pathindexdefinition.html): Path index definition.
+- [QName](/api/core/qname.html): Qualified name (namespace + local name).
+- [TransactionException](/api/core/transactionexception.html): Thrown when a transaction operation fails.
+- [TransactionTimeoutException](/api/core/transactiontimeoutexception.html): Thrown when a write transaction cannot be acquired within the timeout.
+- [ValidationMode](/api/core/validationmode.html): Document validation mode.
+- [ValueIndexDefinition](/api/core/valueindexdefinition.html): Value index definition.
+- [XdmNodeKind](/api/core/xdmnodekind.html): XDM node kinds per XQuery Data Model specification.
+- [XdmValueType](/api/core/xdmvaluetype.html): XDM value types for index typing.
+- [XmlDbException](/api/core/xmldbexception.html): Base exception for XmlDb errors.
+- [XQueryException](/api/core/xqueryexception.html): Thrown when an XQuery parse or execution error occurs.
+- [DayTimeDuration](/api/xdm/daytimeduration.html): Represents an xs:dayTimeDuration value as total seconds (decimal). Unlike TimeSpan, this handles arbitrarily large durations (e.g., P1234567890D).
+- [PhoenixmlDb.Xdm API Reference](/api/xdm/index.html): API documentation for the PhoenixmlDb.Xdm library
+- [NamespaceBinding](/api/xdm/namespacebinding.html): A namespace prefix binding.
+- [ParseResult](/api/xdm/parseresult.html): Result of parsing an XML document.
+- [TextNodeItem](/api/xdm/textnodeitem.html): Lightweight text node marker for sequence accumulators. Distinguishes text nodes (from xsl:text, xsl:value-of, literal text) from atomic string values (from xsl:sequence, XPath expressions). Used for correct XSLT 3.0 §5.7.2 simple content construction.
+- [XdmAttribute](/api/xdm/xdmattribute.html): Represents an XML attribute.
+- [XdmComment](/api/xdm/xdmcomment.html): Represents an XML comment.
+- [XdmDocument](/api/xdm/xdmdocument.html): Represents an XML document root.
+- [XdmElement](/api/xdm/xdmelement.html): Represents an XML element.
+- [XdmNamespace](/api/xdm/xdmnamespace.html): Represents an in-scope namespace binding on an element. These are typically not stored separately but computed from element declarations.
+- [XdmNode](/api/xdm/xdmnode.html): Base type for all XDM nodes.
+- [XdmProcessingInstruction](/api/xdm/xdmprocessinginstruction.html): Represents an XML processing instruction.
+- [XdmQName](/api/xdm/xdmqname.html): Represents an expanded QName (namespace URI + local name).
+- [XdmText](/api/xdm/xdmtext.html): Represents character data content.
+- [XdmType](/api/xdm/xdmtype.html): XDM atomic value types based on XML Schema.
+- [XdmTypeName](/api/xdm/xdmtypename.html): Represents a type name (for type annotations).
+- [XdmValue](/api/xdm/xdmvalue.html): Represents an XDM atomic value.
+- [XmlDocumentParser](/api/xdm/xmldocumentparser.html): Parses XML content into XDM nodes.
+- [XmlSerializer](/api/xdm/xmlserializer.html): Serializes XDM nodes to XML.
+- [XsAnyUri](/api/xdm/xsanyuri.html): Wrapper type for xs:anyURI values. Implements IConvertible so it can participate in string operations.
+- [XsDate](/api/xdm/xsdate.html): Represents an xs:date value with optional timezone. Unlike DateOnly, this preserves timezone offset information.
+- [XsDateTime](/api/xdm/xsdatetime.html): Represents an xs:dateTime value with explicit timezone tracking. Unlike DateTimeOffset, this distinguishes "no timezone" from UTC.
+- [XsDuration](/api/xdm/xsduration.html): Represents an xs:duration value with both month and day-time components. Unlike TimeSpan (which only has day-time), this preserves the year/month facets.
+- [XsGDay](/api/xdm/xsgday.html): XSD xs:gDay value (e.g. "---25").
+- [XsGMonth](/api/xdm/xsgmonth.html): XSD xs:gMonth value (e.g. "--12").
+- [XsGMonthDay](/api/xdm/xsgmonthday.html): XSD xs:gMonthDay value (e.g. "--12-25").
+- [XsGYear](/api/xdm/xsgyear.html): XSD xs:gYear value (e.g. "2005").
+- [XsGYearMonth](/api/xdm/xsgyearmonth.html): XSD xs:gYearMonth value (e.g. "2005-10").
+- [XsTime](/api/xdm/xstime.html): Represents an xs:time value with optional timezone and fractional seconds. Unlike TimeOnly, this preserves timezone offset information.
+- [XsUntypedAtomic](/api/xdm/xsuntypedatomic.html): Wrapper type for xs:untypedAtomic values, distinguishing them from xs:string. Implements IConvertible so it can participate in arithmetic and comparisons.
+- [YearMonthDuration](/api/xdm/yearmonthduration.html): Represents an xs:yearMonthDuration value as a count of months. Unlike TimeSpan, this correctly supports month-based date arithmetic.
+- [DelegateMetadataProvider](/api/xquery/delegatemetadataprovider.html): Adapter that wraps delegate-based metadata resolution into the interface.
+- [DelegateNodeProvider](/api/xquery/delegatenodeprovider.html): Adapter that wraps delegate-based node loading into the interface.
+- [IDocumentResolver](/api/xquery/idocumentresolver.html): Resolves document URIs to XDM documents for fn:doc() and fn:collection(). Implementations can load from files, URLs, databases, or any other source.
+- [IMetadataProvider](/api/xquery/imetadataprovider.html): Provides document metadata resolution for the XQuery execution engine.
+- [PhoenixmlDb.XQuery API Reference](/api/xquery/index.html): API documentation for the PhoenixmlDb.XQuery library
+- [INodeProvider](/api/xquery/inodeprovider.html): Provides node resolution for the XQuery execution engine. Implementations can load nodes from storage, in-memory documents, or any other source.
+- [ParseError](/api/xquery/parseerror.html): A single parse error with location information.
+- [XQueryAstBuilder](/api/xquery/xqueryastbuilder.html): Converts an ANTLR parse tree into the XQuery AST node types.
+- [XQueryErrorListener](/api/xquery/xqueryerrorlistener.html): ANTLR error listener that collects parse errors. Implements both lexer and parser error listener interfaces.
+- [XQueryParseException](/api/xquery/xqueryparseexception.html): Exception thrown when XQuery parsing fails.
+- [XQueryParserFacade](/api/xquery/xqueryparserfacade.html): Public API for parsing XQuery strings into AST expressions.
+- [PhoenixmlDb.Xslt API Reference](/api/xslt/index.html): API documentation for the PhoenixmlDb.Xslt library
+- [XQueryExpressionParser](/api/xslt/xqueryexpressionparser.html): Adapts XQueryParserFacade to IExpressionParser for XSLT stylesheet parsing.
+- [XsltTransformer](/api/xslt/xslttransformer.html): Public API for XSLT transformations. Provides a simple interface for loading stylesheets and transforming XML.
+
 ## getting-started
 
 - [First Application](/getting-started/first-application.html): Build a complete library management app with PhoenixmlDb
@@ -84,6 +169,7 @@
 - [API Reference](/phoenixmldb/api-reference/index.html): PhoenixmlDb .NET API — interfaces, classes, and usage patterns
 - [Indexes API](/phoenixmldb/api-reference/indexes.html): Index creation, management, statistics, and query optimization
 - [Queries API](/phoenixmldb/api-reference/queries.html): XQuery execution, parameters, results, explain plans, and prepared queries
+- [Resource Policy](/phoenixmldb/api-reference/resource-policy.html)
 - [Transactions API](/phoenixmldb/api-reference/transactions.html): Transaction lifecycle, commit/rollback, error handling, and patterns
 - [XSLT API](/phoenixmldb/api-reference/xslt-api.html): XsltTransformer .NET API — transform XML with XSLT from C#
 - [Configuration](/phoenixmldb/configuration.html): Database options, environment variables, logging, and connection strings
@@ -101,6 +187,7 @@
 - [JSON Queries](/phoenixmldb/json-support/json-queries.html): XQuery patterns for querying JSON documents stored in PhoenixmlDb
 - [JSON Storage](/phoenixmldb/json-support/json-storage.html): How JSON documents are stored, the XML mapping, and storage options
 - [LINQ Provider](/phoenixmldb/linq-provider.html): Query PhoenixmlDb with LINQ — XML navigation, fluent API, and type mapping
+- [Metadata](/phoenixmldb/metadata.html): Unlimited namespace-key-value metadata on every document
 - [Migration Guide](/phoenixmldb/migration-guide.html): Migrate from Berkeley DB XML, eXist-db, MarkLogic, MongoDB, or SQL
 - [Mobile Development](/phoenixmldb/mobile-development.html): PhoenixmlDb on .NET MAUI, iOS, Android, and offline-first patterns
 - [Performance Tuning](/phoenixmldb/performance-tuning.html): Query optimization, storage tuning, memory management, and monitoring
@@ -111,7 +198,9 @@
 ## tools
 
 - [Crucible](/tools/crucible.html): Static documentation generator — Markdown to XML to XSLT to HTML
-- [Tools](/tools/index.html): PhoenixmlDb command-line tools — xslt, xquery, and crucible
+- [Tools](/tools/index.html): PhoenixmlDb command-line tools and MCP servers
 - [xquery CLI](/tools/xquery-cli.html): Command-line XQuery processor — query XML documents from the terminal
+- [XQuery MCP Server](/tools/xquery-mcp.html)
 - [xslt CLI](/tools/xslt-cli.html): Command-line XSLT 3.0/4.0 processor — transform XML documents from the terminal
+- [XSLT MCP Server](/tools/xslt-mcp.html)
 

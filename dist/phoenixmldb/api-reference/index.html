@@ -1,6 +1,507 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>API Reference — PhoenixmlDb Documentation</title><meta name="description" content="PhoenixmlDb .NET API — interfaces, classes, and usage patterns"><link rel="canonical" href="/phoenixmldb/api-reference/index.html"><meta property="og:title" content="API Reference"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/api-reference/index.html"><meta property="og:description" content="PhoenixmlDb .NET API — interfaces, classes, and usage patterns"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>API Reference — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="PhoenixmlDb .NET API — interfaces, classes, and usage patterns">
+            <link rel="canonical" href="/phoenixmldb/api-reference/index.html">
+              <meta property="og:title" content="API Reference">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/phoenixmldb/api-reference/index.html">
+                    <meta property="og:description" content="PhoenixmlDb .NET API — interfaces, classes, and usage patterns">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="api-reference"><a class="anchor" href="#api-reference">#</a>API Reference</h1><p>This section provides detailed API documentation for PhoenixmlDb's core classes and interfaces.</p><h2 id="core-classes"><a class="anchor" href="#core-classes">#</a>Core Classes</h2><h3 id="xmldatabase"><a class="anchor" href="#xmldatabase">#</a>XmlDatabase</h3><p>The main entry point for working with PhoenixmlDb.</p><pre><code class="language-csharp">// Create/open database
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <h1 class="page-title">API Reference
+                                </h1>
+                                <p class="page-subtitle">PhoenixmlDb .NET API — interfaces, classes, and usage patterns
+                                </p>
+                                <h1 id="api-reference"><a class="anchor" href="#api-reference">#</a>API Reference
+                                </h1>
+                                <p>This section provides detailed API documentation for PhoenixmlDb's core classes and interfaces.
+                                </p>
+                                <h2 id="core-classes"><a class="anchor" href="#core-classes">#</a>Core Classes
+                                </h2>
+                                <h3 id="xmldatabase"><a class="anchor" href="#xmldatabase">#</a>XmlDatabase
+                                </h3>
+                                <p>The main entry point for working with PhoenixmlDb.
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Create/open database
 using var db = new XmlDatabase(path);
 using var db = new XmlDatabase(path, options);
 // Container operations
@@ -21,7 +522,15 @@ ITransaction BeginTransaction(bool readOnly);
 ITransaction BeginTransaction(TransactionOptions options);
 // Lifecycle
 void Flush();
-void Dispose();</code></pre><h3 id="databaseoptions"><a class="anchor" href="#databaseoptions">#</a>DatabaseOptions</h3><pre><code class="language-csharp">var options = new DatabaseOptions
+void Dispose();</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="databaseoptions"><a class="anchor" href="#databaseoptions">#</a>DatabaseOptions
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">var options = new DatabaseOptions
 {
     MapSize = 10L * 1024 * 1024 * 1024,  // 10 GB max database size
     MaxContainers = 100,                   // Maximum containers
@@ -29,19 +538,55 @@ void Dispose();</code></pre><h3 id="databaseoptions"><a class="anchor" href="#da
     NoSync = false,                        // Sync on commit
     NoMetaSync = false,                    // Sync metadata on commit
     ReadOnly = false                       // Open read-only
-};</code></pre><h2 id="api-topics"><a class="anchor" href="#api-topics">#</a>API Topics</h2><h3 id="container-api"><a class="anchor" href="#container-api">#</a>
-      <a href="containers.html" title="">Container API</a>
-    </h3><p>Create, configure, and manage document containers.</p><h3 id="document-api"><a class="anchor" href="#document-api">#</a>
-      <a href="documents.html" title="">Document API</a>
-    </h3><p>Store, retrieve, and delete XML/JSON documents.</p><h3 id="query-api"><a class="anchor" href="#query-api">#</a>
-      <a href="queries.html" title="">Query API</a>
-    </h3><p>Execute XQuery queries and process results.</p><h3 id="index-api"><a class="anchor" href="#index-api">#</a>
-      <a href="indexes.html" title="">Index API</a>
-    </h3><p>Create and manage indexes for query optimization.</p><h3 id="transaction-api"><a class="anchor" href="#transaction-api">#</a>
-      <a href="transactions.html" title="">Transaction API</a>
-    </h3><p>ACID transactions and concurrent access control.</p><h3 id="xslt-api"><a class="anchor" href="#xslt-api">#</a>
-      <a href="xslt-api.html" title="">XSLT API</a>
-    </h3><p>XsltTransformer — stream-based transforms, result document handling, source/mode selection, and collection binding.</p><h2 id="quick-reference"><a class="anchor" href="#quick-reference">#</a>Quick Reference</h2><h3 id="common-operations"><a class="anchor" href="#common-operations">#</a>Common Operations</h3><pre><code class="language-csharp">// Open database
+};</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="api-topics"><a class="anchor" href="#api-topics">#</a>API Topics
+                                </h2>
+                                <h3 id="container-api"><a class="anchor" href="#container-api">#</a>
+      <a href="containers.html">Container API</a>
+    
+                                </h3>
+                                <p>Create, configure, and manage document containers.
+                                </p>
+                                <h3 id="document-api"><a class="anchor" href="#document-api">#</a>
+      <a href="documents.html">Document API</a>
+    
+                                </h3>
+                                <p>Store, retrieve, and delete XML/JSON documents.
+                                </p>
+                                <h3 id="query-api"><a class="anchor" href="#query-api">#</a>
+      <a href="queries.html">Query API</a>
+    
+                                </h3>
+                                <p>Execute XQuery queries and process results.
+                                </p>
+                                <h3 id="index-api"><a class="anchor" href="#index-api">#</a>
+      <a href="indexes.html">Index API</a>
+    
+                                </h3>
+                                <p>Create and manage indexes for query optimization.
+                                </p>
+                                <h3 id="transaction-api"><a class="anchor" href="#transaction-api">#</a>
+      <a href="transactions.html">Transaction API</a>
+    
+                                </h3>
+                                <p>ACID transactions and concurrent access control.
+                                </p>
+                                <h3 id="xslt-api"><a class="anchor" href="#xslt-api">#</a>
+      <a href="xslt-api.html">XSLT API</a>
+    
+                                </h3>
+                                <p>XsltTransformer — stream-based transforms, result document handling, source/mode selection, and collection binding.
+                                </p>
+                                <h2 id="quick-reference"><a class="anchor" href="#quick-reference">#</a>Quick Reference
+                                </h2>
+                                <h3 id="common-operations"><a class="anchor" href="#common-operations">#</a>Common Operations
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Open database
 using var db = new XmlDatabase("./data");
 // Create container
 var products = db.CreateContainer("products");
@@ -57,7 +602,15 @@ using (var txn = db.BeginTransaction())
     txn.Commit();
 }
 // Create index
-products.CreateIndex(new PathIndex("name-idx", "/product/name"));</code></pre><h3 id="error-handling"><a class="anchor" href="#error-handling">#</a>Error Handling</h3><pre><code class="language-csharp">try
+products.CreateIndex(new PathIndex("name-idx", "/product/name"));</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="error-handling"><a class="anchor" href="#error-handling">#</a>Error Handling
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">try
 {
     db.Query(xquery);
 }
@@ -80,7 +633,17 @@ catch (TransactionException ex)
 {
     // Transaction error
     Console.WriteLine($"Transaction failed: {ex.Message}");
-}</code></pre><h2 id="interfaces"><a class="anchor" href="#interfaces">#</a>Interfaces</h2><h3 id="icontainer"><a class="anchor" href="#icontainer">#</a>IContainer</h3><pre><code class="language-csharp">interface IContainer
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="interfaces"><a class="anchor" href="#interfaces">#</a>Interfaces
+                                </h2>
+                                <h3 id="icontainer"><a class="anchor" href="#icontainer">#</a>IContainer
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">interface IContainer
 {
     string Name { get; }
     ContainerOptions Options { get; }
@@ -101,7 +664,15 @@ catch (TransactionException ex)
     void CreateIndex(IndexDefinition index);
     void DropIndex(string name);
     IEnumerable&lt;IndexInfo&gt; ListIndexes();
-}</code></pre><h3 id="itransaction"><a class="anchor" href="#itransaction">#</a>ITransaction</h3><pre><code class="language-csharp">interface ITransaction : IDisposable
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="itransaction"><a class="anchor" href="#itransaction">#</a>ITransaction
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">interface ITransaction : IDisposable
 {
     bool IsReadOnly { get; }
     TransactionState State { get; }
@@ -110,7 +681,15 @@ catch (TransactionException ex)
     void Execute(string xqueryUpdate);
     void Commit();
     void Abort();
-}</code></pre><h3 id="iqueryresult"><a class="anchor" href="#iqueryresult">#</a>IQueryResult</h3><pre><code class="language-csharp">interface IQueryResult : IEnumerable&lt;string&gt;
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="iqueryresult"><a class="anchor" href="#iqueryresult">#</a>IQueryResult
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">interface IQueryResult : IEnumerable&lt;string&gt;
 {
     int Count { get; }
     bool IsEmpty { get; }
@@ -118,99 +697,329 @@ catch (TransactionException ex)
     string FirstOrDefault();
     T First&lt;T&gt;();
     IEnumerable&lt;T&gt; As&lt;T&gt;();
-}</code></pre><h2 id="thread-safety"><a class="anchor" href="#thread-safety">#</a>Thread Safety</h2><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Operation</p>
-          </th>
-          <th>
-            <p>Thread Safe</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>Read queries</p>
-          </td>
-          <td>
-            <p>Yes (concurrent reads allowed)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Write operations</p>
-          </td>
-          <td>
-            <p>No (single writer at a time)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Create/delete container</p>
-          </td>
-          <td>
-            <p>No</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Read-only transactions</p>
-          </td>
-          <td>
-            <p>Yes (multiple concurrent)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Read-write transactions</p>
-          </td>
-          <td>
-            <p>No (serialized)</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h2 id="performance-guidelines"><a class="anchor" href="#performance-guidelines">#</a>Performance Guidelines</h2><ol><li>
-        <p>
-          <strong>Reuse XmlDatabase instance</strong> - Don't create/dispose frequently</p>
-      </li><li>
-        <p>
-          <strong>Use read-only transactions</strong> - When only reading</p>
-      </li><li>
-        <p>
-          <strong>Batch writes</strong> - Group multiple writes in one transaction</p>
-      </li><li>
-        <p>
-          <strong>Create indexes</strong> - For frequently queried paths</p>
-      </li><li>
-        <p>
-          <strong>Use parameters</strong> - Avoid query string concatenation</p>
-      </li></ol><h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps</h2><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Management</p>
-          </th>
-          <th>
-            <p>Operations</p>
-          </th>
-          <th>
-            <p>Execution</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><strong><a href="containers.html" title="">API Containers</a></strong>Container management</p>
-          </td>
-          <td>
-            <p><strong><a href="documents.html" title="">API Documents</a></strong>Document operations</p>
-          </td>
-          <td>
-            <p><strong><a href="queries.html" title="">API Queries</a></strong>Query execution</p>
-          </td>
-        </tr>
-      </tbody>
-    </table></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="thread-safety"><a class="anchor" href="#thread-safety">#</a>Thread Safety
+                                </h2>
+                                <div class="table-wrap">
+                                  <table>
+      
+                                    <thead>
+        
+                                      <tr>
+          
+                                        <th>
+            
+                                          <p>Operation
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Thread Safe
+                                          </p>
+          
+                                        </th>
+        
+                                      </tr>
+      
+                                    </thead>
+      
+                                    <tbody>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Read queries
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Yes (concurrent reads allowed)
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Write operations
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>No (single writer at a time)
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Create/delete container
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>No
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Read-only transactions
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Yes (multiple concurrent)
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Read-write transactions
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>No (serialized)
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+      
+                                    </tbody>
+    
+                                  </table>
+                                </div>
+                                <h2 id="performance-guidelines"><a class="anchor" href="#performance-guidelines">#</a>Performance Guidelines
+                                </h2>
+                                <ol>
+                                  <li>
+        
+                                    <p>
+          <strong>Reuse XmlDatabase instance</strong> - Don't create/dispose frequently
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Use read-only transactions</strong> - When only reading
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Batch writes</strong> - Group multiple writes in one transaction
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Create indexes</strong> - For frequently queried paths
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Use parameters</strong> - Avoid query string concatenation
+                                    </p>
+      
+                                  </li>
+                                </ol>
+                                <h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps
+                                </h2>
+                                <div class="table-wrap">
+                                  <table>
+      
+                                    <thead>
+        
+                                      <tr>
+          
+                                        <th>
+            
+                                          <p>Management
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Operations
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Execution
+                                          </p>
+          
+                                        </th>
+        
+                                      </tr>
+      
+                                    </thead>
+      
+                                    <tbody>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>
+                <a href="containers.html">API Containers</a>
+              </strong>Container management
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>
+                <a href="documents.html">API Documents</a>
+              </strong>Document operations
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>
+                <a href="queries.html">API Queries</a>
+              </strong>Query execution
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+      
+                                    </tbody>
+    
+                                  </table>
+                                </div>
+                              </article>
+                            </main>
+                            <aside class="toc" aria-label="On this page">
+                              <p class="toc-label">On this page
+                              </p>
+                              <ul>
+                                <li class="toc-h2"><a href="#core-classes">Core Classes</a>
+                                </li>
+                                <li class="toc-h3"><a href="#xmldatabase">XmlDatabase</a>
+                                </li>
+                                <li class="toc-h3"><a href="#databaseoptions">DatabaseOptions</a>
+                                </li>
+                                <li class="toc-h2"><a href="#api-topics">API Topics</a>
+                                </li>
+                                <li class="toc-h3"><a href="#container-api">
+      Container API
+    </a>
+                                </li>
+                                <li class="toc-h3"><a href="#document-api">
+      Document API
+    </a>
+                                </li>
+                                <li class="toc-h3"><a href="#query-api">
+      Query API
+    </a>
+                                </li>
+                                <li class="toc-h3"><a href="#index-api">
+      Index API
+    </a>
+                                </li>
+                                <li class="toc-h3"><a href="#transaction-api">
+      Transaction API
+    </a>
+                                </li>
+                                <li class="toc-h3"><a href="#xslt-api">
+      XSLT API
+    </a>
+                                </li>
+                                <li class="toc-h2"><a href="#quick-reference">Quick Reference</a>
+                                </li>
+                                <li class="toc-h3"><a href="#common-operations">Common Operations</a>
+                                </li>
+                                <li class="toc-h3"><a href="#error-handling">Error Handling</a>
+                                </li>
+                                <li class="toc-h2"><a href="#interfaces">Interfaces</a>
+                                </li>
+                                <li class="toc-h3"><a href="#icontainer">IContainer</a>
+                                </li>
+                                <li class="toc-h3"><a href="#itransaction">ITransaction</a>
+                                </li>
+                                <li class="toc-h3"><a href="#iqueryresult">IQueryResult</a>
+                                </li>
+                                <li class="toc-h2"><a href="#thread-safety">Thread Safety</a>
+                                </li>
+                                <li class="toc-h2"><a href="#performance-guidelines">Performance Guidelines</a>
+                                </li>
+                                <li class="toc-h2"><a href="#next-steps">Next Steps</a>
+                                </li>
+                              </ul>
+                            </aside>
+                          </div>
+                          <div class="search-overlay" id="search-overlay" hidden="hidden">
+                            <div class="search-backdrop">
+                            </div>
+                            <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                              <div class="search-results" id="search-results">
+                              </div>
+                            </div>
+                          </div>
+                          <footer class="site-footer">
+                            <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                            </p>
+                          </footer>
+                          <script src="https://unpkg.com/lunr/lunr.js">
+                          </script>
+                          <script src="/js/prism.js">
+                          </script>
+                          <script src="/js/search.js">
+                          </script>
+                          <script src="/js/theme.js">
+                          </script>
+                          <script src="/js/toc.js">
+                          </script>
+                          <script src="/js/copy.js">
+                          </script>
+                        </body>
+                      </html>

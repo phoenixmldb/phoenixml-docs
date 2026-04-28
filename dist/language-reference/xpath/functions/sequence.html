@@ -1,138 +1,1261 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Sequence Functions — PhoenixmlDb Documentation</title><meta name="description" content="XPath sequence operations — filtering, ordering, set operations, scanning"><link rel="canonical" href="/language-reference/xpath/functions/sequence.html"><meta property="og:title" content="Sequence Functions"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xpath/functions/sequence.html"><meta property="og:description" content="XPath sequence operations — filtering, ordering, set operations, scanning"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Sequence Functions — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="XPath sequence operations — filtering, ordering, set operations, scanning">
+            <link rel="canonical" href="/language-reference/xpath/functions/sequence.html">
+              <meta property="og:title" content="Sequence Functions">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xpath/functions/sequence.html">
+                    <meta property="og:description" content="XPath sequence operations — filtering, ordering, set operations, scanning">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li class="active"><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="sequence-functions"><a class="anchor" href="#sequence-functions">#</a>Sequence Functions</h1><p>Sequences are XPath's fundamental collection type — like <code>IEnumerable&lt;T&gt;</code> in .NET. These functions are the XPath equivalent of LINQ methods. If you're comfortable with LINQ, you'll find most of these intuitive.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#testing-and-cardinality" title="">Testing and Cardinality</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#access-and-slicing" title="">Access and Slicing</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#ordering" title="">Ordering</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#set-operations" title="">Set Operations</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#comparison" title="">Comparison</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#manipulation" title="">Manipulation</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#scanning-and-accumulation" title="">Scanning and Accumulation</a>
-        </p>
-      </li></ul><hr><h2 id="testing-and-cardinality"><a class="anchor" href="#testing-and-cardinality">#</a>Testing and Cardinality</h2><h3 id="empty"><a class="anchor" href="#empty">#</a>empty()</h3><p>Tests whether a sequence is empty.</p><p>
-      <strong>Signature:</strong> <code>empty($seq as item()*) as xs:boolean</code></p><pre><code class="language-xpath">empty(())                =&gt; true
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section open">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li class="active"><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">Functions
+                                </p>
+                                <h1 class="page-title">Sequence Functions
+                                </h1>
+                                <p class="page-subtitle">XPath sequence operations — filtering, ordering, set operations, scanning
+                                </p>
+                                <h1 id="sequence-functions"><a class="anchor" href="#sequence-functions">#</a>Sequence Functions
+                                </h1>
+                                <p>Sequences are XPath's fundamental collection type — like <code>IEnumerable&lt;T&gt;</code> in .NET. These functions are the XPath equivalent of LINQ methods. If you're comfortable with LINQ, you'll find most of these intuitive.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#testing-and-cardinality">Testing and Cardinality</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#access-and-slicing">Access and Slicing</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#ordering">Ordering</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#set-operations">Set Operations</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#comparison">Comparison</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#manipulation">Manipulation</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#scanning-and-accumulation">Scanning and Accumulation</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="testing-and-cardinality"><a class="anchor" href="#testing-and-cardinality">#</a>Testing and Cardinality
+                                  </h2>
+                                  <h3 id="empty"><a class="anchor" href="#empty">#</a>empty()
+                                  </h3>
+                                  <p>Tests whether a sequence is empty.
+                                  </p>
+                                  <p>
+      <strong>Signature:</strong> <code>empty($seq as item()*) as xs:boolean</code>
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xpath</span>
+                                    </figcaption>
+                                    <pre><code class="language-xpath">empty(())                =&gt; true
 empty((1, 2, 3))         =&gt; false
-empty(//book)            =&gt; true if no books exist</code></pre><p>
-      <strong>C# equivalent:</strong> <code>!items.Any()</code></p><hr><h3 id="exists"><a class="anchor" href="#exists">#</a>exists()</h3><p>Tests whether a sequence is non-empty. The inverse of <code>empty()</code>.</p><p>
-      <strong>Signature:</strong> <code>exists($seq as item()*) as xs:boolean</code></p><pre><code class="language-xpath">exists((1, 2, 3))        =&gt; true
+empty(//book)            =&gt; true if no books exist</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
+      <strong>C# equivalent:</strong> <code>!items.Any()</code>
+                                  </p>
+                                  <hr>
+                                    <h3 id="exists"><a class="anchor" href="#exists">#</a>exists()
+                                    </h3>
+                                    <p>Tests whether a sequence is non-empty. The inverse of <code>empty()</code>.
+                                    </p>
+                                    <p>
+      <strong>Signature:</strong> <code>exists($seq as item()*) as xs:boolean</code>
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xpath</span>
+                                      </figcaption>
+                                      <pre><code class="language-xpath">exists((1, 2, 3))        =&gt; true
 exists(())                =&gt; false
-exists(//error)           =&gt; true if any error elements exist</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Any()</code></p><hr><h3 id="count"><a class="anchor" href="#count">#</a>count()</h3><p>Returns the number of items. (Also listed under <a href="numeric.html#count" title="">Numeric Functions</a>.)</p><pre><code class="language-xpath">count(//book)            =&gt; number of book elements
-count(1 to 100)          =&gt; 100</code></pre><hr><h3 id="zero-or-one"><a class="anchor" href="#zero-or-one">#</a>zero-or-one()</h3><p>Asserts that a sequence has at most one item. Throws an error if it has more.</p><p>
-      <strong>Signature:</strong> <code>zero-or-one($seq as item()*) as item()?</code></p><pre><code class="language-xpath">zero-or-one(())           =&gt; ()
+exists(//error)           =&gt; true if any error elements exist</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
+      <strong>C# equivalent:</strong> <code>items.Any()</code>
+                                    </p>
+                                    <hr>
+                                      <h3 id="count"><a class="anchor" href="#count">#</a>count()
+                                      </h3>
+                                      <p>Returns the number of items. (Also listed under <a href="numeric.html#count">Numeric Functions</a>.)
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xpath</span>
+                                        </figcaption>
+                                        <pre><code class="language-xpath">count(//book)            =&gt; number of book elements
+count(1 to 100)          =&gt; 100</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <hr>
+                                        <h3 id="zero-or-one"><a class="anchor" href="#zero-or-one">#</a>zero-or-one()
+                                        </h3>
+                                        <p>Asserts that a sequence has at most one item. Throws an error if it has more.
+                                        </p>
+                                        <p>
+      <strong>Signature:</strong> <code>zero-or-one($seq as item()*) as item()?</code>
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xpath</span>
+                                          </figcaption>
+                                          <pre><code class="language-xpath">zero-or-one(())           =&gt; ()
 zero-or-one("hello")      =&gt; "hello"
-zero-or-one((1, 2))       =&gt; ERROR: sequence has more than one item</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.SingleOrDefault()</code></p><hr><h3 id="exactly-one"><a class="anchor" href="#exactly-one">#</a>exactly-one()</h3><p>Asserts that a sequence has exactly one item.</p><p>
-      <strong>Signature:</strong> <code>exactly-one($seq as item()*) as item()</code></p><pre><code class="language-xpath">exactly-one("hello")      =&gt; "hello"
+zero-or-one((1, 2))       =&gt; ERROR: sequence has more than one item</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
+      <strong>C# equivalent:</strong> <code>items.SingleOrDefault()</code>
+                                        </p>
+                                        <hr>
+                                          <h3 id="exactly-one"><a class="anchor" href="#exactly-one">#</a>exactly-one()
+                                          </h3>
+                                          <p>Asserts that a sequence has exactly one item.
+                                          </p>
+                                          <p>
+      <strong>Signature:</strong> <code>exactly-one($seq as item()*) as item()</code>
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xpath</span>
+                                            </figcaption>
+                                            <pre><code class="language-xpath">exactly-one("hello")      =&gt; "hello"
 exactly-one(())            =&gt; ERROR: empty sequence
-exactly-one((1, 2))        =&gt; ERROR: sequence has more than one item</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Single()</code></p><hr><h3 id="one-or-more"><a class="anchor" href="#one-or-more">#</a>one-or-more()</h3><p>Asserts that a sequence has at least one item.</p><p>
-      <strong>Signature:</strong> <code>one-or-more($seq as item()*) as item()+</code></p><pre><code class="language-xpath">one-or-more((1, 2, 3))    =&gt; (1, 2, 3)
-one-or-more(())            =&gt; ERROR: empty sequence</code></pre><p>
-      <strong>C# equivalent:</strong> Roughly <code>items.Any() ? items : throw</code></p><hr><h2 id="access-and-slicing"><a class="anchor" href="#access-and-slicing">#</a>Access and Slicing</h2><h3 id="head"><a class="anchor" href="#head">#</a>head()</h3><p>Returns the first item of a sequence.</p><p>
-      <strong>Signature:</strong> <code>head($seq as item()*) as item()?</code></p><pre><code class="language-xpath">head((1, 2, 3))      =&gt; 1
+exactly-one((1, 2))        =&gt; ERROR: sequence has more than one item</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>
+      <strong>C# equivalent:</strong> <code>items.Single()</code>
+                                          </p>
+                                          <hr>
+                                            <h3 id="one-or-more"><a class="anchor" href="#one-or-more">#</a>one-or-more()
+                                            </h3>
+                                            <p>Asserts that a sequence has at least one item.
+                                            </p>
+                                            <p>
+      <strong>Signature:</strong> <code>one-or-more($seq as item()*) as item()+</code>
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xpath</span>
+                                              </figcaption>
+                                              <pre><code class="language-xpath">one-or-more((1, 2, 3))    =&gt; (1, 2, 3)
+one-or-more(())            =&gt; ERROR: empty sequence</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
+      <strong>C# equivalent:</strong> Roughly <code>items.Any() ? items : throw</code>
+                                            </p>
+                                            <hr>
+                                              <h2 id="access-and-slicing"><a class="anchor" href="#access-and-slicing">#</a>Access and Slicing
+                                              </h2>
+                                              <h3 id="head"><a class="anchor" href="#head">#</a>head()
+                                              </h3>
+                                              <p>Returns the first item of a sequence.
+                                              </p>
+                                              <p>
+      <strong>Signature:</strong> <code>head($seq as item()*) as item()?</code>
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xpath</span>
+                                                </figcaption>
+                                                <pre><code class="language-xpath">head((1, 2, 3))      =&gt; 1
 head(())              =&gt; ()
-head(//book)          =&gt; first book element</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.FirstOrDefault()</code></p><hr><h3 id="tail"><a class="anchor" href="#tail">#</a>tail()</h3><p>Returns all items except the first.</p><p>
-      <strong>Signature:</strong> <code>tail($seq as item()*) as item()*</code></p><pre><code class="language-xpath">tail((1, 2, 3))      =&gt; (2, 3)
+head(//book)          =&gt; first book element</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>
+      <strong>C# equivalent:</strong> <code>items.FirstOrDefault()</code>
+                                              </p>
+                                              <hr>
+                                                <h3 id="tail"><a class="anchor" href="#tail">#</a>tail()
+                                                </h3>
+                                                <p>Returns all items except the first.
+                                                </p>
+                                                <p>
+      <strong>Signature:</strong> <code>tail($seq as item()*) as item()*</code>
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xpath</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xpath">tail((1, 2, 3))      =&gt; (2, 3)
 tail(("a"))           =&gt; ()
-tail(())              =&gt; ()</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Skip(1)</code></p><hr><h3 id="foot"><a class="anchor" href="#foot">#</a>foot()</h3><p>Returns the last item. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>foot($seq as item()*) as item()?</code></p><pre><code class="language-xpath">foot((1, 2, 3))      =&gt; 3
-foot(())              =&gt; ()</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.LastOrDefault()</code></p><hr><h3 id="trunk"><a class="anchor" href="#trunk">#</a>trunk()</h3><p>Returns all items except the last. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>trunk($seq as item()*) as item()*</code></p><pre><code class="language-xpath">trunk((1, 2, 3))     =&gt; (1, 2)
-trunk(("a"))          =&gt; ()</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.SkipLast(1)</code></p><hr><h3 id="subsequence"><a class="anchor" href="#subsequence">#</a>subsequence()</h3><p>Returns a contiguous slice of the sequence.</p><p>
-      <strong>Signature:</strong> <code>subsequence($seq as item()*, $start as xs:double, $length as xs:double?) as item()*</code></p><pre><code class="language-xpath">subsequence((10, 20, 30, 40, 50), 2, 3)   =&gt; (20, 30, 40)
-subsequence((10, 20, 30, 40, 50), 3)       =&gt; (30, 40, 50)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Skip(1).Take(3)</code> — remember XPath is 1-based.</p><hr><h3 id="items-at"><a class="anchor" href="#items-at">#</a>items-at()</h3><p>Returns items at specified positions. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>items-at($seq as item()*, $positions as xs:integer*) as item()*</code></p><pre><code class="language-xpath">items-at(("a", "b", "c", "d", "e"), (1, 3, 5))   =&gt; ("a", "c", "e")</code></pre><p>
-      <strong>C# equivalent:</strong> <code>positions.Select(i =&gt; items.ElementAt(i - 1))</code></p><hr><h3 id="slice"><a class="anchor" href="#slice">#</a>slice()</h3><p>Advanced slicing with start, stop, and step. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>slice($seq as item()*, $start as xs:integer?, $stop as xs:integer?, $step as xs:integer?) as item()*</code></p><pre><code class="language-xpath">slice(1 to 10, 2, 8, 2)   =&gt; (2, 4, 6, 8)   (: start=2, stop=8, step=2 :)
-slice(1 to 10, (), (), -1) =&gt; (10, 9, 8, 7, 6, 5, 4, 3, 2, 1)  (: reverse :)</code></pre><p>
-      <strong>C# equivalent:</strong> Python-style slicing. No direct C# equivalent — you'd use LINQ <code>Where</code> with index math.</p><hr><h2 id="ordering"><a class="anchor" href="#ordering">#</a>Ordering</h2><h3 id="reverse"><a class="anchor" href="#reverse">#</a>reverse()</h3><p>Reverses the order of a sequence.</p><p>
-      <strong>Signature:</strong> <code>reverse($seq as item()*) as item()*</code></p><pre><code class="language-xpath">reverse((1, 2, 3))             =&gt; (3, 2, 1)
-reverse(("c", "b", "a"))      =&gt; ("a", "b", "c")</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Reverse()</code></p><hr><h3 id="sort"><a class="anchor" href="#sort">#</a>sort()</h3><p>Sorts a sequence. Can take a custom sort key function.</p><p>
-      <strong>Signature:</strong> <code>sort($seq as item()*, $collation as xs:string?, $key as function(item()) as xs:anyAtomicType*) as item()*</code></p><pre><code class="language-xpath">sort(("banana", "apple", "cherry"))
+tail(())              =&gt; ()</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <p>
+      <strong>C# equivalent:</strong> <code>items.Skip(1)</code>
+                                                </p>
+                                                <hr>
+                                                  <h3 id="foot"><a class="anchor" href="#foot">#</a>foot()
+                                                  </h3>
+                                                  <p>Returns the last item. New in XPath 4.0.
+                                                  </p>
+                                                  <p>
+      <strong>Signature:</strong> <code>foot($seq as item()*) as item()?</code>
+                                                  </p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xpath</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xpath">foot((1, 2, 3))      =&gt; 3
+foot(())              =&gt; ()</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <p>
+      <strong>C# equivalent:</strong> <code>items.LastOrDefault()</code>
+                                                  </p>
+                                                  <hr>
+                                                    <h3 id="trunk"><a class="anchor" href="#trunk">#</a>trunk()
+                                                    </h3>
+                                                    <p>Returns all items except the last. New in XPath 4.0.
+                                                    </p>
+                                                    <p>
+      <strong>Signature:</strong> <code>trunk($seq as item()*) as item()*</code>
+                                                    </p>
+                                                    <figure class="code">
+                                                      <figcaption><span class="lang">xpath</span>
+                                                      </figcaption>
+                                                      <pre><code class="language-xpath">trunk((1, 2, 3))     =&gt; (1, 2)
+trunk(("a"))          =&gt; ()</code>
+                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                    </figure>
+                                                    <p>
+      <strong>C# equivalent:</strong> <code>items.SkipLast(1)</code>
+                                                    </p>
+                                                    <hr>
+                                                      <h3 id="subsequence"><a class="anchor" href="#subsequence">#</a>subsequence()
+                                                      </h3>
+                                                      <p>Returns a contiguous slice of the sequence.
+                                                      </p>
+                                                      <p>
+      <strong>Signature:</strong> <code>subsequence($seq as item()*, $start as xs:double, $length as xs:double?) as item()*</code>
+                                                      </p>
+                                                      <figure class="code">
+                                                        <figcaption><span class="lang">xpath</span>
+                                                        </figcaption>
+                                                        <pre><code class="language-xpath">subsequence((10, 20, 30, 40, 50), 2, 3)   =&gt; (20, 30, 40)
+subsequence((10, 20, 30, 40, 50), 3)       =&gt; (30, 40, 50)</code>
+                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                      </figure>
+                                                      <p>
+      <strong>C# equivalent:</strong> <code>items.Skip(1).Take(3)</code> — remember XPath is 1-based.
+                                                      </p>
+                                                      <hr>
+                                                        <h3 id="items-at"><a class="anchor" href="#items-at">#</a>items-at()
+                                                        </h3>
+                                                        <p>Returns items at specified positions. New in XPath 4.0.
+                                                        </p>
+                                                        <p>
+      <strong>Signature:</strong> <code>items-at($seq as item()*, $positions as xs:integer*) as item()*</code>
+                                                        </p>
+                                                        <figure class="code">
+                                                          <figcaption><span class="lang">xpath</span>
+                                                          </figcaption>
+                                                          <pre><code class="language-xpath">items-at(("a", "b", "c", "d", "e"), (1, 3, 5))   =&gt; ("a", "c", "e")</code>
+                                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                        </figure>
+                                                        <p>
+      <strong>C# equivalent:</strong> <code>positions.Select(i =&gt; items.ElementAt(i - 1))</code>
+                                                        </p>
+                                                        <hr>
+                                                          <h3 id="slice"><a class="anchor" href="#slice">#</a>slice()
+                                                          </h3>
+                                                          <p>Advanced slicing with start, stop, and step. New in XPath 4.0.
+                                                          </p>
+                                                          <p>
+      <strong>Signature:</strong> <code>slice($seq as item()*, $start as xs:integer?, $stop as xs:integer?, $step as xs:integer?) as item()*</code>
+                                                          </p>
+                                                          <figure class="code">
+                                                            <figcaption><span class="lang">xpath</span>
+                                                            </figcaption>
+                                                            <pre><code class="language-xpath">slice(1 to 10, 2, 8, 2)   =&gt; (2, 4, 6, 8)   (: start=2, stop=8, step=2 :)
+slice(1 to 10, (), (), -1) =&gt; (10, 9, 8, 7, 6, 5, 4, 3, 2, 1)  (: reverse :)</code>
+                                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                          </figure>
+                                                          <p>
+      <strong>C# equivalent:</strong> Python-style slicing. No direct C# equivalent — you'd use LINQ <code>Where</code> with index math.
+                                                          </p>
+                                                          <hr>
+                                                            <h2 id="ordering"><a class="anchor" href="#ordering">#</a>Ordering
+                                                            </h2>
+                                                            <h3 id="reverse"><a class="anchor" href="#reverse">#</a>reverse()
+                                                            </h3>
+                                                            <p>Reverses the order of a sequence.
+                                                            </p>
+                                                            <p>
+      <strong>Signature:</strong> <code>reverse($seq as item()*) as item()*</code>
+                                                            </p>
+                                                            <figure class="code">
+                                                              <figcaption><span class="lang">xpath</span>
+                                                              </figcaption>
+                                                              <pre><code class="language-xpath">reverse((1, 2, 3))             =&gt; (3, 2, 1)
+reverse(("c", "b", "a"))      =&gt; ("a", "b", "c")</code>
+                                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                            </figure>
+                                                            <p>
+      <strong>C# equivalent:</strong> <code>items.Reverse()</code>
+                                                            </p>
+                                                            <hr>
+                                                              <h3 id="sort"><a class="anchor" href="#sort">#</a>sort()
+                                                              </h3>
+                                                              <p>Sorts a sequence. Can take a custom sort key function.
+                                                              </p>
+                                                              <p>
+      <strong>Signature:</strong> <code>sort($seq as item()*, $collation as xs:string?, $key as function(item()) as xs:anyAtomicType*) as item()*</code>
+                                                              </p>
+                                                              <figure class="code">
+                                                                <figcaption><span class="lang">xpath</span>
+                                                                </figcaption>
+                                                                <pre><code class="language-xpath">sort(("banana", "apple", "cherry"))
 =&gt; ("apple", "banana", "cherry")
 sort((3, 1, 4, 1, 5))
 =&gt; (1, 1, 3, 4, 5)
 (: Sort books by price :)
-sort(//book, (), function($b) { $b/price })</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.OrderBy(x =&gt; x)</code> or <code>items.OrderBy(x =&gt; x.Price)</code></p><hr><h3 id="sort-by"><a class="anchor" href="#sort-by">#</a>sort-by()</h3><p>Sorts by a key expression. Simpler than <code>sort()</code> for common cases. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>sort-by($seq as item()*, $key as function(item()) as xs:anyAtomicType*) as item()*</code></p><pre><code class="language-xpath">sort-by(//book, function($b) { $b/price })   (: books cheapest first :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>books.OrderBy(b =&gt; b.Price)</code></p><hr><h2 id="set-operations"><a class="anchor" href="#set-operations">#</a>Set Operations</h2><h3 id="distinct-values"><a class="anchor" href="#distinct-values">#</a>distinct-values()</h3><p>Returns unique atomic values from a sequence.</p><p>
-      <strong>Signature:</strong> <code>distinct-values($seq as xs:anyAtomicType*, $collation as xs:string?) as xs:anyAtomicType*</code></p><pre><code class="language-xpath">distinct-values((1, 2, 2, 3, 3, 3))           =&gt; (1, 2, 3)
+sort(//book, (), function($b) { $b/price })</code>
+                                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                              </figure>
+                                                              <p>
+      <strong>C# equivalent:</strong> <code>items.OrderBy(x =&gt; x)</code> or <code>items.OrderBy(x =&gt; x.Price)</code>
+                                                              </p>
+                                                              <hr>
+                                                                <h3 id="sort-by"><a class="anchor" href="#sort-by">#</a>sort-by()
+                                                                </h3>
+                                                                <p>Sorts by a key expression. Simpler than <code>sort()</code> for common cases. New in XPath 4.0.
+                                                                </p>
+                                                                <p>
+      <strong>Signature:</strong> <code>sort-by($seq as item()*, $key as function(item()) as xs:anyAtomicType*) as item()*</code>
+                                                                </p>
+                                                                <figure class="code">
+                                                                  <figcaption><span class="lang">xpath</span>
+                                                                  </figcaption>
+                                                                  <pre><code class="language-xpath">sort-by(//book, function($b) { $b/price })   (: books cheapest first :)</code>
+                                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                </figure>
+                                                                <p>
+      <strong>C# equivalent:</strong> <code>books.OrderBy(b =&gt; b.Price)</code>
+                                                                </p>
+                                                                <hr>
+                                                                  <h2 id="set-operations"><a class="anchor" href="#set-operations">#</a>Set Operations
+                                                                  </h2>
+                                                                  <h3 id="distinct-values"><a class="anchor" href="#distinct-values">#</a>distinct-values()
+                                                                  </h3>
+                                                                  <p>Returns unique atomic values from a sequence.
+                                                                  </p>
+                                                                  <p>
+      <strong>Signature:</strong> <code>distinct-values($seq as xs:anyAtomicType*, $collation as xs:string?) as xs:anyAtomicType*</code>
+                                                                  </p>
+                                                                  <figure class="code">
+                                                                    <figcaption><span class="lang">xpath</span>
+                                                                    </figcaption>
+                                                                    <pre><code class="language-xpath">distinct-values((1, 2, 2, 3, 3, 3))           =&gt; (1, 2, 3)
 distinct-values(("a", "b", "a", "c"))          =&gt; ("a", "b", "c")
-distinct-values(//book/@category)               =&gt; unique categories</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Distinct()</code></p><hr><h3 id="index-of"><a class="anchor" href="#index-of">#</a>index-of()</h3><p>Returns the positions where a value appears.</p><p>
-      <strong>Signature:</strong> <code>index-of($seq as xs:anyAtomicType*, $search as xs:anyAtomicType, $collation as xs:string?) as xs:integer*</code></p><pre><code class="language-xpath">index-of(("a", "b", "c", "b"), "b")   =&gt; (2, 4)
+distinct-values(//book/@category)               =&gt; unique categories</code>
+                                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                  </figure>
+                                                                  <p>
+      <strong>C# equivalent:</strong> <code>items.Distinct()</code>
+                                                                  </p>
+                                                                  <hr>
+                                                                    <h3 id="index-of"><a class="anchor" href="#index-of">#</a>index-of()
+                                                                    </h3>
+                                                                    <p>Returns the positions where a value appears.
+                                                                    </p>
+                                                                    <p>
+      <strong>Signature:</strong> <code>index-of($seq as xs:anyAtomicType*, $search as xs:anyAtomicType, $collation as xs:string?) as xs:integer*</code>
+                                                                    </p>
+                                                                    <figure class="code">
+                                                                      <figcaption><span class="lang">xpath</span>
+                                                                      </figcaption>
+                                                                      <pre><code class="language-xpath">index-of(("a", "b", "c", "b"), "b")   =&gt; (2, 4)
 index-of((10, 20, 30), 20)             =&gt; 2
-index-of((10, 20, 30), 99)             =&gt; ()</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Select((item, i) =&gt; (item, i)).Where(x =&gt; x.item == search).Select(x =&gt; x.i + 1)</code></p><hr><h3 id="index-where"><a class="anchor" href="#index-where">#</a>index-where()</h3><p>Returns positions where a predicate is true. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>index-where($seq as item()*, $predicate as function(item()) as xs:boolean) as xs:integer*</code></p><pre><code class="language-xpath">index-where((3, 1, 4, 1, 5), function($n) { $n &gt; 3 })
-=&gt; (3, 5)   (: positions of 4 and 5 :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Select((item, i) =&gt; (item, i)).Where(x =&gt; predicate(x.item)).Select(x =&gt; x.i + 1)</code></p><hr><h3 id="duplicate-values"><a class="anchor" href="#duplicate-values">#</a>duplicate-values()</h3><p>Returns values that appear more than once. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>duplicate-values($seq as xs:anyAtomicType*) as xs:anyAtomicType*</code></p><pre><code class="language-xpath">duplicate-values((1, 2, 2, 3, 3, 4))   =&gt; (2, 3)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.GroupBy(x =&gt; x).Where(g =&gt; g.Count() &gt; 1).Select(g =&gt; g.Key)</code></p><hr><h2 id="comparison"><a class="anchor" href="#comparison">#</a>Comparison</h2><h3 id="deep-equal"><a class="anchor" href="#deep-equal">#</a>deep-equal()</h3><p>Compares two items or sequences for deep equality — including structure for nodes.</p><p>
-      <strong>Signature:</strong> <code>deep-equal($a as item()*, $b as item()*, $collation as xs:string?) as xs:boolean</code></p><pre><code class="language-xpath">deep-equal((1, 2, 3), (1, 2, 3))        =&gt; true
+index-of((10, 20, 30), 99)             =&gt; ()</code>
+                                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                    </figure>
+                                                                    <p>
+      <strong>C# equivalent:</strong> <code>items.Select((item, i) =&gt; (item, i)).Where(x =&gt; x.item == search).Select(x =&gt; x.i + 1)</code>
+                                                                    </p>
+                                                                    <hr>
+                                                                      <h3 id="index-where"><a class="anchor" href="#index-where">#</a>index-where()
+                                                                      </h3>
+                                                                      <p>Returns positions where a predicate is true. New in XPath 4.0.
+                                                                      </p>
+                                                                      <p>
+      <strong>Signature:</strong> <code>index-where($seq as item()*, $predicate as function(item()) as xs:boolean) as xs:integer*</code>
+                                                                      </p>
+                                                                      <figure class="code">
+                                                                        <figcaption><span class="lang">xpath</span>
+                                                                        </figcaption>
+                                                                        <pre><code class="language-xpath">index-where((3, 1, 4, 1, 5), function($n) { $n &gt; 3 })
+=&gt; (3, 5)   (: positions of 4 and 5 :)</code>
+                                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                      </figure>
+                                                                      <p>
+      <strong>C# equivalent:</strong> <code>items.Select((item, i) =&gt; (item, i)).Where(x =&gt; predicate(x.item)).Select(x =&gt; x.i + 1)</code>
+                                                                      </p>
+                                                                      <hr>
+                                                                        <h3 id="duplicate-values"><a class="anchor" href="#duplicate-values">#</a>duplicate-values()
+                                                                        </h3>
+                                                                        <p>Returns values that appear more than once. New in XPath 4.0.
+                                                                        </p>
+                                                                        <p>
+      <strong>Signature:</strong> <code>duplicate-values($seq as xs:anyAtomicType*) as xs:anyAtomicType*</code>
+                                                                        </p>
+                                                                        <figure class="code">
+                                                                          <figcaption><span class="lang">xpath</span>
+                                                                          </figcaption>
+                                                                          <pre><code class="language-xpath">duplicate-values((1, 2, 2, 3, 3, 4))   =&gt; (2, 3)</code>
+                                                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                        </figure>
+                                                                        <p>
+      <strong>C# equivalent:</strong> <code>items.GroupBy(x =&gt; x).Where(g =&gt; g.Count() &gt; 1).Select(g =&gt; g.Key)</code>
+                                                                        </p>
+                                                                        <hr>
+                                                                          <h2 id="comparison"><a class="anchor" href="#comparison">#</a>Comparison
+                                                                          </h2>
+                                                                          <h3 id="deep-equal"><a class="anchor" href="#deep-equal">#</a>deep-equal()
+                                                                          </h3>
+                                                                          <p>Compares two items or sequences for deep equality — including structure for nodes.
+                                                                          </p>
+                                                                          <p>
+      <strong>Signature:</strong> <code>deep-equal($a as item()*, $b as item()*, $collation as xs:string?) as xs:boolean</code>
+                                                                          </p>
+                                                                          <figure class="code">
+                                                                            <figcaption><span class="lang">xpath</span>
+                                                                            </figcaption>
+                                                                            <pre><code class="language-xpath">deep-equal((1, 2, 3), (1, 2, 3))        =&gt; true
 deep-equal((1, 2, 3), (1, 2))           =&gt; false
-deep-equal(//book[1], //book[1])         =&gt; true  (: same node, always equal :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>Enumerable.SequenceEqual(a, b)</code> for sequences, or structural comparison for objects.</p><hr><h3 id="all-equal"><a class="anchor" href="#all-equal">#</a>all-equal()</h3><p>Tests whether all items in a sequence are equal. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>all-equal($seq as xs:anyAtomicType*) as xs:boolean</code></p><pre><code class="language-xpath">all-equal((5, 5, 5))         =&gt; true
+deep-equal(//book[1], //book[1])         =&gt; true  (: same node, always equal :)</code>
+                                                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                          </figure>
+                                                                          <p>
+      <strong>C# equivalent:</strong> <code>Enumerable.SequenceEqual(a, b)</code> for sequences, or structural comparison for objects.
+                                                                          </p>
+                                                                          <hr>
+                                                                            <h3 id="all-equal"><a class="anchor" href="#all-equal">#</a>all-equal()
+                                                                            </h3>
+                                                                            <p>Tests whether all items in a sequence are equal. New in XPath 4.0.
+                                                                            </p>
+                                                                            <p>
+      <strong>Signature:</strong> <code>all-equal($seq as xs:anyAtomicType*) as xs:boolean</code>
+                                                                            </p>
+                                                                            <figure class="code">
+                                                                              <figcaption><span class="lang">xpath</span>
+                                                                              </figcaption>
+                                                                              <pre><code class="language-xpath">all-equal((5, 5, 5))         =&gt; true
 all-equal((5, 5, 6))         =&gt; false
 all-equal(())                 =&gt; true   (: vacuously true :)
-all-equal(("a"))              =&gt; true</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Distinct().Count() &lt;= 1</code></p><hr><h3 id="all-different"><a class="anchor" href="#all-different">#</a>all-different()</h3><p>Tests whether all items in a sequence are unique. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>all-different($seq as xs:anyAtomicType*) as xs:boolean</code></p><pre><code class="language-xpath">all-different((1, 2, 3))     =&gt; true
-all-different((1, 2, 2))     =&gt; false</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Distinct().Count() == items.Count()</code></p><hr><h2 id="manipulation"><a class="anchor" href="#manipulation">#</a>Manipulation</h2><h3 id="insert-before"><a class="anchor" href="#insert-before">#</a>insert-before()</h3><p>Inserts items into a sequence at a given position.</p><p>
-      <strong>Signature:</strong> <code>insert-before($seq as item()*, $pos as xs:integer, $items as item()*) as item()*</code></p><pre><code class="language-xpath">insert-before(("a", "b", "c"), 2, "X")   =&gt; ("a", "X", "b", "c")</code></pre><p>
-      <strong>C# equivalent:</strong> <code>list.Insert(1, "X")</code> (but XPath sequences are immutable — a new sequence is returned)</p><hr><h3 id="remove"><a class="anchor" href="#remove">#</a>remove()</h3><p>Removes the item at a given position.</p><p>
-      <strong>Signature:</strong> <code>remove($seq as item()*, $pos as xs:integer) as item()*</code></p><pre><code class="language-xpath">remove(("a", "b", "c"), 2)   =&gt; ("a", "c")</code></pre><p>
-      <strong>C# equivalent:</strong> <code>list.RemoveAt(1)</code> (again, XPath returns a new sequence)</p><hr><h3 id="replicate"><a class="anchor" href="#replicate">#</a>replicate()</h3><p>Repeats a sequence a given number of times. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>replicate($seq as item()*, $count as xs:integer) as item()*</code></p><pre><code class="language-xpath">replicate(("a", "b"), 3)   =&gt; ("a", "b", "a", "b", "a", "b")
-replicate("x", 5)           =&gt; ("x", "x", "x", "x", "x")</code></pre><p>
-      <strong>C# equivalent:</strong> <code>Enumerable.Repeat(items, 3).SelectMany(x =&gt; x)</code></p><hr><h2 id="scanning-and-accumulation"><a class="anchor" href="#scanning-and-accumulation">#</a>Scanning and Accumulation</h2><p>These higher-level sequence operations are new in XPath 4.0 and parallel functional programming patterns.</p><h3 id="scan-left"><a class="anchor" href="#scan-left">#</a>scan-left()</h3><p>Produces a running accumulation from left to right — like a fold that returns all intermediate results.</p><p>
-      <strong>Signature:</strong> <code>scan-left($seq as item()*, $initial as item()*, $fn as function(item()*, item()) as item()*) as item()**</code></p><pre><code class="language-xpath">scan-left((1, 2, 3, 4), 0, function($acc, $n) { $acc + $n })
-=&gt; (0, 1, 3, 6, 10)   (: running sum :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Aggregate()</code> doesn't return intermediates, but you could build it with a <code>Select</code> that maintains state:</p><pre><code class="language-csharp">items.Select((x, i) =&gt; items.Take(i + 1).Sum())</code></pre><hr><h3 id="scan-right"><a class="anchor" href="#scan-right">#</a>scan-right()</h3><p>Like <code>scan-left</code>, but accumulates from right to left.</p><p>
-      <strong>Signature:</strong> <code>scan-right($seq as item()*, $initial as item()*, $fn as function(item(), item()*) as item()*) as item()**</code></p><pre><code class="language-xpath">scan-right((1, 2, 3, 4), 0, function($n, $acc) { $acc + $n })
-=&gt; (10, 9, 7, 4, 0)</code></pre><hr><h3 id="partition"><a class="anchor" href="#partition">#</a>partition()</h3><p>Splits a sequence into groups based on a predicate that signals group boundaries. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>partition($seq as item()*, $fn as function(item(), item()?) as xs:boolean) as array(item()*)</code></p><pre><code class="language-xpath">(: Split at each value greater than the previous :)
+all-equal(("a"))              =&gt; true</code>
+                                                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                            </figure>
+                                                                            <p>
+      <strong>C# equivalent:</strong> <code>items.Distinct().Count() &lt;= 1</code>
+                                                                            </p>
+                                                                            <hr>
+                                                                              <h3 id="all-different"><a class="anchor" href="#all-different">#</a>all-different()
+                                                                              </h3>
+                                                                              <p>Tests whether all items in a sequence are unique. New in XPath 4.0.
+                                                                              </p>
+                                                                              <p>
+      <strong>Signature:</strong> <code>all-different($seq as xs:anyAtomicType*) as xs:boolean</code>
+                                                                              </p>
+                                                                              <figure class="code">
+                                                                                <figcaption><span class="lang">xpath</span>
+                                                                                </figcaption>
+                                                                                <pre><code class="language-xpath">all-different((1, 2, 3))     =&gt; true
+all-different((1, 2, 2))     =&gt; false</code>
+                                                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                              </figure>
+                                                                              <p>
+      <strong>C# equivalent:</strong> <code>items.Distinct().Count() == items.Count()</code>
+                                                                              </p>
+                                                                              <hr>
+                                                                                <h2 id="manipulation"><a class="anchor" href="#manipulation">#</a>Manipulation
+                                                                                </h2>
+                                                                                <h3 id="insert-before"><a class="anchor" href="#insert-before">#</a>insert-before()
+                                                                                </h3>
+                                                                                <p>Inserts items into a sequence at a given position.
+                                                                                </p>
+                                                                                <p>
+      <strong>Signature:</strong> <code>insert-before($seq as item()*, $pos as xs:integer, $items as item()*) as item()*</code>
+                                                                                </p>
+                                                                                <figure class="code">
+                                                                                  <figcaption><span class="lang">xpath</span>
+                                                                                  </figcaption>
+                                                                                  <pre><code class="language-xpath">insert-before(("a", "b", "c"), 2, "X")   =&gt; ("a", "X", "b", "c")</code>
+                                                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                </figure>
+                                                                                <p>
+      <strong>C# equivalent:</strong> <code>list.Insert(1, "X")</code> (but XPath sequences are immutable — a new sequence is returned)
+                                                                                </p>
+                                                                                <hr>
+                                                                                  <h3 id="remove"><a class="anchor" href="#remove">#</a>remove()
+                                                                                  </h3>
+                                                                                  <p>Removes the item at a given position.
+                                                                                  </p>
+                                                                                  <p>
+      <strong>Signature:</strong> <code>remove($seq as item()*, $pos as xs:integer) as item()*</code>
+                                                                                  </p>
+                                                                                  <figure class="code">
+                                                                                    <figcaption><span class="lang">xpath</span>
+                                                                                    </figcaption>
+                                                                                    <pre><code class="language-xpath">remove(("a", "b", "c"), 2)   =&gt; ("a", "c")</code>
+                                                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                  </figure>
+                                                                                  <p>
+      <strong>C# equivalent:</strong> <code>list.RemoveAt(1)</code> (again, XPath returns a new sequence)
+                                                                                  </p>
+                                                                                  <hr>
+                                                                                    <h3 id="replicate"><a class="anchor" href="#replicate">#</a>replicate()
+                                                                                    </h3>
+                                                                                    <p>Repeats a sequence a given number of times. New in XPath 4.0.
+                                                                                    </p>
+                                                                                    <p>
+      <strong>Signature:</strong> <code>replicate($seq as item()*, $count as xs:integer) as item()*</code>
+                                                                                    </p>
+                                                                                    <figure class="code">
+                                                                                      <figcaption><span class="lang">xpath</span>
+                                                                                      </figcaption>
+                                                                                      <pre><code class="language-xpath">replicate(("a", "b"), 3)   =&gt; ("a", "b", "a", "b", "a", "b")
+replicate("x", 5)           =&gt; ("x", "x", "x", "x", "x")</code>
+                                                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                    </figure>
+                                                                                    <p>
+      <strong>C# equivalent:</strong> <code>Enumerable.Repeat(items, 3).SelectMany(x =&gt; x)</code>
+                                                                                    </p>
+                                                                                    <hr>
+                                                                                      <h2 id="scanning-and-accumulation"><a class="anchor" href="#scanning-and-accumulation">#</a>Scanning and Accumulation
+                                                                                      </h2>
+                                                                                      <p>These higher-level sequence operations are new in XPath 4.0 and parallel functional programming patterns.
+                                                                                      </p>
+                                                                                      <h3 id="scan-left"><a class="anchor" href="#scan-left">#</a>scan-left()
+                                                                                      </h3>
+                                                                                      <p>Produces a running accumulation from left to right — like a fold that returns all intermediate results.
+                                                                                      </p>
+                                                                                      <p>
+      <strong>Signature:</strong> <code>scan-left($seq as item()*, $initial as item()*, $fn as function(item()*, item()) as item()*) as item()**</code>
+                                                                                      </p>
+                                                                                      <figure class="code">
+                                                                                        <figcaption><span class="lang">xpath</span>
+                                                                                        </figcaption>
+                                                                                        <pre><code class="language-xpath">scan-left((1, 2, 3, 4), 0, function($acc, $n) { $acc + $n })
+=&gt; (0, 1, 3, 6, 10)   (: running sum :)</code>
+                                                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                      </figure>
+                                                                                      <p>
+      <strong>C# equivalent:</strong> <code>items.Aggregate()</code> doesn't return intermediates, but you could build it with a <code>Select</code> that maintains state:
+                                                                                      </p>
+                                                                                      <figure class="code">
+                                                                                        <figcaption><span class="lang">csharp</span>
+                                                                                        </figcaption>
+                                                                                        <pre><code class="language-csharp">items.Select((x, i) =&gt; items.Take(i + 1).Sum())</code>
+                                                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                      </figure>
+                                                                                      <hr>
+                                                                                        <h3 id="scan-right"><a class="anchor" href="#scan-right">#</a>scan-right()
+                                                                                        </h3>
+                                                                                        <p>Like <code>scan-left</code>, but accumulates from right to left.
+                                                                                        </p>
+                                                                                        <p>
+      <strong>Signature:</strong> <code>scan-right($seq as item()*, $initial as item()*, $fn as function(item(), item()*) as item()*) as item()**</code>
+                                                                                        </p>
+                                                                                        <figure class="code">
+                                                                                          <figcaption><span class="lang">xpath</span>
+                                                                                          </figcaption>
+                                                                                          <pre><code class="language-xpath">scan-right((1, 2, 3, 4), 0, function($n, $acc) { $acc + $n })
+=&gt; (10, 9, 7, 4, 0)</code>
+                                                                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                        </figure>
+                                                                                        <hr>
+                                                                                          <h3 id="partition"><a class="anchor" href="#partition">#</a>partition()
+                                                                                          </h3>
+                                                                                          <p>Splits a sequence into groups based on a predicate that signals group boundaries. New in XPath 4.0.
+                                                                                          </p>
+                                                                                          <p>
+      <strong>Signature:</strong> <code>partition($seq as item()*, $fn as function(item(), item()?) as xs:boolean) as array(item()*)</code>
+                                                                                          </p>
+                                                                                          <figure class="code">
+                                                                                            <figcaption><span class="lang">xpath</span>
+                                                                                            </figcaption>
+                                                                                            <pre><code class="language-xpath">(: Split at each value greater than the previous :)
 partition((1, 2, 3, 1, 2, 1),
   function($cur, $prev) { $prev and $cur &lt; $prev })
-=&gt; [[1, 2, 3], [1, 2], [1]]</code></pre><hr><h3 id="iterate-while"><a class="anchor" href="#iterate-while">#</a>iterate-while()</h3><p>Repeatedly applies a function while a condition holds. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>iterate-while($initial as item()*, $condition as function(item()*) as xs:boolean, $action as function(item()*) as item()*) as item()*</code></p><pre><code class="language-xpath">(: Double until &gt; 100 :)
+=&gt; [[1, 2, 3], [1, 2], [1]]</code>
+                                                                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                          </figure>
+                                                                                          <hr>
+                                                                                            <h3 id="iterate-while"><a class="anchor" href="#iterate-while">#</a>iterate-while()
+                                                                                            </h3>
+                                                                                            <p>Repeatedly applies a function while a condition holds. New in XPath 4.0.
+                                                                                            </p>
+                                                                                            <p>
+      <strong>Signature:</strong> <code>iterate-while($initial as item()*, $condition as function(item()*) as xs:boolean, $action as function(item()*) as item()*) as item()*</code>
+                                                                                            </p>
+                                                                                            <figure class="code">
+                                                                                              <figcaption><span class="lang">xpath</span>
+                                                                                              </figcaption>
+                                                                                              <pre><code class="language-xpath">(: Double until &gt; 100 :)
 iterate-while(1,
   function($n) { $n &lt;= 100 },
   function($n) { $n * 2 })
-=&gt; 128</code></pre><p>
+=&gt; 128</code>
+                                                                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                            </figure>
+                                                                                            <p>
       <strong>C# equivalent:</strong>
-    </p><pre><code class="language-csharp">var n = 1;
+    
+                                                                                            </p>
+                                                                                            <figure class="code">
+                                                                                              <figcaption><span class="lang">csharp</span>
+                                                                                              </figcaption>
+                                                                                              <pre><code class="language-csharp">var n = 1;
 while (n &lt;= 100) n *= 2;
-// n == 128</code></pre><hr><h3 id="transitive-closure"><a class="anchor" href="#transitive-closure">#</a>transitive-closure()</h3><p>Computes the transitive closure of a function — applying it repeatedly and collecting all results until no new items are produced. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>transitive-closure($initial as item()*, $fn as function(item()) as item()*) as item()*</code></p><pre><code class="language-xpath">(: Find all ancestors of a node :)
-transitive-closure($node, function($n) { $n/.. })</code></pre><p>
-      <strong>Use case:</strong> Graph traversal, hierarchy walking, dependency resolution.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+// n == 128</code>
+                                                                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                            </figure>
+                                                                                            <hr>
+                                                                                              <h3 id="transitive-closure"><a class="anchor" href="#transitive-closure">#</a>transitive-closure()
+                                                                                              </h3>
+                                                                                              <p>Computes the transitive closure of a function — applying it repeatedly and collecting all results until no new items are produced. New in XPath 4.0.
+                                                                                              </p>
+                                                                                              <p>
+      <strong>Signature:</strong> <code>transitive-closure($initial as item()*, $fn as function(item()) as item()*) as item()*</code>
+                                                                                              </p>
+                                                                                              <figure class="code">
+                                                                                                <figcaption><span class="lang">xpath</span>
+                                                                                                </figcaption>
+                                                                                                <pre><code class="language-xpath">(: Find all ancestors of a node :)
+transitive-closure($node, function($n) { $n/.. })</code>
+                                                                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                              </figure>
+                                                                                              <p>
+      <strong>Use case:</strong> Graph traversal, hierarchy walking, dependency resolution.
+                                                                                              </p>
+                                                                                            </article>
+                                                                                          </main>
+                                                                                          <aside class="toc" aria-label="On this page">
+                                                                                            <p class="toc-label">On this page
+                                                                                            </p>
+                                                                                            <ul>
+                                                                                              <li class="toc-h2"><a href="#contents">Contents</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h2"><a href="#testing-and-cardinality">Testing and Cardinality</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#empty">empty()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#exists">exists()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#count">count()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#zero-or-one">zero-or-one()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#exactly-one">exactly-one()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#one-or-more">one-or-more()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h2"><a href="#access-and-slicing">Access and Slicing</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#head">head()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#tail">tail()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#foot">foot()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#trunk">trunk()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#subsequence">subsequence()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#items-at">items-at()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#slice">slice()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h2"><a href="#ordering">Ordering</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#reverse">reverse()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#sort">sort()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#sort-by">sort-by()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h2"><a href="#set-operations">Set Operations</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#distinct-values">distinct-values()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#index-of">index-of()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#index-where">index-where()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#duplicate-values">duplicate-values()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h2"><a href="#comparison">Comparison</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#deep-equal">deep-equal()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#all-equal">all-equal()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#all-different">all-different()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h2"><a href="#manipulation">Manipulation</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#insert-before">insert-before()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#remove">remove()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#replicate">replicate()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h2"><a href="#scanning-and-accumulation">Scanning and Accumulation</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#scan-left">scan-left()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#scan-right">scan-right()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#partition">partition()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#iterate-while">iterate-while()</a>
+                                                                                              </li>
+                                                                                              <li class="toc-h3"><a href="#transitive-closure">transitive-closure()</a>
+                                                                                              </li>
+                                                                                            </ul>
+                                                                                          </aside>
+                                                                                        </div>
+                                                                                        <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                                                                          <div class="search-backdrop">
+                                                                                          </div>
+                                                                                          <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                                                                            <div class="search-results" id="search-results">
+                                                                                            </div>
+                                                                                          </div>
+                                                                                        </div>
+                                                                                        <footer class="site-footer">
+                                                                                          <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                                                                          </p>
+                                                                                        </footer>
+                                                                                        <script src="https://unpkg.com/lunr/lunr.js">
+                                                                                        </script>
+                                                                                        <script src="/js/prism.js">
+                                                                                        </script>
+                                                                                        <script src="/js/search.js">
+                                                                                        </script>
+                                                                                        <script src="/js/theme.js">
+                                                                                        </script>
+                                                                                        <script src="/js/toc.js">
+                                                                                        </script>
+                                                                                        <script src="/js/copy.js">
+                                                                                        </script>
+                                                                                      </body>
+                                                                                    </html>

@@ -1,26 +1,554 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Iteration and Sorting — PhoenixmlDb Documentation</title><meta name="description" content="xsl:for-each, xsl:sort, xsl:perform-sort, xsl:iterate with break and next-iteration"><link rel="canonical" href="/language-reference/xslt/instructions/iteration-sorting.html"><meta property="og:title" content="Iteration and Sorting"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/iteration-sorting.html"><meta property="og:description" content="xsl:for-each, xsl:sort, xsl:perform-sort, xsl:iterate with break and next-iteration"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Iteration and Sorting — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="xsl:for-each, xsl:sort, xsl:perform-sort, xsl:iterate with break and next-iteration">
+            <link rel="canonical" href="/language-reference/xslt/instructions/iteration-sorting.html">
+              <meta property="og:title" content="Iteration and Sorting">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xslt/instructions/iteration-sorting.html">
+                    <meta property="og:description" content="xsl:for-each, xsl:sort, xsl:perform-sort, xsl:iterate with break and next-iteration">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li class="active"><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="iteration-and-sorting"><a class="anchor" href="#iteration-and-sorting">#</a>Iteration and Sorting</h1><p>XSLT provides several ways to process sequences of items. The choice between them depends on whether you need ordering, running state, or just simple iteration.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#xslfor-each" title="">xsl:for-each</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslsort" title="">xsl:sort</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslperform-sort" title="">xsl:perform-sort</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xsliterate" title="">xsl:iterate</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#choosing-the-right-approach" title="">Choosing the Right Approach</a>
-        </p>
-      </li></ul><hr><h2 id="xsl-for-each"><a class="anchor" href="#xsl-for-each">#</a>xsl:for-each</h2><p>Iterates over a sequence, executing the body once for each item. The current item becomes the context node inside the body.</p><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section open">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li class="active"><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">Instructions Reference
+                                </p>
+                                <h1 class="page-title">Iteration and Sorting
+                                </h1>
+                                <p class="page-subtitle">xsl:for-each, xsl:sort, xsl:perform-sort, xsl:iterate with break and next-iteration
+                                </p>
+                                <h1 id="iteration-and-sorting"><a class="anchor" href="#iteration-and-sorting">#</a>Iteration and Sorting
+                                </h1>
+                                <p>XSLT provides several ways to process sequences of items. The choice between them depends on whether you need ordering, running state, or just simple iteration.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslfor-each">xsl:for-each</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslsort">xsl:sort</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslperform-sort">xsl:perform-sort</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xsliterate">xsl:iterate</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#choosing-the-right-approach">Choosing the Right Approach</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="xsl-for-each"><a class="anchor" href="#xsl-for-each">#</a>xsl:for-each
+                                  </h2>
+                                  <p>Iterates over a sequence, executing the body once for each item. The current item becomes the context node inside the body.
+                                  </p>
+                                  <h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage
+                                  </h3>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
   &lt;ul&gt;
     &lt;xsl:for-each select="product"&gt;
       &lt;li&gt;
@@ -28,21 +556,51 @@
       &lt;/li&gt;
     &lt;/xsl:for-each&gt;
   &lt;/ul&gt;
-&lt;/xsl:template&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>foreach (var product in catalog.Products) { ... }</code></p><h3 id="context-change"><a class="anchor" href="#context-change">#</a>Context Change</h3><p>This is the most important thing to understand about <code>xsl:for-each</code>: <strong>it changes the context node</strong>. Inside the loop, <code>.</code> refers to the current item, not the node that was the context before the loop.</p><pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
+&lt;/xsl:template&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
+      <strong>C# parallel:</strong> <code>foreach (var product in catalog.Products) { ... }</code>
+                                  </p>
+                                  <h3 id="context-change"><a class="anchor" href="#context-change">#</a>Context Change
+                                  </h3>
+                                  <p>This is the most important thing to understand about <code>xsl:for-each</code>: <strong>it changes the context node</strong>. Inside the loop, <code>.</code> refers to the current item, not the node that was the context before the loop.
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
   &lt;!-- Here, . is the catalog element --&gt;
   &lt;h1&gt;&lt;xsl:value-of select="@name"/&gt;&lt;/h1&gt;  &lt;!-- catalog's @name --&gt;
   &lt;xsl:for-each select="product"&gt;
     &lt;!-- Here, . is a product element --&gt;
     &lt;p&gt;&lt;xsl:value-of select="@name"/&gt;&lt;/p&gt;    &lt;!-- product's @name --&gt;
   &lt;/xsl:for-each&gt;
-&lt;/xsl:template&gt;</code></pre><p>If you need the outer context inside the loop, save it in a variable before entering:</p><pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
+&lt;/xsl:template&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>If you need the outer context inside the loop, save it in a variable before entering:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
   &lt;xsl:variable name="catalog-name" select="@name"/&gt;
   &lt;xsl:for-each select="product"&gt;
     &lt;!-- Use $catalog-name to access the outer context --&gt;
     &lt;p&gt;&lt;xsl:value-of select="$catalog-name"/&gt;: &lt;xsl:value-of select="name"/&gt;&lt;/p&gt;
   &lt;/xsl:for-each&gt;
-&lt;/xsl:template&gt;</code></pre><h3 id="position-and-last"><a class="anchor" href="#position-and-last">#</a>position() and last()</h3><p>Inside <code>xsl:for-each</code>, the <code>position()</code> and <code>last()</code> functions reflect the current iteration:</p><pre><code class="language-xml">&lt;xsl:for-each select="product"&gt;
+&lt;/xsl:template&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <h3 id="position-and-last"><a class="anchor" href="#position-and-last">#</a>position() and last()
+                                  </h3>
+                                  <p>Inside <code>xsl:for-each</code>, the <code>position()</code> and <code>last()</code> functions reflect the current iteration:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:for-each select="product"&gt;
   &lt;tr class="{if (position() mod 2 = 0) then 'even' else 'odd'}"&gt;
     &lt;td&gt;&lt;xsl:value-of select="position()"/&gt;.&lt;/td&gt;
     &lt;td&gt;&lt;xsl:value-of select="name"/&gt;&lt;/td&gt;
@@ -52,16 +610,34 @@
       &lt;/xsl:if&gt;
     &lt;/td&gt;
   &lt;/tr&gt;
-&lt;/xsl:for-each&gt;</code></pre><p>
+&lt;/xsl:for-each&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">var products = catalog.Products.ToList();
+    
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">csharp</span>
+                                    </figcaption>
+                                    <pre><code class="language-csharp">var products = catalog.Products.ToList();
 for (int i = 0; i &lt; products.Count; i++)
 {
     var isEven = i % 2 == 1; // position() is 1-based
     var isLast = i == products.Count - 1;
     // ...
-}</code></pre><h3 id="iterating-over-non-node-sequences"><a class="anchor" href="#iterating-over-non-node-sequences">#</a>Iterating Over Non-Node Sequences</h3><p>
-      <code>xsl:for-each</code> works on any sequence, not just nodes:</p><pre><code class="language-xml">&lt;!-- Iterate over a sequence of integers --&gt;
+}</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <h3 id="iterating-over-non-node-sequences"><a class="anchor" href="#iterating-over-non-node-sequences">#</a>Iterating Over Non-Node Sequences
+                                  </h3>
+                                  <p>
+      <code>xsl:for-each</code> works on any sequence, not just nodes:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;!-- Iterate over a sequence of integers --&gt;
 &lt;xsl:for-each select="1 to 10"&gt;
   &lt;span&gt;&lt;xsl:value-of select="."/&gt;&lt;/span&gt;
 &lt;/xsl:for-each&gt;
@@ -73,7 +649,20 @@ for (int i = 0; i &lt; products.Count; i++)
 &lt;xsl:variable name="colors" select="map { 'error': 'red', 'warning': 'orange', 'info': 'blue' }"/&gt;
 &lt;xsl:for-each select="map:keys($colors)"&gt;
   &lt;div style="color: {map:get($colors, .)}"&gt;&lt;xsl:value-of select="."/&gt;&lt;/div&gt;
-&lt;/xsl:for-each&gt;</code></pre><hr><h2 id="xsl-sort"><a class="anchor" href="#xsl-sort">#</a>xsl:sort</h2><p>Controls the order in which items are processed. <code>xsl:sort</code> appears as a child of <code>xsl:for-each</code> or <code>xsl:apply-templates</code>, before any other content.</p><h3 id="basic-sorting"><a class="anchor" href="#basic-sorting">#</a>Basic Sorting</h3><pre><code class="language-xml">&lt;!-- Sort products by name alphabetically --&gt;
+&lt;/xsl:for-each&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <hr>
+                                    <h2 id="xsl-sort"><a class="anchor" href="#xsl-sort">#</a>xsl:sort
+                                    </h2>
+                                    <p>Controls the order in which items are processed. <code>xsl:sort</code> appears as a child of <code>xsl:for-each</code> or <code>xsl:apply-templates</code>, before any other content.
+                                    </p>
+                                    <h3 id="basic-sorting"><a class="anchor" href="#basic-sorting">#</a>Basic Sorting
+                                    </h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;!-- Sort products by name alphabetically --&gt;
 &lt;xsl:for-each select="product"&gt;
   &lt;xsl:sort select="name"/&gt;
   &lt;li&gt;&lt;xsl:value-of select="name"/&gt;&lt;/li&gt;
@@ -82,134 +671,343 @@ for (int i = 0; i &lt; products.Count; i++)
 &lt;xsl:for-each select="product"&gt;
   &lt;xsl:sort select="price" data-type="number" order="descending"/&gt;
   &lt;li&gt;&lt;xsl:value-of select="name"/&gt; — $&lt;xsl:value-of select="price"/&gt;&lt;/li&gt;
-&lt;/xsl:for-each&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>products.OrderBy(p =&gt; p.Name)</code> and <code>products.OrderByDescending(p =&gt; p.Price)</code></p><h3 id="sort-attributes"><a class="anchor" href="#sort-attributes">#</a>Sort Attributes</h3><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Attribute</p>
-          </th>
-          <th>
-            <p>Values</p>
-          </th>
-          <th>
-            <p>Default</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>select</code></p>
-          </td>
-          <td>
-            <p>XPath expression</p>
-          </td>
-          <td>
-            <p><code>.</code> (string value of context)</p>
-          </td>
-          <td>
-            <p>The sort key</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>order</code></p>
-          </td>
-          <td>
-            <p><code>ascending</code>, <code>descending</code></p>
-          </td>
-          <td>
-            <p><code>ascending</code></p>
-          </td>
-          <td>
-            <p>Sort direction</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>data-type</code></p>
-          </td>
-          <td>
-            <p><code>text</code>, <code>number</code></p>
-          </td>
-          <td>
-            <p><code>text</code></p>
-          </td>
-          <td>
-            <p>How to compare values</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>collation</code></p>
-          </td>
-          <td>
-            <p>URI</p>
-          </td>
-          <td>
-            <p>Default collation</p>
-          </td>
-          <td>
-            <p>Locale-aware string comparison</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>stable</code></p>
-          </td>
-          <td>
-            <p><code>yes</code>, <code>no</code></p>
-          </td>
-          <td>
-            <p><code>yes</code></p>
-          </td>
-          <td>
-            <p>Preserve original order of equal items</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>lang</code></p>
-          </td>
-          <td>
-            <p>Language code</p>
-          </td>
-          <td>
-            <p>System default</p>
-          </td>
-          <td>
-            <p>Language for string sorting</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>case-order</code></p>
-          </td>
-          <td>
-            <p><code>upper-first</code>, <code>lower-first</code></p>
-          </td>
-          <td>
-            <p>Collation-dependent</p>
-          </td>
-          <td>
-            <p>Whether uppercase sorts before lowercase</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="the-data-type-gotcha"><a class="anchor" href="#the-data-type-gotcha">#</a>The data-type Gotcha</h3><p>This is a common mistake. Without <code>data-type="number"</code>, prices sort as strings:</p><pre><code class="language-xml">&lt;!-- WRONG: string sort puts "9.99" after "29.99" because "9" &gt; "2" --&gt;
+&lt;/xsl:for-each&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
+      <strong>C# parallel:</strong> <code>products.OrderBy(p =&gt; p.Name)</code> and <code>products.OrderByDescending(p =&gt; p.Price)</code>
+                                    </p>
+                                    <h3 id="sort-attributes"><a class="anchor" href="#sort-attributes">#</a>Sort Attributes
+                                    </h3>
+                                    <div class="table-wrap">
+                                      <table>
+      
+                                        <thead>
+        
+                                          <tr>
+          
+                                            <th>
+            
+                                              <p>Attribute
+                                              </p>
+          
+                                            </th>
+          
+                                            <th>
+            
+                                              <p>Values
+                                              </p>
+          
+                                            </th>
+          
+                                            <th>
+            
+                                              <p>Default
+                                              </p>
+          
+                                            </th>
+          
+                                            <th>
+            
+                                              <p>Description
+                                              </p>
+          
+                                            </th>
+        
+                                          </tr>
+      
+                                        </thead>
+      
+                                        <tbody>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>select</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>XPath expression
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>.</code> (string value of context)
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>The sort key
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>order</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>ascending</code>, <code>descending</code>
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>ascending</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Sort direction
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>data-type</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>text</code>, <code>number</code>
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>text</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>How to compare values
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>collation</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>URI
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Default collation
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Locale-aware string comparison
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>stable</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>yes</code>, <code>no</code>
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>yes</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Preserve original order of equal items
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>lang</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Language code
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>System default
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Language for string sorting
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>case-order</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>upper-first</code>, <code>lower-first</code>
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Collation-dependent
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Whether uppercase sorts before lowercase
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+      
+                                        </tbody>
+    
+                                      </table>
+                                    </div>
+                                    <h3 id="the-data-type-gotcha"><a class="anchor" href="#the-data-type-gotcha">#</a>The data-type Gotcha
+                                    </h3>
+                                    <p>This is a common mistake. Without <code>data-type="number"</code>, prices sort as strings:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;!-- WRONG: string sort puts "9.99" after "29.99" because "9" &gt; "2" --&gt;
 &lt;xsl:sort select="price"/&gt;
 &lt;!-- Result: 109.99, 29.99, 9.99 (alphabetical!) --&gt;
 &lt;!-- RIGHT: numeric sort --&gt;
 &lt;xsl:sort select="price" data-type="number"/&gt;
-&lt;!-- Result: 9.99, 29.99, 109.99 --&gt;</code></pre><p>
-      <strong>C# parallel:</strong> This is like sorting strings vs. sorting parsed numbers:</p><pre><code class="language-csharp">// Wrong (string sort): "109.99", "29.99", "9.99"
+&lt;!-- Result: 9.99, 29.99, 109.99 --&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
+      <strong>C# parallel:</strong> This is like sorting strings vs. sorting parsed numbers:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">csharp</span>
+                                      </figcaption>
+                                      <pre><code class="language-csharp">// Wrong (string sort): "109.99", "29.99", "9.99"
 items.OrderBy(x =&gt; x.Price.ToString());
 // Right (numeric sort): 9.99, 29.99, 109.99
-items.OrderBy(x =&gt; x.Price);</code></pre><h3 id="multiple-sort-keys"><a class="anchor" href="#multiple-sort-keys">#</a>Multiple Sort Keys</h3><p>Add multiple <code>xsl:sort</code> children for multi-level sorting. They are applied in order — the first is the primary key, the second is the tiebreaker, etc.</p><pre><code class="language-xml">&lt;!-- Sort by category, then by price within each category --&gt;
+items.OrderBy(x =&gt; x.Price);</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="multiple-sort-keys"><a class="anchor" href="#multiple-sort-keys">#</a>Multiple Sort Keys
+                                    </h3>
+                                    <p>Add multiple <code>xsl:sort</code> children for multi-level sorting. They are applied in order — the first is the primary key, the second is the tiebreaker, etc.
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;!-- Sort by category, then by price within each category --&gt;
 &lt;xsl:for-each select="product"&gt;
   &lt;xsl:sort select="@category"/&gt;
   &lt;xsl:sort select="price" data-type="number"/&gt;
@@ -217,15 +1015,52 @@ items.OrderBy(x =&gt; x.Price);</code></pre><h3 id="multiple-sort-keys"><a class
     [&lt;xsl:value-of select="@category"/&gt;]
     &lt;xsl:value-of select="name"/&gt; — $&lt;xsl:value-of select="price"/&gt;
   &lt;/li&gt;
-&lt;/xsl:for-each&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>products.OrderBy(p =&gt; p.Category).ThenBy(p =&gt; p.Price)</code></p><h3 id="sorting-with-apply-templates"><a class="anchor" href="#sorting-with-apply-templates">#</a>Sorting with apply-templates</h3><p>
-      <code>xsl:sort</code> also works inside <code>xsl:apply-templates</code>:</p><pre><code class="language-xml">&lt;xsl:apply-templates select="product"&gt;
+&lt;/xsl:for-each&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
+      <strong>C# parallel:</strong> <code>products.OrderBy(p =&gt; p.Category).ThenBy(p =&gt; p.Price)</code>
+                                    </p>
+                                    <h3 id="sorting-with-apply-templates"><a class="anchor" href="#sorting-with-apply-templates">#</a>Sorting with apply-templates
+                                    </h3>
+                                    <p>
+      <code>xsl:sort</code> also works inside <code>xsl:apply-templates</code>:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:apply-templates select="product"&gt;
   &lt;xsl:sort select="name"/&gt;
-&lt;/xsl:apply-templates&gt;</code></pre><p>This applies templates to the products in alphabetical order by name, regardless of their document order.</p><h3 id="collation-aware-sorting"><a class="anchor" href="#collation-aware-sorting">#</a>Collation-Aware Sorting</h3><p>For locale-sensitive sorting (accented characters, language-specific rules):</p><pre><code class="language-xml">&lt;xsl:for-each select="product"&gt;
+&lt;/xsl:apply-templates&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>This applies templates to the products in alphabetical order by name, regardless of their document order.
+                                    </p>
+                                    <h3 id="collation-aware-sorting"><a class="anchor" href="#collation-aware-sorting">#</a>Collation-Aware Sorting
+                                    </h3>
+                                    <p>For locale-sensitive sorting (accented characters, language-specific rules):
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:for-each select="product"&gt;
   &lt;xsl:sort select="name" collation="http://www.w3.org/2013/collation/UCA?lang=de"/&gt;
   &lt;li&gt;&lt;xsl:value-of select="name"/&gt;&lt;/li&gt;
-&lt;/xsl:for-each&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>products.OrderBy(p =&gt; p.Name, StringComparer.Create(new CultureInfo("de-DE"), false))</code></p><hr><h2 id="xsl-perform-sort"><a class="anchor" href="#xsl-perform-sort">#</a>xsl:perform-sort</h2><p>Sorts a sequence and returns the sorted result — without iterating over it. This is useful when you need a sorted sequence as input to a function or variable, rather than for immediate output.</p><pre><code class="language-xml">&lt;!-- Sort products by price and store the sorted sequence --&gt;
+&lt;/xsl:for-each&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
+      <strong>C# parallel:</strong> <code>products.OrderBy(p =&gt; p.Name, StringComparer.Create(new CultureInfo("de-DE"), false))</code>
+                                    </p>
+                                    <hr>
+                                      <h2 id="xsl-perform-sort"><a class="anchor" href="#xsl-perform-sort">#</a>xsl:perform-sort
+                                      </h2>
+                                      <p>Sorts a sequence and returns the sorted result — without iterating over it. This is useful when you need a sorted sequence as input to a function or variable, rather than for immediate output.
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;!-- Sort products by price and store the sorted sequence --&gt;
 &lt;xsl:variable name="by-price" as="element(product)*"&gt;
   &lt;xsl:perform-sort select="//product"&gt;
     &lt;xsl:sort select="price" data-type="number"/&gt;
@@ -233,7 +1068,15 @@ items.OrderBy(x =&gt; x.Price);</code></pre><h3 id="multiple-sort-keys"><a class
 &lt;/xsl:variable&gt;
 &lt;!-- Now use the sorted sequence --&gt;
 &lt;p&gt;Cheapest: &lt;xsl:value-of select="$by-price[1]/name"/&gt;&lt;/p&gt;
-&lt;p&gt;Most expensive: &lt;xsl:value-of select="$by-price[last()]/name"/&gt;&lt;/p&gt;</code></pre><h3 id="using-with-functions"><a class="anchor" href="#using-with-functions">#</a>Using with Functions</h3><pre><code class="language-xml">&lt;xsl:function name="my:top-products" as="element(product)*"&gt;
+&lt;p&gt;Most expensive: &lt;xsl:value-of select="$by-price[last()]/name"/&gt;&lt;/p&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="using-with-functions"><a class="anchor" href="#using-with-functions">#</a>Using with Functions
+                                      </h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:function name="my:top-products" as="element(product)*"&gt;
   &lt;xsl:param name="products" as="element(product)*"/&gt;
   &lt;xsl:param name="count" as="xs:integer"/&gt;
   &lt;xsl:variable name="sorted" as="element(product)*"&gt;
@@ -246,15 +1089,48 @@ items.OrderBy(x =&gt; x.Price);</code></pre><h3 id="multiple-sort-keys"><a class
 &lt;!-- Usage: top 5 most expensive products --&gt;
 &lt;xsl:for-each select="my:top-products(//product, 5)"&gt;
   &lt;li&gt;&lt;xsl:value-of select="name"/&gt; — $&lt;xsl:value-of select="price"/&gt;&lt;/li&gt;
-&lt;/xsl:for-each&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>xsl:perform-sort</code> is like LINQ's <code>.OrderBy()</code> returning an <code>IOrderedEnumerable</code> that you can pass to other methods:</p><pre><code class="language-csharp">var sorted = products.OrderByDescending(p =&gt; p.Price).ToList();
-var topFive = sorted.Take(5);</code></pre><hr><h2 id="xsl-iterate"><a class="anchor" href="#xsl-iterate">#</a>xsl:iterate</h2><p>
-      <code>xsl:iterate</code> (XSLT 3.0) is the functional alternative to <code>xsl:for-each</code> when you need <strong>running state</strong> — a value that accumulates across iterations. It replaces the common imperative pattern of a <code>foreach</code> loop with a mutable variable.</p><h3 id="the-problem-xsl-iterate-solves"><a class="anchor" href="#the-problem-xsl-iterate-solves">#</a>The Problem xsl:iterate Solves</h3><p>In C#, you might write:</p><pre><code class="language-csharp">decimal runningTotal = 0;
+&lt;/xsl:for-each&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
+      <strong>C# parallel:</strong> <code>xsl:perform-sort</code> is like LINQ's <code>.OrderBy()</code> returning an <code>IOrderedEnumerable</code> that you can pass to other methods:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">csharp</span>
+                                        </figcaption>
+                                        <pre><code class="language-csharp">var sorted = products.OrderByDescending(p =&gt; p.Price).ToList();
+var topFive = sorted.Take(5);</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <hr>
+                                        <h2 id="xsl-iterate"><a class="anchor" href="#xsl-iterate">#</a>xsl:iterate
+                                        </h2>
+                                        <p>
+      <code>xsl:iterate</code> (XSLT 3.0) is the functional alternative to <code>xsl:for-each</code> when you need <strong>running state</strong> — a value that accumulates across iterations. It replaces the common imperative pattern of a <code>foreach</code> loop with a mutable variable.
+                                        </p>
+                                        <h3 id="the-problem-xsl-iterate-solves"><a class="anchor" href="#the-problem-xsl-iterate-solves">#</a>The Problem xsl:iterate Solves
+                                        </h3>
+                                        <p>In C#, you might write:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">decimal runningTotal = 0;
 foreach (var product in products)
 {
     runningTotal += product.Price;
     Console.WriteLine($"{product.Name}: ${product.Price} (Running total: ${runningTotal})");
-}</code></pre><p>In XSLT, <code>xsl:for-each</code> cannot do this because variables are immutable — there is no way to update a counter between iterations.</p><h3 id="basic-structure"><a class="anchor" href="#basic-structure">#</a>Basic Structure</h3><pre><code class="language-xml">&lt;xsl:iterate select="//product"&gt;
+}</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>In XSLT, <code>xsl:for-each</code> cannot do this because variables are immutable — there is no way to update a counter between iterations.
+                                        </p>
+                                        <h3 id="basic-structure"><a class="anchor" href="#basic-structure">#</a>Basic Structure
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:iterate select="//product"&gt;
   &lt;!-- Parameters are the "mutable state" — re-bound on each iteration --&gt;
   &lt;xsl:param name="running-total" as="xs:decimal" select="0"/&gt;
   &lt;xsl:param name="item-number" as="xs:integer" select="0"/&gt;
@@ -270,15 +1146,33 @@ foreach (var product in products)
     &lt;xsl:with-param name="running-total" select="$running-total + price"/&gt;
     &lt;xsl:with-param name="item-number" select="$item-number + 1"/&gt;
   &lt;/xsl:next-iteration&gt;
-&lt;/xsl:iterate&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>Enumerable.Aggregate()</code>:</p><pre><code class="language-csharp">products.Aggregate(
+&lt;/xsl:iterate&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
+      <strong>C# parallel:</strong> <code>Enumerable.Aggregate()</code>:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">products.Aggregate(
     (total: 0m, num: 0),
     (state, product) =&gt; {
         var newTotal = state.total + product.Price;
         Console.WriteLine($"{state.num + 1}. {product.Name}: ${product.Price} (Total: ${newTotal})");
         return (newTotal, state.num + 1);
     }
-);</code></pre><h3 id="xsl-on-completion"><a class="anchor" href="#xsl-on-completion">#</a>xsl:on-completion</h3><p>Code inside <code>xsl:on-completion</code> runs after the last item is processed. The parameters hold their final values:</p><pre><code class="language-xml">&lt;xsl:iterate select="//product"&gt;
+);</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="xsl-on-completion"><a class="anchor" href="#xsl-on-completion">#</a>xsl:on-completion
+                                        </h3>
+                                        <p>Code inside <code>xsl:on-completion</code> runs after the last item is processed. The parameters hold their final values:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:iterate select="//product"&gt;
   &lt;xsl:param name="total" as="xs:decimal" select="0"/&gt;
   &lt;xsl:param name="count" as="xs:integer" select="0"/&gt;
   &lt;tr&gt;
@@ -295,7 +1189,17 @@ foreach (var product in products)
       &lt;td&gt;$&lt;xsl:value-of select="format-number($total, '#,##0.00')"/&gt;&lt;/td&gt;
     &lt;/tr&gt;
   &lt;/xsl:on-completion&gt;
-&lt;/xsl:iterate&gt;</code></pre><h3 id="xsl-break"><a class="anchor" href="#xsl-break">#</a>xsl:break</h3><p>Terminates the iteration early. This is the XSLT equivalent of C#'s <code>break</code> statement:</p><pre><code class="language-xml">&lt;!-- Find the first product over $100 and stop --&gt;
+&lt;/xsl:iterate&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="xsl-break"><a class="anchor" href="#xsl-break">#</a>xsl:break
+                                        </h3>
+                                        <p>Terminates the iteration early. This is the XSLT equivalent of C#'s <code>break</code> statement:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;!-- Find the first product over $100 and stop --&gt;
 &lt;xsl:iterate select="//product"&gt;
   &lt;xsl:sort select="price" data-type="number"/&gt;
   &lt;xsl:choose&gt;
@@ -307,8 +1211,16 @@ foreach (var product in products)
       &lt;xsl:next-iteration/&gt;
     &lt;/xsl:otherwise&gt;
   &lt;/xsl:choose&gt;
-&lt;/xsl:iterate&gt;</code></pre><p>
-      <code>xsl:break</code> can also carry parameter values to <code>xsl:on-completion</code>:</p><pre><code class="language-xml">&lt;xsl:iterate select="//product"&gt;
+&lt;/xsl:iterate&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
+      <code>xsl:break</code> can also carry parameter values to <code>xsl:on-completion</code>:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:iterate select="//product"&gt;
   &lt;xsl:param name="processed" as="xs:integer" select="0"/&gt;
   &lt;xsl:if test="$processed ge 10"&gt;
     &lt;xsl:break&gt;
@@ -323,7 +1235,15 @@ foreach (var product in products)
   &lt;xsl:on-completion&gt;
     &lt;p&gt;Processed &lt;xsl:value-of select="$processed"/&gt; products.&lt;/p&gt;
   &lt;/xsl:on-completion&gt;
-&lt;/xsl:iterate&gt;</code></pre><h3 id="practical-example-paginated-output"><a class="anchor" href="#practical-example-paginated-output">#</a>Practical Example: Paginated Output</h3><pre><code class="language-xml">&lt;!-- Output products in pages of 10 --&gt;
+&lt;/xsl:iterate&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="practical-example-paginated-output"><a class="anchor" href="#practical-example-paginated-output">#</a>Practical Example: Paginated Output
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;!-- Output products in pages of 10 --&gt;
 &lt;xsl:iterate select="//product"&gt;
   &lt;xsl:param name="page-number" as="xs:integer" select="1"/&gt;
   &lt;xsl:param name="item-on-page" as="xs:integer" select="0"/&gt;
@@ -348,110 +1268,268 @@ foreach (var product in products)
   &lt;xsl:on-completion&gt;
     &lt;xsl:text disable-output-escaping="yes"&gt;&amp;lt;/div&amp;gt;&lt;/xsl:text&gt;
   &lt;/xsl:on-completion&gt;
-&lt;/xsl:iterate&gt;</code></pre><p>Note: The paginated output example above uses <code>disable-output-escaping</code> as a pragmatic workaround. A cleaner approach would be to build the page structure using <code>xsl:for-each-group</code> with positional grouping — see the <a href="grouping.html" title="">Grouping</a> page.</p><hr><h2 id="choosing-the-right-approach"><a class="anchor" href="#choosing-the-right-approach">#</a>Choosing the Right Approach</h2><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Scenario</p>
-          </th>
-          <th>
-            <p>Use</p>
-          </th>
-          <th>
-            <p>Why</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>Simple iteration, each item independent</p>
-          </td>
-          <td>
-            <p><code>xsl:for-each</code></p>
-          </td>
-          <td>
-            <p>Simplest, no state needed</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Processing different node types polymorphically</p>
-          </td>
-          <td>
-            <p><code>xsl:apply-templates</code></p>
-          </td>
-          <td>
-            <p>Pattern matching is more extensible</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Need a running total or counter</p>
-          </td>
-          <td>
-            <p><code>xsl:iterate</code></p>
-          </td>
-          <td>
-            <p>Parameters carry state between iterations</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Need to stop early</p>
-          </td>
-          <td>
-            <p><code>xsl:iterate</code> with <code>xsl:break</code></p>
-          </td>
-          <td>
-            <p><code>for-each</code> processes all items</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Need sorted output</p>
-          </td>
-          <td>
-            <p><code>xsl:for-each</code> + <code>xsl:sort</code></p>
-          </td>
-          <td>
-            <p>Simple and direct</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Need a sorted sequence for further processing</p>
-          </td>
-          <td>
-            <p><code>xsl:perform-sort</code></p>
-          </td>
-          <td>
-            <p>Returns sorted sequence without iterating</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Processing nodes that might have override templates</p>
-          </td>
-          <td>
-            <p><code>xsl:apply-templates</code></p>
-          </td>
-          <td>
-            <p>Allows template specialization</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="for-each-vs-apply-templates"><a class="anchor" href="#for-each-vs-apply-templates">#</a>for-each vs. apply-templates</h3><p>This is a common design question. The short answer:</p><ul><li>
-        <p>
+&lt;/xsl:iterate&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>Note: The paginated output example above uses <code>disable-output-escaping</code> as a pragmatic workaround. A cleaner approach would be to build the page structure using <code>xsl:for-each-group</code> with positional grouping — see the <a href="grouping.html">Grouping</a> page.
+                                        </p>
+                                        <hr>
+                                          <h2 id="choosing-the-right-approach"><a class="anchor" href="#choosing-the-right-approach">#</a>Choosing the Right Approach
+                                          </h2>
+                                          <div class="table-wrap">
+                                            <table>
+      
+                                              <thead>
+        
+                                                <tr>
+          
+                                                  <th>
+            
+                                                    <p>Scenario
+                                                    </p>
+          
+                                                  </th>
+          
+                                                  <th>
+            
+                                                    <p>Use
+                                                    </p>
+          
+                                                  </th>
+          
+                                                  <th>
+            
+                                                    <p>Why
+                                                    </p>
+          
+                                                  </th>
+        
+                                                </tr>
+      
+                                              </thead>
+      
+                                              <tbody>
+        
+                                                <tr>
+          
+                                                  <td>
+            
+                                                    <p>Simple iteration, each item independent
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>xsl:for-each</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>Simplest, no state needed
+                                                    </p>
+          
+                                                  </td>
+        
+                                                </tr>
+        
+                                                <tr>
+          
+                                                  <td>
+            
+                                                    <p>Processing different node types polymorphically
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>xsl:apply-templates</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>Pattern matching is more extensible
+                                                    </p>
+          
+                                                  </td>
+        
+                                                </tr>
+        
+                                                <tr>
+          
+                                                  <td>
+            
+                                                    <p>Need a running total or counter
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>xsl:iterate</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>Parameters carry state between iterations
+                                                    </p>
+          
+                                                  </td>
+        
+                                                </tr>
+        
+                                                <tr>
+          
+                                                  <td>
+            
+                                                    <p>Need to stop early
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>xsl:iterate</code> with <code>xsl:break</code>
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>for-each</code> processes all items
+                                                    </p>
+          
+                                                  </td>
+        
+                                                </tr>
+        
+                                                <tr>
+          
+                                                  <td>
+            
+                                                    <p>Need sorted output
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>xsl:for-each</code> + <code>xsl:sort</code>
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>Simple and direct
+                                                    </p>
+          
+                                                  </td>
+        
+                                                </tr>
+        
+                                                <tr>
+          
+                                                  <td>
+            
+                                                    <p>Need a sorted sequence for further processing
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>xsl:perform-sort</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>Returns sorted sequence without iterating
+                                                    </p>
+          
+                                                  </td>
+        
+                                                </tr>
+        
+                                                <tr>
+          
+                                                  <td>
+            
+                                                    <p>Processing nodes that might have override templates
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>xsl:apply-templates</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>Allows template specialization
+                                                    </p>
+          
+                                                  </td>
+        
+                                                </tr>
+      
+                                              </tbody>
+    
+                                            </table>
+                                          </div>
+                                          <h3 id="for-each-vs-apply-templates"><a class="anchor" href="#for-each-vs-apply-templates">#</a>for-each vs. apply-templates
+                                          </h3>
+                                          <p>This is a common design question. The short answer:
+                                          </p>
+                                          <ul>
+                                            <li>
+        
+                                              <p>
           <strong>
             <code>xsl:for-each</code>
-          </strong> — when you control the rendering inline and the processing logic is local to one template</p>
-      </li><li>
-        <p>
+          </strong> — when you control the rendering inline and the processing logic is local to one template
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>
           <strong>
             <code>xsl:apply-templates</code>
-          </strong> — when you want polymorphic dispatch (different templates for different node types) or when other stylesheets might override the processing</p>
-      </li></ul><pre><code class="language-xml">&lt;!-- for-each: self-contained, simple --&gt;
+          </strong> — when you want polymorphic dispatch (different templates for different node types) or when other stylesheets might override the processing
+                                              </p>
+      
+                                            </li>
+                                          </ul>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;!-- for-each: self-contained, simple --&gt;
 &lt;xsl:template match="catalog"&gt;
   &lt;ul&gt;
     &lt;xsl:for-each select="product"&gt;
@@ -471,5 +1549,90 @@ foreach (var product in products)
 &lt;!-- A different stylesheet could override just the product template --&gt;
 &lt;xsl:template match="product[@featured='true']"&gt;
   &lt;li class="featured"&gt;&lt;strong&gt;&lt;xsl:value-of select="name"/&gt;&lt;/strong&gt;&lt;/li&gt;
-&lt;/xsl:template&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>for-each</code> is like writing logic inline. <code>apply-templates</code> is like calling a virtual method — derived classes (imported stylesheets) can override the behavior.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+&lt;/xsl:template&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>
+      <strong>C# parallel:</strong> <code>for-each</code> is like writing logic inline. <code>apply-templates</code> is like calling a virtual method — derived classes (imported stylesheets) can override the behavior.
+                                          </p>
+                                        </article>
+                                      </main>
+                                      <aside class="toc" aria-label="On this page">
+                                        <p class="toc-label">On this page
+                                        </p>
+                                        <ul>
+                                          <li class="toc-h2"><a href="#contents">Contents</a>
+                                          </li>
+                                          <li class="toc-h2"><a href="#xsl-for-each">xsl:for-each</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#basic-usage">Basic Usage</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#context-change">Context Change</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#position-and-last">position() and last()</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#iterating-over-non-node-sequences">Iterating Over Non-Node Sequences</a>
+                                          </li>
+                                          <li class="toc-h2"><a href="#xsl-sort">xsl:sort</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#basic-sorting">Basic Sorting</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#sort-attributes">Sort Attributes</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#the-data-type-gotcha">The data-type Gotcha</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#multiple-sort-keys">Multiple Sort Keys</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#sorting-with-apply-templates">Sorting with apply-templates</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#collation-aware-sorting">Collation-Aware Sorting</a>
+                                          </li>
+                                          <li class="toc-h2"><a href="#xsl-perform-sort">xsl:perform-sort</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#using-with-functions">Using with Functions</a>
+                                          </li>
+                                          <li class="toc-h2"><a href="#xsl-iterate">xsl:iterate</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#the-problem-xsl-iterate-solves">The Problem xsl:iterate Solves</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#basic-structure">Basic Structure</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#xsl-on-completion">xsl:on-completion</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#xsl-break">xsl:break</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#practical-example-paginated-output">Practical Example: Paginated Output</a>
+                                          </li>
+                                          <li class="toc-h2"><a href="#choosing-the-right-approach">Choosing the Right Approach</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#for-each-vs-apply-templates">for-each vs. apply-templates</a>
+                                          </li>
+                                        </ul>
+                                      </aside>
+                                    </div>
+                                    <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                      <div class="search-backdrop">
+                                      </div>
+                                      <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                        <div class="search-results" id="search-results">
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <footer class="site-footer">
+                                      <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                      </p>
+                                    </footer>
+                                    <script src="https://unpkg.com/lunr/lunr.js">
+                                    </script>
+                                    <script src="/js/prism.js">
+                                    </script>
+                                    <script src="/js/search.js">
+                                    </script>
+                                    <script src="/js/theme.js">
+                                    </script>
+                                    <script src="/js/toc.js">
+                                    </script>
+                                    <script src="/js/copy.js">
+                                    </script>
+                                  </body>
+                                </html>

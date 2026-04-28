@@ -1,107 +1,846 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FLWOR Expressions — PhoenixmlDb Documentation</title><meta name="description" content="XQuery's For-Let-Where-Order-Return expressions — LINQ query syntax for XML"><link rel="canonical" href="/language-reference/xquery/flwor.html"><meta property="og:title" content="FLWOR Expressions"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xquery/flwor.html"><meta property="og:description" content="XQuery's For-Let-Where-Order-Return expressions — LINQ query syntax for XML"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>FLWOR Expressions — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="XQuery's For-Let-Where-Order-Return expressions — LINQ query syntax for XML">
+            <link rel="canonical" href="/language-reference/xquery/flwor.html">
+              <meta property="og:title" content="FLWOR Expressions">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xquery/flwor.html">
+                    <meta property="og:description" content="XQuery's For-Let-Where-Order-Return expressions — LINQ query syntax for XML">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li class="active"><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="flwor-expressions"><a class="anchor" href="#flwor-expressions">#</a>FLWOR Expressions</h1><p>FLWOR (pronounced "flower") is XQuery's core construct. It stands for <strong>F</strong>or, <strong>L</strong>et, <strong>W</strong>here, <strong>O</strong>rder by, <strong>R</strong>eturn — and maps almost directly to LINQ query syntax.</p><p>If you've written LINQ queries in C#, FLWOR will feel immediately familiar:</p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>LINQ</p>
-          </th>
-          <th>
-            <p>FLWOR</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>from</code></p>
-          </td>
-          <td>
-            <p><code>for</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>let</code></p>
-          </td>
-          <td>
-            <p><code>let</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>where</code></p>
-          </td>
-          <td>
-            <p><code>where</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>orderby</code></p>
-          </td>
-          <td>
-            <p><code>order by</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>select</code></p>
-          </td>
-          <td>
-            <p><code>return</code></p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h2 id="basic-structure"><a class="anchor" href="#basic-structure">#</a>Basic Structure</h2><pre><code class="language-xquery">for $variable in expression
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li class="active"><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">XQuery
+                                </p>
+                                <h1 class="page-title">FLWOR Expressions
+                                </h1>
+                                <p class="page-subtitle">XQuery's For-Let-Where-Order-Return expressions — LINQ query syntax for XML
+                                </p>
+                                <h1 id="flwor-expressions"><a class="anchor" href="#flwor-expressions">#</a>FLWOR Expressions
+                                </h1>
+                                <p>FLWOR (pronounced "flower") is XQuery's core construct. It stands for <strong>F</strong>or, <strong>L</strong>et, <strong>W</strong>here, <strong>O</strong>rder by, <strong>R</strong>eturn — and maps almost directly to LINQ query syntax.
+                                </p>
+                                <p>If you've written LINQ queries in C#, FLWOR will feel immediately familiar:
+                                </p>
+                                <div class="table-wrap">
+                                  <table>
+      
+                                    <thead>
+        
+                                      <tr>
+          
+                                        <th>
+            
+                                          <p>LINQ
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>FLWOR
+                                          </p>
+          
+                                        </th>
+        
+                                      </tr>
+      
+                                    </thead>
+      
+                                    <tbody>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>from</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>for</code>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>let</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>let</code>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>where</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>where</code>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>orderby</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>order by</code>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>select</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>return</code>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+      
+                                    </tbody>
+    
+                                  </table>
+                                </div>
+                                <h2 id="basic-structure"><a class="anchor" href="#basic-structure">#</a>Basic Structure
+                                </h2>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $variable in expression
 let $computed := expression
 where condition
 order by expression
-return result-expression</code></pre><p>All clauses except <code>return</code> are optional. The simplest FLWOR is just <code>for ... return</code>:</p><pre><code class="language-xquery">for $x in (1, 2, 3)
+return result-expression</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>All clauses except <code>return</code> are optional. The simplest FLWOR is just <code>for ... return</code>:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $x in (1, 2, 3)
 return $x * 2
-(: Result: 2, 4, 6 :)</code></pre><h2 id="for-clause"><a class="anchor" href="#for-clause">#</a>For Clause</h2><p>Iterates over a sequence, binding each item to a variable:</p><pre><code class="language-xquery">for $book in //catalog/book
+(: Result: 2, 4, 6 :)</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="for-clause"><a class="anchor" href="#for-clause">#</a>For Clause
+                                </h2>
+                                <p>Iterates over a sequence, binding each item to a variable:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $book in //catalog/book
 return $book/title
-(: LINQ equivalent: from book in catalog.Elements("book") select book.Element("title") :)</code></pre><h3 id="positional-variable"><a class="anchor" href="#positional-variable">#</a>Positional Variable</h3><p>Track the position with <code>at</code>:</p><pre><code class="language-xquery">for $book at $pos in //catalog/book
+(: LINQ equivalent: from book in catalog.Elements("book") select book.Element("title") :)</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="positional-variable"><a class="anchor" href="#positional-variable">#</a>Positional Variable
+                                </h3>
+                                <p>Track the position with <code>at</code>:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $book at $pos in //catalog/book
 return concat($pos, ". ", $book/title)
-(: Result: "1. Effective C#", "2. XML in a Nutshell" :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>books.Select((book, index) =&gt; $"{index + 1}. {book.Title}")</code></p><h3 id="multiple-for-clauses"><a class="anchor" href="#multiple-for-clauses">#</a>Multiple For Clauses</h3><p>Like nested loops — produces a cross product:</p><pre><code class="language-xquery">for $color in ("red", "blue")
+(: Result: "1. Effective C#", "2. XML in a Nutshell" :)</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <strong>C# equivalent:</strong> <code>books.Select((book, index) =&gt; $"{index + 1}. {book.Title}")</code>
+                                </p>
+                                <h3 id="multiple-for-clauses"><a class="anchor" href="#multiple-for-clauses">#</a>Multiple For Clauses
+                                </h3>
+                                <p>Like nested loops — produces a cross product:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $color in ("red", "blue")
 for $size in ("S", "M", "L")
 return concat($color, "-", $size)
-(: Result: "red-S", "red-M", "red-L", "blue-S", "blue-M", "blue-L" :)</code></pre><p>
+(: Result: "red-S", "red-M", "red-L", "blue-S", "blue-M", "blue-L" :)</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
       <strong>C# equivalent:</strong>
-    </p><pre><code class="language-csharp">from color in new[] { "red", "blue" }
+    
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">from color in new[] { "red", "blue" }
 from size in new[] { "S", "M", "L" }
-select $"{color}-{size}"</code></pre><h2 id="let-clause"><a class="anchor" href="#let-clause">#</a>Let Clause</h2><p>Binds a computed value to a variable. Unlike <code>for</code>, it doesn't iterate:</p><pre><code class="language-xquery">for $book in //catalog/book
+select $"{color}-{size}"</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="let-clause"><a class="anchor" href="#let-clause">#</a>Let Clause
+                                </h2>
+                                <p>Binds a computed value to a variable. Unlike <code>for</code>, it doesn't iterate:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $book in //catalog/book
 let $discount := $book/price * 0.1
 let $sale-price := $book/price - $discount
 return &lt;sale&gt;
   &lt;title&gt;{ $book/title/text() }&lt;/title&gt;
   &lt;original&gt;{ $book/price/text() }&lt;/original&gt;
   &lt;discounted&gt;{ $sale-price }&lt;/discounted&gt;
-&lt;/sale&gt;</code></pre><p>
+&lt;/sale&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
       <strong>C# equivalent:</strong>
-    </p><pre><code class="language-csharp">from book in books
+    
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">from book in books
 let discount = book.Price * 0.1m
 let salePrice = book.Price - discount
-select new { book.Title, Original = book.Price, Discounted = salePrice }</code></pre><p>
-      <code>let</code> is essential for avoiding repeated computation. Without it, you'd have to write the same expression multiple times.</p><h2 id="where-clause"><a class="anchor" href="#where-clause">#</a>Where Clause</h2><p>Filters items based on a condition:</p><pre><code class="language-xquery">for $book in //catalog/book
+select new { book.Title, Original = book.Price, Discounted = salePrice }</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <code>let</code> is essential for avoiding repeated computation. Without it, you'd have to write the same expression multiple times.
+                                </p>
+                                <h2 id="where-clause"><a class="anchor" href="#where-clause">#</a>Where Clause
+                                </h2>
+                                <p>Filters items based on a condition:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $book in //catalog/book
 where $book/price &gt; 30
-return $book/title</code></pre><p>
-      <strong>C# equivalent:</strong> <code>from book in books where book.Price &gt; 30 select book.Title</code></p><h3 id="multiple-conditions"><a class="anchor" href="#multiple-conditions">#</a>Multiple Conditions</h3><p>Use <code>and</code> / <code>or</code>:</p><pre><code class="language-xquery">for $book in //catalog/book
+return $book/title</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <strong>C# equivalent:</strong> <code>from book in books where book.Price &gt; 30 select book.Title</code>
+                                </p>
+                                <h3 id="multiple-conditions"><a class="anchor" href="#multiple-conditions">#</a>Multiple Conditions
+                                </h3>
+                                <p>Use <code>and</code> / <code>or</code>:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $book in //catalog/book
 where $book/price &gt; 20 and $book/price &lt; 50
 where $book/@category = "programming"
-return $book/title</code></pre><p>Multiple <code>where</code> clauses are equivalent to combining with <code>and</code>.</p><h2 id="order-by-clause"><a class="anchor" href="#order-by-clause">#</a>Order By Clause</h2><p>Sorts results:</p><pre><code class="language-xquery">for $book in //catalog/book
+return $book/title</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>Multiple <code>where</code> clauses are equivalent to combining with <code>and</code>.
+                                </p>
+                                <h2 id="order-by-clause"><a class="anchor" href="#order-by-clause">#</a>Order By Clause
+                                </h2>
+                                <p>Sorts results:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $book in //catalog/book
 order by $book/price descending
-return &lt;item&gt;{ $book/title/text() } — ${ $book/price/text() }&lt;/item&gt;</code></pre><p>
-      <strong>C# equivalent:</strong> <code>from book in books orderby book.Price descending select ...</code></p><h3 id="multiple-sort-keys"><a class="anchor" href="#multiple-sort-keys">#</a>Multiple Sort Keys</h3><pre><code class="language-xquery">for $book in //catalog/book
+return &lt;item&gt;{ $book/title/text() } — ${ $book/price/text() }&lt;/item&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <strong>C# equivalent:</strong> <code>from book in books orderby book.Price descending select ...</code>
+                                </p>
+                                <h3 id="multiple-sort-keys"><a class="anchor" href="#multiple-sort-keys">#</a>Multiple Sort Keys
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $book in //catalog/book
 order by $book/@category ascending, $book/price descending
-return $book/title</code></pre><h3 id="collation"><a class="anchor" href="#collation">#</a>Collation</h3><p>For locale-aware string sorting:</p><pre><code class="language-xquery">for $name in //customer/name
+return $book/title</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="collation"><a class="anchor" href="#collation">#</a>Collation
+                                </h3>
+                                <p>For locale-aware string sorting:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $name in //customer/name
 order by $name collation "http://www.w3.org/2013/collation/UCA"
-return $name</code></pre><h2 id="return-clause"><a class="anchor" href="#return-clause">#</a>Return Clause</h2><p>Specifies the output for each iteration. Can return:</p><h3 id="atomic-values"><a class="anchor" href="#atomic-values">#</a>Atomic Values</h3><pre><code class="language-xquery">for $book in //catalog/book
+return $name</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="return-clause"><a class="anchor" href="#return-clause">#</a>Return Clause
+                                </h2>
+                                <p>Specifies the output for each iteration. Can return:
+                                </p>
+                                <h3 id="atomic-values"><a class="anchor" href="#atomic-values">#</a>Atomic Values
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $book in //catalog/book
 return string($book/title)
-(: Returns a sequence of strings :)</code></pre><h3 id="constructed-xml"><a class="anchor" href="#constructed-xml">#</a>Constructed XML</h3><pre><code class="language-xquery">for $book in //catalog/book
+(: Returns a sequence of strings :)</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="constructed-xml"><a class="anchor" href="#constructed-xml">#</a>Constructed XML
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $book in //catalog/book
 return &lt;li class="book"&gt;{ $book/title/text() }&lt;/li&gt;
-(: Returns a sequence of &lt;li&gt; elements :)</code></pre><h3 id="complex-structures"><a class="anchor" href="#complex-structures">#</a>Complex Structures</h3><pre><code class="language-xquery">for $category in distinct-values(//book/@category)
+(: Returns a sequence of &lt;li&gt; elements :)</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="complex-structures"><a class="anchor" href="#complex-structures">#</a>Complex Structures
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $category in distinct-values(//book/@category)
 return &lt;section&gt;
   &lt;h2&gt;{ $category }&lt;/h2&gt;
   &lt;ul&gt;{
@@ -109,31 +848,97 @@ return &lt;section&gt;
     order by $book/title
     return &lt;li&gt;{ $book/title/text() }&lt;/li&gt;
   }&lt;/ul&gt;
-&lt;/section&gt;</code></pre><p>
+&lt;/section&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
       <strong>C# equivalent:</strong>
-    </p><pre><code class="language-csharp">from category in books.Select(b =&gt; b.Category).Distinct()
+    
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">from category in books.Select(b =&gt; b.Category).Distinct()
 select new {
     Heading = category,
     Books = from book in books
             where book.Category == category
             orderby book.Title
             select book.Title
-}</code></pre><h2 id="xquery-4-0-additions"><a class="anchor" href="#xquery-4-0-additions">#</a>XQuery 4.0 Additions</h2><h3 id="otherwise-clause"><a class="anchor" href="#otherwise-clause">#</a>Otherwise Clause</h3><p>Provides a default value when the FLWOR produces an empty result:</p><pre><code class="language-xquery">for $book in //catalog/book
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="xquery-4-0-additions"><a class="anchor" href="#xquery-4-0-additions">#</a>XQuery 4.0 Additions
+                                </h2>
+                                <h3 id="otherwise-clause"><a class="anchor" href="#otherwise-clause">#</a>Otherwise Clause
+                                </h3>
+                                <p>Provides a default value when the FLWOR produces an empty result:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $book in //catalog/book
 where $book/price &gt; 1000
 return $book/title
-otherwise &lt;no-results&gt;No books found over $1000&lt;/no-results&gt;</code></pre><p>
-      <strong>C# equivalent:</strong> <code>result.DefaultIfEmpty(fallback)</code></p><h3 id="window-clause"><a class="anchor" href="#window-clause">#</a>Window Clause</h3><p>Processes items in windows (groups of consecutive items):</p><pre><code class="language-xquery">for tumbling window $w in (1, 2, 3, 4, 5, 6, 7, 8)
+otherwise &lt;no-results&gt;No books found over $1000&lt;/no-results&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <strong>C# equivalent:</strong> <code>result.DefaultIfEmpty(fallback)</code>
+                                </p>
+                                <h3 id="window-clause"><a class="anchor" href="#window-clause">#</a>Window Clause
+                                </h3>
+                                <p>Processes items in windows (groups of consecutive items):
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for tumbling window $w in (1, 2, 3, 4, 5, 6, 7, 8)
     start at $s when true()
     end at $e when $e - $s = 2
 return &lt;group&gt;{ $w }&lt;/group&gt;
-(: Result: &lt;group&gt;1 2 3&lt;/group&gt;, &lt;group&gt;4 5 6&lt;/group&gt;, &lt;group&gt;7 8&lt;/group&gt; :)</code></pre><h3 id="count-clause"><a class="anchor" href="#count-clause">#</a>Count Clause</h3><p>Adds a counter variable:</p><pre><code class="language-xquery">for $book in //catalog/book
+(: Result: &lt;group&gt;1 2 3&lt;/group&gt;, &lt;group&gt;4 5 6&lt;/group&gt;, &lt;group&gt;7 8&lt;/group&gt; :)</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="count-clause"><a class="anchor" href="#count-clause">#</a>Count Clause
+                                </h3>
+                                <p>Adds a counter variable:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $book in //catalog/book
 count $n
-return &lt;item number="{ $n }"&gt;{ $book/title/text() }&lt;/item&gt;</code></pre><p>Similar to <code>at</code> in the <code>for</code> clause, but counts across all loop iterations including after <code>where</code> filtering.</p><h3 id="group-by-clause"><a class="anchor" href="#group-by-clause">#</a>Group By Clause</h3><p>Groups items by a key:</p><pre><code class="language-xquery">for $book in //catalog/book
+return &lt;item number="{ $n }"&gt;{ $book/title/text() }&lt;/item&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>Similar to <code>at</code> in the <code>for</code> clause, but counts across all loop iterations including after <code>where</code> filtering.
+                                </p>
+                                <h3 id="group-by-clause"><a class="anchor" href="#group-by-clause">#</a>Group By Clause
+                                </h3>
+                                <p>Groups items by a key:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $book in //catalog/book
 group by $cat := $book/@category
 return &lt;category name="{ $cat }"&gt;
   { for $b in $book return &lt;title&gt;{ $b/title/text() }&lt;/title&gt; }
-&lt;/category&gt;</code></pre><p>
-      <strong>C# equivalent:</strong> <code>from book in books group book by book.Category into g select new { g.Key, Books = g }</code></p><h2 id="putting-it-all-together"><a class="anchor" href="#putting-it-all-together">#</a>Putting It All Together</h2><p>A real-world example — generating an order summary from XML:</p><pre><code class="language-xquery">let $orders := doc("orders.xml")//order
+&lt;/category&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <strong>C# equivalent:</strong> <code>from book in books group book by book.Category into g select new { g.Key, Books = g }</code>
+                                </p>
+                                <h2 id="putting-it-all-together"><a class="anchor" href="#putting-it-all-together">#</a>Putting It All Together
+                                </h2>
+                                <p>A real-world example — generating an order summary from XML:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">let $orders := doc("orders.xml")//order
 let $products := doc("products.xml")//product
 for $order in $orders
 let $items := for $item in $order/line-item
@@ -155,14 +960,117 @@ return &lt;order-summary id="{ $order/@id }"&gt;
     order by $item?total descending
     return &lt;item name="{ $item?name }" total="{ $item?total }"/&gt;
   }&lt;/items&gt;
-&lt;/order-summary&gt;</code></pre><p>This query:</p><ol><li>
-        <p>Joins two documents (orders and products)</p>
-      </li><li>
-        <p>Computes line item totals</p>
-      </li><li>
-        <p>Filters orders over $100</p>
-      </li><li>
-        <p>Sorts by total descending</p>
-      </li><li>
-        <p>Constructs a summary XML document</p>
-      </li></ol><p>The equivalent C# code would be significantly more verbose, especially the cross-document join and XML construction.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+&lt;/order-summary&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>This query:
+                                </p>
+                                <ol>
+                                  <li>
+        
+                                    <p>Joins two documents (orders and products)
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Computes line item totals
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Filters orders over $100
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Sorts by total descending
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Constructs a summary XML document
+                                    </p>
+      
+                                  </li>
+                                </ol>
+                                <p>The equivalent C# code would be significantly more verbose, especially the cross-document join and XML construction.
+                                </p>
+                              </article>
+                            </main>
+                            <aside class="toc" aria-label="On this page">
+                              <p class="toc-label">On this page
+                              </p>
+                              <ul>
+                                <li class="toc-h2"><a href="#basic-structure">Basic Structure</a>
+                                </li>
+                                <li class="toc-h2"><a href="#for-clause">For Clause</a>
+                                </li>
+                                <li class="toc-h3"><a href="#positional-variable">Positional Variable</a>
+                                </li>
+                                <li class="toc-h3"><a href="#multiple-for-clauses">Multiple For Clauses</a>
+                                </li>
+                                <li class="toc-h2"><a href="#let-clause">Let Clause</a>
+                                </li>
+                                <li class="toc-h2"><a href="#where-clause">Where Clause</a>
+                                </li>
+                                <li class="toc-h3"><a href="#multiple-conditions">Multiple Conditions</a>
+                                </li>
+                                <li class="toc-h2"><a href="#order-by-clause">Order By Clause</a>
+                                </li>
+                                <li class="toc-h3"><a href="#multiple-sort-keys">Multiple Sort Keys</a>
+                                </li>
+                                <li class="toc-h3"><a href="#collation">Collation</a>
+                                </li>
+                                <li class="toc-h2"><a href="#return-clause">Return Clause</a>
+                                </li>
+                                <li class="toc-h3"><a href="#atomic-values">Atomic Values</a>
+                                </li>
+                                <li class="toc-h3"><a href="#constructed-xml">Constructed XML</a>
+                                </li>
+                                <li class="toc-h3"><a href="#complex-structures">Complex Structures</a>
+                                </li>
+                                <li class="toc-h2"><a href="#xquery-4-0-additions">XQuery 4.0 Additions</a>
+                                </li>
+                                <li class="toc-h3"><a href="#otherwise-clause">Otherwise Clause</a>
+                                </li>
+                                <li class="toc-h3"><a href="#window-clause">Window Clause</a>
+                                </li>
+                                <li class="toc-h3"><a href="#count-clause">Count Clause</a>
+                                </li>
+                                <li class="toc-h3"><a href="#group-by-clause">Group By Clause</a>
+                                </li>
+                                <li class="toc-h2"><a href="#putting-it-all-together">Putting It All Together</a>
+                                </li>
+                              </ul>
+                            </aside>
+                          </div>
+                          <div class="search-overlay" id="search-overlay" hidden="hidden">
+                            <div class="search-backdrop">
+                            </div>
+                            <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                              <div class="search-results" id="search-results">
+                              </div>
+                            </div>
+                          </div>
+                          <footer class="site-footer">
+                            <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                            </p>
+                          </footer>
+                          <script src="https://unpkg.com/lunr/lunr.js">
+                          </script>
+                          <script src="/js/prism.js">
+                          </script>
+                          <script src="/js/search.js">
+                          </script>
+                          <script src="/js/theme.js">
+                          </script>
+                          <script src="/js/toc.js">
+                          </script>
+                          <script src="/js/copy.js">
+                          </script>
+                        </body>
+                      </html>

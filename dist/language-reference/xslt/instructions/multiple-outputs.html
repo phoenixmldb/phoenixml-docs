@@ -1,208 +1,1062 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Multiple Output Documents — PhoenixmlDb Documentation</title><meta name="description" content="xsl:result-document and xsl:output — generating multiple files and controlling serialization"><link rel="canonical" href="/language-reference/xslt/instructions/multiple-outputs.html"><meta property="og:title" content="Multiple Output Documents"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/multiple-outputs.html"><meta property="og:description" content="xsl:result-document and xsl:output — generating multiple files and controlling serialization"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Multiple Output Documents — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="xsl:result-document and xsl:output — generating multiple files and controlling serialization">
+            <link rel="canonical" href="/language-reference/xslt/instructions/multiple-outputs.html">
+              <meta property="og:title" content="Multiple Output Documents">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xslt/instructions/multiple-outputs.html">
+                    <meta property="og:description" content="xsl:result-document and xsl:output — generating multiple files and controlling serialization">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li class="active"><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="multiple-output-documents"><a class="anchor" href="#multiple-output-documents">#</a>Multiple Output Documents</h1><p>A single XSLT transformation can produce multiple output files. This is one of XSLT's most powerful capabilities — from a single source document and stylesheet, you can generate an index page, individual detail pages, a sitemap, and a JSON API response in one pass.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#xsloutput" title="">xsl:output</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslresult-document" title="">xsl:result-document</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#named-output-definitions" title="">Named Output Definitions</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#common-patterns" title="">Common Patterns</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#secondary-output-in-the-phoenixmldb-api" title="">Secondary Output in the PhoenixmlDb API</a>
-        </p>
-      </li></ul><hr><h2 id="xsl-output"><a class="anchor" href="#xsl-output">#</a>xsl:output</h2><p>Controls how the result tree is serialized into bytes. This is a top-level declaration (child of <code>xsl:stylesheet</code>) that configures the serializer.</p><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><pre><code class="language-xml">&lt;xsl:output method="html" indent="yes" encoding="utf-8"
-            html-version="5" include-content-type="no"/&gt;</code></pre><h3 id="serialization-parameters"><a class="anchor" href="#serialization-parameters">#</a>Serialization Parameters</h3><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Attribute</p>
-          </th>
-          <th>
-            <p>Values</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>method</code></p>
-          </td>
-          <td>
-            <p><code>xml</code>, <code>html</code>, <code>xhtml</code>, <code>text</code>, <code>json</code>, <code>adaptive</code></p>
-          </td>
-          <td>
-            <p>Output format</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>indent</code></p>
-          </td>
-          <td>
-            <p><code>yes</code>, <code>no</code></p>
-          </td>
-          <td>
-            <p>Pretty-print the output</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>encoding</code></p>
-          </td>
-          <td>
-            <p><code>utf-8</code>, <code>utf-16</code>, <code>iso-8859-1</code>, etc.</p>
-          </td>
-          <td>
-            <p>Character encoding</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>omit-xml-declaration</code></p>
-          </td>
-          <td>
-            <p><code>yes</code>, <code>no</code></p>
-          </td>
-          <td>
-            <p>Suppress <code>&lt;?xml?&gt;</code> declaration</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>standalone</code></p>
-          </td>
-          <td>
-            <p><code>yes</code>, <code>no</code>, <code>omit</code></p>
-          </td>
-          <td>
-            <p>Standalone declaration</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>doctype-system</code></p>
-          </td>
-          <td>
-            <p>URI</p>
-          </td>
-          <td>
-            <p>DOCTYPE system identifier</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>doctype-public</code></p>
-          </td>
-          <td>
-            <p>public ID</p>
-          </td>
-          <td>
-            <p>DOCTYPE public identifier</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>cdata-section-elements</code></p>
-          </td>
-          <td>
-            <p>QNames</p>
-          </td>
-          <td>
-            <p>Elements whose text content is wrapped in CDATA</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>media-type</code></p>
-          </td>
-          <td>
-            <p>MIME type</p>
-          </td>
-          <td>
-            <p>Content-Type (e.g., <code>text/html</code>, <code>application/json</code>)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>html-version</code></p>
-          </td>
-          <td>
-            <p><code>5</code>, <code>4.01</code>, etc.</p>
-          </td>
-          <td>
-            <p>HTML version (XSLT 3.0)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>include-content-type</code></p>
-          </td>
-          <td>
-            <p><code>yes</code>, <code>no</code></p>
-          </td>
-          <td>
-            <p>Include <code>&lt;meta charset&gt;</code> in HTML</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>suppress-indentation</code></p>
-          </td>
-          <td>
-            <p>QNames</p>
-          </td>
-          <td>
-            <p>Elements where indentation should be suppressed</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>item-separator</code></p>
-          </td>
-          <td>
-            <p>string</p>
-          </td>
-          <td>
-            <p>Separator between items in <code>adaptive</code> method</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="output-methods"><a class="anchor" href="#output-methods">#</a>Output Methods</h3><p>
-      <strong>XML</strong> — the default. Produces well-formed XML with proper escaping:</p><pre><code class="language-xml">&lt;xsl:output method="xml" indent="yes" encoding="utf-8"/&gt;</code></pre><p>
-      <strong>HTML</strong> — produces HTML-compatible output. Self-closing tags are not used for void elements, boolean attributes are minimized, and entity references follow HTML rules:</p><pre><code class="language-xml">&lt;xsl:output method="html" html-version="5" indent="yes"/&gt;</code></pre><p>Key differences from XML method:</p><ul><li>
-        <p>
-          <code>&lt;br/&gt;</code> becomes <code>&lt;br&gt;</code> (no self-closing)</p>
-      </li><li>
-        <p>
-          <code>&lt;script&gt;&lt;/script&gt;</code> is preserved (not collapsed to <code>&lt;script/&gt;</code>)</p>
-      </li><li>
-        <p>
-          <code>checked="checked"</code> may be minimized to <code>checked</code></p>
-      </li><li>
-        <p>No XML declaration</p>
-      </li></ul><p>
-      <strong>Text</strong> — produces plain text. All markup is stripped; only text content appears:</p><pre><code class="language-xml">&lt;xsl:output method="text" encoding="utf-8"/&gt;</code></pre><p>Useful for generating CSV, plain text reports, source code, configuration files, or any non-XML format.</p><p>
-      <strong>JSON</strong> — introduced in XSLT 3.0. Serializes XDM maps and arrays as JSON:</p><pre><code class="language-xml">&lt;xsl:output method="json" indent="yes"/&gt;</code></pre><p>The result tree must be a map or array (built with <code>xsl:map</code>/<code>xsl:array</code> or the XPath <code>map{}</code> / <code>[]</code> constructors).</p><p>
-      <strong>Adaptive</strong> — chooses the method based on the result. If the result is a map or array, it uses JSON. If it is a document with an <code>html</code> root element, it uses HTML. Otherwise, it uses XML:</p><pre><code class="language-xml">&lt;xsl:output method="adaptive" indent="yes"/&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>xsl:output</code> is like configuring a <code>JsonSerializerOptions</code> or <code>XmlWriterSettings</code> object — you are not changing what data is produced, just how it is written to text.</p><pre><code class="language-csharp">var settings = new XmlWriterSettings
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section open">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li class="active"><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">Instructions Reference
+                                </p>
+                                <h1 class="page-title">Multiple Output Documents
+                                </h1>
+                                <p class="page-subtitle">xsl:result-document and xsl:output — generating multiple files and controlling serialization
+                                </p>
+                                <h1 id="multiple-output-documents"><a class="anchor" href="#multiple-output-documents">#</a>Multiple Output Documents
+                                </h1>
+                                <p>A single XSLT transformation can produce multiple output files. This is one of XSLT's most powerful capabilities — from a single source document and stylesheet, you can generate an index page, individual detail pages, a sitemap, and a JSON API response in one pass.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#xsloutput">xsl:output</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslresult-document">xsl:result-document</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#named-output-definitions">Named Output Definitions</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#common-patterns">Common Patterns</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#secondary-output-in-the-phoenixmldb-api">Secondary Output in the PhoenixmlDb API</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="xsl-output"><a class="anchor" href="#xsl-output">#</a>xsl:output
+                                  </h2>
+                                  <p>Controls how the result tree is serialized into bytes. This is a top-level declaration (child of <code>xsl:stylesheet</code>) that configures the serializer.
+                                  </p>
+                                  <h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage
+                                  </h3>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:output method="html" indent="yes" encoding="utf-8"
+            html-version="5" include-content-type="no"/&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <h3 id="serialization-parameters"><a class="anchor" href="#serialization-parameters">#</a>Serialization Parameters
+                                  </h3>
+                                  <div class="table-wrap">
+                                    <table>
+      
+                                      <thead>
+        
+                                        <tr>
+          
+                                          <th>
+            
+                                            <p>Attribute
+                                            </p>
+          
+                                          </th>
+          
+                                          <th>
+            
+                                            <p>Values
+                                            </p>
+          
+                                          </th>
+          
+                                          <th>
+            
+                                            <p>Description
+                                            </p>
+          
+                                          </th>
+        
+                                        </tr>
+      
+                                      </thead>
+      
+                                      <tbody>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>method</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>xml</code>, <code>html</code>, <code>xhtml</code>, <code>text</code>, <code>json</code>, <code>adaptive</code>
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Output format
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>indent</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>yes</code>, <code>no</code>
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Pretty-print the output
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>encoding</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>utf-8</code>, <code>utf-16</code>, <code>iso-8859-1</code>, etc.
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Character encoding
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>omit-xml-declaration</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>yes</code>, <code>no</code>
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Suppress <code>&lt;?xml?&gt;</code> declaration
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>standalone</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>yes</code>, <code>no</code>, <code>omit</code>
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Standalone declaration
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>doctype-system</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>URI
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>DOCTYPE system identifier
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>doctype-public</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>public ID
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>DOCTYPE public identifier
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>cdata-section-elements</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>QNames
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Elements whose text content is wrapped in CDATA
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>media-type</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>MIME type
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Content-Type (e.g., <code>text/html</code>, <code>application/json</code>)
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>html-version</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>5</code>, <code>4.01</code>, etc.
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>HTML version (XSLT 3.0)
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>include-content-type</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>yes</code>, <code>no</code>
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Include <code>&lt;meta charset&gt;</code> in HTML
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>suppress-indentation</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>QNames
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Elements where indentation should be suppressed
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>item-separator</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>string
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Separator between items in <code>adaptive</code> method
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+      
+                                      </tbody>
+    
+                                    </table>
+                                  </div>
+                                  <h3 id="output-methods"><a class="anchor" href="#output-methods">#</a>Output Methods
+                                  </h3>
+                                  <p>
+      <strong>XML</strong> — the default. Produces well-formed XML with proper escaping:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:output method="xml" indent="yes" encoding="utf-8"/&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
+      <strong>HTML</strong> — produces HTML-compatible output. Self-closing tags are not used for void elements, boolean attributes are minimized, and entity references follow HTML rules:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:output method="html" html-version="5" indent="yes"/&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>Key differences from XML method:
+                                  </p>
+                                  <ul>
+                                    <li>
+        
+                                      <p>
+          <code>&lt;br/&gt;</code> becomes <code>&lt;br&gt;</code> (no self-closing)
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <code>&lt;script&gt;&lt;/script&gt;</code> is preserved (not collapsed to <code>&lt;script/&gt;</code>)
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <code>checked="checked"</code> may be minimized to <code>checked</code>
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>No XML declaration
+                                      </p>
+      
+                                    </li>
+                                  </ul>
+                                  <p>
+      <strong>Text</strong> — produces plain text. All markup is stripped; only text content appears:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:output method="text" encoding="utf-8"/&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>Useful for generating CSV, plain text reports, source code, configuration files, or any non-XML format.
+                                  </p>
+                                  <p>
+      <strong>JSON</strong> — introduced in XSLT 3.0. Serializes XDM maps and arrays as JSON:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:output method="json" indent="yes"/&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>The result tree must be a map or array (built with <code>xsl:map</code>/<code>xsl:array</code> or the XPath <code>map{}</code> / <code>[]</code> constructors).
+                                  </p>
+                                  <p>
+      <strong>Adaptive</strong> — chooses the method based on the result. If the result is a map or array, it uses JSON. If it is a document with an <code>html</code> root element, it uses HTML. Otherwise, it uses XML:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:output method="adaptive" indent="yes"/&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
+      <strong>C# parallel:</strong> <code>xsl:output</code> is like configuring a <code>JsonSerializerOptions</code> or <code>XmlWriterSettings</code> object — you are not changing what data is produced, just how it is written to text.
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">csharp</span>
+                                    </figcaption>
+                                    <pre><code class="language-csharp">var settings = new XmlWriterSettings
 {
     Indent = true,
     Encoding = Encoding.UTF8,
     OmitXmlDeclaration = true
-};</code></pre><hr><h2 id="xsl-result-document"><a class="anchor" href="#xsl-result-document">#</a>xsl:result-document</h2><p>Creates a secondary output document. The primary result goes to the main output destination; each <code>xsl:result-document</code> writes to a separate destination identified by an <code>href</code>.</p><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><pre><code class="language-xml">&lt;xsl:template match="/"&gt;
+};</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <hr>
+                                    <h2 id="xsl-result-document"><a class="anchor" href="#xsl-result-document">#</a>xsl:result-document
+                                    </h2>
+                                    <p>Creates a secondary output document. The primary result goes to the main output destination; each <code>xsl:result-document</code> writes to a separate destination identified by an <code>href</code>.
+                                    </p>
+                                    <h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage
+                                    </h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:template match="/"&gt;
   &lt;!-- Primary output: index page --&gt;
   &lt;html&gt;
     &lt;body&gt;
@@ -227,13 +1081,35 @@
       &lt;/html&gt;
     &lt;/xsl:result-document&gt;
   &lt;/xsl:for-each&gt;
-&lt;/xsl:template&gt;</code></pre><h3 id="the-href-attribute"><a class="anchor" href="#the-href-attribute">#</a>The href Attribute</h3><p>
-      <code>href</code> is an AVT that specifies the destination URI. It is resolved relative to the base output URI:</p><pre><code class="language-xml">&lt;!-- Static path --&gt;
+&lt;/xsl:template&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="the-href-attribute"><a class="anchor" href="#the-href-attribute">#</a>The href Attribute
+                                    </h3>
+                                    <p>
+      <code>href</code> is an AVT that specifies the destination URI. It is resolved relative to the base output URI:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;!-- Static path --&gt;
 &lt;xsl:result-document href="sitemap.xml"&gt;...&lt;/xsl:result-document&gt;
 &lt;!-- Dynamic path from data --&gt;
 &lt;xsl:result-document href="output/{@category}/{@id}.html"&gt;...&lt;/xsl:result-document&gt;
 &lt;!-- Computed path --&gt;
-&lt;xsl:result-document href="{translate(lower-case(name), ' ', '-')}.html"&gt;...&lt;/xsl:result-document&gt;</code></pre><p>If <code>href</code> is omitted, the result document replaces the primary output. This is useful when a template needs to override the serialization settings for the main output.</p><h3 id="the-format-attribute"><a class="anchor" href="#the-format-attribute">#</a>The format Attribute</h3><p>References a named <code>xsl:output</code> declaration to control serialization for this specific result document:</p><pre><code class="language-xml">&lt;xsl:output name="html-output" method="html" html-version="5" indent="yes"/&gt;
+&lt;xsl:result-document href="{translate(lower-case(name), ' ', '-')}.html"&gt;...&lt;/xsl:result-document&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>If <code>href</code> is omitted, the result document replaces the primary output. This is useful when a template needs to override the serialization settings for the main output.
+                                    </p>
+                                    <h3 id="the-format-attribute"><a class="anchor" href="#the-format-attribute">#</a>The format Attribute
+                                    </h3>
+                                    <p>References a named <code>xsl:output</code> declaration to control serialization for this specific result document:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:output name="html-output" method="html" html-version="5" indent="yes"/&gt;
 &lt;xsl:output name="json-output" method="json" indent="yes"/&gt;
 &lt;xsl:output name="xml-output" method="xml" indent="yes" encoding="utf-8"/&gt;
 &lt;xsl:template match="/"&gt;
@@ -266,23 +1142,79 @@
       &lt;/xsl:for-each&gt;
     &lt;/urlset&gt;
   &lt;/xsl:result-document&gt;
-&lt;/xsl:template&gt;</code></pre><h3 id="inline-serialization-overrides"><a class="anchor" href="#inline-serialization-overrides">#</a>Inline Serialization Overrides</h3><p>Instead of referencing a named output, you can override individual serialization parameters directly on <code>xsl:result-document</code>:</p><pre><code class="language-xml">&lt;xsl:result-document href="data.xml" method="xml" indent="yes" encoding="utf-16"&gt;
+&lt;/xsl:template&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="inline-serialization-overrides"><a class="anchor" href="#inline-serialization-overrides">#</a>Inline Serialization Overrides
+                                    </h3>
+                                    <p>Instead of referencing a named output, you can override individual serialization parameters directly on <code>xsl:result-document</code>:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:result-document href="data.xml" method="xml" indent="yes" encoding="utf-16"&gt;
   &lt;export&gt;...&lt;/export&gt;
-&lt;/xsl:result-document&gt;</code></pre><p>These override the settings from the referenced (or default) <code>xsl:output</code> declaration.</p><h3 id="validation"><a class="anchor" href="#validation">#</a>Validation</h3><p>
-      <code>xsl:result-document</code> supports validation attributes for schema-aware processing:</p><pre><code class="language-xml">&lt;xsl:result-document href="output.xml" validation="strict"&gt;
+&lt;/xsl:result-document&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>These override the settings from the referenced (or default) <code>xsl:output</code> declaration.
+                                    </p>
+                                    <h3 id="validation"><a class="anchor" href="#validation">#</a>Validation
+                                    </h3>
+                                    <p>
+      <code>xsl:result-document</code> supports validation attributes for schema-aware processing:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:result-document href="output.xml" validation="strict"&gt;
   &lt;!-- content is validated against the schema --&gt;
-&lt;/xsl:result-document&gt;</code></pre><hr><h2 id="named-output-definitions"><a class="anchor" href="#named-output-definitions">#</a>Named Output Definitions</h2><p>You can define multiple named output formats and reference them by name. The unnamed <code>xsl:output</code> is the default for the primary result.</p><pre><code class="language-xml">&lt;!-- Default output (primary result) --&gt;
+&lt;/xsl:result-document&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <hr>
+                                      <h2 id="named-output-definitions"><a class="anchor" href="#named-output-definitions">#</a>Named Output Definitions
+                                      </h2>
+                                      <p>You can define multiple named output formats and reference them by name. The unnamed <code>xsl:output</code> is the default for the primary result.
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;!-- Default output (primary result) --&gt;
 &lt;xsl:output method="html" html-version="5" indent="yes"/&gt;
 &lt;!-- Named alternatives --&gt;
 &lt;xsl:output name="fragment" method="html" html-version="5" indent="yes"
             omit-xml-declaration="yes"/&gt;
 &lt;xsl:output name="csv" method="text" encoding="utf-8"/&gt;
 &lt;xsl:output name="feed" method="xml" indent="yes" encoding="utf-8"
-            media-type="application/atom+xml"/&gt;</code></pre><p>Multiple unnamed <code>xsl:output</code> declarations are merged — their attributes are combined, with later declarations winning on conflicts:</p><pre><code class="language-xml">&lt;!-- These are merged into one effective output declaration --&gt;
+            media-type="application/atom+xml"/&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>Multiple unnamed <code>xsl:output</code> declarations are merged — their attributes are combined, with later declarations winning on conflicts:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;!-- These are merged into one effective output declaration --&gt;
 &lt;xsl:output method="html"/&gt;
 &lt;xsl:output indent="yes"/&gt;
 &lt;xsl:output encoding="utf-8"/&gt;
-&lt;!-- Effective: method="html" indent="yes" encoding="utf-8" --&gt;</code></pre><p>This is useful when importing stylesheets — the importing stylesheet can override specific serialization parameters without redeclaring everything.</p><hr><h2 id="common-patterns"><a class="anchor" href="#common-patterns">#</a>Common Patterns</h2><h3 id="one-page-per-item"><a class="anchor" href="#one-page-per-item">#</a>One Page Per Item</h3><p>The most common multi-output pattern — generate an index page and individual detail pages:</p><pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
+&lt;!-- Effective: method="html" indent="yes" encoding="utf-8" --&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>This is useful when importing stylesheets — the importing stylesheet can override specific serialization parameters without redeclaring everything.
+                                      </p>
+                                      <hr>
+                                        <h2 id="common-patterns"><a class="anchor" href="#common-patterns">#</a>Common Patterns
+                                        </h2>
+                                        <h3 id="one-page-per-item"><a class="anchor" href="#one-page-per-item">#</a>One Page Per Item
+                                        </h3>
+                                        <p>The most common multi-output pattern — generate an index page and individual detail pages:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
   &lt;!-- Index page (primary output) --&gt;
   &lt;html&gt;
     &lt;head&gt;&lt;title&gt;Product Catalog&lt;/title&gt;&lt;/head&gt;
@@ -322,7 +1254,17 @@
       &lt;/html&gt;
     &lt;/xsl:result-document&gt;
   &lt;/xsl:for-each&gt;
-&lt;/xsl:template&gt;</code></pre><h3 id="multi-format-output"><a class="anchor" href="#multi-format-output">#</a>Multi-Format Output</h3><p>Generate the same data in multiple formats — HTML for humans, JSON for APIs, XML for machine interchange:</p><pre><code class="language-xml">&lt;xsl:output method="html" html-version="5" indent="yes"/&gt;
+&lt;/xsl:template&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="multi-format-output"><a class="anchor" href="#multi-format-output">#</a>Multi-Format Output
+                                        </h3>
+                                        <p>Generate the same data in multiple formats — HTML for humans, JSON for APIs, XML for machine interchange:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:output method="html" html-version="5" indent="yes"/&gt;
 &lt;xsl:output name="json" method="json" indent="yes"/&gt;
 &lt;xsl:output name="xml-export" method="xml" indent="yes"/&gt;
 &lt;xsl:template match="catalog"&gt;
@@ -355,7 +1297,15 @@
       &lt;xsl:copy-of select="product"/&gt;
     &lt;/catalog&gt;
   &lt;/xsl:result-document&gt;
-&lt;/xsl:template&gt;</code></pre><h3 id="category-based-directory-structure"><a class="anchor" href="#category-based-directory-structure">#</a>Category-Based Directory Structure</h3><pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
+&lt;/xsl:template&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="category-based-directory-structure"><a class="anchor" href="#category-based-directory-structure">#</a>Category-Based Directory Structure
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
   &lt;xsl:for-each-group select="product" group-by="@category"&gt;
     &lt;!-- Category index page --&gt;
     &lt;xsl:result-document href="{current-grouping-key()}/index.html"&gt;
@@ -383,7 +1333,15 @@
       &lt;/xsl:result-document&gt;
     &lt;/xsl:for-each&gt;
   &lt;/xsl:for-each-group&gt;
-&lt;/xsl:template&gt;</code></pre><h3 id="generating-csv-with-text-method"><a class="anchor" href="#generating-csv-with-text-method">#</a>Generating CSV with Text Method</h3><pre><code class="language-xml">&lt;xsl:output name="csv" method="text" encoding="utf-8"/&gt;
+&lt;/xsl:template&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="generating-csv-with-text-method"><a class="anchor" href="#generating-csv-with-text-method">#</a>Generating CSV with Text Method
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:output name="csv" method="text" encoding="utf-8"/&gt;
 &lt;xsl:template match="catalog"&gt;
   &lt;!-- HTML primary output --&gt;
   &lt;html&gt;...&lt;/html&gt;
@@ -402,7 +1360,18 @@
       &lt;xsl:text&gt;&amp;#10;&lt;/xsl:text&gt;
     &lt;/xsl:for-each&gt;
   &lt;/xsl:result-document&gt;
-&lt;/xsl:template&gt;</code></pre><hr><h2 id="secondary-output-in-the-phoenixmldb-api"><a class="anchor" href="#secondary-output-in-the-phoenixmldb-api">#</a>Secondary Output in the PhoenixmlDb API</h2><p>When running transformations through the PhoenixmlDb .NET API, secondary output documents are collected in a dictionary rather than written directly to the file system. This gives you programmatic access to all generated outputs.</p><pre><code class="language-csharp">using PhoenixmlDb.Xslt;
+&lt;/xsl:template&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <hr>
+                                          <h2 id="secondary-output-in-the-phoenixmldb-api"><a class="anchor" href="#secondary-output-in-the-phoenixmldb-api">#</a>Secondary Output in the PhoenixmlDb API
+                                          </h2>
+                                          <p>When running transformations through the PhoenixmlDb .NET API, secondary output documents are collected in a dictionary rather than written directly to the file system. This gives you programmatic access to all generated outputs.
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">using PhoenixmlDb.Xslt;
 var transformer = new XsltTransformer();
 await transformer.LoadStylesheetAsync(stylesheet, new Uri("catalog.xslt"));
 var result = await transformer.TransformAsync(sourceXml);
@@ -415,23 +1384,130 @@ foreach (var (href, content) in result.SecondaryResultDocuments)
     var outputPath = Path.Combine("output", href);
     Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
     File.WriteAllText(outputPath, content);
-}</code></pre><p>This design lets you:</p><ul><li>
-        <p>
-          <strong>Write to any storage</strong> — local files, blob storage, database, HTTP endpoints</p>
-      </li><li>
-        <p>
-          <strong>Post-process</strong> generated documents before writing them</p>
-      </li><li>
-        <p>
-          <strong>Test</strong> transformations by inspecting secondary outputs in memory</p>
-      </li><li>
-        <p>
-          <strong>Filter</strong> which documents to actually write</p>
-      </li></ul><p>
-      <strong>C# parallel:</strong> <code>xsl:result-document</code> is conceptually like calling <code>File.WriteAllText(path, content)</code> for each output file, except the XSLT engine collects them and hands them to you. The calling code decides where they actually go.</p><h3 id="controlling-the-base-uri"><a class="anchor" href="#controlling-the-base-uri">#</a>Controlling the Base URI</h3><p>The <code>href</code> values in <code>xsl:result-document</code> are resolved relative to the base output URI. In the PhoenixmlDb API, you can set this when calling the transform:</p><pre><code class="language-csharp">var options = new TransformOptions
+}</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>This design lets you:
+                                          </p>
+                                          <ul>
+                                            <li>
+        
+                                              <p>
+          <strong>Write to any storage</strong> — local files, blob storage, database, HTTP endpoints
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>
+          <strong>Post-process</strong> generated documents before writing them
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>
+          <strong>Test</strong> transformations by inspecting secondary outputs in memory
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>
+          <strong>Filter</strong> which documents to actually write
+                                              </p>
+      
+                                            </li>
+                                          </ul>
+                                          <p>
+      <strong>C# parallel:</strong> <code>xsl:result-document</code> is conceptually like calling <code>File.WriteAllText(path, content)</code> for each output file, except the XSLT engine collects them and hands them to you. The calling code decides where they actually go.
+                                          </p>
+                                          <h3 id="controlling-the-base-uri"><a class="anchor" href="#controlling-the-base-uri">#</a>Controlling the Base URI
+                                          </h3>
+                                          <p>The <code>href</code> values in <code>xsl:result-document</code> are resolved relative to the base output URI. In the PhoenixmlDb API, you can set this when calling the transform:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">var options = new TransformOptions
 {
     BaseOutputUri = new Uri("file:///output/site/")
 };
 var result = await transformer.TransformAsync(sourceXml, options);
 // result.SecondaryResultDocuments keys are now relative to /output/site/
-// e.g., "products/WP-001.html", "api/catalog.json"</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+// e.g., "products/WP-001.html", "api/catalog.json"</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                        </article>
+                                      </main>
+                                      <aside class="toc" aria-label="On this page">
+                                        <p class="toc-label">On this page
+                                        </p>
+                                        <ul>
+                                          <li class="toc-h2"><a href="#contents">Contents</a>
+                                          </li>
+                                          <li class="toc-h2"><a href="#xsl-output">xsl:output</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#basic-usage">Basic Usage</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#serialization-parameters">Serialization Parameters</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#output-methods">Output Methods</a>
+                                          </li>
+                                          <li class="toc-h2"><a href="#xsl-result-document">xsl:result-document</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#basic-usage">Basic Usage</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#the-href-attribute">The href Attribute</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#the-format-attribute">The format Attribute</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#inline-serialization-overrides">Inline Serialization Overrides</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#validation">Validation</a>
+                                          </li>
+                                          <li class="toc-h2"><a href="#named-output-definitions">Named Output Definitions</a>
+                                          </li>
+                                          <li class="toc-h2"><a href="#common-patterns">Common Patterns</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#one-page-per-item">One Page Per Item</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#multi-format-output">Multi-Format Output</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#category-based-directory-structure">Category-Based Directory Structure</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#generating-csv-with-text-method">Generating CSV with Text Method</a>
+                                          </li>
+                                          <li class="toc-h2"><a href="#secondary-output-in-the-phoenixmldb-api">Secondary Output in the PhoenixmlDb API</a>
+                                          </li>
+                                          <li class="toc-h3"><a href="#controlling-the-base-uri">Controlling the Base URI</a>
+                                          </li>
+                                        </ul>
+                                      </aside>
+                                    </div>
+                                    <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                      <div class="search-backdrop">
+                                      </div>
+                                      <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                        <div class="search-results" id="search-results">
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <footer class="site-footer">
+                                      <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                      </p>
+                                    </footer>
+                                    <script src="https://unpkg.com/lunr/lunr.js">
+                                    </script>
+                                    <script src="/js/prism.js">
+                                    </script>
+                                    <script src="/js/search.js">
+                                    </script>
+                                    <script src="/js/theme.js">
+                                    </script>
+                                    <script src="/js/toc.js">
+                                    </script>
+                                    <script src="/js/copy.js">
+                                    </script>
+                                  </body>
+                                </html>

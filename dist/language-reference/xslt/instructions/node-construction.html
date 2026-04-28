@@ -1,53 +1,653 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Node Construction — PhoenixmlDb Documentation</title><meta name="description" content="xsl:element, xsl:attribute, xsl:namespace, xsl:document — building nodes with dynamic names"><link rel="canonical" href="/language-reference/xslt/instructions/node-construction.html"><meta property="og:title" content="Node Construction"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/node-construction.html"><meta property="og:description" content="xsl:element, xsl:attribute, xsl:namespace, xsl:document — building nodes with dynamic names"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Node Construction — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="xsl:element, xsl:attribute, xsl:namespace, xsl:document — building nodes with dynamic names">
+            <link rel="canonical" href="/language-reference/xslt/instructions/node-construction.html">
+              <meta property="og:title" content="Node Construction">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xslt/instructions/node-construction.html">
+                    <meta property="og:description" content="xsl:element, xsl:attribute, xsl:namespace, xsl:document — building nodes with dynamic names">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li class="active"><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="node-construction"><a class="anchor" href="#node-construction">#</a>Node Construction</h1><p>Most of the time you write literal result elements directly in your stylesheet — <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;product&gt;</code>. But when the element or attribute name is not known until runtime, you need dynamic node construction. XSLT provides four instructions for this, plus a powerful shorthand called attribute value templates (AVTs) that you will use constantly.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#attribute-value-templates-avts" title="">Attribute Value Templates (AVTs)</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#text-value-templates" title="">Text Value Templates</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslelement" title="">xsl:element</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslattribute" title="">xsl:attribute</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslnamespace" title="">xsl:namespace</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xsldocument" title="">xsl:document</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#when-to-use-dynamic-construction-vs-literal-elements" title="">When to Use Dynamic Construction vs. Literal Elements</a>
-        </p>
-      </li></ul><hr><h2 id="attribute-value-templates-avts"><a class="anchor" href="#attribute-value-templates-avts">#</a>Attribute Value Templates (AVTs)</h2><p>Before covering the dynamic construction instructions, you need to understand AVTs — they are the single most-used feature for putting computed values into output attributes.</p><p>An AVT is any attribute on a literal result element (or on certain XSLT instruction attributes) that contains <code>{expression}</code> placeholders. The processor evaluates the XPath expression and substitutes the string result.</p><pre><code class="language-xml">&lt;a href="/products/{@id}"&gt;
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section open">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li class="active"><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">Instructions Reference
+                                </p>
+                                <h1 class="page-title">Node Construction
+                                </h1>
+                                <p class="page-subtitle">xsl:element, xsl:attribute, xsl:namespace, xsl:document — building nodes with dynamic names
+                                </p>
+                                <h1 id="node-construction"><a class="anchor" href="#node-construction">#</a>Node Construction
+                                </h1>
+                                <p>Most of the time you write literal result elements directly in your stylesheet — <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;product&gt;</code>. But when the element or attribute name is not known until runtime, you need dynamic node construction. XSLT provides four instructions for this, plus a powerful shorthand called attribute value templates (AVTs) that you will use constantly.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#attribute-value-templates-avts">Attribute Value Templates (AVTs)</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#text-value-templates">Text Value Templates</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslelement">xsl:element</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslattribute">xsl:attribute</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslnamespace">xsl:namespace</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xsldocument">xsl:document</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#when-to-use-dynamic-construction-vs-literal-elements">When to Use Dynamic Construction vs. Literal Elements</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="attribute-value-templates-avts"><a class="anchor" href="#attribute-value-templates-avts">#</a>Attribute Value Templates (AVTs)
+                                  </h2>
+                                  <p>Before covering the dynamic construction instructions, you need to understand AVTs — they are the single most-used feature for putting computed values into output attributes.
+                                  </p>
+                                  <p>An AVT is any attribute on a literal result element (or on certain XSLT instruction attributes) that contains <code>{expression}</code> placeholders. The processor evaluates the XPath expression and substitutes the string result.
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;a href="/products/{@id}"&gt;
   &lt;xsl:value-of select="name"/&gt;
-&lt;/a&gt;</code></pre><p>Given <code>&lt;product id="WP-001"&gt;&lt;name&gt;Widget Pro&lt;/name&gt;&lt;/product&gt;</code>, this produces:</p><pre><code class="language-html">&lt;a href="/products/WP-001"&gt;Widget Pro&lt;/a&gt;</code></pre><p>
-      <strong>C# parallel:</strong> This is exactly string interpolation — <code>$"/products/{product.Id}"</code>.</p><h3 id="multiple-expressions-in-one-attribute"><a class="anchor" href="#multiple-expressions-in-one-attribute">#</a>Multiple Expressions in One Attribute</h3><p>You can mix literal text and multiple expressions:</p><pre><code class="language-xml">&lt;img src="/images/{@category}/{@id}.png"
+&lt;/a&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>Given <code>&lt;product id="WP-001"&gt;&lt;name&gt;Widget Pro&lt;/name&gt;&lt;/product&gt;</code>, this produces:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">html</span>
+                                    </figcaption>
+                                    <pre><code class="language-html">&lt;a href="/products/WP-001"&gt;Widget Pro&lt;/a&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
+      <strong>C# parallel:</strong> This is exactly string interpolation — <code>$"/products/{product.Id}"</code>.
+                                  </p>
+                                  <h3 id="multiple-expressions-in-one-attribute"><a class="anchor" href="#multiple-expressions-in-one-attribute">#</a>Multiple Expressions in One Attribute
+                                  </h3>
+                                  <p>You can mix literal text and multiple expressions:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;img src="/images/{@category}/{@id}.png"
      alt="{name} - {price}"
-     class="product {if (@on-sale = 'true') then 'sale' else 'regular'}"/&gt;</code></pre><h3 id="escaping-curly-braces"><a class="anchor" href="#escaping-curly-braces">#</a>Escaping Curly Braces</h3><p>To produce a literal <code>{</code> or <code>}</code> in an AVT, double it:</p><pre><code class="language-xml">&lt;!-- Producing CSS or JavaScript that contains braces --&gt;
+     class="product {if (@on-sale = 'true') then 'sale' else 'regular'}"/&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <h3 id="escaping-curly-braces"><a class="anchor" href="#escaping-curly-braces">#</a>Escaping Curly Braces
+                                  </h3>
+                                  <p>To produce a literal <code>{</code> or <code>}</code> in an AVT, double it:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;!-- Producing CSS or JavaScript that contains braces --&gt;
 &lt;style&gt;
   .product-{@id} {{ color: red; }}
-&lt;/style&gt;</code></pre><p>Output:</p><pre><code class="language-html">&lt;style&gt;
+&lt;/style&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>Output:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">html</span>
+                                    </figcaption>
+                                    <pre><code class="language-html">&lt;style&gt;
   .product-WP-001 { color: red; }
-&lt;/style&gt;</code></pre><h3 id="where-avts-work"><a class="anchor" href="#where-avts-work">#</a>Where AVTs Work</h3><p>AVTs are available on:</p><ul><li>
-        <p>
-          <strong>Literal result element attributes</strong> — <code>&lt;div class="{$class}"&gt;</code> (the most common use)</p>
-      </li><li>
-        <p>
-          <strong>Certain XSLT instruction attributes</strong> — marked in the spec as "attribute value template." For example, <code>xsl:element/@name</code>, <code>xsl:attribute/@name</code>, <code>xsl:result-document/@href</code>, <code>xsl:sort/@order</code></p>
-      </li><li>
-        <p>
-          <strong>Not</strong> on <code>select</code>, <code>test</code>, or <code>match</code> attributes — those are already XPath expressions</p>
-      </li></ul><h3 id="common-avt-patterns"><a class="anchor" href="#common-avt-patterns">#</a>Common AVT Patterns</h3><pre><code class="language-xml">&lt;!-- Conditional CSS class --&gt;
+&lt;/style&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <h3 id="where-avts-work"><a class="anchor" href="#where-avts-work">#</a>Where AVTs Work
+                                  </h3>
+                                  <p>AVTs are available on:
+                                  </p>
+                                  <ul>
+                                    <li>
+        
+                                      <p>
+          <strong>Literal result element attributes</strong> — <code>&lt;div class="{$class}"&gt;</code> (the most common use)
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <strong>Certain XSLT instruction attributes</strong> — marked in the spec as "attribute value template." For example, <code>xsl:element/@name</code>, <code>xsl:attribute/@name</code>, <code>xsl:result-document/@href</code>, <code>xsl:sort/@order</code>
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <strong>Not</strong> on <code>select</code>, <code>test</code>, or <code>match</code> attributes — those are already XPath expressions
+                                      </p>
+      
+                                    </li>
+                                  </ul>
+                                  <h3 id="common-avt-patterns"><a class="anchor" href="#common-avt-patterns">#</a>Common AVT Patterns
+                                  </h3>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;!-- Conditional CSS class --&gt;
 &lt;tr class="{if (position() mod 2 = 0) then 'even' else 'odd'}"&gt;
   &lt;td&gt;&lt;xsl:value-of select="name"/&gt;&lt;/td&gt;
 &lt;/tr&gt;
@@ -60,46 +660,156 @@
 &lt;!-- Computed id for anchor links --&gt;
 &lt;section id="{translate(lower-case(name), ' ', '-')}"&gt;
   &lt;h2&gt;&lt;xsl:value-of select="name"/&gt;&lt;/h2&gt;
-&lt;/section&gt;</code></pre><hr><h2 id="text-value-templates"><a class="anchor" href="#text-value-templates">#</a>Text Value Templates</h2><p>XSLT 3.0 extends the AVT concept to text content with <code>expand-text="yes"</code>. When enabled, <code>{expression}</code> works inside text nodes too — not just in attributes.</p><pre><code class="language-xml">&lt;xsl:template match="product" expand-text="yes"&gt;
+&lt;/section&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <hr>
+                                    <h2 id="text-value-templates"><a class="anchor" href="#text-value-templates">#</a>Text Value Templates
+                                    </h2>
+                                    <p>XSLT 3.0 extends the AVT concept to text content with <code>expand-text="yes"</code>. When enabled, <code>{expression}</code> works inside text nodes too — not just in attributes.
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:template match="product" expand-text="yes"&gt;
   &lt;div class="product"&gt;
     &lt;h3&gt;{name}&lt;/h3&gt;
     &lt;p class="price"&gt;${format-number(price, '#,##0.00')}&lt;/p&gt;
     &lt;p class="sku"&gt;SKU: {@id}&lt;/p&gt;
   &lt;/div&gt;
-&lt;/xsl:template&gt;</code></pre><p>This is equivalent to writing <code>&lt;xsl:value-of select="name"/&gt;</code> everywhere, but far more readable. You can enable it on any element — <code>xsl:stylesheet</code>, <code>xsl:template</code>, or any literal result element — and it applies to all descendant text nodes.</p><h3 id="enabling-globally"><a class="anchor" href="#enabling-globally">#</a>Enabling Globally</h3><p>Most stylesheets enable it on the root element:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+&lt;/xsl:template&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>This is equivalent to writing <code>&lt;xsl:value-of select="name"/&gt;</code> everywhere, but far more readable. You can enable it on any element — <code>xsl:stylesheet</code>, <code>xsl:template</code>, or any literal result element — and it applies to all descendant text nodes.
+                                    </p>
+                                    <h3 id="enabling-globally"><a class="anchor" href="#enabling-globally">#</a>Enabling Globally
+                                    </h3>
+                                    <p>Most stylesheets enable it on the root element:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="3.0"
                 expand-text="yes"&gt;
   &lt;!-- All templates can now use {expression} in text --&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>expand-text="yes"</code> turns your entire stylesheet into something that feels like Razor or C# string interpolation — <code>$"Product: {name}, Price: ${price:N2}"</code>.</p><h3 id="escaping-in-text-value-templates"><a class="anchor" href="#escaping-in-text-value-templates">#</a>Escaping in Text Value Templates</h3><p>Just like AVTs, double the braces to produce literal <code>{</code> and <code>}</code>:</p><pre><code class="language-xml">&lt;xsl:template match="product" expand-text="yes"&gt;
+&lt;/xsl:stylesheet&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
+      <strong>C# parallel:</strong> <code>expand-text="yes"</code> turns your entire stylesheet into something that feels like Razor or C# string interpolation — <code>$"Product: {name}, Price: ${price:N2}"</code>.
+                                    </p>
+                                    <h3 id="escaping-in-text-value-templates"><a class="anchor" href="#escaping-in-text-value-templates">#</a>Escaping in Text Value Templates
+                                    </h3>
+                                    <p>Just like AVTs, double the braces to produce literal <code>{</code> and <code>}</code>:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:template match="product" expand-text="yes"&gt;
   &lt;script&gt;
     const product = {{ "id": "{@id}", "name": "{name}" }};
   &lt;/script&gt;
-&lt;/xsl:template&gt;</code></pre><p>Output:</p><pre><code class="language-html">&lt;script&gt;
+&lt;/xsl:template&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>Output:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">html</span>
+                                      </figcaption>
+                                      <pre><code class="language-html">&lt;script&gt;
   const product = { "id": "WP-001", "name": "Widget Pro" };
-&lt;/script&gt;</code></pre><hr><h2 id="xsl-element"><a class="anchor" href="#xsl-element">#</a>xsl:element</h2><p>Creates an element whose name is computed at runtime. Use this when you cannot write the element name as a literal in your stylesheet.</p><pre><code class="language-xml">&lt;xsl:element name="{$element-name}"&gt;
+&lt;/script&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <hr>
+                                      <h2 id="xsl-element"><a class="anchor" href="#xsl-element">#</a>xsl:element
+                                      </h2>
+                                      <p>Creates an element whose name is computed at runtime. Use this when you cannot write the element name as a literal in your stylesheet.
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:element name="{$element-name}"&gt;
   &lt;!-- content --&gt;
-&lt;/xsl:element&gt;</code></pre><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><pre><code class="language-xml">&lt;!-- Convert a "field" element into an element whose name comes from the @name attribute --&gt;
+&lt;/xsl:element&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage
+                                      </h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;!-- Convert a "field" element into an element whose name comes from the @name attribute --&gt;
 &lt;xsl:template match="field"&gt;
   &lt;xsl:element name="{@name}"&gt;
     &lt;xsl:value-of select="."/&gt;
   &lt;/xsl:element&gt;
-&lt;/xsl:template&gt;</code></pre><p>Given:</p><pre><code class="language-xml">&lt;record&gt;
+&lt;/xsl:template&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>Given:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;record&gt;
   &lt;field name="firstName"&gt;Alice&lt;/field&gt;
   &lt;field name="lastName"&gt;Smith&lt;/field&gt;
   &lt;field name="email"&gt;alice@example.com&lt;/field&gt;
-&lt;/record&gt;</code></pre><p>Output:</p><pre><code class="language-xml">&lt;firstName&gt;Alice&lt;/firstName&gt;
+&lt;/record&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>Output:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;firstName&gt;Alice&lt;/firstName&gt;
 &lt;lastName&gt;Smith&lt;/lastName&gt;
-&lt;email&gt;alice@example.com&lt;/email&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>new XElement(fieldName, value)</code> — the <code>XElement</code> constructor takes the element name as a string parameter.</p><h3 id="namespace-handling"><a class="anchor" href="#namespace-handling">#</a>Namespace Handling</h3><p>The <code>namespace</code> attribute specifies the namespace URI for the constructed element:</p><pre><code class="language-xml">&lt;!-- Create element in a specific namespace --&gt;
+&lt;email&gt;alice@example.com&lt;/email&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
+      <strong>C# parallel:</strong> <code>new XElement(fieldName, value)</code> — the <code>XElement</code> constructor takes the element name as a string parameter.
+                                      </p>
+                                      <h3 id="namespace-handling"><a class="anchor" href="#namespace-handling">#</a>Namespace Handling
+                                      </h3>
+                                      <p>The <code>namespace</code> attribute specifies the namespace URI for the constructed element:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;!-- Create element in a specific namespace --&gt;
 &lt;xsl:element name="atom:feed" namespace="http://www.w3.org/2005/Atom"&gt;
   &lt;xsl:element name="atom:title" namespace="http://www.w3.org/2005/Atom"&gt;
     &lt;xsl:value-of select="$site-title"/&gt;
   &lt;/xsl:element&gt;
-&lt;/xsl:element&gt;</code></pre><p>Output:</p><pre><code class="language-xml">&lt;atom:feed xmlns:atom="http://www.w3.org/2005/Atom"&gt;
+&lt;/xsl:element&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>Output:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;atom:feed xmlns:atom="http://www.w3.org/2005/Atom"&gt;
   &lt;atom:title&gt;My Product Catalog&lt;/atom:title&gt;
-&lt;/atom:feed&gt;</code></pre><p>If you omit <code>namespace</code>, the element inherits the namespace from the prefix used in the <code>name</code> attribute (resolved against in-scope namespace declarations). If there is no prefix, the element is in the default namespace of the stylesheet at that point.</p><h3 id="the-use-attribute-sets-attribute"><a class="anchor" href="#the-use-attribute-sets-attribute">#</a>The use-attribute-sets Attribute</h3><p>
-      <code>xsl:element</code> can apply named attribute sets — predefined groups of attributes:</p><pre><code class="language-xml">&lt;xsl:attribute-set name="table-defaults"&gt;
+&lt;/atom:feed&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>If you omit <code>namespace</code>, the element inherits the namespace from the prefix used in the <code>name</code> attribute (resolved against in-scope namespace declarations). If there is no prefix, the element is in the default namespace of the stylesheet at that point.
+                                      </p>
+                                      <h3 id="the-use-attribute-sets-attribute"><a class="anchor" href="#the-use-attribute-sets-attribute">#</a>The use-attribute-sets Attribute
+                                      </h3>
+                                      <p>
+      <code>xsl:element</code> can apply named attribute sets — predefined groups of attributes:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:attribute-set name="table-defaults"&gt;
   &lt;xsl:attribute name="class"&gt;data-table&lt;/xsl:attribute&gt;
   &lt;xsl:attribute name="cellpadding"&gt;4&lt;/xsl:attribute&gt;
   &lt;xsl:attribute name="border"&gt;1&lt;/xsl:attribute&gt;
@@ -108,9 +818,27 @@
   &lt;xsl:element name="table" use-attribute-sets="table-defaults"&gt;
     &lt;xsl:apply-templates/&gt;
   &lt;/xsl:element&gt;
-&lt;/xsl:template&gt;</code></pre><p>Output:</p><pre><code class="language-html">&lt;table class="data-table" cellpadding="4" border="1"&gt;
+&lt;/xsl:template&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>Output:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">html</span>
+                                        </figcaption>
+                                        <pre><code class="language-html">&lt;table class="data-table" cellpadding="4" border="1"&gt;
   &lt;!-- content --&gt;
-&lt;/table&gt;</code></pre><p>Attribute sets work on literal result elements too: <code>&lt;table xsl:use-attribute-sets="table-defaults"&gt;</code>.</p><h3 id="practical-example-generic-xml-to-html-table"><a class="anchor" href="#practical-example-generic-xml-to-html-table">#</a>Practical Example: Generic XML-to-HTML Table</h3><pre><code class="language-xml">&lt;!-- Turn any XML structure into an HTML table --&gt;
+&lt;/table&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>Attribute sets work on literal result elements too: <code>&lt;table xsl:use-attribute-sets="table-defaults"&gt;</code>.
+                                      </p>
+                                      <h3 id="practical-example-generic-xml-to-html-table"><a class="anchor" href="#practical-example-generic-xml-to-html-table">#</a>Practical Example: Generic XML-to-HTML Table
+                                      </h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;!-- Turn any XML structure into an HTML table --&gt;
 &lt;xsl:template match="*[*]" mode="auto-table"&gt;
   &lt;table&gt;
     &lt;thead&gt;
@@ -132,27 +860,80 @@
       &lt;/xsl:for-each&gt;
     &lt;/tbody&gt;
   &lt;/table&gt;
-&lt;/xsl:template&gt;</code></pre><p>Here <code>xsl:element</code> chooses between <code>&lt;th&gt;</code> and <code>&lt;td&gt;</code> based on position — something you cannot do with a literal element.</p><hr><h2 id="xsl-attribute"><a class="anchor" href="#xsl-attribute">#</a>xsl:attribute</h2><p>Creates an attribute on the parent element, with a name that can be computed at runtime.</p><pre><code class="language-xml">&lt;xsl:attribute name="class"&gt;product-card&lt;/xsl:attribute&gt;</code></pre><h3 id="why-not-just-use-avts"><a class="anchor" href="#why-not-just-use-avts">#</a>Why Not Just Use AVTs?</h3><p>For static attribute names, AVTs are always cleaner:</p><pre><code class="language-xml">&lt;!-- Preferred: AVT --&gt;
+&lt;/xsl:template&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>Here <code>xsl:element</code> chooses between <code>&lt;th&gt;</code> and <code>&lt;td&gt;</code> based on position — something you cannot do with a literal element.
+                                      </p>
+                                      <hr>
+                                        <h2 id="xsl-attribute"><a class="anchor" href="#xsl-attribute">#</a>xsl:attribute
+                                        </h2>
+                                        <p>Creates an attribute on the parent element, with a name that can be computed at runtime.
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:attribute name="class"&gt;product-card&lt;/xsl:attribute&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="why-not-just-use-avts"><a class="anchor" href="#why-not-just-use-avts">#</a>Why Not Just Use AVTs?
+                                        </h3>
+                                        <p>For static attribute names, AVTs are always cleaner:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;!-- Preferred: AVT --&gt;
 &lt;div class="product {$extra-class}"&gt;...&lt;/div&gt;
 &lt;!-- Equivalent but verbose: xsl:attribute --&gt;
 &lt;div&gt;
   &lt;xsl:attribute name="class"&gt;product &lt;xsl:value-of select="$extra-class"/&gt;&lt;/xsl:attribute&gt;
   ...
-&lt;/div&gt;</code></pre><p>Use <code>xsl:attribute</code> when:</p><ol><li>
-        <p>
-          <strong>The attribute name is dynamic:</strong> <code>&lt;xsl:attribute name="{$attr-name}"&gt;...&lt;/xsl:attribute&gt;</code></p>
-      </li><li>
-        <p>
-          <strong>The attribute value requires complex construction</strong> with multiple instructions</p>
-      </li><li>
-        <p>
+&lt;/div&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>Use <code>xsl:attribute</code> when:
+                                        </p>
+                                        <ol>
+                                          <li>
+        
+                                            <p>
+          <strong>The attribute name is dynamic:</strong> <code>&lt;xsl:attribute name="{$attr-name}"&gt;...&lt;/xsl:attribute&gt;</code>
+                                            </p>
+      
+                                          </li>
+                                          <li>
+        
+                                            <p>
+          <strong>The attribute value requires complex construction</strong> with multiple instructions
+                                            </p>
+      
+                                          </li>
+                                          <li>
+        
+                                            <p>
           <strong>You are conditionally adding an attribute:</strong>
-        </p>
-      </li></ol><pre><code class="language-xml">&lt;input type="checkbox"&gt;
+        
+                                            </p>
+      
+                                          </li>
+                                        </ol>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;input type="checkbox"&gt;
   &lt;xsl:if test="@selected = 'true'"&gt;
     &lt;xsl:attribute name="checked"&gt;checked&lt;/xsl:attribute&gt;
   &lt;/xsl:if&gt;
-&lt;/input&gt;</code></pre><h3 id="dynamic-attribute-names"><a class="anchor" href="#dynamic-attribute-names">#</a>Dynamic Attribute Names</h3><pre><code class="language-xml">&lt;!-- Convert XML attributes to data-* attributes --&gt;
+&lt;/input&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="dynamic-attribute-names"><a class="anchor" href="#dynamic-attribute-names">#</a>Dynamic Attribute Names
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;!-- Convert XML attributes to data-* attributes --&gt;
 &lt;xsl:template match="product"&gt;
   &lt;div&gt;
     &lt;xsl:for-each select="@*"&gt;
@@ -162,10 +943,30 @@
     &lt;/xsl:for-each&gt;
     &lt;xsl:apply-templates/&gt;
   &lt;/div&gt;
-&lt;/xsl:template&gt;</code></pre><p>Given <code>&lt;product id="WP-001" category="electronics" status="active"&gt;</code>, output:</p><pre><code class="language-html">&lt;div data-id="WP-001" data-category="electronics" data-status="active"&gt;
+&lt;/xsl:template&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>Given <code>&lt;product id="WP-001" category="electronics" status="active"&gt;</code>, output:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">html</span>
+                                          </figcaption>
+                                          <pre><code class="language-html">&lt;div data-id="WP-001" data-category="electronics" data-status="active"&gt;
   &lt;!-- content --&gt;
-&lt;/div&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>new XAttribute(attrName, value)</code> or setting a property dynamically with reflection.</p><h3 id="the-separator-attribute"><a class="anchor" href="#the-separator-attribute">#</a>The separator Attribute</h3><p>When the content of <code>xsl:attribute</code> produces a sequence, the <code>separator</code> attribute controls how items are joined. This is useful for multi-value attributes like CSS classes:</p><pre><code class="language-xml">&lt;div&gt;
+&lt;/div&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
+      <strong>C# parallel:</strong> <code>new XAttribute(attrName, value)</code> or setting a property dynamically with reflection.
+                                        </p>
+                                        <h3 id="the-separator-attribute"><a class="anchor" href="#the-separator-attribute">#</a>The separator Attribute
+                                        </h3>
+                                        <p>When the content of <code>xsl:attribute</code> produces a sequence, the <code>separator</code> attribute controls how items are joined. This is useful for multi-value attributes like CSS classes:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;div&gt;
   &lt;xsl:attribute name="class" separator=" "&gt;
     &lt;xsl:text&gt;product-card&lt;/xsl:text&gt;
     &lt;xsl:if test="@on-sale = 'true'"&gt;
@@ -179,26 +980,85 @@
     &lt;/xsl:if&gt;
   &lt;/xsl:attribute&gt;
   &lt;xsl:apply-templates/&gt;
-&lt;/div&gt;</code></pre><p>A product that is on sale and featured produces:</p><pre><code class="language-html">&lt;div class="product-card on-sale featured"&gt;...&lt;/div&gt;</code></pre><p>Without <code>separator</code>, the default is to concatenate everything with no delimiter. The <code>separator</code> attribute is particularly helpful because it automatically handles the case where some conditional items are absent — no extra spaces or dangling separators.</p><p>
-      <strong>C# parallel:</strong> <code>string.Join(" ", classList.Where(c =&gt; c != null))</code> — building a CSS class list from conditional parts.</p><h3 id="placement-rules"><a class="anchor" href="#placement-rules">#</a>Placement Rules</h3><p>
-      <code>xsl:attribute</code> must appear before any child nodes in the parent element. This fails:</p><pre><code class="language-xml">&lt;!-- ERROR: attribute after child content --&gt;
+&lt;/div&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>A product that is on sale and featured produces:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">html</span>
+                                          </figcaption>
+                                          <pre><code class="language-html">&lt;div class="product-card on-sale featured"&gt;...&lt;/div&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>Without <code>separator</code>, the default is to concatenate everything with no delimiter. The <code>separator</code> attribute is particularly helpful because it automatically handles the case where some conditional items are absent — no extra spaces or dangling separators.
+                                        </p>
+                                        <p>
+      <strong>C# parallel:</strong> <code>string.Join(" ", classList.Where(c =&gt; c != null))</code> — building a CSS class list from conditional parts.
+                                        </p>
+                                        <h3 id="placement-rules"><a class="anchor" href="#placement-rules">#</a>Placement Rules
+                                        </h3>
+                                        <p>
+      <code>xsl:attribute</code> must appear before any child nodes in the parent element. This fails:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;!-- ERROR: attribute after child content --&gt;
 &lt;div&gt;
   &lt;p&gt;Some content&lt;/p&gt;
   &lt;xsl:attribute name="class"&gt;container&lt;/xsl:attribute&gt;  &lt;!-- too late! --&gt;
-&lt;/div&gt;</code></pre><p>The attribute instruction must come first:</p><pre><code class="language-xml">&lt;div&gt;
+&lt;/div&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>The attribute instruction must come first:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;div&gt;
   &lt;xsl:attribute name="class"&gt;container&lt;/xsl:attribute&gt;
   &lt;p&gt;Some content&lt;/p&gt;
-&lt;/div&gt;</code></pre><hr><h2 id="xsl-namespace"><a class="anchor" href="#xsl-namespace">#</a>xsl:namespace</h2><p>Creates a namespace declaration on the parent element. This is rarely needed because namespace declarations are usually handled automatically — when you create an element in a namespace, the serializer adds the necessary <code>xmlns</code> declarations. But occasionally you need explicit control.</p><h3 id="when-you-need-xsl-namespace"><a class="anchor" href="#when-you-need-xsl-namespace">#</a>When You Need xsl:namespace</h3><p>The primary use case is when the output document must contain namespace declarations that are not used by any element or attribute in that document. This happens with:</p><ul><li>
-        <p>
-          <strong>Schema-instance declarations</strong> (<code>xsi:schemaLocation</code>)</p>
-      </li><li>
-        <p>
-          <strong>Namespace-aware content</strong> embedded in attribute values (like XPath expressions in Schematron)</p>
-      </li><li>
-        <p>
+&lt;/div&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <hr>
+                                          <h2 id="xsl-namespace"><a class="anchor" href="#xsl-namespace">#</a>xsl:namespace
+                                          </h2>
+                                          <p>Creates a namespace declaration on the parent element. This is rarely needed because namespace declarations are usually handled automatically — when you create an element in a namespace, the serializer adds the necessary <code>xmlns</code> declarations. But occasionally you need explicit control.
+                                          </p>
+                                          <h3 id="when-you-need-xsl-namespace"><a class="anchor" href="#when-you-need-xsl-namespace">#</a>When You Need xsl:namespace
+                                          </h3>
+                                          <p>The primary use case is when the output document must contain namespace declarations that are not used by any element or attribute in that document. This happens with:
+                                          </p>
+                                          <ul>
+                                            <li>
+        
+                                              <p>
+          <strong>Schema-instance declarations</strong> (<code>xsi:schemaLocation</code>)
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>
+          <strong>Namespace-aware content</strong> embedded in attribute values (like XPath expressions in Schematron)
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>
           <strong>XSLT stylesheets that generate other XSLT stylesheets</strong>
-        </p>
-      </li></ul><pre><code class="language-xml">&lt;xsl:template match="/"&gt;
+        
+                                              </p>
+      
+                                            </li>
+                                          </ul>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;xsl:template match="/"&gt;
   &lt;root&gt;
     &lt;xsl:namespace name="xsi" select="'http://www.w3.org/2001/XMLSchema-instance'"/&gt;
     &lt;xsl:attribute name="xsi:schemaLocation"
@@ -207,13 +1067,52 @@
     &lt;/xsl:attribute&gt;
     &lt;xsl:apply-templates/&gt;
   &lt;/root&gt;
-&lt;/xsl:template&gt;</code></pre><p>Output:</p><pre><code class="language-xml">&lt;root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+&lt;/xsl:template&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>Output:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://example.com/schema catalog.xsd"&gt;
   &lt;!-- content --&gt;
-&lt;/root&gt;</code></pre><h3 id="dynamic-namespace-prefix"><a class="anchor" href="#dynamic-namespace-prefix">#</a>Dynamic Namespace Prefix</h3><p>The <code>name</code> attribute specifies the prefix; the <code>select</code> attribute (or content) specifies the URI:</p><pre><code class="language-xml">&lt;!-- Add a namespace with a dynamic prefix --&gt;
-&lt;xsl:namespace name="{$prefix}" select="$namespace-uri"/&gt;</code></pre><p>Use an empty <code>name</code> to set the default namespace:</p><pre><code class="language-xml">&lt;!-- Set the default namespace --&gt;
-&lt;xsl:namespace name="" select="'http://www.w3.org/1999/xhtml'"/&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>new XAttribute(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance")</code> — manually adding namespace declarations to an <code>XElement</code>.</p><hr><h2 id="xsl-document"><a class="anchor" href="#xsl-document">#</a>xsl:document</h2><p>Creates a new document node (the root of a tree). This is primarily useful for constructing temporary trees that you want to process further — for example, building an intermediate XML structure and then transforming it.</p><pre><code class="language-xml">&lt;xsl:variable name="temp-doc" as="document-node()"&gt;
+&lt;/root&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="dynamic-namespace-prefix"><a class="anchor" href="#dynamic-namespace-prefix">#</a>Dynamic Namespace Prefix
+                                          </h3>
+                                          <p>The <code>name</code> attribute specifies the prefix; the <code>select</code> attribute (or content) specifies the URI:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;!-- Add a namespace with a dynamic prefix --&gt;
+&lt;xsl:namespace name="{$prefix}" select="$namespace-uri"/&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>Use an empty <code>name</code> to set the default namespace:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;!-- Set the default namespace --&gt;
+&lt;xsl:namespace name="" select="'http://www.w3.org/1999/xhtml'"/&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>
+      <strong>C# parallel:</strong> <code>new XAttribute(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance")</code> — manually adding namespace declarations to an <code>XElement</code>.
+                                          </p>
+                                          <hr>
+                                            <h2 id="xsl-document"><a class="anchor" href="#xsl-document">#</a>xsl:document
+                                            </h2>
+                                            <p>Creates a new document node (the root of a tree). This is primarily useful for constructing temporary trees that you want to process further — for example, building an intermediate XML structure and then transforming it.
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:variable name="temp-doc" as="document-node()"&gt;
   &lt;xsl:document&gt;
     &lt;products&gt;
       &lt;xsl:for-each select="//product[@status = 'active']"&gt;
@@ -227,7 +1126,17 @@
   &lt;/xsl:document&gt;
 &lt;/xsl:variable&gt;
 &lt;!-- Now process the temporary document --&gt;
-&lt;xsl:apply-templates select="$temp-doc/products/product"/&gt;</code></pre><h3 id="when-to-use-xsl-document"><a class="anchor" href="#when-to-use-xsl-document">#</a>When to Use xsl:document</h3><p>In practice, <code>xsl:document</code> is uncommon because a variable with content already creates a document node:</p><pre><code class="language-xml">&lt;!-- These are nearly equivalent --&gt;
+&lt;xsl:apply-templates select="$temp-doc/products/product"/&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="when-to-use-xsl-document"><a class="anchor" href="#when-to-use-xsl-document">#</a>When to Use xsl:document
+                                            </h3>
+                                            <p>In practice, <code>xsl:document</code> is uncommon because a variable with content already creates a document node:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;!-- These are nearly equivalent --&gt;
 &lt;xsl:variable name="temp"&gt;
   &lt;products&gt;...&lt;/products&gt;
 &lt;/xsl:variable&gt;
@@ -235,10 +1144,24 @@
   &lt;xsl:document&gt;
     &lt;products&gt;...&lt;/products&gt;
   &lt;/xsl:document&gt;
-&lt;/xsl:variable&gt;</code></pre><p>The explicit <code>xsl:document</code> form is useful when:</p><ol><li>
-        <p>
-          <strong>You need a document node inside a function</strong> that returns <code>document-node()</code>:</p>
-      </li></ol><pre><code class="language-xml">&lt;xsl:function name="my:build-lookup" as="document-node()"&gt;
+&lt;/xsl:variable&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>The explicit <code>xsl:document</code> form is useful when:
+                                            </p>
+                                            <ol>
+                                              <li>
+        
+                                                <p>
+          <strong>You need a document node inside a function</strong> that returns <code>document-node()</code>:
+                                                </p>
+      
+                                              </li>
+                                            </ol>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:function name="my:build-lookup" as="document-node()"&gt;
   &lt;xsl:param name="items" as="element()*"/&gt;
   &lt;xsl:document&gt;
     &lt;lookup&gt;
@@ -247,14 +1170,34 @@
       &lt;/xsl:for-each&gt;
     &lt;/lookup&gt;
   &lt;/xsl:document&gt;
-&lt;/xsl:function&gt;</code></pre><ol><li>
-        <p>
-          <strong>You need validation</strong> — <code>xsl:document</code> supports the <code>validation</code> and <code>type</code> attributes for schema validation of the constructed tree.</p>
-      </li><li>
-        <p>
-          <strong>You are building a multi-pass transformation</strong> where the first pass constructs an intermediate document and the second pass transforms it to final output.</p>
-      </li></ol><p>
-      <strong>C# parallel:</strong> <code>new XDocument(new XElement("products", ...))</code> — constructing an in-memory XML document for further processing.</p><h3 id="multi-pass-transformation-example"><a class="anchor" href="#multi-pass-transformation-example">#</a>Multi-Pass Transformation Example</h3><pre><code class="language-xml">&lt;xsl:template match="/"&gt;
+&lt;/xsl:function&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <ol>
+                                              <li>
+        
+                                                <p>
+          <strong>You need validation</strong> — <code>xsl:document</code> supports the <code>validation</code> and <code>type</code> attributes for schema validation of the constructed tree.
+                                                </p>
+      
+                                              </li>
+                                              <li>
+        
+                                                <p>
+          <strong>You are building a multi-pass transformation</strong> where the first pass constructs an intermediate document and the second pass transforms it to final output.
+                                                </p>
+      
+                                              </li>
+                                            </ol>
+                                            <p>
+      <strong>C# parallel:</strong> <code>new XDocument(new XElement("products", ...))</code> — constructing an in-memory XML document for further processing.
+                                            </p>
+                                            <h3 id="multi-pass-transformation-example"><a class="anchor" href="#multi-pass-transformation-example">#</a>Multi-Pass Transformation Example
+                                            </h3>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:template match="/"&gt;
   &lt;!-- Pass 1: Build normalized intermediate document --&gt;
   &lt;xsl:variable name="normalized" as="document-node()"&gt;
     &lt;xsl:document&gt;
@@ -287,80 +1230,201 @@
       &lt;/xsl:for-each-group&gt;
     &lt;/body&gt;
   &lt;/html&gt;
-&lt;/xsl:template&gt;</code></pre><hr><h2 id="when-to-use-dynamic-construction-vs-literal-elements"><a class="anchor" href="#when-to-use-dynamic-construction-vs-literal-elements">#</a>When to Use Dynamic Construction vs. Literal Elements</h2><p>Use <strong>literal result elements</strong> (the default) whenever the element name is known at stylesheet-authoring time:</p><pre><code class="language-xml">&lt;!-- Preferred: literal result element --&gt;
+&lt;/xsl:template&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <hr>
+                                              <h2 id="when-to-use-dynamic-construction-vs-literal-elements"><a class="anchor" href="#when-to-use-dynamic-construction-vs-literal-elements">#</a>When to Use Dynamic Construction vs. Literal Elements
+                                              </h2>
+                                              <p>Use <strong>literal result elements</strong> (the default) whenever the element name is known at stylesheet-authoring time:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;!-- Preferred: literal result element --&gt;
 &lt;div class="product"&gt;
   &lt;h3&gt;&lt;xsl:value-of select="name"/&gt;&lt;/h3&gt;
-&lt;/div&gt;</code></pre><p>Use <strong>xsl:element / xsl:attribute</strong> when:</p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Scenario</p>
-          </th>
-          <th>
-            <p>Example</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>Element name is data-driven</p>
-          </td>
-          <td>
-            <p><code>&lt;xsl:element name="{@node-type}"&gt;</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Attribute name is data-driven</p>
-          </td>
-          <td>
-            <p><code>&lt;xsl:attribute name="data-{local-name()}"&gt;</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Element name depends on a condition</p>
-          </td>
-          <td>
-            <p><code>&lt;xsl:element name="{if ($level = 1) then 'h1' else 'h2'}"&gt;</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>You need programmatic namespace control</p>
-          </td>
-          <td>
-            <p><code>&lt;xsl:element name="ns:{$local}" namespace="{$uri}"&gt;</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Generating XSLT from XSLT</p>
-          </td>
-          <td>
-            <p>Element names collide with the XSLT namespace</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Building a generic/reflective transform</p>
-          </td>
-          <td>
-            <p>Processing arbitrary XML structures</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="decision-flowchart"><a class="anchor" href="#decision-flowchart">#</a>Decision Flowchart</h3><ol><li>
-        <p>
-          <strong>Is the element/attribute name fixed?</strong> Use a literal result element with AVTs for attribute values.</p>
-      </li><li>
-        <p>
-          <strong>Is the name computed from data?</strong> Use <code>xsl:element</code> or <code>xsl:attribute</code>.</p>
-      </li><li>
-        <p>
-          <strong>Is the name one of a small, known set?</strong> Consider <code>xsl:choose</code> with literal elements — it is more readable than <code>xsl:element</code> when there are only two or three alternatives.</p>
-      </li></ol><pre><code class="language-xml">&lt;!-- For a small set of known names, choose + literal is clearer --&gt;
+&lt;/div&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>Use <strong>xsl:element / xsl:attribute</strong> when:
+                                              </p>
+                                              <div class="table-wrap">
+                                                <table>
+      
+                                                  <thead>
+        
+                                                    <tr>
+          
+                                                      <th>
+            
+                                                        <p>Scenario
+                                                        </p>
+          
+                                                      </th>
+          
+                                                      <th>
+            
+                                                        <p>Example
+                                                        </p>
+          
+                                                      </th>
+        
+                                                    </tr>
+      
+                                                  </thead>
+      
+                                                  <tbody>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>Element name is data-driven
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>&lt;xsl:element name="{@node-type}"&gt;</code>
+            
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>Attribute name is data-driven
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>&lt;xsl:attribute name="data-{local-name()}"&gt;</code>
+            
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>Element name depends on a condition
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>&lt;xsl:element name="{if ($level = 1) then 'h1' else 'h2'}"&gt;</code>
+            
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>You need programmatic namespace control
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>&lt;xsl:element name="ns:{$local}" namespace="{$uri}"&gt;</code>
+            
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>Generating XSLT from XSLT
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Element names collide with the XSLT namespace
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>Building a generic/reflective transform
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Processing arbitrary XML structures
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+      
+                                                  </tbody>
+    
+                                                </table>
+                                              </div>
+                                              <h3 id="decision-flowchart"><a class="anchor" href="#decision-flowchart">#</a>Decision Flowchart
+                                              </h3>
+                                              <ol>
+                                                <li>
+        
+                                                  <p>
+          <strong>Is the element/attribute name fixed?</strong> Use a literal result element with AVTs for attribute values.
+                                                  </p>
+      
+                                                </li>
+                                                <li>
+        
+                                                  <p>
+          <strong>Is the name computed from data?</strong> Use <code>xsl:element</code> or <code>xsl:attribute</code>.
+                                                  </p>
+      
+                                                </li>
+                                                <li>
+        
+                                                  <p>
+          <strong>Is the name one of a small, known set?</strong> Consider <code>xsl:choose</code> with literal elements — it is more readable than <code>xsl:element</code> when there are only two or three alternatives.
+                                                  </p>
+      
+                                                </li>
+                                              </ol>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;!-- For a small set of known names, choose + literal is clearer --&gt;
 &lt;xsl:choose&gt;
   &lt;xsl:when test="@level = '1'"&gt;&lt;h1&gt;&lt;xsl:apply-templates/&gt;&lt;/h1&gt;&lt;/xsl:when&gt;
   &lt;xsl:when test="@level = '2'"&gt;&lt;h2&gt;&lt;xsl:apply-templates/&gt;&lt;/h2&gt;&lt;/xsl:when&gt;
@@ -370,66 +1434,257 @@
 &lt;!-- For an open-ended set, xsl:element is necessary --&gt;
 &lt;xsl:element name="h{@level}"&gt;
   &lt;xsl:apply-templates/&gt;
-&lt;/xsl:element&gt;</code></pre><p>
+&lt;/xsl:element&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>
       <strong>C# parallel summary:</strong>
-    </p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>XSLT</p>
-          </th>
-          <th>
-            <p>C# (LINQ to XML)</p>
-          </th>
-          <th>
-            <p>C# (String Interpolation)</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>&lt;div class="{@id}"&gt;</code> (AVT)</p>
-          </td>
-          <td>
-            <p><code>new XElement("div", new XAttribute("class", id))</code></p>
-          </td>
-          <td>
-            <p><code>$"&lt;div class=\"{id}\"&gt;"</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>&lt;xsl:element name="{$n}"&gt;</code></p>
-          </td>
-          <td>
-            <p><code>new XElement(n, ...)</code></p>
-          </td>
-          <td>
-            <p><code>$"&lt;{n}&gt;...&lt;/{n}&gt;"</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>&lt;xsl:attribute name="{$a}"&gt;</code></p>
-          </td>
-          <td>
-            <p><code>new XAttribute(a, value)</code></p>
-          </td>
-          <td>
-            <p><code>$"{a}=\"{value}\""</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>expand-text</code> / TVTs</p>
-          </td>
-          <td>
-            <p>N/A</p>
-          </td>
-          <td>
-            <p><code>$"Name: {product.Name}, Price: {product.Price:C}"</code></p>
-          </td>
-        </tr>
-      </tbody>
-    </table></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+    
+                                              </p>
+                                              <div class="table-wrap">
+                                                <table>
+      
+                                                  <thead>
+        
+                                                    <tr>
+          
+                                                      <th>
+            
+                                                        <p>XSLT
+                                                        </p>
+          
+                                                      </th>
+          
+                                                      <th>
+            
+                                                        <p>C# (LINQ to XML)
+                                                        </p>
+          
+                                                      </th>
+          
+                                                      <th>
+            
+                                                        <p>C# (String Interpolation)
+                                                        </p>
+          
+                                                      </th>
+        
+                                                    </tr>
+      
+                                                  </thead>
+      
+                                                  <tbody>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>&lt;div class="{@id}"&gt;</code> (AVT)
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>new XElement("div", new XAttribute("class", id))</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>$"&lt;div class=\"{id}\"&gt;"</code>
+            
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>&lt;xsl:element name="{$n}"&gt;</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>new XElement(n, ...)</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>$"&lt;{n}&gt;...&lt;/{n}&gt;"</code>
+            
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>&lt;xsl:attribute name="{$a}"&gt;</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>new XAttribute(a, value)</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>$"{a}=\"{value}\""</code>
+            
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>expand-text</code> / TVTs
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>N/A
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>$"Name: {product.Name}, Price: {product.Price:C}"</code>
+            
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+      
+                                                  </tbody>
+    
+                                                </table>
+                                              </div>
+                                            </article>
+                                          </main>
+                                          <aside class="toc" aria-label="On this page">
+                                            <p class="toc-label">On this page
+                                            </p>
+                                            <ul>
+                                              <li class="toc-h2"><a href="#contents">Contents</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#attribute-value-templates-avts">Attribute Value Templates (AVTs)</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#multiple-expressions-in-one-attribute">Multiple Expressions in One Attribute</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#escaping-curly-braces">Escaping Curly Braces</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#where-avts-work">Where AVTs Work</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#common-avt-patterns">Common AVT Patterns</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#text-value-templates">Text Value Templates</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#enabling-globally">Enabling Globally</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#escaping-in-text-value-templates">Escaping in Text Value Templates</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#xsl-element">xsl:element</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#basic-usage">Basic Usage</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#namespace-handling">Namespace Handling</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#the-use-attribute-sets-attribute">The use-attribute-sets Attribute</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#practical-example-generic-xml-to-html-table">Practical Example: Generic XML-to-HTML Table</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#xsl-attribute">xsl:attribute</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#why-not-just-use-avts">Why Not Just Use AVTs?</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#dynamic-attribute-names">Dynamic Attribute Names</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#the-separator-attribute">The separator Attribute</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#placement-rules">Placement Rules</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#xsl-namespace">xsl:namespace</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#when-you-need-xsl-namespace">When You Need xsl:namespace</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#dynamic-namespace-prefix">Dynamic Namespace Prefix</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#xsl-document">xsl:document</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#when-to-use-xsl-document">When to Use xsl:document</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#multi-pass-transformation-example">Multi-Pass Transformation Example</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#when-to-use-dynamic-construction-vs-literal-elements">When to Use Dynamic Construction vs. Literal Elements</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#decision-flowchart">Decision Flowchart</a>
+                                              </li>
+                                            </ul>
+                                          </aside>
+                                        </div>
+                                        <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                          <div class="search-backdrop">
+                                          </div>
+                                          <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                            <div class="search-results" id="search-results">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <footer class="site-footer">
+                                          <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                          </p>
+                                        </footer>
+                                        <script src="https://unpkg.com/lunr/lunr.js">
+                                        </script>
+                                        <script src="/js/prism.js">
+                                        </script>
+                                        <script src="/js/search.js">
+                                        </script>
+                                        <script src="/js/theme.js">
+                                        </script>
+                                        <script src="/js/toc.js">
+                                        </script>
+                                        <script src="/js/copy.js">
+                                        </script>
+                                      </body>
+                                    </html>

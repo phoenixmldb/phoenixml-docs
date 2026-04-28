@@ -1,59 +1,638 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Extensibility — PhoenixmlDb Documentation</title><meta name="description" content="Extending XSLT with custom functions, packages, extension instructions, and .NET integration"><link rel="canonical" href="/language-reference/xslt/extensibility.html"><meta property="og:title" content="Extensibility"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/extensibility.html"><meta property="og:description" content="Extending XSLT with custom functions, packages, extension instructions, and .NET integration"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Extensibility — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="Extending XSLT with custom functions, packages, extension instructions, and .NET integration">
+            <link rel="canonical" href="/language-reference/xslt/extensibility.html">
+              <meta property="og:title" content="Extensibility">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xslt/extensibility.html">
+                    <meta property="og:description" content="Extending XSLT with custom functions, packages, extension instructions, and .NET integration">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li class="active"><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="extensibility"><a class="anchor" href="#extensibility">#</a>Extensibility</h1><p>XSLT stylesheets rarely exist in isolation. Real transforms need domain-specific logic, access to external data, and integration with the host application. XSLT's extensibility model provides multiple mechanisms for this: user-defined functions, packages, extension functions registered from the host environment, and import/include hierarchies.</p><p>If you have worked with C# middleware, Razor tag helpers, or plugin architectures with <code>IServiceCollection</code>, you already understand the pattern: extend the framework's built-in capabilities with application-specific behavior.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#why-extensibility-matters" title="">Why Extensibility Matters</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslfunction--user-defined-functions" title="">xsl:function — User-Defined Functions</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#packages--reusable-stylesheet-libraries" title="">Packages — Reusable Stylesheet Libraries</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#extension-functions-from-net" title="">Extension Functions from .NET</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#extension-instructions-and-xslfallback" title="">Extension Instructions and xsl:fallback</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#import-and-include" title="">Import and Include</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#practical-patterns" title="">Practical Patterns</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#integration-examples" title="">Integration Examples</a>
-        </p>
-      </li></ul><hr><h2 id="why-extensibility-matters"><a class="anchor" href="#why-extensibility-matters">#</a>Why Extensibility Matters</h2><p>Consider a real XSLT transform for generating invoices. You need to:</p><ul><li>
-        <p>
-          <strong>Format currency</strong> according to the customer's locale</p>
-      </li><li>
-        <p>
-          <strong>Calculate tax</strong> based on jurisdiction-specific rules that change quarterly</p>
-      </li><li>
-        <p>
-          <strong>Look up</strong> the current exchange rate from an API</p>
-      </li><li>
-        <p>
-          <strong>Generate</strong> a unique invoice number from a database sequence</p>
-      </li><li>
-        <p>
-          <strong>Send</strong> the rendered invoice to a print queue or email service</p>
-      </li></ul><p>Standard XSLT can handle the XML transformation. Extensibility handles everything else — the parts where the stylesheet needs to talk to the outside world.</p><p>
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li class="active"><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">XSLT
+                                </p>
+                                <h1 class="page-title">Extensibility
+                                </h1>
+                                <p class="page-subtitle">Extending XSLT with custom functions, packages, extension instructions, and .NET integration
+                                </p>
+                                <h1 id="extensibility"><a class="anchor" href="#extensibility">#</a>Extensibility
+                                </h1>
+                                <p>XSLT stylesheets rarely exist in isolation. Real transforms need domain-specific logic, access to external data, and integration with the host application. XSLT's extensibility model provides multiple mechanisms for this: user-defined functions, packages, extension functions registered from the host environment, and import/include hierarchies.
+                                </p>
+                                <p>If you have worked with C# middleware, Razor tag helpers, or plugin architectures with <code>IServiceCollection</code>, you already understand the pattern: extend the framework's built-in capabilities with application-specific behavior.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#why-extensibility-matters">Why Extensibility Matters</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslfunction--user-defined-functions">xsl:function — User-Defined Functions</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#packages--reusable-stylesheet-libraries">Packages — Reusable Stylesheet Libraries</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#extension-functions-from-net">Extension Functions from .NET</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#extension-instructions-and-xslfallback">Extension Instructions and xsl:fallback</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#import-and-include">Import and Include</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#practical-patterns">Practical Patterns</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#integration-examples">Integration Examples</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="why-extensibility-matters"><a class="anchor" href="#why-extensibility-matters">#</a>Why Extensibility Matters
+                                  </h2>
+                                  <p>Consider a real XSLT transform for generating invoices. You need to:
+                                  </p>
+                                  <ul>
+                                    <li>
+        
+                                      <p>
+          <strong>Format currency</strong> according to the customer's locale
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <strong>Calculate tax</strong> based on jurisdiction-specific rules that change quarterly
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <strong>Look up</strong> the current exchange rate from an API
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <strong>Generate</strong> a unique invoice number from a database sequence
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <strong>Send</strong> the rendered invoice to a print queue or email service
+                                      </p>
+      
+                                    </li>
+                                  </ul>
+                                  <p>Standard XSLT can handle the XML transformation. Extensibility handles everything else — the parts where the stylesheet needs to talk to the outside world.
+                                  </p>
+                                  <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// ASP.NET Core: the framework handles HTTP, you extend with middleware and services
+    
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">csharp</span>
+                                    </figcaption>
+                                    <pre><code class="language-csharp">// ASP.NET Core: the framework handles HTTP, you extend with middleware and services
 builder.Services.AddScoped&lt;IInvoiceFormatter, LocaleAwareFormatter&gt;();
 builder.Services.AddScoped&lt;ITaxCalculator, JurisdictionTaxCalculator&gt;();
-builder.Services.AddHttpClient&lt;IExchangeRateService, OpenExchangeRateService&gt;();</code></pre><hr><h2 id="xsl-function-user-defined-functions"><a class="anchor" href="#xsl-function-user-defined-functions">#</a>xsl:function — User-Defined Functions</h2><p>This section provides a brief recap. For comprehensive coverage, see <a href="instructions/functions.html" title="">User-Defined Functions</a>.</p><p>
-      <code>xsl:function</code> defines custom functions callable from any XPath expression:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+builder.Services.AddHttpClient&lt;IExchangeRateService, OpenExchangeRateService&gt;();</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <hr>
+                                    <h2 id="xsl-function-user-defined-functions"><a class="anchor" href="#xsl-function-user-defined-functions">#</a>xsl:function — User-Defined Functions
+                                    </h2>
+                                    <p>This section provides a brief recap. For comprehensive coverage, see <a href="instructions/functions.html">User-Defined Functions</a>.
+                                    </p>
+                                    <p>
+      <code>xsl:function</code> defines custom functions callable from any XPath expression:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                  xmlns:app="http://example.com/app"
                  version="3.0"&gt;
   &lt;xsl:function name="app:format-price" as="xs:string"&gt;
@@ -77,7 +656,24 @@ builder.Services.AddHttpClient&lt;IExchangeRateService, OpenExchangeRateService&
       &lt;xsl:value-of select="app:format-price(total, @currency)"/&gt;
     &lt;/div&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><p>Functions can be recursive, accept other functions as arguments (higher-order functions), and return any XPath type — strings, numbers, nodes, maps, arrays, or sequences.</p><hr><h2 id="packages-reusable-stylesheet-libraries"><a class="anchor" href="#packages-reusable-stylesheet-libraries">#</a>Packages — Reusable Stylesheet Libraries</h2><p>This section provides a brief recap. For comprehensive coverage, see <a href="instructions/packages.html" title="">Packages</a>.</p><p>XSLT 3.0 packages bundle stylesheets into reusable libraries with controlled visibility — like NuGet packages for XSLT.</p><h3 id="defining-a-package"><a class="anchor" href="#defining-a-package">#</a>Defining a Package</h3><pre><code class="language-xml">&lt;xsl:package name="http://example.com/formatting" version="2.0"
+&lt;/xsl:stylesheet&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>Functions can be recursive, accept other functions as arguments (higher-order functions), and return any XPath type — strings, numbers, nodes, maps, arrays, or sequences.
+                                    </p>
+                                    <hr>
+                                      <h2 id="packages-reusable-stylesheet-libraries"><a class="anchor" href="#packages-reusable-stylesheet-libraries">#</a>Packages — Reusable Stylesheet Libraries
+                                      </h2>
+                                      <p>This section provides a brief recap. For comprehensive coverage, see <a href="instructions/packages.html">Packages</a>.
+                                      </p>
+                                      <p>XSLT 3.0 packages bundle stylesheets into reusable libraries with controlled visibility — like NuGet packages for XSLT.
+                                      </p>
+                                      <h3 id="defining-a-package"><a class="anchor" href="#defining-a-package">#</a>Defining a Package
+                                      </h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:package name="http://example.com/formatting" version="2.0"
              xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
              xmlns:fmt="http://example.com/formatting"
              version="3.0"&gt;
@@ -96,7 +692,15 @@ builder.Services.AddHttpClient&lt;IExchangeRateService, OpenExchangeRateService&
     &lt;xsl:param name="amount" as="xs:decimal"/&gt;
     &lt;xsl:value-of select="concat('$', format-number($amount, '#,##0.00'))"/&gt;
   &lt;/xsl:function&gt;
-&lt;/xsl:package&gt;</code></pre><h3 id="using-a-package"><a class="anchor" href="#using-a-package">#</a>Using a Package</h3><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+&lt;/xsl:package&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="using-a-package"><a class="anchor" href="#using-a-package">#</a>Using a Package
+                                      </h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;xsl:use-package name="http://example.com/formatting" version="2.0"&gt;
     &lt;!-- Override the abstract function --&gt;
     &lt;xsl:override&gt;
@@ -106,69 +710,178 @@ builder.Services.AddHttpClient&lt;IExchangeRateService, OpenExchangeRateService&
       &lt;/xsl:function&gt;
     &lt;/xsl:override&gt;
   &lt;/xsl:use-package&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><p>
+&lt;/xsl:stylesheet&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
       <strong>Visibility controls:</strong>
-    </p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>XSLT Visibility</p>
-          </th>
-          <th>
-            <p>C# Equivalent</p>
-          </th>
-          <th>
-            <p>Meaning</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>public</code></p>
-          </td>
-          <td>
-            <p><code>public</code></p>
-          </td>
-          <td>
-            <p>Accessible to consumers</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>private</code></p>
-          </td>
-          <td>
-            <p><code>private</code> / <code>internal</code></p>
-          </td>
-          <td>
-            <p>Hidden from consumers</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>final</code></p>
-          </td>
-          <td>
-            <p><code>sealed</code> / non-<code>virtual</code></p>
-          </td>
-          <td>
-            <p>Public but cannot be overridden</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>abstract</code></p>
-          </td>
-          <td>
-            <p><code>abstract</code></p>
-          </td>
-          <td>
-            <p>Must be overridden by consumer</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><hr><h2 id="extension-functions-from-net"><a class="anchor" href="#extension-functions-from-net">#</a>Extension Functions from .NET</h2><p>PhoenixmlDb allows you to register .NET methods that become callable from XPath expressions within XSLT stylesheets. This is the primary mechanism for connecting XSLT to the outside world.</p><h3 id="setting-stylesheet-parameters-from-c"><a class="anchor" href="#setting-stylesheet-parameters-from-c">#</a>Setting Stylesheet Parameters from C#</h3><p>The simplest form of .NET integration — pass values into the stylesheet:</p><pre><code class="language-csharp">var transformer = new XsltTransformer();
+    
+                                      </p>
+                                      <div class="table-wrap">
+                                        <table>
+      
+                                          <thead>
+        
+                                            <tr>
+          
+                                              <th>
+            
+                                                <p>XSLT Visibility
+                                                </p>
+          
+                                              </th>
+          
+                                              <th>
+            
+                                                <p>C# Equivalent
+                                                </p>
+          
+                                              </th>
+          
+                                              <th>
+            
+                                                <p>Meaning
+                                                </p>
+          
+                                              </th>
+        
+                                            </tr>
+      
+                                          </thead>
+      
+                                          <tbody>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>public</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>
+              <code>public</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Accessible to consumers
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>private</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>
+              <code>private</code> / <code>internal</code>
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Hidden from consumers
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>final</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>
+              <code>sealed</code> / non-<code>virtual</code>
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Public but cannot be overridden
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>abstract</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>
+              <code>abstract</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Must be overridden by consumer
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+      
+                                          </tbody>
+    
+                                        </table>
+                                      </div>
+                                      <hr>
+                                        <h2 id="extension-functions-from-net"><a class="anchor" href="#extension-functions-from-net">#</a>Extension Functions from .NET
+                                        </h2>
+                                        <p>PhoenixmlDb allows you to register .NET methods that become callable from XPath expressions within XSLT stylesheets. This is the primary mechanism for connecting XSLT to the outside world.
+                                        </p>
+                                        <h3 id="setting-stylesheet-parameters-from-c"><a class="anchor" href="#setting-stylesheet-parameters-from-c">#</a>Setting Stylesheet Parameters from C#
+                                        </h3>
+                                        <p>The simplest form of .NET integration — pass values into the stylesheet:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">var transformer = new XsltTransformer();
 await transformer.LoadStylesheetAsync(stylesheet, baseUri);
 // Set parameters that the stylesheet declares with xsl:param
 transformer.SetParameter("api-key", apiKey);
@@ -176,7 +889,15 @@ transformer.SetParameter("base-url", "https://api.example.com");
 transformer.SetParameter("report-date", DateTime.Now.ToString("yyyy-MM-dd"));
 transformer.SetParameter("environment", "production");
 transformer.SetParameter("user-name", currentUser.DisplayName);
-var result = await transformer.TransformAsync(inputXml);</code></pre><p>The stylesheet declares matching parameters:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+var result = await transformer.TransformAsync(inputXml);</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>The stylesheet declares matching parameters:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;xsl:param name="api-key" as="xs:string"/&gt;
   &lt;xsl:param name="base-url" as="xs:string" select="'https://localhost'"/&gt;
   &lt;xsl:param name="report-date" as="xs:date" select="current-date()"/&gt;
@@ -189,9 +910,17 @@ var result = await transformer.TransformAsync(inputXml);</code></pre><p>The styl
       &lt;xsl:apply-templates/&gt;
     &lt;/report&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><p>
+&lt;/xsl:stylesheet&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// Parameters are like constructor arguments or configuration values
+    
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">// Parameters are like constructor arguments or configuration values
 public class ReportGenerator
 {
     private readonly string _apiKey;
@@ -203,7 +932,17 @@ public class ReportGenerator
         _baseUrl = config["BaseUrl"];
         _environment = config["Environment"] ?? "development";
     }
-}</code></pre><h3 id="registering-extension-functions"><a class="anchor" href="#registering-extension-functions">#</a>Registering Extension Functions</h3><p>Register C# methods that XSLT can call from XPath expressions:</p><pre><code class="language-csharp">var transformer = new XsltTransformer();
+}</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="registering-extension-functions"><a class="anchor" href="#registering-extension-functions">#</a>Registering Extension Functions
+                                        </h3>
+                                        <p>Register C# methods that XSLT can call from XPath expressions:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">var transformer = new XsltTransformer();
 await transformer.LoadStylesheetAsync(stylesheet, baseUri);
 // Register a function that returns a value
 transformer.RegisterFunction(
@@ -241,7 +980,15 @@ transformer.RegisterFunction(
         logger.Log(level == "error" ? LogLevel.Error : LogLevel.Information, message);
         return true;
     }
-);</code></pre><p>The stylesheet calls these functions:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+);</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>The stylesheet calls these functions:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                  xmlns:ext="http://example.com/ext"
                  version="3.0"&gt;
   &lt;xsl:template match="price"&gt;
@@ -255,7 +1002,17 @@ transformer.RegisterFunction(
       &lt;xsl:value-of select="ext:format-phone(.)"/&gt;
     &lt;/formatted-phone&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><h3 id="handling-secondary-result-documents"><a class="anchor" href="#handling-secondary-result-documents">#</a>Handling Secondary Result Documents</h3><p>XSLT's <code>xsl:result-document</code> produces multiple output files from a single transform. The .NET API captures all of them:</p><pre><code class="language-xml">&lt;!-- Stylesheet that produces multiple files --&gt;
+&lt;/xsl:stylesheet&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="handling-secondary-result-documents"><a class="anchor" href="#handling-secondary-result-documents">#</a>Handling Secondary Result Documents
+                                        </h3>
+                                        <p>XSLT's <code>xsl:result-document</code> produces multiple output files from a single transform. The .NET API captures all of them:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;!-- Stylesheet that produces multiple files --&gt;
 &lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;xsl:template match="/"&gt;
     &lt;!-- Primary output: index.html --&gt;
@@ -282,7 +1039,13 @@ transformer.RegisterFunction(
       &lt;/xsl:result-document&gt;
     &lt;/xsl:for-each&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><pre><code class="language-csharp">var transformer = new XsltTransformer();
+&lt;/xsl:stylesheet&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">var transformer = new XsltTransformer();
 await transformer.LoadStylesheetAsync(stylesheet, baseUri);
 var primaryResult = await transformer.TransformAsync(inputXml);
 // Write primary result
@@ -296,7 +1059,20 @@ foreach (var (href, content) in transformer.SecondaryResultDocuments)
     Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
     await File.WriteAllTextAsync(filePath, content);
 }
-Console.WriteLine($"Generated {1 + transformer.SecondaryResultDocuments.Count} files");</code></pre><hr><h2 id="extension-instructions-and-xsl-fallback"><a class="anchor" href="#extension-instructions-and-xsl-fallback">#</a>Extension Instructions and xsl:fallback</h2><h3 id="extension-instructions"><a class="anchor" href="#extension-instructions">#</a>Extension Instructions</h3><p>Extension elements allow processors to support custom XSLT instructions beyond the standard set. You declare extension namespaces with <code>extension-element-prefixes</code>:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+Console.WriteLine($"Generated {1 + transformer.SecondaryResultDocuments.Count} files");</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <hr>
+                                          <h2 id="extension-instructions-and-xsl-fallback"><a class="anchor" href="#extension-instructions-and-xsl-fallback">#</a>Extension Instructions and xsl:fallback
+                                          </h2>
+                                          <h3 id="extension-instructions"><a class="anchor" href="#extension-instructions">#</a>Extension Instructions
+                                          </h3>
+                                          <p>Extension elements allow processors to support custom XSLT instructions beyond the standard set. You declare extension namespaces with <code>extension-element-prefixes</code>:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                  xmlns:sql="http://example.com/sql-extension"
                  extension-element-prefixes="sql"
                  version="3.0"&gt;
@@ -313,7 +1089,17 @@ Console.WriteLine($"Generated {1 + transformer.SecondaryResultDocuments.Count} f
       &lt;/xsl:for-each&gt;
     &lt;/table&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><h3 id="xsl-fallback-graceful-degradation"><a class="anchor" href="#xsl-fallback-graceful-degradation">#</a>xsl:fallback — Graceful Degradation</h3><p>When an extension element is not available (because the stylesheet runs on a different processor), <code>xsl:fallback</code> provides a safe alternative:</p><pre><code class="language-xml">&lt;xsl:template match="data"&gt;
+&lt;/xsl:stylesheet&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="xsl-fallback-graceful-degradation"><a class="anchor" href="#xsl-fallback-graceful-degradation">#</a>xsl:fallback — Graceful Degradation
+                                          </h3>
+                                          <p>When an extension element is not available (because the stylesheet runs on a different processor), <code>xsl:fallback</code> provides a safe alternative:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;xsl:template match="data"&gt;
   &lt;sql:query connection="main" var="rows"&gt;
     SELECT * FROM products
     &lt;xsl:fallback&gt;
@@ -322,9 +1108,19 @@ Console.WriteLine($"Generated {1 + transformer.SecondaryResultDocuments.Count} f
       &lt;xsl:apply-templates select="document('static-products.xml')//product"/&gt;
     &lt;/xsl:fallback&gt;
   &lt;/sql:query&gt;
-&lt;/xsl:template&gt;</code></pre><p>This pattern lets you write stylesheets that work across processors — using advanced features where available and degrading gracefully elsewhere.</p><p>
+&lt;/xsl:template&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>This pattern lets you write stylesheets that work across processors — using advanced features where available and degrading gracefully elsewhere.
+                                          </p>
+                                          <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// Similar to optional dependency injection with fallbacks
+    
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">// Similar to optional dependency injection with fallbacks
 public class ProductService
 {
     private readonly ISqlExtension? _sql;
@@ -336,13 +1132,36 @@ public class ProductService
         else
             return _fallback.LoadProducts("static-products.xml");
     }
-}</code></pre><h3 id="use-when-compile-time-conditional-inclusion"><a class="anchor" href="#use-when-compile-time-conditional-inclusion">#</a>use-when — Compile-Time Conditional Inclusion</h3><p>For compile-time decisions about which code to include:</p><pre><code class="language-xml">&lt;!-- Only include debug templates when running in development --&gt;
+}</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="use-when-compile-time-conditional-inclusion"><a class="anchor" href="#use-when-compile-time-conditional-inclusion">#</a>use-when — Compile-Time Conditional Inclusion
+                                          </h3>
+                                          <p>For compile-time decisions about which code to include:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;!-- Only include debug templates when running in development --&gt;
 &lt;xsl:template match="*" mode="debug"
               use-when="system-property('xsl:product-name') = 'PhoenixmlDb'"&gt;
   &lt;div class="debug"&gt;
     &lt;pre&gt;&lt;xsl:copy-of select="."/&gt;&lt;/pre&gt;
   &lt;/div&gt;
-&lt;/xsl:template&gt;</code></pre><hr><h2 id="import-and-include"><a class="anchor" href="#import-and-include">#</a>Import and Include</h2><h3 id="xsl-import-lower-precedence"><a class="anchor" href="#xsl-import-lower-precedence">#</a>xsl:import — Lower Precedence</h3><p>Imported templates and functions have lower precedence than those in the importing stylesheet. This lets you define defaults that the importer can override:</p><pre><code class="language-xml">&lt;!-- base-styles.xsl — provides default formatting --&gt;
+&lt;/xsl:template&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <hr>
+                                            <h2 id="import-and-include"><a class="anchor" href="#import-and-include">#</a>Import and Include
+                                            </h2>
+                                            <h3 id="xsl-import-lower-precedence"><a class="anchor" href="#xsl-import-lower-precedence">#</a>xsl:import — Lower Precedence
+                                            </h3>
+                                            <p>Imported templates and functions have lower precedence than those in the importing stylesheet. This lets you define defaults that the importer can override:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;!-- base-styles.xsl — provides default formatting --&gt;
 &lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;xsl:template match="heading"&gt;
     &lt;h2&gt;&lt;xsl:value-of select="."/&gt;&lt;/h2&gt;
@@ -350,7 +1169,13 @@ public class ProductService
   &lt;xsl:template match="paragraph"&gt;
     &lt;p&gt;&lt;xsl:value-of select="."/&gt;&lt;/p&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><pre><code class="language-xml">&lt;!-- custom-styles.xsl — overrides specific templates --&gt;
+&lt;/xsl:stylesheet&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;!-- custom-styles.xsl — overrides specific templates --&gt;
 &lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;xsl:import href="base-styles.xsl"/&gt;
   &lt;!-- Override: headings get a class attribute --&gt;
@@ -358,14 +1183,30 @@ public class ProductService
     &lt;h2 class="custom-heading"&gt;&lt;xsl:value-of select="."/&gt;&lt;/h2&gt;
   &lt;/xsl:template&gt;
   &lt;!-- paragraph template is inherited from base-styles.xsl --&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><p>You can call the overridden (imported) template with <code>xsl:next-match</code> or <code>xsl:apply-imports</code>:</p><pre><code class="language-xml">&lt;xsl:template match="heading"&gt;
+&lt;/xsl:stylesheet&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>You can call the overridden (imported) template with <code>xsl:next-match</code> or <code>xsl:apply-imports</code>:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:template match="heading"&gt;
   &lt;div class="heading-wrapper"&gt;
     &lt;!-- Delegate to the imported template for the actual rendering --&gt;
     &lt;xsl:next-match/&gt;
   &lt;/div&gt;
-&lt;/xsl:template&gt;</code></pre><p>
+&lt;/xsl:template&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// Like virtual method override with base call
+    
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">csharp</span>
+                                              </figcaption>
+                                              <pre><code class="language-csharp">// Like virtual method override with base call
 public class CustomRenderer : BaseRenderer
 {
     public override string RenderHeading(string text)
@@ -373,7 +1214,17 @@ public class CustomRenderer : BaseRenderer
         // Wrap the base implementation
         return $"&lt;div class='heading-wrapper'&gt;{base.RenderHeading(text)}&lt;/div&gt;";
     }
-}</code></pre><h3 id="xsl-include-same-precedence"><a class="anchor" href="#xsl-include-same-precedence">#</a>xsl:include — Same Precedence</h3><p>Included stylesheets are treated as if their content were copy-pasted into the including stylesheet. There is no precedence difference:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+}</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="xsl-include-same-precedence"><a class="anchor" href="#xsl-include-same-precedence">#</a>xsl:include — Same Precedence
+                                            </h3>
+                                            <p>Included stylesheets are treated as if their content were copy-pasted into the including stylesheet. There is no precedence difference:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;!-- Pull in shared templates at the same precedence level --&gt;
   &lt;xsl:include href="common-templates.xsl"/&gt;
   &lt;xsl:include href="utility-functions.xsl"/&gt;
@@ -381,7 +1232,15 @@ public class CustomRenderer : BaseRenderer
     &lt;!-- Can use templates and functions from included files --&gt;
     &lt;xsl:apply-templates/&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><h3 id="building-stylesheet-hierarchies"><a class="anchor" href="#building-stylesheet-hierarchies">#</a>Building Stylesheet Hierarchies</h3><p>Larger projects use a layered architecture:</p><pre><code>stylesheets/
+&lt;/xsl:stylesheet&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="building-stylesheet-hierarchies"><a class="anchor" href="#building-stylesheet-hierarchies">#</a>Building Stylesheet Hierarchies
+                                            </h3>
+                                            <p>Larger projects use a layered architecture:
+                                            </p>
+                                            <figure class="code">
+                                              <pre><code>stylesheets/
   base/
     typography.xsl        (: base text formatting :)
     layout.xsl            (: page structure :)
@@ -392,7 +1251,13 @@ public class CustomRenderer : BaseRenderer
   transforms/
     invoice.xsl           (: includes corporate theme + invoice-specific logic :)
     report.xsl            (: includes corporate theme + report-specific logic :)
-    email-template.xsl    (: includes marketing theme + email layout :)</code></pre><pre><code class="language-xml">&lt;!-- transforms/invoice.xsl --&gt;
+    email-template.xsl    (: includes marketing theme + email layout :)</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;!-- transforms/invoice.xsl --&gt;
 &lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;!-- Import the corporate theme (which imports base) --&gt;
   &lt;xsl:import href="../themes/corporate.xsl"/&gt;
@@ -402,69 +1267,167 @@ public class CustomRenderer : BaseRenderer
   &lt;xsl:template match="invoice"&gt;
     &lt;!-- ... --&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><p>
+&lt;/xsl:stylesheet&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
       <strong>Import vs Include — when to use each:</strong>
-    </p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Aspect</p>
-          </th>
-          <th>
-            <p><code>xsl:import</code></p>
-          </th>
-          <th>
-            <p><code>xsl:include</code></p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>Precedence</p>
-          </td>
-          <td>
-            <p>Lower than importing stylesheet</p>
-          </td>
-          <td>
-            <p>Same as including stylesheet</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Can override</p>
-          </td>
-          <td>
-            <p>Yes — importer's templates win</p>
-          </td>
-          <td>
-            <p>No — name conflicts are errors</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Use case</p>
-          </td>
-          <td>
-            <p>Base/default templates you want to customize</p>
-          </td>
-          <td>
-            <p>Shared utilities you want at the same level</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>C# parallel</p>
-          </td>
-          <td>
-            <p>Inheriting from a base class</p>
-          </td>
-          <td>
-            <p><code>partial</code> classes or <code>global using static</code></p>
-          </td>
-        </tr>
-      </tbody>
-    </table><hr><h2 id="practical-patterns"><a class="anchor" href="#practical-patterns">#</a>Practical Patterns</h2><h3 id="custom-output-formatting-functions"><a class="anchor" href="#custom-output-formatting-functions">#</a>Custom Output Formatting Functions</h3><p>Build a library of formatting functions for consistent output:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    
+                                            </p>
+                                            <div class="table-wrap">
+                                              <table>
+      
+                                                <thead>
+        
+                                                  <tr>
+          
+                                                    <th>
+            
+                                                      <p>Aspect
+                                                      </p>
+          
+                                                    </th>
+          
+                                                    <th>
+            
+                                                      <p>
+              <code>xsl:import</code>
+            
+                                                      </p>
+          
+                                                    </th>
+          
+                                                    <th>
+            
+                                                      <p>
+              <code>xsl:include</code>
+            
+                                                      </p>
+          
+                                                    </th>
+        
+                                                  </tr>
+      
+                                                </thead>
+      
+                                                <tbody>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>Precedence
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Lower than importing stylesheet
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Same as including stylesheet
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>Can override
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Yes — importer's templates win
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>No — name conflicts are errors
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>Use case
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Base/default templates you want to customize
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Shared utilities you want at the same level
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>C# parallel
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Inheriting from a base class
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>
+              <code>partial</code> classes or <code>global using static</code>
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+      
+                                                </tbody>
+    
+                                              </table>
+                                            </div>
+                                            <hr>
+                                              <h2 id="practical-patterns"><a class="anchor" href="#practical-patterns">#</a>Practical Patterns
+                                              </h2>
+                                              <h3 id="custom-output-formatting-functions"><a class="anchor" href="#custom-output-formatting-functions">#</a>Custom Output Formatting Functions
+                                              </h3>
+                                              <p>Build a library of formatting functions for consistent output:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                  xmlns:fmt="http://example.com/format"
                  version="3.0"&gt;
   &lt;xsl:function name="fmt:date-human" as="xs:string"&gt;
@@ -498,7 +1461,17 @@ public class CustomRenderer : BaseRenderer
     &lt;xsl:param name="plural" as="xs:string"/&gt;
     &lt;xsl:value-of select="concat($count, ' ', if ($count = 1) then $singular else $plural)"/&gt;
   &lt;/xsl:function&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><h3 id="conditional-processing-based-on-environment"><a class="anchor" href="#conditional-processing-based-on-environment">#</a>Conditional Processing Based on Environment</h3><p>Use parameters to vary behavior between development and production:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+&lt;/xsl:stylesheet&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="conditional-processing-based-on-environment"><a class="anchor" href="#conditional-processing-based-on-environment">#</a>Conditional Processing Based on Environment
+                                              </h3>
+                                              <p>Use parameters to vary behavior between development and production:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;xsl:param name="environment" as="xs:string" select="'development'"/&gt;
   &lt;xsl:param name="debug" as="xs:boolean" select="false()"/&gt;
   &lt;xsl:param name="cdn-url" as="xs:string" select="''"/&gt;
@@ -531,7 +1504,13 @@ public class CustomRenderer : BaseRenderer
       &lt;/body&gt;
     &lt;/html&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><pre><code class="language-csharp">// C# — set environment-specific parameters
+&lt;/xsl:stylesheet&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">csharp</span>
+                                                </figcaption>
+                                                <pre><code class="language-csharp">// C# — set environment-specific parameters
 var transformer = new XsltTransformer();
 await transformer.LoadStylesheetAsync(stylesheet, baseUri);
 if (env.IsProduction())
@@ -545,7 +1524,17 @@ else
     transformer.SetParameter("environment", "development");
     transformer.SetParameter("debug", true);
 }
-var html = await transformer.TransformAsync(inputXml);</code></pre><h3 id="multi-pass-transforms"><a class="anchor" href="#multi-pass-transforms">#</a>Multi-Pass Transforms</h3><p>Feed the output of one transform into another:</p><pre><code class="language-csharp">var transformer = new XsltTransformer();
+var html = await transformer.TransformAsync(inputXml);</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="multi-pass-transforms"><a class="anchor" href="#multi-pass-transforms">#</a>Multi-Pass Transforms
+                                              </h3>
+                                              <p>Feed the output of one transform into another:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">csharp</span>
+                                                </figcaption>
+                                                <pre><code class="language-csharp">var transformer = new XsltTransformer();
 // Pass 1: Normalize the data
 await transformer.LoadStylesheetAsync(normalizeStylesheet, baseUri);
 var normalized = await transformer.TransformAsync(rawInput);
@@ -557,7 +1546,17 @@ var enriched = await transformer.TransformAsync(normalized);
 await transformer.LoadStylesheetAsync(renderStylesheet, baseUri);
 transformer.SetParameter("output-format", "html");
 var finalOutput = await transformer.TransformAsync(enriched);
-await File.WriteAllTextAsync("output/report.html", finalOutput);</code></pre><h3 id="data-access-via-extension-functions"><a class="anchor" href="#data-access-via-extension-functions">#</a>Data Access via Extension Functions</h3><p>Query a database from within an XSLT transform by registering data access functions:</p><pre><code class="language-csharp">transformer.RegisterFunction(
+await File.WriteAllTextAsync("output/report.html", finalOutput);</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="data-access-via-extension-functions"><a class="anchor" href="#data-access-via-extension-functions">#</a>Data Access via Extension Functions
+                                              </h3>
+                                              <p>Query a database from within an XSLT transform by registering data access functions:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">csharp</span>
+                                                </figcaption>
+                                                <pre><code class="language-csharp">transformer.RegisterFunction(
     "http://example.com/db",
     "lookup-customer",
     (string customerId) =&gt;
@@ -574,7 +1573,13 @@ await File.WriteAllTextAsync("output/report.html", finalOutput);</code></pre><h3
         }
         return "&lt;customer/&gt;";
     }
-);</code></pre><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+);</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                  xmlns:db="http://example.com/db"
                  version="3.0"&gt;
   &lt;xsl:template match="order"&gt;
@@ -587,7 +1592,20 @@ await File.WriteAllTextAsync("output/report.html", finalOutput);</code></pre><h3
       &lt;xsl:apply-templates select="items"/&gt;
     &lt;/div&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><hr><h2 id="integration-examples"><a class="anchor" href="#integration-examples">#</a>Integration Examples</h2><h3 id="asp-net-core-xslt-transforms-as-middleware"><a class="anchor" href="#asp-net-core-xslt-transforms-as-middleware">#</a>ASP.NET Core — XSLT Transforms as Middleware</h3><p>Use XSLT to transform XML API responses into HTML:</p><pre><code class="language-csharp">public class XsltMiddleware
+&lt;/xsl:stylesheet&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <hr>
+                                                <h2 id="integration-examples"><a class="anchor" href="#integration-examples">#</a>Integration Examples
+                                                </h2>
+                                                <h3 id="asp-net-core-xslt-transforms-as-middleware"><a class="anchor" href="#asp-net-core-xslt-transforms-as-middleware">#</a>ASP.NET Core — XSLT Transforms as Middleware
+                                                </h3>
+                                                <p>Use XSLT to transform XML API responses into HTML:
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">csharp</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-csharp">public class XsltMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly string _stylesheetPath;
@@ -634,7 +1652,17 @@ await File.WriteAllTextAsync("output/report.html", finalOutput);</code></pre><h3
     }
 }
 // Registration in Program.cs
-app.UseMiddleware&lt;XsltMiddleware&gt;("stylesheets/api-to-html.xsl");</code></pre><h3 id="cli-tools-batch-transforms"><a class="anchor" href="#cli-tools-batch-transforms">#</a>CLI Tools — Batch Transforms</h3><p>Build a command-line tool that applies XSLT transforms, similar to PhoenixmlDb's <code>xslt</code> CLI:</p><pre><code class="language-csharp">public class XsltCli
+app.UseMiddleware&lt;XsltMiddleware&gt;("stylesheets/api-to-html.xsl");</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <h3 id="cli-tools-batch-transforms"><a class="anchor" href="#cli-tools-batch-transforms">#</a>CLI Tools — Batch Transforms
+                                                </h3>
+                                                <p>Build a command-line tool that applies XSLT transforms, similar to PhoenixmlDb's <code>xslt</code> CLI:
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">csharp</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-csharp">public class XsltCli
 {
     public static async Task&lt;int&gt; Main(string[] args)
     {
@@ -671,7 +1699,15 @@ app.UseMiddleware&lt;XsltMiddleware&gt;("stylesheets/api-to-html.xsl");</code></
         }
         return 0;
     }
-}</code></pre><p>Usage:</p><pre><code class="language-bash"># Basic transform
+}</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <p>Usage:
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">bash</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-bash"># Basic transform
 dotnet run -- stylesheet.xsl input.xml output.html
 # With parameters
 dotnet run -- invoice.xsl order.xml invoice.html customer-name="Acme Corp" currency=EUR
@@ -679,7 +1715,17 @@ dotnet run -- invoice.xsl order.xml invoice.html customer-name="Acme Corp" curre
 dotnet run -- catalog.xsl products.xml output/index.html
 #   Created: output/product-001.html
 #   Created: output/product-002.html
-#   Created: output/product-003.html</code></pre><h3 id="ci-cd-generating-documentation-and-reports"><a class="anchor" href="#ci-cd-generating-documentation-and-reports">#</a>CI/CD — Generating Documentation and Reports</h3><p>Use XSLT in build pipelines to generate documentation, configuration files, or test reports:</p><pre><code class="language-csharp">// Build step: generate API documentation from XML doc comments
+#   Created: output/product-003.html</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <h3 id="ci-cd-generating-documentation-and-reports"><a class="anchor" href="#ci-cd-generating-documentation-and-reports">#</a>CI/CD — Generating Documentation and Reports
+                                                </h3>
+                                                <p>Use XSLT in build pipelines to generate documentation, configuration files, or test reports:
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">csharp</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-csharp">// Build step: generate API documentation from XML doc comments
 public class DocGenerationTask
 {
     public async Task GenerateApiDocsAsync(string projectDir, string outputDir)
@@ -707,6 +1753,105 @@ public class DocGenerationTask
             await File.WriteAllTextAsync(Path.Combine(outputDir, href), content);
         }
     }
-}</code></pre><pre><code class="language-yaml"># GitHub Actions workflow step
+}</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">yaml</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-yaml"># GitHub Actions workflow step
 - name: Generate API Documentation
-  run: dotnet run --project tools/DocGen -- src/ docs/api/</code></pre><p>The XSLT stylesheet handles all the formatting logic — converting raw XML doc comments into navigable, styled HTML pages — while the .NET code handles file I/O, parameter passing, and build integration.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+  run: dotnet run --project tools/DocGen -- src/ docs/api/</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <p>The XSLT stylesheet handles all the formatting logic — converting raw XML doc comments into navigable, styled HTML pages — while the .NET code handles file I/O, parameter passing, and build integration.
+                                                </p>
+                                              </article>
+                                            </main>
+                                            <aside class="toc" aria-label="On this page">
+                                              <p class="toc-label">On this page
+                                              </p>
+                                              <ul>
+                                                <li class="toc-h2"><a href="#contents">Contents</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#why-extensibility-matters">Why Extensibility Matters</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#xsl-function-user-defined-functions">xsl:function — User-Defined Functions</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#packages-reusable-stylesheet-libraries">Packages — Reusable Stylesheet Libraries</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#defining-a-package">Defining a Package</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#using-a-package">Using a Package</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#extension-functions-from-net">Extension Functions from .NET</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#setting-stylesheet-parameters-from-c">Setting Stylesheet Parameters from C#</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#registering-extension-functions">Registering Extension Functions</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#handling-secondary-result-documents">Handling Secondary Result Documents</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#extension-instructions-and-xsl-fallback">Extension Instructions and xsl:fallback</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#extension-instructions">Extension Instructions</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#xsl-fallback-graceful-degradation">xsl:fallback — Graceful Degradation</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#use-when-compile-time-conditional-inclusion">use-when — Compile-Time Conditional Inclusion</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#import-and-include">Import and Include</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#xsl-import-lower-precedence">xsl:import — Lower Precedence</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#xsl-include-same-precedence">xsl:include — Same Precedence</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#building-stylesheet-hierarchies">Building Stylesheet Hierarchies</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#practical-patterns">Practical Patterns</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#custom-output-formatting-functions">Custom Output Formatting Functions</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#conditional-processing-based-on-environment">Conditional Processing Based on Environment</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#multi-pass-transforms">Multi-Pass Transforms</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#data-access-via-extension-functions">Data Access via Extension Functions</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#integration-examples">Integration Examples</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#asp-net-core-xslt-transforms-as-middleware">ASP.NET Core — XSLT Transforms as Middleware</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#cli-tools-batch-transforms">CLI Tools — Batch Transforms</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#ci-cd-generating-documentation-and-reports">CI/CD — Generating Documentation and Reports</a>
+                                                </li>
+                                              </ul>
+                                            </aside>
+                                          </div>
+                                          <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                            <div class="search-backdrop">
+                                            </div>
+                                            <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                              <div class="search-results" id="search-results">
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <footer class="site-footer">
+                                            <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                            </p>
+                                          </footer>
+                                          <script src="https://unpkg.com/lunr/lunr.js">
+                                          </script>
+                                          <script src="/js/prism.js">
+                                          </script>
+                                          <script src="/js/search.js">
+                                          </script>
+                                          <script src="/js/theme.js">
+                                          </script>
+                                          <script src="/js/toc.js">
+                                          </script>
+                                          <script src="/js/copy.js">
+                                          </script>
+                                        </body>
+                                      </html>

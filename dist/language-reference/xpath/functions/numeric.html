@@ -1,135 +1,1002 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Numeric Functions — PhoenixmlDb Documentation</title><meta name="description" content="XPath numeric functions — arithmetic, rounding, aggregation"><link rel="canonical" href="/language-reference/xpath/functions/numeric.html"><meta property="og:title" content="Numeric Functions"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xpath/functions/numeric.html"><meta property="og:description" content="XPath numeric functions — arithmetic, rounding, aggregation"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Numeric Functions — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="XPath numeric functions — arithmetic, rounding, aggregation">
+            <link rel="canonical" href="/language-reference/xpath/functions/numeric.html">
+              <meta property="og:title" content="Numeric Functions">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xpath/functions/numeric.html">
+                    <meta property="og:description" content="XPath numeric functions — arithmetic, rounding, aggregation">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li class="active"><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="numeric-functions"><a class="anchor" href="#numeric-functions">#</a>Numeric Functions</h1><p>XPath's numeric functions cover rounding, absolute values, and aggregate operations over sequences. If you're used to <code>System.Math</code> and LINQ aggregates in C#, these map directly.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#rounding-and-truncation" title="">Rounding and Truncation</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#absolute-value" title="">Absolute Value</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#aggregation" title="">Aggregation</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#numeric-testing" title="">Numeric Testing</a>
-        </p>
-      </li></ul><hr><h2 id="rounding-and-truncation"><a class="anchor" href="#rounding-and-truncation">#</a>Rounding and Truncation</h2><h3 id="round"><a class="anchor" href="#round">#</a>round()</h3><p>Rounds a number to the nearest integer, or to a specified number of decimal places.</p><p>
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section open">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li class="active"><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">Functions
+                                </p>
+                                <h1 class="page-title">Numeric Functions
+                                </h1>
+                                <p class="page-subtitle">XPath numeric functions — arithmetic, rounding, aggregation
+                                </p>
+                                <h1 id="numeric-functions"><a class="anchor" href="#numeric-functions">#</a>Numeric Functions
+                                </h1>
+                                <p>XPath's numeric functions cover rounding, absolute values, and aggregate operations over sequences. If you're used to <code>System.Math</code> and LINQ aggregates in C#, these map directly.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#rounding-and-truncation">Rounding and Truncation</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#absolute-value">Absolute Value</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#aggregation">Aggregation</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#numeric-testing">Numeric Testing</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="rounding-and-truncation"><a class="anchor" href="#rounding-and-truncation">#</a>Rounding and Truncation
+                                  </h2>
+                                  <h3 id="round"><a class="anchor" href="#round">#</a>round()
+                                  </h3>
+                                  <p>Rounds a number to the nearest integer, or to a specified number of decimal places.
+                                  </p>
+                                  <p>
       <strong>Signature:</strong> <code>round($value as xs:numeric?) as xs:numeric?</code>
-<strong>Signature (XPath 3.1+):</strong> <code>round($value as xs:numeric?, $precision as xs:integer) as xs:numeric?</code></p><pre><code class="language-xpath">round(3.7)        =&gt; 4
+<strong>Signature (XPath 3.1+):</strong> <code>round($value as xs:numeric?, $precision as xs:integer) as xs:numeric?</code>
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xpath</span>
+                                    </figcaption>
+                                    <pre><code class="language-xpath">round(3.7)        =&gt; 4
 round(3.3)        =&gt; 3
 round(3.5)        =&gt; 4        (: rounds half up :)
 round(-3.5)       =&gt; -3       (: rounds half toward positive infinity :)
 round(3.14159, 2) =&gt; 3.14
-round(1234, -2)   =&gt; 1200     (: negative precision rounds to tens, hundreds, etc. :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>Math.Round(3.7)</code> — but note C# uses "round half to even" (banker's rounding) by default, while XPath rounds half up.</p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Value</p>
-          </th>
-          <th>
-            <p>XPath <code>round()</code></p>
-          </th>
-          <th>
-            <p>C# <code>Math.Round()</code></p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>2.5</p>
-          </td>
-          <td>
-            <p>3</p>
-          </td>
-          <td>
-            <p>2 (banker's rounding)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>3.5</p>
-          </td>
-          <td>
-            <p>4</p>
-          </td>
-          <td>
-            <p>4 (banker's rounding)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>-2.5</p>
-          </td>
-          <td>
-            <p>-2</p>
-          </td>
-          <td>
-            <p>-2</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><p>To get XPath-style rounding in C#, use <code>Math.Round(value, MidpointRounding.AwayFromZero)</code>.</p><hr><h3 id="round-half-to-even"><a class="anchor" href="#round-half-to-even">#</a>round-half-to-even()</h3><p>Rounds using banker's rounding (round half to nearest even number). This minimizes cumulative rounding bias.</p><p>
-      <strong>Signature:</strong> <code>round-half-to-even($value as xs:numeric?, $precision as xs:integer?) as xs:numeric?</code></p><pre><code class="language-xpath">round-half-to-even(2.5)      =&gt; 2       (: rounds to even :)
+round(1234, -2)   =&gt; 1200     (: negative precision rounds to tens, hundreds, etc. :)</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
+      <strong>C# equivalent:</strong> <code>Math.Round(3.7)</code> — but note C# uses "round half to even" (banker's rounding) by default, while XPath rounds half up.
+                                  </p>
+                                  <div class="table-wrap">
+                                    <table>
+      
+                                      <thead>
+        
+                                        <tr>
+          
+                                          <th>
+            
+                                            <p>Value
+                                            </p>
+          
+                                          </th>
+          
+                                          <th>
+            
+                                            <p>XPath <code>round()</code>
+                                            </p>
+          
+                                          </th>
+          
+                                          <th>
+            
+                                            <p>C# <code>Math.Round()</code>
+                                            </p>
+          
+                                          </th>
+        
+                                        </tr>
+      
+                                      </thead>
+      
+                                      <tbody>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>2.5
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>3
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>2 (banker's rounding)
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>3.5
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>4
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>4 (banker's rounding)
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>-2.5
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>-2
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>-2
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+      
+                                      </tbody>
+    
+                                    </table>
+                                  </div>
+                                  <p>To get XPath-style rounding in C#, use <code>Math.Round(value, MidpointRounding.AwayFromZero)</code>.
+                                  </p>
+                                  <hr>
+                                    <h3 id="round-half-to-even"><a class="anchor" href="#round-half-to-even">#</a>round-half-to-even()
+                                    </h3>
+                                    <p>Rounds using banker's rounding (round half to nearest even number). This minimizes cumulative rounding bias.
+                                    </p>
+                                    <p>
+      <strong>Signature:</strong> <code>round-half-to-even($value as xs:numeric?, $precision as xs:integer?) as xs:numeric?</code>
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xpath</span>
+                                      </figcaption>
+                                      <pre><code class="language-xpath">round-half-to-even(2.5)      =&gt; 2       (: rounds to even :)
 round-half-to-even(3.5)      =&gt; 4       (: rounds to even :)
 round-half-to-even(2.45, 1)  =&gt; 2.4
-round-half-to-even(2.55, 1)  =&gt; 2.6</code></pre><p>
-      <strong>C# equivalent:</strong> <code>Math.Round(2.5)</code> — this is C#'s default rounding mode.</p><p>
-      <strong>When to use:</strong> Financial calculations where rounding bias accumulates over many operations.</p><hr><h3 id="floor"><a class="anchor" href="#floor">#</a>floor()</h3><p>Rounds down to the nearest integer (toward negative infinity).</p><p>
-      <strong>Signature:</strong> <code>floor($value as xs:numeric?) as xs:numeric?</code></p><pre><code class="language-xpath">floor(3.7)    =&gt; 3
+round-half-to-even(2.55, 1)  =&gt; 2.6</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
+      <strong>C# equivalent:</strong> <code>Math.Round(2.5)</code> — this is C#'s default rounding mode.
+                                    </p>
+                                    <p>
+      <strong>When to use:</strong> Financial calculations where rounding bias accumulates over many operations.
+                                    </p>
+                                    <hr>
+                                      <h3 id="floor"><a class="anchor" href="#floor">#</a>floor()
+                                      </h3>
+                                      <p>Rounds down to the nearest integer (toward negative infinity).
+                                      </p>
+                                      <p>
+      <strong>Signature:</strong> <code>floor($value as xs:numeric?) as xs:numeric?</code>
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xpath</span>
+                                        </figcaption>
+                                        <pre><code class="language-xpath">floor(3.7)    =&gt; 3
 floor(3.2)    =&gt; 3
 floor(-3.2)   =&gt; -4      (: toward negative infinity, not toward zero! :)
-floor(-3.7)   =&gt; -4</code></pre><p>
-      <strong>C# equivalent:</strong> <code>Math.Floor(3.7)</code></p><hr><h3 id="ceiling"><a class="anchor" href="#ceiling">#</a>ceiling()</h3><p>Rounds up to the nearest integer (toward positive infinity).</p><p>
-      <strong>Signature:</strong> <code>ceiling($value as xs:numeric?) as xs:numeric?</code></p><pre><code class="language-xpath">ceiling(3.2)   =&gt; 4
+floor(-3.7)   =&gt; -4</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
+      <strong>C# equivalent:</strong> <code>Math.Floor(3.7)</code>
+                                      </p>
+                                      <hr>
+                                        <h3 id="ceiling"><a class="anchor" href="#ceiling">#</a>ceiling()
+                                        </h3>
+                                        <p>Rounds up to the nearest integer (toward positive infinity).
+                                        </p>
+                                        <p>
+      <strong>Signature:</strong> <code>ceiling($value as xs:numeric?) as xs:numeric?</code>
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xpath</span>
+                                          </figcaption>
+                                          <pre><code class="language-xpath">ceiling(3.2)   =&gt; 4
 ceiling(3.7)   =&gt; 4
 ceiling(-3.2)  =&gt; -3     (: toward positive infinity :)
-ceiling(-3.7)  =&gt; -3</code></pre><p>
-      <strong>C# equivalent:</strong> <code>Math.Ceiling(3.2)</code></p><p>
-      <strong>Practical example</strong> — calculating pages needed:</p><pre><code class="language-xpath">ceiling(count(//item) div 10)   (: number of pages with 10 items per page :)</code></pre><hr><h2 id="absolute-value"><a class="anchor" href="#absolute-value">#</a>Absolute Value</h2><h3 id="abs"><a class="anchor" href="#abs">#</a>abs()</h3><p>Returns the absolute value of a number.</p><p>
-      <strong>Signature:</strong> <code>abs($value as xs:numeric?) as xs:numeric?</code></p><pre><code class="language-xpath">abs(-5)     =&gt; 5
+ceiling(-3.7)  =&gt; -3</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
+      <strong>C# equivalent:</strong> <code>Math.Ceiling(3.2)</code>
+                                        </p>
+                                        <p>
+      <strong>Practical example</strong> — calculating pages needed:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xpath</span>
+                                          </figcaption>
+                                          <pre><code class="language-xpath">ceiling(count(//item) div 10)   (: number of pages with 10 items per page :)</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <hr>
+                                          <h2 id="absolute-value"><a class="anchor" href="#absolute-value">#</a>Absolute Value
+                                          </h2>
+                                          <h3 id="abs"><a class="anchor" href="#abs">#</a>abs()
+                                          </h3>
+                                          <p>Returns the absolute value of a number.
+                                          </p>
+                                          <p>
+      <strong>Signature:</strong> <code>abs($value as xs:numeric?) as xs:numeric?</code>
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xpath</span>
+                                            </figcaption>
+                                            <pre><code class="language-xpath">abs(-5)     =&gt; 5
 abs(5)      =&gt; 5
 abs(-3.14)  =&gt; 3.14
-abs(0)      =&gt; 0</code></pre><p>
-      <strong>C# equivalent:</strong> <code>Math.Abs(-5)</code></p><p>
-      <strong>Practical example</strong> — finding the magnitude of a difference:</p><pre><code class="language-xpath">abs(//actual - //expected)   (: deviation regardless of direction :)</code></pre><hr><h2 id="aggregation"><a class="anchor" href="#aggregation">#</a>Aggregation</h2><p>These functions operate on sequences — the XPath equivalent of LINQ aggregate methods.</p><h3 id="sum"><a class="anchor" href="#sum">#</a>sum()</h3><p>Returns the sum of a sequence of numbers.</p><p>
-      <strong>Signature:</strong> <code>sum($values as xs:anyAtomicType*, $zero as xs:anyAtomicType?) as xs:anyAtomicType</code></p><pre><code class="language-xpath">sum((1, 2, 3, 4, 5))           =&gt; 15
+abs(0)      =&gt; 0</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>
+      <strong>C# equivalent:</strong> <code>Math.Abs(-5)</code>
+                                          </p>
+                                          <p>
+      <strong>Practical example</strong> — finding the magnitude of a difference:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xpath</span>
+                                            </figcaption>
+                                            <pre><code class="language-xpath">abs(//actual - //expected)   (: deviation regardless of direction :)</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <hr>
+                                            <h2 id="aggregation"><a class="anchor" href="#aggregation">#</a>Aggregation
+                                            </h2>
+                                            <p>These functions operate on sequences — the XPath equivalent of LINQ aggregate methods.
+                                            </p>
+                                            <h3 id="sum"><a class="anchor" href="#sum">#</a>sum()
+                                            </h3>
+                                            <p>Returns the sum of a sequence of numbers.
+                                            </p>
+                                            <p>
+      <strong>Signature:</strong> <code>sum($values as xs:anyAtomicType*, $zero as xs:anyAtomicType?) as xs:anyAtomicType</code>
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xpath</span>
+                                              </figcaption>
+                                              <pre><code class="language-xpath">sum((1, 2, 3, 4, 5))           =&gt; 15
 sum(//item/price)               =&gt; total of all prices
 sum(//order/@amount)            =&gt; total of all order amounts
 sum(())                         =&gt; 0        (: empty sequence :)
-sum((), 0.00)                   =&gt; 0.00     (: with explicit zero value :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Sum()</code> or <code>items.Sum(x =&gt; x.Price)</code></p><p>Given this XML:</p><pre><code class="language-xml">&lt;order&gt;
+sum((), 0.00)                   =&gt; 0.00     (: with explicit zero value :)</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
+      <strong>C# equivalent:</strong> <code>items.Sum()</code> or <code>items.Sum(x =&gt; x.Price)</code>
+                                            </p>
+                                            <p>Given this XML:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;order&gt;
   &lt;item&gt;&lt;price&gt;9.99&lt;/price&gt;&lt;qty&gt;2&lt;/qty&gt;&lt;/item&gt;
   &lt;item&gt;&lt;price&gt;24.50&lt;/price&gt;&lt;qty&gt;1&lt;/qty&gt;&lt;/item&gt;
   &lt;item&gt;&lt;price&gt;4.99&lt;/price&gt;&lt;qty&gt;3&lt;/qty&gt;&lt;/item&gt;
-&lt;/order&gt;</code></pre><pre><code class="language-xpath">sum(/order/item/price)     =&gt; 39.48</code></pre><p>
-      <strong>Note:</strong> To sum products (price × quantity), you need a <code>for</code> expression or <code>sum(for $i in //item return $i/price * $i/qty)</code>.</p><hr><h3 id="avg"><a class="anchor" href="#avg">#</a>avg()</h3><p>Returns the average of a sequence of numbers.</p><p>
-      <strong>Signature:</strong> <code>avg($values as xs:anyAtomicType*) as xs:anyAtomicType?</code></p><pre><code class="language-xpath">avg((1, 2, 3, 4, 5))     =&gt; 3
+&lt;/order&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xpath</span>
+                                              </figcaption>
+                                              <pre><code class="language-xpath">sum(/order/item/price)     =&gt; 39.48</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
+      <strong>Note:</strong> To sum products (price × quantity), you need a <code>for</code> expression or <code>sum(for $i in //item return $i/price * $i/qty)</code>.
+                                            </p>
+                                            <hr>
+                                              <h3 id="avg"><a class="anchor" href="#avg">#</a>avg()
+                                              </h3>
+                                              <p>Returns the average of a sequence of numbers.
+                                              </p>
+                                              <p>
+      <strong>Signature:</strong> <code>avg($values as xs:anyAtomicType*) as xs:anyAtomicType?</code>
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xpath</span>
+                                                </figcaption>
+                                                <pre><code class="language-xpath">avg((1, 2, 3, 4, 5))     =&gt; 3
 avg(//item/price)          =&gt; average price
-avg(())                    =&gt; ()    (: empty sequence returns empty :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Average()</code></p><hr><h3 id="min"><a class="anchor" href="#min">#</a>min()</h3><p>Returns the minimum value in a sequence.</p><p>
-      <strong>Signature:</strong> <code>min($values as xs:anyAtomicType*, $collation as xs:string?) as xs:anyAtomicType?</code></p><pre><code class="language-xpath">min((3, 1, 4, 1, 5))                      =&gt; 1
+avg(())                    =&gt; ()    (: empty sequence returns empty :)</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>
+      <strong>C# equivalent:</strong> <code>items.Average()</code>
+                                              </p>
+                                              <hr>
+                                                <h3 id="min"><a class="anchor" href="#min">#</a>min()
+                                                </h3>
+                                                <p>Returns the minimum value in a sequence.
+                                                </p>
+                                                <p>
+      <strong>Signature:</strong> <code>min($values as xs:anyAtomicType*, $collation as xs:string?) as xs:anyAtomicType?</code>
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xpath</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xpath">min((3, 1, 4, 1, 5))                      =&gt; 1
 min(//item/price)                           =&gt; lowest price
 min(//order/@date)                          =&gt; earliest date (works with xs:date!)
-min(("banana", "apple", "cherry"))         =&gt; "apple" (: string comparison :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Min()</code></p><p>
-      <strong>Note:</strong> <code>min()</code> works with dates, strings, and numbers — unlike C#'s <code>Min()</code> which needs <code>IComparable</code>.</p><hr><h3 id="max"><a class="anchor" href="#max">#</a>max()</h3><p>Returns the maximum value in a sequence.</p><p>
-      <strong>Signature:</strong> <code>max($values as xs:anyAtomicType*, $collation as xs:string?) as xs:anyAtomicType?</code></p><pre><code class="language-xpath">max((3, 1, 4, 1, 5))        =&gt; 5
+min(("banana", "apple", "cherry"))         =&gt; "apple" (: string comparison :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <p>
+      <strong>C# equivalent:</strong> <code>items.Min()</code>
+                                                </p>
+                                                <p>
+      <strong>Note:</strong> <code>min()</code> works with dates, strings, and numbers — unlike C#'s <code>Min()</code> which needs <code>IComparable</code>.
+                                                </p>
+                                                <hr>
+                                                  <h3 id="max"><a class="anchor" href="#max">#</a>max()
+                                                  </h3>
+                                                  <p>Returns the maximum value in a sequence.
+                                                  </p>
+                                                  <p>
+      <strong>Signature:</strong> <code>max($values as xs:anyAtomicType*, $collation as xs:string?) as xs:anyAtomicType?</code>
+                                                  </p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xpath</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xpath">max((3, 1, 4, 1, 5))        =&gt; 5
 max(//item/price)             =&gt; highest price
-max(//order/@date)            =&gt; most recent date</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Max()</code></p><hr><h3 id="count"><a class="anchor" href="#count">#</a>count()</h3><p>Returns the number of items in a sequence.</p><p>
-      <strong>Signature:</strong> <code>count($values as item()*) as xs:integer</code></p><pre><code class="language-xpath">count((1, 2, 3))              =&gt; 3
+max(//order/@date)            =&gt; most recent date</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <p>
+      <strong>C# equivalent:</strong> <code>items.Max()</code>
+                                                  </p>
+                                                  <hr>
+                                                    <h3 id="count"><a class="anchor" href="#count">#</a>count()
+                                                    </h3>
+                                                    <p>Returns the number of items in a sequence.
+                                                    </p>
+                                                    <p>
+      <strong>Signature:</strong> <code>count($values as item()*) as xs:integer</code>
+                                                    </p>
+                                                    <figure class="code">
+                                                      <figcaption><span class="lang">xpath</span>
+                                                      </figcaption>
+                                                      <pre><code class="language-xpath">count((1, 2, 3))              =&gt; 3
 count(//book)                  =&gt; number of book elements
 count(//book[@category='data']) =&gt; number of data books
-count(())                      =&gt; 0</code></pre><p>
-      <strong>C# equivalent:</strong> <code>items.Count()</code> or <code>.Length</code></p><p>
-      <strong>Practical example</strong> — conditional based on count:</p><pre><code class="language-xpath">if (count(//error) &gt; 0) then "Errors found" else "All clear"</code></pre><hr><h2 id="numeric-testing"><a class="anchor" href="#numeric-testing">#</a>Numeric Testing</h2><h3 id="is-nan"><a class="anchor" href="#is-nan">#</a>is-NaN()</h3><p>Tests whether a value is NaN (Not a Number). New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>is-NaN($value as xs:anyAtomicType) as xs:boolean</code></p><pre><code class="language-xpath">is-NaN(xs:double('NaN'))       =&gt; true
+count(())                      =&gt; 0</code>
+                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                    </figure>
+                                                    <p>
+      <strong>C# equivalent:</strong> <code>items.Count()</code> or <code>.Length</code>
+                                                    </p>
+                                                    <p>
+      <strong>Practical example</strong> — conditional based on count:
+                                                    </p>
+                                                    <figure class="code">
+                                                      <figcaption><span class="lang">xpath</span>
+                                                      </figcaption>
+                                                      <pre><code class="language-xpath">if (count(//error) &gt; 0) then "Errors found" else "All clear"</code>
+                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                    </figure>
+                                                    <hr>
+                                                      <h2 id="numeric-testing"><a class="anchor" href="#numeric-testing">#</a>Numeric Testing
+                                                      </h2>
+                                                      <h3 id="is-nan"><a class="anchor" href="#is-nan">#</a>is-NaN()
+                                                      </h3>
+                                                      <p>Tests whether a value is NaN (Not a Number). New in XPath 4.0.
+                                                      </p>
+                                                      <p>
+      <strong>Signature:</strong> <code>is-NaN($value as xs:anyAtomicType) as xs:boolean</code>
+                                                      </p>
+                                                      <figure class="code">
+                                                        <figcaption><span class="lang">xpath</span>
+                                                        </figcaption>
+                                                        <pre><code class="language-xpath">is-NaN(xs:double('NaN'))       =&gt; true
 is-NaN(42)                     =&gt; false
-is-NaN(0 div 0.0e0)            =&gt; true</code></pre><p>
-      <strong>C# equivalent:</strong> <code>double.IsNaN(value)</code></p><p>
-      <strong>Why this exists:</strong> The expression <code>$x = $x</code> returns <code>false</code> when <code>$x</code> is <code>NaN</code> (IEEE 754 behavior), which is counterintuitive. <code>is-NaN()</code> is the explicit test.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+is-NaN(0 div 0.0e0)            =&gt; true</code>
+                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                      </figure>
+                                                      <p>
+      <strong>C# equivalent:</strong> <code>double.IsNaN(value)</code>
+                                                      </p>
+                                                      <p>
+      <strong>Why this exists:</strong> The expression <code>$x = $x</code> returns <code>false</code> when <code>$x</code> is <code>NaN</code> (IEEE 754 behavior), which is counterintuitive. <code>is-NaN()</code> is the explicit test.
+                                                      </p>
+                                                    </article>
+                                                  </main>
+                                                  <aside class="toc" aria-label="On this page">
+                                                    <p class="toc-label">On this page
+                                                    </p>
+                                                    <ul>
+                                                      <li class="toc-h2"><a href="#contents">Contents</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#rounding-and-truncation">Rounding and Truncation</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#round">round()</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#round-half-to-even">round-half-to-even()</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#floor">floor()</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#ceiling">ceiling()</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#absolute-value">Absolute Value</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#abs">abs()</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#aggregation">Aggregation</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#sum">sum()</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#avg">avg()</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#min">min()</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#max">max()</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#count">count()</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#numeric-testing">Numeric Testing</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#is-nan">is-NaN()</a>
+                                                      </li>
+                                                    </ul>
+                                                  </aside>
+                                                </div>
+                                                <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                                  <div class="search-backdrop">
+                                                  </div>
+                                                  <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                                    <div class="search-results" id="search-results">
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <footer class="site-footer">
+                                                  <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                                  </p>
+                                                </footer>
+                                                <script src="https://unpkg.com/lunr/lunr.js">
+                                                </script>
+                                                <script src="/js/prism.js">
+                                                </script>
+                                                <script src="/js/search.js">
+                                                </script>
+                                                <script src="/js/theme.js">
+                                                </script>
+                                                <script src="/js/toc.js">
+                                                </script>
+                                                <script src="/js/copy.js">
+                                                </script>
+                                              </body>
+                                            </html>

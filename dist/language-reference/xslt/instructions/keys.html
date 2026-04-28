@@ -1,110 +1,772 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Keys and Cross-References — PhoenixmlDb Documentation</title><meta name="description" content="xsl:key — indexing documents for fast lookup with key() function"><link rel="canonical" href="/language-reference/xslt/instructions/keys.html"><meta property="og:title" content="Keys and Cross-References"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/keys.html"><meta property="og:description" content="xsl:key — indexing documents for fast lookup with key() function"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Keys and Cross-References — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="xsl:key — indexing documents for fast lookup with key() function">
+            <link rel="canonical" href="/language-reference/xslt/instructions/keys.html">
+              <meta property="og:title" content="Keys and Cross-References">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xslt/instructions/keys.html">
+                    <meta property="og:description" content="xsl:key — indexing documents for fast lookup with key() function">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li class="active"><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="keys-and-cross-references"><a class="anchor" href="#keys-and-cross-references">#</a>Keys and Cross-References</h1><p>
-      <code>xsl:key</code> defines an index over a document — a precomputed lookup structure that the <code>key()</code> function uses for fast retrieval. If you have ever added an index to a database column to speed up queries, you already understand the concept. Keys turn O(n) linear scans into O(1) hash lookups.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#xslkey" title="">xsl:key</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#the-key-function" title="">The key() Function</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#how-keys-work" title="">How Keys Work</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#composite-keys" title="">Composite Keys</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#cross-document-lookups" title="">Cross-Document Lookups</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#common-patterns" title="">Common Patterns</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#performance" title="">Performance</a>
-        </p>
-      </li></ul><hr><h2 id="xsl-key"><a class="anchor" href="#xsl-key">#</a>xsl:key</h2><p>A key is a top-level declaration that defines three things: a name, which nodes to index, and what value to index them by.</p><pre><code class="language-xml">&lt;xsl:key name="products-by-id" match="product" use="@id"/&gt;</code></pre><p>This says: "For every <code>product</code> element, index it by its <code>@id</code> attribute. Call this index <code>products-by-id</code>."</p><h3 id="attributes"><a class="anchor" href="#attributes">#</a>Attributes</h3><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Attribute</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>name</code></p>
-          </td>
-          <td>
-            <p>The name you use to look up values with the <code>key()</code> function</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>match</code></p>
-          </td>
-          <td>
-            <p>A pattern that selects which nodes to index (like <code>xsl:template match</code>)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>use</code></p>
-          </td>
-          <td>
-            <p>An XPath expression evaluated for each matched node — produces the key value(s)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>composite</code></p>
-          </td>
-          <td>
-            <p><code>yes</code> or <code>no</code> (XSLT 3.0). When <code>yes</code>, <code>use</code> is a sequence of values that together form a compound key</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>collation</code></p>
-          </td>
-          <td>
-            <p>URI of a collation for string comparison</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="basic-examples"><a class="anchor" href="#basic-examples">#</a>Basic Examples</h3><pre><code class="language-xml">&lt;!-- Index products by ID --&gt;
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section open">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li class="active"><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">Instructions Reference
+                                </p>
+                                <h1 class="page-title">Keys and Cross-References
+                                </h1>
+                                <p class="page-subtitle">xsl:key — indexing documents for fast lookup with key() function
+                                </p>
+                                <h1 id="keys-and-cross-references"><a class="anchor" href="#keys-and-cross-references">#</a>Keys and Cross-References
+                                </h1>
+                                <p>
+      <code>xsl:key</code> defines an index over a document — a precomputed lookup structure that the <code>key()</code> function uses for fast retrieval. If you have ever added an index to a database column to speed up queries, you already understand the concept. Keys turn O(n) linear scans into O(1) hash lookups.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslkey">xsl:key</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#the-key-function">The key() Function</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#how-keys-work">How Keys Work</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#composite-keys">Composite Keys</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#cross-document-lookups">Cross-Document Lookups</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#common-patterns">Common Patterns</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#performance">Performance</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="xsl-key"><a class="anchor" href="#xsl-key">#</a>xsl:key
+                                  </h2>
+                                  <p>A key is a top-level declaration that defines three things: a name, which nodes to index, and what value to index them by.
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:key name="products-by-id" match="product" use="@id"/&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>This says: "For every <code>product</code> element, index it by its <code>@id</code> attribute. Call this index <code>products-by-id</code>."
+                                  </p>
+                                  <h3 id="attributes"><a class="anchor" href="#attributes">#</a>Attributes
+                                  </h3>
+                                  <div class="table-wrap">
+                                    <table>
+      
+                                      <thead>
+        
+                                        <tr>
+          
+                                          <th>
+            
+                                            <p>Attribute
+                                            </p>
+          
+                                          </th>
+          
+                                          <th>
+            
+                                            <p>Description
+                                            </p>
+          
+                                          </th>
+        
+                                        </tr>
+      
+                                      </thead>
+      
+                                      <tbody>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>name</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>The name you use to look up values with the <code>key()</code> function
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>match</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>A pattern that selects which nodes to index (like <code>xsl:template match</code>)
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>use</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>An XPath expression evaluated for each matched node — produces the key value(s)
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>composite</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>yes</code> or <code>no</code> (XSLT 3.0). When <code>yes</code>, <code>use</code> is a sequence of values that together form a compound key
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>collation</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>URI of a collation for string comparison
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+      
+                                      </tbody>
+    
+                                    </table>
+                                  </div>
+                                  <h3 id="basic-examples"><a class="anchor" href="#basic-examples">#</a>Basic Examples
+                                  </h3>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;!-- Index products by ID --&gt;
 &lt;xsl:key name="products-by-id" match="product" use="@id"/&gt;
 &lt;!-- Index products by category --&gt;
 &lt;xsl:key name="products-by-category" match="product" use="@category"/&gt;
 &lt;!-- Index employees by department --&gt;
 &lt;xsl:key name="staff-by-dept" match="employee" use="department"/&gt;
 &lt;!-- Index elements by their name (for generic processing) --&gt;
-&lt;xsl:key name="elements-by-name" match="*" use="local-name()"/&gt;</code></pre><hr><h2 id="the-key-function"><a class="anchor" href="#the-key-function">#</a>The key() Function</h2><p>
-      <code>key()</code> retrieves nodes from an index. It takes two or three arguments:</p><pre><code>key(key-name, key-value)
-key(key-name, key-value, document)</code></pre><h3 id="basic-lookup"><a class="anchor" href="#basic-lookup">#</a>Basic Lookup</h3><pre><code class="language-xml">&lt;xsl:key name="products-by-id" match="product" use="@id"/&gt;
+&lt;xsl:key name="elements-by-name" match="*" use="local-name()"/&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <hr>
+                                    <h2 id="the-key-function"><a class="anchor" href="#the-key-function">#</a>The key() Function
+                                    </h2>
+                                    <p>
+      <code>key()</code> retrieves nodes from an index. It takes two or three arguments:
+                                    </p>
+                                    <figure class="code">
+                                      <pre><code>key(key-name, key-value)
+key(key-name, key-value, document)</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="basic-lookup"><a class="anchor" href="#basic-lookup">#</a>Basic Lookup
+                                    </h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:key name="products-by-id" match="product" use="@id"/&gt;
 &lt;!-- Look up a single product --&gt;
 &lt;xsl:value-of select="key('products-by-id', 'WP-001')/name"/&gt;
 &lt;!-- Returns: Widget Pro --&gt;
 &lt;!-- Look up with a dynamic value --&gt;
 &lt;xsl:variable name="referenced-product"
-              select="key('products-by-id', @product-ref)"/&gt;</code></pre><h3 id="multiple-values"><a class="anchor" href="#multiple-values">#</a>Multiple Values</h3><p>You can pass a sequence of key values. The function returns all nodes matching any of the values:</p><pre><code class="language-xml">&lt;!-- Look up multiple products at once --&gt;
+              select="key('products-by-id', @product-ref)"/&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="multiple-values"><a class="anchor" href="#multiple-values">#</a>Multiple Values
+                                    </h3>
+                                    <p>You can pass a sequence of key values. The function returns all nodes matching any of the values:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;!-- Look up multiple products at once --&gt;
 &lt;xsl:variable name="featured"
               select="key('products-by-id', ('WP-001', 'WP-002', 'WP-005'))"/&gt;
 &lt;!-- Look up products in a list of categories --&gt;
 &lt;xsl:variable name="selected-categories" select="('electronics', 'books')"/&gt;
 &lt;xsl:for-each select="key('products-by-category', $selected-categories)"&gt;
   &lt;li&gt;&lt;xsl:value-of select="name"/&gt;&lt;/li&gt;
-&lt;/xsl:for-each&gt;</code></pre><h3 id="using-key-in-templates"><a class="anchor" href="#using-key-in-templates">#</a>Using key() in Templates</h3><p>A typical use is resolving references — one element references another by ID:</p><pre><code class="language-xml">&lt;!-- Source data with references --&gt;
+&lt;/xsl:for-each&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="using-key-in-templates"><a class="anchor" href="#using-key-in-templates">#</a>Using key() in Templates
+                                    </h3>
+                                    <p>A typical use is resolving references — one element references another by ID:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;!-- Source data with references --&gt;
 &lt;catalog&gt;
   &lt;product id="WP-001"&gt;
     &lt;name&gt;Widget Pro&lt;/name&gt;
@@ -118,7 +780,13 @@ key(key-name, key-value, document)</code></pre><h3 id="basic-lookup"><a class="a
     &lt;line-item product-ref="WP-001" quantity="3"/&gt;
     &lt;line-item product-ref="WP-002" quantity="1"/&gt;
   &lt;/order&gt;
-&lt;/catalog&gt;</code></pre><pre><code class="language-xml">&lt;xsl:key name="products-by-id" match="product" use="@id"/&gt;
+&lt;/catalog&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:key name="products-by-id" match="product" use="@id"/&gt;
 &lt;xsl:template match="order"&gt;
   &lt;div class="order"&gt;
     &lt;h2&gt;Order &lt;xsl:value-of select="@id"/&gt;&lt;/h2&gt;
@@ -139,18 +807,57 @@ key(key-name, key-value, document)</code></pre><h3 id="basic-lookup"><a class="a
       &lt;/tbody&gt;
     &lt;/table&gt;
   &lt;/div&gt;
-&lt;/xsl:template&gt;</code></pre><p>
+&lt;/xsl:template&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// Build a lookup
+    
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">csharp</span>
+                                      </figcaption>
+                                      <pre><code class="language-csharp">// Build a lookup
 var productsById = catalog.Products.ToDictionary(p =&gt; p.Id);
 // Resolve a reference
-var product = productsById[lineItem.ProductRef];</code></pre><hr><h2 id="how-keys-work"><a class="anchor" href="#how-keys-work">#</a>How Keys Work</h2><p>When you first call <code>key()</code> for a given key name and document, the XSLT processor builds an in-memory index:</p><ol><li>
-        <p>It scans the document for all nodes matching the <code>match</code> pattern</p>
-      </li><li>
-        <p>For each matched node, it evaluates the <code>use</code> expression to get the key value(s)</p>
-      </li><li>
-        <p>It stores a mapping from each key value to the matching node(s) in a hash table</p>
-      </li></ol><p>Subsequent <code>key()</code> calls with the same key name and document reuse this index — the lookup is a hash table get, not a document scan.</p><h3 id="key-lookup-vs-predicate-filtering"><a class="anchor" href="#key-lookup-vs-predicate-filtering">#</a>Key Lookup vs. Predicate Filtering</h3><p>Consider finding all products in the "electronics" category:</p><pre><code class="language-xml">&lt;!-- Without keys: linear scan every time --&gt;
+var product = productsById[lineItem.ProductRef];</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <hr>
+                                      <h2 id="how-keys-work"><a class="anchor" href="#how-keys-work">#</a>How Keys Work
+                                      </h2>
+                                      <p>When you first call <code>key()</code> for a given key name and document, the XSLT processor builds an in-memory index:
+                                      </p>
+                                      <ol>
+                                        <li>
+        
+                                          <p>It scans the document for all nodes matching the <code>match</code> pattern
+                                          </p>
+      
+                                        </li>
+                                        <li>
+        
+                                          <p>For each matched node, it evaluates the <code>use</code> expression to get the key value(s)
+                                          </p>
+      
+                                        </li>
+                                        <li>
+        
+                                          <p>It stores a mapping from each key value to the matching node(s) in a hash table
+                                          </p>
+      
+                                        </li>
+                                      </ol>
+                                      <p>Subsequent <code>key()</code> calls with the same key name and document reuse this index — the lookup is a hash table get, not a document scan.
+                                      </p>
+                                      <h3 id="key-lookup-vs-predicate-filtering"><a class="anchor" href="#key-lookup-vs-predicate-filtering">#</a>Key Lookup vs. Predicate Filtering
+                                      </h3>
+                                      <p>Consider finding all products in the "electronics" category:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;!-- Without keys: linear scan every time --&gt;
 &lt;xsl:for-each select="//product[@category = 'electronics']"&gt;
   &lt;!-- The processor must check every product element --&gt;
 &lt;/xsl:for-each&gt;
@@ -158,50 +865,135 @@ var product = productsById[lineItem.ProductRef];</code></pre><hr><h2 id="how-key
 &lt;xsl:key name="products-by-category" match="product" use="@category"/&gt;
 &lt;xsl:for-each select="key('products-by-category', 'electronics')"&gt;
   &lt;!-- The processor jumps directly to the matching products --&gt;
-&lt;/xsl:for-each&gt;</code></pre><p>For a single lookup, the difference is negligible. But if you perform the same category lookup hundreds of times (once per order line, for example), the key version is dramatically faster.</p><p>
+&lt;/xsl:for-each&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>For a single lookup, the difference is negligible. But if you perform the same category lookup hundreds of times (once per order line, for example), the key version is dramatically faster.
+                                      </p>
+                                      <p>
       <strong>C# parallel:</strong>
-    </p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>XSLT</p>
-          </th>
-          <th>
-            <p>C#</p>
-          </th>
-          <th>
-            <p>Complexity</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>//product[@category = $cat]</code></p>
-          </td>
-          <td>
-            <p><code>products.Where(p =&gt; p.Category == cat)</code></p>
-          </td>
-          <td>
-            <p>O(n) per call</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>key('by-category', $cat)</code></p>
-          </td>
-          <td>
-            <p><code>productsByCategory[cat]</code> (<code>Dictionary</code>/<code>ILookup</code>)</p>
-          </td>
-          <td>
-            <p>O(1) per call after O(n) setup</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="when-the-index-is-built"><a class="anchor" href="#when-the-index-is-built">#</a>When the Index is Built</h3><p>The index is built lazily — on the first call to <code>key()</code> for that key name and document. It is built once per (key-name, document) pair and cached for the duration of the transformation.</p><h3 id="multiple-nodes-per-key-value"><a class="anchor" href="#multiple-nodes-per-key-value">#</a>Multiple Nodes Per Key Value</h3><p>A key value can map to multiple nodes. This is the <code>ILookup&lt;TKey, TValue&gt;</code> case:</p><pre><code class="language-xml">&lt;xsl:key name="products-by-category" match="product" use="@category"/&gt;
+    
+                                      </p>
+                                      <div class="table-wrap">
+                                        <table>
+      
+                                          <thead>
+        
+                                            <tr>
+          
+                                              <th>
+            
+                                                <p>XSLT
+                                                </p>
+          
+                                              </th>
+          
+                                              <th>
+            
+                                                <p>C#
+                                                </p>
+          
+                                              </th>
+          
+                                              <th>
+            
+                                                <p>Complexity
+                                                </p>
+          
+                                              </th>
+        
+                                            </tr>
+      
+                                          </thead>
+      
+                                          <tbody>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>//product[@category = $cat]</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>
+              <code>products.Where(p =&gt; p.Category == cat)</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>O(n) per call
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>key('by-category', $cat)</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>
+              <code>productsByCategory[cat]</code> (<code>Dictionary</code>/<code>ILookup</code>)
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>O(1) per call after O(n) setup
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+      
+                                          </tbody>
+    
+                                        </table>
+                                      </div>
+                                      <h3 id="when-the-index-is-built"><a class="anchor" href="#when-the-index-is-built">#</a>When the Index is Built
+                                      </h3>
+                                      <p>The index is built lazily — on the first call to <code>key()</code> for that key name and document. It is built once per (key-name, document) pair and cached for the duration of the transformation.
+                                      </p>
+                                      <h3 id="multiple-nodes-per-key-value"><a class="anchor" href="#multiple-nodes-per-key-value">#</a>Multiple Nodes Per Key Value
+                                      </h3>
+                                      <p>A key value can map to multiple nodes. This is the <code>ILookup&lt;TKey, TValue&gt;</code> case:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:key name="products-by-category" match="product" use="@category"/&gt;
 &lt;!-- Returns ALL products in the electronics category --&gt;
 &lt;xsl:variable name="electronics" select="key('products-by-category', 'electronics')"/&gt;
-&lt;!-- $electronics is a sequence of 0 or more product elements --&gt;</code></pre><h3 id="multiple-key-values-per-node"><a class="anchor" href="#multiple-key-values-per-node">#</a>Multiple Key Values Per Node</h3><p>A single node can have multiple key values — when the <code>use</code> expression returns a sequence:</p><pre><code class="language-xml">&lt;!-- A product can have multiple tags --&gt;
+&lt;!-- $electronics is a sequence of 0 or more product elements --&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="multiple-key-values-per-node"><a class="anchor" href="#multiple-key-values-per-node">#</a>Multiple Key Values Per Node
+                                      </h3>
+                                      <p>A single node can have multiple key values — when the <code>use</code> expression returns a sequence:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;!-- A product can have multiple tags --&gt;
 &lt;product id="WP-001"&gt;
   &lt;name&gt;Widget Pro&lt;/name&gt;
   &lt;tag&gt;electronics&lt;/tag&gt;
@@ -211,25 +1003,77 @@ var product = productsById[lineItem.ProductRef];</code></pre><hr><h2 id="how-key
 &lt;!-- Index products by their tags --&gt;
 &lt;xsl:key name="products-by-tag" match="product" use="tag"/&gt;
 &lt;!-- key('products-by-tag', 'sale') returns WP-001 --&gt;
-&lt;!-- key('products-by-tag', 'electronics') also returns WP-001 --&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>ILookup&lt;string, Product&gt;</code> — one product appears under multiple keys:</p><pre><code class="language-csharp">var productsByTag = products
+&lt;!-- key('products-by-tag', 'electronics') also returns WP-001 --&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
+      <strong>C# parallel:</strong> <code>ILookup&lt;string, Product&gt;</code> — one product appears under multiple keys:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">csharp</span>
+                                        </figcaption>
+                                        <pre><code class="language-csharp">var productsByTag = products
     .SelectMany(p =&gt; p.Tags.Select(t =&gt; (Tag: t, Product: p)))
-    .ToLookup(x =&gt; x.Tag, x =&gt; x.Product);</code></pre><hr><h2 id="composite-keys"><a class="anchor" href="#composite-keys">#</a>Composite Keys</h2><p>XSLT 3.0 introduces composite keys with <code>composite="yes"</code>. A composite key uses multiple values together as a single compound key — like a multi-column index in a database.</p><pre><code class="language-xml">&lt;!-- Index by both category AND status --&gt;
+    .ToLookup(x =&gt; x.Tag, x =&gt; x.Product);</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <hr>
+                                        <h2 id="composite-keys"><a class="anchor" href="#composite-keys">#</a>Composite Keys
+                                        </h2>
+                                        <p>XSLT 3.0 introduces composite keys with <code>composite="yes"</code>. A composite key uses multiple values together as a single compound key — like a multi-column index in a database.
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;!-- Index by both category AND status --&gt;
 &lt;xsl:key name="products-by-cat-status"
          match="product"
          use="@category, @status"
          composite="yes"/&gt;
 &lt;!-- Look up active electronics --&gt;
 &lt;xsl:variable name="active-electronics"
-              select="key('products-by-cat-status', ('electronics', 'active'))"/&gt;</code></pre><p>Without <code>composite="yes"</code>, passing two values to <code>use</code> would create two separate key entries per node. With <code>composite="yes"</code>, the two values are treated as a single compound key.</p><h3 id="before-xslt-3-0-concatenated-keys"><a class="anchor" href="#before-xslt-3-0-concatenated-keys">#</a>Before XSLT 3.0: Concatenated Keys</h3><p>In XSLT 2.0, you simulate composite keys by concatenating the values:</p><pre><code class="language-xml">&lt;xsl:key name="products-by-cat-status"
+              select="key('products-by-cat-status', ('electronics', 'active'))"/&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>Without <code>composite="yes"</code>, passing two values to <code>use</code> would create two separate key entries per node. With <code>composite="yes"</code>, the two values are treated as a single compound key.
+                                        </p>
+                                        <h3 id="before-xslt-3-0-concatenated-keys"><a class="anchor" href="#before-xslt-3-0-concatenated-keys">#</a>Before XSLT 3.0: Concatenated Keys
+                                        </h3>
+                                        <p>In XSLT 2.0, you simulate composite keys by concatenating the values:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:key name="products-by-cat-status"
          match="product"
          use="concat(@category, '|', @status)"/&gt;
 &lt;!-- Look up --&gt;
 &lt;xsl:variable name="active-electronics"
-              select="key('products-by-cat-status', 'electronics|active')"/&gt;</code></pre><p>This works but is fragile — if a value contains the separator character, you get incorrect results. Composite keys are the cleaner XSLT 3.0 solution.</p><p>
-      <strong>C# parallel:</strong> Composite keys are like <code>Dictionary&lt;(string Category, string Status), List&lt;Product&gt;&gt;</code> — a tuple key:</p><pre><code class="language-csharp">var lookup = products
+              select="key('products-by-cat-status', 'electronics|active')"/&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>This works but is fragile — if a value contains the separator character, you get incorrect results. Composite keys are the cleaner XSLT 3.0 solution.
+                                        </p>
+                                        <p>
+      <strong>C# parallel:</strong> Composite keys are like <code>Dictionary&lt;(string Category, string Status), List&lt;Product&gt;&gt;</code> — a tuple key:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">var lookup = products
     .ToLookup(p =&gt; (p.Category, p.Status));
-var activeElectronics = lookup[("electronics", "active")];</code></pre><hr><h2 id="cross-document-lookups"><a class="anchor" href="#cross-document-lookups">#</a>Cross-Document Lookups</h2><p>The third argument to <code>key()</code> specifies which document to search. By default, <code>key()</code> searches the document containing the context node. You can search a different document by passing a node from that document:</p><pre><code class="language-xml">&lt;!-- External lookup table --&gt;
+var activeElectronics = lookup[("electronics", "active")];</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <hr>
+                                          <h2 id="cross-document-lookups"><a class="anchor" href="#cross-document-lookups">#</a>Cross-Document Lookups
+                                          </h2>
+                                          <p>The third argument to <code>key()</code> specifies which document to search. By default, <code>key()</code> searches the document containing the context node. You can search a different document by passing a node from that document:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;!-- External lookup table --&gt;
 &lt;xsl:variable name="codes-doc" select="doc('status-codes.xml')"/&gt;
 &lt;xsl:key name="status-label" match="status" use="@code"/&gt;
 &lt;!-- Look up a status code in the external document --&gt;
@@ -237,11 +1081,29 @@ var activeElectronics = lookup[("electronics", "active")];</code></pre><hr><h2 i
   &lt;xsl:variable name="status-text"
                 select="key('status-label', @status, $codes-doc)"/&gt;
   &lt;span class="status"&gt;&lt;xsl:value-of select="$status-text"/&gt;&lt;/span&gt;
-&lt;/xsl:template&gt;</code></pre><p>Where <code>status-codes.xml</code> contains:</p><pre><code class="language-xml">&lt;codes&gt;
+&lt;/xsl:template&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>Where <code>status-codes.xml</code> contains:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;codes&gt;
   &lt;status code="A" label="Active"/&gt;
   &lt;status code="D" label="Discontinued"/&gt;
   &lt;status code="P" label="Pending Review"/&gt;
-&lt;/codes&gt;</code></pre><h3 id="joining-two-documents"><a class="anchor" href="#joining-two-documents">#</a>Joining Two Documents</h3><p>A common pattern is joining data from two XML documents — like a SQL join:</p><pre><code class="language-xml">&lt;!-- orders.xml (the source document) --&gt;
+&lt;/codes&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="joining-two-documents"><a class="anchor" href="#joining-two-documents">#</a>Joining Two Documents
+                                          </h3>
+                                          <p>A common pattern is joining data from two XML documents — like a SQL join:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;!-- orders.xml (the source document) --&gt;
 &lt;orders&gt;
   &lt;order id="ORD-100"&gt;
     &lt;line product-ref="WP-001" qty="2"/&gt;
@@ -252,7 +1114,13 @@ var activeElectronics = lookup[("electronics", "active")];</code></pre><hr><h2 i
 &lt;catalog&gt;
   &lt;product id="WP-001"&gt;&lt;name&gt;Widget Pro&lt;/name&gt;&lt;price&gt;29.99&lt;/price&gt;&lt;/product&gt;
   &lt;product id="WP-003"&gt;&lt;name&gt;Gizmo X&lt;/name&gt;&lt;price&gt;79.99&lt;/price&gt;&lt;/product&gt;
-&lt;/catalog&gt;</code></pre><pre><code class="language-xml">&lt;xsl:variable name="product-catalog" select="doc('products.xml')"/&gt;
+&lt;/catalog&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;xsl:variable name="product-catalog" select="doc('products.xml')"/&gt;
 &lt;xsl:key name="prod-by-id" match="product" use="@id"/&gt;
 &lt;xsl:template match="order"&gt;
   &lt;div class="order"&gt;
@@ -268,12 +1136,33 @@ var activeElectronics = lookup[("electronics", "active")];</code></pre><hr><h2 i
       &lt;/p&gt;
     &lt;/xsl:for-each&gt;
   &lt;/div&gt;
-&lt;/xsl:template&gt;</code></pre><p>
-      <strong>C# parallel:</strong> This is a classic hash join:</p><pre><code class="language-csharp">var productsById = products.ToDictionary(p =&gt; p.Id);
+&lt;/xsl:template&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>
+      <strong>C# parallel:</strong> This is a classic hash join:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">var productsById = products.ToDictionary(p =&gt; p.Id);
 var orderDetails = order.Lines.Select(line =&gt; new {
     Product = productsById[line.ProductRef],
     Quantity = line.Qty
-});</code></pre><hr><h2 id="common-patterns"><a class="anchor" href="#common-patterns">#</a>Common Patterns</h2><h3 id="lookup-tables"><a class="anchor" href="#lookup-tables">#</a>Lookup Tables</h3><p>Replace verbose <code>xsl:choose</code> blocks with data-driven lookups:</p><pre><code class="language-xml">&lt;!-- Instead of this: --&gt;
+});</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <hr>
+                                            <h2 id="common-patterns"><a class="anchor" href="#common-patterns">#</a>Common Patterns
+                                            </h2>
+                                            <h3 id="lookup-tables"><a class="anchor" href="#lookup-tables">#</a>Lookup Tables
+                                            </h3>
+                                            <p>Replace verbose <code>xsl:choose</code> blocks with data-driven lookups:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;!-- Instead of this: --&gt;
 &lt;xsl:choose&gt;
   &lt;xsl:when test="@country = 'US'"&gt;United States&lt;/xsl:when&gt;
   &lt;xsl:when test="@country = 'GB'"&gt;United Kingdom&lt;/xsl:when&gt;
@@ -283,20 +1172,58 @@ var orderDetails = order.Lines.Select(line =&gt; new {
 &lt;!-- Use a lookup table: --&gt;
 &lt;xsl:variable name="countries-doc" select="doc('countries.xml')"/&gt;
 &lt;xsl:key name="country-by-code" match="country" use="@code"/&gt;
-&lt;xsl:value-of select="key('country-by-code', @country, $countries-doc)/@name"/&gt;</code></pre><h3 id="deduplication"><a class="anchor" href="#deduplication">#</a>Deduplication</h3><p>Use keys to find unique values — nodes with the same key value are grouped together, and you can select just the first:</p><pre><code class="language-xml">&lt;xsl:key name="products-by-category" match="product" use="@category"/&gt;
+&lt;xsl:value-of select="key('country-by-code', @country, $countries-doc)/@name"/&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="deduplication"><a class="anchor" href="#deduplication">#</a>Deduplication
+                                            </h3>
+                                            <p>Use keys to find unique values — nodes with the same key value are grouped together, and you can select just the first:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:key name="products-by-category" match="product" use="@category"/&gt;
 &lt;!-- Get distinct categories --&gt;
 &lt;xsl:for-each select="//product[generate-id() =
                        generate-id(key('products-by-category', @category)[1])]"&gt;
   &lt;li&gt;&lt;xsl:value-of select="@category"/&gt;&lt;/li&gt;
-&lt;/xsl:for-each&gt;</code></pre><p>This is the classic "Muenchian method" from XSLT 1.0. In XSLT 2.0+, use <code>xsl:for-each-group</code> instead — it is simpler and more readable:</p><pre><code class="language-xml">&lt;!-- Preferred in XSLT 2.0+: --&gt;
+&lt;/xsl:for-each&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>This is the classic "Muenchian method" from XSLT 1.0. In XSLT 2.0+, use <code>xsl:for-each-group</code> instead — it is simpler and more readable:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;!-- Preferred in XSLT 2.0+: --&gt;
 &lt;xsl:for-each-group select="//product" group-by="@category"&gt;
   &lt;li&gt;&lt;xsl:value-of select="current-grouping-key()"/&gt;&lt;/li&gt;
-&lt;/xsl:for-each-group&gt;</code></pre><h3 id="parent-child-joins"><a class="anchor" href="#parent-child-joins">#</a>Parent-Child Joins</h3><p>Index child elements by their parent's ID to navigate relationships:</p><pre><code class="language-xml">&lt;xsl:key name="children-by-parent" match="category" use="@parent-id"/&gt;
+&lt;/xsl:for-each-group&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="parent-child-joins"><a class="anchor" href="#parent-child-joins">#</a>Parent-Child Joins
+                                            </h3>
+                                            <p>Index child elements by their parent's ID to navigate relationships:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:key name="children-by-parent" match="category" use="@parent-id"/&gt;
 &lt;!-- Given: &lt;category id="C1" parent-id="ROOT"/&gt;
             &lt;category id="C2" parent-id="C1"/&gt;
             &lt;category id="C3" parent-id="C1"/&gt; --&gt;
 &lt;!-- Find all children of category C1 --&gt;
-&lt;xsl:variable name="children" select="key('children-by-parent', 'C1')"/&gt;</code></pre><h3 id="existence-check"><a class="anchor" href="#existence-check">#</a>Existence Check</h3><p>Keys provide an efficient way to test whether a value exists in a set:</p><pre><code class="language-xml">&lt;xsl:key name="valid-codes" match="code" use="."/&gt;
+&lt;xsl:variable name="children" select="key('children-by-parent', 'C1')"/&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="existence-check"><a class="anchor" href="#existence-check">#</a>Existence Check
+                                            </h3>
+                                            <p>Keys provide an efficient way to test whether a value exists in a set:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:key name="valid-codes" match="code" use="."/&gt;
 &lt;xsl:variable name="codes-doc" select="doc('valid-codes.xml')"/&gt;
 &lt;!-- Check if a product's status code is valid --&gt;
 &lt;xsl:if test="key('valid-codes', @status, $codes-doc)"&gt;
@@ -304,79 +1231,202 @@ var orderDetails = order.Lines.Select(line =&gt; new {
 &lt;/xsl:if&gt;
 &lt;xsl:if test="not(key('valid-codes', @status, $codes-doc))"&gt;
   &lt;xsl:message&gt;WARNING: Unknown status code '&lt;xsl:value-of select="@status"/&gt;'&lt;/xsl:message&gt;
-&lt;/xsl:if&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>HashSet&lt;string&gt;.Contains(value)</code> — O(1) membership test.</p><hr><h2 id="performance"><a class="anchor" href="#performance">#</a>Performance</h2><h3 id="when-to-use-keys"><a class="anchor" href="#when-to-use-keys">#</a>When to Use Keys</h3><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Scenario</p>
-          </th>
-          <th>
-            <p>Use Keys?</p>
-          </th>
-          <th>
-            <p>Why</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>Single lookup by ID</p>
-          </td>
-          <td>
-            <p>Maybe</p>
-          </td>
-          <td>
-            <p>Predicate <code>[@id = $val]</code> is fine for one-time use</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Repeated lookups by same field</p>
-          </td>
-          <td>
-            <p><strong>Yes</strong></p>
-          </td>
-          <td>
-            <p>Index built once, used many times</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Joining two documents</p>
-          </td>
-          <td>
-            <p><strong>Yes</strong></p>
-          </td>
-          <td>
-            <p>Avoids N x M nested loops</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Lookup table (code-to-label)</p>
-          </td>
-          <td>
-            <p><strong>Yes</strong></p>
-          </td>
-          <td>
-            <p>Classic use case</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>One-time filtering</p>
-          </td>
-          <td>
-            <p>No</p>
-          </td>
-          <td>
-            <p>Predicate is simpler and equally fast</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="index-building-cost"><a class="anchor" href="#index-building-cost">#</a>Index Building Cost</h3><p>Building a key index has a one-time cost proportional to the number of matched nodes. For a document with 10,000 products, the first <code>key()</code> call triggers a scan of all 10,000 products. Subsequent calls are near-instant.</p><p>If you define a key but never call <code>key()</code> for it, the index is never built — there is no wasted effort.</p><h3 id="memory"><a class="anchor" href="#memory">#</a>Memory</h3><p>Key indexes consume memory proportional to the number of entries. For large documents, this is usually worthwhile — the memory cost of the index is small compared to the document itself. But if you define many keys with broad match patterns (<code>match="*"</code>), the combined memory cost can be significant.</p><h3 id="comparison-with-predicates"><a class="anchor" href="#comparison-with-predicates">#</a>Comparison with Predicates</h3><pre><code class="language-xml">&lt;!-- Predicate: O(n) per call — scans all products each time --&gt;
+&lt;/xsl:if&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
+      <strong>C# parallel:</strong> <code>HashSet&lt;string&gt;.Contains(value)</code> — O(1) membership test.
+                                            </p>
+                                            <hr>
+                                              <h2 id="performance"><a class="anchor" href="#performance">#</a>Performance
+                                              </h2>
+                                              <h3 id="when-to-use-keys"><a class="anchor" href="#when-to-use-keys">#</a>When to Use Keys
+                                              </h3>
+                                              <div class="table-wrap">
+                                                <table>
+      
+                                                  <thead>
+        
+                                                    <tr>
+          
+                                                      <th>
+            
+                                                        <p>Scenario
+                                                        </p>
+          
+                                                      </th>
+          
+                                                      <th>
+            
+                                                        <p>Use Keys?
+                                                        </p>
+          
+                                                      </th>
+          
+                                                      <th>
+            
+                                                        <p>Why
+                                                        </p>
+          
+                                                      </th>
+        
+                                                    </tr>
+      
+                                                  </thead>
+      
+                                                  <tbody>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>Single lookup by ID
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Maybe
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Predicate <code>[@id = $val]</code> is fine for one-time use
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>Repeated lookups by same field
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <strong>Yes</strong>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Index built once, used many times
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>Joining two documents
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <strong>Yes</strong>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Avoids N x M nested loops
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>Lookup table (code-to-label)
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <strong>Yes</strong>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Classic use case
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>One-time filtering
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>No
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Predicate is simpler and equally fast
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+      
+                                                  </tbody>
+    
+                                                </table>
+                                              </div>
+                                              <h3 id="index-building-cost"><a class="anchor" href="#index-building-cost">#</a>Index Building Cost
+                                              </h3>
+                                              <p>Building a key index has a one-time cost proportional to the number of matched nodes. For a document with 10,000 products, the first <code>key()</code> call triggers a scan of all 10,000 products. Subsequent calls are near-instant.
+                                              </p>
+                                              <p>If you define a key but never call <code>key()</code> for it, the index is never built — there is no wasted effort.
+                                              </p>
+                                              <h3 id="memory"><a class="anchor" href="#memory">#</a>Memory
+                                              </h3>
+                                              <p>Key indexes consume memory proportional to the number of entries. For large documents, this is usually worthwhile — the memory cost of the index is small compared to the document itself. But if you define many keys with broad match patterns (<code>match="*"</code>), the combined memory cost can be significant.
+                                              </p>
+                                              <h3 id="comparison-with-predicates"><a class="anchor" href="#comparison-with-predicates">#</a>Comparison with Predicates
+                                              </h3>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;!-- Predicate: O(n) per call — scans all products each time --&gt;
 &lt;xsl:for-each select="order/line"&gt;
   &lt;xsl:value-of select="//product[@id = current()/@product-ref]/name"/&gt;
 &lt;/xsl:for-each&gt;
@@ -386,67 +1436,254 @@ var orderDetails = order.Lines.Select(line =&gt; new {
 &lt;xsl:for-each select="order/line"&gt;
   &lt;xsl:value-of select="key('product-by-id', @product-ref)/name"/&gt;
 &lt;/xsl:for-each&gt;
-&lt;!-- For 1000 lines: 10000 setup + 1000 lookups ≈ 11,000 operations --&gt;</code></pre><p>The key version is nearly 1000x faster for this workload.</p><p>
+&lt;!-- For 1000 lines: 10000 setup + 1000 lookups ≈ 11,000 operations --&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>The key version is nearly 1000x faster for this workload.
+                                              </p>
+                                              <p>
       <strong>C# parallel summary:</strong>
-    </p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>XSLT</p>
-          </th>
-          <th>
-            <p>C#</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>xsl:key name="k" match="product" use="@id"</code></p>
-          </td>
-          <td>
-            <p><code>products.ToDictionary(p =&gt; p.Id)</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>key('k', $value)</code></p>
-          </td>
-          <td>
-            <p><code>dict[value]</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>key('k', $value, $doc)</code></p>
-          </td>
-          <td>
-            <p><code>otherDict[value]</code> (from different collection)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Key with multiple values per node</p>
-          </td>
-          <td>
-            <p><code>ToLookup()</code> with <code>SelectMany</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Composite key</p>
-          </td>
-          <td>
-            <p><code>ToDictionary</code> with tuple key</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Predicate <code>[@id = $val]</code></p>
-          </td>
-          <td>
-            <p><code>products.Where(p =&gt; p.Id == val)</code> (linear scan)</p>
-          </td>
-        </tr>
-      </tbody>
-    </table></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+    
+                                              </p>
+                                              <div class="table-wrap">
+                                                <table>
+      
+                                                  <thead>
+        
+                                                    <tr>
+          
+                                                      <th>
+            
+                                                        <p>XSLT
+                                                        </p>
+          
+                                                      </th>
+          
+                                                      <th>
+            
+                                                        <p>C#
+                                                        </p>
+          
+                                                      </th>
+        
+                                                    </tr>
+      
+                                                  </thead>
+      
+                                                  <tbody>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>xsl:key name="k" match="product" use="@id"</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>products.ToDictionary(p =&gt; p.Id)</code>
+            
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>key('k', $value)</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>dict[value]</code>
+            
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>key('k', $value, $doc)</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>otherDict[value]</code> (from different collection)
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>Key with multiple values per node
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>ToLookup()</code> with <code>SelectMany</code>
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>Composite key
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>ToDictionary</code> with tuple key
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>Predicate <code>[@id = $val]</code>
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>products.Where(p =&gt; p.Id == val)</code> (linear scan)
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+      
+                                                  </tbody>
+    
+                                                </table>
+                                              </div>
+                                            </article>
+                                          </main>
+                                          <aside class="toc" aria-label="On this page">
+                                            <p class="toc-label">On this page
+                                            </p>
+                                            <ul>
+                                              <li class="toc-h2"><a href="#contents">Contents</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#xsl-key">xsl:key</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#attributes">Attributes</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#basic-examples">Basic Examples</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#the-key-function">The key() Function</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#basic-lookup">Basic Lookup</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#multiple-values">Multiple Values</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#using-key-in-templates">Using key() in Templates</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#how-keys-work">How Keys Work</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#key-lookup-vs-predicate-filtering">Key Lookup vs. Predicate Filtering</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#when-the-index-is-built">When the Index is Built</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#multiple-nodes-per-key-value">Multiple Nodes Per Key Value</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#multiple-key-values-per-node">Multiple Key Values Per Node</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#composite-keys">Composite Keys</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#before-xslt-3-0-concatenated-keys">Before XSLT 3.0: Concatenated Keys</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#cross-document-lookups">Cross-Document Lookups</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#joining-two-documents">Joining Two Documents</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#common-patterns">Common Patterns</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#lookup-tables">Lookup Tables</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#deduplication">Deduplication</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#parent-child-joins">Parent-Child Joins</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#existence-check">Existence Check</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#performance">Performance</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#when-to-use-keys">When to Use Keys</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#index-building-cost">Index Building Cost</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#memory">Memory</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#comparison-with-predicates">Comparison with Predicates</a>
+                                              </li>
+                                            </ul>
+                                          </aside>
+                                        </div>
+                                        <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                          <div class="search-backdrop">
+                                          </div>
+                                          <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                            <div class="search-results" id="search-results">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <footer class="site-footer">
+                                          <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                          </p>
+                                        </footer>
+                                        <script src="https://unpkg.com/lunr/lunr.js">
+                                        </script>
+                                        <script src="/js/prism.js">
+                                        </script>
+                                        <script src="/js/search.js">
+                                        </script>
+                                        <script src="/js/theme.js">
+                                        </script>
+                                        <script src="/js/toc.js">
+                                        </script>
+                                        <script src="/js/copy.js">
+                                        </script>
+                                      </body>
+                                    </html>

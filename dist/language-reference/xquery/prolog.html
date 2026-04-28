@@ -1,64 +1,634 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Prolog and Declarations — PhoenixmlDb Documentation</title><meta name="description" content="XQuery prolog — module declarations, namespace imports, options, and configuration"><link rel="canonical" href="/language-reference/xquery/prolog.html"><meta property="og:title" content="Prolog and Declarations"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xquery/prolog.html"><meta property="og:description" content="XQuery prolog — module declarations, namespace imports, options, and configuration"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Prolog and Declarations — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="XQuery prolog — module declarations, namespace imports, options, and configuration">
+            <link rel="canonical" href="/language-reference/xquery/prolog.html">
+              <meta property="og:title" content="Prolog and Declarations">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xquery/prolog.html">
+                    <meta property="og:description" content="XQuery prolog — module declarations, namespace imports, options, and configuration">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li class="active"><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="prolog-and-declarations"><a class="anchor" href="#prolog-and-declarations">#</a>Prolog and Declarations</h1><p>Every XQuery file begins with an optional <strong>prolog</strong> — a header section that sets up the execution environment before the main query body runs. The prolog declares namespaces, imports modules, defines variables and functions, and configures serialization.</p><p>If you are coming from C#, the prolog is a combination of <code>using</code> directives, assembly-level attributes, <code>.csproj</code> properties, and global configuration — all in one place at the top of the file.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#what-the-prolog-is" title="">What the Prolog Is</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#version-declaration" title="">Version Declaration</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#module-declaration" title="">Module Declaration</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#namespace-declarations" title="">Namespace Declarations</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#imports" title="">Imports</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#variable-declarations" title="">Variable Declarations</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#option-declarations" title="">Option Declarations</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#environment-settings" title="">Environment Settings</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#declaration-order" title="">Declaration Order</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#main-module-vs-library-module" title="">Main Module vs Library Module</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#complete-example" title="">Complete Example</a>
-        </p>
-      </li></ul><hr><h2 id="what-the-prolog-is"><a class="anchor" href="#what-the-prolog-is">#</a>What the Prolog Is</h2><p>An XQuery file has two parts:</p><ol><li>
-        <p>
-          <strong>Prolog</strong> — declarations that configure the environment (optional)</p>
-      </li><li>
-        <p>
-          <strong>Body</strong> — the expression that produces results (required in main modules)</p>
-      </li></ol><pre><code class="language-xquery">(: === PROLOG === :)
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li class="active"><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">XQuery
+                                </p>
+                                <h1 class="page-title">Prolog and Declarations
+                                </h1>
+                                <p class="page-subtitle">XQuery prolog — module declarations, namespace imports, options, and configuration
+                                </p>
+                                <h1 id="prolog-and-declarations"><a class="anchor" href="#prolog-and-declarations">#</a>Prolog and Declarations
+                                </h1>
+                                <p>Every XQuery file begins with an optional <strong>prolog</strong> — a header section that sets up the execution environment before the main query body runs. The prolog declares namespaces, imports modules, defines variables and functions, and configures serialization.
+                                </p>
+                                <p>If you are coming from C#, the prolog is a combination of <code>using</code> directives, assembly-level attributes, <code>.csproj</code> properties, and global configuration — all in one place at the top of the file.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#what-the-prolog-is">What the Prolog Is</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#version-declaration">Version Declaration</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#module-declaration">Module Declaration</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#namespace-declarations">Namespace Declarations</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#imports">Imports</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#variable-declarations">Variable Declarations</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#option-declarations">Option Declarations</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#environment-settings">Environment Settings</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#declaration-order">Declaration Order</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#main-module-vs-library-module">Main Module vs Library Module</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#complete-example">Complete Example</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="what-the-prolog-is"><a class="anchor" href="#what-the-prolog-is">#</a>What the Prolog Is
+                                  </h2>
+                                  <p>An XQuery file has two parts:
+                                  </p>
+                                  <ol>
+                                    <li>
+        
+                                      <p>
+          <strong>Prolog</strong> — declarations that configure the environment (optional)
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <strong>Body</strong> — the expression that produces results (required in main modules)
+                                      </p>
+      
+                                    </li>
+                                  </ol>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xquery</span>
+                                    </figcaption>
+                                    <pre><code class="language-xquery">(: === PROLOG === :)
 xquery version "4.0";
 declare namespace app = "http://example.com/app";
 import module namespace util = "http://example.com/util" at "util.xqm";
 declare variable $config := map { "debug": true() };
 (: === BODY === :)
-&lt;result&gt;{ util:process(collection("data"), $config) }&lt;/result&gt;</code></pre><p>
+&lt;result&gt;{ util:process(collection("data"), $config) }&lt;/result&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// === "Prolog" in C# ===
+    
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">csharp</span>
+                                    </figcaption>
+                                    <pre><code class="language-csharp">// === "Prolog" in C# ===
 using System;                           // namespace import
 using MyApp.Utilities;                  // module import
 // assembly attributes, global usings, etc.
@@ -66,57 +636,167 @@ using MyApp.Utilities;                  // module import
 public class Program
 {
     static void Main() { /* ... */ }    // the executable part
-}</code></pre><p>The prolog is not just syntactic sugar. It controls fundamental behaviors: how namespaces resolve, what modules are available, how output is serialized, how empty sequences sort, and more.</p><hr><h2 id="version-declaration"><a class="anchor" href="#version-declaration">#</a>Version Declaration</h2><p>The version declaration must be the very first thing in the file (before any comments or whitespace):</p><pre><code class="language-xquery">xquery version "4.0";</code></pre><p>This tells the processor which version of the XQuery specification to use. Common values:</p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Version</p>
-          </th>
-          <th>
-            <p>Notes</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>"1.0"</code></p>
-          </td>
-          <td>
-            <p>Original XQuery (2007)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>"3.0"</code></p>
-          </td>
-          <td>
-            <p>Maps, arrays, try/catch, group by (2014)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>"3.1"</code></p>
-          </td>
-          <td>
-            <p>JSON support, arrow operator, string constructors (2017)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>"4.0"</code></p>
-          </td>
-          <td>
-            <p>Latest — enhanced maps/arrays, <code>otherwise</code>, <code>for member</code> (2024)</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><p>You can also specify the encoding:</p><pre><code class="language-xquery">xquery version "4.0" encoding "UTF-8";</code></pre><p>
+}</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>The prolog is not just syntactic sugar. It controls fundamental behaviors: how namespaces resolve, what modules are available, how output is serialized, how empty sequences sort, and more.
+                                  </p>
+                                  <hr>
+                                    <h2 id="version-declaration"><a class="anchor" href="#version-declaration">#</a>Version Declaration
+                                    </h2>
+                                    <p>The version declaration must be the very first thing in the file (before any comments or whitespace):
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">xquery version "4.0";</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>This tells the processor which version of the XQuery specification to use. Common values:
+                                    </p>
+                                    <div class="table-wrap">
+                                      <table>
+      
+                                        <thead>
+        
+                                          <tr>
+          
+                                            <th>
+            
+                                              <p>Version
+                                              </p>
+          
+                                            </th>
+          
+                                            <th>
+            
+                                              <p>Notes
+                                              </p>
+          
+                                            </th>
+        
+                                          </tr>
+      
+                                        </thead>
+      
+                                        <tbody>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>"1.0"</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Original XQuery (2007)
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>"3.0"</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Maps, arrays, try/catch, group by (2014)
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>"3.1"</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>JSON support, arrow operator, string constructors (2017)
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>"4.0"</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Latest — enhanced maps/arrays, <code>otherwise</code>, <code>for member</code> (2024)
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+      
+                                        </tbody>
+    
+                                      </table>
+                                    </div>
+                                    <p>You can also specify the encoding:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">xquery version "4.0" encoding "UTF-8";</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// C# language version in .csproj
+    
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">csharp</span>
+                                      </figcaption>
+                                      <pre><code class="language-csharp">// C# language version in .csproj
 &lt;PropertyGroup&gt;
     &lt;LangVersion&gt;12.0&lt;/LangVersion&gt;
-&lt;/PropertyGroup&gt;</code></pre><p>If you omit the version declaration, the processor uses its default version (typically the latest it supports).</p><hr><h2 id="module-declaration"><a class="anchor" href="#module-declaration">#</a>Module Declaration</h2><p>A <strong>module declaration</strong> turns an XQuery file into a library module — a reusable package of functions and variables that other queries can import. Library modules have no body expression; they only provide declarations.</p><pre><code class="language-xquery">module namespace util = "http://example.com/util";
+&lt;/PropertyGroup&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>If you omit the version declaration, the processor uses its default version (typically the latest it supports).
+                                    </p>
+                                    <hr>
+                                      <h2 id="module-declaration"><a class="anchor" href="#module-declaration">#</a>Module Declaration
+                                      </h2>
+                                      <p>A <strong>module declaration</strong> turns an XQuery file into a library module — a reusable package of functions and variables that other queries can import. Library modules have no body expression; they only provide declarations.
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">module namespace util = "http://example.com/util";
 (: This file is now a library module.
    It can only contain function and variable declarations.
    It cannot have a query body. :)
@@ -127,136 +807,395 @@ declare function util:truncate($text as xs:string, $max as xs:integer) as xs:str
   if (string-length($text) &gt; $max)
   then concat(substring($text, 1, $max - 3), "...")
   else $text
-};</code></pre><p>The <code>module namespace</code> declaration binds a prefix (<code>util</code>) to a namespace URI (<code>http://example.com/util</code>). Every function and variable in the module must use this namespace prefix.</p><p>
+};</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>The <code>module namespace</code> declaration binds a prefix (<code>util</code>) to a namespace URI (<code>http://example.com/util</code>). Every function and variable in the module must use this namespace prefix.
+                                      </p>
+                                      <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// A C# class library (reusable, no Main method)
+    
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">csharp</span>
+                                        </figcaption>
+                                        <pre><code class="language-csharp">// A C# class library (reusable, no Main method)
 namespace Example.Util;
 public static class StringHelpers
 {
     public static string Truncate(string text, int max) =&gt;
         text.Length &gt; max ? text[..(max - 3)] + "..." : text;
-}</code></pre><hr><h2 id="namespace-declarations"><a class="anchor" href="#namespace-declarations">#</a>Namespace Declarations</h2><p>Namespaces prevent name collisions, just like C# namespaces. XQuery provides several ways to declare them.</p><h3 id="explicit-namespace-declaration"><a class="anchor" href="#explicit-namespace-declaration">#</a>Explicit Namespace Declaration</h3><pre><code class="language-xquery">declare namespace app = "http://example.com/app";
+}</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <hr>
+                                        <h2 id="namespace-declarations"><a class="anchor" href="#namespace-declarations">#</a>Namespace Declarations
+                                        </h2>
+                                        <p>Namespaces prevent name collisions, just like C# namespaces. XQuery provides several ways to declare them.
+                                        </p>
+                                        <h3 id="explicit-namespace-declaration"><a class="anchor" href="#explicit-namespace-declaration">#</a>Explicit Namespace Declaration
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">declare namespace app = "http://example.com/app";
 declare namespace hr = "http://example.com/hr";
 (: Now use the prefixes in the query :)
-//hr:employee[hr:department = "Engineering"]</code></pre><h3 id="default-element-namespace"><a class="anchor" href="#default-element-namespace">#</a>Default Element Namespace</h3><p>Sets the namespace for element names that have no prefix:</p><pre><code class="language-xquery">declare default element namespace "http://www.w3.org/1999/xhtml";
+//hr:employee[hr:department = "Engineering"]</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="default-element-namespace"><a class="anchor" href="#default-element-namespace">#</a>Default Element Namespace
+                                        </h3>
+                                        <p>Sets the namespace for element names that have no prefix:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">declare default element namespace "http://www.w3.org/1999/xhtml";
 (: These unprefixed elements are now in the XHTML namespace :)
 &lt;html&gt;
   &lt;head&gt;&lt;title&gt;Page&lt;/title&gt;&lt;/head&gt;
   &lt;body&gt;&lt;p&gt;Content&lt;/p&gt;&lt;/body&gt;
-&lt;/html&gt;</code></pre><p>Without this declaration, unprefixed elements are in no namespace.</p><h3 id="default-function-namespace"><a class="anchor" href="#default-function-namespace">#</a>Default Function Namespace</h3><p>Sets the namespace for unqualified function calls:</p><pre><code class="language-xquery">declare default function namespace "http://example.com/app";
+&lt;/html&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>Without this declaration, unprefixed elements are in no namespace.
+                                        </p>
+                                        <h3 id="default-function-namespace"><a class="anchor" href="#default-function-namespace">#</a>Default Function Namespace
+                                        </h3>
+                                        <p>Sets the namespace for unqualified function calls:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">declare default function namespace "http://example.com/app";
 (: Calls http://example.com/app:process(), not fn:process() :)
-process($data)</code></pre><p>By default, the function namespace is <code>http://www.w3.org/2005/xpath-functions</code> (the <code>fn</code> namespace), so unqualified function calls like <code>count()</code>, <code>string()</code>, <code>contains()</code> resolve to the standard XPath functions.</p><h3 id="pre-declared-namespaces"><a class="anchor" href="#pre-declared-namespaces">#</a>Pre-Declared Namespaces</h3><p>These namespaces are always available without declaring them:</p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Prefix</p>
-          </th>
-          <th>
-            <p>Namespace URI</p>
-          </th>
-          <th>
-            <p>Purpose</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>fn</code></p>
-          </td>
-          <td>
-            <p><code>http://www.w3.org/2005/xpath-functions</code></p>
-          </td>
-          <td>
-            <p>Standard functions: <code>fn:count()</code>, <code>fn:string()</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>xs</code></p>
-          </td>
-          <td>
-            <p><code>http://www.w3.org/2001/XMLSchema</code></p>
-          </td>
-          <td>
-            <p>Schema types: <code>xs:integer</code>, <code>xs:string</code>, <code>xs:date</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>xsi</code></p>
-          </td>
-          <td>
-            <p><code>http://www.w3.org/2001/XMLSchema-instance</code></p>
-          </td>
-          <td>
-            <p>Schema instance attributes</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>xml</code></p>
-          </td>
-          <td>
-            <p><code>http://www.w3.org/XML/1998/namespace</code></p>
-          </td>
-          <td>
-            <p><code>xml:lang</code>, <code>xml:space</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>math</code></p>
-          </td>
-          <td>
-            <p><code>http://www.w3.org/2005/xpath-functions/math</code></p>
-          </td>
-          <td>
-            <p>Math functions: <code>math:pi()</code>, <code>math:sqrt()</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>map</code></p>
-          </td>
-          <td>
-            <p><code>http://www.w3.org/2005/xpath-functions/map</code></p>
-          </td>
-          <td>
-            <p>Map functions: <code>map:keys()</code>, <code>map:merge()</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>array</code></p>
-          </td>
-          <td>
-            <p><code>http://www.w3.org/2005/xpath-functions/array</code></p>
-          </td>
-          <td>
-            <p>Array functions: <code>array:size()</code>, <code>array:join()</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>local</code></p>
-          </td>
-          <td>
-            <p><code>http://www.w3.org/2005/xquery-local-functions</code></p>
-          </td>
-          <td>
-            <p>Local functions in main modules</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><p>
+process($data)</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>By default, the function namespace is <code>http://www.w3.org/2005/xpath-functions</code> (the <code>fn</code> namespace), so unqualified function calls like <code>count()</code>, <code>string()</code>, <code>contains()</code> resolve to the standard XPath functions.
+                                        </p>
+                                        <h3 id="pre-declared-namespaces"><a class="anchor" href="#pre-declared-namespaces">#</a>Pre-Declared Namespaces
+                                        </h3>
+                                        <p>These namespaces are always available without declaring them:
+                                        </p>
+                                        <div class="table-wrap">
+                                          <table>
+      
+                                            <thead>
+        
+                                              <tr>
+          
+                                                <th>
+            
+                                                  <p>Prefix
+                                                  </p>
+          
+                                                </th>
+          
+                                                <th>
+            
+                                                  <p>Namespace URI
+                                                  </p>
+          
+                                                </th>
+          
+                                                <th>
+            
+                                                  <p>Purpose
+                                                  </p>
+          
+                                                </th>
+        
+                                              </tr>
+      
+                                            </thead>
+      
+                                            <tbody>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>fn</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>http://www.w3.org/2005/xpath-functions</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Standard functions: <code>fn:count()</code>, <code>fn:string()</code>
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>xs</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>http://www.w3.org/2001/XMLSchema</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Schema types: <code>xs:integer</code>, <code>xs:string</code>, <code>xs:date</code>
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>xsi</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>http://www.w3.org/2001/XMLSchema-instance</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Schema instance attributes
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>xml</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>http://www.w3.org/XML/1998/namespace</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>xml:lang</code>, <code>xml:space</code>
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>math</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>http://www.w3.org/2005/xpath-functions/math</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Math functions: <code>math:pi()</code>, <code>math:sqrt()</code>
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>map</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>http://www.w3.org/2005/xpath-functions/map</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Map functions: <code>map:keys()</code>, <code>map:merge()</code>
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>array</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>http://www.w3.org/2005/xpath-functions/array</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Array functions: <code>array:size()</code>, <code>array:join()</code>
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>local</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>http://www.w3.org/2005/xquery-local-functions</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Local functions in main modules
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+      
+                                            </tbody>
+    
+                                          </table>
+                                        </div>
+                                        <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// Pre-declared namespaces are like C#'s implicit global usings
+    
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">// Pre-declared namespaces are like C#'s implicit global usings
 // In .NET 6+, these are available without explicit "using":
-// System, System.Collections.Generic, System.Linq, System.Threading.Tasks, etc.</code></pre><hr><h2 id="imports"><a class="anchor" href="#imports">#</a>Imports</h2><h3 id="module-import"><a class="anchor" href="#module-import">#</a>Module Import</h3><p>Imports functions and variables from a library module:</p><pre><code class="language-xquery">import module namespace util = "http://example.com/util" at "util.xqm";
-import module namespace db = "http://example.com/db" at "lib/database.xqm";</code></pre><p>The <code>at</code> clause specifies the physical location of the module file. Some processors can resolve modules by namespace URI alone (using a catalog or repository), making the <code>at</code> clause optional.</p><p>After importing, you can use the module's functions and variables:</p><pre><code class="language-xquery">import module namespace str = "http://example.com/strings" at "strings.xqm";
+// System, System.Collections.Generic, System.Linq, System.Threading.Tasks, etc.</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <hr>
+                                          <h2 id="imports"><a class="anchor" href="#imports">#</a>Imports
+                                          </h2>
+                                          <h3 id="module-import"><a class="anchor" href="#module-import">#</a>Module Import
+                                          </h3>
+                                          <p>Imports functions and variables from a library module:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">import module namespace util = "http://example.com/util" at "util.xqm";
+import module namespace db = "http://example.com/db" at "lib/database.xqm";</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>The <code>at</code> clause specifies the physical location of the module file. Some processors can resolve modules by namespace URI alone (using a catalog or repository), making the <code>at</code> clause optional.
+                                          </p>
+                                          <p>After importing, you can use the module's functions and variables:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">import module namespace str = "http://example.com/strings" at "strings.xqm";
 str:capitalize("hello world")
-(: Result: "Hello World" :)</code></pre><h3 id="importing-modules-with-annotated-declarations"><a class="anchor" href="#importing-modules-with-annotated-declarations">#</a>Importing Modules with Annotated Declarations</h3><p>When a library module uses <code>%public</code> and <code>%private</code> annotations, only the <code>%public</code> (or unannotated, which defaults to public) declarations are visible to the importer:</p><pre><code class="language-xquery">(: strings.xqm :)
+(: Result: "Hello World" :)</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="importing-modules-with-annotated-declarations"><a class="anchor" href="#importing-modules-with-annotated-declarations">#</a>Importing Modules with Annotated Declarations
+                                          </h3>
+                                          <p>When a library module uses <code>%public</code> and <code>%private</code> annotations, only the <code>%public</code> (or unannotated, which defaults to public) declarations are visible to the importer:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">(: strings.xqm :)
 module namespace str = "http://example.com/strings";
 declare %public function str:capitalize($text as xs:string) as xs:string {
   str:apply-case-rule($text, "upper")
@@ -264,94 +1203,279 @@ declare %public function str:capitalize($text as xs:string) as xs:string {
 declare %private function str:apply-case-rule($text as xs:string, $rule as xs:string) as xs:string {
   (: internal implementation — not visible to importers :)
   ...
-};</code></pre><pre><code class="language-xquery">(: main.xq :)
+};</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">(: main.xq :)
 import module namespace str = "http://example.com/strings" at "strings.xqm";
 str:capitalize("hello")         (: OK — %public :)
-(: str:apply-case-rule(...)     ERROR — %private, not accessible :)</code></pre><p>
+(: str:apply-case-rule(...)     ERROR — %private, not accessible :)</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// C# project reference + using
+    
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">// C# project reference + using
 // In .csproj: &lt;ProjectReference Include="../Util/Util.csproj" /&gt;
 using Example.Util;
-StringHelpers.Capitalize("hello world");</code></pre><h3 id="multiple-module-locations"><a class="anchor" href="#multiple-module-locations">#</a>Multiple Module Locations</h3><p>A single namespace can be implemented across multiple files:</p><pre><code class="language-xquery">import module namespace util = "http://example.com/util"
-  at "util-strings.xqm", "util-dates.xqm", "util-numbers.xqm";</code></pre><h3 id="schema-import"><a class="anchor" href="#schema-import">#</a>Schema Import</h3><p>Imports an XML Schema for type-aware processing:</p><pre><code class="language-xquery">import schema namespace tns = "http://example.com/orders" at "orders.xsd";
+StringHelpers.Capitalize("hello world");</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="multiple-module-locations"><a class="anchor" href="#multiple-module-locations">#</a>Multiple Module Locations
+                                          </h3>
+                                          <p>A single namespace can be implemented across multiple files:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">import module namespace util = "http://example.com/util"
+  at "util-strings.xqm", "util-dates.xqm", "util-numbers.xqm";</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="schema-import"><a class="anchor" href="#schema-import">#</a>Schema Import
+                                          </h3>
+                                          <p>Imports an XML Schema for type-aware processing:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">import schema namespace tns = "http://example.com/orders" at "orders.xsd";
 (: Now you can use schema-defined types :)
-declare variable $order as schema-element(tns:order) := doc("order.xml")/tns:order;</code></pre><p>Schema imports enable the processor to validate data against the schema and use schema-defined types in type annotations.</p><p>
+declare variable $order as schema-element(tns:order) := doc("order.xml")/tns:order;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>Schema imports enable the processor to validate data against the schema and use schema-defined types in type annotations.
+                                          </p>
+                                          <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// Like generating C# classes from an XSD with xsd.exe or XmlSchemaClassGenerator
+    
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">// Like generating C# classes from an XSD with xsd.exe or XmlSchemaClassGenerator
 // xsd.exe /c orders.xsd
-// Then using the generated types for strongly-typed access</code></pre><hr><h2 id="variable-declarations"><a class="anchor" href="#variable-declarations">#</a>Variable Declarations</h2><h3 id="simple-variable"><a class="anchor" href="#simple-variable">#</a>Simple Variable</h3><pre><code class="language-xquery">declare variable $app-name := "Customer Portal";
+// Then using the generated types for strongly-typed access</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <hr>
+                                            <h2 id="variable-declarations"><a class="anchor" href="#variable-declarations">#</a>Variable Declarations
+                                            </h2>
+                                            <h3 id="simple-variable"><a class="anchor" href="#simple-variable">#</a>Simple Variable
+                                            </h3>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">declare variable $app-name := "Customer Portal";
 declare variable $max-results := 100;
-declare variable $debug := false();</code></pre><h3 id="typed-variable"><a class="anchor" href="#typed-variable">#</a>Typed Variable</h3><p>Adding a type annotation provides compile-time checking:</p><pre><code class="language-xquery">declare variable $count as xs:integer := 0;
+declare variable $debug := false();</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="typed-variable"><a class="anchor" href="#typed-variable">#</a>Typed Variable
+                                            </h3>
+                                            <p>Adding a type annotation provides compile-time checking:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">declare variable $count as xs:integer := 0;
 declare variable $rate as xs:decimal := 0.085;
-declare variable $start-date as xs:date := xs:date("2025-01-01");</code></pre><p>
+declare variable $start-date as xs:date := xs:date("2025-01-01");</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">const string AppName = "Customer Portal";
+    
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">csharp</span>
+                                              </figcaption>
+                                              <pre><code class="language-csharp">const string AppName = "Customer Portal";
 const int MaxResults = 100;
-static readonly DateTime StartDate = new DateTime(2025, 1, 1);</code></pre><h3 id="external-variables"><a class="anchor" href="#external-variables">#</a>External Variables</h3><p>External variables are declared in the query but their values are provided by the calling environment (a .NET application, a command-line tool, or a database engine):</p><pre><code class="language-xquery">(: Declared in the query — no default value :)
+static readonly DateTime StartDate = new DateTime(2025, 1, 1);</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="external-variables"><a class="anchor" href="#external-variables">#</a>External Variables
+                                            </h3>
+                                            <p>External variables are declared in the query but their values are provided by the calling environment (a .NET application, a command-line tool, or a database engine):
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: Declared in the query — no default value :)
 declare variable $user-id as xs:string external;
 declare variable $page as xs:integer external;
 (: Declared with a default value — the caller may override it :)
-declare variable $page-size as xs:integer external := 25;</code></pre><p>The caller provides the values:</p><pre><code class="language-csharp">// C# — setting external variables before execution
+declare variable $page-size as xs:integer external := 25;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>The caller provides the values:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">csharp</span>
+                                              </figcaption>
+                                              <pre><code class="language-csharp">// C# — setting external variables before execution
 var engine = new XQueryEngine();
 engine.SetVariable("user-id", userId);
 engine.SetVariable("page", currentPage);
 // page-size not set — defaults to 25
-var results = await engine.ExecuteAsync(query);</code></pre><p>
+var results = await engine.ExecuteAsync(query);</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// External variables are like method parameters or configuration values
+    
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">csharp</span>
+                                              </figcaption>
+                                              <pre><code class="language-csharp">// External variables are like method parameters or configuration values
 public static IEnumerable&lt;Order&gt; GetOrders(string userId, int page, int pageSize = 25)
 {
     // userId and page are required; pageSize has a default
-}</code></pre><h3 id="annotations-on-declarations"><a class="anchor" href="#annotations-on-declarations">#</a>Annotations on Declarations</h3><p>Variable and function declarations can carry <strong>annotations</strong> that control visibility and convey metadata. Annotations are prefixed with <code>%</code> and appear before the <code>variable</code> or <code>function</code> keyword:</p><pre><code class="language-xquery">(: Visibility annotations :)
+}</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="annotations-on-declarations"><a class="anchor" href="#annotations-on-declarations">#</a>Annotations on Declarations
+                                            </h3>
+                                            <p>Variable and function declarations can carry <strong>annotations</strong> that control visibility and convey metadata. Annotations are prefixed with <code>%</code> and appear before the <code>variable</code> or <code>function</code> keyword:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: Visibility annotations :)
 declare %public variable $api-version := "2.0";
 declare %private variable $internal-key := "abc123";
 (: Function annotations :)
 declare %public function local:get-data() { collection("data") };
-declare %private function local:validate($x) { ... };</code></pre><p>The two built-in annotations are:</p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Annotation</p>
-          </th>
-          <th>
-            <p>Meaning</p>
-          </th>
-          <th>
-            <p>Default</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>%public</code></p>
-          </td>
-          <td>
-            <p>Visible to importing modules</p>
-          </td>
-          <td>
-            <p>Yes (functions and variables are public by default)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>%private</code></p>
-          </td>
-          <td>
-            <p>Hidden from importing modules</p>
-          </td>
-          <td>
-            <p>No</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><p>Processors and frameworks may define additional annotations. For example, REST API frameworks often use annotations like <code>%rest:path("/endpoint")</code> and <code>%rest:GET</code> to bind XQuery functions to HTTP routes.</p><p>
+declare %private function local:validate($x) { ... };</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>The two built-in annotations are:
+                                            </p>
+                                            <div class="table-wrap">
+                                              <table>
+      
+                                                <thead>
+        
+                                                  <tr>
+          
+                                                    <th>
+            
+                                                      <p>Annotation
+                                                      </p>
+          
+                                                    </th>
+          
+                                                    <th>
+            
+                                                      <p>Meaning
+                                                      </p>
+          
+                                                    </th>
+          
+                                                    <th>
+            
+                                                      <p>Default
+                                                      </p>
+          
+                                                    </th>
+        
+                                                  </tr>
+      
+                                                </thead>
+      
+                                                <tbody>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>
+              <code>%public</code>
+            
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Visible to importing modules
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Yes (functions and variables are public by default)
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>
+              <code>%private</code>
+            
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Hidden from importing modules
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>No
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+      
+                                                </tbody>
+    
+                                              </table>
+                                            </div>
+                                            <p>Processors and frameworks may define additional annotations. For example, REST API frameworks often use annotations like <code>%rest:path("/endpoint")</code> and <code>%rest:GET</code> to bind XQuery functions to HTTP routes.
+                                            </p>
+                                            <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// Annotations are like C# access modifiers + attributes
+    
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">csharp</span>
+                                              </figcaption>
+                                              <pre><code class="language-csharp">// Annotations are like C# access modifiers + attributes
 public static string ApiVersion = "2.0";         // %public
 private static string InternalKey = "abc123";     // %private
 [HttpGet("/endpoint")]                            // %rest:path, %rest:GET
-public IActionResult GetData() { ... }</code></pre><h3 id="complex-variable-values"><a class="anchor" href="#complex-variable-values">#</a>Complex Variable Values</h3><p>Variables can hold any XQuery value — sequences, maps, arrays, XML nodes:</p><pre><code class="language-xquery">declare variable $config := map {
+public IActionResult GetData() { ... }</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="complex-variable-values"><a class="anchor" href="#complex-variable-values">#</a>Complex Variable Values
+                                            </h3>
+                                            <p>Variables can hold any XQuery value — sequences, maps, arrays, XML nodes:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">declare variable $config := map {
   "database": "production",
   "max-connections": 10,
   "features": ["search", "export", "notifications"]
@@ -362,18 +1486,59 @@ declare variable $template :=
     &lt;subject/&gt;
     &lt;body/&gt;
   &lt;/email&gt;;
-declare variable $valid-statuses := ("active", "pending", "suspended");</code></pre><hr><h2 id="option-declarations"><a class="anchor" href="#option-declarations">#</a>Option Declarations</h2><p>Option declarations configure the processor's behavior, most commonly serialization (how results are output).</p><h3 id="serialization-options"><a class="anchor" href="#serialization-options">#</a>Serialization Options</h3><p>Serialization options control the format of the query's output. They use the <code>output</code> namespace:</p><pre><code class="language-xquery">declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
+declare variable $valid-statuses := ("active", "pending", "suspended");</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <hr>
+                                              <h2 id="option-declarations"><a class="anchor" href="#option-declarations">#</a>Option Declarations
+                                              </h2>
+                                              <p>Option declarations configure the processor's behavior, most commonly serialization (how results are output).
+                                              </p>
+                                              <h3 id="serialization-options"><a class="anchor" href="#serialization-options">#</a>Serialization Options
+                                              </h3>
+                                              <p>Serialization options control the format of the query's output. They use the <code>output</code> namespace:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
 (: Output as indented XML :)
 declare option output:method "xml";
 declare option output:indent "yes";
-declare option output:encoding "UTF-8";</code></pre><pre><code class="language-xquery">(: Output as HTML5 :)
+declare option output:encoding "UTF-8";</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">(: Output as HTML5 :)
 declare option output:method "html";
 declare option output:html-version "5";
-declare option output:indent "yes";</code></pre><pre><code class="language-xquery">(: Output as JSON :)
+declare option output:indent "yes";</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">(: Output as JSON :)
 declare option output:method "json";
-declare option output:indent "yes";</code></pre><pre><code class="language-xquery">(: Output as plain text :)
-declare option output:method "text";</code></pre><p>
-      <strong>JSON serialization</strong> is a common use case — output XQuery maps and arrays as JSON:</p><pre><code class="language-xquery">declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
+declare option output:indent "yes";</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">(: Output as plain text :)
+declare option output:method "text";</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>
+      <strong>JSON serialization</strong> is a common use case — output XQuery maps and arrays as JSON:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
 declare option output:method "json";
 declare option output:indent "yes";
 map {
@@ -385,112 +1550,285 @@ map {
       "email": string($u/email)
     }
   }
-}</code></pre><p>This query produces formatted JSON output directly, combining XQuery's data querying with JSON serialization.</p><p>Common serialization options:</p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Option</p>
-          </th>
-          <th>
-            <p>Values</p>
-          </th>
-          <th>
-            <p>Default</p>
-          </th>
-          <th>
-            <p>Purpose</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>output:method</code></p>
-          </td>
-          <td>
-            <p><code>xml</code>, <code>html</code>, <code>xhtml</code>, <code>text</code>, <code>json</code>, <code>adaptive</code></p>
-          </td>
-          <td>
-            <p><code>xml</code></p>
-          </td>
-          <td>
-            <p>Output format</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>output:indent</code></p>
-          </td>
-          <td>
-            <p><code>yes</code>, <code>no</code></p>
-          </td>
-          <td>
-            <p><code>no</code></p>
-          </td>
-          <td>
-            <p>Pretty-print output</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>output:encoding</code></p>
-          </td>
-          <td>
-            <p><code>UTF-8</code>, <code>ISO-8859-1</code>, etc.</p>
-          </td>
-          <td>
-            <p><code>UTF-8</code></p>
-          </td>
-          <td>
-            <p>Character encoding</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>output:omit-xml-declaration</code></p>
-          </td>
-          <td>
-            <p><code>yes</code>, <code>no</code></p>
-          </td>
-          <td>
-            <p><code>no</code></p>
-          </td>
-          <td>
-            <p>Include <code>&lt;?xml ... ?&gt;</code> header</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>output:standalone</code></p>
-          </td>
-          <td>
-            <p><code>yes</code>, <code>no</code>, <code>omit</code></p>
-          </td>
-          <td>
-            <p><code>omit</code></p>
-          </td>
-          <td>
-            <p>Standalone attribute in XML declaration</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>output:media-type</code></p>
-          </td>
-          <td>
-            <p>MIME type string</p>
-          </td>
-          <td>
-            <p>varies by method</p>
-          </td>
-          <td>
-            <p>Content type hint</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><p>
+}</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>This query produces formatted JSON output directly, combining XQuery's data querying with JSON serialization.
+                                              </p>
+                                              <p>Common serialization options:
+                                              </p>
+                                              <div class="table-wrap">
+                                                <table>
+      
+                                                  <thead>
+        
+                                                    <tr>
+          
+                                                      <th>
+            
+                                                        <p>Option
+                                                        </p>
+          
+                                                      </th>
+          
+                                                      <th>
+            
+                                                        <p>Values
+                                                        </p>
+          
+                                                      </th>
+          
+                                                      <th>
+            
+                                                        <p>Default
+                                                        </p>
+          
+                                                      </th>
+          
+                                                      <th>
+            
+                                                        <p>Purpose
+                                                        </p>
+          
+                                                      </th>
+        
+                                                    </tr>
+      
+                                                  </thead>
+      
+                                                  <tbody>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>output:method</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>xml</code>, <code>html</code>, <code>xhtml</code>, <code>text</code>, <code>json</code>, <code>adaptive</code>
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>xml</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Output format
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>output:indent</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>yes</code>, <code>no</code>
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>no</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Pretty-print output
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>output:encoding</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>UTF-8</code>, <code>ISO-8859-1</code>, etc.
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>UTF-8</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Character encoding
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>output:omit-xml-declaration</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>yes</code>, <code>no</code>
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>no</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Include <code>&lt;?xml ... ?&gt;</code> header
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>output:standalone</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>yes</code>, <code>no</code>, <code>omit</code>
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>omit</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Standalone attribute in XML declaration
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>output:media-type</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>MIME type string
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>varies by method
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Content type hint
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+      
+                                                  </tbody>
+    
+                                                </table>
+                                              </div>
+                                              <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// Serialization settings in C#
+    
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">csharp</span>
+                                                </figcaption>
+                                                <pre><code class="language-csharp">// Serialization settings in C#
 var settings = new XmlWriterSettings
 {
     Indent = true,
@@ -502,39 +1840,167 @@ var options = new JsonSerializerOptions
 {
     WriteIndented = true,
     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-};</code></pre><hr><h2 id="environment-settings"><a class="anchor" href="#environment-settings">#</a>Environment Settings</h2><p>These declarations control the processor's behavior for the entire module.</p><h3 id="construction-mode"><a class="anchor" href="#construction-mode">#</a>Construction Mode</h3><p>Controls whether type annotations are preserved on copied nodes:</p><pre><code class="language-xquery">declare construction preserve;  (: keep original type annotations :)
-declare construction strip;     (: remove type annotations — default :)</code></pre><h3 id="ordering-mode"><a class="anchor" href="#ordering-mode">#</a>Ordering Mode</h3><p>Controls whether the processor is required to maintain document order:</p><pre><code class="language-xquery">declare ordering ordered;      (: maintain document order — default :)
-declare ordering unordered;    (: processor may reorder for optimization :)</code></pre><p>Using <code>unordered</code> can improve performance when you do not care about result order (for example, when counting or aggregating).</p><h3 id="empty-order"><a class="anchor" href="#empty-order">#</a>Empty Order</h3><p>Controls where empty sequences sort in <code>order by</code> clauses:</p><pre><code class="language-xquery">declare default order empty greatest;  (: empty sorts last in ascending :)
-declare default order empty least;     (: empty sorts first in ascending — default :)</code></pre><pre><code class="language-xquery">(: Practical impact :)
+};</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <hr>
+                                                <h2 id="environment-settings"><a class="anchor" href="#environment-settings">#</a>Environment Settings
+                                                </h2>
+                                                <p>These declarations control the processor's behavior for the entire module.
+                                                </p>
+                                                <h3 id="construction-mode"><a class="anchor" href="#construction-mode">#</a>Construction Mode
+                                                </h3>
+                                                <p>Controls whether type annotations are preserved on copied nodes:
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">declare construction preserve;  (: keep original type annotations :)
+declare construction strip;     (: remove type annotations — default :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <h3 id="ordering-mode"><a class="anchor" href="#ordering-mode">#</a>Ordering Mode
+                                                </h3>
+                                                <p>Controls whether the processor is required to maintain document order:
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">declare ordering ordered;      (: maintain document order — default :)
+declare ordering unordered;    (: processor may reorder for optimization :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <p>Using <code>unordered</code> can improve performance when you do not care about result order (for example, when counting or aggregating).
+                                                </p>
+                                                <h3 id="empty-order"><a class="anchor" href="#empty-order">#</a>Empty Order
+                                                </h3>
+                                                <p>Controls where empty sequences sort in <code>order by</code> clauses:
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">declare default order empty greatest;  (: empty sorts last in ascending :)
+declare default order empty least;     (: empty sorts first in ascending — default :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">(: Practical impact :)
 for $emp in //employee
 order by $emp/middle-name  (: some employees have no middle name :)
 return $emp/name
 (: With "empty greatest": employees without middle names sort last :)
-(: With "empty least": employees without middle names sort first :)</code></pre><p>
+(: With "empty least": employees without middle names sort first :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// C# LINQ equivalent
+    
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">csharp</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-csharp">// C# LINQ equivalent
 employees.OrderBy(e =&gt; e.MiddleName ?? "")       // empty least
-employees.OrderBy(e =&gt; e.MiddleName ?? "\uFFFF")  // empty greatest</code></pre><h3 id="boundary-space"><a class="anchor" href="#boundary-space">#</a>Boundary Space</h3><p>Controls how whitespace between constructors is handled:</p><pre><code class="language-xquery">declare boundary-space preserve;  (: keep whitespace between expressions :)
-declare boundary-space strip;     (: remove boundary whitespace — default :)</code></pre><pre><code class="language-xquery">(: With boundary-space preserve: :)
+employees.OrderBy(e =&gt; e.MiddleName ?? "\uFFFF")  // empty greatest</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <h3 id="boundary-space"><a class="anchor" href="#boundary-space">#</a>Boundary Space
+                                                </h3>
+                                                <p>Controls how whitespace between constructors is handled:
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">declare boundary-space preserve;  (: keep whitespace between expressions :)
+declare boundary-space strip;     (: remove boundary whitespace — default :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">(: With boundary-space preserve: :)
 &lt;name&gt;{ $first } { $last }&lt;/name&gt;
 (: Result: &lt;name&gt;John Smith&lt;/name&gt;  (space between first and last is preserved) :)
 (: With boundary-space strip: :)
 &lt;name&gt;{ $first }{ $last }&lt;/name&gt;
-(: Result: &lt;name&gt;JohnSmith&lt;/name&gt;  (you must add space explicitly) :)</code></pre><h3 id="copy-namespaces"><a class="anchor" href="#copy-namespaces">#</a>Copy Namespaces</h3><p>Controls namespace handling when nodes are copied:</p><pre><code class="language-xquery">declare copy-namespaces preserve, inherit;    (: default :)
+(: Result: &lt;name&gt;JohnSmith&lt;/name&gt;  (you must add space explicitly) :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <h3 id="copy-namespaces"><a class="anchor" href="#copy-namespaces">#</a>Copy Namespaces
+                                                </h3>
+                                                <p>Controls namespace handling when nodes are copied:
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">declare copy-namespaces preserve, inherit;    (: default :)
 declare copy-namespaces no-preserve, inherit;
 declare copy-namespaces preserve, no-inherit;
-declare copy-namespaces no-preserve, no-inherit;</code></pre><ul><li>
-        <p>
-          <strong>preserve</strong> / <strong>no-preserve</strong> — whether in-scope namespaces from the original node are copied</p>
-      </li><li>
-        <p>
-          <strong>inherit</strong> / <strong>no-inherit</strong> — whether the copied node inherits namespaces from its new parent</p>
-      </li></ul><h3 id="base-uri"><a class="anchor" href="#base-uri">#</a>Base URI</h3><p>Sets the base URI for resolving relative URIs in <code>doc()</code>, <code>collection()</code>, and other functions:</p><pre><code class="language-xquery">declare base-uri "https://data.example.com/";
-doc("customers.xml")  (: resolves to https://data.example.com/customers.xml :)</code></pre><h3 id="default-collation"><a class="anchor" href="#default-collation">#</a>Default Collation</h3><p>Sets the default collation for string comparisons and sorting:</p><pre><code class="language-xquery">declare default collation "http://www.w3.org/2013/collation/UCA?lang=en;strength=secondary";</code></pre><p>Collations control how strings are compared — whether case matters, how accented characters sort, and language-specific ordering rules.</p><p>
+declare copy-namespaces no-preserve, no-inherit;</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <ul>
+                                                  <li>
+        
+                                                    <p>
+          <strong>preserve</strong> / <strong>no-preserve</strong> — whether in-scope namespaces from the original node are copied
+                                                    </p>
+      
+                                                  </li>
+                                                  <li>
+        
+                                                    <p>
+          <strong>inherit</strong> / <strong>no-inherit</strong> — whether the copied node inherits namespaces from its new parent
+                                                    </p>
+      
+                                                  </li>
+                                                </ul>
+                                                <h3 id="base-uri"><a class="anchor" href="#base-uri">#</a>Base URI
+                                                </h3>
+                                                <p>Sets the base URI for resolving relative URIs in <code>doc()</code>, <code>collection()</code>, and other functions:
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">declare base-uri "https://data.example.com/";
+doc("customers.xml")  (: resolves to https://data.example.com/customers.xml :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <h3 id="default-collation"><a class="anchor" href="#default-collation">#</a>Default Collation
+                                                </h3>
+                                                <p>Sets the default collation for string comparisons and sorting:
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">declare default collation "http://www.w3.org/2013/collation/UCA?lang=en;strength=secondary";</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <p>Collations control how strings are compared — whether case matters, how accented characters sort, and language-specific ordering rules.
+                                                </p>
+                                                <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// C# culture-specific comparison
+    
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">csharp</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-csharp">// C# culture-specific comparison
 var comparer = StringComparer.Create(new CultureInfo("en-US"), ignoreCase: true);
-names.OrderBy(n =&gt; n, comparer);</code></pre><hr><h2 id="declaration-order"><a class="anchor" href="#declaration-order">#</a>Declaration Order</h2><p>Declarations in the prolog must follow a specific order. While not all categories are required, those that are present must appear in this sequence:</p><pre><code class="language-xquery">(: 1. Version declaration (must be very first) :)
+names.OrderBy(n =&gt; n, comparer);</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <hr>
+                                                  <h2 id="declaration-order"><a class="anchor" href="#declaration-order">#</a>Declaration Order
+                                                  </h2>
+                                                  <p>Declarations in the prolog must follow a specific order. While not all categories are required, those that are present must appear in this sequence:
+                                                  </p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xquery</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xquery">(: 1. Version declaration (must be very first) :)
 xquery version "4.0";
 (: 2. Module declaration (library modules only) :)
 module namespace mylib = "http://example.com/mylib";
@@ -562,14 +2028,37 @@ declare variable $input external;
 (: 8. Function declarations :)
 declare function local:process($data) { (: ... :) };
 (: 9. Body expression (main modules only — not in library modules) :)
-local:process(doc("data.xml"))</code></pre><p>
+local:process(doc("data.xml"))</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// C# has a similar convention (enforced by style rules, not the compiler):
+    
+                                                  </p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">csharp</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-csharp">// C# has a similar convention (enforced by style rules, not the compiler):
 // 1. File-level attributes
 // 2. using directives
 // 3. namespace declaration
 // 4. class/struct declarations
-// 5. Fields, then constructors, then methods</code></pre><hr><h2 id="main-module-vs-library-module"><a class="anchor" href="#main-module-vs-library-module">#</a>Main Module vs Library Module</h2><p>XQuery has two kinds of modules, and the prolog is what distinguishes them.</p><h3 id="main-module"><a class="anchor" href="#main-module">#</a>Main Module</h3><p>A main module has a <strong>body expression</strong> — the query that produces results. It is the entry point, like <code>Program.Main()</code> in C#:</p><pre><code class="language-xquery">xquery version "4.0";
+// 5. Fields, then constructors, then methods</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <hr>
+                                                    <h2 id="main-module-vs-library-module"><a class="anchor" href="#main-module-vs-library-module">#</a>Main Module vs Library Module
+                                                    </h2>
+                                                    <p>XQuery has two kinds of modules, and the prolog is what distinguishes them.
+                                                    </p>
+                                                    <h3 id="main-module"><a class="anchor" href="#main-module">#</a>Main Module
+                                                    </h3>
+                                                    <p>A main module has a <strong>body expression</strong> — the query that produces results. It is the entry point, like <code>Program.Main()</code> in C#:
+                                                    </p>
+                                                    <figure class="code">
+                                                      <figcaption><span class="lang">xquery</span>
+                                                      </figcaption>
+                                                      <pre><code class="language-xquery">xquery version "4.0";
 import module namespace util = "http://example.com/util" at "util.xqm";
 declare variable $input external;
 (: Body expression — this is what gets executed :)
@@ -578,7 +2067,17 @@ declare variable $input external;
   for $item in $input//order
   return util:format-order($item)
 }
-&lt;/report&gt;</code></pre><h3 id="library-module"><a class="anchor" href="#library-module">#</a>Library Module</h3><p>A library module has a <strong>module declaration</strong> instead of a body. It provides functions and variables for other modules to import:</p><pre><code class="language-xquery">xquery version "4.0";
+&lt;/report&gt;</code>
+                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                    </figure>
+                                                    <h3 id="library-module"><a class="anchor" href="#library-module">#</a>Library Module
+                                                    </h3>
+                                                    <p>A library module has a <strong>module declaration</strong> instead of a body. It provides functions and variables for other modules to import:
+                                                    </p>
+                                                    <figure class="code">
+                                                      <figcaption><span class="lang">xquery</span>
+                                                      </figcaption>
+                                                      <pre><code class="language-xquery">xquery version "4.0";
 module namespace util = "http://example.com/util";
 declare function util:format-order($order as element(order)) as element(formatted-order) {
   &lt;formatted-order id="{ $order/@id }"&gt;
@@ -589,80 +2088,189 @@ declare function util:format-order($order as element(order)) as element(formatte
 };
 declare function util:format-currency($amount as xs:decimal) as xs:string {
   concat("$", format-number($amount, "#,##0.00"))
-};</code></pre><p>
+};</code>
+                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                    </figure>
+                                                    <p>
       <strong>Key differences:</strong>
-    </p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Aspect</p>
-          </th>
-          <th>
-            <p>Main Module</p>
-          </th>
-          <th>
-            <p>Library Module</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>Has <code>module namespace</code></p>
-          </td>
-          <td>
-            <p>No</p>
-          </td>
-          <td>
-            <p>Yes</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Has a body expression</p>
-          </td>
-          <td>
-            <p>Yes (required)</p>
-          </td>
-          <td>
-            <p>No (forbidden)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Can be executed directly</p>
-          </td>
-          <td>
-            <p>Yes</p>
-          </td>
-          <td>
-            <p>No — must be imported</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>File extension (convention)</p>
-          </td>
-          <td>
-            <p><code>.xq</code> or <code>.xquery</code></p>
-          </td>
-          <td>
-            <p><code>.xqm</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>C# equivalent</p>
-          </td>
-          <td>
-            <p><code>Program.cs</code> with <code>Main()</code></p>
-          </td>
-          <td>
-            <p>Class library <code>.dll</code></p>
-          </td>
-        </tr>
-      </tbody>
-    </table><hr><h2 id="complete-example"><a class="anchor" href="#complete-example">#</a>Complete Example</h2><p>Here is a realistic main module prolog that uses most declaration types:</p><pre><code class="language-xquery">xquery version "4.0";
+    
+                                                    </p>
+                                                    <div class="table-wrap">
+                                                      <table>
+      
+                                                        <thead>
+        
+                                                          <tr>
+          
+                                                            <th>
+            
+                                                              <p>Aspect
+                                                              </p>
+          
+                                                            </th>
+          
+                                                            <th>
+            
+                                                              <p>Main Module
+                                                              </p>
+          
+                                                            </th>
+          
+                                                            <th>
+            
+                                                              <p>Library Module
+                                                              </p>
+          
+                                                            </th>
+        
+                                                          </tr>
+      
+                                                        </thead>
+      
+                                                        <tbody>
+        
+                                                          <tr>
+          
+                                                            <td>
+            
+                                                              <p>Has <code>module namespace</code>
+                                                              </p>
+          
+                                                            </td>
+          
+                                                            <td>
+            
+                                                              <p>No
+                                                              </p>
+          
+                                                            </td>
+          
+                                                            <td>
+            
+                                                              <p>Yes
+                                                              </p>
+          
+                                                            </td>
+        
+                                                          </tr>
+        
+                                                          <tr>
+          
+                                                            <td>
+            
+                                                              <p>Has a body expression
+                                                              </p>
+          
+                                                            </td>
+          
+                                                            <td>
+            
+                                                              <p>Yes (required)
+                                                              </p>
+          
+                                                            </td>
+          
+                                                            <td>
+            
+                                                              <p>No (forbidden)
+                                                              </p>
+          
+                                                            </td>
+        
+                                                          </tr>
+        
+                                                          <tr>
+          
+                                                            <td>
+            
+                                                              <p>Can be executed directly
+                                                              </p>
+          
+                                                            </td>
+          
+                                                            <td>
+            
+                                                              <p>Yes
+                                                              </p>
+          
+                                                            </td>
+          
+                                                            <td>
+            
+                                                              <p>No — must be imported
+                                                              </p>
+          
+                                                            </td>
+        
+                                                          </tr>
+        
+                                                          <tr>
+          
+                                                            <td>
+            
+                                                              <p>File extension (convention)
+                                                              </p>
+          
+                                                            </td>
+          
+                                                            <td>
+            
+                                                              <p>
+              <code>.xq</code> or <code>.xquery</code>
+                                                              </p>
+          
+                                                            </td>
+          
+                                                            <td>
+            
+                                                              <p>
+              <code>.xqm</code>
+            
+                                                              </p>
+          
+                                                            </td>
+        
+                                                          </tr>
+        
+                                                          <tr>
+          
+                                                            <td>
+            
+                                                              <p>C# equivalent
+                                                              </p>
+          
+                                                            </td>
+          
+                                                            <td>
+            
+                                                              <p>
+              <code>Program.cs</code> with <code>Main()</code>
+                                                              </p>
+          
+                                                            </td>
+          
+                                                            <td>
+            
+                                                              <p>Class library <code>.dll</code>
+                                                              </p>
+          
+                                                            </td>
+        
+                                                          </tr>
+      
+                                                        </tbody>
+    
+                                                      </table>
+                                                    </div>
+                                                    <hr>
+                                                      <h2 id="complete-example"><a class="anchor" href="#complete-example">#</a>Complete Example
+                                                      </h2>
+                                                      <p>Here is a realistic main module prolog that uses most declaration types:
+                                                      </p>
+                                                      <figure class="code">
+                                                        <figcaption><span class="lang">xquery</span>
+                                                        </figcaption>
+                                                        <pre><code class="language-xquery">xquery version "4.0";
 (: Namespace declarations :)
 declare namespace app = "http://example.com/crm";
 declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
@@ -722,11 +2330,126 @@ return
         &lt;/employee&gt;
     }
     &lt;/employees&gt;
-  &lt;/app:report&gt;</code></pre><p>
+  &lt;/app:report&gt;</code>
+                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                      </figure>
+                                                      <p>
       <strong>Running this from C#:</strong>
-    </p><pre><code class="language-csharp">var engine = new XQueryEngine();
+    
+                                                      </p>
+                                                      <figure class="code">
+                                                        <figcaption><span class="lang">csharp</span>
+                                                        </figcaption>
+                                                        <pre><code class="language-csharp">var engine = new XQueryEngine();
 engine.SetVariable("department", "Engineering");
 engine.SetVariable("report-date", DateTime.Now.ToString("yyyy-MM-dd"));
 engine.SetVariable("include-inactive", false);
 var report = await engine.ExecuteAsync(File.ReadAllText("employee-report.xq"));
-Console.WriteLine(report);</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+Console.WriteLine(report);</code>
+                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                      </figure>
+                                                    </article>
+                                                  </main>
+                                                  <aside class="toc" aria-label="On this page">
+                                                    <p class="toc-label">On this page
+                                                    </p>
+                                                    <ul>
+                                                      <li class="toc-h2"><a href="#contents">Contents</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#what-the-prolog-is">What the Prolog Is</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#version-declaration">Version Declaration</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#module-declaration">Module Declaration</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#namespace-declarations">Namespace Declarations</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#explicit-namespace-declaration">Explicit Namespace Declaration</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#default-element-namespace">Default Element Namespace</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#default-function-namespace">Default Function Namespace</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#pre-declared-namespaces">Pre-Declared Namespaces</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#imports">Imports</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#module-import">Module Import</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#importing-modules-with-annotated-declarations">Importing Modules with Annotated Declarations</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#multiple-module-locations">Multiple Module Locations</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#schema-import">Schema Import</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#variable-declarations">Variable Declarations</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#simple-variable">Simple Variable</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#typed-variable">Typed Variable</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#external-variables">External Variables</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#annotations-on-declarations">Annotations on Declarations</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#complex-variable-values">Complex Variable Values</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#option-declarations">Option Declarations</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#serialization-options">Serialization Options</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#environment-settings">Environment Settings</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#construction-mode">Construction Mode</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#ordering-mode">Ordering Mode</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#empty-order">Empty Order</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#boundary-space">Boundary Space</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#copy-namespaces">Copy Namespaces</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#base-uri">Base URI</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#default-collation">Default Collation</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#declaration-order">Declaration Order</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#main-module-vs-library-module">Main Module vs Library Module</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#main-module">Main Module</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#library-module">Library Module</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#complete-example">Complete Example</a>
+                                                      </li>
+                                                    </ul>
+                                                  </aside>
+                                                </div>
+                                                <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                                  <div class="search-backdrop">
+                                                  </div>
+                                                  <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                                    <div class="search-results" id="search-results">
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <footer class="site-footer">
+                                                  <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                                  </p>
+                                                </footer>
+                                                <script src="https://unpkg.com/lunr/lunr.js">
+                                                </script>
+                                                <script src="/js/prism.js">
+                                                </script>
+                                                <script src="/js/search.js">
+                                                </script>
+                                                <script src="/js/theme.js">
+                                                </script>
+                                                <script src="/js/toc.js">
+                                                </script>
+                                                <script src="/js/copy.js">
+                                                </script>
+                                              </body>
+                                            </html>

@@ -1,50 +1,634 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Conditionals and Error Handling — PhoenixmlDb Documentation</title><meta name="description" content="if/then/else, switch, typeswitch, try/catch, and the otherwise operator"><link rel="canonical" href="/language-reference/xquery/conditionals.html"><meta property="og:title" content="Conditionals and Error Handling"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xquery/conditionals.html"><meta property="og:description" content="if/then/else, switch, typeswitch, try/catch, and the otherwise operator"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Conditionals and Error Handling — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="if/then/else, switch, typeswitch, try/catch, and the otherwise operator">
+            <link rel="canonical" href="/language-reference/xquery/conditionals.html">
+              <meta property="og:title" content="Conditionals and Error Handling">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xquery/conditionals.html">
+                    <meta property="og:description" content="if/then/else, switch, typeswitch, try/catch, and the otherwise operator">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li class="active"><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="conditionals-and-error-handling"><a class="anchor" href="#conditionals-and-error-handling">#</a>Conditionals and Error Handling</h1><p>XQuery's conditionals are all <strong>expressions</strong> — they return values. There are no statements. This is the biggest mental shift for C# developers: every <code>if</code>, every <code>switch</code>, every <code>try/catch</code> produces a result that can be assigned, returned, or embedded inside XML.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#ifthenelse" title="">if/then/else</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#braced-if" title="">Braced if</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#switch-expression" title="">switch Expression</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#typeswitch-expression" title="">typeswitch Expression</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#trycatch" title="">try/catch</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#otherwise-operator" title="">otherwise Operator</a>
-        </p>
-      </li></ul><hr><h2 id="if-then-else"><a class="anchor" href="#if-then-else">#</a>if/then/else</h2><p>The fundamental conditional. Always an expression, always returns a value.</p><pre><code class="language-xquery">let $status := if ($order/total &gt; 1000) then "premium" else "standard"
-return &lt;order class="{ $status }"&gt;{ $order/total/text() }&lt;/order&gt;</code></pre><p>
-      <strong>C# parallel:</strong> The ternary operator:</p><pre><code class="language-csharp">var status = order.Total &gt; 1000 ? "premium" : "standard";</code></pre><h3 id="the-else-is-required"><a class="anchor" href="#the-else-is-required">#</a>The else Is Required</h3><p>In standard XQuery (3.1 and earlier), <code>else</code> is mandatory. If you don't want to return anything, use the empty sequence <code>()</code>:</p><pre><code class="language-xquery">if ($product/stock &gt; 0) then
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li class="active"><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">XQuery
+                                </p>
+                                <h1 class="page-title">Conditionals and Error Handling
+                                </h1>
+                                <p class="page-subtitle">if/then/else, switch, typeswitch, try/catch, and the otherwise operator
+                                </p>
+                                <h1 id="conditionals-and-error-handling"><a class="anchor" href="#conditionals-and-error-handling">#</a>Conditionals and Error Handling
+                                </h1>
+                                <p>XQuery's conditionals are all <strong>expressions</strong> — they return values. There are no statements. This is the biggest mental shift for C# developers: every <code>if</code>, every <code>switch</code>, every <code>try/catch</code> produces a result that can be assigned, returned, or embedded inside XML.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#ifthenelse">if/then/else</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#braced-if">Braced if</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#switch-expression">switch Expression</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#typeswitch-expression">typeswitch Expression</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#trycatch">try/catch</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#otherwise-operator">otherwise Operator</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="if-then-else"><a class="anchor" href="#if-then-else">#</a>if/then/else
+                                  </h2>
+                                  <p>The fundamental conditional. Always an expression, always returns a value.
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xquery</span>
+                                    </figcaption>
+                                    <pre><code class="language-xquery">let $status := if ($order/total &gt; 1000) then "premium" else "standard"
+return &lt;order class="{ $status }"&gt;{ $order/total/text() }&lt;/order&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
+      <strong>C# parallel:</strong> The ternary operator:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">csharp</span>
+                                    </figcaption>
+                                    <pre><code class="language-csharp">var status = order.Total &gt; 1000 ? "premium" : "standard";</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <h3 id="the-else-is-required"><a class="anchor" href="#the-else-is-required">#</a>The else Is Required
+                                  </h3>
+                                  <p>In standard XQuery (3.1 and earlier), <code>else</code> is mandatory. If you don't want to return anything, use the empty sequence <code>()</code>:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xquery</span>
+                                    </figcaption>
+                                    <pre><code class="language-xquery">if ($product/stock &gt; 0) then
   &lt;available&gt;{ $product/name/text() }&lt;/available&gt;
 else
-  ()</code></pre><p>The empty sequence <code>()</code> is XQuery's equivalent of "nothing" — it produces no output. This is especially useful inside XML constructors:</p><pre><code class="language-xquery">&lt;product&gt;
+  ()</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>The empty sequence <code>()</code> is XQuery's equivalent of "nothing" — it produces no output. This is especially useful inside XML constructors:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xquery</span>
+                                    </figcaption>
+                                    <pre><code class="language-xquery">&lt;product&gt;
   &lt;name&gt;{ $product/name/text() }&lt;/name&gt;
   &lt;price&gt;{ $product/price/text() }&lt;/price&gt;
   { if ($product/@featured = "true") then &lt;badge&gt;Featured&lt;/badge&gt; else () }
   { if ($product/stock &lt; 5) then &lt;warning&gt;Low stock&lt;/warning&gt; else () }
-&lt;/product&gt;</code></pre><h3 id="nested-if"><a class="anchor" href="#nested-if">#</a>Nested if</h3><pre><code class="language-xquery">let $tier :=
+&lt;/product&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <h3 id="nested-if"><a class="anchor" href="#nested-if">#</a>Nested if
+                                  </h3>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xquery</span>
+                                    </figcaption>
+                                    <pre><code class="language-xquery">let $tier :=
   if ($total &gt; 10000) then "platinum"
   else if ($total &gt; 5000) then "gold"
   else if ($total &gt; 1000) then "silver"
   else "bronze"
-return &lt;customer tier="{ $tier }"&gt;{ $name }&lt;/customer&gt;</code></pre><p>
+return &lt;customer tier="{ $tier }"&gt;{ $name }&lt;/customer&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">var tier = total &gt; 10000 ? "platinum"
+    
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">csharp</span>
+                                    </figcaption>
+                                    <pre><code class="language-csharp">var tier = total &gt; 10000 ? "platinum"
          : total &gt; 5000  ? "gold"
          : total &gt; 1000  ? "silver"
-         : "bronze";</code></pre><p>Nested <code>if</code> works but gets unwieldy fast. For multiple branches, prefer <code>switch</code>.</p><h3 id="if-as-an-expression-everywhere"><a class="anchor" href="#if-as-an-expression-everywhere">#</a>if as an Expression Everywhere</h3><p>Because <code>if</code> is an expression, you can use it anywhere a value is expected:</p><pre><code class="language-xquery">(: In a function argument :)
+         : "bronze";</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>Nested <code>if</code> works but gets unwieldy fast. For multiple branches, prefer <code>switch</code>.
+                                  </p>
+                                  <h3 id="if-as-an-expression-everywhere"><a class="anchor" href="#if-as-an-expression-everywhere">#</a>if as an Expression Everywhere
+                                  </h3>
+                                  <p>Because <code>if</code> is an expression, you can use it anywhere a value is expected:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xquery</span>
+                                    </figcaption>
+                                    <pre><code class="language-xquery">(: In a function argument :)
 concat("Status: ", if ($active) then "Active" else "Inactive")
 (: In an attribute value :)
 &lt;div class="product { if ($featured) then 'highlight' else '' }"&gt;
@@ -55,29 +639,83 @@ for $item in //items/item
 return if ($item/@type = "header") then
   &lt;h2&gt;{ $item/text() }&lt;/h2&gt;
 else
-  &lt;p&gt;{ $item/text() }&lt;/p&gt;</code></pre><hr><h2 id="braced-if"><a class="anchor" href="#braced-if">#</a>Braced if</h2><p>
+  &lt;p&gt;{ $item/text() }&lt;/p&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <hr>
+                                    <h2 id="braced-if"><a class="anchor" href="#braced-if">#</a>Braced if
+                                    </h2>
+                                    <p>
       <em>XQuery 4.0</em>
-    </p><p>XQuery 4.0 adds a shorthand <code>if</code> without <code>else</code>. The result is the empty sequence when the condition is false:</p><pre><code class="language-xquery">(: XQuery 4.0 braced if — no else needed :)
+    
+                                    </p>
+                                    <p>XQuery 4.0 adds a shorthand <code>if</code> without <code>else</code>. The result is the empty sequence when the condition is false:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">(: XQuery 4.0 braced if — no else needed :)
 &lt;product&gt;
   &lt;name&gt;{ $product/name/text() }&lt;/name&gt;
   { if ($product/@featured = "true") { &lt;badge&gt;Featured&lt;/badge&gt; } }
   { if ($product/stock &lt; 5) { &lt;warning&gt;Low stock&lt;/warning&gt; } }
-&lt;/product&gt;</code></pre><p>This is equivalent to <code>if (...) then ... else ()</code> but more concise. The braces <code>{}</code> replace <code>then</code>, and the absence of <code>else</code> implicitly returns <code>()</code>.</p><p>
-      <strong>C# parallel:</strong> There's no exact equivalent, but it's similar in spirit to conditional output in Razor views:</p><pre><code class="language-csharp">@if (product.IsFeatured) { &lt;badge&gt;Featured&lt;/badge&gt; }</code></pre><h3 id="when-to-use-braced-if"><a class="anchor" href="#when-to-use-braced-if">#</a>When to Use Braced if</h3><p>Use braced <code>if</code> when you're conditionally including optional content and the <code>else ()</code> adds nothing but noise. Use the full <code>if/then/else</code> when both branches produce meaningful output.</p><hr><h2 id="switch-expression"><a class="anchor" href="#switch-expression">#</a>switch Expression</h2><p>The <code>switch</code> expression matches a value against multiple cases. Unlike C#'s <code>switch</code> statement (pre-C# 8), XQuery's <code>switch</code> is an expression and has no fall-through.</p><pre><code class="language-xquery">let $status-label := switch ($order/@status)
+&lt;/product&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>This is equivalent to <code>if (...) then ... else ()</code> but more concise. The braces <code>{}</code> replace <code>then</code>, and the absence of <code>else</code> implicitly returns <code>()</code>.
+                                    </p>
+                                    <p>
+      <strong>C# parallel:</strong> There's no exact equivalent, but it's similar in spirit to conditional output in Razor views:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">csharp</span>
+                                      </figcaption>
+                                      <pre><code class="language-csharp">@if (product.IsFeatured) { &lt;badge&gt;Featured&lt;/badge&gt; }</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="when-to-use-braced-if"><a class="anchor" href="#when-to-use-braced-if">#</a>When to Use Braced if
+                                    </h3>
+                                    <p>Use braced <code>if</code> when you're conditionally including optional content and the <code>else ()</code> adds nothing but noise. Use the full <code>if/then/else</code> when both branches produce meaningful output.
+                                    </p>
+                                    <hr>
+                                      <h2 id="switch-expression"><a class="anchor" href="#switch-expression">#</a>switch Expression
+                                      </h2>
+                                      <p>The <code>switch</code> expression matches a value against multiple cases. Unlike C#'s <code>switch</code> statement (pre-C# 8), XQuery's <code>switch</code> is an expression and has no fall-through.
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">let $status-label := switch ($order/@status)
   case "pending"   return "Awaiting Review"
   case "approved"  return "Approved for Processing"
   case "shipped"   return "In Transit"
   case "delivered"  return "Delivered"
   default          return "Unknown Status"
-return &lt;span class="status"&gt;{ $status-label }&lt;/span&gt;</code></pre><p>
-      <strong>C# parallel:</strong> Switch expression (C# 8+):</p><pre><code class="language-csharp">var statusLabel = order.Status switch
+return &lt;span class="status"&gt;{ $status-label }&lt;/span&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
+      <strong>C# parallel:</strong> Switch expression (C# 8+):
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">csharp</span>
+                                        </figcaption>
+                                        <pre><code class="language-csharp">var statusLabel = order.Status switch
 {
     "pending"   =&gt; "Awaiting Review",
     "approved"  =&gt; "Approved for Processing",
     "shipped"   =&gt; "In Transit",
     "delivered" =&gt; "Delivered",
     _           =&gt; "Unknown Status"
-};</code></pre><h3 id="multiple-values-per-case"><a class="anchor" href="#multiple-values-per-case">#</a>Multiple Values per Case</h3><pre><code class="language-xquery">switch ($file/@extension)
+};</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="multiple-values-per-case"><a class="anchor" href="#multiple-values-per-case">#</a>Multiple Values per Case
+                                      </h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">switch ($file/@extension)
   case "jpg" case "jpeg" case "png" case "gif" case "webp"
     return "image"
   case "mp4" case "avi" case "mkv" case "mov"
@@ -85,7 +723,17 @@ return &lt;span class="status"&gt;{ $status-label }&lt;/span&gt;</code></pre><p>
   case "pdf" case "docx" case "txt" case "md"
     return "document"
   default
-    return "other"</code></pre><h3 id="switch-with-complex-return-values"><a class="anchor" href="#switch-with-complex-return-values">#</a>Switch with Complex Return Values</h3><p>Since each branch is an expression, you can return constructed XML:</p><pre><code class="language-xquery">switch ($response/@code)
+    return "other"</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="switch-with-complex-return-values"><a class="anchor" href="#switch-with-complex-return-values">#</a>Switch with Complex Return Values
+                                      </h3>
+                                      <p>Since each branch is an expression, you can return constructed XML:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">switch ($response/@code)
   case "200" return
     &lt;success&gt;
       &lt;message&gt;Request successful&lt;/message&gt;
@@ -103,11 +751,32 @@ return &lt;span class="status"&gt;{ $status-label }&lt;/span&gt;</code></pre><p>
   default return
     &lt;error&gt;
       &lt;message&gt;Unexpected response code: { $response/@code/string() }&lt;/message&gt;
-    &lt;/error&gt;</code></pre><h3 id="default-is-required"><a class="anchor" href="#default-is-required">#</a>default Is Required</h3><p>Every <code>switch</code> must have a <code>default</code> branch. If you genuinely have no default action, return the empty sequence:</p><pre><code class="language-xquery">switch ($value)
+    &lt;/error&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="default-is-required"><a class="anchor" href="#default-is-required">#</a>default Is Required
+                                      </h3>
+                                      <p>Every <code>switch</code> must have a <code>default</code> branch. If you genuinely have no default action, return the empty sequence:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">switch ($value)
   case "yes" return true()
   case "no" return false()
-  default return ()</code></pre><hr><h2 id="typeswitch-expression"><a class="anchor" href="#typeswitch-expression">#</a>typeswitch Expression</h2><p>
-      <code>typeswitch</code> matches on the <strong>type</strong> of a value rather than its content. This is essential for processing mixed-content XML, handling polymorphic data, and working with items whose type isn't known at compile time.</p><pre><code class="language-xquery">typeswitch ($node)
+  default return ()</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <hr>
+                                        <h2 id="typeswitch-expression"><a class="anchor" href="#typeswitch-expression">#</a>typeswitch Expression
+                                        </h2>
+                                        <p>
+      <code>typeswitch</code> matches on the <strong>type</strong> of a value rather than its content. This is essential for processing mixed-content XML, handling polymorphic data, and working with items whose type isn't known at compile time.
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">typeswitch ($node)
   case element(product) return
     &lt;div class="product"&gt;{ $node/name/text() }&lt;/div&gt;
   case element(category) return
@@ -117,15 +786,33 @@ return &lt;span class="status"&gt;{ $status-label }&lt;/span&gt;</code></pre><p>
   case text() return
     &lt;span&gt;{ $node }&lt;/span&gt;
   default return
-    &lt;div&gt;Unknown: { local-name($node) }&lt;/div&gt;</code></pre><p>
-      <strong>C# parallel:</strong> Pattern matching with <code>switch</code>:</p><pre><code class="language-csharp">var result = node switch
+    &lt;div&gt;Unknown: { local-name($node) }&lt;/div&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
+      <strong>C# parallel:</strong> Pattern matching with <code>switch</code>:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">var result = node switch
 {
     XElement e when e.Name == "product" =&gt; RenderProduct(e),
     XElement e when e.Name == "category" =&gt; RenderCategory(e),
     XElement e when e.Name == "review" =&gt; RenderReview(e),
     XText t =&gt; $"&lt;span&gt;{t.Value}&lt;/span&gt;",
     _ =&gt; $"&lt;div&gt;Unknown: {(node as XElement)?.Name}&lt;/div&gt;"
-};</code></pre><h3 id="binding-the-matched-value"><a class="anchor" href="#binding-the-matched-value">#</a>Binding the Matched Value</h3><p>Use <code>$variable</code> after the type to bind the matched value with the correct type:</p><pre><code class="language-xquery">typeswitch ($input)
+};</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="binding-the-matched-value"><a class="anchor" href="#binding-the-matched-value">#</a>Binding the Matched Value
+                                        </h3>
+                                        <p>Use <code>$variable</code> after the type to bind the matched value with the correct type:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">typeswitch ($input)
   case $s as xs:string return
     concat("String value: ", $s)
   case $n as xs:integer return
@@ -135,7 +822,17 @@ return &lt;span class="status"&gt;{ $status-label }&lt;/span&gt;</code></pre><p>
   case $e as element() return
     concat("Element: ", local-name($e))
   default $other return
-    concat("Other: ", string($other))</code></pre><p>The binding is important because inside each <code>case</code> branch, the variable has the specific type. You get proper type-checking and access to type-specific operations.</p><h3 id="practical-example-recursive-mixed-content-renderer"><a class="anchor" href="#practical-example-recursive-mixed-content-renderer">#</a>Practical Example: Recursive Mixed-Content Renderer</h3><pre><code class="language-xquery">declare function local:render($nodes as node()*) as node()* {
+    concat("Other: ", string($other))</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>The binding is important because inside each <code>case</code> branch, the variable has the specific type. You get proper type-checking and access to type-specific operations.
+                                        </p>
+                                        <h3 id="practical-example-recursive-mixed-content-renderer"><a class="anchor" href="#practical-example-recursive-mixed-content-renderer">#</a>Practical Example: Recursive Mixed-Content Renderer
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">declare function local:render($nodes as node()*) as node()* {
   for $node in $nodes
   return typeswitch ($node)
     case element(bold) return
@@ -157,7 +854,17 @@ return &lt;span class="status"&gt;{ $status-label }&lt;/span&gt;</code></pre><p>
     case comment() return ()  (: strip comments :)
     default return local:render($node/node())
 };
-local:render(//document/body/*)</code></pre><p>This pattern is similar to what XSLT does with template matching, but expressed as an explicit recursive function. Use <code>typeswitch</code> when you need this kind of polymorphic dispatch in XQuery.</p><h3 id="matching-multiple-types"><a class="anchor" href="#matching-multiple-types">#</a>Matching Multiple Types</h3><pre><code class="language-xquery">typeswitch ($value)
+local:render(//document/body/*)</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>This pattern is similar to what XSLT does with template matching, but expressed as an explicit recursive function. Use <code>typeswitch</code> when you need this kind of polymorphic dispatch in XQuery.
+                                        </p>
+                                        <h3 id="matching-multiple-types"><a class="anchor" href="#matching-multiple-types">#</a>Matching Multiple Types
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">typeswitch ($value)
   case xs:integer | xs:decimal | xs:double return
     &lt;number&gt;{ $value }&lt;/number&gt;
   case xs:date | xs:dateTime return
@@ -165,66 +872,173 @@ local:render(//document/body/*)</code></pre><p>This pattern is similar to what X
   case xs:string return
     &lt;text&gt;{ $value }&lt;/text&gt;
   default return
-    &lt;other&gt;{ string($value) }&lt;/other&gt;</code></pre><hr><h2 id="try-catch"><a class="anchor" href="#try-catch">#</a>try/catch</h2><p>XQuery's <code>try/catch</code> handles dynamic errors. Like everything else in XQuery, it's an expression.</p><pre><code class="language-xquery">let $result := try {
+    &lt;other&gt;{ string($value) }&lt;/other&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <hr>
+                                          <h2 id="try-catch"><a class="anchor" href="#try-catch">#</a>try/catch
+                                          </h2>
+                                          <p>XQuery's <code>try/catch</code> handles dynamic errors. Like everything else in XQuery, it's an expression.
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">let $result := try {
   xs:integer("not-a-number")
 } catch * {
   -1  (: fallback value on any error :)
 }
 return $result
-(: Result: -1 :)</code></pre><p>
+(: Result: -1 :)</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">int result;
+    
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">int result;
 try { result = int.Parse("not-a-number"); }
-catch { result = -1; }</code></pre><h3 id="error-variables"><a class="anchor" href="#error-variables">#</a>Error Variables</h3><p>Inside a <code>catch</code> block, three variables are available:</p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Variable</p>
-          </th>
-          <th>
-            <p>Type</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>$err:code</code></p>
-          </td>
-          <td>
-            <p><code>xs:QName</code></p>
-          </td>
-          <td>
-            <p>The error code (e.g., <code>err:FORG0001</code>)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>$err:description</code></p>
-          </td>
-          <td>
-            <p><code>xs:string?</code></p>
-          </td>
-          <td>
-            <p>Human-readable error message</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>$err:value</code></p>
-          </td>
-          <td>
-            <p><code>item()*</code></p>
-          </td>
-          <td>
-            <p>Additional error context (may be empty)</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><p>You must declare the error namespace:</p><pre><code class="language-xquery">declare namespace err = "http://www.w3.org/2005/xqt-errors";
+catch { result = -1; }</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="error-variables"><a class="anchor" href="#error-variables">#</a>Error Variables
+                                          </h3>
+                                          <p>Inside a <code>catch</code> block, three variables are available:
+                                          </p>
+                                          <div class="table-wrap">
+                                            <table>
+      
+                                              <thead>
+        
+                                                <tr>
+          
+                                                  <th>
+            
+                                                    <p>Variable
+                                                    </p>
+          
+                                                  </th>
+          
+                                                  <th>
+            
+                                                    <p>Type
+                                                    </p>
+          
+                                                  </th>
+          
+                                                  <th>
+            
+                                                    <p>Description
+                                                    </p>
+          
+                                                  </th>
+        
+                                                </tr>
+      
+                                              </thead>
+      
+                                              <tbody>
+        
+                                                <tr>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>$err:code</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>xs:QName</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>The error code (e.g., <code>err:FORG0001</code>)
+                                                    </p>
+          
+                                                  </td>
+        
+                                                </tr>
+        
+                                                <tr>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>$err:description</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>xs:string?</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>Human-readable error message
+                                                    </p>
+          
+                                                  </td>
+        
+                                                </tr>
+        
+                                                <tr>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>$err:value</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>item()*</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>Additional error context (may be empty)
+                                                    </p>
+          
+                                                  </td>
+        
+                                                </tr>
+      
+                                              </tbody>
+    
+                                            </table>
+                                          </div>
+                                          <p>You must declare the error namespace:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">declare namespace err = "http://www.w3.org/2005/xqt-errors";
 try {
   doc("missing-file.xml")//data
 } catch * {
@@ -232,7 +1046,17 @@ try {
     &lt;code&gt;{ $err:code }&lt;/code&gt;
     &lt;message&gt;{ $err:description }&lt;/message&gt;
   &lt;/error&gt;
-}</code></pre><h3 id="catching-specific-errors"><a class="anchor" href="#catching-specific-errors">#</a>Catching Specific Errors</h3><p>Catch by error code to handle different errors differently:</p><pre><code class="language-xquery">declare namespace err = "http://www.w3.org/2005/xqt-errors";
+}</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="catching-specific-errors"><a class="anchor" href="#catching-specific-errors">#</a>Catching Specific Errors
+                                          </h3>
+                                          <p>Catch by error code to handle different errors differently:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">declare namespace err = "http://www.w3.org/2005/xqt-errors";
 try {
   let $data := doc($filename)
   return $data//record
@@ -248,9 +1072,17 @@ catch err:FODC0006 {
 catch * {
   (: Catch-all for anything else :)
   &lt;error type="unknown"&gt;{ $err:description }&lt;/error&gt;
-}</code></pre><p>
+}</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">try {
+    
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">try {
     var doc = XDocument.Load(filename);
     return doc.Descendants("record");
 }
@@ -262,7 +1094,15 @@ catch (UriFormatException) {
 }
 catch (Exception ex) {
     return new XElement("error", ex.Message);
-}</code></pre><h3 id="practical-example-safe-data-conversion"><a class="anchor" href="#practical-example-safe-data-conversion">#</a>Practical Example: Safe Data Conversion</h3><pre><code class="language-xquery">declare function local:safe-decimal($value as xs:string?) as xs:decimal? {
+}</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="practical-example-safe-data-conversion"><a class="anchor" href="#practical-example-safe-data-conversion">#</a>Practical Example: Safe Data Conversion
+                                          </h3>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">declare function local:safe-decimal($value as xs:string?) as xs:decimal? {
   if (empty($value) or $value = "") then ()
   else try { xs:decimal($value) } catch * { () }
 };
@@ -275,11 +1115,29 @@ for $row in //data/row
 let $amount := local:safe-decimal($row/amount)
 let $date := local:safe-date($row/date)
 where exists($amount) and exists($date)
-return &lt;valid-record amount="{ $amount }" date="{ $date }"/&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>decimal.TryParse</code> and <code>DateTime.TryParse</code>:</p><pre><code class="language-csharp">static decimal? SafeDecimal(string value) =&gt;
+return &lt;valid-record amount="{ $amount }" date="{ $date }"/&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>
+      <strong>C# parallel:</strong> <code>decimal.TryParse</code> and <code>DateTime.TryParse</code>:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">static decimal? SafeDecimal(string value) =&gt;
     decimal.TryParse(value, out var d) ? d : null;
 static DateTime? SafeDate(string value) =&gt;
-    DateTime.TryParse(value, out var dt) ? dt : null;</code></pre><h3 id="raising-errors"><a class="anchor" href="#raising-errors">#</a>Raising Errors</h3><p>Use <code>error()</code> to throw errors:</p><pre><code class="language-xquery">declare function local:validate-age($age as xs:integer) as xs:integer {
+    DateTime.TryParse(value, out var dt) ? dt : null;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="raising-errors"><a class="anchor" href="#raising-errors">#</a>Raising Errors
+                                          </h3>
+                                          <p>Use <code>error()</code> to throw errors:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">declare function local:validate-age($age as xs:integer) as xs:integer {
   if ($age &lt; 0 or $age &gt; 150) then
     error(
       QName("http://example.com/errors", "INVALID-AGE"),
@@ -294,46 +1152,214 @@ try {
   local:validate-age(-5)
 } catch Q{http://example.com/errors}INVALID-AGE {
   &lt;validation-error&gt;{ $err:description }&lt;/validation-error&gt;
-}</code></pre><hr><h2 id="otherwise-operator"><a class="anchor" href="#otherwise-operator">#</a>otherwise Operator</h2><p>
+}</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <hr>
+                                            <h2 id="otherwise-operator"><a class="anchor" href="#otherwise-operator">#</a>otherwise Operator
+                                            </h2>
+                                            <p>
       <em>XQuery 4.0</em>
-    </p><p>The <code>otherwise</code> operator returns a fallback value when an expression evaluates to the empty sequence. It's XQuery's null-coalescing operator.</p><pre><code class="language-xquery">$user/nickname otherwise $user/name otherwise "Anonymous"</code></pre><p>
-      <strong>C# parallel:</strong> The <code>??</code> operator:</p><pre><code class="language-csharp">user.Nickname ?? user.Name ?? "Anonymous"</code></pre><h3 id="how-it-works"><a class="anchor" href="#how-it-works">#</a>How It Works</h3><p>
-      <code>otherwise</code> checks for the empty sequence — not for <code>null</code>, <code>false</code>, <code>0</code>, or <code>""</code>. Only <code>()</code> triggers the fallback:</p><pre><code class="language-xquery">(: These return the left side — they're not empty :)
+    
+                                            </p>
+                                            <p>The <code>otherwise</code> operator returns a fallback value when an expression evaluates to the empty sequence. It's XQuery's null-coalescing operator.
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">$user/nickname otherwise $user/name otherwise "Anonymous"</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
+      <strong>C# parallel:</strong> The <code>??</code> operator:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">csharp</span>
+                                              </figcaption>
+                                              <pre><code class="language-csharp">user.Nickname ?? user.Name ?? "Anonymous"</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="how-it-works"><a class="anchor" href="#how-it-works">#</a>How It Works
+                                            </h3>
+                                            <p>
+      <code>otherwise</code> checks for the empty sequence — not for <code>null</code>, <code>false</code>, <code>0</code>, or <code>""</code>. Only <code>()</code> triggers the fallback:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: These return the left side — they're not empty :)
 "" otherwise "fallback"       (: returns "" — empty string is not empty sequence :)
 0 otherwise 42                (: returns 0 — zero is not empty sequence :)
 false() otherwise true()      (: returns false — false is not empty sequence :)
 (: This returns the fallback — () is the empty sequence :)
-() otherwise "fallback"       (: returns "fallback" :)</code></pre><p>This is different from C#'s <code>??</code>, which checks for <code>null</code>. In XQuery, everything is about sequences.</p><h3 id="practical-examples"><a class="anchor" href="#practical-examples">#</a>Practical Examples</h3><p>
+() otherwise "fallback"       (: returns "fallback" :)</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>This is different from C#'s <code>??</code>, which checks for <code>null</code>. In XQuery, everything is about sequences.
+                                            </p>
+                                            <h3 id="practical-examples"><a class="anchor" href="#practical-examples">#</a>Practical Examples
+                                            </h3>
+                                            <p>
       <strong>Safe attribute access:</strong>
-    </p><pre><code class="language-xquery">(: Get the display name, with fallbacks :)
+    
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: Get the display name, with fallbacks :)
 let $display :=
   $user/@display-name/string() otherwise
   concat($user/first-name, " ", $user/last-name) otherwise
   $user/@username/string() otherwise
   "Unknown User"
-return &lt;span class="user-name"&gt;{ $display }&lt;/span&gt;</code></pre><p>
+return &lt;span class="user-name"&gt;{ $display }&lt;/span&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
       <strong>Configuration with defaults:</strong>
-    </p><pre><code class="language-xquery">let $page-size := xs:integer($config/page-size/text()) otherwise 25
+    
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">let $page-size := xs:integer($config/page-size/text()) otherwise 25
 let $sort-order := $config/sort-order/text() otherwise "ascending"
 let $locale := $config/@locale/string() otherwise "en-US"
 return map {
   "page-size": $page-size,
   "sort-order": $sort-order,
   "locale": $locale
-}</code></pre><p>
+}</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
       <strong>Chained lookups:</strong>
-    </p><pre><code class="language-xquery">(: Try multiple data sources :)
+    
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: Try multiple data sources :)
 let $product :=
   collection("primary-catalog")//product[@sku = $sku] otherwise
   collection("archive-catalog")//product[@sku = $sku] otherwise
   &lt;product&gt;&lt;name&gt;Product not found&lt;/name&gt;&lt;sku&gt;{ $sku }&lt;/sku&gt;&lt;/product&gt;
-return $product</code></pre><h3 id="otherwise-vs-if-else"><a class="anchor" href="#otherwise-vs-if-else">#</a>otherwise vs if/else</h3><p>Use <code>otherwise</code> when testing for empty sequences. Use <code>if/then/else</code> for boolean conditions:</p><pre><code class="language-xquery">(: otherwise — is the sequence empty? :)
+return $product</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="otherwise-vs-if-else"><a class="anchor" href="#otherwise-vs-if-else">#</a>otherwise vs if/else
+                                            </h3>
+                                            <p>Use <code>otherwise</code> when testing for empty sequences. Use <code>if/then/else</code> for boolean conditions:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: otherwise — is the sequence empty? :)
 $node/optional-child otherwise &lt;default/&gt;
 (: if/then/else — is a condition true? :)
-if ($node/@status = "active") then $node else ()</code></pre><h3 id="otherwise-in-flwor-vs-the-otherwise-operator"><a class="anchor" href="#otherwise-in-flwor-vs-the-otherwise-operator">#</a>otherwise in FLWOR vs the otherwise Operator</h3><p>Note that the <code>otherwise</code> clause at the end of a FLWOR (covered in <a href="flwor-advanced.html" title="">Advanced FLWOR</a>) and the <code>otherwise</code> operator are related but different:</p><pre><code class="language-xquery">(: FLWOR otherwise — fallback for the entire FLWOR result :)
+if ($node/@status = "active") then $node else ()</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="otherwise-in-flwor-vs-the-otherwise-operator"><a class="anchor" href="#otherwise-in-flwor-vs-the-otherwise-operator">#</a>otherwise in FLWOR vs the otherwise Operator
+                                            </h3>
+                                            <p>Note that the <code>otherwise</code> clause at the end of a FLWOR (covered in <a href="flwor-advanced.html">Advanced FLWOR</a>) and the <code>otherwise</code> operator are related but different:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: FLWOR otherwise — fallback for the entire FLWOR result :)
 for $x in //items/item
 where $x/price &gt; 100
 return $x
 otherwise &lt;none/&gt;
 (: Operator otherwise — inline null coalescing :)
-let $name := $user/nickname otherwise $user/name</code></pre><p>The FLWOR <code>otherwise</code> clause is syntactic sugar for wrapping the entire FLWOR in <code>(flwor-expr) otherwise fallback</code>.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+let $name := $user/nickname otherwise $user/name</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>The FLWOR <code>otherwise</code> clause is syntactic sugar for wrapping the entire FLWOR in <code>(flwor-expr) otherwise fallback</code>.
+                                            </p>
+                                          </article>
+                                        </main>
+                                        <aside class="toc" aria-label="On this page">
+                                          <p class="toc-label">On this page
+                                          </p>
+                                          <ul>
+                                            <li class="toc-h2"><a href="#contents">Contents</a>
+                                            </li>
+                                            <li class="toc-h2"><a href="#if-then-else">if/then/else</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#the-else-is-required">The else Is Required</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#nested-if">Nested if</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#if-as-an-expression-everywhere">if as an Expression Everywhere</a>
+                                            </li>
+                                            <li class="toc-h2"><a href="#braced-if">Braced if</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#when-to-use-braced-if">When to Use Braced if</a>
+                                            </li>
+                                            <li class="toc-h2"><a href="#switch-expression">switch Expression</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#multiple-values-per-case">Multiple Values per Case</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#switch-with-complex-return-values">Switch with Complex Return Values</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#default-is-required">default Is Required</a>
+                                            </li>
+                                            <li class="toc-h2"><a href="#typeswitch-expression">typeswitch Expression</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#binding-the-matched-value">Binding the Matched Value</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#practical-example-recursive-mixed-content-renderer">Practical Example: Recursive Mixed-Content Renderer</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#matching-multiple-types">Matching Multiple Types</a>
+                                            </li>
+                                            <li class="toc-h2"><a href="#try-catch">try/catch</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#error-variables">Error Variables</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#catching-specific-errors">Catching Specific Errors</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#practical-example-safe-data-conversion">Practical Example: Safe Data Conversion</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#raising-errors">Raising Errors</a>
+                                            </li>
+                                            <li class="toc-h2"><a href="#otherwise-operator">otherwise Operator</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#how-it-works">How It Works</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#practical-examples">Practical Examples</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#otherwise-vs-if-else">otherwise vs if/else</a>
+                                            </li>
+                                            <li class="toc-h3"><a href="#otherwise-in-flwor-vs-the-otherwise-operator">otherwise in FLWOR vs the otherwise Operator</a>
+                                            </li>
+                                          </ul>
+                                        </aside>
+                                      </div>
+                                      <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                        <div class="search-backdrop">
+                                        </div>
+                                        <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                          <div class="search-results" id="search-results">
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <footer class="site-footer">
+                                        <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                        </p>
+                                      </footer>
+                                      <script src="https://unpkg.com/lunr/lunr.js">
+                                      </script>
+                                      <script src="/js/prism.js">
+                                      </script>
+                                      <script src="/js/search.js">
+                                      </script>
+                                      <script src="/js/theme.js">
+                                      </script>
+                                      <script src="/js/toc.js">
+                                      </script>
+                                      <script src="/js/copy.js">
+                                      </script>
+                                    </body>
+                                  </html>

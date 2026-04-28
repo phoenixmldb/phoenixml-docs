@@ -1,40 +1,584 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Error Handling — PhoenixmlDb Documentation</title><meta name="description" content="xsl:try/catch, xsl:assert, xsl:fallback — handling errors and asserting conditions"><link rel="canonical" href="/language-reference/xslt/instructions/error-handling.html"><meta property="og:title" content="Error Handling"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/error-handling.html"><meta property="og:description" content="xsl:try/catch, xsl:assert, xsl:fallback — handling errors and asserting conditions"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Error Handling — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="xsl:try/catch, xsl:assert, xsl:fallback — handling errors and asserting conditions">
+            <link rel="canonical" href="/language-reference/xslt/instructions/error-handling.html">
+              <meta property="og:title" content="Error Handling">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xslt/instructions/error-handling.html">
+                    <meta property="og:description" content="xsl:try/catch, xsl:assert, xsl:fallback — handling errors and asserting conditions">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li class="active"><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="error-handling"><a class="anchor" href="#error-handling">#</a>Error Handling</h1><p>XSLT 3.0 adds structured error handling to the language. Before 3.0, a runtime error typically terminated the transformation — your only tool was <code>xsl:message terminate="yes"</code> to fail intentionally. Now you can catch errors, recover gracefully, and write assertions that validate your data during transformation.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#xsltry--xslcatch" title="">xsl:try / xsl:catch</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#error-variables" title="">Error Variables</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#selective-error-catching" title="">Selective Error Catching</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslassert" title="">xsl:assert</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslfallback" title="">xsl:fallback</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslmessage-with-terminate" title="">xsl:message with terminate</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#error-recovery-patterns" title="">Error Recovery Patterns</a>
-        </p>
-      </li></ul><hr><h2 id="xsl-try-xsl-catch"><a class="anchor" href="#xsl-try-xsl-catch">#</a>xsl:try / xsl:catch</h2><p>
-      <code>xsl:try</code> wraps code that might fail. If a dynamic error occurs inside the <code>xsl:try</code> body, execution jumps to the <code>xsl:catch</code> block instead of terminating the transformation.</p><h3 id="basic-structure"><a class="anchor" href="#basic-structure">#</a>Basic Structure</h3><pre><code class="language-xml">&lt;xsl:try&gt;
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section open">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li class="active"><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">Instructions Reference
+                                </p>
+                                <h1 class="page-title">Error Handling
+                                </h1>
+                                <p class="page-subtitle">xsl:try/catch, xsl:assert, xsl:fallback — handling errors and asserting conditions
+                                </p>
+                                <h1 id="error-handling"><a class="anchor" href="#error-handling">#</a>Error Handling
+                                </h1>
+                                <p>XSLT 3.0 adds structured error handling to the language. Before 3.0, a runtime error typically terminated the transformation — your only tool was <code>xsl:message terminate="yes"</code> to fail intentionally. Now you can catch errors, recover gracefully, and write assertions that validate your data during transformation.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#xsltry--xslcatch">xsl:try / xsl:catch</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#error-variables">Error Variables</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#selective-error-catching">Selective Error Catching</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslassert">xsl:assert</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslfallback">xsl:fallback</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslmessage-with-terminate">xsl:message with terminate</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#error-recovery-patterns">Error Recovery Patterns</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="xsl-try-xsl-catch"><a class="anchor" href="#xsl-try-xsl-catch">#</a>xsl:try / xsl:catch
+                                  </h2>
+                                  <p>
+      <code>xsl:try</code> wraps code that might fail. If a dynamic error occurs inside the <code>xsl:try</code> body, execution jumps to the <code>xsl:catch</code> block instead of terminating the transformation.
+                                  </p>
+                                  <h3 id="basic-structure"><a class="anchor" href="#basic-structure">#</a>Basic Structure
+                                  </h3>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:try&gt;
   &lt;!-- code that might fail --&gt;
   &lt;xsl:catch&gt;
     &lt;!-- recovery code --&gt;
   &lt;/xsl:catch&gt;
-&lt;/xsl:try&gt;</code></pre><h3 id="example-handling-type-conversion-errors"><a class="anchor" href="#example-handling-type-conversion-errors">#</a>Example: Handling Type Conversion Errors</h3><pre><code class="language-xml">&lt;xsl:template match="product"&gt;
+&lt;/xsl:try&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <h3 id="example-handling-type-conversion-errors"><a class="anchor" href="#example-handling-type-conversion-errors">#</a>Example: Handling Type Conversion Errors
+                                  </h3>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:template match="product"&gt;
   &lt;div class="product"&gt;
     &lt;h3&gt;&lt;xsl:value-of select="name"/&gt;&lt;/h3&gt;
     &lt;xsl:try&gt;
@@ -44,128 +588,345 @@
       &lt;/xsl:catch&gt;
     &lt;/xsl:try&gt;
   &lt;/div&gt;
-&lt;/xsl:template&gt;</code></pre><p>If <code>price</code> contains "TBD" instead of a number, the <code>number()</code> conversion fails. Instead of crashing the entire transformation, the catch block produces a fallback message.</p><p>
+&lt;/xsl:template&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>If <code>price</code> contains "TBD" instead of a number, the <code>number()</code> conversion fails. Instead of crashing the entire transformation, the catch block produces a fallback message.
+                                  </p>
+                                  <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">try
+    
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">csharp</span>
+                                    </figcaption>
+                                    <pre><code class="language-csharp">try
 {
     html += $"&lt;p class='price'&gt;${price:N2}&lt;/p&gt;";
 }
 catch (FormatException)
 {
     html += "&lt;p class='price error'&gt;Price unavailable&lt;/p&gt;";
-}</code></pre><h3 id="what-can-be-caught"><a class="anchor" href="#what-can-be-caught">#</a>What Can Be Caught</h3><p>
-      <code>xsl:try</code>/<code>xsl:catch</code> handles <strong>dynamic errors</strong> — errors that occur during execution:</p><ul><li>
-        <p>Type conversion failures (<code>xs:integer("abc")</code>)</p>
-      </li><li>
-        <p>Division by zero</p>
-      </li><li>
-        <p>Invalid function arguments</p>
-      </li><li>
-        <p>Document loading errors (<code>doc('missing.xml')</code>)</p>
-      </li><li>
-        <p>
-          <code>xsl:message terminate="yes"</code> (the termination becomes a catchable error in XSLT 3.0)</p>
-      </li><li>
-        <p>Errors raised by <code>error()</code> function</p>
-      </li><li>
-        <p>Schema validation failures</p>
-      </li></ul><p>It does <strong>not</strong> catch:</p><ul><li>
-        <p>Static errors (syntax errors, undeclared variables) — these are compile-time errors</p>
-      </li><li>
-        <p>Type errors from <code>as</code> declarations — these are checked before <code>try</code> can intervene</p>
-      </li></ul><h3 id="return-value"><a class="anchor" href="#return-value">#</a>Return Value</h3><p>
-      <code>xsl:try</code> is a sequence constructor — it produces either the result of the try body (if successful) or the result of the catch body (if an error occurred). You can use it anywhere a sequence constructor is allowed, including in variable declarations:</p><pre><code class="language-xml">&lt;xsl:variable name="parsed-date" as="xs:string"&gt;
+}</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <h3 id="what-can-be-caught"><a class="anchor" href="#what-can-be-caught">#</a>What Can Be Caught
+                                  </h3>
+                                  <p>
+      <code>xsl:try</code>/<code>xsl:catch</code> handles <strong>dynamic errors</strong> — errors that occur during execution:
+                                  </p>
+                                  <ul>
+                                    <li>
+        
+                                      <p>Type conversion failures (<code>xs:integer("abc")</code>)
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>Division by zero
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>Invalid function arguments
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>Document loading errors (<code>doc('missing.xml')</code>)
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <code>xsl:message terminate="yes"</code> (the termination becomes a catchable error in XSLT 3.0)
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>Errors raised by <code>error()</code> function
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>Schema validation failures
+                                      </p>
+      
+                                    </li>
+                                  </ul>
+                                  <p>It does <strong>not</strong> catch:
+                                  </p>
+                                  <ul>
+                                    <li>
+        
+                                      <p>Static errors (syntax errors, undeclared variables) — these are compile-time errors
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>Type errors from <code>as</code> declarations — these are checked before <code>try</code> can intervene
+                                      </p>
+      
+                                    </li>
+                                  </ul>
+                                  <h3 id="return-value"><a class="anchor" href="#return-value">#</a>Return Value
+                                  </h3>
+                                  <p>
+      <code>xsl:try</code> is a sequence constructor — it produces either the result of the try body (if successful) or the result of the catch body (if an error occurred). You can use it anywhere a sequence constructor is allowed, including in variable declarations:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:variable name="parsed-date" as="xs:string"&gt;
   &lt;xsl:try&gt;
     &lt;xsl:sequence select="format-date(xs:date(@date), '[MNn] [D], [Y]')"/&gt;
     &lt;xsl:catch&gt;
       &lt;xsl:sequence select="string(@date)"/&gt;  &lt;!-- fall back to raw string --&gt;
     &lt;/xsl:catch&gt;
   &lt;/xsl:try&gt;
-&lt;/xsl:variable&gt;</code></pre><hr><h2 id="error-variables"><a class="anchor" href="#error-variables">#</a>Error Variables</h2><p>Inside <code>xsl:catch</code>, several variables in the <code>err</code> namespace provide information about the error that occurred. You must declare the namespace to use them:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+&lt;/xsl:variable&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <hr>
+                                    <h2 id="error-variables"><a class="anchor" href="#error-variables">#</a>Error Variables
+                                    </h2>
+                                    <p>Inside <code>xsl:catch</code>, several variables in the <code>err</code> namespace provide information about the error that occurred. You must declare the namespace to use them:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:err="http://www.w3.org/2005/xqt-errors"
-                version="3.0"&gt;</code></pre><h3 id="available-variables"><a class="anchor" href="#available-variables">#</a>Available Variables</h3><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Variable</p>
-          </th>
-          <th>
-            <p>Type</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>$err:code</code></p>
-          </td>
-          <td>
-            <p><code>xs:QName</code></p>
-          </td>
-          <td>
-            <p>Error code (e.g., <code>err:FOAR0002</code> for division by zero)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>$err:description</code></p>
-          </td>
-          <td>
-            <p><code>xs:string?</code></p>
-          </td>
-          <td>
-            <p>Human-readable error message</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>$err:value</code></p>
-          </td>
-          <td>
-            <p><code>item()*</code></p>
-          </td>
-          <td>
-            <p>Additional error data (if provided by the error raiser)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>$err:module</code></p>
-          </td>
-          <td>
-            <p><code>xs:string?</code></p>
-          </td>
-          <td>
-            <p>URI of the stylesheet module where the error occurred</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>$err:line-number</code></p>
-          </td>
-          <td>
-            <p><code>xs:integer?</code></p>
-          </td>
-          <td>
-            <p>Line number where the error occurred</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>$err:column-number</code></p>
-          </td>
-          <td>
-            <p><code>xs:integer?</code></p>
-          </td>
-          <td>
-            <p>Column number where the error occurred</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="example-detailed-error-logging"><a class="anchor" href="#example-detailed-error-logging">#</a>Example: Detailed Error Logging</h3><pre><code class="language-xml">&lt;xsl:template match="product" xmlns:err="http://www.w3.org/2005/xqt-errors"&gt;
+                version="3.0"&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="available-variables"><a class="anchor" href="#available-variables">#</a>Available Variables
+                                    </h3>
+                                    <div class="table-wrap">
+                                      <table>
+      
+                                        <thead>
+        
+                                          <tr>
+          
+                                            <th>
+            
+                                              <p>Variable
+                                              </p>
+          
+                                            </th>
+          
+                                            <th>
+            
+                                              <p>Type
+                                              </p>
+          
+                                            </th>
+          
+                                            <th>
+            
+                                              <p>Description
+                                              </p>
+          
+                                            </th>
+        
+                                          </tr>
+      
+                                        </thead>
+      
+                                        <tbody>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>$err:code</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>xs:QName</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Error code (e.g., <code>err:FOAR0002</code> for division by zero)
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>$err:description</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>xs:string?</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Human-readable error message
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>$err:value</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>item()*</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Additional error data (if provided by the error raiser)
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>$err:module</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>xs:string?</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>URI of the stylesheet module where the error occurred
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>$err:line-number</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>xs:integer?</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Line number where the error occurred
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+        
+                                          <tr>
+          
+                                            <td>
+            
+                                              <p>
+              <code>$err:column-number</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>
+              <code>xs:integer?</code>
+            
+                                              </p>
+          
+                                            </td>
+          
+                                            <td>
+            
+                                              <p>Column number where the error occurred
+                                              </p>
+          
+                                            </td>
+        
+                                          </tr>
+      
+                                        </tbody>
+    
+                                      </table>
+                                    </div>
+                                    <h3 id="example-detailed-error-logging"><a class="anchor" href="#example-detailed-error-logging">#</a>Example: Detailed Error Logging
+                                    </h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:template match="product" xmlns:err="http://www.w3.org/2005/xqt-errors"&gt;
   &lt;xsl:try&gt;
     &lt;div class="product"&gt;
       &lt;h3&gt;&lt;xsl:value-of select="name"/&gt;&lt;/h3&gt;
@@ -189,8 +950,16 @@ catch (FormatException)
       &lt;/div&gt;
     &lt;/xsl:catch&gt;
   &lt;/xsl:try&gt;
-&lt;/xsl:template&gt;</code></pre><p>
-      <strong>C# parallel:</strong> The error variables map to exception properties:</p><pre><code class="language-csharp">try { /* ... */ }
+&lt;/xsl:template&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
+      <strong>C# parallel:</strong> The error variables map to exception properties:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">csharp</span>
+                                      </figcaption>
+                                      <pre><code class="language-csharp">try { /* ... */ }
 catch (Exception ex)
 {
     // $err:code       -&gt; ex.GetType().Name or ex.HResult
@@ -198,86 +967,233 @@ catch (Exception ex)
     // $err:value      -&gt; ex.Data
     // $err:module     -&gt; ex.Source
     // $err:line-number -&gt; ex.StackTrace (parsed)
-}</code></pre><hr><h2 id="selective-error-catching"><a class="anchor" href="#selective-error-catching">#</a>Selective Error Catching</h2><p>The <code>errors</code> attribute on <code>xsl:catch</code> lets you specify which errors to catch. Errors not listed propagate up and terminate the transformation (or are caught by an outer <code>xsl:try</code>).</p><h3 id="catching-specific-error-codes"><a class="anchor" href="#catching-specific-error-codes">#</a>Catching Specific Error Codes</h3><pre><code class="language-xml">&lt;xsl:try&gt;
+}</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <hr>
+                                      <h2 id="selective-error-catching"><a class="anchor" href="#selective-error-catching">#</a>Selective Error Catching
+                                      </h2>
+                                      <p>The <code>errors</code> attribute on <code>xsl:catch</code> lets you specify which errors to catch. Errors not listed propagate up and terminate the transformation (or are caught by an outer <code>xsl:try</code>).
+                                      </p>
+                                      <h3 id="catching-specific-error-codes"><a class="anchor" href="#catching-specific-error-codes">#</a>Catching Specific Error Codes
+                                      </h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:try&gt;
   &lt;xsl:sequence select="xs:decimal(price)"/&gt;
   &lt;xsl:catch errors="err:FORG0001"&gt;
     &lt;!-- Only catch "invalid value for cast" errors --&gt;
     &lt;xsl:sequence select="0"/&gt;
   &lt;/xsl:catch&gt;
-&lt;/xsl:try&gt;</code></pre><h3 id="catching-multiple-error-codes"><a class="anchor" href="#catching-multiple-error-codes">#</a>Catching Multiple Error Codes</h3><p>List multiple error codes separated by spaces:</p><pre><code class="language-xml">&lt;xsl:catch errors="err:FORG0001 err:FOAR0002 err:FODT0002"&gt;
+&lt;/xsl:try&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="catching-multiple-error-codes"><a class="anchor" href="#catching-multiple-error-codes">#</a>Catching Multiple Error Codes
+                                      </h3>
+                                      <p>List multiple error codes separated by spaces:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:catch errors="err:FORG0001 err:FOAR0002 err:FODT0002"&gt;
   &lt;!-- Handle any of these three error types --&gt;
-&lt;/xsl:catch&gt;</code></pre><h3 id="catching-all-errors-in-a-namespace"><a class="anchor" href="#catching-all-errors-in-a-namespace">#</a>Catching All Errors in a Namespace</h3><p>Use a wildcard <code>*</code> for the local name:</p><pre><code class="language-xml">&lt;xsl:catch errors="err:*"&gt;
+&lt;/xsl:catch&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="catching-all-errors-in-a-namespace"><a class="anchor" href="#catching-all-errors-in-a-namespace">#</a>Catching All Errors in a Namespace
+                                      </h3>
+                                      <p>Use a wildcard <code>*</code> for the local name:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:catch errors="err:*"&gt;
   &lt;!-- Catch any standard XPath/XSLT error --&gt;
-&lt;/xsl:catch&gt;</code></pre><h3 id="common-error-codes"><a class="anchor" href="#common-error-codes">#</a>Common Error Codes</h3><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Code</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>err:FORG0001</code></p>
-          </td>
-          <td>
-            <p>Invalid value for cast/constructor</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>err:FOAR0002</code></p>
-          </td>
-          <td>
-            <p>Division by zero</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>err:FODC0002</code></p>
-          </td>
-          <td>
-            <p>Error loading document (doc() / document())</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>err:FODT0002</code></p>
-          </td>
-          <td>
-            <p>Overflow/underflow in date/time operation</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>err:FOTY0012</code></p>
-          </td>
-          <td>
-            <p>Argument to fn:data() is a function item</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>err:XPTY0004</code></p>
-          </td>
-          <td>
-            <p>Type error (value does not match expected type)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>err:XTMM9000</code></p>
-          </td>
-          <td>
-            <p>xsl:message with terminate="yes"</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="nested-try-catch"><a class="anchor" href="#nested-try-catch">#</a>Nested Try/Catch</h3><p>You can nest <code>xsl:try</code> blocks for layered error handling:</p><pre><code class="language-xml">&lt;xsl:try&gt;
+&lt;/xsl:catch&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="common-error-codes"><a class="anchor" href="#common-error-codes">#</a>Common Error Codes
+                                      </h3>
+                                      <div class="table-wrap">
+                                        <table>
+      
+                                          <thead>
+        
+                                            <tr>
+          
+                                              <th>
+            
+                                                <p>Code
+                                                </p>
+          
+                                              </th>
+          
+                                              <th>
+            
+                                                <p>Description
+                                                </p>
+          
+                                              </th>
+        
+                                            </tr>
+      
+                                          </thead>
+      
+                                          <tbody>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>err:FORG0001</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Invalid value for cast/constructor
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>err:FOAR0002</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Division by zero
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>err:FODC0002</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Error loading document (doc() / document())
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>err:FODT0002</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Overflow/underflow in date/time operation
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>err:FOTY0012</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Argument to fn:data() is a function item
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>err:XPTY0004</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Type error (value does not match expected type)
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>err:XTMM9000</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>xsl:message with terminate="yes"
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+      
+                                          </tbody>
+    
+                                        </table>
+                                      </div>
+                                      <h3 id="nested-try-catch"><a class="anchor" href="#nested-try-catch">#</a>Nested Try/Catch
+                                      </h3>
+                                      <p>You can nest <code>xsl:try</code> blocks for layered error handling:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:try&gt;
   &lt;!-- Outer try: catches document loading errors --&gt;
   &lt;xsl:variable name="lookup" select="doc('lookup.xml')"/&gt;
   &lt;xsl:for-each select="//product"&gt;
@@ -296,8 +1212,16 @@ catch (Exception ex)
   &lt;xsl:catch errors="err:FODC0002"&gt;
     &lt;p class="system-error"&gt;Lookup table could not be loaded. Please try again later.&lt;/p&gt;
   &lt;/xsl:catch&gt;
-&lt;/xsl:try&gt;</code></pre><p>
-      <strong>C# parallel:</strong> Nested try/catch with specific exception types:</p><pre><code class="language-csharp">try
+&lt;/xsl:try&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
+      <strong>C# parallel:</strong> Nested try/catch with specific exception types:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">csharp</span>
+                                        </figcaption>
+                                        <pre><code class="language-csharp">try
 {
     var lookup = LoadDocument("lookup.xml");
     foreach (var product in products)
@@ -315,8 +1239,21 @@ catch (Exception ex)
 catch (FileNotFoundException)
 {
     RenderSystemError("Lookup table could not be loaded.");
-}</code></pre><hr><h2 id="xsl-assert"><a class="anchor" href="#xsl-assert">#</a>xsl:assert</h2><p>
-      <code>xsl:assert</code> tests a condition and raises an error if the condition is false. It is a declarative way to validate assumptions about your data during transformation.</p><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><pre><code class="language-xml">&lt;xsl:template match="product"&gt;
+}</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <hr>
+                                        <h2 id="xsl-assert"><a class="anchor" href="#xsl-assert">#</a>xsl:assert
+                                        </h2>
+                                        <p>
+      <code>xsl:assert</code> tests a condition and raises an error if the condition is false. It is a declarative way to validate assumptions about your data during transformation.
+                                        </p>
+                                        <h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:template match="product"&gt;
   &lt;xsl:assert test="@id" error-code="Q{http://example.com/err}MISSING-ID"&gt;
     Product element must have an @id attribute.
   &lt;/xsl:assert&gt;
@@ -328,53 +1265,137 @@ catch (FileNotFoundException)
   &lt;div class="product" data-id="{@id}"&gt;
     &lt;xsl:apply-templates/&gt;
   &lt;/div&gt;
-&lt;/xsl:template&gt;</code></pre><h3 id="attributes"><a class="anchor" href="#attributes">#</a>Attributes</h3><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Attribute</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>test</code></p>
-          </td>
-          <td>
-            <p>XPath expression that must evaluate to true. If false, the assertion fails and an error is raised.</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>error-code</code></p>
-          </td>
-          <td>
-            <p>Optional QName for the error code (catchable by <code>xsl:catch</code>). Default is <code>err:XTMM9001</code>.</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>select</code></p>
-          </td>
-          <td>
-            <p>Optional expression whose value is attached to the error as <code>$err:value</code> in the catch block.</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="the-select-attribute"><a class="anchor" href="#the-select-attribute">#</a>The select Attribute</h3><p>The <code>select</code> attribute provides structured data about the assertion failure, accessible as <code>$err:value</code> in a catch block:</p><pre><code class="language-xml">&lt;xsl:assert test="price &gt; 0"
+&lt;/xsl:template&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="attributes"><a class="anchor" href="#attributes">#</a>Attributes
+                                        </h3>
+                                        <div class="table-wrap">
+                                          <table>
+      
+                                            <thead>
+        
+                                              <tr>
+          
+                                                <th>
+            
+                                                  <p>Attribute
+                                                  </p>
+          
+                                                </th>
+          
+                                                <th>
+            
+                                                  <p>Description
+                                                  </p>
+          
+                                                </th>
+        
+                                              </tr>
+      
+                                            </thead>
+      
+                                            <tbody>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>test</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>XPath expression that must evaluate to true. If false, the assertion fails and an error is raised.
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>error-code</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Optional QName for the error code (catchable by <code>xsl:catch</code>). Default is <code>err:XTMM9001</code>.
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>select</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Optional expression whose value is attached to the error as <code>$err:value</code> in the catch block.
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+      
+                                            </tbody>
+    
+                                          </table>
+                                        </div>
+                                        <h3 id="the-select-attribute"><a class="anchor" href="#the-select-attribute">#</a>The select Attribute
+                                        </h3>
+                                        <p>The <code>select</code> attribute provides structured data about the assertion failure, accessible as <code>$err:value</code> in a catch block:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:assert test="price &gt; 0"
             error-code="Q{http://example.com/err}INVALID-PRICE"
             select="map { 'product-id': string(@id), 'price': string(price) }"&gt;
   Price must be positive.
-&lt;/xsl:assert&gt;</code></pre><p>In a catch block:</p><pre><code class="language-xml">&lt;xsl:catch errors="Q{http://example.com/err}INVALID-PRICE"&gt;
+&lt;/xsl:assert&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>In a catch block:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:catch errors="Q{http://example.com/err}INVALID-PRICE"&gt;
   &lt;xsl:variable name="info" select="$err:value"/&gt;
   &lt;p&gt;Product &lt;xsl:value-of select="$info?product-id"/&gt; has invalid price:
      &lt;xsl:value-of select="$info?price"/&gt;&lt;/p&gt;
-&lt;/xsl:catch&gt;</code></pre><h3 id="use-in-validation-scenarios"><a class="anchor" href="#use-in-validation-scenarios">#</a>Use in Validation Scenarios</h3><p>
-      <code>xsl:assert</code> is powerful for building validation into your transformation:</p><pre><code class="language-xml">&lt;xsl:template match="order"&gt;
+&lt;/xsl:catch&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="use-in-validation-scenarios"><a class="anchor" href="#use-in-validation-scenarios">#</a>Use in Validation Scenarios
+                                        </h3>
+                                        <p>
+      <code>xsl:assert</code> is powerful for building validation into your transformation:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:template match="order"&gt;
   &lt;!-- Validate the order before processing --&gt;
   &lt;xsl:assert test="line-item"&gt;
     Order &lt;xsl:value-of select="@id"/&gt; has no line items.
@@ -388,19 +1409,52 @@ catch (FileNotFoundException)
   &lt;/xsl:assert&gt;
   &lt;!-- Process the validated order --&gt;
   &lt;xsl:apply-templates/&gt;
-&lt;/xsl:template&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>Debug.Assert()</code> or guard clauses:</p><pre><code class="language-csharp">Debug.Assert(order.LineItems.Any(), $"Order {order.Id} has no line items.");
+&lt;/xsl:template&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
+      <strong>C# parallel:</strong> <code>Debug.Assert()</code> or guard clauses:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">Debug.Assert(order.LineItems.Any(), $"Order {order.Id} has no line items.");
 // Or with guard clauses:
 if (!order.LineItems.Any())
-    throw new ValidationException($"Order {order.Id} has no line items.");</code></pre><p>The key difference: <code>xsl:assert</code> errors can be caught by <code>xsl:try</code>/<code>xsl:catch</code>, making them recoverable. <code>Debug.Assert</code> in C# is typically only active in debug builds.</p><hr><h2 id="xsl-fallback"><a class="anchor" href="#xsl-fallback">#</a>xsl:fallback</h2><p>
-      <code>xsl:fallback</code> provides a graceful degradation mechanism when a stylesheet uses instructions that the processor does not support. This is primarily useful for forwards compatibility — writing stylesheets that use newer features while still working on older processors.</p><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><pre><code class="language-xml">&lt;xsl:some-future-instruction&gt;
+    throw new ValidationException($"Order {order.Id} has no line items.");</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>The key difference: <code>xsl:assert</code> errors can be caught by <code>xsl:try</code>/<code>xsl:catch</code>, making them recoverable. <code>Debug.Assert</code> in C# is typically only active in debug builds.
+                                        </p>
+                                        <hr>
+                                          <h2 id="xsl-fallback"><a class="anchor" href="#xsl-fallback">#</a>xsl:fallback
+                                          </h2>
+                                          <p>
+      <code>xsl:fallback</code> provides a graceful degradation mechanism when a stylesheet uses instructions that the processor does not support. This is primarily useful for forwards compatibility — writing stylesheets that use newer features while still working on older processors.
+                                          </p>
+                                          <h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage
+                                          </h3>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;xsl:some-future-instruction&gt;
   &lt;!-- This instruction might not exist in the current processor --&gt;
   &lt;xsl:fallback&gt;
     &lt;!-- This runs if the processor does not recognize the parent instruction --&gt;
     &lt;xsl:message&gt;Note: some-future-instruction is not supported. Using fallback.&lt;/xsl:message&gt;
     &lt;!-- Alternative implementation --&gt;
   &lt;/xsl:fallback&gt;
-&lt;/xsl:some-future-instruction&gt;</code></pre><h3 id="forwards-compatibility-example"><a class="anchor" href="#forwards-compatibility-example">#</a>Forwards Compatibility Example</h3><p>Suppose you want to use a hypothetical XSLT 4.0 instruction but need the stylesheet to work on XSLT 3.0 processors:</p><pre><code class="language-xml">&lt;xsl:stylesheet version="4.0"
+&lt;/xsl:some-future-instruction&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="forwards-compatibility-example"><a class="anchor" href="#forwards-compatibility-example">#</a>Forwards Compatibility Example
+                                          </h3>
+                                          <p>Suppose you want to use a hypothetical XSLT 4.0 instruction but need the stylesheet to work on XSLT 3.0 processors:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;xsl:stylesheet version="4.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
   &lt;xsl:template match="product"&gt;
     &lt;!-- Try to use a 4.0 feature --&gt;
@@ -424,15 +1478,47 @@ if (!order.LineItems.Any())
       &lt;/xsl:fallback&gt;
     &lt;/xsl:switch&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><p>When a 4.0 processor runs this, it executes <code>xsl:switch</code> normally. When a 3.0 processor encounters the unrecognized <code>xsl:switch</code>, it sees the stylesheet declares <code>version="4.0"</code> (a forwards-compatible version), finds the <code>xsl:fallback</code> child, and executes that instead.</p><h3 id="how-forwards-compatibility-works"><a class="anchor" href="#how-forwards-compatibility-works">#</a>How Forwards Compatibility Works</h3><ul><li>
-        <p>If the stylesheet declares a version higher than the processor supports (e.g., <code>version="4.0"</code> on a 3.0 processor), the processor enters <strong>forwards-compatible mode</strong></p>
-      </li><li>
-        <p>In this mode, unrecognized instructions are not immediately an error — the processor looks for <code>xsl:fallback</code> children</p>
-      </li><li>
-        <p>If <code>xsl:fallback</code> is found, it is executed in place of the unrecognized instruction</p>
-      </li><li>
-        <p>If no <code>xsl:fallback</code> is found, a runtime error is raised (which can be caught by <code>xsl:try</code>/<code>xsl:catch</code>)</p>
-      </li></ul><h3 id="multiple-fallbacks"><a class="anchor" href="#multiple-fallbacks">#</a>Multiple Fallbacks</h3><p>You can provide multiple <code>xsl:fallback</code> elements — all of them execute if the parent is unsupported:</p><pre><code class="language-xml">&lt;xsl:hypothetical-instruction&gt;
+&lt;/xsl:stylesheet&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>When a 4.0 processor runs this, it executes <code>xsl:switch</code> normally. When a 3.0 processor encounters the unrecognized <code>xsl:switch</code>, it sees the stylesheet declares <code>version="4.0"</code> (a forwards-compatible version), finds the <code>xsl:fallback</code> child, and executes that instead.
+                                          </p>
+                                          <h3 id="how-forwards-compatibility-works"><a class="anchor" href="#how-forwards-compatibility-works">#</a>How Forwards Compatibility Works
+                                          </h3>
+                                          <ul>
+                                            <li>
+        
+                                              <p>If the stylesheet declares a version higher than the processor supports (e.g., <code>version="4.0"</code> on a 3.0 processor), the processor enters <strong>forwards-compatible mode</strong>
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>In this mode, unrecognized instructions are not immediately an error — the processor looks for <code>xsl:fallback</code> children
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>If <code>xsl:fallback</code> is found, it is executed in place of the unrecognized instruction
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>If no <code>xsl:fallback</code> is found, a runtime error is raised (which can be caught by <code>xsl:try</code>/<code>xsl:catch</code>)
+                                              </p>
+      
+                                            </li>
+                                          </ul>
+                                          <h3 id="multiple-fallbacks"><a class="anchor" href="#multiple-fallbacks">#</a>Multiple Fallbacks
+                                          </h3>
+                                          <p>You can provide multiple <code>xsl:fallback</code> elements — all of them execute if the parent is unsupported:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;xsl:hypothetical-instruction&gt;
   &lt;xsl:fallback&gt;
     &lt;xsl:message&gt;Using fallback for hypothetical-instruction&lt;/xsl:message&gt;
   &lt;/xsl:fallback&gt;
@@ -440,14 +1526,35 @@ if (!order.LineItems.Any())
     &lt;!-- Alternative implementation --&gt;
     &lt;xsl:apply-templates/&gt;
   &lt;/xsl:fallback&gt;
-&lt;/xsl:hypothetical-instruction&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>xsl:fallback</code> is conceptually similar to <code>#if</code> preprocessor directives or feature detection:</p><pre><code class="language-csharp">#if NET8_0_OR_GREATER
+&lt;/xsl:hypothetical-instruction&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>
+      <strong>C# parallel:</strong> <code>xsl:fallback</code> is conceptually similar to <code>#if</code> preprocessor directives or feature detection:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">#if NET8_0_OR_GREATER
     // Use new API
     var result = SomeNewApi();
 #else
     // Fallback for older frameworks
     var result = LegacyApproach();
-#endif</code></pre><hr><h2 id="xsl-message-with-terminate"><a class="anchor" href="#xsl-message-with-terminate">#</a>xsl:message with terminate</h2><p>Before XSLT 3.0's <code>xsl:try</code>/<code>xsl:catch</code>, the only way to signal an error was <code>xsl:message terminate="yes"</code>. This is still useful and widely used:</p><h3 id="as-a-guard-clause"><a class="anchor" href="#as-a-guard-clause">#</a>As a Guard Clause</h3><pre><code class="language-xml">&lt;xsl:template match="product"&gt;
+#endif</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <hr>
+                                            <h2 id="xsl-message-with-terminate"><a class="anchor" href="#xsl-message-with-terminate">#</a>xsl:message with terminate
+                                            </h2>
+                                            <p>Before XSLT 3.0's <code>xsl:try</code>/<code>xsl:catch</code>, the only way to signal an error was <code>xsl:message terminate="yes"</code>. This is still useful and widely used:
+                                            </p>
+                                            <h3 id="as-a-guard-clause"><a class="anchor" href="#as-a-guard-clause">#</a>As a Guard Clause
+                                            </h3>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:template match="product"&gt;
   &lt;xsl:if test="not(@id)"&gt;
     &lt;xsl:message terminate="yes"&gt;
       FATAL: Product element at position &lt;xsl:value-of select="position()"/&gt;
@@ -458,98 +1565,255 @@ if (!order.LineItems.Any())
   &lt;div class="product" data-id="{@id}"&gt;
     &lt;xsl:apply-templates/&gt;
   &lt;/div&gt;
-&lt;/xsl:template&gt;</code></pre><h3 id="with-error-codes-xslt-3-0"><a class="anchor" href="#with-error-codes-xslt-3-0">#</a>With Error Codes (XSLT 3.0)</h3><p>In XSLT 3.0, <code>xsl:message terminate="yes"</code> raises a catchable error. You can assign an error code:</p><pre><code class="language-xml">&lt;xsl:message terminate="yes"
+&lt;/xsl:template&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="with-error-codes-xslt-3-0"><a class="anchor" href="#with-error-codes-xslt-3-0">#</a>With Error Codes (XSLT 3.0)
+                                            </h3>
+                                            <p>In XSLT 3.0, <code>xsl:message terminate="yes"</code> raises a catchable error. You can assign an error code:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:message terminate="yes"
              error-code="Q{http://example.com/err}MISSING-REQUIRED-FIELD"&gt;
   Required field '&lt;xsl:value-of select="$field-name"/&gt;' is missing in
   &lt;xsl:value-of select="local-name()"/&gt; element.
-&lt;/xsl:message&gt;</code></pre><p>This error can be caught:</p><pre><code class="language-xml">&lt;xsl:try&gt;
+&lt;/xsl:message&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>This error can be caught:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:try&gt;
   &lt;xsl:apply-templates select="//product"/&gt;
   &lt;xsl:catch errors="Q{http://example.com/err}MISSING-REQUIRED-FIELD"&gt;
     &lt;p class="error"&gt;Some products have missing data. &lt;xsl:value-of select="$err:description"/&gt;&lt;/p&gt;
   &lt;/xsl:catch&gt;
-&lt;/xsl:try&gt;</code></pre><h3 id="terminate-yes-vs-xsl-assert"><a class="anchor" href="#terminate-yes-vs-xsl-assert">#</a>terminate="yes" vs. xsl:assert</h3><table>
-      <thead>
-        <tr>
-          <th>
-            <p></p>
-          </th>
-          <th>
-            <p><code>xsl:message terminate="yes"</code></p>
-          </th>
-          <th>
-            <p><code>xsl:assert</code></p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><strong>Syntax</strong></p>
-          </td>
-          <td>
-            <p>Requires wrapping in <code>xsl:if</code> for conditional use</p>
-          </td>
-          <td>
-            <p>Has a built-in <code>test</code> attribute</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><strong>Message</strong></p>
-          </td>
-          <td>
-            <p>Content of the message element</p>
-          </td>
-          <td>
-            <p>Content of the assert element</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><strong>Error code</strong></p>
-          </td>
-          <td>
-            <p>Via <code>error-code</code> attribute</p>
-          </td>
-          <td>
-            <p>Via <code>error-code</code> attribute</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><strong>Error value</strong></p>
-          </td>
-          <td>
-            <p>Not directly supported</p>
-          </td>
-          <td>
-            <p>Via <code>select</code> attribute</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><strong>Readability</strong></p>
-          </td>
-          <td>
-            <p>Two instructions (<code>xsl:if</code> + <code>xsl:message</code>)</p>
-          </td>
-          <td>
-            <p>Single instruction</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><strong>Pre-3.0</strong></p>
-          </td>
-          <td>
-            <p>Available since XSLT 1.0</p>
-          </td>
-          <td>
-            <p>XSLT 3.0 only</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><p>For validation checks, prefer <code>xsl:assert</code> — it is more concise and communicates intent more clearly. Use <code>xsl:message terminate="yes"</code> when you need the message to carry complex content or when targeting XSLT 1.0/2.0 compatibility.</p><hr><h2 id="error-recovery-patterns"><a class="anchor" href="#error-recovery-patterns">#</a>Error Recovery Patterns</h2><h3 id="fail-safe-processing"><a class="anchor" href="#fail-safe-processing">#</a>Fail-Safe Processing</h3><p>Process each item independently, catching errors per item so one bad record does not stop the entire transformation:</p><pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
+&lt;/xsl:try&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="terminate-yes-vs-xsl-assert"><a class="anchor" href="#terminate-yes-vs-xsl-assert">#</a>terminate="yes" vs. xsl:assert
+                                            </h3>
+                                            <div class="table-wrap">
+                                              <table>
+      
+                                                <thead>
+        
+                                                  <tr>
+          
+                                                    <th>
+            
+                                                      <p>
+                                                      </p>
+          
+                                                    </th>
+          
+                                                    <th>
+            
+                                                      <p>
+              <code>xsl:message terminate="yes"</code>
+            
+                                                      </p>
+          
+                                                    </th>
+          
+                                                    <th>
+            
+                                                      <p>
+              <code>xsl:assert</code>
+            
+                                                      </p>
+          
+                                                    </th>
+        
+                                                  </tr>
+      
+                                                </thead>
+      
+                                                <tbody>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>
+              <strong>Syntax</strong>
+            
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Requires wrapping in <code>xsl:if</code> for conditional use
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Has a built-in <code>test</code> attribute
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>
+              <strong>Message</strong>
+            
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Content of the message element
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Content of the assert element
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>
+              <strong>Error code</strong>
+            
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Via <code>error-code</code> attribute
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Via <code>error-code</code> attribute
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>
+              <strong>Error value</strong>
+            
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Not directly supported
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Via <code>select</code> attribute
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>
+              <strong>Readability</strong>
+            
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Two instructions (<code>xsl:if</code> + <code>xsl:message</code>)
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Single instruction
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>
+              <strong>Pre-3.0</strong>
+            
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Available since XSLT 1.0
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>XSLT 3.0 only
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+      
+                                                </tbody>
+    
+                                              </table>
+                                            </div>
+                                            <p>For validation checks, prefer <code>xsl:assert</code> — it is more concise and communicates intent more clearly. Use <code>xsl:message terminate="yes"</code> when you need the message to carry complex content or when targeting XSLT 1.0/2.0 compatibility.
+                                            </p>
+                                            <hr>
+                                              <h2 id="error-recovery-patterns"><a class="anchor" href="#error-recovery-patterns">#</a>Error Recovery Patterns
+                                              </h2>
+                                              <h3 id="fail-safe-processing"><a class="anchor" href="#fail-safe-processing">#</a>Fail-Safe Processing
+                                              </h3>
+                                              <p>Process each item independently, catching errors per item so one bad record does not stop the entire transformation:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
   &lt;html&gt;
     &lt;body&gt;
       &lt;h1&gt;Product Catalog&lt;/h1&gt;
@@ -567,8 +1831,16 @@ if (!order.LineItems.Any())
       &lt;/xsl:for-each&gt;
     &lt;/body&gt;
   &lt;/html&gt;
-&lt;/xsl:template&gt;</code></pre><p>
-      <strong>C# parallel:</strong> This is the "continue on error" pattern:</p><pre><code class="language-csharp">foreach (var product in products)
+&lt;/xsl:template&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>
+      <strong>C# parallel:</strong> This is the "continue on error" pattern:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">csharp</span>
+                                                </figcaption>
+                                                <pre><code class="language-csharp">foreach (var product in products)
 {
     try
     {
@@ -578,7 +1850,17 @@ if (!order.LineItems.Any())
     {
         RenderErrorCard(product, ex.Message);
     }
-}</code></pre><h3 id="safe-document-loading"><a class="anchor" href="#safe-document-loading">#</a>Safe Document Loading</h3><p>Gracefully handle missing or invalid external documents:</p><pre><code class="language-xml">&lt;xsl:function name="my:safe-doc" as="document-node()?"&gt;
+}</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="safe-document-loading"><a class="anchor" href="#safe-document-loading">#</a>Safe Document Loading
+                                              </h3>
+                                              <p>Gracefully handle missing or invalid external documents:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;xsl:function name="my:safe-doc" as="document-node()?"&gt;
   &lt;xsl:param name="uri" as="xs:string"/&gt;
   &lt;xsl:try&gt;
     &lt;xsl:sequence select="doc($uri)"/&gt;
@@ -592,7 +1874,17 @@ if (!order.LineItems.Any())
 &lt;xsl:variable name="lookup" select="my:safe-doc('lookup-table.xml')"/&gt;
 &lt;xsl:if test="$lookup"&gt;
   &lt;!-- Document loaded successfully, use it --&gt;
-&lt;/xsl:if&gt;</code></pre><h3 id="validation-with-error-collection"><a class="anchor" href="#validation-with-error-collection">#</a>Validation with Error Collection</h3><p>Validate all records and collect errors before deciding how to proceed:</p><pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
+&lt;/xsl:if&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="validation-with-error-collection"><a class="anchor" href="#validation-with-error-collection">#</a>Validation with Error Collection
+                                              </h3>
+                                              <p>Validate all records and collect errors before deciding how to proceed:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;xsl:template match="catalog"&gt;
   &lt;!-- Collect validation errors --&gt;
   &lt;xsl:variable name="errors" as="element(error)*"&gt;
     &lt;xsl:for-each select="product"&gt;
@@ -638,7 +1930,17 @@ if (!order.LineItems.Any())
       &lt;xsl:apply-templates select="product"/&gt;
     &lt;/xsl:otherwise&gt;
   &lt;/xsl:choose&gt;
-&lt;/xsl:template&gt;</code></pre><h3 id="default-values-with-try-catch"><a class="anchor" href="#default-values-with-try-catch">#</a>Default Values with Try/Catch</h3><p>Use try/catch to provide default values when data is malformed:</p><pre><code class="language-xml">&lt;xsl:function name="my:safe-decimal" as="xs:decimal"&gt;
+&lt;/xsl:template&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="default-values-with-try-catch"><a class="anchor" href="#default-values-with-try-catch">#</a>Default Values with Try/Catch
+                                              </h3>
+                                              <p>Use try/catch to provide default values when data is malformed:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;xsl:function name="my:safe-decimal" as="xs:decimal"&gt;
   &lt;xsl:param name="value" as="xs:string"/&gt;
   &lt;xsl:param name="default" as="xs:decimal"/&gt;
   &lt;xsl:try&gt;
@@ -659,9 +1961,27 @@ if (!order.LineItems.Any())
 &lt;/xsl:function&gt;
 &lt;!-- Usage --&gt;
 &lt;xsl:variable name="price" select="my:safe-decimal(price, 0)"/&gt;
-&lt;xsl:variable name="display-date" select="my:safe-date(@date)"/&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>TryParse</code> pattern:</p><pre><code class="language-csharp">static decimal SafeDecimal(string value, decimal defaultValue) =&gt;
-    decimal.TryParse(value, out var result) ? result : defaultValue;</code></pre><h3 id="assertion-try-catch-for-controlled-validation"><a class="anchor" href="#assertion-try-catch-for-controlled-validation">#</a>Assertion + Try/Catch for Controlled Validation</h3><p>Combine assertions with try/catch for a "validate, then process" pattern:</p><pre><code class="language-xml">&lt;xsl:template match="order"&gt;
+&lt;xsl:variable name="display-date" select="my:safe-date(@date)"/&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>
+      <strong>C# parallel:</strong> <code>TryParse</code> pattern:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">csharp</span>
+                                                </figcaption>
+                                                <pre><code class="language-csharp">static decimal SafeDecimal(string value, decimal defaultValue) =&gt;
+    decimal.TryParse(value, out var result) ? result : defaultValue;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="assertion-try-catch-for-controlled-validation"><a class="anchor" href="#assertion-try-catch-for-controlled-validation">#</a>Assertion + Try/Catch for Controlled Validation
+                                              </h3>
+                                              <p>Combine assertions with try/catch for a "validate, then process" pattern:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;xsl:template match="order"&gt;
   &lt;xsl:try&gt;
     &lt;!-- Assertions act as preconditions --&gt;
     &lt;xsl:assert test="@id"&gt;Order must have an ID.&lt;/xsl:assert&gt;
@@ -680,91 +2000,334 @@ if (!order.LineItems.Any())
       &lt;/div&gt;
     &lt;/xsl:catch&gt;
   &lt;/xsl:try&gt;
-&lt;/xsl:template&gt;</code></pre><p>
+&lt;/xsl:template&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>
       <strong>C# parallel summary:</strong>
-    </p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>XSLT</p>
-          </th>
-          <th>
-            <p>C#</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>xsl:try</code> / <code>xsl:catch</code></p>
-          </td>
-          <td>
-            <p><code>try</code> / <code>catch</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>$err:code</code></p>
-          </td>
-          <td>
-            <p><code>ex.GetType()</code> or <code>ex.HResult</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>$err:description</code></p>
-          </td>
-          <td>
-            <p><code>ex.Message</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>$err:value</code></p>
-          </td>
-          <td>
-            <p><code>ex.Data</code> or custom exception properties</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>errors="err:FORG0001"</code></p>
-          </td>
-          <td>
-            <p><code>catch (FormatException)</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>xsl:assert test="..."</code></p>
-          </td>
-          <td>
-            <p><code>Debug.Assert(...)</code> or guard clause with <code>throw</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>xsl:fallback</code></p>
-          </td>
-          <td>
-            <p><code>#if</code> preprocessor / feature detection</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>xsl:message terminate="yes"</code></p>
-          </td>
-          <td>
-            <p><code>throw new Exception(...)</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Nested <code>xsl:try</code></p>
-          </td>
-          <td>
-            <p>Nested <code>try</code>/<code>catch</code> blocks</p>
-          </td>
-        </tr>
-      </tbody>
-    </table></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+    
+                                              </p>
+                                              <div class="table-wrap">
+                                                <table>
+      
+                                                  <thead>
+        
+                                                    <tr>
+          
+                                                      <th>
+            
+                                                        <p>XSLT
+                                                        </p>
+          
+                                                      </th>
+          
+                                                      <th>
+            
+                                                        <p>C#
+                                                        </p>
+          
+                                                      </th>
+        
+                                                    </tr>
+      
+                                                  </thead>
+      
+                                                  <tbody>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>xsl:try</code> / <code>xsl:catch</code>
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>try</code> / <code>catch</code>
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>$err:code</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>ex.GetType()</code> or <code>ex.HResult</code>
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>$err:description</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>ex.Message</code>
+            
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>$err:value</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>ex.Data</code> or custom exception properties
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>errors="err:FORG0001"</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>catch (FormatException)</code>
+            
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>xsl:assert test="..."</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>Debug.Assert(...)</code> or guard clause with <code>throw</code>
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>xsl:fallback</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>#if</code> preprocessor / feature detection
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>xsl:message terminate="yes"</code>
+            
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>
+              <code>throw new Exception(...)</code>
+            
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+        
+                                                    <tr>
+          
+                                                      <td>
+            
+                                                        <p>Nested <code>xsl:try</code>
+                                                        </p>
+          
+                                                      </td>
+          
+                                                      <td>
+            
+                                                        <p>Nested <code>try</code>/<code>catch</code> blocks
+                                                        </p>
+          
+                                                      </td>
+        
+                                                    </tr>
+      
+                                                  </tbody>
+    
+                                                </table>
+                                              </div>
+                                            </article>
+                                          </main>
+                                          <aside class="toc" aria-label="On this page">
+                                            <p class="toc-label">On this page
+                                            </p>
+                                            <ul>
+                                              <li class="toc-h2"><a href="#contents">Contents</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#xsl-try-xsl-catch">xsl:try / xsl:catch</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#basic-structure">Basic Structure</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#example-handling-type-conversion-errors">Example: Handling Type Conversion Errors</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#what-can-be-caught">What Can Be Caught</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#return-value">Return Value</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#error-variables">Error Variables</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#available-variables">Available Variables</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#example-detailed-error-logging">Example: Detailed Error Logging</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#selective-error-catching">Selective Error Catching</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#catching-specific-error-codes">Catching Specific Error Codes</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#catching-multiple-error-codes">Catching Multiple Error Codes</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#catching-all-errors-in-a-namespace">Catching All Errors in a Namespace</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#common-error-codes">Common Error Codes</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#nested-try-catch">Nested Try/Catch</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#xsl-assert">xsl:assert</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#basic-usage">Basic Usage</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#attributes">Attributes</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#the-select-attribute">The select Attribute</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#use-in-validation-scenarios">Use in Validation Scenarios</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#xsl-fallback">xsl:fallback</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#basic-usage">Basic Usage</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#forwards-compatibility-example">Forwards Compatibility Example</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#how-forwards-compatibility-works">How Forwards Compatibility Works</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#multiple-fallbacks">Multiple Fallbacks</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#xsl-message-with-terminate">xsl:message with terminate</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#as-a-guard-clause">As a Guard Clause</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#with-error-codes-xslt-3-0">With Error Codes (XSLT 3.0)</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#terminate-yes-vs-xsl-assert">terminate="yes" vs. xsl:assert</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#error-recovery-patterns">Error Recovery Patterns</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#fail-safe-processing">Fail-Safe Processing</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#safe-document-loading">Safe Document Loading</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#validation-with-error-collection">Validation with Error Collection</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#default-values-with-try-catch">Default Values with Try/Catch</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#assertion-try-catch-for-controlled-validation">Assertion + Try/Catch for Controlled Validation</a>
+                                              </li>
+                                            </ul>
+                                          </aside>
+                                        </div>
+                                        <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                          <div class="search-backdrop">
+                                          </div>
+                                          <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                            <div class="search-results" id="search-results">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <footer class="site-footer">
+                                          <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                          </p>
+                                        </footer>
+                                        <script src="https://unpkg.com/lunr/lunr.js">
+                                        </script>
+                                        <script src="/js/prism.js">
+                                        </script>
+                                        <script src="/js/search.js">
+                                        </script>
+                                        <script src="/js/theme.js">
+                                        </script>
+                                        <script src="/js/toc.js">
+                                        </script>
+                                        <script src="/js/copy.js">
+                                        </script>
+                                      </body>
+                                    </html>

@@ -1,13 +1,522 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Transactions API — PhoenixmlDb Documentation</title><meta name="description" content="Transaction lifecycle, commit/rollback, error handling, and patterns"><link rel="canonical" href="/phoenixmldb/api-reference/transactions.html"><meta property="og:title" content="Transactions API"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/api-reference/transactions.html"><meta property="og:description" content="Transaction lifecycle, commit/rollback, error handling, and patterns"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Transactions API — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="Transaction lifecycle, commit/rollback, error handling, and patterns">
+            <link rel="canonical" href="/phoenixmldb/api-reference/transactions.html">
+              <meta property="og:title" content="Transactions API">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/phoenixmldb/api-reference/transactions.html">
+                    <meta property="og:description" content="Transaction lifecycle, commit/rollback, error handling, and patterns">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li class="active"><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="transaction-api"><a class="anchor" href="#transaction-api">#</a>Transaction API</h1><p>The Transaction API provides ACID-compliant transactions for consistent data operations.</p><h2 id="creating-transactions"><a class="anchor" href="#creating-transactions">#</a>Creating Transactions</h2><h3 id="read-only-transaction"><a class="anchor" href="#read-only-transaction">#</a>Read-Only Transaction</h3><pre><code class="language-csharp">using (var txn = db.BeginTransaction(readOnly: true))
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li class="active"><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">API Reference
+                                </p>
+                                <h1 class="page-title">Transactions API
+                                </h1>
+                                <p class="page-subtitle">Transaction lifecycle, commit/rollback, error handling, and patterns
+                                </p>
+                                <h1 id="transaction-api"><a class="anchor" href="#transaction-api">#</a>Transaction API
+                                </h1>
+                                <p>The Transaction API provides ACID-compliant transactions for consistent data operations.
+                                </p>
+                                <h2 id="creating-transactions"><a class="anchor" href="#creating-transactions">#</a>Creating Transactions
+                                </h2>
+                                <h3 id="read-only-transaction"><a class="anchor" href="#read-only-transaction">#</a>Read-Only Transaction
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">using (var txn = db.BeginTransaction(readOnly: true))
 {
     // Snapshot isolation - sees consistent view
     var products = txn.Query("collection('products')//product");
     var orders = txn.Query("collection('orders')//order");
     // Process results
 }
-// Automatically completes on dispose</code></pre><h3 id="read-write-transaction"><a class="anchor" href="#read-write-transaction">#</a>Read-Write Transaction</h3><pre><code class="language-csharp">using (var txn = db.BeginTransaction())
+// Automatically completes on dispose</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="read-write-transaction"><a class="anchor" href="#read-write-transaction">#</a>Read-Write Transaction
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">using (var txn = db.BeginTransaction())
 {
     var container = txn.GetContainer("products");
     container.PutDocument("p1.xml", xml1);
@@ -15,7 +524,15 @@
     container.DeleteDocument("p3.xml");
     txn.Commit();  // Commit all changes
 }
-// If Commit() not called, changes are rolled back</code></pre><h3 id="with-options"><a class="anchor" href="#with-options">#</a>With Options</h3><pre><code class="language-csharp">var options = new TransactionOptions
+// If Commit() not called, changes are rolled back</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="with-options"><a class="anchor" href="#with-options">#</a>With Options
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">var options = new TransactionOptions
 {
     ReadOnly = false,
     Timeout = TimeSpan.FromSeconds(30),
@@ -25,68 +542,176 @@ using (var txn = db.BeginTransaction(options))
 {
     // Operations...
     txn.Commit();
-}</code></pre><h2 id="transactionoptions"><a class="anchor" href="#transactionoptions">#</a>TransactionOptions</h2><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Property</p>
-          </th>
-          <th>
-            <p>Type</p>
-          </th>
-          <th>
-            <p>Default</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>ReadOnly</code></p>
-          </td>
-          <td>
-            <p><code>bool</code></p>
-          </td>
-          <td>
-            <p><code>false</code></p>
-          </td>
-          <td>
-            <p>Read-only transaction</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>Timeout</code></p>
-          </td>
-          <td>
-            <p><code>TimeSpan</code></p>
-          </td>
-          <td>
-            <p>60s</p>
-          </td>
-          <td>
-            <p>Maximum duration</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>IsolationLevel</code></p>
-          </td>
-          <td>
-            <p><code>IsolationLevel</code></p>
-          </td>
-          <td>
-            <p><code>Snapshot</code></p>
-          </td>
-          <td>
-            <p>Isolation level</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h2 id="transaction-operations"><a class="anchor" href="#transaction-operations">#</a>Transaction Operations</h2><h3 id="itransaction-interface"><a class="anchor" href="#itransaction-interface">#</a>ITransaction Interface</h3><pre><code class="language-csharp">interface ITransaction : IDisposable
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="transactionoptions"><a class="anchor" href="#transactionoptions">#</a>TransactionOptions
+                                </h2>
+                                <div class="table-wrap">
+                                  <table>
+      
+                                    <thead>
+        
+                                      <tr>
+          
+                                        <th>
+            
+                                          <p>Property
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Type
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Default
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Description
+                                          </p>
+          
+                                        </th>
+        
+                                      </tr>
+      
+                                    </thead>
+      
+                                    <tbody>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>ReadOnly</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>bool</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>false</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Read-only transaction
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>Timeout</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>TimeSpan</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>60s
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Maximum duration
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <code>IsolationLevel</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>IsolationLevel</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <code>Snapshot</code>
+            
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Isolation level
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+      
+                                    </tbody>
+    
+                                  </table>
+                                </div>
+                                <h2 id="transaction-operations"><a class="anchor" href="#transaction-operations">#</a>Transaction Operations
+                                </h2>
+                                <h3 id="itransaction-interface"><a class="anchor" href="#itransaction-interface">#</a>ITransaction Interface
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">interface ITransaction : IDisposable
 {
     bool IsReadOnly { get; }
     TransactionState State { get; }
@@ -97,12 +722,28 @@ using (var txn = db.BeginTransaction(options))
     void Execute(string xqueryUpdate);
     void Commit();
     void Abort();
-}</code></pre><h3 id="get-container"><a class="anchor" href="#get-container">#</a>Get Container</h3><pre><code class="language-csharp">using (var txn = db.BeginTransaction())
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="get-container"><a class="anchor" href="#get-container">#</a>Get Container
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">using (var txn = db.BeginTransaction())
 {
     var products = txn.GetContainer("products");
     var orders = txn.GetContainer("orders");
     // Operations on containers are part of transaction
-}</code></pre><h3 id="query-in-transaction"><a class="anchor" href="#query-in-transaction">#</a>Query in Transaction</h3><pre><code class="language-csharp">using (var txn = db.BeginTransaction(readOnly: true))
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="query-in-transaction"><a class="anchor" href="#query-in-transaction">#</a>Query in Transaction
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">using (var txn = db.BeginTransaction(readOnly: true))
 {
     var result = txn.Query("""
         for $p in collection('products')//product
@@ -114,7 +755,15 @@ using (var txn = db.BeginTransaction(options))
     {
         Console.WriteLine(product);
     }
-}</code></pre><h3 id="update-in-transaction"><a class="anchor" href="#update-in-transaction">#</a>Update in Transaction</h3><pre><code class="language-csharp">using (var txn = db.BeginTransaction())
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="update-in-transaction"><a class="anchor" href="#update-in-transaction">#</a>Update in Transaction
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">using (var txn = db.BeginTransaction())
 {
     txn.Execute("""
         for $p in collection('products')//product
@@ -122,7 +771,17 @@ using (var txn = db.BeginTransaction(options))
         return delete node $p
         """);
     txn.Commit();
-}</code></pre><h2 id="commit-and-rollback"><a class="anchor" href="#commit-and-rollback">#</a>Commit and Rollback</h2><h3 id="explicit-commit"><a class="anchor" href="#explicit-commit">#</a>Explicit Commit</h3><pre><code class="language-csharp">using (var txn = db.BeginTransaction())
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="commit-and-rollback"><a class="anchor" href="#commit-and-rollback">#</a>Commit and Rollback
+                                </h2>
+                                <h3 id="explicit-commit"><a class="anchor" href="#explicit-commit">#</a>Explicit Commit
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">using (var txn = db.BeginTransaction())
 {
     // Make changes
     txn.GetContainer("data").PutDocument("doc.xml", content);
@@ -130,25 +789,57 @@ using (var txn = db.BeginTransaction(options))
     txn.Commit();
     // Transaction state is now Committed
     Console.WriteLine(txn.State); // Committed
-}</code></pre><h3 id="explicit-rollback"><a class="anchor" href="#explicit-rollback">#</a>Explicit Rollback</h3><pre><code class="language-csharp">using (var txn = db.BeginTransaction())
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="explicit-rollback"><a class="anchor" href="#explicit-rollback">#</a>Explicit Rollback
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">using (var txn = db.BeginTransaction())
 {
     txn.GetContainer("data").PutDocument("doc.xml", content);
     // Something went wrong, rollback
     txn.Abort();
     // Transaction state is now Aborted
     Console.WriteLine(txn.State); // Aborted
-}</code></pre><h3 id="automatic-rollback"><a class="anchor" href="#automatic-rollback">#</a>Automatic Rollback</h3><pre><code class="language-csharp">using (var txn = db.BeginTransaction())
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="automatic-rollback"><a class="anchor" href="#automatic-rollback">#</a>Automatic Rollback
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">using (var txn = db.BeginTransaction())
 {
     txn.GetContainer("data").PutDocument("doc.xml", content);
     // No Commit() called
 }
-// Changes automatically rolled back on dispose</code></pre><h2 id="transaction-states"><a class="anchor" href="#transaction-states">#</a>Transaction States</h2><pre><code class="language-csharp">enum TransactionState
+// Changes automatically rolled back on dispose</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="transaction-states"><a class="anchor" href="#transaction-states">#</a>Transaction States
+                                </h2>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">enum TransactionState
 {
     Active,     // Transaction in progress
     Committed,  // Successfully committed
     Aborted,    // Rolled back
     Disposed    // Disposed (implies aborted if not committed)
-}</code></pre><h2 id="error-handling"><a class="anchor" href="#error-handling">#</a>Error Handling</h2><pre><code class="language-csharp">try
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="error-handling"><a class="anchor" href="#error-handling">#</a>Error Handling
+                                </h2>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">try
 {
     using (var txn = db.BeginTransaction())
     {
@@ -175,7 +866,17 @@ catch (InvalidOperationException ex)
 {
     // e.g., Write operation in read-only transaction
     Console.WriteLine($"Invalid operation: {ex.Message}");
-}</code></pre><h2 id="patterns"><a class="anchor" href="#patterns">#</a>Patterns</h2><h3 id="unit-of-work"><a class="anchor" href="#unit-of-work">#</a>Unit of Work</h3><pre><code class="language-csharp">public void TransferFunds(string from, string to, decimal amount)
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="patterns"><a class="anchor" href="#patterns">#</a>Patterns
+                                </h2>
+                                <h3 id="unit-of-work"><a class="anchor" href="#unit-of-work">#</a>Unit of Work
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">public void TransferFunds(string from, string to, decimal amount)
 {
     using var txn = db.BeginTransaction();
     var accounts = txn.GetContainer("accounts");
@@ -196,7 +897,15 @@ catch (InvalidOperationException ex)
         with {toBalance + amount}
         """);
     txn.Commit();
-}</code></pre><h3 id="retry-on-conflict"><a class="anchor" href="#retry-on-conflict">#</a>Retry on Conflict</h3><pre><code class="language-csharp">public T ExecuteWithRetry&lt;T&gt;(Func&lt;ITransaction, T&gt; operation, int maxRetries = 3)
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="retry-on-conflict"><a class="anchor" href="#retry-on-conflict">#</a>Retry on Conflict
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">public T ExecuteWithRetry&lt;T&gt;(Func&lt;ITransaction, T&gt; operation, int maxRetries = 3)
 {
     for (int attempt = 1; attempt &lt;= maxRetries; attempt++)
     {
@@ -219,7 +928,15 @@ var result = ExecuteWithRetry(txn =&gt;
 {
     // Operations that might conflict
     return txn.QuerySingle&lt;int&gt;("count(//product)");
-});</code></pre><h3 id="optimistic-locking"><a class="anchor" href="#optimistic-locking">#</a>Optimistic Locking</h3><pre><code class="language-csharp">public void UpdateWithVersion(string docName, string newContent)
+});</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="optimistic-locking"><a class="anchor" href="#optimistic-locking">#</a>Optimistic Locking
+                                </h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">public void UpdateWithVersion(string docName, string newContent)
 {
     using var txn = db.BeginTransaction();
     // Get current version
@@ -236,7 +953,15 @@ var result = ExecuteWithRetry(txn =&gt;
                 error(xs:QName('local:conflict'), 'Version conflict')
         """);
     txn.Commit();
-}</code></pre><h2 id="nested-operations"><a class="anchor" href="#nested-operations">#</a>Nested Operations</h2><pre><code class="language-csharp">using (var txn = db.BeginTransaction())
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="nested-operations"><a class="anchor" href="#nested-operations">#</a>Nested Operations
+                                </h2>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">using (var txn = db.BeginTransaction())
 {
     ProcessOrders(txn);
     UpdateInventory(txn);
@@ -247,49 +972,207 @@ void ProcessOrders(ITransaction txn)
 {
     var orders = txn.GetContainer("orders");
     // Process orders within transaction context
-}</code></pre><h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2><ol><li>
-        <p>
-          <strong>Keep transactions short</strong> - Minimize time between begin and commit</p>
-      </li><li>
-        <p>
-          <strong>Use read-only when possible</strong> - Better concurrency</p>
-      </li><li>
-        <p>
-          <strong>Don't hold transactions</strong> - Across async/await or user input</p>
-      </li><li>
-        <p>
-          <strong>Handle conflicts</strong> - Implement retry logic</p>
-      </li><li>
-        <p>
-          <strong>Always dispose</strong> - Use <code>using</code> statements</p>
-      </li><li>
-        <p>
-          <strong>Batch related operations</strong> - Single transaction for related changes</p>
-      </li></ol><h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps</h2><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Concepts</p>
-          </th>
-          <th>
-            <p>Execution</p>
-          </th>
-          <th>
-            <p>Configuration</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><strong><a href="../transactions.html" title="">Transactions</a></strong>Transaction concepts</p>
-          </td>
-          <td>
-            <p><strong><a href="queries.html" title="">Query API</a></strong>Query execution</p>
-          </td>
-          <td>
-            <p><strong><a href="../configuration.html" title="">Configuration</a></strong>Transaction settings</p>
-          </td>
-        </tr>
-      </tbody>
-    </table></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices
+                                </h2>
+                                <ol>
+                                  <li>
+        
+                                    <p>
+          <strong>Keep transactions short</strong> - Minimize time between begin and commit
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Use read-only when possible</strong> - Better concurrency
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Don't hold transactions</strong> - Across async/await or user input
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Handle conflicts</strong> - Implement retry logic
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Always dispose</strong> - Use <code>using</code> statements
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Batch related operations</strong> - Single transaction for related changes
+                                    </p>
+      
+                                  </li>
+                                </ol>
+                                <h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps
+                                </h2>
+                                <div class="table-wrap">
+                                  <table>
+      
+                                    <thead>
+        
+                                      <tr>
+          
+                                        <th>
+            
+                                          <p>Concepts
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Execution
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Configuration
+                                          </p>
+          
+                                        </th>
+        
+                                      </tr>
+      
+                                    </thead>
+      
+                                    <tbody>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>
+                <a href="../transactions.html">Transactions</a>
+              </strong>Transaction concepts
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>
+                <a href="queries.html">Query API</a>
+              </strong>Query execution
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>
+                <a href="../configuration.html">Configuration</a>
+              </strong>Transaction settings
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+      
+                                    </tbody>
+    
+                                  </table>
+                                </div>
+                              </article>
+                            </main>
+                            <aside class="toc" aria-label="On this page">
+                              <p class="toc-label">On this page
+                              </p>
+                              <ul>
+                                <li class="toc-h2"><a href="#creating-transactions">Creating Transactions</a>
+                                </li>
+                                <li class="toc-h3"><a href="#read-only-transaction">Read-Only Transaction</a>
+                                </li>
+                                <li class="toc-h3"><a href="#read-write-transaction">Read-Write Transaction</a>
+                                </li>
+                                <li class="toc-h3"><a href="#with-options">With Options</a>
+                                </li>
+                                <li class="toc-h2"><a href="#transactionoptions">TransactionOptions</a>
+                                </li>
+                                <li class="toc-h2"><a href="#transaction-operations">Transaction Operations</a>
+                                </li>
+                                <li class="toc-h3"><a href="#itransaction-interface">ITransaction Interface</a>
+                                </li>
+                                <li class="toc-h3"><a href="#get-container">Get Container</a>
+                                </li>
+                                <li class="toc-h3"><a href="#query-in-transaction">Query in Transaction</a>
+                                </li>
+                                <li class="toc-h3"><a href="#update-in-transaction">Update in Transaction</a>
+                                </li>
+                                <li class="toc-h2"><a href="#commit-and-rollback">Commit and Rollback</a>
+                                </li>
+                                <li class="toc-h3"><a href="#explicit-commit">Explicit Commit</a>
+                                </li>
+                                <li class="toc-h3"><a href="#explicit-rollback">Explicit Rollback</a>
+                                </li>
+                                <li class="toc-h3"><a href="#automatic-rollback">Automatic Rollback</a>
+                                </li>
+                                <li class="toc-h2"><a href="#transaction-states">Transaction States</a>
+                                </li>
+                                <li class="toc-h2"><a href="#error-handling">Error Handling</a>
+                                </li>
+                                <li class="toc-h2"><a href="#patterns">Patterns</a>
+                                </li>
+                                <li class="toc-h3"><a href="#unit-of-work">Unit of Work</a>
+                                </li>
+                                <li class="toc-h3"><a href="#retry-on-conflict">Retry on Conflict</a>
+                                </li>
+                                <li class="toc-h3"><a href="#optimistic-locking">Optimistic Locking</a>
+                                </li>
+                                <li class="toc-h2"><a href="#nested-operations">Nested Operations</a>
+                                </li>
+                                <li class="toc-h2"><a href="#best-practices">Best Practices</a>
+                                </li>
+                                <li class="toc-h2"><a href="#next-steps">Next Steps</a>
+                                </li>
+                              </ul>
+                            </aside>
+                          </div>
+                          <div class="search-overlay" id="search-overlay" hidden="hidden">
+                            <div class="search-backdrop">
+                            </div>
+                            <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                              <div class="search-results" id="search-results">
+                              </div>
+                            </div>
+                          </div>
+                          <footer class="site-footer">
+                            <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                            </p>
+                          </footer>
+                          <script src="https://unpkg.com/lunr/lunr.js">
+                          </script>
+                          <script src="/js/prism.js">
+                          </script>
+                          <script src="/js/search.js">
+                          </script>
+                          <script src="/js/theme.js">
+                          </script>
+                          <script src="/js/toc.js">
+                          </script>
+                          <script src="/js/copy.js">
+                          </script>
+                        </body>
+                      </html>

@@ -1,120 +1,794 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>XQuery vs XSLT — PhoenixmlDb Documentation</title><meta name="description" content="When to use XQuery and when to use XSLT — a practical decision guide"><link rel="canonical" href="/language-reference/xquery/xquery-vs-xslt.html"><meta property="og:title" content="XQuery vs XSLT"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xquery/xquery-vs-xslt.html"><meta property="og:description" content="When to use XQuery and when to use XSLT — a practical decision guide"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>XQuery vs XSLT — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="When to use XQuery and when to use XSLT — a practical decision guide">
+            <link rel="canonical" href="/language-reference/xquery/xquery-vs-xslt.html">
+              <meta property="og:title" content="XQuery vs XSLT">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xquery/xquery-vs-xslt.html">
+                    <meta property="og:description" content="When to use XQuery and when to use XSLT — a practical decision guide">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li class="active"><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="xquery-vs-xslt"><a class="anchor" href="#xquery-vs-xslt">#</a>XQuery vs XSLT</h1><p>XQuery and XSLT overlap significantly. Both can query XML, both can produce output, and both use XPath for navigation. This page helps you choose the right tool for each job.</p><h2 id="the-short-answer"><a class="anchor" href="#the-short-answer">#</a>The Short Answer</h2><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Task</p>
-          </th>
-          <th>
-            <p>Prefer</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>Transform a document from one format to another</p>
-          </td>
-          <td>
-            <p><strong>XSLT</strong></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Query a database or document collection</p>
-          </td>
-          <td>
-            <p><strong>XQuery</strong></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Generate HTML from XML data</p>
-          </td>
-          <td>
-            <p><strong>Either</strong> (XSLT for template-heavy, XQuery for data-heavy)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Build new XML documents from queries</p>
-          </td>
-          <td>
-            <p><strong>XQuery</strong></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Apply the same transform to many documents</p>
-          </td>
-          <td>
-            <p><strong>XSLT</strong></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Ad-hoc data exploration</p>
-          </td>
-          <td>
-            <p><strong>XQuery</strong></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Identity transform with targeted changes</p>
-          </td>
-          <td>
-            <p><strong>XSLT</strong></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Join data across multiple documents</p>
-          </td>
-          <td>
-            <p><strong>XQuery</strong></p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h2 id="paradigm-difference"><a class="anchor" href="#paradigm-difference">#</a>Paradigm Difference</h2><p>The fundamental difference is in how you think about the problem:</p><p>
-      <strong>XSLT</strong> is <strong>rule-based and declarative</strong>. You write template rules that match patterns in the input document. The engine walks the tree and fires rules. You don't control the traversal — you control what happens when a pattern matches.</p><pre><code class="language-xml">&lt;!-- XSLT: "When you see a product, render it like this" --&gt;
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li class="active"><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">XQuery
+                                </p>
+                                <h1 class="page-title">XQuery vs XSLT
+                                </h1>
+                                <p class="page-subtitle">When to use XQuery and when to use XSLT — a practical decision guide
+                                </p>
+                                <h1 id="xquery-vs-xslt"><a class="anchor" href="#xquery-vs-xslt">#</a>XQuery vs XSLT
+                                </h1>
+                                <p>XQuery and XSLT overlap significantly. Both can query XML, both can produce output, and both use XPath for navigation. This page helps you choose the right tool for each job.
+                                </p>
+                                <h2 id="the-short-answer"><a class="anchor" href="#the-short-answer">#</a>The Short Answer
+                                </h2>
+                                <div class="table-wrap">
+                                  <table>
+      
+                                    <thead>
+        
+                                      <tr>
+          
+                                        <th>
+            
+                                          <p>Task
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Prefer
+                                          </p>
+          
+                                        </th>
+        
+                                      </tr>
+      
+                                    </thead>
+      
+                                    <tbody>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Transform a document from one format to another
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>XSLT</strong>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Query a database or document collection
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>XQuery</strong>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Generate HTML from XML data
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>Either</strong> (XSLT for template-heavy, XQuery for data-heavy)
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Build new XML documents from queries
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>XQuery</strong>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Apply the same transform to many documents
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>XSLT</strong>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Ad-hoc data exploration
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>XQuery</strong>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Identity transform with targeted changes
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>XSLT</strong>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Join data across multiple documents
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>XQuery</strong>
+            
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+      
+                                    </tbody>
+    
+                                  </table>
+                                </div>
+                                <h2 id="paradigm-difference"><a class="anchor" href="#paradigm-difference">#</a>Paradigm Difference
+                                </h2>
+                                <p>The fundamental difference is in how you think about the problem:
+                                </p>
+                                <p>
+      <strong>XSLT</strong> is <strong>rule-based and declarative</strong>. You write template rules that match patterns in the input document. The engine walks the tree and fires rules. You don't control the traversal — you control what happens when a pattern matches.
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xml</span>
+                                  </figcaption>
+                                  <pre><code class="language-xml">&lt;!-- XSLT: "When you see a product, render it like this" --&gt;
 &lt;xsl:template match="product"&gt;
   &lt;div class="card"&gt;
     &lt;h2&gt;&lt;xsl:value-of select="name"/&gt;&lt;/h2&gt;
     &lt;p&gt;$&lt;xsl:value-of select="price"/&gt;&lt;/p&gt;
   &lt;/div&gt;
-&lt;/xsl:template&gt;</code></pre><p>
-      <strong>XQuery</strong> is <strong>expression-based and procedural</strong> (in a functional sense). You write queries that select, filter, transform, and construct. You control the flow explicitly.</p><pre><code class="language-xquery">(: XQuery: "Select products and build cards from them" :)
+&lt;/xsl:template&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <strong>XQuery</strong> is <strong>expression-based and procedural</strong> (in a functional sense). You write queries that select, filter, transform, and construct. You control the flow explicitly.
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: XQuery: "Select products and build cards from them" :)
 for $p in //product
 return &lt;div class="card"&gt;
   &lt;h2&gt;{ $p/name/text() }&lt;/h2&gt;
   &lt;p&gt;${ $p/price/text() }&lt;/p&gt;
-&lt;/div&gt;</code></pre><p>
-      <strong>C# analogy:</strong> XSLT is like event handlers (you register what should happen when something occurs). XQuery is like LINQ (you write the query that produces the result).</p><h2 id="strengths-comparison"><a class="anchor" href="#strengths-comparison">#</a>Strengths Comparison</h2><h3 id="where-xslt-excels"><a class="anchor" href="#where-xslt-excels">#</a>Where XSLT Excels</h3><p>
-      <strong>Document-centric transforms.</strong> When you're converting one XML format to another and the output structure closely mirrors the input structure, XSLT's template matching handles this naturally:</p><pre><code class="language-xml">&lt;!-- Copy everything, change just the price format --&gt;
+&lt;/div&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <strong>C# analogy:</strong> XSLT is like event handlers (you register what should happen when something occurs). XQuery is like LINQ (you write the query that produces the result).
+                                </p>
+                                <h2 id="strengths-comparison"><a class="anchor" href="#strengths-comparison">#</a>Strengths Comparison
+                                </h2>
+                                <h3 id="where-xslt-excels"><a class="anchor" href="#where-xslt-excels">#</a>Where XSLT Excels
+                                </h3>
+                                <p>
+      <strong>Document-centric transforms.</strong> When you're converting one XML format to another and the output structure closely mirrors the input structure, XSLT's template matching handles this naturally:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xml</span>
+                                  </figcaption>
+                                  <pre><code class="language-xml">&lt;!-- Copy everything, change just the price format --&gt;
 &lt;xsl:mode on-no-match="shallow-copy"/&gt;
 &lt;xsl:template match="price"&gt;
   &lt;price formatted="true"&gt;
     $&lt;xsl:value-of select="format-number(., '#,##0.00')"/&gt;
   &lt;/price&gt;
-&lt;/xsl:template&gt;</code></pre><p>In XQuery, you'd have to explicitly reconstruct the entire document tree to change one element.</p><p>
-      <strong>Multiple output documents.</strong> XSLT's <code>xsl:result-document</code> can generate many output files from a single input — ideal for static site generation, batch PDF creation, or splitting large documents.</p><p>
-      <strong>Reusable template libraries.</strong> XSLT's import/include mechanism with priority-based override is well-suited to building theme systems and customizable document pipelines.</p><p>
-      <strong>Streaming.</strong> XSLT 3.0 supports streaming transformations for very large documents that don't fit in memory.</p><h3 id="where-xquery-excels"><a class="anchor" href="#where-xquery-excels">#</a>Where XQuery Excels</h3><p>
-      <strong>Database queries.</strong> XQuery was designed as a query language for XML databases. It's the SQL of the XML world:</p><pre><code class="language-xquery">for $order in collection("orders")//order
+&lt;/xsl:template&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>In XQuery, you'd have to explicitly reconstruct the entire document tree to change one element.
+                                </p>
+                                <p>
+      <strong>Multiple output documents.</strong> XSLT's <code>xsl:result-document</code> can generate many output files from a single input — ideal for static site generation, batch PDF creation, or splitting large documents.
+                                </p>
+                                <p>
+      <strong>Reusable template libraries.</strong> XSLT's import/include mechanism with priority-based override is well-suited to building theme systems and customizable document pipelines.
+                                </p>
+                                <p>
+      <strong>Streaming.</strong> XSLT 3.0 supports streaming transformations for very large documents that don't fit in memory.
+                                </p>
+                                <h3 id="where-xquery-excels"><a class="anchor" href="#where-xquery-excels">#</a>Where XQuery Excels
+                                </h3>
+                                <p>
+      <strong>Database queries.</strong> XQuery was designed as a query language for XML databases. It's the SQL of the XML world:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $order in collection("orders")//order
 where $order/@date &gt; xs:date("2026-01-01")
   and $order/total &gt; 1000
 order by $order/total descending
-return $order</code></pre><p>
-      <strong>Cross-document joins.</strong> XQuery naturally joins data from multiple sources:</p><pre><code class="language-xquery">for $order in doc("orders.xml")//order
+return $order</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <strong>Cross-document joins.</strong> XQuery naturally joins data from multiple sources:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $order in doc("orders.xml")//order
 let $customer := doc("customers.xml")//customer[@id = $order/@customer-id]
 return &lt;summary&gt;
   &lt;order-id&gt;{ string($order/@id) }&lt;/order-id&gt;
   &lt;customer&gt;{ $customer/name/text() }&lt;/customer&gt;
   &lt;total&gt;{ $order/total/text() }&lt;/total&gt;
-&lt;/summary&gt;</code></pre><p>
-      <strong>Ad-hoc analysis.</strong> XQuery expressions can be written interactively (REPL-style) for exploring data:</p><pre><code class="language-xquery">(: Quick analysis — no boilerplate needed :)
+&lt;/summary&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <strong>Ad-hoc analysis.</strong> XQuery expressions can be written interactively (REPL-style) for exploring data:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: Quick analysis — no boilerplate needed :)
 let $orders := doc("orders.xml")//order
 return map {
   "count": count($orders),
@@ -126,8 +800,16 @@ return map {
     order by $customer-total descending
     return $cid
   )[1]
-}</code></pre><p>
-      <strong>Constructing new documents.</strong> XQuery's constructor syntax is more natural for building complex XML from scratch:</p><pre><code class="language-xquery">&lt;report generated="{ current-dateTime() }"&gt;
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <strong>Constructing new documents.</strong> XQuery's constructor syntax is more natural for building complex XML from scratch:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">&lt;report generated="{ current-dateTime() }"&gt;
   {
     for $category in distinct-values(//product/@category)
     let $products := //product[@category = $category]
@@ -136,67 +818,266 @@ return map {
       { $products }
     &lt;/section&gt;
   }
-&lt;/report&gt;</code></pre><h2 id="they-share-xpath"><a class="anchor" href="#they-share-xpath">#</a>They Share XPath</h2><p>Both languages use XPath 3.1/4.0 for navigation and expression evaluation. All XPath functions, operators, and data types work identically in both. This means:</p><ul><li>
-        <p>Knowledge of XPath transfers directly to both languages</p>
-      </li><li>
-        <p>You can use the same navigation expressions in XSLT match patterns and XQuery FLWOR clauses</p>
-      </li><li>
-        <p>Function libraries (string, numeric, date, sequence) are identical</p>
-      </li></ul><h2 id="using-them-together"><a class="anchor" href="#using-them-together">#</a>Using Them Together</h2><p>In practice, you often use both:</p><ol><li>
-        <p>
-          <strong>XQuery</strong> to select and prepare data from a database or document collection</p>
-      </li><li>
-        <p>
-          <strong>XSLT</strong> to transform the prepared data into the final output format</p>
-      </li></ol><p>Example pipeline:</p><pre><code>XML Database → XQuery (select + join + aggregate) → intermediate XML → XSLT (→ HTML)</code></pre><p>This is exactly what PhoenixmlDb enables — XQuery for database operations, XSLT for rendering.</p><h2 id="decision-framework"><a class="anchor" href="#decision-framework">#</a>Decision Framework</h2><p>Ask these questions:</p><p>
+&lt;/report&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="they-share-xpath"><a class="anchor" href="#they-share-xpath">#</a>They Share XPath
+                                </h2>
+                                <p>Both languages use XPath 3.1/4.0 for navigation and expression evaluation. All XPath functions, operators, and data types work identically in both. This means:
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>Knowledge of XPath transfers directly to both languages
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>You can use the same navigation expressions in XSLT match patterns and XQuery FLWOR clauses
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Function libraries (string, numeric, date, sequence) are identical
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <h2 id="using-them-together"><a class="anchor" href="#using-them-together">#</a>Using Them Together
+                                </h2>
+                                <p>In practice, you often use both:
+                                </p>
+                                <ol>
+                                  <li>
+        
+                                    <p>
+          <strong>XQuery</strong> to select and prepare data from a database or document collection
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>XSLT</strong> to transform the prepared data into the final output format
+                                    </p>
+      
+                                  </li>
+                                </ol>
+                                <p>Example pipeline:
+                                </p>
+                                <figure class="code">
+                                  <pre><code>XML Database → XQuery (select + join + aggregate) → intermediate XML → XSLT (→ HTML)</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>This is exactly what PhoenixmlDb enables — XQuery for database operations, XSLT for rendering.
+                                </p>
+                                <h2 id="decision-framework"><a class="anchor" href="#decision-framework">#</a>Decision Framework
+                                </h2>
+                                <p>Ask these questions:
+                                </p>
+                                <p>
       <strong>1. Are you transforming a document or querying data?</strong>
-    </p><ul><li>
-        <p>Transforming → XSLT</p>
-      </li><li>
-        <p>Querying → XQuery</p>
-      </li></ul><p>
+    
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>Transforming → XSLT
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Querying → XQuery
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <p>
       <strong>2. Does the output closely mirror the input structure?</strong>
-    </p><ul><li>
-        <p>Yes (most nodes copied, few changes) → XSLT (identity transform pattern)</p>
-      </li><li>
-        <p>No (different structure, aggregation, joins) → XQuery</p>
-      </li></ul><p>
+    
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>Yes (most nodes copied, few changes) → XSLT (identity transform pattern)
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>No (different structure, aggregation, joins) → XQuery
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <p>
       <strong>3. Do you need multiple output files?</strong>
-    </p><ul><li>
-        <p>Yes → XSLT (<code>xsl:result-document</code>)</p>
-      </li><li>
-        <p>No → Either</p>
-      </li></ul><p>
+    
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>Yes → XSLT (<code>xsl:result-document</code>)
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>No → Either
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <p>
       <strong>4. Is the input from a database or collection?</strong>
-    </p><ul><li>
-        <p>Database/collection → XQuery</p>
-      </li><li>
-        <p>Single document or known set → Either</p>
-      </li></ul><p>
+    
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>Database/collection → XQuery
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Single document or known set → Either
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <p>
       <strong>5. Do you need reusable, overridable templates?</strong>
-    </p><ul><li>
-        <p>Yes → XSLT (import/include with priority override)</p>
-      </li><li>
-        <p>No → Either</p>
-      </li></ul><p>
+    
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>Yes → XSLT (import/include with priority override)
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>No → Either
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <p>
       <strong>6. Are you doing ad-hoc exploration?</strong>
-    </p><ul><li>
-        <p>Yes → XQuery (less boilerplate)</p>
-      </li><li>
-        <p>No → Depends on the task</p>
-      </li></ul><h2 id="the-net-developer-s-perspective"><a class="anchor" href="#the-net-developer-s-perspective">#</a>The .NET Developer's Perspective</h2><p>If you're coming from C#:</p><ul><li>
-        <p>
-          <strong>XQuery</strong> will feel more natural initially — it's expression-based like LINQ, with explicit control flow</p>
-      </li><li>
-        <p>
-          <strong>XSLT</strong> requires a paradigm shift to declarative, rule-based thinking — but once it clicks, it's more powerful for document-centric work</p>
-      </li><li>
-        <p>
-          <strong>Learn XPath first</strong> — it's the foundation for both</p>
-      </li><li>
-        <p>
-          <strong>Start with XQuery</strong> for data queries and exploration</p>
-      </li><li>
-        <p>
-          <strong>Move to XSLT</strong> when you need document transformation, multi-output generation, or template-based rendering</p>
-      </li></ul><p>Both are valuable tools. The best .NET developers working with XML will use both, choosing the right one for each task.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+    
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>Yes → XQuery (less boilerplate)
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>No → Depends on the task
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <h2 id="the-net-developer-s-perspective"><a class="anchor" href="#the-net-developer-s-perspective">#</a>The .NET Developer's Perspective
+                                </h2>
+                                <p>If you're coming from C#:
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <strong>XQuery</strong> will feel more natural initially — it's expression-based like LINQ, with explicit control flow
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>XSLT</strong> requires a paradigm shift to declarative, rule-based thinking — but once it clicks, it's more powerful for document-centric work
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Learn XPath first</strong> — it's the foundation for both
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Start with XQuery</strong> for data queries and exploration
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <strong>Move to XSLT</strong> when you need document transformation, multi-output generation, or template-based rendering
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <p>Both are valuable tools. The best .NET developers working with XML will use both, choosing the right one for each task.
+                                </p>
+                              </article>
+                            </main>
+                            <aside class="toc" aria-label="On this page">
+                              <p class="toc-label">On this page
+                              </p>
+                              <ul>
+                                <li class="toc-h2"><a href="#the-short-answer">The Short Answer</a>
+                                </li>
+                                <li class="toc-h2"><a href="#paradigm-difference">Paradigm Difference</a>
+                                </li>
+                                <li class="toc-h2"><a href="#strengths-comparison">Strengths Comparison</a>
+                                </li>
+                                <li class="toc-h3"><a href="#where-xslt-excels">Where XSLT Excels</a>
+                                </li>
+                                <li class="toc-h3"><a href="#where-xquery-excels">Where XQuery Excels</a>
+                                </li>
+                                <li class="toc-h2"><a href="#they-share-xpath">They Share XPath</a>
+                                </li>
+                                <li class="toc-h2"><a href="#using-them-together">Using Them Together</a>
+                                </li>
+                                <li class="toc-h2"><a href="#decision-framework">Decision Framework</a>
+                                </li>
+                                <li class="toc-h2"><a href="#the-net-developer-s-perspective">The .NET Developer's Perspective</a>
+                                </li>
+                              </ul>
+                            </aside>
+                          </div>
+                          <div class="search-overlay" id="search-overlay" hidden="hidden">
+                            <div class="search-backdrop">
+                            </div>
+                            <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                              <div class="search-results" id="search-results">
+                              </div>
+                            </div>
+                          </div>
+                          <footer class="site-footer">
+                            <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                            </p>
+                          </footer>
+                          <script src="https://unpkg.com/lunr/lunr.js">
+                          </script>
+                          <script src="/js/prism.js">
+                          </script>
+                          <script src="/js/search.js">
+                          </script>
+                          <script src="/js/theme.js">
+                          </script>
+                          <script src="/js/toc.js">
+                          </script>
+                          <script src="/js/copy.js">
+                          </script>
+                        </body>
+                      </html>

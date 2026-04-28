@@ -1,44 +1,614 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Working with JSON — PhoenixmlDb Documentation</title><meta name="description" content="Parsing, querying, transforming, and outputting JSON with XPath, XSLT, and XQuery"><link rel="canonical" href="/language-reference/xml-foundations/working-with-json.html"><meta property="og:title" content="Working with JSON"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xml-foundations/working-with-json.html"><meta property="og:description" content="Parsing, querying, transforming, and outputting JSON with XPath, XSLT, and XQuery"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Working with JSON — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="Parsing, querying, transforming, and outputting JSON with XPath, XSLT, and XQuery">
+            <link rel="canonical" href="/language-reference/xml-foundations/working-with-json.html">
+              <meta property="og:title" content="Working with JSON">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xml-foundations/working-with-json.html">
+                    <meta property="og:description" content="Parsing, querying, transforming, and outputting JSON with XPath, XSLT, and XQuery">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li class="active"><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="working-with-json"><a class="anchor" href="#working-with-json">#</a>Working with JSON</h1><p>One of the biggest misconceptions about XML technologies is that they can't work with JSON. In fact, XPath 3.1, XSLT 3.0, and XQuery 3.1 all have <strong>native JSON support</strong> — you can parse JSON, query it, transform it, and output it, all within the same tools you use for XML.</p><p>This means you can:</p><ul><li>
-        <p>Parse a JSON API response and transform it into HTML</p>
-      </li><li>
-        <p>Combine JSON and XML data sources in a single query</p>
-      </li><li>
-        <p>Convert between JSON and XML formats</p>
-      </li><li>
-        <p>Use XSLT to produce JSON API responses from XML data</p>
-      </li><li>
-        <p>Query JSON with the full power of XPath</p>
-      </li></ul><p>If you're a .NET developer who works primarily with JSON, this is the bridge between what you know and what XML tools offer.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#parsing-json" title="">Parsing JSON</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#querying-json-with-xpath" title="">Querying JSON with XPath</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#json-in-xslt" title="">JSON in XSLT</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#json-in-xquery" title="">JSON in XQuery</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#round-trip-json-to-json" title="">Round-Trip: JSON to JSON</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#mixed-workflows-json--xml" title="">Mixed Workflows: JSON + XML</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#json-output-patterns" title="">JSON Output Patterns</a>
-        </p>
-      </li></ul><hr><h2 id="parsing-json"><a class="anchor" href="#parsing-json">#</a>Parsing JSON</h2><h3 id="json-doc"><a class="anchor" href="#json-doc">#</a>json-doc()</h3><p>Loads and parses a JSON file into XDM maps and arrays:</p><pre><code class="language-xpath">json-doc('config.json')</code></pre><p>Given this JSON file:</p><pre><code class="language-json">{
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li class="active"><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">XML Foundations
+                                </p>
+                                <h1 class="page-title">Working with JSON
+                                </h1>
+                                <p class="page-subtitle">Parsing, querying, transforming, and outputting JSON with XPath, XSLT, and XQuery
+                                </p>
+                                <h1 id="working-with-json"><a class="anchor" href="#working-with-json">#</a>Working with JSON
+                                </h1>
+                                <p>One of the biggest misconceptions about XML technologies is that they can't work with JSON. In fact, XPath 3.1, XSLT 3.0, and XQuery 3.1 all have <strong>native JSON support</strong> — you can parse JSON, query it, transform it, and output it, all within the same tools you use for XML.
+                                </p>
+                                <p>This means you can:
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>Parse a JSON API response and transform it into HTML
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Combine JSON and XML data sources in a single query
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Convert between JSON and XML formats
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Use XSLT to produce JSON API responses from XML data
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Query JSON with the full power of XPath
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <p>If you're a .NET developer who works primarily with JSON, this is the bridge between what you know and what XML tools offer.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#parsing-json">Parsing JSON</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#querying-json-with-xpath">Querying JSON with XPath</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#json-in-xslt">JSON in XSLT</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#json-in-xquery">JSON in XQuery</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#round-trip-json-to-json">Round-Trip: JSON to JSON</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#mixed-workflows-json--xml">Mixed Workflows: JSON + XML</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#json-output-patterns">JSON Output Patterns</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="parsing-json"><a class="anchor" href="#parsing-json">#</a>Parsing JSON
+                                  </h2>
+                                  <h3 id="json-doc"><a class="anchor" href="#json-doc">#</a>json-doc()
+                                  </h3>
+                                  <p>Loads and parses a JSON file into XDM maps and arrays:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xpath</span>
+                                    </figcaption>
+                                    <pre><code class="language-xpath">json-doc('config.json')</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>Given this JSON file:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">json</span>
+                                    </figcaption>
+                                    <pre><code class="language-json">{
   "name": "PhoenixmlDb",
   "version": "1.0.0",
   "features": ["xquery", "xslt", "xpath"],
@@ -46,123 +616,343 @@
     "debug": false,
     "maxConnections": 100
   }
-}</code></pre><p>
-      <code>json-doc('config.json')</code> returns an XDM map — the same data structure you'd get from <code>JsonSerializer.Deserialize&lt;Dictionary&lt;string, object&gt;&gt;()</code> in C#, but queryable with XPath.</p><h3 id="parse-json"><a class="anchor" href="#parse-json">#</a>parse-json()</h3><p>Parses a JSON string (useful when JSON comes from an API call, parameter, or embedded in XML):</p><pre><code class="language-xpath">parse-json('{"name": "Alice", "age": 30}')</code></pre><p>
-      <strong>C# equivalent:</strong> <code>JsonDocument.Parse(jsonString)</code></p><h3 id="what-json-becomes-in-xdm"><a class="anchor" href="#what-json-becomes-in-xdm">#</a>What JSON Becomes in XDM</h3><table>
-      <thead>
-        <tr>
-          <th>
-            <p>JSON</p>
-          </th>
-          <th>
-            <p>XDM Type</p>
-          </th>
-          <th>
-            <p>C# Equivalent</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>{ }</code> object</p>
-          </td>
-          <td>
-            <p><code>map(*)</code></p>
-          </td>
-          <td>
-            <p><code>Dictionary&lt;string, object&gt;</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>[ ]</code> array</p>
-          </td>
-          <td>
-            <p><code>array(*)</code></p>
-          </td>
-          <td>
-            <p><code>List&lt;object&gt;</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>"string"</code></p>
-          </td>
-          <td>
-            <p><code>xs:string</code></p>
-          </td>
-          <td>
-            <p><code>string</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>123</code></p>
-          </td>
-          <td>
-            <p><code>xs:integer</code></p>
-          </td>
-          <td>
-            <p><code>long</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>3.14</code></p>
-          </td>
-          <td>
-            <p><code>xs:double</code></p>
-          </td>
-          <td>
-            <p><code>double</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>true</code> / <code>false</code></p>
-          </td>
-          <td>
-            <p><code>xs:boolean</code></p>
-          </td>
-          <td>
-            <p><code>bool</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>null</code></p>
-          </td>
-          <td>
-            <p>Empty sequence <code>()</code></p>
-          </td>
-          <td>
-            <p><code>null</code></p>
-          </td>
-        </tr>
-      </tbody>
-    </table><hr><h2 id="querying-json-with-xpath"><a class="anchor" href="#querying-json-with-xpath">#</a>Querying JSON with XPath</h2><p>Once JSON is parsed into maps and arrays, you query it with the <code>?</code> lookup operator:</p><h3 id="object-access"><a class="anchor" href="#object-access">#</a>Object Access</h3><pre><code class="language-xpath">let $config := json-doc('config.json')
+}</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
+      <code>json-doc('config.json')</code> returns an XDM map — the same data structure you'd get from <code>JsonSerializer.Deserialize&lt;Dictionary&lt;string, object&gt;&gt;()</code> in C#, but queryable with XPath.
+                                  </p>
+                                  <h3 id="parse-json"><a class="anchor" href="#parse-json">#</a>parse-json()
+                                  </h3>
+                                  <p>Parses a JSON string (useful when JSON comes from an API call, parameter, or embedded in XML):
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xpath</span>
+                                    </figcaption>
+                                    <pre><code class="language-xpath">parse-json('{"name": "Alice", "age": 30}')</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
+      <strong>C# equivalent:</strong> <code>JsonDocument.Parse(jsonString)</code>
+                                  </p>
+                                  <h3 id="what-json-becomes-in-xdm"><a class="anchor" href="#what-json-becomes-in-xdm">#</a>What JSON Becomes in XDM
+                                  </h3>
+                                  <div class="table-wrap">
+                                    <table>
+      
+                                      <thead>
+        
+                                        <tr>
+          
+                                          <th>
+            
+                                            <p>JSON
+                                            </p>
+          
+                                          </th>
+          
+                                          <th>
+            
+                                            <p>XDM Type
+                                            </p>
+          
+                                          </th>
+          
+                                          <th>
+            
+                                            <p>C# Equivalent
+                                            </p>
+          
+                                          </th>
+        
+                                        </tr>
+      
+                                      </thead>
+      
+                                      <tbody>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>{ }</code> object
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>map(*)</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>Dictionary&lt;string, object&gt;</code>
+            
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>[ ]</code> array
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>array(*)</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>List&lt;object&gt;</code>
+            
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>"string"</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>xs:string</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>string</code>
+            
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>123</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>xs:integer</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>long</code>
+            
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>3.14</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>xs:double</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>double</code>
+            
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>true</code> / <code>false</code>
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>xs:boolean</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>bool</code>
+            
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>null</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Empty sequence <code>()</code>
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>null</code>
+            
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+      
+                                      </tbody>
+    
+                                    </table>
+                                  </div>
+                                  <hr>
+                                    <h2 id="querying-json-with-xpath"><a class="anchor" href="#querying-json-with-xpath">#</a>Querying JSON with XPath
+                                    </h2>
+                                    <p>Once JSON is parsed into maps and arrays, you query it with the <code>?</code> lookup operator:
+                                    </p>
+                                    <h3 id="object-access"><a class="anchor" href="#object-access">#</a>Object Access
+                                    </h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xpath</span>
+                                      </figcaption>
+                                      <pre><code class="language-xpath">let $config := json-doc('config.json')
 return (
   $config?name,                    (: "PhoenixmlDb" :)
   $config?version,                 (: "1.0.0" :)
   $config?settings?debug,          (: false :)
   $config?settings?maxConnections  (: 100 :)
-)</code></pre><p>
+)</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
       <strong>C# equivalent:</strong>
-    </p><pre><code class="language-csharp">var config = JsonDocument.Parse(json);
+    
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">csharp</span>
+                                      </figcaption>
+                                      <pre><code class="language-csharp">var config = JsonDocument.Parse(json);
 config.RootElement.GetProperty("name").GetString();
-config.RootElement.GetProperty("settings").GetProperty("debug").GetBoolean();</code></pre><p>The XPath version is more concise — <code>$config?settings?debug</code> vs. the verbose <code>GetProperty</code> chain.</p><h3 id="array-access"><a class="anchor" href="#array-access">#</a>Array Access</h3><pre><code class="language-xpath">let $config := json-doc('config.json')
+config.RootElement.GetProperty("settings").GetProperty("debug").GetBoolean();</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>The XPath version is more concise — <code>$config?settings?debug</code> vs. the verbose <code>GetProperty</code> chain.
+                                    </p>
+                                    <h3 id="array-access"><a class="anchor" href="#array-access">#</a>Array Access
+                                    </h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xpath</span>
+                                      </figcaption>
+                                      <pre><code class="language-xpath">let $config := json-doc('config.json')
 return (
   $config?features?1,        (: "xquery" — 1-based indexing :)
   $config?features?*,        (: all features as a sequence :)
   array:size($config?features) (: 3 :)
-)</code></pre><h3 id="filtering-json-arrays"><a class="anchor" href="#filtering-json-arrays">#</a>Filtering JSON Arrays</h3><p>Given a JSON API response:</p><pre><code class="language-json">{
+)</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="filtering-json-arrays"><a class="anchor" href="#filtering-json-arrays">#</a>Filtering JSON Arrays
+                                    </h3>
+                                    <p>Given a JSON API response:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">json</span>
+                                      </figcaption>
+                                      <pre><code class="language-json">{
   "users": [
     { "name": "Alice", "role": "admin", "active": true },
     { "name": "Bob", "role": "user", "active": true },
     { "name": "Charlie", "role": "user", "active": false }
   ]
-}</code></pre><pre><code class="language-xpath">let $data := parse-json($json-string)
+}</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xpath</span>
+                                      </figcaption>
+                                      <pre><code class="language-xpath">let $data := parse-json($json-string)
 let $users := $data?users?*         (: sequence of all user maps :)
 (: Active users :)
 return $users[.?active = true()]
@@ -170,12 +960,28 @@ return $users[.?active = true()]
 return $users[.?role = 'admin']
 (: User names as a comma-separated string :)
 return string-join($users ! .?name, ', ')
-(: "Alice, Bob, Charlie" :)</code></pre><p>
+(: "Alice, Bob, Charlie" :)</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
       <strong>C# equivalent:</strong>
-    </p><pre><code class="language-csharp">var users = JsonSerializer.Deserialize&lt;List&lt;User&gt;&gt;(json);
+    
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">csharp</span>
+                                      </figcaption>
+                                      <pre><code class="language-csharp">var users = JsonSerializer.Deserialize&lt;List&lt;User&gt;&gt;(json);
 users.Where(u =&gt; u.Active).ToList();
 users.Where(u =&gt; u.Role == "admin").ToList();
-string.Join(", ", users.Select(u =&gt; u.Name));</code></pre><h3 id="nested-queries"><a class="anchor" href="#nested-queries">#</a>Nested Queries</h3><pre><code class="language-xpath">let $orders := json-doc('orders.json')?orders?*
+string.Join(", ", users.Select(u =&gt; u.Name));</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="nested-queries"><a class="anchor" href="#nested-queries">#</a>Nested Queries
+                                    </h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xpath</span>
+                                      </figcaption>
+                                      <pre><code class="language-xpath">let $orders := json-doc('orders.json')?orders?*
 for $order in $orders
 where $order?total &gt; 100
 order by $order?total descending
@@ -183,7 +989,22 @@ return map {
   'id': $order?id,
   'customer': $order?customer?name,
   'total': $order?total
-}</code></pre><p>This is full FLWOR query power applied to JSON data — something that <code>System.Text.Json</code> alone can't do without writing procedural code.</p><hr><h2 id="json-in-xslt"><a class="anchor" href="#json-in-xslt">#</a>JSON in XSLT</h2><h3 id="reading-json-input"><a class="anchor" href="#reading-json-input">#</a>Reading JSON Input</h3><p>An XSLT stylesheet can process JSON input by loading it with <code>json-doc()</code>:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+}</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>This is full FLWOR query power applied to JSON data — something that <code>System.Text.Json</code> alone can't do without writing procedural code.
+                                    </p>
+                                    <hr>
+                                      <h2 id="json-in-xslt"><a class="anchor" href="#json-in-xslt">#</a>JSON in XSLT
+                                      </h2>
+                                      <h3 id="reading-json-input"><a class="anchor" href="#reading-json-input">#</a>Reading JSON Input
+                                      </h3>
+                                      <p>An XSLT stylesheet can process JSON input by loading it with <code>json-doc()</code>:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;xsl:output method="html" html-version="5" indent="yes"/&gt;
   &lt;xsl:param name="data-file" select="'data.json'"/&gt;
   &lt;xsl:variable name="data" select="json-doc($data-file)"/&gt;
@@ -203,8 +1024,18 @@ return map {
       &lt;/body&gt;
     &lt;/html&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><p>
-      <strong>This transforms a JSON file into an HTML table</strong> — using XSLT's template system and formatting capabilities, but reading from JSON instead of XML.</p><h3 id="producing-json-output"><a class="anchor" href="#producing-json-output">#</a>Producing JSON Output</h3><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+&lt;/xsl:stylesheet&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
+      <strong>This transforms a JSON file into an HTML table</strong> — using XSLT's template system and formatting capabilities, but reading from JSON instead of XML.
+                                      </p>
+                                      <h3 id="producing-json-output"><a class="anchor" href="#producing-json-output">#</a>Producing JSON Output
+                                      </h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;xsl:output method="json" indent="yes"/&gt;
   &lt;xsl:template match="catalog"&gt;
     &lt;xsl:sequence select="
@@ -223,16 +1054,32 @@ return map {
       }
     "/&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><p>
+&lt;/xsl:stylesheet&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
       <strong>Output:</strong>
-    </p><pre><code class="language-json">{
+    
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">json</span>
+                                        </figcaption>
+                                        <pre><code class="language-json">{
   "products": [
     { "id": "P001", "name": "Wireless Mouse", "price": 29.99, "category": "electronics" },
     { "id": "P002", "name": "Mechanical Keyboard", "price": 89.99, "category": "electronics" }
   ],
   "count": 2,
   "generated": "2026-03-19T14:30:00"
-}</code></pre><h3 id="combining-json-and-xml-sources"><a class="anchor" href="#combining-json-and-xml-sources">#</a>Combining JSON and XML Sources</h3><pre><code class="language-xml">&lt;xsl:variable name="config" select="json-doc('config.json')"/&gt;
+}</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="combining-json-and-xml-sources"><a class="anchor" href="#combining-json-and-xml-sources">#</a>Combining JSON and XML Sources
+                                      </h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:variable name="config" select="json-doc('config.json')"/&gt;
 &lt;xsl:variable name="catalog" select="doc('catalog.xml')"/&gt;
 &lt;xsl:template match="/"&gt;
   &lt;html&gt;
@@ -248,11 +1095,34 @@ return map {
       &lt;/xsl:for-each&gt;
     &lt;/body&gt;
   &lt;/html&gt;
-&lt;/xsl:template&gt;</code></pre><p>Configuration in JSON, data in XML, output in HTML — all in one stylesheet.</p><hr><h2 id="json-in-xquery"><a class="anchor" href="#json-in-xquery">#</a>JSON in XQuery</h2><p>XQuery provides even more natural JSON handling:</p><h3 id="querying-json-apis"><a class="anchor" href="#querying-json-apis">#</a>Querying JSON APIs</h3><pre><code class="language-xquery">let $response := json-doc('https://api.example.com/products')
+&lt;/xsl:template&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>Configuration in JSON, data in XML, output in HTML — all in one stylesheet.
+                                      </p>
+                                      <hr>
+                                        <h2 id="json-in-xquery"><a class="anchor" href="#json-in-xquery">#</a>JSON in XQuery
+                                        </h2>
+                                        <p>XQuery provides even more natural JSON handling:
+                                        </p>
+                                        <h3 id="querying-json-apis"><a class="anchor" href="#querying-json-apis">#</a>Querying JSON APIs
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">let $response := json-doc('https://api.example.com/products')
 for $product in $response?data?*
 where $product?price &lt; 50
 order by $product?name
-return &lt;li&gt;{ $product?name } — ${ $product?price }&lt;/li&gt;</code></pre><h3 id="converting-json-to-xml"><a class="anchor" href="#converting-json-to-xml">#</a>Converting JSON to XML</h3><pre><code class="language-xquery">let $users := json-doc('users.json')?*
+return &lt;li&gt;{ $product?name } — ${ $product?price }&lt;/li&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="converting-json-to-xml"><a class="anchor" href="#converting-json-to-xml">#</a>Converting JSON to XML
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">let $users := json-doc('users.json')?*
 return &lt;users&gt;{
   for $user in $users
   return &lt;user id="{ $user?id }"&gt;
@@ -263,7 +1133,15 @@ return &lt;users&gt;{
       return &lt;role&gt;{ $role }&lt;/role&gt;
     }&lt;/roles&gt;
   &lt;/user&gt;
-}&lt;/users&gt;</code></pre><h3 id="converting-xml-to-json"><a class="anchor" href="#converting-xml-to-json">#</a>Converting XML to JSON</h3><pre><code class="language-xquery">let $catalog := doc('catalog.xml')
+}&lt;/users&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="converting-xml-to-json"><a class="anchor" href="#converting-xml-to-json">#</a>Converting XML to JSON
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">let $catalog := doc('catalog.xml')
 return array {
   for $p in $catalog//product
   return map {
@@ -272,7 +1150,18 @@ return array {
     'price': number($p/price),
     'tags': array { $p/tags/tag ! string(.) }
   }
-}</code></pre><hr><h2 id="round-trip-json-to-json"><a class="anchor" href="#round-trip-json-to-json">#</a>Round-Trip: JSON to JSON</h2><p>You can read JSON, process it with XPath/XQuery, and output JSON — never touching XML:</p><pre><code class="language-xquery">(: Read JSON, filter, reshape, output JSON :)
+}</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <hr>
+                                          <h2 id="round-trip-json-to-json"><a class="anchor" href="#round-trip-json-to-json">#</a>Round-Trip: JSON to JSON
+                                          </h2>
+                                          <p>You can read JSON, process it with XPath/XQuery, and output JSON — never touching XML:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">(: Read JSON, filter, reshape, output JSON :)
 let $input := json-doc('orders.json')
 let $orders := $input?orders?*
 return map {
@@ -293,8 +1182,25 @@ return map {
       'totalSpent': $total
     }
   }
-}</code></pre><p>Serialize with <code>method="json"</code> and you get a JSON-to-JSON transformation pipeline — no XML involved at all. The XQuery/XPath engine is acting as a general-purpose data transformation tool.</p><p>
-      <strong>C# equivalent:</strong> This would require deserializing to objects, LINQ queries, then re-serializing. The XQuery version is more concise and declarative.</p><hr><h2 id="mixed-workflows-json-xml"><a class="anchor" href="#mixed-workflows-json-xml">#</a>Mixed Workflows: JSON + XML</h2><p>Real-world data integration often combines formats. These tools handle that naturally:</p><h3 id="enriching-xml-with-json-config"><a class="anchor" href="#enriching-xml-with-json-config">#</a>Enriching XML with JSON Config</h3><pre><code class="language-xquery">let $products := doc('products.xml')//product
+}</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>Serialize with <code>method="json"</code> and you get a JSON-to-JSON transformation pipeline — no XML involved at all. The XQuery/XPath engine is acting as a general-purpose data transformation tool.
+                                          </p>
+                                          <p>
+      <strong>C# equivalent:</strong> This would require deserializing to objects, LINQ queries, then re-serializing. The XQuery version is more concise and declarative.
+                                          </p>
+                                          <hr>
+                                            <h2 id="mixed-workflows-json-xml"><a class="anchor" href="#mixed-workflows-json-xml">#</a>Mixed Workflows: JSON + XML
+                                            </h2>
+                                            <p>Real-world data integration often combines formats. These tools handle that naturally:
+                                            </p>
+                                            <h3 id="enriching-xml-with-json-config"><a class="anchor" href="#enriching-xml-with-json-config">#</a>Enriching XML with JSON Config
+                                            </h3>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">let $products := doc('products.xml')//product
 let $pricing := json-doc('pricing.json')
 for $p in $products
 let $price-info := $pricing?prices?*[.?sku = string($p/@sku)]
@@ -302,7 +1208,15 @@ return &lt;product id="{ $p/@id }"&gt;
   { $p/name }
   &lt;price currency="{ $price-info?currency }"&gt;{ $price-info?amount }&lt;/price&gt;
   &lt;discount&gt;{ $price-info?discount }&lt;/discount&gt;
-&lt;/product&gt;</code></pre><h3 id="generating-json-from-xml-json-sources"><a class="anchor" href="#generating-json-from-xml-json-sources">#</a>Generating JSON from XML + JSON Sources</h3><pre><code class="language-xquery">let $catalog := doc('catalog.xml')
+&lt;/product&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="generating-json-from-xml-json-sources"><a class="anchor" href="#generating-json-from-xml-json-sources">#</a>Generating JSON from XML + JSON Sources
+                                            </h3>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">let $catalog := doc('catalog.xml')
 let $reviews := json-doc('reviews.json')
 return array {
   for $p in $catalog//product
@@ -315,27 +1229,192 @@ return array {
                  else null,
     'reviewCount': count($product-reviews)
   }
-}</code></pre><hr><h2 id="json-output-patterns"><a class="anchor" href="#json-output-patterns">#</a>JSON Output Patterns</h2><h3 id="pattern-1-simple-object"><a class="anchor" href="#pattern-1-simple-object">#</a>Pattern 1: Simple Object</h3><pre><code class="language-xpath">map { 'status': 'ok', 'count': count(//item) }</code></pre><h3 id="pattern-2-array-of-objects"><a class="anchor" href="#pattern-2-array-of-objects">#</a>Pattern 2: Array of Objects</h3><pre><code class="language-xpath">array { //item ! map { 'name': string(./name), 'value': string(./price) } }</code></pre><h3 id="pattern-3-nested-structure"><a class="anchor" href="#pattern-3-nested-structure">#</a>Pattern 3: Nested Structure</h3><pre><code class="language-xpath">map {
+}</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <hr>
+                                              <h2 id="json-output-patterns"><a class="anchor" href="#json-output-patterns">#</a>JSON Output Patterns
+                                              </h2>
+                                              <h3 id="pattern-1-simple-object"><a class="anchor" href="#pattern-1-simple-object">#</a>Pattern 1: Simple Object
+                                              </h3>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xpath</span>
+                                                </figcaption>
+                                                <pre><code class="language-xpath">map { 'status': 'ok', 'count': count(//item) }</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="pattern-2-array-of-objects"><a class="anchor" href="#pattern-2-array-of-objects">#</a>Pattern 2: Array of Objects
+                                              </h3>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xpath</span>
+                                                </figcaption>
+                                                <pre><code class="language-xpath">array { //item ! map { 'name': string(./name), 'value': string(./price) } }</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="pattern-3-nested-structure"><a class="anchor" href="#pattern-3-nested-structure">#</a>Pattern 3: Nested Structure
+                                              </h3>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xpath</span>
+                                                </figcaption>
+                                                <pre><code class="language-xpath">map {
   'metadata': map { 'generated': string(current-dateTime()), 'version': '1.0' },
   'data': array { ... }
-}</code></pre><h3 id="pattern-4-preserving-json-null"><a class="anchor" href="#pattern-4-preserving-json-null">#</a>Pattern 4: Preserving JSON Null</h3><p>XPath's empty sequence <code>()</code> serializes as JSON <code>null</code>:</p><pre><code class="language-xpath">map {
+}</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="pattern-4-preserving-json-null"><a class="anchor" href="#pattern-4-preserving-json-null">#</a>Pattern 4: Preserving JSON Null
+                                              </h3>
+                                              <p>XPath's empty sequence <code>()</code> serializes as JSON <code>null</code>:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xpath</span>
+                                                </figcaption>
+                                                <pre><code class="language-xpath">map {
   'name': 'Alice',
   'email': if ($user/email) then string($user/email) else ()
 }
-(: Output: { "name": "Alice", "email": null } :)</code></pre><h3 id="serialization-control"><a class="anchor" href="#serialization-control">#</a>Serialization Control</h3><pre><code class="language-xpath">serialize($map, map {
+(: Output: { "name": "Alice", "email": null } :)</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="serialization-control"><a class="anchor" href="#serialization-control">#</a>Serialization Control
+                                              </h3>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xpath</span>
+                                                </figcaption>
+                                                <pre><code class="language-xpath">serialize($map, map {
   'method': 'json',
   'indent': true(),
   'allow-duplicate-names': false()
-})</code></pre><hr><h2 id="the-takeaway-for-net-developers"><a class="anchor" href="#the-takeaway-for-net-developers">#</a>The Takeaway for .NET Developers</h2><p>If your reaction is "wait, I can use XPath to query JSON?" — yes. The XPath 3.1 data model (maps + arrays) maps 1:1 to JSON's data model. This means:</p><ul><li>
-        <p>
-          <strong>You don't need to choose</strong> between JSON and XML tools. Use both.</p>
-      </li><li>
-        <p>
-          <strong>XPath is a universal query language</strong> — it works on XML trees AND JSON data structures.</p>
-      </li><li>
-        <p>
-          <strong>XSLT is a universal transform language</strong> — it can read JSON and produce JSON, not just XML-to-HTML.</p>
-      </li><li>
-        <p>
-          <strong>Format conversion is natural</strong> — JSON ↔ XML ↔ HTML ↔ CSV ↔ text, all in one toolchain.</p>
-      </li></ul><p>The "XML vs JSON" debate becomes moot when your tools handle both natively.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+})</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <hr>
+                                                <h2 id="the-takeaway-for-net-developers"><a class="anchor" href="#the-takeaway-for-net-developers">#</a>The Takeaway for .NET Developers
+                                                </h2>
+                                                <p>If your reaction is "wait, I can use XPath to query JSON?" — yes. The XPath 3.1 data model (maps + arrays) maps 1:1 to JSON's data model. This means:
+                                                </p>
+                                                <ul>
+                                                  <li>
+        
+                                                    <p>
+          <strong>You don't need to choose</strong> between JSON and XML tools. Use both.
+                                                    </p>
+      
+                                                  </li>
+                                                  <li>
+        
+                                                    <p>
+          <strong>XPath is a universal query language</strong> — it works on XML trees AND JSON data structures.
+                                                    </p>
+      
+                                                  </li>
+                                                  <li>
+        
+                                                    <p>
+          <strong>XSLT is a universal transform language</strong> — it can read JSON and produce JSON, not just XML-to-HTML.
+                                                    </p>
+      
+                                                  </li>
+                                                  <li>
+        
+                                                    <p>
+          <strong>Format conversion is natural</strong> — JSON ↔ XML ↔ HTML ↔ CSV ↔ text, all in one toolchain.
+                                                    </p>
+      
+                                                  </li>
+                                                </ul>
+                                                <p>The "XML vs JSON" debate becomes moot when your tools handle both natively.
+                                                </p>
+                                              </article>
+                                            </main>
+                                            <aside class="toc" aria-label="On this page">
+                                              <p class="toc-label">On this page
+                                              </p>
+                                              <ul>
+                                                <li class="toc-h2"><a href="#contents">Contents</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#parsing-json">Parsing JSON</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#json-doc">json-doc()</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#parse-json">parse-json()</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#what-json-becomes-in-xdm">What JSON Becomes in XDM</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#querying-json-with-xpath">Querying JSON with XPath</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#object-access">Object Access</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#array-access">Array Access</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#filtering-json-arrays">Filtering JSON Arrays</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#nested-queries">Nested Queries</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#json-in-xslt">JSON in XSLT</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#reading-json-input">Reading JSON Input</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#producing-json-output">Producing JSON Output</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#combining-json-and-xml-sources">Combining JSON and XML Sources</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#json-in-xquery">JSON in XQuery</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#querying-json-apis">Querying JSON APIs</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#converting-json-to-xml">Converting JSON to XML</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#converting-xml-to-json">Converting XML to JSON</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#round-trip-json-to-json">Round-Trip: JSON to JSON</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#mixed-workflows-json-xml">Mixed Workflows: JSON + XML</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#enriching-xml-with-json-config">Enriching XML with JSON Config</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#generating-json-from-xml-json-sources">Generating JSON from XML + JSON Sources</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#json-output-patterns">JSON Output Patterns</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#pattern-1-simple-object">Pattern 1: Simple Object</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#pattern-2-array-of-objects">Pattern 2: Array of Objects</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#pattern-3-nested-structure">Pattern 3: Nested Structure</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#pattern-4-preserving-json-null">Pattern 4: Preserving JSON Null</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#serialization-control">Serialization Control</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#the-takeaway-for-net-developers">The Takeaway for .NET Developers</a>
+                                                </li>
+                                              </ul>
+                                            </aside>
+                                          </div>
+                                          <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                            <div class="search-backdrop">
+                                            </div>
+                                            <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                              <div class="search-results" id="search-results">
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <footer class="site-footer">
+                                            <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                            </p>
+                                          </footer>
+                                          <script src="https://unpkg.com/lunr/lunr.js">
+                                          </script>
+                                          <script src="/js/prism.js">
+                                          </script>
+                                          <script src="/js/search.js">
+                                          </script>
+                                          <script src="/js/theme.js">
+                                          </script>
+                                          <script src="/js/toc.js">
+                                          </script>
+                                          <script src="/js/copy.js">
+                                          </script>
+                                        </body>
+                                      </html>

@@ -1,140 +1,848 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Variables and Parameters — PhoenixmlDb Documentation</title><meta name="description" content="xsl:variable, xsl:param, static parameters, tunnel parameters, with-param"><link rel="canonical" href="/language-reference/xslt/instructions/variables-parameters.html"><meta property="og:title" content="Variables and Parameters"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/variables-parameters.html"><meta property="og:description" content="xsl:variable, xsl:param, static parameters, tunnel parameters, with-param"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Variables and Parameters — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="xsl:variable, xsl:param, static parameters, tunnel parameters, with-param">
+            <link rel="canonical" href="/language-reference/xslt/instructions/variables-parameters.html">
+              <meta property="og:title" content="Variables and Parameters">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xslt/instructions/variables-parameters.html">
+                    <meta property="og:description" content="xsl:variable, xsl:param, static parameters, tunnel parameters, with-param">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li class="active"><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="variables-and-parameters"><a class="anchor" href="#variables-and-parameters">#</a>Variables and Parameters</h1><p>Variables and parameters in XSLT look similar to their C# counterparts but behave differently in one critical way: <strong>XSLT variables are immutable</strong>. Once set, a variable's value cannot be changed. This is functional programming — you build new values instead of mutating existing ones.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#xslvariable" title="">xsl:variable</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslparam" title="">xsl:param</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslwith-param" title="">xsl:with-param</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#static-parameters" title="">Static Parameters</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#tunnel-parameters" title="">Tunnel Parameters</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#variable-scope-and-shadowing" title="">Variable Scope and Shadowing</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#working-with-immutable-variables" title="">Working with Immutable Variables</a>
-        </p>
-      </li></ul><hr><h2 id="xsl-variable"><a class="anchor" href="#xsl-variable">#</a>xsl:variable</h2><p>Declares a variable — a named, immutable value.</p><h3 id="using-select-simple-values"><a class="anchor" href="#using-select-simple-values">#</a>Using select (Simple Values)</h3><pre><code class="language-xml">&lt;xsl:variable name="tax-rate" select="0.08"/&gt;
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section open">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li class="active"><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">Instructions Reference
+                                </p>
+                                <h1 class="page-title">Variables and Parameters
+                                </h1>
+                                <p class="page-subtitle">xsl:variable, xsl:param, static parameters, tunnel parameters, with-param
+                                </p>
+                                <h1 id="variables-and-parameters"><a class="anchor" href="#variables-and-parameters">#</a>Variables and Parameters
+                                </h1>
+                                <p>Variables and parameters in XSLT look similar to their C# counterparts but behave differently in one critical way: <strong>XSLT variables are immutable</strong>. Once set, a variable's value cannot be changed. This is functional programming — you build new values instead of mutating existing ones.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslvariable">xsl:variable</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslparam">xsl:param</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslwith-param">xsl:with-param</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#static-parameters">Static Parameters</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#tunnel-parameters">Tunnel Parameters</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#variable-scope-and-shadowing">Variable Scope and Shadowing</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#working-with-immutable-variables">Working with Immutable Variables</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="xsl-variable"><a class="anchor" href="#xsl-variable">#</a>xsl:variable
+                                  </h2>
+                                  <p>Declares a variable — a named, immutable value.
+                                  </p>
+                                  <h3 id="using-select-simple-values"><a class="anchor" href="#using-select-simple-values">#</a>Using select (Simple Values)
+                                  </h3>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:variable name="tax-rate" select="0.08"/&gt;
 &lt;xsl:variable name="product-name" select="name"/&gt;
 &lt;xsl:variable name="total" select="price * (1 + $tax-rate)"/&gt;
-&lt;xsl:variable name="all-products" select="//product"/&gt;</code></pre><p>The <code>select</code> attribute evaluates an XPath expression and binds the result to the variable name.</p><h3 id="using-content-constructing-nodes"><a class="anchor" href="#using-content-constructing-nodes">#</a>Using Content (Constructing Nodes)</h3><p>When you need to build a temporary tree (a document fragment), use the content form:</p><pre><code class="language-xml">&lt;xsl:variable name="product-card"&gt;
+&lt;xsl:variable name="all-products" select="//product"/&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>The <code>select</code> attribute evaluates an XPath expression and binds the result to the variable name.
+                                  </p>
+                                  <h3 id="using-content-constructing-nodes"><a class="anchor" href="#using-content-constructing-nodes">#</a>Using Content (Constructing Nodes)
+                                  </h3>
+                                  <p>When you need to build a temporary tree (a document fragment), use the content form:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:variable name="product-card"&gt;
   &lt;div class="card"&gt;
     &lt;h3&gt;&lt;xsl:value-of select="name"/&gt;&lt;/h3&gt;
     &lt;p&gt;$&lt;xsl:value-of select="price"/&gt;&lt;/p&gt;
   &lt;/div&gt;
 &lt;/xsl:variable&gt;
 &lt;!-- Use it later --&gt;
-&lt;xsl:copy-of select="$product-card"/&gt;</code></pre><p>
-      <strong>Important:</strong> When you use the content form without an <code>as</code> attribute, the variable holds a <em>temporary tree</em> (document node). You can read from it, but nodes in it are detached from the original document — they have no parent, no siblings, and no relationship to the source tree.</p><h3 id="the-as-attribute-typing"><a class="anchor" href="#the-as-attribute-typing">#</a>The as Attribute (Typing)</h3><p>The <code>as</code> attribute declares the expected type. This is optional but recommended for clarity and early error detection:</p><pre><code class="language-xml">&lt;xsl:variable name="price" as="xs:decimal" select="price"/&gt;
+&lt;xsl:copy-of select="$product-card"/&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
+      <strong>Important:</strong> When you use the content form without an <code>as</code> attribute, the variable holds a <em>temporary tree</em> (document node). You can read from it, but nodes in it are detached from the original document — they have no parent, no siblings, and no relationship to the source tree.
+                                  </p>
+                                  <h3 id="the-as-attribute-typing"><a class="anchor" href="#the-as-attribute-typing">#</a>The as Attribute (Typing)
+                                  </h3>
+                                  <p>The <code>as</code> attribute declares the expected type. This is optional but recommended for clarity and early error detection:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:variable name="price" as="xs:decimal" select="price"/&gt;
 &lt;xsl:variable name="product-names" as="xs:string*" select="//product/name"/&gt;
 &lt;xsl:variable name="active" as="xs:boolean" select="@status = 'active'"/&gt;
-&lt;xsl:variable name="items" as="element(product)*" select="//product[@category = 'electronics']"/&gt;</code></pre><p>If the actual value does not match the declared type, the processor raises a type error — similar to a compile-time error in C#.</p><p>
+&lt;xsl:variable name="items" as="element(product)*" select="//product[@category = 'electronics']"/&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>If the actual value does not match the declared type, the processor raises a type error — similar to a compile-time error in C#.
+                                  </p>
+                                  <p>
       <strong>C# parallel:</strong>
-    </p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>XSLT</p>
-          </th>
-          <th>
-            <p>C#</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>&lt;xsl:variable name="x" select="42"/&gt;</code></p>
-          </td>
-          <td>
-            <p><code>var x = 42;</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>&lt;xsl:variable name="x" as="xs:integer" select="42"/&gt;</code></p>
-          </td>
-          <td>
-            <p><code>int x = 42;</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Content form (temporary tree)</p>
-          </td>
-          <td>
-            <p><code>var fragment = new XDocument(...)</code></p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="select-vs-content-when-to-use-which"><a class="anchor" href="#select-vs-content-when-to-use-which">#</a>select vs. Content: When to Use Which</h3><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Scenario</p>
-          </th>
-          <th>
-            <p>Use</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>Simple value (string, number, boolean)</p>
-          </td>
-          <td>
-            <p><code>select</code> attribute</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Node reference from source document</p>
-          </td>
-          <td>
-            <p><code>select</code> attribute</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Computed XPath expression</p>
-          </td>
-          <td>
-            <p><code>select</code> attribute</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Constructing new XML nodes</p>
-          </td>
-          <td>
-            <p>Content form</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Multi-step construction with conditionals</p>
-          </td>
-          <td>
-            <p>Content form</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><hr><h2 id="xsl-param"><a class="anchor" href="#xsl-param">#</a>xsl:param</h2><p>Declares a parameter — a variable whose value can be supplied by the caller. Parameters appear in three places:</p><h3 id="template-parameters"><a class="anchor" href="#template-parameters">#</a>Template Parameters</h3><pre><code class="language-xml">&lt;xsl:template match="product"&gt;
+    
+                                  </p>
+                                  <div class="table-wrap">
+                                    <table>
+      
+                                      <thead>
+        
+                                        <tr>
+          
+                                          <th>
+            
+                                            <p>XSLT
+                                            </p>
+          
+                                          </th>
+          
+                                          <th>
+            
+                                            <p>C#
+                                            </p>
+          
+                                          </th>
+        
+                                        </tr>
+      
+                                      </thead>
+      
+                                      <tbody>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>&lt;xsl:variable name="x" select="42"/&gt;</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>var x = 42;</code>
+            
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>
+              <code>&lt;xsl:variable name="x" as="xs:integer" select="42"/&gt;</code>
+            
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>int x = 42;</code>
+            
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Content form (temporary tree)
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>var fragment = new XDocument(...)</code>
+            
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+      
+                                      </tbody>
+    
+                                    </table>
+                                  </div>
+                                  <h3 id="select-vs-content-when-to-use-which"><a class="anchor" href="#select-vs-content-when-to-use-which">#</a>select vs. Content: When to Use Which
+                                  </h3>
+                                  <div class="table-wrap">
+                                    <table>
+      
+                                      <thead>
+        
+                                        <tr>
+          
+                                          <th>
+            
+                                            <p>Scenario
+                                            </p>
+          
+                                          </th>
+          
+                                          <th>
+            
+                                            <p>Use
+                                            </p>
+          
+                                          </th>
+        
+                                        </tr>
+      
+                                      </thead>
+      
+                                      <tbody>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Simple value (string, number, boolean)
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>select</code> attribute
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Node reference from source document
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>select</code> attribute
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Computed XPath expression
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>
+              <code>select</code> attribute
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Constructing new XML nodes
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Content form
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Multi-step construction with conditionals
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Content form
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+      
+                                      </tbody>
+    
+                                    </table>
+                                  </div>
+                                  <hr>
+                                    <h2 id="xsl-param"><a class="anchor" href="#xsl-param">#</a>xsl:param
+                                    </h2>
+                                    <p>Declares a parameter — a variable whose value can be supplied by the caller. Parameters appear in three places:
+                                    </p>
+                                    <h3 id="template-parameters"><a class="anchor" href="#template-parameters">#</a>Template Parameters
+                                    </h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:template match="product"&gt;
   &lt;xsl:param name="show-price" as="xs:boolean" select="true()"/&gt;
   &lt;xsl:param name="currency" as="xs:string" select="'USD'"/&gt;
   &lt;div class="product"&gt;
@@ -145,38 +853,138 @@
          &lt;xsl:value-of select="format-number(price, '#,##0.00')"/&gt;&lt;/p&gt;
     &lt;/xsl:if&gt;
   &lt;/div&gt;
-&lt;/xsl:template&gt;</code></pre><p>The <code>select</code> attribute provides a default value. If the caller does not pass the parameter, the default is used.</p><p>
-      <strong>C# parallel:</strong> Method parameters with default values:</p><pre><code class="language-csharp">void RenderProduct(Product p, bool showPrice = true, string currency = "USD") { ... }</code></pre><h3 id="required-parameters"><a class="anchor" href="#required-parameters">#</a>Required Parameters</h3><p>Use <code>required="yes"</code> to force the caller to supply a value:</p><pre><code class="language-xml">&lt;xsl:template name="format-currency"&gt;
+&lt;/xsl:template&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>The <code>select</code> attribute provides a default value. If the caller does not pass the parameter, the default is used.
+                                    </p>
+                                    <p>
+      <strong>C# parallel:</strong> Method parameters with default values:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">csharp</span>
+                                      </figcaption>
+                                      <pre><code class="language-csharp">void RenderProduct(Product p, bool showPrice = true, string currency = "USD") { ... }</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="required-parameters"><a class="anchor" href="#required-parameters">#</a>Required Parameters
+                                    </h3>
+                                    <p>Use <code>required="yes"</code> to force the caller to supply a value:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:template name="format-currency"&gt;
   &lt;xsl:param name="amount" as="xs:decimal" required="yes"/&gt;
   &lt;xsl:param name="currency" as="xs:string" required="yes"/&gt;
   &lt;xsl:value-of select="concat($currency, ' ', format-number($amount, '#,##0.00'))"/&gt;
-&lt;/xsl:template&gt;</code></pre><p>If the caller omits a required parameter, the processor raises an error. This is equivalent to a C# method parameter without a default value.</p><h3 id="stylesheet-parameters-global"><a class="anchor" href="#stylesheet-parameters-global">#</a>Stylesheet Parameters (Global)</h3><p>Parameters declared as children of <code>xsl:stylesheet</code> are global — they can be set by the calling application:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+&lt;/xsl:template&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>If the caller omits a required parameter, the processor raises an error. This is equivalent to a C# method parameter without a default value.
+                                    </p>
+                                    <h3 id="stylesheet-parameters-global"><a class="anchor" href="#stylesheet-parameters-global">#</a>Stylesheet Parameters (Global)
+                                    </h3>
+                                    <p>Parameters declared as children of <code>xsl:stylesheet</code> are global — they can be set by the calling application:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xml</span>
+                                      </figcaption>
+                                      <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;xsl:param name="output-format" as="xs:string" select="'html'"/&gt;
   &lt;xsl:param name="debug" as="xs:boolean" select="false()"/&gt;
   &lt;xsl:param name="base-url" as="xs:string" select="'https://example.com'"/&gt;
   &lt;!-- These can be set from C#: --&gt;
   &lt;!-- transformer.SetParameter("output-format", "pdf"); --&gt;
   &lt;!-- transformer.SetParameter("debug", true); --&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><p>
-      <strong>C# parallel:</strong> Stylesheet parameters are like dependency injection — the calling code provides configuration values that the stylesheet uses.</p><pre><code class="language-csharp">// In C#, setting XSLT parameters:
+&lt;/xsl:stylesheet&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
+      <strong>C# parallel:</strong> Stylesheet parameters are like dependency injection — the calling code provides configuration values that the stylesheet uses.
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">csharp</span>
+                                      </figcaption>
+                                      <pre><code class="language-csharp">// In C#, setting XSLT parameters:
 var transformer = new XslCompiledTransform();
 transformer.Load("catalog.xslt");
 var args = new XsltArgumentList();
 args.AddParam("output-format", "", "pdf");
 args.AddParam("debug", "", true);
-transformer.Transform(input, args, output);</code></pre><hr><h2 id="xsl-with-param"><a class="anchor" href="#xsl-with-param">#</a>xsl:with-param</h2><p>Passes a parameter value when calling a template or applying templates.</p><h3 id="with-call-template"><a class="anchor" href="#with-call-template">#</a>With call-template</h3><pre><code class="language-xml">&lt;xsl:call-template name="format-currency"&gt;
+transformer.Transform(input, args, output);</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <hr>
+                                      <h2 id="xsl-with-param"><a class="anchor" href="#xsl-with-param">#</a>xsl:with-param
+                                      </h2>
+                                      <p>Passes a parameter value when calling a template or applying templates.
+                                      </p>
+                                      <h3 id="with-call-template"><a class="anchor" href="#with-call-template">#</a>With call-template
+                                      </h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:call-template name="format-currency"&gt;
   &lt;xsl:with-param name="amount" select="price"/&gt;
   &lt;xsl:with-param name="currency" select="'EUR'"/&gt;
-&lt;/xsl:call-template&gt;</code></pre><h3 id="with-apply-templates"><a class="anchor" href="#with-apply-templates">#</a>With apply-templates</h3><pre><code class="language-xml">&lt;xsl:apply-templates select="product"&gt;
+&lt;/xsl:call-template&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="with-apply-templates"><a class="anchor" href="#with-apply-templates">#</a>With apply-templates
+                                      </h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:apply-templates select="product"&gt;
   &lt;xsl:with-param name="show-price" select="false()"/&gt;
   &lt;xsl:with-param name="currency" select="'GBP'"/&gt;
-&lt;/xsl:apply-templates&gt;</code></pre><h3 id="content-form"><a class="anchor" href="#content-form">#</a>Content Form</h3><p>Like <code>xsl:variable</code>, you can use content instead of <code>select</code>:</p><pre><code class="language-xml">&lt;xsl:apply-templates select="product"&gt;
+&lt;/xsl:apply-templates&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="content-form"><a class="anchor" href="#content-form">#</a>Content Form
+                                      </h3>
+                                      <p>Like <code>xsl:variable</code>, you can use content instead of <code>select</code>:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:apply-templates select="product"&gt;
   &lt;xsl:with-param name="header"&gt;
     &lt;h2&gt;Featured Products&lt;/h2&gt;
   &lt;/xsl:with-param&gt;
-&lt;/xsl:apply-templates&gt;</code></pre><p>
-      <strong>C# parallel:</strong> Named arguments in method calls:</p><pre><code class="language-csharp">RenderProduct(product, showPrice: false, currency: "GBP");</code></pre><hr><h2 id="static-parameters"><a class="anchor" href="#static-parameters">#</a>Static Parameters</h2><p>XSLT 3.0 introduces static parameters with <code>static="yes"</code>. These are evaluated at compile time, enabling conditional compilation.</p><pre><code class="language-xml">&lt;xsl:param name="debug" as="xs:boolean" select="false()" static="yes"/&gt;
-&lt;xsl:param name="edition" as="xs:string" select="'standard'" static="yes"/&gt;</code></pre><h3 id="compile-time-conditional-use-when"><a class="anchor" href="#compile-time-conditional-use-when">#</a>Compile-Time Conditional: use-when</h3><p>Static parameters are primarily used with the <code>use-when</code> attribute, which conditionally includes or excludes declarations at compile time:</p><pre><code class="language-xml">&lt;xsl:param name="debug" as="xs:boolean" select="false()" static="yes"/&gt;
+&lt;/xsl:apply-templates&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
+      <strong>C# parallel:</strong> Named arguments in method calls:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">csharp</span>
+                                        </figcaption>
+                                        <pre><code class="language-csharp">RenderProduct(product, showPrice: false, currency: "GBP");</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <hr>
+                                        <h2 id="static-parameters"><a class="anchor" href="#static-parameters">#</a>Static Parameters
+                                        </h2>
+                                        <p>XSLT 3.0 introduces static parameters with <code>static="yes"</code>. These are evaluated at compile time, enabling conditional compilation.
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:param name="debug" as="xs:boolean" select="false()" static="yes"/&gt;
+&lt;xsl:param name="edition" as="xs:string" select="'standard'" static="yes"/&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="compile-time-conditional-use-when"><a class="anchor" href="#compile-time-conditional-use-when">#</a>Compile-Time Conditional: use-when
+                                        </h3>
+                                        <p>Static parameters are primarily used with the <code>use-when</code> attribute, which conditionally includes or excludes declarations at compile time:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:param name="debug" as="xs:boolean" select="false()" static="yes"/&gt;
 &lt;!-- This template only exists when debug is true --&gt;
 &lt;xsl:template match="product" use-when="$debug"&gt;
   &lt;xsl:message select="concat('Processing product: ', @id)"/&gt;
@@ -185,7 +993,15 @@ transformer.Transform(input, args, output);</code></pre><hr><h2 id="xsl-with-par
 &lt;!-- Include verbose error checking only in debug mode --&gt;
 &lt;xsl:template match="product[not(@id)]" use-when="$debug"&gt;
   &lt;xsl:message terminate="yes"&gt;Product missing @id attribute!&lt;/xsl:message&gt;
-&lt;/xsl:template&gt;</code></pre><h3 id="feature-toggles"><a class="anchor" href="#feature-toggles">#</a>Feature Toggles</h3><pre><code class="language-xml">&lt;xsl:param name="enable-analytics" as="xs:boolean" select="false()" static="yes"/&gt;
+&lt;/xsl:template&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="feature-toggles"><a class="anchor" href="#feature-toggles">#</a>Feature Toggles
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:param name="enable-analytics" as="xs:boolean" select="false()" static="yes"/&gt;
 &lt;xsl:param name="theme" as="xs:string" select="'light'" static="yes"/&gt;
 &lt;xsl:template match="/"&gt;
   &lt;html&gt;
@@ -197,11 +1013,36 @@ transformer.Transform(input, args, output);</code></pre><hr><h2 id="xsl-with-par
       &lt;xsl:apply-templates/&gt;
     &lt;/body&gt;
   &lt;/html&gt;
-&lt;/xsl:template&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>#if DEBUG</code> / <code>#if FEATURE_FLAG</code> preprocessor directives, or feature flags evaluated at startup:</p><pre><code class="language-csharp">#if DEBUG
+&lt;/xsl:template&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
+      <strong>C# parallel:</strong> <code>#if DEBUG</code> / <code>#if FEATURE_FLAG</code> preprocessor directives, or feature flags evaluated at startup:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">#if DEBUG
     Console.WriteLine($"Processing product: {product.Id}");
-#endif</code></pre><p>
-      <strong>Key difference:</strong> Static parameters are resolved when the stylesheet is compiled, not when it runs. Changing a static parameter requires recompiling the stylesheet.</p><hr><h2 id="tunnel-parameters"><a class="anchor" href="#tunnel-parameters">#</a>Tunnel Parameters</h2><p>Tunnel parameters solve a problem that every deep call chain creates: how do you pass a value through multiple layers of templates without adding the parameter to every intermediate template?</p><h3 id="the-problem"><a class="anchor" href="#the-problem">#</a>The Problem</h3><p>Without tunnel parameters, passing a value through a deep template chain requires every template in the chain to declare and forward the parameter:</p><pre><code class="language-xml">&lt;!-- Without tunneling: every template must explicitly forward the parameter --&gt;
+#endif</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
+      <strong>Key difference:</strong> Static parameters are resolved when the stylesheet is compiled, not when it runs. Changing a static parameter requires recompiling the stylesheet.
+                                        </p>
+                                        <hr>
+                                          <h2 id="tunnel-parameters"><a class="anchor" href="#tunnel-parameters">#</a>Tunnel Parameters
+                                          </h2>
+                                          <p>Tunnel parameters solve a problem that every deep call chain creates: how do you pass a value through multiple layers of templates without adding the parameter to every intermediate template?
+                                          </p>
+                                          <h3 id="the-problem"><a class="anchor" href="#the-problem">#</a>The Problem
+                                          </h3>
+                                          <p>Without tunnel parameters, passing a value through a deep template chain requires every template in the chain to declare and forward the parameter:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;!-- Without tunneling: every template must explicitly forward the parameter --&gt;
 &lt;xsl:template match="catalog"&gt;
   &lt;xsl:param name="currency"/&gt;
   &lt;xsl:apply-templates select="category"&gt;
@@ -217,7 +1058,17 @@ transformer.Transform(input, args, output);</code></pre><hr><h2 id="xsl-with-par
 &lt;xsl:template match="product"&gt;
   &lt;xsl:param name="currency"/&gt;  &lt;!-- finally gets to use it --&gt;
   &lt;span&gt;&lt;xsl:value-of select="concat($currency, ' ', price)"/&gt;&lt;/span&gt;
-&lt;/xsl:template&gt;</code></pre><h3 id="the-solution"><a class="anchor" href="#the-solution">#</a>The Solution</h3><p>With <code>tunnel="yes"</code>, intermediate templates do not need to know about the parameter:</p><pre><code class="language-xml">&lt;!-- With tunneling: only the sender and receiver mention it --&gt;
+&lt;/xsl:template&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="the-solution"><a class="anchor" href="#the-solution">#</a>The Solution
+                                          </h3>
+                                          <p>With <code>tunnel="yes"</code>, intermediate templates do not need to know about the parameter:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;!-- With tunneling: only the sender and receiver mention it --&gt;
 &lt;xsl:template match="catalog"&gt;
   &lt;xsl:apply-templates select="category"&gt;
     &lt;xsl:with-param name="currency" select="'EUR'" tunnel="yes"/&gt;
@@ -233,27 +1084,75 @@ transformer.Transform(input, args, output);</code></pre><hr><h2 id="xsl-with-par
 &lt;xsl:template match="product"&gt;
   &lt;xsl:param name="currency" tunnel="yes"/&gt;  &lt;!-- receives the tunneled value --&gt;
   &lt;span&gt;&lt;xsl:value-of select="concat($currency, ' ', price)"/&gt;&lt;/span&gt;
-&lt;/xsl:template&gt;</code></pre><p>The <code>currency</code> parameter passes invisibly through the <code>category</code> template.</p><h3 id="rules"><a class="anchor" href="#rules">#</a>Rules</h3><ul><li>
-        <p>The sender must specify <code>tunnel="yes"</code> on <code>xsl:with-param</code></p>
-      </li><li>
-        <p>The receiver must specify <code>tunnel="yes"</code> on <code>xsl:param</code></p>
-      </li><li>
-        <p>Intermediate templates do not need to declare or forward the parameter</p>
-      </li><li>
-        <p>Tunnel parameters and regular parameters are separate — you can have a tunnel parameter and a regular parameter with the same name</p>
-      </li><li>
-        <p>Tunnel parameters propagate through <code>xsl:apply-templates</code> and <code>xsl:call-template</code></p>
-      </li></ul><p>
-      <strong>C# parallel:</strong> Tunnel parameters are conceptually similar to:</p><ul><li>
-        <p>
-          <strong>Ambient context / AsyncLocal:</strong> Values that flow through the call stack without explicit passing (<code>AsyncLocal&lt;T&gt;</code>, <code>HttpContext.Current</code>)</p>
-      </li><li>
-        <p>
-          <strong>Dependency injection:</strong> Services injected deep in the call chain without intermediate classes knowing about them</p>
-      </li><li>
-        <p>
-          <strong>React Context / Angular Services:</strong> For web developers, tunnel parameters work like React's Context API</p>
-      </li></ul><pre><code class="language-csharp">// C# ambient context (similar concept)
+&lt;/xsl:template&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>The <code>currency</code> parameter passes invisibly through the <code>category</code> template.
+                                          </p>
+                                          <h3 id="rules"><a class="anchor" href="#rules">#</a>Rules
+                                          </h3>
+                                          <ul>
+                                            <li>
+        
+                                              <p>The sender must specify <code>tunnel="yes"</code> on <code>xsl:with-param</code>
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>The receiver must specify <code>tunnel="yes"</code> on <code>xsl:param</code>
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>Intermediate templates do not need to declare or forward the parameter
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>Tunnel parameters and regular parameters are separate — you can have a tunnel parameter and a regular parameter with the same name
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>Tunnel parameters propagate through <code>xsl:apply-templates</code> and <code>xsl:call-template</code>
+                                              </p>
+      
+                                            </li>
+                                          </ul>
+                                          <p>
+      <strong>C# parallel:</strong> Tunnel parameters are conceptually similar to:
+                                          </p>
+                                          <ul>
+                                            <li>
+        
+                                              <p>
+          <strong>Ambient context / AsyncLocal:</strong> Values that flow through the call stack without explicit passing (<code>AsyncLocal&lt;T&gt;</code>, <code>HttpContext.Current</code>)
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>
+          <strong>Dependency injection:</strong> Services injected deep in the call chain without intermediate classes knowing about them
+                                              </p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>
+          <strong>React Context / Angular Services:</strong> For web developers, tunnel parameters work like React's Context API
+                                              </p>
+      
+                                            </li>
+                                          </ul>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">// C# ambient context (similar concept)
 public static class CurrencyContext
 {
     private static readonly AsyncLocal&lt;string&gt; _currency = new();
@@ -262,7 +1161,20 @@ public static class CurrencyContext
         get =&gt; _currency.Value ?? "USD";
         set =&gt; _currency.Value = value;
     }
-}</code></pre><hr><h2 id="variable-scope-and-shadowing"><a class="anchor" href="#variable-scope-and-shadowing">#</a>Variable Scope and Shadowing</h2><h3 id="scope"><a class="anchor" href="#scope">#</a>Scope</h3><p>Variables are visible from their declaration to the end of their enclosing block:</p><pre><code class="language-xml">&lt;xsl:template match="product"&gt;
+}</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <hr>
+                                            <h2 id="variable-scope-and-shadowing"><a class="anchor" href="#variable-scope-and-shadowing">#</a>Variable Scope and Shadowing
+                                            </h2>
+                                            <h3 id="scope"><a class="anchor" href="#scope">#</a>Scope
+                                            </h3>
+                                            <p>Variables are visible from their declaration to the end of their enclosing block:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:template match="product"&gt;
   &lt;!-- $name is visible from here to the end of the template --&gt;
   &lt;xsl:variable name="name" select="name"/&gt;
   &lt;xsl:if test="@on-sale = 'true'"&gt;
@@ -272,16 +1184,40 @@ public static class CurrencyContext
   &lt;/xsl:if&gt;
   &lt;!-- $discount is NOT visible here — it is out of scope --&gt;
   &lt;p&gt;&lt;xsl:value-of select="$name"/&gt;&lt;/p&gt;
-&lt;/xsl:template&gt;</code></pre><p>
-      <strong>C# parallel:</strong> Block scoping — variables declared inside <code>{ }</code> are not visible outside.</p><h3 id="shadowing"><a class="anchor" href="#shadowing">#</a>Shadowing</h3><p>You can declare a variable with the same name as an outer variable. The inner declaration shadows the outer one:</p><pre><code class="language-xml">&lt;xsl:variable name="label" select="'default'"/&gt;
+&lt;/xsl:template&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
+      <strong>C# parallel:</strong> Block scoping — variables declared inside <code>{ }</code> are not visible outside.
+                                            </p>
+                                            <h3 id="shadowing"><a class="anchor" href="#shadowing">#</a>Shadowing
+                                            </h3>
+                                            <p>You can declare a variable with the same name as an outer variable. The inner declaration shadows the outer one:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:variable name="label" select="'default'"/&gt;
 &lt;xsl:for-each select="product"&gt;
   &lt;!-- This shadows the outer $label --&gt;
   &lt;xsl:variable name="label" select="name"/&gt;
   &lt;span&gt;&lt;xsl:value-of select="$label"/&gt;&lt;/span&gt;  &lt;!-- uses the inner $label --&gt;
 &lt;/xsl:for-each&gt;
 &lt;!-- Back to the outer $label --&gt;
-&lt;p&gt;&lt;xsl:value-of select="$label"/&gt;&lt;/p&gt;  &lt;!-- "default" --&gt;</code></pre><p>
-      <strong>Note:</strong> Shadowing is legal but can be confusing. Many XSLT processors emit warnings for shadowed variables.</p><h3 id="top-level-vs-local-variables"><a class="anchor" href="#top-level-vs-local-variables">#</a>Top-Level vs. Local Variables</h3><p>Variables declared as children of <code>xsl:stylesheet</code> are global:</p><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+&lt;p&gt;&lt;xsl:value-of select="$label"/&gt;&lt;/p&gt;  &lt;!-- "default" --&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
+      <strong>Note:</strong> Shadowing is legal but can be confusing. Many XSLT processors emit warnings for shadowed variables.
+                                            </p>
+                                            <h3 id="top-level-vs-local-variables"><a class="anchor" href="#top-level-vs-local-variables">#</a>Top-Level vs. Local Variables
+                                            </h3>
+                                            <p>Variables declared as children of <code>xsl:stylesheet</code> are global:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;!-- Global variable — visible in all templates --&gt;
   &lt;xsl:variable name="site-title" select="'Product Catalog'"/&gt;
   &lt;xsl:variable name="product-count" select="count(//product)"/&gt;
@@ -289,22 +1225,67 @@ public static class CurrencyContext
     &lt;h1&gt;&lt;xsl:value-of select="$site-title"/&gt;&lt;/h1&gt;
     &lt;p&gt;&lt;xsl:value-of select="$product-count"/&gt; products&lt;/p&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><p>Global variables are evaluated lazily — they are computed the first time they are referenced.</p><hr><h2 id="working-with-immutable-variables"><a class="anchor" href="#working-with-immutable-variables">#</a>Working with Immutable Variables</h2><p>Coming from C#, the biggest adjustment is that you cannot reassign variables. There is no <code>$counter = $counter + 1</code>. Here are the patterns that replace mutable state.</p><h3 id="pattern-1-compute-everything-in-one-expression"><a class="anchor" href="#pattern-1-compute-everything-in-one-expression">#</a>Pattern 1: Compute Everything in One Expression</h3><p>Instead of building a value incrementally, compute it in a single XPath expression:</p><pre><code class="language-xml">&lt;!-- C# thinking (won't work in XSLT):
+&lt;/xsl:stylesheet&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>Global variables are evaluated lazily — they are computed the first time they are referenced.
+                                            </p>
+                                            <hr>
+                                              <h2 id="working-with-immutable-variables"><a class="anchor" href="#working-with-immutable-variables">#</a>Working with Immutable Variables
+                                              </h2>
+                                              <p>Coming from C#, the biggest adjustment is that you cannot reassign variables. There is no <code>$counter = $counter + 1</code>. Here are the patterns that replace mutable state.
+                                              </p>
+                                              <h3 id="pattern-1-compute-everything-in-one-expression"><a class="anchor" href="#pattern-1-compute-everything-in-one-expression">#</a>Pattern 1: Compute Everything in One Expression
+                                              </h3>
+                                              <p>Instead of building a value incrementally, compute it in a single XPath expression:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;!-- C# thinking (won't work in XSLT):
      var total = 0;
      foreach (var p in products) total += p.Price;
 --&gt;
 &lt;!-- XSLT: compute in one expression --&gt;
 &lt;xsl:variable name="total" select="sum(//product/price)"/&gt;
 &lt;xsl:variable name="avg" select="avg(//product/price)"/&gt;
-&lt;xsl:variable name="expensive" select="//product[price &gt; 100]"/&gt;</code></pre><h3 id="pattern-2-chained-variables"><a class="anchor" href="#pattern-2-chained-variables">#</a>Pattern 2: Chained Variables</h3><p>When you need multi-step computation, use a chain of variables where each builds on the previous:</p><pre><code class="language-xml">&lt;xsl:variable name="raw-price" select="price"/&gt;
+&lt;xsl:variable name="expensive" select="//product[price &gt; 100]"/&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="pattern-2-chained-variables"><a class="anchor" href="#pattern-2-chained-variables">#</a>Pattern 2: Chained Variables
+                                              </h3>
+                                              <p>When you need multi-step computation, use a chain of variables where each builds on the previous:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;xsl:variable name="raw-price" select="price"/&gt;
 &lt;xsl:variable name="discounted" select="$raw-price * (1 - @discount div 100)"/&gt;
 &lt;xsl:variable name="with-tax" select="$discounted * 1.08"/&gt;
 &lt;xsl:variable name="formatted" select="format-number($with-tax, '$#,##0.00')"/&gt;
-&lt;span class="price"&gt;&lt;xsl:value-of select="$formatted"/&gt;&lt;/span&gt;</code></pre><p>
-      <strong>C# parallel:</strong> This is like a LINQ pipeline or a series of <code>let</code> clauses:</p><pre><code class="language-csharp">var formatted = product.Price
+&lt;span class="price"&gt;&lt;xsl:value-of select="$formatted"/&gt;&lt;/span&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>
+      <strong>C# parallel:</strong> This is like a LINQ pipeline or a series of <code>let</code> clauses:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">csharp</span>
+                                                </figcaption>
+                                                <pre><code class="language-csharp">var formatted = product.Price
     .Apply(p =&gt; p * (1 - product.Discount / 100m))
     .Apply(p =&gt; p * 1.08m)
-    .Apply(p =&gt; p.ToString("$#,##0.00"));</code></pre><h3 id="pattern-3-xsl-iterate-for-running-totals"><a class="anchor" href="#pattern-3-xsl-iterate-for-running-totals">#</a>Pattern 3: xsl:iterate for Running Totals</h3><p>When you genuinely need a running accumulator (like a <code>foreach</code> with mutable state), use <code>xsl:iterate</code>:</p><pre><code class="language-xml">&lt;!-- Running total of prices --&gt;
+    .Apply(p =&gt; p.ToString("$#,##0.00"));</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="pattern-3-xsl-iterate-for-running-totals"><a class="anchor" href="#pattern-3-xsl-iterate-for-running-totals">#</a>Pattern 3: xsl:iterate for Running Totals
+                                              </h3>
+                                              <p>When you genuinely need a running accumulator (like a <code>foreach</code> with mutable state), use <code>xsl:iterate</code>:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;!-- Running total of prices --&gt;
 &lt;xsl:iterate select="//product"&gt;
   &lt;xsl:param name="running-total" as="xs:decimal" select="0"/&gt;
   &lt;tr&gt;
@@ -315,8 +1296,119 @@ public static class CurrencyContext
   &lt;xsl:next-iteration&gt;
     &lt;xsl:with-param name="running-total" select="$running-total + price"/&gt;
   &lt;/xsl:next-iteration&gt;
-&lt;/xsl:iterate&gt;</code></pre><p>See <a href="iteration-sorting.html" title="">Iteration and Sorting</a> for full coverage of <code>xsl:iterate</code>.</p><h3 id="pattern-4-recursive-functions"><a class="anchor" href="#pattern-4-recursive-functions">#</a>Pattern 4: Recursive Functions</h3><p>For algorithms that need mutable state in C#, XSLT uses recursion:</p><pre><code class="language-xml">&lt;xsl:function name="my:factorial" as="xs:integer"&gt;
+&lt;/xsl:iterate&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>See <a href="iteration-sorting.html">Iteration and Sorting</a> for full coverage of <code>xsl:iterate</code>.
+                                              </p>
+                                              <h3 id="pattern-4-recursive-functions"><a class="anchor" href="#pattern-4-recursive-functions">#</a>Pattern 4: Recursive Functions
+                                              </h3>
+                                              <p>For algorithms that need mutable state in C#, XSLT uses recursion:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;xsl:function name="my:factorial" as="xs:integer"&gt;
   &lt;xsl:param name="n" as="xs:integer"/&gt;
   &lt;xsl:sequence select="if ($n le 1) then 1 else $n * my:factorial($n - 1)"/&gt;
-&lt;/xsl:function&gt;</code></pre><p>
-      <strong>C# parallel:</strong> <code>const</code> and <code>readonly</code> — XSLT variables are conceptually <code>const</code>. You never reassign them; you create new ones.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+&lt;/xsl:function&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>
+      <strong>C# parallel:</strong> <code>const</code> and <code>readonly</code> — XSLT variables are conceptually <code>const</code>. You never reassign them; you create new ones.
+                                              </p>
+                                            </article>
+                                          </main>
+                                          <aside class="toc" aria-label="On this page">
+                                            <p class="toc-label">On this page
+                                            </p>
+                                            <ul>
+                                              <li class="toc-h2"><a href="#contents">Contents</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#xsl-variable">xsl:variable</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#using-select-simple-values">Using select (Simple Values)</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#using-content-constructing-nodes">Using Content (Constructing Nodes)</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#the-as-attribute-typing">The as Attribute (Typing)</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#select-vs-content-when-to-use-which">select vs. Content: When to Use Which</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#xsl-param">xsl:param</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#template-parameters">Template Parameters</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#required-parameters">Required Parameters</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#stylesheet-parameters-global">Stylesheet Parameters (Global)</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#xsl-with-param">xsl:with-param</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#with-call-template">With call-template</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#with-apply-templates">With apply-templates</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#content-form">Content Form</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#static-parameters">Static Parameters</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#compile-time-conditional-use-when">Compile-Time Conditional: use-when</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#feature-toggles">Feature Toggles</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#tunnel-parameters">Tunnel Parameters</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#the-problem">The Problem</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#the-solution">The Solution</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#rules">Rules</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#variable-scope-and-shadowing">Variable Scope and Shadowing</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#scope">Scope</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#shadowing">Shadowing</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#top-level-vs-local-variables">Top-Level vs. Local Variables</a>
+                                              </li>
+                                              <li class="toc-h2"><a href="#working-with-immutable-variables">Working with Immutable Variables</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#pattern-1-compute-everything-in-one-expression">Pattern 1: Compute Everything in One Expression</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#pattern-2-chained-variables">Pattern 2: Chained Variables</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#pattern-3-xsl-iterate-for-running-totals">Pattern 3: xsl:iterate for Running Totals</a>
+                                              </li>
+                                              <li class="toc-h3"><a href="#pattern-4-recursive-functions">Pattern 4: Recursive Functions</a>
+                                              </li>
+                                            </ul>
+                                          </aside>
+                                        </div>
+                                        <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                          <div class="search-backdrop">
+                                          </div>
+                                          <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                            <div class="search-results" id="search-results">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <footer class="site-footer">
+                                          <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                          </p>
+                                        </footer>
+                                        <script src="https://unpkg.com/lunr/lunr.js">
+                                        </script>
+                                        <script src="/js/prism.js">
+                                        </script>
+                                        <script src="/js/search.js">
+                                        </script>
+                                        <script src="/js/theme.js">
+                                        </script>
+                                        <script src="/js/toc.js">
+                                        </script>
+                                        <script src="/js/copy.js">
+                                        </script>
+                                      </body>
+                                    </html>

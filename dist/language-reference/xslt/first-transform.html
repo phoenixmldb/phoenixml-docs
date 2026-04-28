@@ -1,6 +1,507 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Your First Transform — PhoenixmlDb Documentation</title><meta name="description" content="Hands-on introduction to XSLT — transforming XML to HTML step by step"><link rel="canonical" href="/language-reference/xslt/first-transform.html"><meta property="og:title" content="Your First Transform"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/first-transform.html"><meta property="og:description" content="Hands-on introduction to XSLT — transforming XML to HTML step by step"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Your First Transform — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="Hands-on introduction to XSLT — transforming XML to HTML step by step">
+            <link rel="canonical" href="/language-reference/xslt/first-transform.html">
+              <meta property="og:title" content="Your First Transform">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xslt/first-transform.html">
+                    <meta property="og:description" content="Hands-on introduction to XSLT — transforming XML to HTML step by step">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li class="active"><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="your-first-transform"><a class="anchor" href="#your-first-transform">#</a>Your First Transform</h1><p>Let's transform an XML document into HTML. We'll start with the simplest possible stylesheet and build up, explaining each concept as it appears.</p><h2 id="the-source-document"><a class="anchor" href="#the-source-document">#</a>The Source Document</h2><p>We'll work with this product catalog:</p><pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li class="active"><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">XSLT
+                                </p>
+                                <h1 class="page-title">Your First Transform
+                                </h1>
+                                <p class="page-subtitle">Hands-on introduction to XSLT — transforming XML to HTML step by step
+                                </p>
+                                <h1 id="your-first-transform"><a class="anchor" href="#your-first-transform">#</a>Your First Transform
+                                </h1>
+                                <p>Let's transform an XML document into HTML. We'll start with the simplest possible stylesheet and build up, explaining each concept as it appears.
+                                </p>
+                                <h2 id="the-source-document"><a class="anchor" href="#the-source-document">#</a>The Source Document
+                                </h2>
+                                <p>We'll work with this product catalog:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xml</span>
+                                  </figcaption>
+                                  <pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;catalog&gt;
   &lt;product id="P001" category="electronics"&gt;
     &lt;name&gt;Wireless Mouse&lt;/name&gt;
@@ -17,7 +518,17 @@
     &lt;price currency="USD"&gt;45.00&lt;/price&gt;
     &lt;description&gt;7-port hub with HDMI and SD card reader.&lt;/description&gt;
   &lt;/product&gt;
-&lt;/catalog&gt;</code></pre><h2 id="step-1-the-minimal-stylesheet"><a class="anchor" href="#step-1-the-minimal-stylesheet">#</a>Step 1: The Minimal Stylesheet</h2><p>Every XSLT stylesheet is an XML document. Here's the absolute minimum:</p><pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;/catalog&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="step-1-the-minimal-stylesheet"><a class="anchor" href="#step-1-the-minimal-stylesheet">#</a>Step 1: The Minimal Stylesheet
+                                </h2>
+                                <p>Every XSLT stylesheet is an XML document. Here's the absolute minimum:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xml</span>
+                                  </figcaption>
+                                  <pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;xsl:output method="html" html-version="5" indent="yes"/&gt;
   &lt;xsl:template match="/"&gt;
@@ -29,32 +540,76 @@
       &lt;/body&gt;
     &lt;/html&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><p>
+&lt;/xsl:stylesheet&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
       <strong>What's happening:</strong>
-    </p><ol><li>
-        <p>
-          <code>&lt;xsl:stylesheet&gt;</code> declares this is an XSLT stylesheet. The <code>xmlns:xsl</code> namespace is required.</p>
-      </li><li>
-        <p>
-          <code>&lt;xsl:output method="html"&gt;</code> tells the engine to produce HTML output (not XML).</p>
-      </li><li>
-        <p>
-          <code>&lt;xsl:template match="/"&gt;</code> is a <strong>template rule</strong> that matches the document root. When the engine encounters the root, it executes this template.</p>
-      </li><li>
-        <p>Everything inside the template that isn't an <code>xsl:</code> element is <strong>literal result elements</strong> — copied directly to the output.</p>
-      </li><li>
-        <p>
-          <code>&lt;xsl:value-of select="count(//product)"/&gt;</code> evaluates an XPath expression and inserts the result as text.</p>
-      </li></ol><p>
+    
+                                </p>
+                                <ol>
+                                  <li>
+        
+                                    <p>
+          <code>&lt;xsl:stylesheet&gt;</code> declares this is an XSLT stylesheet. The <code>xmlns:xsl</code> namespace is required.
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <code>&lt;xsl:output method="html"&gt;</code> tells the engine to produce HTML output (not XML).
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <code>&lt;xsl:template match="/"&gt;</code> is a <strong>template rule</strong> that matches the document root. When the engine encounters the root, it executes this template.
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>Everything inside the template that isn't an <code>xsl:</code> element is <strong>literal result elements</strong> — copied directly to the output.
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <code>&lt;xsl:value-of select="count(//product)"/&gt;</code> evaluates an XPath expression and inserts the result as text.
+                                    </p>
+      
+                                  </li>
+                                </ol>
+                                <p>
       <strong>Output:</strong>
-    </p><pre><code class="language-html">&lt;!DOCTYPE html&gt;
+    
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">html</span>
+                                  </figcaption>
+                                  <pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;head&gt;&lt;title&gt;Product Catalog&lt;/title&gt;&lt;/head&gt;
   &lt;body&gt;
     &lt;h1&gt;Product Catalog&lt;/h1&gt;
     &lt;p&gt;We have 3 products.&lt;/p&gt;
   &lt;/body&gt;
-&lt;/html&gt;</code></pre><p>If you've written Razor views, this should feel familiar — it's a template with embedded expressions. The difference is that the "expressions" are XPath, and the matching is automatic.</p><h2 id="step-2-iterating-with-xsl-for-each"><a class="anchor" href="#step-2-iterating-with-xsl-for-each">#</a>Step 2: Iterating with xsl:for-each</h2><p>Let's list the products:</p><pre><code class="language-xml">&lt;xsl:template match="/"&gt;
+&lt;/html&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>If you've written Razor views, this should feel familiar — it's a template with embedded expressions. The difference is that the "expressions" are XPath, and the matching is automatic.
+                                </p>
+                                <h2 id="step-2-iterating-with-xsl-for-each"><a class="anchor" href="#step-2-iterating-with-xsl-for-each">#</a>Step 2: Iterating with xsl:for-each
+                                </h2>
+                                <p>Let's list the products:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xml</span>
+                                  </figcaption>
+                                  <pre><code class="language-xml">&lt;xsl:template match="/"&gt;
   &lt;html&gt;
     &lt;head&gt;&lt;title&gt;Product Catalog&lt;/title&gt;&lt;/head&gt;
     &lt;body&gt;
@@ -69,34 +624,98 @@
       &lt;/ul&gt;
     &lt;/body&gt;
   &lt;/html&gt;
-&lt;/xsl:template&gt;</code></pre><p>
-      <code>xsl:for-each</code> is like C#'s <code>foreach</code> — it iterates over the nodes selected by the <code>select</code> expression. Inside the loop, <code>.</code> (the context node) is the current product.</p><p>
+&lt;/xsl:template&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <code>xsl:for-each</code> is like C#'s <code>foreach</code> — it iterates over the nodes selected by the <code>select</code> expression. Inside the loop, <code>.</code> (the context node) is the current product.
+                                </p>
+                                <p>
       <strong>Output:</strong>
-    </p><pre><code class="language-html">&lt;ul&gt;
+    
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">html</span>
+                                  </figcaption>
+                                  <pre><code class="language-html">&lt;ul&gt;
   &lt;li&gt;Wireless Mouse — $29.99&lt;/li&gt;
   &lt;li&gt;Mechanical Keyboard — $89.99&lt;/li&gt;
   &lt;li&gt;USB-C Hub — $45.00&lt;/li&gt;
-&lt;/ul&gt;</code></pre><h2 id="step-3-conditionals-with-xsl-if"><a class="anchor" href="#step-3-conditionals-with-xsl-if">#</a>Step 3: Conditionals with xsl:if</h2><p>Let's mark products over $50:</p><pre><code class="language-xml">&lt;xsl:for-each select="//product"&gt;
+&lt;/ul&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="step-3-conditionals-with-xsl-if"><a class="anchor" href="#step-3-conditionals-with-xsl-if">#</a>Step 3: Conditionals with xsl:if
+                                </h2>
+                                <p>Let's mark products over $50:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xml</span>
+                                  </figcaption>
+                                  <pre><code class="language-xml">&lt;xsl:for-each select="//product"&gt;
   &lt;li&gt;
     &lt;xsl:value-of select="name"/&gt; — $&lt;xsl:value-of select="price"/&gt;
     &lt;xsl:if test="price &gt; 50"&gt;
       &lt;span class="premium"&gt; ★ Premium&lt;/span&gt;
     &lt;/xsl:if&gt;
   &lt;/li&gt;
-&lt;/xsl:for-each&gt;</code></pre><p>
-      <code>xsl:if</code> is a simple conditional — like C#'s <code>if</code> without <code>else</code>. For if/else logic, use <code>xsl:choose</code> (covered in <a href="instructions/index.html" title="">Instructions Reference</a>).</p><h2 id="step-4-accessing-attributes"><a class="anchor" href="#step-4-accessing-attributes">#</a>Step 4: Accessing Attributes</h2><p>Let's use the <code>id</code> and <code>category</code> attributes:</p><pre><code class="language-xml">&lt;xsl:for-each select="//product"&gt;
+&lt;/xsl:for-each&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <code>xsl:if</code> is a simple conditional — like C#'s <code>if</code> without <code>else</code>. For if/else logic, use <code>xsl:choose</code> (covered in <a href="instructions/index.html">Instructions Reference</a>).
+                                </p>
+                                <h2 id="step-4-accessing-attributes"><a class="anchor" href="#step-4-accessing-attributes">#</a>Step 4: Accessing Attributes
+                                </h2>
+                                <p>Let's use the <code>id</code> and <code>category</code> attributes:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xml</span>
+                                  </figcaption>
+                                  <pre><code class="language-xml">&lt;xsl:for-each select="//product"&gt;
   &lt;li id="{@id}" class="category-{@category}"&gt;
     &lt;xsl:value-of select="name"/&gt;
   &lt;/li&gt;
-&lt;/xsl:for-each&gt;</code></pre><p>The <code>{@id}</code> syntax is an <strong>attribute value template</strong> — it evaluates the XPath expression inside <code>{}</code> and inserts the result. This is the XSLT equivalent of C#'s string interpolation <code>$"category-{product.Category}"</code>.</p><p>
+&lt;/xsl:for-each&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>The <code>{@id}</code> syntax is an <strong>attribute value template</strong> — it evaluates the XPath expression inside <code>{}</code> and inserts the result. This is the XSLT equivalent of C#'s string interpolation <code>$"category-{product.Category}"</code>.
+                                </p>
+                                <p>
       <strong>Output:</strong>
-    </p><pre><code class="language-html">&lt;li id="P001" class="category-electronics"&gt;Wireless Mouse&lt;/li&gt;
+    
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">html</span>
+                                  </figcaption>
+                                  <pre><code class="language-html">&lt;li id="P001" class="category-electronics"&gt;Wireless Mouse&lt;/li&gt;
 &lt;li id="P002" class="category-electronics"&gt;Mechanical Keyboard&lt;/li&gt;
-&lt;li id="P003" class="category-accessories"&gt;USB-C Hub&lt;/li&gt;</code></pre><h2 id="step-5-sorting"><a class="anchor" href="#step-5-sorting">#</a>Step 5: Sorting</h2><p>Let's sort products by price, cheapest first:</p><pre><code class="language-xml">&lt;xsl:for-each select="//product"&gt;
+&lt;li id="P003" class="category-accessories"&gt;USB-C Hub&lt;/li&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="step-5-sorting"><a class="anchor" href="#step-5-sorting">#</a>Step 5: Sorting
+                                </h2>
+                                <p>Let's sort products by price, cheapest first:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xml</span>
+                                  </figcaption>
+                                  <pre><code class="language-xml">&lt;xsl:for-each select="//product"&gt;
   &lt;xsl:sort select="price" data-type="number" order="ascending"/&gt;
   &lt;li&gt;&lt;xsl:value-of select="name"/&gt; — $&lt;xsl:value-of select="price"/&gt;&lt;/li&gt;
-&lt;/xsl:for-each&gt;</code></pre><p>
-      <code>xsl:sort</code> must be the first child of <code>xsl:for-each</code>. The <code>data-type="number"</code> is important — without it, "89.99" sorts after "9" because string sorting is lexicographic.</p><h2 id="step-6-template-matching-the-real-power"><a class="anchor" href="#step-6-template-matching-the-real-power">#</a>Step 6: Template Matching (The Real Power)</h2><p>Everything above uses <code>xsl:for-each</code>, which is the imperative approach. The real power of XSLT is <strong>template matching</strong> — defining rules that automatically fire for different node types.</p><pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;/xsl:for-each&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
+      <code>xsl:sort</code> must be the first child of <code>xsl:for-each</code>. The <code>data-type="number"</code> is important — without it, "89.99" sorts after "9" because string sorting is lexicographic.
+                                </p>
+                                <h2 id="step-6-template-matching-the-real-power"><a class="anchor" href="#step-6-template-matching-the-real-power">#</a>Step 6: Template Matching (The Real Power)
+                                </h2>
+                                <p>Everything above uses <code>xsl:for-each</code>, which is the imperative approach. The real power of XSLT is <strong>template matching</strong> — defining rules that automatically fire for different node types.
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xml</span>
+                                  </figcaption>
+                                  <pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;xsl:output method="html" html-version="5" indent="yes"/&gt;
   &lt;!-- Root template: HTML page structure --&gt;
@@ -117,28 +736,137 @@
       &lt;p&gt;&lt;xsl:value-of select="description"/&gt;&lt;/p&gt;
     &lt;/div&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><p>
+&lt;/xsl:stylesheet&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>
       <strong>What changed:</strong>
-    </p><ol><li>
-        <p>The root template calls <code>&lt;xsl:apply-templates select="catalog/product"/&gt;</code> — this tells the engine to find template rules that match each product element.</p>
-      </li><li>
-        <p>The <code>&lt;xsl:template match="product"&gt;</code> rule fires for each product.</p>
-      </li><li>
-        <p>The engine handles the iteration — you don't write a loop.</p>
-      </li></ol><p>
-      <strong>Why this matters:</strong> With <code>xsl:for-each</code>, the root template knows about products. With template matching, each template is self-contained. You can add new element types just by adding new templates — the existing ones don't change. This is the Open/Closed Principle, built into the language.</p><h2 id="running-this-in-net"><a class="anchor" href="#running-this-in-net">#</a>Running This in .NET</h2><p>Using the PhoenixmlDb XSLT engine:</p><pre><code class="language-csharp">using PhoenixmlDb.Xslt;
+    
+                                </p>
+                                <ol>
+                                  <li>
+        
+                                    <p>The root template calls <code>&lt;xsl:apply-templates select="catalog/product"/&gt;</code> — this tells the engine to find template rules that match each product element.
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>The <code>&lt;xsl:template match="product"&gt;</code> rule fires for each product.
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>The engine handles the iteration — you don't write a loop.
+                                    </p>
+      
+                                  </li>
+                                </ol>
+                                <p>
+      <strong>Why this matters:</strong> With <code>xsl:for-each</code>, the root template knows about products. With template matching, each template is self-contained. You can add new element types just by adding new templates — the existing ones don't change. This is the Open/Closed Principle, built into the language.
+                                </p>
+                                <h2 id="running-this-in-net"><a class="anchor" href="#running-this-in-net">#</a>Running This in .NET
+                                </h2>
+                                <p>Using the PhoenixmlDb XSLT engine:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">using PhoenixmlDb.Xslt;
 var stylesheet = File.ReadAllText("catalog.xslt");
 var sourceXml = File.ReadAllText("catalog.xml");
 var transformer = new XsltTransformer();
 await transformer.LoadStylesheetAsync(stylesheet, new Uri("catalog.xslt"));
 var html = await transformer.TransformAsync(sourceXml);
-Console.WriteLine(html);</code></pre><p>Or using the Crucible CLI:</p><pre><code class="language-bash">xslt catalog.xslt catalog.xml -o catalog.html</code></pre><h2 id="what-s-next"><a class="anchor" href="#what-s-next">#</a>What's Next</h2><p>This tutorial covered the basics — <code>xsl:value-of</code>, <code>xsl:for-each</code>, <code>xsl:if</code>, <code>xsl:sort</code>, attribute value templates, and template matching. The next pages cover:</p><ul><li>
-        <p>
-          <a href="template-matching.html" title="">Template Matching</a> — the paradigm shift from imperative to declarative</p>
-      </li><li>
-        <p>
-          <a href="instructions/index.html" title="">Instructions Reference</a> — the complete set of XSLT instructions</p>
-      </li><li>
-        <p>
-          <a href="output-methods.html" title="">Output Methods</a> — producing HTML, XML, JSON, and text</p>
-      </li></ul></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+Console.WriteLine(html);</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>Or using the Crucible CLI:
+                                </p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">bash</span>
+                                  </figcaption>
+                                  <pre><code class="language-bash">xslt catalog.xslt catalog.xml -o catalog.html</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="what-s-next"><a class="anchor" href="#what-s-next">#</a>What's Next
+                                </h2>
+                                <p>This tutorial covered the basics — <code>xsl:value-of</code>, <code>xsl:for-each</code>, <code>xsl:if</code>, <code>xsl:sort</code>, attribute value templates, and template matching. The next pages cover:
+                                </p>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="template-matching.html">Template Matching</a> — the paradigm shift from imperative to declarative
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="instructions/index.html">Instructions Reference</a> — the complete set of XSLT instructions
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="output-methods.html">Output Methods</a> — producing HTML, XML, JSON, and text
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                              </article>
+                            </main>
+                            <aside class="toc" aria-label="On this page">
+                              <p class="toc-label">On this page
+                              </p>
+                              <ul>
+                                <li class="toc-h2"><a href="#the-source-document">The Source Document</a>
+                                </li>
+                                <li class="toc-h2"><a href="#step-1-the-minimal-stylesheet">Step 1: The Minimal Stylesheet</a>
+                                </li>
+                                <li class="toc-h2"><a href="#step-2-iterating-with-xsl-for-each">Step 2: Iterating with xsl:for-each</a>
+                                </li>
+                                <li class="toc-h2"><a href="#step-3-conditionals-with-xsl-if">Step 3: Conditionals with xsl:if</a>
+                                </li>
+                                <li class="toc-h2"><a href="#step-4-accessing-attributes">Step 4: Accessing Attributes</a>
+                                </li>
+                                <li class="toc-h2"><a href="#step-5-sorting">Step 5: Sorting</a>
+                                </li>
+                                <li class="toc-h2"><a href="#step-6-template-matching-the-real-power">Step 6: Template Matching (The Real Power)</a>
+                                </li>
+                                <li class="toc-h2"><a href="#running-this-in-net">Running This in .NET</a>
+                                </li>
+                                <li class="toc-h2"><a href="#what-s-next">What's Next</a>
+                                </li>
+                              </ul>
+                            </aside>
+                          </div>
+                          <div class="search-overlay" id="search-overlay" hidden="hidden">
+                            <div class="search-backdrop">
+                            </div>
+                            <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                              <div class="search-results" id="search-results">
+                              </div>
+                            </div>
+                          </div>
+                          <footer class="site-footer">
+                            <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                            </p>
+                          </footer>
+                          <script src="https://unpkg.com/lunr/lunr.js">
+                          </script>
+                          <script src="/js/prism.js">
+                          </script>
+                          <script src="/js/search.js">
+                          </script>
+                          <script src="/js/theme.js">
+                          </script>
+                          <script src="/js/toc.js">
+                          </script>
+                          <script src="/js/copy.js">
+                          </script>
+                        </body>
+                      </html>

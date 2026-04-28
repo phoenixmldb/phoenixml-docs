@@ -1,113 +1,1097 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Array Functions — PhoenixmlDb Documentation</title><meta name="description" content="XPath ordered array operations — like List&lt;T&gt; in .NET"><link rel="canonical" href="/language-reference/xpath/functions/array.html"><meta property="og:title" content="Array Functions"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xpath/functions/array.html"><meta property="og:description" content="XPath ordered array operations — like List&lt;T&gt; in .NET"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Array Functions — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="XPath ordered array operations — like List&lt;T&gt; in .NET">
+            <link rel="canonical" href="/language-reference/xpath/functions/array.html">
+              <meta property="og:title" content="Array Functions">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xpath/functions/array.html">
+                    <meta property="og:description" content="XPath ordered array operations — like List&lt;T&gt; in .NET">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li class="active"><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="array-functions"><a class="anchor" href="#array-functions">#</a>Array Functions</h1><p>Arrays are ordered, indexable collections introduced in XPath 3.1. Unlike sequences (which are flat), arrays can be nested — an array can contain other arrays. Think of them as <code>List&lt;object&gt;</code> in C# or JSON arrays.</p><p>All array functions are in the <code>array:</code> namespace.</p><h2 id="sequences-vs-arrays"><a class="anchor" href="#sequences-vs-arrays">#</a>Sequences vs Arrays</h2><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Feature</p>
-          </th>
-          <th>
-            <p>Sequence</p>
-          </th>
-          <th>
-            <p>Array</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>Nesting</p>
-          </td>
-          <td>
-            <p>Flat — <code>(1, (2, 3))</code> becomes <code>(1, 2, 3)</code></p>
-          </td>
-          <td>
-            <p>Nestable — <code>[[1, 2], [3, 4]]</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Indexing</p>
-          </td>
-          <td>
-            <p>By position with <code>[N]</code> predicate</p>
-          </td>
-          <td>
-            <p>With <code>?N</code> lookup</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Mutation</p>
-          </td>
-          <td>
-            <p>No in-place mutation</p>
-          </td>
-          <td>
-            <p>No in-place mutation</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Use case</p>
-          </td>
-          <td>
-            <p>Query results, node selections</p>
-          </td>
-          <td>
-            <p>Structured data, JSON interop</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#construction" title="">Construction</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#access" title="">Access</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#modification" title="">Modification</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#transformation" title="">Transformation</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#searching" title="">Searching</a>
-        </p>
-      </li></ul><hr><h2 id="construction"><a class="anchor" href="#construction">#</a>Construction</h2><h3 id="array-literals"><a class="anchor" href="#array-literals">#</a>Array Literals</h3><pre><code class="language-xpath">[1, 2, 3]                    (: array of integers :)
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section open">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li class="active"><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">Functions
+                                </p>
+                                <h1 class="page-title">Array Functions
+                                </h1>
+                                <p class="page-subtitle">XPath ordered array operations — like List&lt;T&gt; in .NET
+                                </p>
+                                <h1 id="array-functions"><a class="anchor" href="#array-functions">#</a>Array Functions
+                                </h1>
+                                <p>Arrays are ordered, indexable collections introduced in XPath 3.1. Unlike sequences (which are flat), arrays can be nested — an array can contain other arrays. Think of them as <code>List&lt;object&gt;</code> in C# or JSON arrays.
+                                </p>
+                                <p>All array functions are in the <code>array:</code> namespace.
+                                </p>
+                                <h2 id="sequences-vs-arrays"><a class="anchor" href="#sequences-vs-arrays">#</a>Sequences vs Arrays
+                                </h2>
+                                <div class="table-wrap">
+                                  <table>
+      
+                                    <thead>
+        
+                                      <tr>
+          
+                                        <th>
+            
+                                          <p>Feature
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Sequence
+                                          </p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Array
+                                          </p>
+          
+                                        </th>
+        
+                                      </tr>
+      
+                                    </thead>
+      
+                                    <tbody>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Nesting
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Flat — <code>(1, (2, 3))</code> becomes <code>(1, 2, 3)</code>
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Nestable — <code>[[1, 2], [3, 4]]</code>
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Indexing
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>By position with <code>[N]</code> predicate
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>With <code>?N</code> lookup
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Mutation
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>No in-place mutation
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>No in-place mutation
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Use case
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Query results, node selections
+                                          </p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Structured data, JSON interop
+                                          </p>
+          
+                                        </td>
+        
+                                      </tr>
+      
+                                    </tbody>
+    
+                                  </table>
+                                </div>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#construction">Construction</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#access">Access</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#modification">Modification</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#transformation">Transformation</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#searching">Searching</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="construction"><a class="anchor" href="#construction">#</a>Construction
+                                  </h2>
+                                  <h3 id="array-literals"><a class="anchor" href="#array-literals">#</a>Array Literals
+                                  </h3>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xpath</span>
+                                    </figcaption>
+                                    <pre><code class="language-xpath">[1, 2, 3]                    (: array of integers :)
 ["a", "b", "c"]              (: array of strings :)
 [[1, 2], [3, 4]]             (: nested arrays :)
-[]                            (: empty array :)</code></pre><hr><h3 id="array-build"><a class="anchor" href="#array-build">#</a>array:build()</h3><p>Builds an array from a sequence using a function. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>array:build($seq as item()*, $fn as function(item()) as item()*) as array(*)</code></p><pre><code class="language-xpath">array:build(1 to 5, function($n) { $n * $n })
-=&gt; [1, 4, 9, 16, 25]</code></pre><p>
-      <strong>C# equivalent:</strong> <code>Enumerable.Range(1, 5).Select(n =&gt; n * n).ToList()</code></p><hr><h3 id="array-join"><a class="anchor" href="#array-join">#</a>array:join()</h3><p>Concatenates multiple arrays into one.</p><p>
-      <strong>Signature:</strong> <code>array:join($arrays as array(*)*) as array(*)</code></p><pre><code class="language-xpath">array:join(([1, 2], [3, 4], [5]))   =&gt; [1, 2, 3, 4, 5]</code></pre><p>
-      <strong>C# equivalent:</strong> <code>lists.SelectMany(x =&gt; x).ToList()</code></p><hr><h2 id="access"><a class="anchor" href="#access">#</a>Access</h2><h3 id="array-size"><a class="anchor" href="#array-size">#</a>array:size()</h3><p>Returns the number of members.</p><pre><code class="language-xpath">array:size([10, 20, 30])   =&gt; 3
-array:size([])              =&gt; 0</code></pre><p>
-      <strong>C# equivalent:</strong> <code>list.Count</code></p><hr><h3 id="array-get"><a class="anchor" href="#array-get">#</a>array:get()</h3><p>Returns the member at a position (1-based).</p><pre><code class="language-xpath">array:get(["a", "b", "c"], 2)   =&gt; "b"</code></pre><p>
-      <strong>Shorthand:</strong> <code>$arr?2</code> — the lookup operator works on arrays with integer keys.</p><p>
-      <strong>C# equivalent:</strong> <code>list[1]</code> (0-based in C#)</p><hr><h3 id="array-head-array-tail-array-foot-array-trunk"><a class="anchor" href="#array-head-array-tail-array-foot-array-trunk">#</a>array:head() / array:tail() / array:foot() / array:trunk()</h3><p>Same semantics as their sequence counterparts:</p><pre><code class="language-xpath">array:head([1, 2, 3])    =&gt; 1
+[]                            (: empty array :)</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <hr>
+                                    <h3 id="array-build"><a class="anchor" href="#array-build">#</a>array:build()
+                                    </h3>
+                                    <p>Builds an array from a sequence using a function. New in XPath 4.0.
+                                    </p>
+                                    <p>
+      <strong>Signature:</strong> <code>array:build($seq as item()*, $fn as function(item()) as item()*) as array(*)</code>
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xpath</span>
+                                      </figcaption>
+                                      <pre><code class="language-xpath">array:build(1 to 5, function($n) { $n * $n })
+=&gt; [1, 4, 9, 16, 25]</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
+      <strong>C# equivalent:</strong> <code>Enumerable.Range(1, 5).Select(n =&gt; n * n).ToList()</code>
+                                    </p>
+                                    <hr>
+                                      <h3 id="array-join"><a class="anchor" href="#array-join">#</a>array:join()
+                                      </h3>
+                                      <p>Concatenates multiple arrays into one.
+                                      </p>
+                                      <p>
+      <strong>Signature:</strong> <code>array:join($arrays as array(*)*) as array(*)</code>
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xpath</span>
+                                        </figcaption>
+                                        <pre><code class="language-xpath">array:join(([1, 2], [3, 4], [5]))   =&gt; [1, 2, 3, 4, 5]</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
+      <strong>C# equivalent:</strong> <code>lists.SelectMany(x =&gt; x).ToList()</code>
+                                      </p>
+                                      <hr>
+                                        <h2 id="access"><a class="anchor" href="#access">#</a>Access
+                                        </h2>
+                                        <h3 id="array-size"><a class="anchor" href="#array-size">#</a>array:size()
+                                        </h3>
+                                        <p>Returns the number of members.
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xpath</span>
+                                          </figcaption>
+                                          <pre><code class="language-xpath">array:size([10, 20, 30])   =&gt; 3
+array:size([])              =&gt; 0</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
+      <strong>C# equivalent:</strong> <code>list.Count</code>
+                                        </p>
+                                        <hr>
+                                          <h3 id="array-get"><a class="anchor" href="#array-get">#</a>array:get()
+                                          </h3>
+                                          <p>Returns the member at a position (1-based).
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xpath</span>
+                                            </figcaption>
+                                            <pre><code class="language-xpath">array:get(["a", "b", "c"], 2)   =&gt; "b"</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>
+      <strong>Shorthand:</strong> <code>$arr?2</code> — the lookup operator works on arrays with integer keys.
+                                          </p>
+                                          <p>
+      <strong>C# equivalent:</strong> <code>list[1]</code> (0-based in C#)
+                                          </p>
+                                          <hr>
+                                            <h3 id="array-head-array-tail-array-foot-array-trunk"><a class="anchor" href="#array-head-array-tail-array-foot-array-trunk">#</a>array:head() / array:tail() / array:foot() / array:trunk()
+                                            </h3>
+                                            <p>Same semantics as their sequence counterparts:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xpath</span>
+                                              </figcaption>
+                                              <pre><code class="language-xpath">array:head([1, 2, 3])    =&gt; 1
 array:tail([1, 2, 3])    =&gt; [2, 3]
 array:foot([1, 2, 3])    =&gt; 3         (: XPath 4.0 :)
-array:trunk([1, 2, 3])   =&gt; [1, 2]    (: XPath 4.0 :)</code></pre><hr><h3 id="array-subarray"><a class="anchor" href="#array-subarray">#</a>array:subarray()</h3><p>Extracts a contiguous slice.</p><pre><code class="language-xpath">array:subarray([10, 20, 30, 40, 50], 2, 3)   =&gt; [20, 30, 40]</code></pre><hr><h3 id="array-slice"><a class="anchor" href="#array-slice">#</a>array:slice()</h3><p>Advanced slicing with start, stop, step. New in XPath 4.0.</p><pre><code class="language-xpath">array:slice([1, 2, 3, 4, 5, 6, 7, 8], 2, 7, 2)   =&gt; [2, 4, 6]</code></pre><hr><h2 id="modification"><a class="anchor" href="#modification">#</a>Modification</h2><p>Arrays are immutable — these return new arrays.</p><h3 id="array-put"><a class="anchor" href="#array-put">#</a>array:put()</h3><p>Returns a new array with the value at a position replaced.</p><pre><code class="language-xpath">array:put(["a", "b", "c"], 2, "X")   =&gt; ["a", "X", "c"]</code></pre><p>
-      <strong>C# equivalent:</strong> <code>list[1] = "X"</code> (but immutable)</p><hr><h3 id="array-append"><a class="anchor" href="#array-append">#</a>array:append()</h3><p>Appends a member to the end.</p><pre><code class="language-xpath">array:append([1, 2], 3)   =&gt; [1, 2, 3]</code></pre><p>
-      <strong>C# equivalent:</strong> <code>list.Add(3)</code> (immutable version)</p><hr><h3 id="array-insert-before"><a class="anchor" href="#array-insert-before">#</a>array:insert-before()</h3><p>Inserts a member at a position.</p><pre><code class="language-xpath">array:insert-before([1, 2, 3], 2, 99)   =&gt; [1, 99, 2, 3]</code></pre><hr><h3 id="array-remove"><a class="anchor" href="#array-remove">#</a>array:remove()</h3><p>Removes the member at a position.</p><pre><code class="language-xpath">array:remove([1, 2, 3], 2)   =&gt; [1, 3]</code></pre><hr><h3 id="array-reverse"><a class="anchor" href="#array-reverse">#</a>array:reverse()</h3><pre><code class="language-xpath">array:reverse([1, 2, 3])   =&gt; [3, 2, 1]</code></pre><hr><h2 id="transformation"><a class="anchor" href="#transformation">#</a>Transformation</h2><h3 id="array-for-each"><a class="anchor" href="#array-for-each">#</a>array:for-each()</h3><p>Applies a function to each member.</p><pre><code class="language-xpath">array:for-each([1, 2, 3], function($n) { $n * 2 })
-=&gt; [2, 4, 6]</code></pre><p>
-      <strong>C# equivalent:</strong> <code>list.Select(n =&gt; n * 2).ToList()</code></p><hr><h3 id="array-filter"><a class="anchor" href="#array-filter">#</a>array:filter()</h3><p>Keeps members where the predicate is true.</p><pre><code class="language-xpath">array:filter([1, 2, 3, 4, 5], function($n) { $n mod 2 = 0 })
-=&gt; [2, 4]</code></pre><p>
-      <strong>C# equivalent:</strong> <code>list.Where(n =&gt; n % 2 == 0).ToList()</code></p><hr><h3 id="array-fold-left-array-fold-right"><a class="anchor" href="#array-fold-left-array-fold-right">#</a>array:fold-left() / array:fold-right()</h3><p>Reduces an array to a single value.</p><pre><code class="language-xpath">array:fold-left([1, 2, 3, 4], 0, function($acc, $n) { $acc + $n })
-=&gt; 10</code></pre><p>
-      <strong>C# equivalent:</strong> <code>list.Aggregate(0, (acc, n) =&gt; acc + n)</code></p><hr><h3 id="array-for-each-pair"><a class="anchor" href="#array-for-each-pair">#</a>array:for-each-pair()</h3><p>Applies a function to pairs of members from two arrays.</p><pre><code class="language-xpath">array:for-each-pair([1, 2, 3], [10, 20, 30],
+array:trunk([1, 2, 3])   =&gt; [1, 2]    (: XPath 4.0 :)</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <hr>
+                                              <h3 id="array-subarray"><a class="anchor" href="#array-subarray">#</a>array:subarray()
+                                              </h3>
+                                              <p>Extracts a contiguous slice.
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xpath</span>
+                                                </figcaption>
+                                                <pre><code class="language-xpath">array:subarray([10, 20, 30, 40, 50], 2, 3)   =&gt; [20, 30, 40]</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <hr>
+                                                <h3 id="array-slice"><a class="anchor" href="#array-slice">#</a>array:slice()
+                                                </h3>
+                                                <p>Advanced slicing with start, stop, step. New in XPath 4.0.
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xpath</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xpath">array:slice([1, 2, 3, 4, 5, 6, 7, 8], 2, 7, 2)   =&gt; [2, 4, 6]</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <hr>
+                                                  <h2 id="modification"><a class="anchor" href="#modification">#</a>Modification
+                                                  </h2>
+                                                  <p>Arrays are immutable — these return new arrays.
+                                                  </p>
+                                                  <h3 id="array-put"><a class="anchor" href="#array-put">#</a>array:put()
+                                                  </h3>
+                                                  <p>Returns a new array with the value at a position replaced.
+                                                  </p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xpath</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xpath">array:put(["a", "b", "c"], 2, "X")   =&gt; ["a", "X", "c"]</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <p>
+      <strong>C# equivalent:</strong> <code>list[1] = "X"</code> (but immutable)
+                                                  </p>
+                                                  <hr>
+                                                    <h3 id="array-append"><a class="anchor" href="#array-append">#</a>array:append()
+                                                    </h3>
+                                                    <p>Appends a member to the end.
+                                                    </p>
+                                                    <figure class="code">
+                                                      <figcaption><span class="lang">xpath</span>
+                                                      </figcaption>
+                                                      <pre><code class="language-xpath">array:append([1, 2], 3)   =&gt; [1, 2, 3]</code>
+                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                    </figure>
+                                                    <p>
+      <strong>C# equivalent:</strong> <code>list.Add(3)</code> (immutable version)
+                                                    </p>
+                                                    <hr>
+                                                      <h3 id="array-insert-before"><a class="anchor" href="#array-insert-before">#</a>array:insert-before()
+                                                      </h3>
+                                                      <p>Inserts a member at a position.
+                                                      </p>
+                                                      <figure class="code">
+                                                        <figcaption><span class="lang">xpath</span>
+                                                        </figcaption>
+                                                        <pre><code class="language-xpath">array:insert-before([1, 2, 3], 2, 99)   =&gt; [1, 99, 2, 3]</code>
+                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                      </figure>
+                                                      <hr>
+                                                        <h3 id="array-remove"><a class="anchor" href="#array-remove">#</a>array:remove()
+                                                        </h3>
+                                                        <p>Removes the member at a position.
+                                                        </p>
+                                                        <figure class="code">
+                                                          <figcaption><span class="lang">xpath</span>
+                                                          </figcaption>
+                                                          <pre><code class="language-xpath">array:remove([1, 2, 3], 2)   =&gt; [1, 3]</code>
+                                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                        </figure>
+                                                        <hr>
+                                                          <h3 id="array-reverse"><a class="anchor" href="#array-reverse">#</a>array:reverse()
+                                                          </h3>
+                                                          <figure class="code">
+                                                            <figcaption><span class="lang">xpath</span>
+                                                            </figcaption>
+                                                            <pre><code class="language-xpath">array:reverse([1, 2, 3])   =&gt; [3, 2, 1]</code>
+                                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                          </figure>
+                                                          <hr>
+                                                            <h2 id="transformation"><a class="anchor" href="#transformation">#</a>Transformation
+                                                            </h2>
+                                                            <h3 id="array-for-each"><a class="anchor" href="#array-for-each">#</a>array:for-each()
+                                                            </h3>
+                                                            <p>Applies a function to each member.
+                                                            </p>
+                                                            <figure class="code">
+                                                              <figcaption><span class="lang">xpath</span>
+                                                              </figcaption>
+                                                              <pre><code class="language-xpath">array:for-each([1, 2, 3], function($n) { $n * 2 })
+=&gt; [2, 4, 6]</code>
+                                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                            </figure>
+                                                            <p>
+      <strong>C# equivalent:</strong> <code>list.Select(n =&gt; n * 2).ToList()</code>
+                                                            </p>
+                                                            <hr>
+                                                              <h3 id="array-filter"><a class="anchor" href="#array-filter">#</a>array:filter()
+                                                              </h3>
+                                                              <p>Keeps members where the predicate is true.
+                                                              </p>
+                                                              <figure class="code">
+                                                                <figcaption><span class="lang">xpath</span>
+                                                                </figcaption>
+                                                                <pre><code class="language-xpath">array:filter([1, 2, 3, 4, 5], function($n) { $n mod 2 = 0 })
+=&gt; [2, 4]</code>
+                                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                              </figure>
+                                                              <p>
+      <strong>C# equivalent:</strong> <code>list.Where(n =&gt; n % 2 == 0).ToList()</code>
+                                                              </p>
+                                                              <hr>
+                                                                <h3 id="array-fold-left-array-fold-right"><a class="anchor" href="#array-fold-left-array-fold-right">#</a>array:fold-left() / array:fold-right()
+                                                                </h3>
+                                                                <p>Reduces an array to a single value.
+                                                                </p>
+                                                                <figure class="code">
+                                                                  <figcaption><span class="lang">xpath</span>
+                                                                  </figcaption>
+                                                                  <pre><code class="language-xpath">array:fold-left([1, 2, 3, 4], 0, function($acc, $n) { $acc + $n })
+=&gt; 10</code>
+                                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                </figure>
+                                                                <p>
+      <strong>C# equivalent:</strong> <code>list.Aggregate(0, (acc, n) =&gt; acc + n)</code>
+                                                                </p>
+                                                                <hr>
+                                                                  <h3 id="array-for-each-pair"><a class="anchor" href="#array-for-each-pair">#</a>array:for-each-pair()
+                                                                  </h3>
+                                                                  <p>Applies a function to pairs of members from two arrays.
+                                                                  </p>
+                                                                  <figure class="code">
+                                                                    <figcaption><span class="lang">xpath</span>
+                                                                    </figcaption>
+                                                                    <pre><code class="language-xpath">array:for-each-pair([1, 2, 3], [10, 20, 30],
   function($a, $b) { $a + $b })
-=&gt; [11, 22, 33]</code></pre><p>
-      <strong>C# equivalent:</strong> <code>a.Zip(b, (x, y) =&gt; x + y).ToList()</code></p><hr><h3 id="array-sort-array-sort-by"><a class="anchor" href="#array-sort-array-sort-by">#</a>array:sort() / array:sort-by()</h3><pre><code class="language-xpath">array:sort(["banana", "apple", "cherry"])
+=&gt; [11, 22, 33]</code>
+                                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                  </figure>
+                                                                  <p>
+      <strong>C# equivalent:</strong> <code>a.Zip(b, (x, y) =&gt; x + y).ToList()</code>
+                                                                  </p>
+                                                                  <hr>
+                                                                    <h3 id="array-sort-array-sort-by"><a class="anchor" href="#array-sort-array-sort-by">#</a>array:sort() / array:sort-by()
+                                                                    </h3>
+                                                                    <figure class="code">
+                                                                      <figcaption><span class="lang">xpath</span>
+                                                                      </figcaption>
+                                                                      <pre><code class="language-xpath">array:sort(["banana", "apple", "cherry"])
 =&gt; ["apple", "banana", "cherry"]
-array:sort-by($books, function($b) { $b?price })</code></pre><hr><h3 id="array-flatten"><a class="anchor" href="#array-flatten">#</a>array:flatten()</h3><p>Recursively flattens nested arrays into a sequence.</p><pre><code class="language-xpath">array:flatten([[1, 2], [3, [4, 5]]])   =&gt; (1, 2, 3, 4, 5)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>list.SelectMany(x =&gt; x is IEnumerable e ? e.Cast&lt;object&gt;() : new[] { x })</code></p><hr><h2 id="searching"><a class="anchor" href="#searching">#</a>Searching</h2><h3 id="array-index-of"><a class="anchor" href="#array-index-of">#</a>array:index-of()</h3><p>Returns positions where a value appears. New in XPath 4.0.</p><pre><code class="language-xpath">array:index-of(["a", "b", "c", "b"], "b")   =&gt; (2, 4)</code></pre><hr><h3 id="array-index-where"><a class="anchor" href="#array-index-where">#</a>array:index-where()</h3><p>Returns positions where a predicate is true. New in XPath 4.0.</p><pre><code class="language-xpath">array:index-where([3, 1, 4, 1, 5], function($n) { $n &gt; 3 })
-=&gt; (3, 5)</code></pre><hr><h2 id="conversion"><a class="anchor" href="#conversion">#</a>Conversion</h2><h3 id="array-members"><a class="anchor" href="#array-members">#</a>array:members()</h3><p>Converts an array to a sequence of its members (each wrapped in a single-item array). New in XPath 4.0.</p><h3 id="array-items"><a class="anchor" href="#array-items">#</a>array:items()</h3><p>Converts an array to a flat sequence. New in XPath 4.0.</p><pre><code class="language-xpath">array:items([1, 2, 3])   =&gt; (1, 2, 3)</code></pre><h3 id="array-of-members"><a class="anchor" href="#array-of-members">#</a>array:of-members()</h3><p>Creates an array from a sequence of single-item arrays. New in XPath 4.0.</p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+array:sort-by($books, function($b) { $b?price })</code>
+                                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                    </figure>
+                                                                    <hr>
+                                                                      <h3 id="array-flatten"><a class="anchor" href="#array-flatten">#</a>array:flatten()
+                                                                      </h3>
+                                                                      <p>Recursively flattens nested arrays into a sequence.
+                                                                      </p>
+                                                                      <figure class="code">
+                                                                        <figcaption><span class="lang">xpath</span>
+                                                                        </figcaption>
+                                                                        <pre><code class="language-xpath">array:flatten([[1, 2], [3, [4, 5]]])   =&gt; (1, 2, 3, 4, 5)</code>
+                                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                      </figure>
+                                                                      <p>
+      <strong>C# equivalent:</strong> <code>list.SelectMany(x =&gt; x is IEnumerable e ? e.Cast&lt;object&gt;() : new[] { x })</code>
+                                                                      </p>
+                                                                      <hr>
+                                                                        <h2 id="searching"><a class="anchor" href="#searching">#</a>Searching
+                                                                        </h2>
+                                                                        <h3 id="array-index-of"><a class="anchor" href="#array-index-of">#</a>array:index-of()
+                                                                        </h3>
+                                                                        <p>Returns positions where a value appears. New in XPath 4.0.
+                                                                        </p>
+                                                                        <figure class="code">
+                                                                          <figcaption><span class="lang">xpath</span>
+                                                                          </figcaption>
+                                                                          <pre><code class="language-xpath">array:index-of(["a", "b", "c", "b"], "b")   =&gt; (2, 4)</code>
+                                                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                        </figure>
+                                                                        <hr>
+                                                                          <h3 id="array-index-where"><a class="anchor" href="#array-index-where">#</a>array:index-where()
+                                                                          </h3>
+                                                                          <p>Returns positions where a predicate is true. New in XPath 4.0.
+                                                                          </p>
+                                                                          <figure class="code">
+                                                                            <figcaption><span class="lang">xpath</span>
+                                                                            </figcaption>
+                                                                            <pre><code class="language-xpath">array:index-where([3, 1, 4, 1, 5], function($n) { $n &gt; 3 })
+=&gt; (3, 5)</code>
+                                                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                          </figure>
+                                                                          <hr>
+                                                                            <h2 id="conversion"><a class="anchor" href="#conversion">#</a>Conversion
+                                                                            </h2>
+                                                                            <h3 id="array-members"><a class="anchor" href="#array-members">#</a>array:members()
+                                                                            </h3>
+                                                                            <p>Converts an array to a sequence of its members (each wrapped in a single-item array). New in XPath 4.0.
+                                                                            </p>
+                                                                            <h3 id="array-items"><a class="anchor" href="#array-items">#</a>array:items()
+                                                                            </h3>
+                                                                            <p>Converts an array to a flat sequence. New in XPath 4.0.
+                                                                            </p>
+                                                                            <figure class="code">
+                                                                              <figcaption><span class="lang">xpath</span>
+                                                                              </figcaption>
+                                                                              <pre><code class="language-xpath">array:items([1, 2, 3])   =&gt; (1, 2, 3)</code>
+                                                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                            </figure>
+                                                                            <h3 id="array-of-members"><a class="anchor" href="#array-of-members">#</a>array:of-members()
+                                                                            </h3>
+                                                                            <p>Creates an array from a sequence of single-item arrays. New in XPath 4.0.
+                                                                            </p>
+                                                                          </article>
+                                                                        </main>
+                                                                        <aside class="toc" aria-label="On this page">
+                                                                          <p class="toc-label">On this page
+                                                                          </p>
+                                                                          <ul>
+                                                                            <li class="toc-h2"><a href="#sequences-vs-arrays">Sequences vs Arrays</a>
+                                                                            </li>
+                                                                            <li class="toc-h2"><a href="#contents">Contents</a>
+                                                                            </li>
+                                                                            <li class="toc-h2"><a href="#construction">Construction</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-literals">Array Literals</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-build">array:build()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-join">array:join()</a>
+                                                                            </li>
+                                                                            <li class="toc-h2"><a href="#access">Access</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-size">array:size()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-get">array:get()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-head-array-tail-array-foot-array-trunk">array:head() / array:tail() / array:foot() / array:trunk()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-subarray">array:subarray()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-slice">array:slice()</a>
+                                                                            </li>
+                                                                            <li class="toc-h2"><a href="#modification">Modification</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-put">array:put()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-append">array:append()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-insert-before">array:insert-before()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-remove">array:remove()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-reverse">array:reverse()</a>
+                                                                            </li>
+                                                                            <li class="toc-h2"><a href="#transformation">Transformation</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-for-each">array:for-each()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-filter">array:filter()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-fold-left-array-fold-right">array:fold-left() / array:fold-right()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-for-each-pair">array:for-each-pair()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-sort-array-sort-by">array:sort() / array:sort-by()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-flatten">array:flatten()</a>
+                                                                            </li>
+                                                                            <li class="toc-h2"><a href="#searching">Searching</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-index-of">array:index-of()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-index-where">array:index-where()</a>
+                                                                            </li>
+                                                                            <li class="toc-h2"><a href="#conversion">Conversion</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-members">array:members()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-items">array:items()</a>
+                                                                            </li>
+                                                                            <li class="toc-h3"><a href="#array-of-members">array:of-members()</a>
+                                                                            </li>
+                                                                          </ul>
+                                                                        </aside>
+                                                                      </div>
+                                                                      <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                                                        <div class="search-backdrop">
+                                                                        </div>
+                                                                        <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                                                          <div class="search-results" id="search-results">
+                                                                          </div>
+                                                                        </div>
+                                                                      </div>
+                                                                      <footer class="site-footer">
+                                                                        <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                                                        </p>
+                                                                      </footer>
+                                                                      <script src="https://unpkg.com/lunr/lunr.js">
+                                                                      </script>
+                                                                      <script src="/js/prism.js">
+                                                                      </script>
+                                                                      <script src="/js/search.js">
+                                                                      </script>
+                                                                      <script src="/js/theme.js">
+                                                                      </script>
+                                                                      <script src="/js/toc.js">
+                                                                      </script>
+                                                                      <script src="/js/copy.js">
+                                                                      </script>
+                                                                    </body>
+                                                                  </html>

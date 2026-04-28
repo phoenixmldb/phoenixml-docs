@@ -1,373 +1,1454 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Full-Text Search — PhoenixmlDb Documentation</title><meta name="description" content="XQuery Full-Text — ft:contains, match options, scoring, and search expressions"><link rel="canonical" href="/language-reference/xquery/full-text.html"><meta property="og:title" content="Full-Text Search"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xquery/full-text.html"><meta property="og:description" content="XQuery Full-Text — ft:contains, match options, scoring, and search expressions"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Full-Text Search — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="XQuery Full-Text — ft:contains, match options, scoring, and search expressions">
+            <link rel="canonical" href="/language-reference/xquery/full-text.html">
+              <meta property="og:title" content="Full-Text Search">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xquery/full-text.html">
+                    <meta property="og:description" content="XQuery Full-Text — ft:contains, match options, scoring, and search expressions">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li class="active"><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="full-text-search"><a class="anchor" href="#full-text-search">#</a>Full-Text Search</h1><p>XQuery's built-in <code>contains()</code> function does exact substring matching — it finds <code>"data"</code> inside <code>"database"</code> but cannot search linguistically. Full-Text Search adds the features you would expect from a real search engine: stemming, case-insensitive matching, diacritics normalization, stop words, wildcards, proximity search, and relevance scoring.</p><p>If you have used Lucene.NET, Elasticsearch, or SQL Server's <code>CONTAINS</code> / <code>FREETEXT</code> predicates, XQuery Full-Text solves the same problems but is integrated directly into the query language — no separate index API or raw SQL strings needed.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#why-full-text-in-xquery" title="">Why Full-Text in XQuery</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#ftcontains--the-basic-predicate" title="">ft:contains — The Basic Predicate</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#match-options" title="">Match Options</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#search-modes" title="">Search Modes</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#logical-combinations" title="">Logical Combinations</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#positional-filters" title="">Positional Filters</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#full-text-functions" title="">Full-Text Functions</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#scoring-and-relevance" title="">Scoring and Relevance</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#practical-examples" title="">Practical Examples</a>
-        </p>
-      </li></ul><hr><h2 id="why-full-text-in-xquery"><a class="anchor" href="#why-full-text-in-xquery">#</a>Why Full-Text in XQuery</h2><p>Consider a document library with thousands of articles. A user searches for <code>"running"</code>. With standard XQuery:</p><pre><code class="language-xquery">(: Standard contains() — exact substring match :)
-//article[contains(description, "running")]</code></pre><p>This misses articles containing <code>"run"</code>, <code>"runs"</code>, or <code>"ran"</code>. It is also case-sensitive, so <code>"Running"</code> at the start of a sentence is missed. And there is no way to rank results by relevance.</p><p>
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li class="active"><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">XQuery
+                                </p>
+                                <h1 class="page-title">Full-Text Search
+                                </h1>
+                                <p class="page-subtitle">XQuery Full-Text — ft:contains, match options, scoring, and search expressions
+                                </p>
+                                <h1 id="full-text-search"><a class="anchor" href="#full-text-search">#</a>Full-Text Search
+                                </h1>
+                                <p>XQuery's built-in <code>contains()</code> function does exact substring matching — it finds <code>"data"</code> inside <code>"database"</code> but cannot search linguistically. Full-Text Search adds the features you would expect from a real search engine: stemming, case-insensitive matching, diacritics normalization, stop words, wildcards, proximity search, and relevance scoring.
+                                </p>
+                                <p>If you have used Lucene.NET, Elasticsearch, or SQL Server's <code>CONTAINS</code> / <code>FREETEXT</code> predicates, XQuery Full-Text solves the same problems but is integrated directly into the query language — no separate index API or raw SQL strings needed.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#why-full-text-in-xquery">Why Full-Text in XQuery</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#ftcontains--the-basic-predicate">ft:contains — The Basic Predicate</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#match-options">Match Options</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#search-modes">Search Modes</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#logical-combinations">Logical Combinations</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#positional-filters">Positional Filters</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#full-text-functions">Full-Text Functions</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#scoring-and-relevance">Scoring and Relevance</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#practical-examples">Practical Examples</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="why-full-text-in-xquery"><a class="anchor" href="#why-full-text-in-xquery">#</a>Why Full-Text in XQuery
+                                  </h2>
+                                  <p>Consider a document library with thousands of articles. A user searches for <code>"running"</code>. With standard XQuery:
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xquery</span>
+                                    </figcaption>
+                                    <pre><code class="language-xquery">(: Standard contains() — exact substring match :)
+//article[contains(description, "running")]</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>This misses articles containing <code>"run"</code>, <code>"runs"</code>, or <code>"ran"</code>. It is also case-sensitive, so <code>"Running"</code> at the start of a sentence is missed. And there is no way to rank results by relevance.
+                                  </p>
+                                  <p>
       <strong>C# parallel — the same problem exists:</strong>
-    </p><pre><code class="language-csharp">// C# exact match — same limitations
+    
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">csharp</span>
+                                    </figcaption>
+                                    <pre><code class="language-csharp">// C# exact match — same limitations
 var results = articles.Where(a =&gt; a.Description.Contains("running"));
-// Misses "run", "runs", "ran", case-sensitive</code></pre><p>In C#, you solve this by adding a full-text search library (Lucene.NET, SQL Server Full-Text Search, or Elasticsearch). In XQuery, Full-Text Search is a W3C standard extension built into the language itself.</p><p>Full-Text Search gives you:</p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Feature</p>
-          </th>
-          <th>
-            <p>Standard <code>contains()</code></p>
-          </th>
-          <th>
-            <p>Full-Text Search</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>Substring matching</p>
-          </td>
-          <td>
-            <p>Yes</p>
-          </td>
-          <td>
-            <p>Yes</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Case insensitive</p>
-          </td>
-          <td>
-            <p>No (must use <code>lower-case()</code>)</p>
-          </td>
-          <td>
-            <p>Yes (default)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Stemming</p>
-          </td>
-          <td>
-            <p>No</p>
-          </td>
-          <td>
-            <p>Yes (<code>"running"</code> matches <code>"run"</code>)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Diacritics</p>
-          </td>
-          <td>
-            <p>No</p>
-          </td>
-          <td>
-            <p>Yes (<code>"cafe"</code> matches <code>"cafe"</code>)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Wildcards</p>
-          </td>
-          <td>
-            <p>No</p>
-          </td>
-          <td>
-            <p>Yes (<code>"data*"</code> matches <code>"database"</code>)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Stop words</p>
-          </td>
-          <td>
-            <p>No</p>
-          </td>
-          <td>
-            <p>Yes (ignore <code>"the"</code>, <code>"a"</code>, <code>"an"</code>)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Proximity</p>
-          </td>
-          <td>
-            <p>No</p>
-          </td>
-          <td>
-            <p>Yes (<code>"xml"</code> near <code>"database"</code>)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Scoring/ranking</p>
-          </td>
-          <td>
-            <p>No</p>
-          </td>
-          <td>
-            <p>Yes</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Phrase search</p>
-          </td>
-          <td>
-            <p>No</p>
-          </td>
-          <td>
-            <p>Yes</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Thesaurus</p>
-          </td>
-          <td>
-            <p>No</p>
-          </td>
-          <td>
-            <p>Yes</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><hr><h2 id="ft-contains-the-basic-predicate"><a class="anchor" href="#ft-contains-the-basic-predicate">#</a>ft:contains — The Basic Predicate</h2><p>
-      <code>ft:contains</code> is the entry point for full-text search. It takes a node (the content to search) and a search expression (what to look for):</p><pre><code class="language-xquery">(: Search the description element for "database" :)
-//book[ft:contains(description, "database")]</code></pre><pre><code class="language-xquery">(: Search ALL text content of the book element :)
-//book[ft:contains(., "xml query")]</code></pre><pre><code class="language-xquery">(: Search with match options :)
-//book[ft:contains(title, "xml" using stemming using case insensitive)]</code></pre><p>The first argument is the node whose text content is searched. Using <code>.</code> searches all descendant text. The second argument is a full-text selection — a search expression that can include match options.</p><p>
+// Misses "run", "runs", "ran", case-sensitive</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>In C#, you solve this by adding a full-text search library (Lucene.NET, SQL Server Full-Text Search, or Elasticsearch). In XQuery, Full-Text Search is a W3C standard extension built into the language itself.
+                                  </p>
+                                  <p>Full-Text Search gives you:
+                                  </p>
+                                  <div class="table-wrap">
+                                    <table>
+      
+                                      <thead>
+        
+                                        <tr>
+          
+                                          <th>
+            
+                                            <p>Feature
+                                            </p>
+          
+                                          </th>
+          
+                                          <th>
+            
+                                            <p>Standard <code>contains()</code>
+                                            </p>
+          
+                                          </th>
+          
+                                          <th>
+            
+                                            <p>Full-Text Search
+                                            </p>
+          
+                                          </th>
+        
+                                        </tr>
+      
+                                      </thead>
+      
+                                      <tbody>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Substring matching
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Yes
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Yes
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Case insensitive
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>No (must use <code>lower-case()</code>)
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Yes (default)
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Stemming
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>No
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Yes (<code>"running"</code> matches <code>"run"</code>)
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Diacritics
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>No
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Yes (<code>"cafe"</code> matches <code>"cafe"</code>)
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Wildcards
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>No
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Yes (<code>"data*"</code> matches <code>"database"</code>)
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Stop words
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>No
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Yes (ignore <code>"the"</code>, <code>"a"</code>, <code>"an"</code>)
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Proximity
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>No
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Yes (<code>"xml"</code> near <code>"database"</code>)
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Scoring/ranking
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>No
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Yes
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Phrase search
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>No
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Yes
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+        
+                                        <tr>
+          
+                                          <td>
+            
+                                            <p>Thesaurus
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>No
+                                            </p>
+          
+                                          </td>
+          
+                                          <td>
+            
+                                            <p>Yes
+                                            </p>
+          
+                                          </td>
+        
+                                        </tr>
+      
+                                      </tbody>
+    
+                                    </table>
+                                  </div>
+                                  <hr>
+                                    <h2 id="ft-contains-the-basic-predicate"><a class="anchor" href="#ft-contains-the-basic-predicate">#</a>ft:contains — The Basic Predicate
+                                    </h2>
+                                    <p>
+      <code>ft:contains</code> is the entry point for full-text search. It takes a node (the content to search) and a search expression (what to look for):
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">(: Search the description element for "database" :)
+//book[ft:contains(description, "database")]</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">(: Search ALL text content of the book element :)
+//book[ft:contains(., "xml query")]</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">(: Search with match options :)
+//book[ft:contains(title, "xml" using stemming using case insensitive)]</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>The first argument is the node whose text content is searched. Using <code>.</code> searches all descendant text. The second argument is a full-text selection — a search expression that can include match options.
+                                    </p>
+                                    <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// SQL Server full-text search via Entity Framework
+    
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">csharp</span>
+                                      </figcaption>
+                                      <pre><code class="language-csharp">// SQL Server full-text search via Entity Framework
 var books = context.Books
     .Where(b =&gt; EF.Functions.Contains(b.Description, "database"));
 // Lucene.NET
 var query = new QueryParser("description", analyzer).Parse("database");
-var results = searcher.Search(query, 100);</code></pre><h3 id="searching-multiple-fields"><a class="anchor" href="#searching-multiple-fields">#</a>Searching Multiple Fields</h3><pre><code class="language-xquery">(: Search title OR description :)
+var results = searcher.Search(query, 100);</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="searching-multiple-fields"><a class="anchor" href="#searching-multiple-fields">#</a>Searching Multiple Fields
+                                    </h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">(: Search title OR description :)
 //book[ft:contains(title, "xml") or ft:contains(description, "xml")]
 (: Search all text content of the entire book element :)
-//book[ft:contains(., "xml")]</code></pre><h3 id="using-ft-contains-in-flwor-expressions"><a class="anchor" href="#using-ft-contains-in-flwor-expressions">#</a>Using ft:contains in FLWOR Expressions</h3><pre><code class="language-xquery">for $article in //article
+//book[ft:contains(., "xml")]</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="using-ft-contains-in-flwor-expressions"><a class="anchor" href="#using-ft-contains-in-flwor-expressions">#</a>Using ft:contains in FLWOR Expressions
+                                    </h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">for $article in //article
 where ft:contains($article/body, "machine learning")
 order by ft:score($article/body, "machine learning") descending
 return
   &lt;result&gt;
     &lt;title&gt;{ $article/title/text() }&lt;/title&gt;
     &lt;score&gt;{ ft:score($article/body, "machine learning") }&lt;/score&gt;
-  &lt;/result&gt;</code></pre><hr><h2 id="match-options"><a class="anchor" href="#match-options">#</a>Match Options</h2><p>Match options follow the search term and control how matching is performed. You can combine multiple options with successive <code>using</code> clauses.</p><h3 id="language"><a class="anchor" href="#language">#</a>Language</h3><p>Specifies the language for stemming and stop word processing:</p><pre><code class="language-xquery">//article[ft:contains(., "running" using language "en")]</code></pre><p>Language affects stemming rules (English stemming is different from German stemming), stop word lists, and tokenization. Common language codes: <code>"en"</code> (English), <code>"de"</code> (German), <code>"fr"</code> (French), <code>"es"</code> (Spanish).</p><h3 id="stemming"><a class="anchor" href="#stemming">#</a>Stemming</h3><p>Stemming reduces words to their root form so that morphological variants match:</p><pre><code class="language-xquery">(: Without stemming — only matches literal "running" :)
+  &lt;/result&gt;</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <hr>
+                                      <h2 id="match-options"><a class="anchor" href="#match-options">#</a>Match Options
+                                      </h2>
+                                      <p>Match options follow the search term and control how matching is performed. You can combine multiple options with successive <code>using</code> clauses.
+                                      </p>
+                                      <h3 id="language"><a class="anchor" href="#language">#</a>Language
+                                      </h3>
+                                      <p>Specifies the language for stemming and stop word processing:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">//article[ft:contains(., "running" using language "en")]</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>Language affects stemming rules (English stemming is different from German stemming), stop word lists, and tokenization. Common language codes: <code>"en"</code> (English), <code>"de"</code> (German), <code>"fr"</code> (French), <code>"es"</code> (Spanish).
+                                      </p>
+                                      <h3 id="stemming"><a class="anchor" href="#stemming">#</a>Stemming
+                                      </h3>
+                                      <p>Stemming reduces words to their root form so that morphological variants match:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">(: Without stemming — only matches literal "running" :)
 //article[ft:contains(., "running")]
 (: With stemming — matches "run", "runs", "running", "ran" :)
-//article[ft:contains(., "running" using stemming)]</code></pre><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Search Term</p>
-          </th>
-          <th>
-            <p>Matches (with stemming)</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>"running"</code></p>
-          </td>
-          <td>
-            <p>run, runs, running, ran</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>"databases"</code></p>
-          </td>
-          <td>
-            <p>database, databases</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>"better"</code></p>
-          </td>
-          <td>
-            <p>better, good, best (language-dependent)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>"analyzing"</code></p>
-          </td>
-          <td>
-            <p>analyze, analyzes, analyzing, analysis</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><p>
+//article[ft:contains(., "running" using stemming)]</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <div class="table-wrap">
+                                        <table>
+      
+                                          <thead>
+        
+                                            <tr>
+          
+                                              <th>
+            
+                                                <p>Search Term
+                                                </p>
+          
+                                              </th>
+          
+                                              <th>
+            
+                                                <p>Matches (with stemming)
+                                                </p>
+          
+                                              </th>
+        
+                                            </tr>
+      
+                                          </thead>
+      
+                                          <tbody>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>"running"</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>run, runs, running, ran
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>"databases"</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>database, databases
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>"better"</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>better, good, best (language-dependent)
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>"analyzing"</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>analyze, analyzes, analyzing, analysis
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+      
+                                          </tbody>
+    
+                                        </table>
+                                      </div>
+                                      <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// Lucene.NET with stemming analyzer
+    
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">csharp</span>
+                                        </figcaption>
+                                        <pre><code class="language-csharp">// Lucene.NET with stemming analyzer
 var analyzer = new EnglishAnalyzer(LuceneVersion.LUCENE_48);
-// "running" query now matches "run", "runs", "ran"</code></pre><h3 id="case-sensitivity"><a class="anchor" href="#case-sensitivity">#</a>Case Sensitivity</h3><p>By default, full-text matching is case insensitive. You can override this:</p><pre><code class="language-xquery">(: Default: case insensitive — matches "XML", "xml", "Xml" :)
+// "running" query now matches "run", "runs", "ran"</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="case-sensitivity"><a class="anchor" href="#case-sensitivity">#</a>Case Sensitivity
+                                      </h3>
+                                      <p>By default, full-text matching is case insensitive. You can override this:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">(: Default: case insensitive — matches "XML", "xml", "Xml" :)
 //doc[ft:contains(title, "xml")]
 (: Explicit case insensitive (same as default) :)
 //doc[ft:contains(title, "xml" using case insensitive)]
 (: Case sensitive — only matches exact case :)
-//doc[ft:contains(title, "XML" using case sensitive)]</code></pre><h3 id="diacritics"><a class="anchor" href="#diacritics">#</a>Diacritics</h3><p>By default, full-text matching is diacritics insensitive, so accented characters match their unaccented equivalents:</p><pre><code class="language-xquery">(: Diacritics insensitive (default) — "cafe" matches "cafe" :)
+//doc[ft:contains(title, "XML" using case sensitive)]</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="diacritics"><a class="anchor" href="#diacritics">#</a>Diacritics
+                                      </h3>
+                                      <p>By default, full-text matching is diacritics insensitive, so accented characters match their unaccented equivalents:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">(: Diacritics insensitive (default) — "cafe" matches "cafe" :)
 //restaurant[ft:contains(name, "cafe")]
 (: Diacritics sensitive — "cafe" does NOT match "cafe" :)
-//restaurant[ft:contains(name, "cafe" using diacritics sensitive)]</code></pre><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Search</p>
-          </th>
-          <th>
-            <p>Diacritics Insensitive (default)</p>
-          </th>
-          <th>
-            <p>Diacritics Sensitive</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>"cafe"</code></p>
-          </td>
-          <td>
-            <p>cafe, cafe, CAFE</p>
-          </td>
-          <td>
-            <p>cafe, CAFE only</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>"resume"</code></p>
-          </td>
-          <td>
-            <p>resume, resume, resume</p>
-          </td>
-          <td>
-            <p>resume only</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>"nino"</code></p>
-          </td>
-          <td>
-            <p>nino, nino</p>
-          </td>
-          <td>
-            <p>nino only</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><h3 id="wildcards"><a class="anchor" href="#wildcards">#</a>Wildcards</h3><p>Enables glob-style wildcards within search terms:</p><pre><code class="language-xquery">(: Matches "database", "datatype", "dataset", "data-driven" :)
+//restaurant[ft:contains(name, "cafe" using diacritics sensitive)]</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <div class="table-wrap">
+                                        <table>
+      
+                                          <thead>
+        
+                                            <tr>
+          
+                                              <th>
+            
+                                                <p>Search
+                                                </p>
+          
+                                              </th>
+          
+                                              <th>
+            
+                                                <p>Diacritics Insensitive (default)
+                                                </p>
+          
+                                              </th>
+          
+                                              <th>
+            
+                                                <p>Diacritics Sensitive
+                                                </p>
+          
+                                              </th>
+        
+                                            </tr>
+      
+                                          </thead>
+      
+                                          <tbody>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>"cafe"</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>cafe, cafe, CAFE
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>cafe, CAFE only
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>"resume"</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>resume, resume, resume
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>resume only
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>"nino"</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>nino, nino
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>nino only
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+      
+                                          </tbody>
+    
+                                        </table>
+                                      </div>
+                                      <h3 id="wildcards"><a class="anchor" href="#wildcards">#</a>Wildcards
+                                      </h3>
+                                      <p>Enables glob-style wildcards within search terms:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">(: Matches "database", "datatype", "dataset", "data-driven" :)
 //doc[ft:contains(., "data*" using wildcards)]
 (: Matches "analyze", "analyse" (British vs American spelling) :)
-//doc[ft:contains(., "analy?e" using wildcards)]</code></pre><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Wildcard</p>
-          </th>
-          <th>
-            <p>Meaning</p>
-          </th>
-          <th>
-            <p>Example</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>*</code></p>
-          </td>
-          <td>
-            <p>Zero or more characters</p>
-          </td>
-          <td>
-            <p><code>"data*"</code> matches <code>"database"</code>, <code>"datatype"</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>?</code></p>
-          </td>
-          <td>
-            <p>Exactly one character</p>
-          </td>
-          <td>
-            <p><code>"te?t"</code> matches <code>"test"</code>, <code>"text"</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>\*</code></p>
-          </td>
-          <td>
-            <p>Literal asterisk</p>
-          </td>
-          <td>
-            <p><code>"5\*5"</code> matches <code>"5*5"</code></p>
-          </td>
-        </tr>
-      </tbody>
-    </table><p>
+//doc[ft:contains(., "analy?e" using wildcards)]</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <div class="table-wrap">
+                                        <table>
+      
+                                          <thead>
+        
+                                            <tr>
+          
+                                              <th>
+            
+                                                <p>Wildcard
+                                                </p>
+          
+                                              </th>
+          
+                                              <th>
+            
+                                                <p>Meaning
+                                                </p>
+          
+                                              </th>
+          
+                                              <th>
+            
+                                                <p>Example
+                                                </p>
+          
+                                              </th>
+        
+                                            </tr>
+      
+                                          </thead>
+      
+                                          <tbody>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>*</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Zero or more characters
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>
+              <code>"data*"</code> matches <code>"database"</code>, <code>"datatype"</code>
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>?</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Exactly one character
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>
+              <code>"te?t"</code> matches <code>"test"</code>, <code>"text"</code>
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>\*</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Literal asterisk
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>
+              <code>"5\*5"</code> matches <code>"5*5"</code>
+                                                </p>
+          
+                                              </td>
+        
+                                            </tr>
+      
+                                          </tbody>
+    
+                                        </table>
+                                      </div>
+                                      <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// SQL Server
+    
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">csharp</span>
+                                        </figcaption>
+                                        <pre><code class="language-csharp">// SQL Server
 var results = context.Documents
     .Where(d =&gt; EF.Functions.Contains(d.Content, "\"data*\""));
 // Lucene.NET
-var query = new WildcardQuery(new Term("content", "data*"));</code></pre><h3 id="stop-words"><a class="anchor" href="#stop-words">#</a>Stop Words</h3><p>Stop words are common words (like "the", "a", "is", "and") that are ignored during search to improve relevance:</p><pre><code class="language-xquery">(: Use an explicit stop word list :)
+var query = new WildcardQuery(new Term("content", "data*"));</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="stop-words"><a class="anchor" href="#stop-words">#</a>Stop Words
+                                      </h3>
+                                      <p>Stop words are common words (like "the", "a", "is", "and") that are ignored during search to improve relevance:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">(: Use an explicit stop word list :)
 //doc[ft:contains(., "the art of war"
   using stop words ("the", "a", "an", "of", "is", "and", "or", "in"))]
 (: Actually searches for: "art", "war" :)
 (: Use the default stop word list for the language :)
 //doc[ft:contains(., "the art of war"
   using stop words default
-  using language "en")]</code></pre><p>Without stop words, a search for <code>"the art of war"</code> might rank documents with many occurrences of <code>"the"</code> highly. With stop words, only the meaningful terms <code>"art"</code> and <code>"war"</code> contribute to matching and scoring.</p><h3 id="thesaurus"><a class="anchor" href="#thesaurus">#</a>Thesaurus</h3><p>A thesaurus expands search terms to include synonyms:</p><pre><code class="language-xquery">(: "fast" also matches "quick", "rapid", "speedy" :)
+  using language "en")]</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>Without stop words, a search for <code>"the art of war"</code> might rank documents with many occurrences of <code>"the"</code> highly. With stop words, only the meaningful terms <code>"art"</code> and <code>"war"</code> contribute to matching and scoring.
+                                      </p>
+                                      <h3 id="thesaurus"><a class="anchor" href="#thesaurus">#</a>Thesaurus
+                                      </h3>
+                                      <p>A thesaurus expands search terms to include synonyms:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">(: "fast" also matches "quick", "rapid", "speedy" :)
 //doc[ft:contains(., "fast"
   using thesaurus at "thesaurus.xml")]
 (: With a specific relationship type :)
 //doc[ft:contains(., "car"
-  using thesaurus at "thesaurus.xml" relationship "synonym")]</code></pre><p>The thesaurus is an XML file mapping terms to their synonyms:</p><pre><code class="language-xml">&lt;thesaurus xmlns="http://www.w3.org/2007/full-text-thesaurus"&gt;
+  using thesaurus at "thesaurus.xml" relationship "synonym")]</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>The thesaurus is an XML file mapping terms to their synonyms:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;thesaurus xmlns="http://www.w3.org/2007/full-text-thesaurus"&gt;
   &lt;entry&gt;
     &lt;term&gt;fast&lt;/term&gt;
     &lt;synonym&gt;quick&lt;/synonym&gt;
@@ -379,94 +1460,292 @@ var query = new WildcardQuery(new Term("content", "data*"));</code></pre><h3 id=
     &lt;synonym&gt;automobile&lt;/synonym&gt;
     &lt;synonym&gt;vehicle&lt;/synonym&gt;
   &lt;/entry&gt;
-&lt;/thesaurus&gt;</code></pre><h3 id="combining-match-options"><a class="anchor" href="#combining-match-options">#</a>Combining Match Options</h3><p>Options are composable. Combine as many as you need:</p><pre><code class="language-xquery">//article[ft:contains(body, "running"
+&lt;/thesaurus&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="combining-match-options"><a class="anchor" href="#combining-match-options">#</a>Combining Match Options
+                                      </h3>
+                                      <p>Options are composable. Combine as many as you need:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">//article[ft:contains(body, "running"
   using stemming
   using case insensitive
   using wildcards
   using stop words default
-  using language "en")]</code></pre><hr><h2 id="search-modes"><a class="anchor" href="#search-modes">#</a>Search Modes</h2><p>Search modes control how multi-word search strings are interpreted.</p><h3 id="any-word"><a class="anchor" href="#any-word">#</a>any word</h3><p>Matches documents containing <strong>any</strong> of the specified words. This is the most lenient mode — the equivalent of an <code>OR</code> search:</p><pre><code class="language-xquery">(: Matches documents containing "xml" OR "json" OR "yaml" :)
-//doc[ft:contains(., "xml json yaml" using mode any word)]</code></pre><p>
+  using language "en")]</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <hr>
+                                        <h2 id="search-modes"><a class="anchor" href="#search-modes">#</a>Search Modes
+                                        </h2>
+                                        <p>Search modes control how multi-word search strings are interpreted.
+                                        </p>
+                                        <h3 id="any-word"><a class="anchor" href="#any-word">#</a>any word
+                                        </h3>
+                                        <p>Matches documents containing <strong>any</strong> of the specified words. This is the most lenient mode — the equivalent of an <code>OR</code> search:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">(: Matches documents containing "xml" OR "json" OR "yaml" :)
+//doc[ft:contains(., "xml json yaml" using mode any word)]</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// Lucene.NET default behavior with OR operator
+    
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">// Lucene.NET default behavior with OR operator
 var query = parser.Parse("xml json yaml"); // default: OR between terms
 // SQL Server FREETEXT — similar to "any word" + stemming
 var results = context.Documents
-    .Where(d =&gt; EF.Functions.FreeText(d.Content, "xml json yaml"));</code></pre><h3 id="all-words"><a class="anchor" href="#all-words">#</a>all words</h3><p>Matches documents containing <strong>all</strong> of the specified words, but not necessarily as a phrase or in order:</p><pre><code class="language-xquery">(: Matches documents containing "xml" AND "database" AND "query" :)
-//doc[ft:contains(., "xml database query" using mode all words)]</code></pre><p>The document <code>"This query language processes XML and stores results in a database"</code> would match because all three words appear somewhere in the text.</p><p>
+    .Where(d =&gt; EF.Functions.FreeText(d.Content, "xml json yaml"));</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="all-words"><a class="anchor" href="#all-words">#</a>all words
+                                        </h3>
+                                        <p>Matches documents containing <strong>all</strong> of the specified words, but not necessarily as a phrase or in order:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">(: Matches documents containing "xml" AND "database" AND "query" :)
+//doc[ft:contains(., "xml database query" using mode all words)]</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>The document <code>"This query language processes XML and stores results in a database"</code> would match because all three words appear somewhere in the text.
+                                        </p>
+                                        <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// SQL Server CONTAINS with AND
+    
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">// SQL Server CONTAINS with AND
 var results = context.Documents
-    .Where(d =&gt; EF.Functions.Contains(d.Content, "\"xml\" AND \"database\" AND \"query\""));</code></pre><h3 id="phrase"><a class="anchor" href="#phrase">#</a>phrase</h3><p>Matches the exact phrase — all words must appear consecutively in order:</p><pre><code class="language-xquery">(: Only matches the literal phrase "xml database" :)
-//doc[ft:contains(., "xml database" using mode phrase)]</code></pre><p>This is the most restrictive mode. The document must contain the exact sequence <code>"xml database"</code> as consecutive words.</p><p>
+    .Where(d =&gt; EF.Functions.Contains(d.Content, "\"xml\" AND \"database\" AND \"query\""));</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="phrase"><a class="anchor" href="#phrase">#</a>phrase
+                                        </h3>
+                                        <p>Matches the exact phrase — all words must appear consecutively in order:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">(: Only matches the literal phrase "xml database" :)
+//doc[ft:contains(., "xml database" using mode phrase)]</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>This is the most restrictive mode. The document must contain the exact sequence <code>"xml database"</code> as consecutive words.
+                                        </p>
+                                        <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// SQL Server CONTAINS with phrase
+    
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">// SQL Server CONTAINS with phrase
 var results = context.Documents
-    .Where(d =&gt; EF.Functions.Contains(d.Content, "\"xml database\""));</code></pre><h3 id="comparison-table"><a class="anchor" href="#comparison-table">#</a>Comparison Table</h3><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Mode</p>
-          </th>
-          <th>
-            <p>Search: <code>"xml database query"</code></p>
-          </th>
-          <th>
-            <p>Matches</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>any word</code></p>
-          </td>
-          <td>
-            <p>Any of: xml, database, query</p>
-          </td>
-          <td>
-            <p>"This xml file..."</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>all words</code></p>
-          </td>
-          <td>
-            <p>All of: xml, database, query</p>
-          </td>
-          <td>
-            <p>"The xml query uses a database"</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>phrase</code></p>
-          </td>
-          <td>
-            <p>Exact phrase</p>
-          </td>
-          <td>
-            <p>"...xml database query language..."</p>
-          </td>
-        </tr>
-      </tbody>
-    </table><hr><h2 id="logical-combinations"><a class="anchor" href="#logical-combinations">#</a>Logical Combinations</h2><p>Full-text search expressions support <code>ftand</code>, <code>ftor</code>, and <code>ftnot</code> for combining search conditions. These operate at the full-text level (not the XPath level), so they apply within a single <code>ft:contains</code> call.</p><h3 id="ftand-both-terms-required"><a class="anchor" href="#ftand-both-terms-required">#</a>ftand — Both Terms Required</h3><pre><code class="language-xquery">(: Document must contain both "xml" and "database" :)
-//doc[ft:contains(., "xml" ftand "database")]</code></pre><p>This is different from <code>all words</code> mode because each operand can be its own search expression with independent options:</p><pre><code class="language-xquery">(: "xml" with stemming AND "database" with wildcards :)
+    .Where(d =&gt; EF.Functions.Contains(d.Content, "\"xml database\""));</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="comparison-table"><a class="anchor" href="#comparison-table">#</a>Comparison Table
+                                        </h3>
+                                        <div class="table-wrap">
+                                          <table>
+      
+                                            <thead>
+        
+                                              <tr>
+          
+                                                <th>
+            
+                                                  <p>Mode
+                                                  </p>
+          
+                                                </th>
+          
+                                                <th>
+            
+                                                  <p>Search: <code>"xml database query"</code>
+                                                  </p>
+          
+                                                </th>
+          
+                                                <th>
+            
+                                                  <p>Matches
+                                                  </p>
+          
+                                                </th>
+        
+                                              </tr>
+      
+                                            </thead>
+      
+                                            <tbody>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>any word</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Any of: xml, database, query
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>"This xml file..."
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>all words</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>All of: xml, database, query
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>"The xml query uses a database"
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>phrase</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Exact phrase
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>"...xml database query language..."
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+      
+                                            </tbody>
+    
+                                          </table>
+                                        </div>
+                                        <hr>
+                                          <h2 id="logical-combinations"><a class="anchor" href="#logical-combinations">#</a>Logical Combinations
+                                          </h2>
+                                          <p>Full-text search expressions support <code>ftand</code>, <code>ftor</code>, and <code>ftnot</code> for combining search conditions. These operate at the full-text level (not the XPath level), so they apply within a single <code>ft:contains</code> call.
+                                          </p>
+                                          <h3 id="ftand-both-terms-required"><a class="anchor" href="#ftand-both-terms-required">#</a>ftand — Both Terms Required
+                                          </h3>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">(: Document must contain both "xml" and "database" :)
+//doc[ft:contains(., "xml" ftand "database")]</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>This is different from <code>all words</code> mode because each operand can be its own search expression with independent options:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">(: "xml" with stemming AND "database" with wildcards :)
 //doc[ft:contains(.,
   ("xml" using stemming) ftand ("data*" using wildcards)
-)]</code></pre><h3 id="ftor-either-term-matches"><a class="anchor" href="#ftor-either-term-matches">#</a>ftor — Either Term Matches</h3><pre><code class="language-xquery">(: Document contains "xml" or "json" (or both) :)
+)]</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="ftor-either-term-matches"><a class="anchor" href="#ftor-either-term-matches">#</a>ftor — Either Term Matches
+                                          </h3>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">(: Document contains "xml" or "json" (or both) :)
 //doc[ft:contains(., "xml" ftor "json")]
 (: Three-way OR :)
-//doc[ft:contains(., "xml" ftor "json" ftor "yaml")]</code></pre><h3 id="ftnot-exclude-terms"><a class="anchor" href="#ftnot-exclude-terms">#</a>ftnot — Exclude Terms</h3><pre><code class="language-xquery">(: Contains "database" but NOT "relational" :)
+//doc[ft:contains(., "xml" ftor "json" ftor "yaml")]</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="ftnot-exclude-terms"><a class="anchor" href="#ftnot-exclude-terms">#</a>ftnot — Exclude Terms
+                                          </h3>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">(: Contains "database" but NOT "relational" :)
 //doc[ft:contains(., "database" ftnot "relational")]
 (: NoSQL documents: contain "database" but not "sql" or "relational" :)
-//doc[ft:contains(., "database" ftnot ("sql" ftor "relational"))]</code></pre><h3 id="complex-combinations"><a class="anchor" href="#complex-combinations">#</a>Complex Combinations</h3><pre><code class="language-xquery">(: (xml AND database) OR (json AND nosql), but NOT tutorial :)
+//doc[ft:contains(., "database" ftnot ("sql" ftor "relational"))]</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="complex-combinations"><a class="anchor" href="#complex-combinations">#</a>Complex Combinations
+                                          </h3>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">(: (xml AND database) OR (json AND nosql), but NOT tutorial :)
 //doc[ft:contains(.,
   (("xml" ftand "database") ftor ("json" ftand "nosql"))
   ftnot "tutorial"
-)]</code></pre><p>
+)]</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// SQL Server CONTAINS with complex logic
+    
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">// SQL Server CONTAINS with complex logic
 var results = context.Documents.Where(d =&gt;
     EF.Functions.Contains(d.Content,
         "(\"xml\" AND \"database\") OR (\"json\" AND \"nosql\") AND NOT \"tutorial\""));
@@ -474,42 +1753,185 @@ var results = context.Documents.Where(d =&gt;
 var query = new BooleanQuery();
 query.Add(xmlAndDb, Occur.SHOULD);
 query.Add(jsonAndNosql, Occur.SHOULD);
-query.Add(tutorial, Occur.MUST_NOT);</code></pre><hr><h2 id="positional-filters"><a class="anchor" href="#positional-filters">#</a>Positional Filters</h2><p>Positional filters constrain where and how search terms appear relative to each other.</p><h3 id="ordered"><a class="anchor" href="#ordered">#</a>ordered</h3><p>Terms must appear in the specified order (but not necessarily consecutively):</p><pre><code class="language-xquery">(: "introduction" must appear before "conclusion" :)
-//doc[ft:contains(., "introduction" ftand "conclusion" ordered)]</code></pre><p>A document with <code>"Introduction ... several pages ... Conclusion"</code> matches. A document where <code>"Conclusion"</code> appears before <code>"Introduction"</code> does not.</p><h3 id="window"><a class="anchor" href="#window">#</a>window</h3><p>Terms must appear within a specified number of tokens (words) of each other:</p><pre><code class="language-xquery">(: "xml" and "database" within 5 words of each other :)
-//doc[ft:contains(., "xml" ftand "database" window 5 words)]</code></pre><p>The sentence <code>"XML is a popular database format"</code> matches (4 words between). The sentence <code>"XML was designed in the 1990s and is now used by every major database vendor"</code> does not (too many words between).</p><h3 id="distance"><a class="anchor" href="#distance">#</a>distance</h3><p>Similar to <code>window</code>, but specifies the minimum and maximum distance:</p><pre><code class="language-xquery">(: "xml" and "schema" between 1 and 3 words apart :)
-//doc[ft:contains(., "xml" ftand "schema" distance at most 3 words)]</code></pre><h3 id="at-start-at-end-entire-content"><a class="anchor" href="#at-start-at-end-entire-content">#</a>at start / at end / entire content</h3><p>Constrain where in the text the match must occur:</p><pre><code class="language-xquery">(: Title must START with "Introduction" :)
+query.Add(tutorial, Occur.MUST_NOT);</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <hr>
+                                            <h2 id="positional-filters"><a class="anchor" href="#positional-filters">#</a>Positional Filters
+                                            </h2>
+                                            <p>Positional filters constrain where and how search terms appear relative to each other.
+                                            </p>
+                                            <h3 id="ordered"><a class="anchor" href="#ordered">#</a>ordered
+                                            </h3>
+                                            <p>Terms must appear in the specified order (but not necessarily consecutively):
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: "introduction" must appear before "conclusion" :)
+//doc[ft:contains(., "introduction" ftand "conclusion" ordered)]</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>A document with <code>"Introduction ... several pages ... Conclusion"</code> matches. A document where <code>"Conclusion"</code> appears before <code>"Introduction"</code> does not.
+                                            </p>
+                                            <h3 id="window"><a class="anchor" href="#window">#</a>window
+                                            </h3>
+                                            <p>Terms must appear within a specified number of tokens (words) of each other:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: "xml" and "database" within 5 words of each other :)
+//doc[ft:contains(., "xml" ftand "database" window 5 words)]</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>The sentence <code>"XML is a popular database format"</code> matches (4 words between). The sentence <code>"XML was designed in the 1990s and is now used by every major database vendor"</code> does not (too many words between).
+                                            </p>
+                                            <h3 id="distance"><a class="anchor" href="#distance">#</a>distance
+                                            </h3>
+                                            <p>Similar to <code>window</code>, but specifies the minimum and maximum distance:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: "xml" and "schema" between 1 and 3 words apart :)
+//doc[ft:contains(., "xml" ftand "schema" distance at most 3 words)]</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="at-start-at-end-entire-content"><a class="anchor" href="#at-start-at-end-entire-content">#</a>at start / at end / entire content
+                                            </h3>
+                                            <p>Constrain where in the text the match must occur:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: Title must START with "Introduction" :)
 //doc[ft:contains(title, "Introduction" at start)]
 (: Title must END with "Guide" :)
 //doc[ft:contains(title, "Guide" at end)]
 (: Title must be exactly "User Guide" (entire content) :)
-//doc[ft:contains(title, "User Guide" entire content)]</code></pre><h3 id="combining-positional-filters"><a class="anchor" href="#combining-positional-filters">#</a>Combining Positional Filters</h3><pre><code class="language-xquery">(: "xml" then "query" in order, within 3 words :)
+//doc[ft:contains(title, "User Guide" entire content)]</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="combining-positional-filters"><a class="anchor" href="#combining-positional-filters">#</a>Combining Positional Filters
+                                            </h3>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: "xml" then "query" in order, within 3 words :)
 //doc[ft:contains(.,
   "xml" ftand "query"
   ordered
   window 3 words
-)]</code></pre><p>
+)]</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// SQL Server CONTAINS with NEAR
+    
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">csharp</span>
+                                              </figcaption>
+                                              <pre><code class="language-csharp">// SQL Server CONTAINS with NEAR
 var results = context.Documents.Where(d =&gt;
     EF.Functions.Contains(d.Content, "NEAR((xml, query), 3, TRUE)"));
-// TRUE = ordered, 3 = max distance</code></pre><hr><h2 id="full-text-functions"><a class="anchor" href="#full-text-functions">#</a>Full-Text Functions</h2><p>Beyond <code>ft:contains</code>, the Full-Text specification provides utility functions.</p><h3 id="ft-score"><a class="anchor" href="#ft-score">#</a>ft:score()</h3><p>Returns a relevance score (between 0.0 and 1.0) for how well a node matches a search expression:</p><pre><code class="language-xquery">for $article in //article
+// TRUE = ordered, 3 = max distance</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <hr>
+                                              <h2 id="full-text-functions"><a class="anchor" href="#full-text-functions">#</a>Full-Text Functions
+                                              </h2>
+                                              <p>Beyond <code>ft:contains</code>, the Full-Text specification provides utility functions.
+                                              </p>
+                                              <h3 id="ft-score"><a class="anchor" href="#ft-score">#</a>ft:score()
+                                              </h3>
+                                              <p>Returns a relevance score (between 0.0 and 1.0) for how well a node matches a search expression:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">for $article in //article
 let $score := ft:score($article/body, "machine learning")
 where $score &gt; 0
 order by $score descending
 return
   &lt;result score="{ $score }"&gt;
     &lt;title&gt;{ $article/title/text() }&lt;/title&gt;
-  &lt;/result&gt;</code></pre><p>Scoring considers term frequency (how often the term appears), document length, and the specificity of the match.</p><h3 id="ft-tokenize"><a class="anchor" href="#ft-tokenize">#</a>ft:tokenize()</h3><p>Breaks text into tokens (words) according to full-text tokenization rules:</p><pre><code class="language-xquery">ft:tokenize("Hello, world! This is a test.")
+  &lt;/result&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>Scoring considers term frequency (how often the term appears), document length, and the specificity of the match.
+                                              </p>
+                                              <h3 id="ft-tokenize"><a class="anchor" href="#ft-tokenize">#</a>ft:tokenize()
+                                              </h3>
+                                              <p>Breaks text into tokens (words) according to full-text tokenization rules:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">ft:tokenize("Hello, world! This is a test.")
 (: Result: ("Hello", "world", "This", "is", "a", "test") :)
 ft:tokenize("C# is great", "en")
-(: Result: ("C#", "is", "great") :)</code></pre><p>
+(: Result: ("C#", "is", "great") :)</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// Lucene.NET tokenization
-var tokenStream = analyzer.GetTokenStream("field", "Hello, world! This is a test.");</code></pre><h3 id="ft-stem"><a class="anchor" href="#ft-stem">#</a>ft:stem()</h3><p>Returns the stem of a word for a given language:</p><pre><code class="language-xquery">ft:stem("running", "en")   (: Result: "run" :)
+    
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">csharp</span>
+                                                </figcaption>
+                                                <pre><code class="language-csharp">// Lucene.NET tokenization
+var tokenStream = analyzer.GetTokenStream("field", "Hello, world! This is a test.");</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="ft-stem"><a class="anchor" href="#ft-stem">#</a>ft:stem()
+                                              </h3>
+                                              <p>Returns the stem of a word for a given language:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">ft:stem("running", "en")   (: Result: "run" :)
 ft:stem("databases", "en")  (: Result: "databas" :)
-ft:stem("better", "en")     (: Result: "better" or "good" depending on stemmer :)</code></pre><h3 id="ft-is-stop-word"><a class="anchor" href="#ft-is-stop-word">#</a>ft:is-stop-word()</h3><p>Tests whether a word is a stop word in a given language:</p><pre><code class="language-xquery">ft:is-stop-word("the", "en")   (: Result: true() :)
-ft:is-stop-word("xml", "en")   (: Result: false() :)</code></pre><h3 id="ft-thesaurus-lookup"><a class="anchor" href="#ft-thesaurus-lookup">#</a>ft:thesaurus-lookup()</h3><p>Looks up synonyms in a thesaurus:</p><pre><code class="language-xquery">ft:thesaurus-lookup("thesaurus.xml", "fast")
-(: Result: ("quick", "rapid", "speedy") :)</code></pre><hr><h2 id="scoring-and-relevance"><a class="anchor" href="#scoring-and-relevance">#</a>Scoring and Relevance</h2><p>Scoring lets you rank search results by relevance, just like a web search engine returns the most relevant pages first.</p><h3 id="basic-relevance-ranking"><a class="anchor" href="#basic-relevance-ranking">#</a>Basic Relevance Ranking</h3><pre><code class="language-xquery">for $doc in collection("articles")
+ft:stem("better", "en")     (: Result: "better" or "good" depending on stemmer :)</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="ft-is-stop-word"><a class="anchor" href="#ft-is-stop-word">#</a>ft:is-stop-word()
+                                              </h3>
+                                              <p>Tests whether a word is a stop word in a given language:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">ft:is-stop-word("the", "en")   (: Result: true() :)
+ft:is-stop-word("xml", "en")   (: Result: false() :)</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="ft-thesaurus-lookup"><a class="anchor" href="#ft-thesaurus-lookup">#</a>ft:thesaurus-lookup()
+                                              </h3>
+                                              <p>Looks up synonyms in a thesaurus:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">ft:thesaurus-lookup("thesaurus.xml", "fast")
+(: Result: ("quick", "rapid", "speedy") :)</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <hr>
+                                                <h2 id="scoring-and-relevance"><a class="anchor" href="#scoring-and-relevance">#</a>Scoring and Relevance
+                                                </h2>
+                                                <p>Scoring lets you rank search results by relevance, just like a web search engine returns the most relevant pages first.
+                                                </p>
+                                                <h3 id="basic-relevance-ranking"><a class="anchor" href="#basic-relevance-ranking">#</a>Basic Relevance Ranking
+                                                </h3>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">for $doc in collection("articles")
 let $score := ft:score($doc, "xquery full text search")
 where $score &gt; 0
 order by $score descending
@@ -517,7 +1939,17 @@ return
   &lt;result relevance="{ round($score * 100) }%"&gt;
     &lt;title&gt;{ $doc//title/text() }&lt;/title&gt;
     &lt;excerpt&gt;{ substring($doc//body, 1, 200) }&lt;/excerpt&gt;
-  &lt;/result&gt;</code></pre><h3 id="boosting-specific-fields"><a class="anchor" href="#boosting-specific-fields">#</a>Boosting Specific Fields</h3><p>You can weight matches in different fields by combining scores:</p><pre><code class="language-xquery">for $article in collection("articles")
+  &lt;/result&gt;</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <h3 id="boosting-specific-fields"><a class="anchor" href="#boosting-specific-fields">#</a>Boosting Specific Fields
+                                                </h3>
+                                                <p>You can weight matches in different fields by combining scores:
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">for $article in collection("articles")
 let $title-score := ft:score($article/title, "xquery") * 3  (: title matches worth 3x :)
 let $body-score := ft:score($article/body, "xquery")
 let $total-score := $title-score + $body-score
@@ -526,14 +1958,30 @@ order by $total-score descending
 return
   &lt;result score="{ round($total-score * 100) div 100 }"&gt;
     &lt;title&gt;{ $article/title/text() }&lt;/title&gt;
-  &lt;/result&gt;</code></pre><p>
+  &lt;/result&gt;</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// Lucene.NET field boosting
+    
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">csharp</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-csharp">// Lucene.NET field boosting
 var titleQuery = new TermQuery(new Term("title", "xquery")) { Boost = 3.0f };
 var bodyQuery = new TermQuery(new Term("body", "xquery"));
 var combined = new BooleanQuery();
 combined.Add(titleQuery, Occur.SHOULD);
-combined.Add(bodyQuery, Occur.SHOULD);</code></pre><h3 id="pagination-with-scoring"><a class="anchor" href="#pagination-with-scoring">#</a>Pagination with Scoring</h3><pre><code class="language-xquery">let $page := 1
+combined.Add(bodyQuery, Occur.SHOULD);</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <h3 id="pagination-with-scoring"><a class="anchor" href="#pagination-with-scoring">#</a>Pagination with Scoring
+                                                </h3>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">let $page := 1
 let $page-size := 10
 let $all-results :=
   for $doc in collection("articles")
@@ -547,7 +1995,20 @@ let $all-results :=
 return
   &lt;page number="{ $page }" total="{ count($all-results) }"&gt;
     { subsequence($all-results, ($page - 1) * $page-size + 1, $page-size) }
-  &lt;/page&gt;</code></pre><hr><h2 id="practical-examples"><a class="anchor" href="#practical-examples">#</a>Practical Examples</h2><h3 id="document-search-system"><a class="anchor" href="#document-search-system">#</a>Document Search System</h3><p>A complete document search with faceted results:</p><pre><code class="language-xquery">declare variable $query external;  (: search query from user :)
+  &lt;/page&gt;</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <hr>
+                                                  <h2 id="practical-examples"><a class="anchor" href="#practical-examples">#</a>Practical Examples
+                                                  </h2>
+                                                  <h3 id="document-search-system"><a class="anchor" href="#document-search-system">#</a>Document Search System
+                                                  </h3>
+                                                  <p>A complete document search with faceted results:
+                                                  </p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xquery</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xquery">declare variable $query external;  (: search query from user :)
 declare variable $category external;  (: optional category filter :)
 let $results :=
   for $doc in collection("documents")
@@ -575,7 +2036,15 @@ return
         &lt;/result&gt;
     }
     &lt;/results&gt;
-  &lt;/search-results&gt;</code></pre><h3 id="content-management-search-and-highlight"><a class="anchor" href="#content-management-search-and-highlight">#</a>Content Management — Search and Highlight</h3><pre><code class="language-xquery">declare function local:search-articles(
+  &lt;/search-results&gt;</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <h3 id="content-management-search-and-highlight"><a class="anchor" href="#content-management-search-and-highlight">#</a>Content Management — Search and Highlight
+                                                  </h3>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xquery</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xquery">declare function local:search-articles(
   $terms as xs:string,
   $max-results as xs:integer
 ) as element(results) {
@@ -603,7 +2072,17 @@ return
     }
     &lt;/results&gt;
 };
-local:search-articles("machine learning neural networks", 10)</code></pre><h3 id="log-analysis"><a class="anchor" href="#log-analysis">#</a>Log Analysis</h3><p>Search application logs for error patterns:</p><pre><code class="language-xquery">(: Find error log entries mentioning timeout or connection issues :)
+local:search-articles("machine learning neural networks", 10)</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <h3 id="log-analysis"><a class="anchor" href="#log-analysis">#</a>Log Analysis
+                                                  </h3>
+                                                  <p>Search application logs for error patterns:
+                                                  </p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xquery</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xquery">(: Find error log entries mentioning timeout or connection issues :)
 for $entry in collection("logs")/log-entry
 where ft:contains($entry/message,
   ("timeout" ftor "connection refused" ftor "connection reset")
@@ -617,7 +2096,15 @@ return
     &lt;level&gt;{ string($entry/@level) }&lt;/level&gt;
     &lt;message&gt;{ $entry/message/text() }&lt;/message&gt;
     &lt;source&gt;{ $entry/source/text() }&lt;/source&gt;
-  &lt;/alert&gt;</code></pre><h3 id="multi-language-search"><a class="anchor" href="#multi-language-search">#</a>Multi-Language Search</h3><pre><code class="language-xquery">(: Search with language-appropriate stemming :)
+  &lt;/alert&gt;</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <h3 id="multi-language-search"><a class="anchor" href="#multi-language-search">#</a>Multi-Language Search
+                                                  </h3>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xquery</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xquery">(: Search with language-appropriate stemming :)
 declare function local:search(
   $collection as xs:string,
   $terms as xs:string,
@@ -635,7 +2122,15 @@ declare function local:search(
 (: English search — "running" matches "run" :)
 local:search("articles-en", "running databases", "en")
 (: German search — "Datenbanken" matches "Datenbank" :)
-local:search("articles-de", "Datenbanken", "de")</code></pre><h3 id="c-integration-running-full-text-queries"><a class="anchor" href="#c-integration-running-full-text-queries">#</a>C# Integration — Running Full-Text Queries</h3><pre><code class="language-csharp">// Running full-text XQuery from a .NET application
+local:search("articles-de", "Datenbanken", "de")</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <h3 id="c-integration-running-full-text-queries"><a class="anchor" href="#c-integration-running-full-text-queries">#</a>C# Integration — Running Full-Text Queries
+                                                  </h3>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">csharp</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-csharp">// Running full-text XQuery from a .NET application
 var engine = new XQueryEngine();
 engine.SetVariable("query", userSearchInput);
 engine.SetVariable("category", selectedCategory ?? "");
@@ -659,4 +2154,133 @@ var searchResults = results.Select(r =&gt; new SearchResult
 {
     Title = r.Element("title")?.Value,
     Score = double.Parse(r.Element("score")?.Value ?? "0")
-}).ToList();</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+}).ToList();</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                </article>
+                                              </main>
+                                              <aside class="toc" aria-label="On this page">
+                                                <p class="toc-label">On this page
+                                                </p>
+                                                <ul>
+                                                  <li class="toc-h2"><a href="#contents">Contents</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#why-full-text-in-xquery">Why Full-Text in XQuery</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#ft-contains-the-basic-predicate">ft:contains — The Basic Predicate</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#searching-multiple-fields">Searching Multiple Fields</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#using-ft-contains-in-flwor-expressions">Using ft:contains in FLWOR Expressions</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#match-options">Match Options</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#language">Language</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#stemming">Stemming</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#case-sensitivity">Case Sensitivity</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#diacritics">Diacritics</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#wildcards">Wildcards</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#stop-words">Stop Words</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#thesaurus">Thesaurus</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#combining-match-options">Combining Match Options</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#search-modes">Search Modes</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#any-word">any word</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#all-words">all words</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#phrase">phrase</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#comparison-table">Comparison Table</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#logical-combinations">Logical Combinations</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#ftand-both-terms-required">ftand — Both Terms Required</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#ftor-either-term-matches">ftor — Either Term Matches</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#ftnot-exclude-terms">ftnot — Exclude Terms</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#complex-combinations">Complex Combinations</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#positional-filters">Positional Filters</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#ordered">ordered</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#window">window</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#distance">distance</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#at-start-at-end-entire-content">at start / at end / entire content</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#combining-positional-filters">Combining Positional Filters</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#full-text-functions">Full-Text Functions</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#ft-score">ft:score()</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#ft-tokenize">ft:tokenize()</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#ft-stem">ft:stem()</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#ft-is-stop-word">ft:is-stop-word()</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#ft-thesaurus-lookup">ft:thesaurus-lookup()</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#scoring-and-relevance">Scoring and Relevance</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#basic-relevance-ranking">Basic Relevance Ranking</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#boosting-specific-fields">Boosting Specific Fields</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#pagination-with-scoring">Pagination with Scoring</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#practical-examples">Practical Examples</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#document-search-system">Document Search System</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#content-management-search-and-highlight">Content Management — Search and Highlight</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#log-analysis">Log Analysis</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#multi-language-search">Multi-Language Search</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#c-integration-running-full-text-queries">C# Integration — Running Full-Text Queries</a>
+                                                  </li>
+                                                </ul>
+                                              </aside>
+                                            </div>
+                                            <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                              <div class="search-backdrop">
+                                              </div>
+                                              <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                                <div class="search-results" id="search-results">
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <footer class="site-footer">
+                                              <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                              </p>
+                                            </footer>
+                                            <script src="https://unpkg.com/lunr/lunr.js">
+                                            </script>
+                                            <script src="/js/prism.js">
+                                            </script>
+                                            <script src="/js/search.js">
+                                            </script>
+                                            <script src="/js/theme.js">
+                                            </script>
+                                            <script src="/js/toc.js">
+                                            </script>
+                                            <script src="/js/copy.js">
+                                            </script>
+                                          </body>
+                                        </html>

@@ -1,234 +1,1582 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>String Functions — PhoenixmlDb Documentation</title><meta name="description" content="XPath string manipulation, searching, regex, Unicode, and URI functions"><link rel="canonical" href="/language-reference/xpath/functions/string.html"><meta property="og:title" content="String Functions"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xpath/functions/string.html"><meta property="og:description" content="XPath string manipulation, searching, regex, Unicode, and URI functions"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>String Functions — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="XPath string manipulation, searching, regex, Unicode, and URI functions">
+            <link rel="canonical" href="/language-reference/xpath/functions/string.html">
+              <meta property="og:title" content="String Functions">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xpath/functions/string.html">
+                    <meta property="og:description" content="XPath string manipulation, searching, regex, Unicode, and URI functions">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li class="active"><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="string-functions"><a class="anchor" href="#string-functions">#</a>String Functions</h1><p>String functions are the most commonly used category in XPath. If you've worked with <code>System.String</code> methods in C#, most of these will feel familiar — with a few important differences around how XPath handles Unicode and sequences.</p><p>All string functions are in the default <code>fn:</code> namespace.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#basic-string-operations" title="">Basic String Operations</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#substring-operations" title="">Substring Operations</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#searching-and-testing" title="">Searching and Testing</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#case-conversion" title="">Case Conversion</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#whitespace-and-normalization" title="">Whitespace and Normalization</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#regular-expressions" title="">Regular Expressions</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#unicode-functions" title="">Unicode Functions</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#uri-functions" title="">URI Functions</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#other-string-functions" title="">Other String Functions</a>
-        </p>
-      </li></ul><hr><h2 id="basic-string-operations"><a class="anchor" href="#basic-string-operations">#</a>Basic String Operations</h2><h3 id="string"><a class="anchor" href="#string">#</a>string()</h3><p>Converts a value to its string representation.</p><p>
-      <strong>Signature:</strong> <code>string($value?) as xs:string</code></p><pre><code class="language-xpath">string(42)            =&gt; "42"
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section open">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li class="active"><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">Functions
+                                </p>
+                                <h1 class="page-title">String Functions
+                                </h1>
+                                <p class="page-subtitle">XPath string manipulation, searching, regex, Unicode, and URI functions
+                                </p>
+                                <h1 id="string-functions"><a class="anchor" href="#string-functions">#</a>String Functions
+                                </h1>
+                                <p>String functions are the most commonly used category in XPath. If you've worked with <code>System.String</code> methods in C#, most of these will feel familiar — with a few important differences around how XPath handles Unicode and sequences.
+                                </p>
+                                <p>All string functions are in the default <code>fn:</code> namespace.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#basic-string-operations">Basic String Operations</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#substring-operations">Substring Operations</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#searching-and-testing">Searching and Testing</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#case-conversion">Case Conversion</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#whitespace-and-normalization">Whitespace and Normalization</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#regular-expressions">Regular Expressions</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#unicode-functions">Unicode Functions</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#uri-functions">URI Functions</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#other-string-functions">Other String Functions</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="basic-string-operations"><a class="anchor" href="#basic-string-operations">#</a>Basic String Operations
+                                  </h2>
+                                  <h3 id="string"><a class="anchor" href="#string">#</a>string()
+                                  </h3>
+                                  <p>Converts a value to its string representation.
+                                  </p>
+                                  <p>
+      <strong>Signature:</strong> <code>string($value?) as xs:string</code>
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xpath</span>
+                                    </figcaption>
+                                    <pre><code class="language-xpath">string(42)            =&gt; "42"
 string(true())        =&gt; "true"
 string(())            =&gt; ""        (: empty sequence becomes empty string :)
-string(//price[1])    =&gt; "39.99"   (: string value of a node :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>.ToString()</code> or <code>Convert.ToString()</code></p><p>
-      <strong>Note:</strong> When called with no arguments, <code>string()</code> returns the string value of the context node — a common pattern in XSLT template matching.</p><hr><h3 id="string-length"><a class="anchor" href="#string-length">#</a>string-length()</h3><p>Returns the number of characters in a string.</p><p>
-      <strong>Signature:</strong> <code>string-length($value as xs:string?) as xs:integer</code></p><pre><code class="language-xpath">string-length("hello")           =&gt; 5
+string(//price[1])    =&gt; "39.99"   (: string value of a node :)</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
+      <strong>C# equivalent:</strong> <code>.ToString()</code> or <code>Convert.ToString()</code>
+                                  </p>
+                                  <p>
+      <strong>Note:</strong> When called with no arguments, <code>string()</code> returns the string value of the context node — a common pattern in XSLT template matching.
+                                  </p>
+                                  <hr>
+                                    <h3 id="string-length"><a class="anchor" href="#string-length">#</a>string-length()
+                                    </h3>
+                                    <p>Returns the number of characters in a string.
+                                    </p>
+                                    <p>
+      <strong>Signature:</strong> <code>string-length($value as xs:string?) as xs:integer</code>
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xpath</span>
+                                      </figcaption>
+                                      <pre><code class="language-xpath">string-length("hello")           =&gt; 5
 string-length("")                =&gt; 0
 string-length("café")            =&gt; 4     (: counts characters, not bytes :)
-string-length(//title)           =&gt; length of the title element's text</code></pre><p>
-      <strong>C# equivalent:</strong> <code>"hello".Length</code></p><p>
-      <strong>Note:</strong> XPath counts Unicode characters (codepoints), not bytes. This matches C#'s <code>string.Length</code> for most text, but differs for surrogate pairs.</p><hr><h3 id="concat"><a class="anchor" href="#concat">#</a>concat()</h3><p>Joins two or more strings together. Unlike most XPath functions, <code>concat</code> accepts a variable number of arguments.</p><p>
-      <strong>Signature:</strong> <code>concat($arg1 as xs:anyAtomicType?, $arg2 as xs:anyAtomicType?, ...) as xs:string</code></p><pre><code class="language-xpath">concat("hello", " ", "world")    =&gt; "hello world"
+string-length(//title)           =&gt; length of the title element's text</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
+      <strong>C# equivalent:</strong> <code>"hello".Length</code>
+                                    </p>
+                                    <p>
+      <strong>Note:</strong> XPath counts Unicode characters (codepoints), not bytes. This matches C#'s <code>string.Length</code> for most text, but differs for surrogate pairs.
+                                    </p>
+                                    <hr>
+                                      <h3 id="concat"><a class="anchor" href="#concat">#</a>concat()
+                                      </h3>
+                                      <p>Joins two or more strings together. Unlike most XPath functions, <code>concat</code> accepts a variable number of arguments.
+                                      </p>
+                                      <p>
+      <strong>Signature:</strong> <code>concat($arg1 as xs:anyAtomicType?, $arg2 as xs:anyAtomicType?, ...) as xs:string</code>
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xpath</span>
+                                        </figcaption>
+                                        <pre><code class="language-xpath">concat("hello", " ", "world")    =&gt; "hello world"
 concat(//first-name, " ", //last-name) =&gt; "John Smith"
-concat("Order #", @id)           =&gt; "Order #12345"</code></pre><p>
-      <strong>C# equivalent:</strong> <code>string.Concat()</code> or <code>$"hello {world}"</code></p><p>
-      <strong>Note:</strong> For joining a sequence with a separator, use <code>string-join()</code> instead.</p><hr><h3 id="string-join"><a class="anchor" href="#string-join">#</a>string-join()</h3><p>Joins a sequence of strings with a separator.</p><p>
-      <strong>Signature:</strong> <code>string-join($values as xs:anyAtomicType*, $separator as xs:string?) as xs:string</code></p><pre><code class="language-xpath">string-join(("a", "b", "c"), ", ")       =&gt; "a, b, c"
+concat("Order #", @id)           =&gt; "Order #12345"</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
+      <strong>C# equivalent:</strong> <code>string.Concat()</code> or <code>$"hello {world}"</code>
+                                      </p>
+                                      <p>
+      <strong>Note:</strong> For joining a sequence with a separator, use <code>string-join()</code> instead.
+                                      </p>
+                                      <hr>
+                                        <h3 id="string-join"><a class="anchor" href="#string-join">#</a>string-join()
+                                        </h3>
+                                        <p>Joins a sequence of strings with a separator.
+                                        </p>
+                                        <p>
+      <strong>Signature:</strong> <code>string-join($values as xs:anyAtomicType*, $separator as xs:string?) as xs:string</code>
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xpath</span>
+                                          </figcaption>
+                                          <pre><code class="language-xpath">string-join(("a", "b", "c"), ", ")       =&gt; "a, b, c"
 string-join(//item/name, " | ")          =&gt; "Widget | Gadget | Gizmo"
 string-join(("a", "b", "c"))            =&gt; "abc"   (: no separator :)
-string-join((), ", ")                    =&gt; ""      (: empty sequence :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>string.Join(", ", items)</code></p><p>Given this XML:</p><pre><code class="language-xml">&lt;order&gt;
+string-join((), ", ")                    =&gt; ""      (: empty sequence :)</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
+      <strong>C# equivalent:</strong> <code>string.Join(", ", items)</code>
+                                        </p>
+                                        <p>Given this XML:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;order&gt;
   &lt;item&gt;&lt;name&gt;Widget&lt;/name&gt;&lt;/item&gt;
   &lt;item&gt;&lt;name&gt;Gadget&lt;/name&gt;&lt;/item&gt;
   &lt;item&gt;&lt;name&gt;Gizmo&lt;/name&gt;&lt;/item&gt;
-&lt;/order&gt;</code></pre><pre><code class="language-xpath">string-join(/order/item/name, ", ")   =&gt; "Widget, Gadget, Gizmo"</code></pre><hr><h2 id="substring-operations"><a class="anchor" href="#substring-operations">#</a>Substring Operations</h2><h3 id="substring"><a class="anchor" href="#substring">#</a>substring()</h3><p>Extracts a portion of a string. <strong>Warning:</strong> XPath uses 1-based indexing, not 0-based like C#.</p><p>
-      <strong>Signature:</strong> <code>substring($value as xs:string?, $start as xs:double, $length as xs:double?) as xs:string</code></p><pre><code class="language-xpath">substring("hello world", 1, 5)   =&gt; "hello"    (: start at position 1, take 5 :)
+&lt;/order&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xpath</span>
+                                          </figcaption>
+                                          <pre><code class="language-xpath">string-join(/order/item/name, ", ")   =&gt; "Widget, Gadget, Gizmo"</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <hr>
+                                          <h2 id="substring-operations"><a class="anchor" href="#substring-operations">#</a>Substring Operations
+                                          </h2>
+                                          <h3 id="substring"><a class="anchor" href="#substring">#</a>substring()
+                                          </h3>
+                                          <p>Extracts a portion of a string. <strong>Warning:</strong> XPath uses 1-based indexing, not 0-based like C#.
+                                          </p>
+                                          <p>
+      <strong>Signature:</strong> <code>substring($value as xs:string?, $start as xs:double, $length as xs:double?) as xs:string</code>
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xpath</span>
+                                            </figcaption>
+                                            <pre><code class="language-xpath">substring("hello world", 1, 5)   =&gt; "hello"    (: start at position 1, take 5 :)
 substring("hello world", 7)      =&gt; "world"    (: start at position 7, take rest :)
-substring("hello", 2, 3)         =&gt; "ell"</code></pre><p>
-      <strong>C# equivalent:</strong> <code>"hello world".Substring(0, 5)</code> — but remember C# is 0-based!</p><table>
-      <thead>
-        <tr>
-          <th>
-            <p>XPath</p>
-          </th>
-          <th>
-            <p>C#</p>
-          </th>
-          <th>
-            <p>Result</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>substring("abcde", 1, 3)</code></p>
-          </td>
-          <td>
-            <p><code>"abcde".Substring(0, 3)</code></p>
-          </td>
-          <td>
-            <p><code>"abc"</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>substring("abcde", 3)</code></p>
-          </td>
-          <td>
-            <p><code>"abcde".Substring(2)</code></p>
-          </td>
-          <td>
-            <p><code>"cde"</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>substring("abcde", 2, 2)</code></p>
-          </td>
-          <td>
-            <p><code>"abcde".Substring(1, 2)</code></p>
-          </td>
-          <td>
-            <p><code>"bc"</code></p>
-          </td>
-        </tr>
-      </tbody>
-    </table><hr><h3 id="substring-before"><a class="anchor" href="#substring-before">#</a>substring-before()</h3><p>Returns the part of a string before the first occurrence of a search string.</p><p>
-      <strong>Signature:</strong> <code>substring-before($value as xs:string?, $search as xs:string?) as xs:string</code></p><pre><code class="language-xpath">substring-before("2026-03-19", "-")    =&gt; "2026"
+substring("hello", 2, 3)         =&gt; "ell"</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>
+      <strong>C# equivalent:</strong> <code>"hello world".Substring(0, 5)</code> — but remember C# is 0-based!
+                                          </p>
+                                          <div class="table-wrap">
+                                            <table>
+      
+                                              <thead>
+        
+                                                <tr>
+          
+                                                  <th>
+            
+                                                    <p>XPath
+                                                    </p>
+          
+                                                  </th>
+          
+                                                  <th>
+            
+                                                    <p>C#
+                                                    </p>
+          
+                                                  </th>
+          
+                                                  <th>
+            
+                                                    <p>Result
+                                                    </p>
+          
+                                                  </th>
+        
+                                                </tr>
+      
+                                              </thead>
+      
+                                              <tbody>
+        
+                                                <tr>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>substring("abcde", 1, 3)</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>"abcde".Substring(0, 3)</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>"abc"</code>
+            
+                                                    </p>
+          
+                                                  </td>
+        
+                                                </tr>
+        
+                                                <tr>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>substring("abcde", 3)</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>"abcde".Substring(2)</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>"cde"</code>
+            
+                                                    </p>
+          
+                                                  </td>
+        
+                                                </tr>
+        
+                                                <tr>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>substring("abcde", 2, 2)</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>"abcde".Substring(1, 2)</code>
+            
+                                                    </p>
+          
+                                                  </td>
+          
+                                                  <td>
+            
+                                                    <p>
+              <code>"bc"</code>
+            
+                                                    </p>
+          
+                                                  </td>
+        
+                                                </tr>
+      
+                                              </tbody>
+    
+                                            </table>
+                                          </div>
+                                          <hr>
+                                            <h3 id="substring-before"><a class="anchor" href="#substring-before">#</a>substring-before()
+                                            </h3>
+                                            <p>Returns the part of a string before the first occurrence of a search string.
+                                            </p>
+                                            <p>
+      <strong>Signature:</strong> <code>substring-before($value as xs:string?, $search as xs:string?) as xs:string</code>
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xpath</span>
+                                              </figcaption>
+                                              <pre><code class="language-xpath">substring-before("2026-03-19", "-")    =&gt; "2026"
 substring-before("hello world", " ")   =&gt; "hello"
-substring-before("hello", "xyz")       =&gt; ""       (: not found :)</code></pre><p>
+substring-before("hello", "xyz")       =&gt; ""       (: not found :)</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
       <strong>C# equivalent:</strong>
-    </p><pre><code class="language-csharp">var s = "2026-03-19";
-s.Substring(0, s.IndexOf('-'))  // "2026"</code></pre><hr><h3 id="substring-after"><a class="anchor" href="#substring-after">#</a>substring-after()</h3><p>Returns the part of a string after the first occurrence of a search string.</p><p>
-      <strong>Signature:</strong> <code>substring-after($value as xs:string?, $search as xs:string?) as xs:string</code></p><pre><code class="language-xpath">substring-after("2026-03-19", "-")     =&gt; "03-19"
+    
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">csharp</span>
+                                              </figcaption>
+                                              <pre><code class="language-csharp">var s = "2026-03-19";
+s.Substring(0, s.IndexOf('-'))  // "2026"</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <hr>
+                                              <h3 id="substring-after"><a class="anchor" href="#substring-after">#</a>substring-after()
+                                              </h3>
+                                              <p>Returns the part of a string after the first occurrence of a search string.
+                                              </p>
+                                              <p>
+      <strong>Signature:</strong> <code>substring-after($value as xs:string?, $search as xs:string?) as xs:string</code>
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xpath</span>
+                                                </figcaption>
+                                                <pre><code class="language-xpath">substring-after("2026-03-19", "-")     =&gt; "03-19"
 substring-after("name=value", "=")     =&gt; "value"
-substring-after("hello", "xyz")        =&gt; ""       (: not found :)</code></pre><p>
+substring-after("hello", "xyz")        =&gt; ""       (: not found :)</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>
       <strong>C# equivalent:</strong>
-    </p><pre><code class="language-csharp">var s = "2026-03-19";
-s.Substring(s.IndexOf('-') + 1)  // "03-19"</code></pre><p>
-      <strong>Practical example</strong> — extracting a file extension:</p><pre><code class="language-xpath">substring-after("report.pdf", ".")  =&gt; "pdf"</code></pre><hr><h2 id="searching-and-testing"><a class="anchor" href="#searching-and-testing">#</a>Searching and Testing</h2><h3 id="contains"><a class="anchor" href="#contains">#</a>contains()</h3><p>Tests whether a string contains a substring.</p><p>
-      <strong>Signature:</strong> <code>contains($value as xs:string?, $search as xs:string?) as xs:boolean</code></p><pre><code class="language-xpath">contains("hello world", "world")   =&gt; true
+    
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">csharp</span>
+                                                </figcaption>
+                                                <pre><code class="language-csharp">var s = "2026-03-19";
+s.Substring(s.IndexOf('-') + 1)  // "03-19"</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>
+      <strong>Practical example</strong> — extracting a file extension:
+                                              </p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xpath</span>
+                                                </figcaption>
+                                                <pre><code class="language-xpath">substring-after("report.pdf", ".")  =&gt; "pdf"</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <hr>
+                                                <h2 id="searching-and-testing"><a class="anchor" href="#searching-and-testing">#</a>Searching and Testing
+                                                </h2>
+                                                <h3 id="contains"><a class="anchor" href="#contains">#</a>contains()
+                                                </h3>
+                                                <p>Tests whether a string contains a substring.
+                                                </p>
+                                                <p>
+      <strong>Signature:</strong> <code>contains($value as xs:string?, $search as xs:string?) as xs:boolean</code>
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xpath</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xpath">contains("hello world", "world")   =&gt; true
 contains("hello world", "xyz")     =&gt; false
-contains("hello", "")              =&gt; true    (: empty string is always contained :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>"hello world".Contains("world")</code></p><p>
-      <strong>Common XPath pattern</strong> — filtering by content:</p><pre><code class="language-xpath">//book[contains(title, "XML")]     (: books with "XML" in the title :)</code></pre><hr><h3 id="starts-with"><a class="anchor" href="#starts-with">#</a>starts-with()</h3><p>Tests whether a string starts with a prefix.</p><p>
-      <strong>Signature:</strong> <code>starts-with($value as xs:string?, $prefix as xs:string?) as xs:boolean</code></p><pre><code class="language-xpath">starts-with("hello world", "hello")  =&gt; true
+contains("hello", "")              =&gt; true    (: empty string is always contained :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <p>
+      <strong>C# equivalent:</strong> <code>"hello world".Contains("world")</code>
+                                                </p>
+                                                <p>
+      <strong>Common XPath pattern</strong> — filtering by content:
+                                                </p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xpath</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xpath">//book[contains(title, "XML")]     (: books with "XML" in the title :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <hr>
+                                                  <h3 id="starts-with"><a class="anchor" href="#starts-with">#</a>starts-with()
+                                                  </h3>
+                                                  <p>Tests whether a string starts with a prefix.
+                                                  </p>
+                                                  <p>
+      <strong>Signature:</strong> <code>starts-with($value as xs:string?, $prefix as xs:string?) as xs:boolean</code>
+                                                  </p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xpath</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xpath">starts-with("hello world", "hello")  =&gt; true
 starts-with("hello world", "world")  =&gt; false
-starts-with(@href, "http")           =&gt; true for external links</code></pre><p>
-      <strong>C# equivalent:</strong> <code>"hello".StartsWith("hello")</code></p><p>
-      <strong>Practical example</strong> — finding external links in a document:</p><pre><code class="language-xpath">//link[starts-with(@href, "http")]</code></pre><hr><h3 id="ends-with"><a class="anchor" href="#ends-with">#</a>ends-with()</h3><p>Tests whether a string ends with a suffix.</p><p>
-      <strong>Signature:</strong> <code>ends-with($value as xs:string?, $suffix as xs:string?) as xs:boolean</code></p><pre><code class="language-xpath">ends-with("report.pdf", ".pdf")   =&gt; true
-ends-with("image.png", ".jpg")    =&gt; false</code></pre><p>
-      <strong>C# equivalent:</strong> <code>"report.pdf".EndsWith(".pdf")</code></p><p>
-      <strong>Practical example</strong> — finding all PDF links:</p><pre><code class="language-xpath">//link[ends-with(@href, ".pdf")]</code></pre><hr><h3 id="contains-token"><a class="anchor" href="#contains-token">#</a>contains-token()</h3><p>Tests whether a whitespace-separated token list contains a specific token. This is useful for CSS-class-style attribute values.</p><p>
-      <strong>Signature:</strong> <code>contains-token($value as xs:string?, $token as xs:string) as xs:boolean</code></p><pre><code class="language-xpath">contains-token("btn btn-primary active", "btn-primary")  =&gt; true
+starts-with(@href, "http")           =&gt; true for external links</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <p>
+      <strong>C# equivalent:</strong> <code>"hello".StartsWith("hello")</code>
+                                                  </p>
+                                                  <p>
+      <strong>Practical example</strong> — finding external links in a document:
+                                                  </p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xpath</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xpath">//link[starts-with(@href, "http")]</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <hr>
+                                                    <h3 id="ends-with"><a class="anchor" href="#ends-with">#</a>ends-with()
+                                                    </h3>
+                                                    <p>Tests whether a string ends with a suffix.
+                                                    </p>
+                                                    <p>
+      <strong>Signature:</strong> <code>ends-with($value as xs:string?, $suffix as xs:string?) as xs:boolean</code>
+                                                    </p>
+                                                    <figure class="code">
+                                                      <figcaption><span class="lang">xpath</span>
+                                                      </figcaption>
+                                                      <pre><code class="language-xpath">ends-with("report.pdf", ".pdf")   =&gt; true
+ends-with("image.png", ".jpg")    =&gt; false</code>
+                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                    </figure>
+                                                    <p>
+      <strong>C# equivalent:</strong> <code>"report.pdf".EndsWith(".pdf")</code>
+                                                    </p>
+                                                    <p>
+      <strong>Practical example</strong> — finding all PDF links:
+                                                    </p>
+                                                    <figure class="code">
+                                                      <figcaption><span class="lang">xpath</span>
+                                                      </figcaption>
+                                                      <pre><code class="language-xpath">//link[ends-with(@href, ".pdf")]</code>
+                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                    </figure>
+                                                    <hr>
+                                                      <h3 id="contains-token"><a class="anchor" href="#contains-token">#</a>contains-token()
+                                                      </h3>
+                                                      <p>Tests whether a whitespace-separated token list contains a specific token. This is useful for CSS-class-style attribute values.
+                                                      </p>
+                                                      <p>
+      <strong>Signature:</strong> <code>contains-token($value as xs:string?, $token as xs:string) as xs:boolean</code>
+                                                      </p>
+                                                      <figure class="code">
+                                                        <figcaption><span class="lang">xpath</span>
+                                                        </figcaption>
+                                                        <pre><code class="language-xpath">contains-token("btn btn-primary active", "btn-primary")  =&gt; true
 contains-token("btn btn-primary active", "btn")           =&gt; true
-contains-token("btn btn-primary active", "bt")            =&gt; false (: partial match fails :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>"btn btn-primary".Split(' ').Contains("btn-primary")</code></p><p>
-      <strong>Why this exists:</strong> <code>contains("btn btn-primary", "btn")</code> returns true even for partial matches. <code>contains-token</code> requires a whole-token match.</p><hr><h2 id="case-conversion"><a class="anchor" href="#case-conversion">#</a>Case Conversion</h2><h3 id="upper-case"><a class="anchor" href="#upper-case">#</a>upper-case()</h3><p>Converts a string to uppercase.</p><p>
-      <strong>Signature:</strong> <code>upper-case($value as xs:string?) as xs:string</code></p><pre><code class="language-xpath">upper-case("hello")   =&gt; "HELLO"
+contains-token("btn btn-primary active", "bt")            =&gt; false (: partial match fails :)</code>
+                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                      </figure>
+                                                      <p>
+      <strong>C# equivalent:</strong> <code>"btn btn-primary".Split(' ').Contains("btn-primary")</code>
+                                                      </p>
+                                                      <p>
+      <strong>Why this exists:</strong> <code>contains("btn btn-primary", "btn")</code> returns true even for partial matches. <code>contains-token</code> requires a whole-token match.
+                                                      </p>
+                                                      <hr>
+                                                        <h2 id="case-conversion"><a class="anchor" href="#case-conversion">#</a>Case Conversion
+                                                        </h2>
+                                                        <h3 id="upper-case"><a class="anchor" href="#upper-case">#</a>upper-case()
+                                                        </h3>
+                                                        <p>Converts a string to uppercase.
+                                                        </p>
+                                                        <p>
+      <strong>Signature:</strong> <code>upper-case($value as xs:string?) as xs:string</code>
+                                                        </p>
+                                                        <figure class="code">
+                                                          <figcaption><span class="lang">xpath</span>
+                                                          </figcaption>
+                                                          <pre><code class="language-xpath">upper-case("hello")   =&gt; "HELLO"
 upper-case("café")    =&gt; "CAFÉ"
-upper-case("")        =&gt; ""</code></pre><p>
-      <strong>C# equivalent:</strong> <code>"hello".ToUpperInvariant()</code></p><hr><h3 id="lower-case"><a class="anchor" href="#lower-case">#</a>lower-case()</h3><p>Converts a string to lowercase.</p><p>
-      <strong>Signature:</strong> <code>lower-case($value as xs:string?) as xs:string</code></p><pre><code class="language-xpath">lower-case("HELLO")   =&gt; "hello"
-lower-case("XML")     =&gt; "xml"</code></pre><p>
-      <strong>C# equivalent:</strong> <code>"HELLO".ToLowerInvariant()</code></p><p>
-      <strong>Practical example</strong> — case-insensitive comparison:</p><pre><code class="language-xpath">//book[lower-case(title) = "effective c#"]</code></pre><hr><h2 id="whitespace-and-normalization"><a class="anchor" href="#whitespace-and-normalization">#</a>Whitespace and Normalization</h2><h3 id="normalize-space"><a class="anchor" href="#normalize-space">#</a>normalize-space()</h3><p>Strips leading/trailing whitespace and collapses internal whitespace to single spaces.</p><p>
-      <strong>Signature:</strong> <code>normalize-space($value as xs:string?) as xs:string</code></p><pre><code class="language-xpath">normalize-space("  hello   world  ")   =&gt; "hello world"
+upper-case("")        =&gt; ""</code>
+                                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                        </figure>
+                                                        <p>
+      <strong>C# equivalent:</strong> <code>"hello".ToUpperInvariant()</code>
+                                                        </p>
+                                                        <hr>
+                                                          <h3 id="lower-case"><a class="anchor" href="#lower-case">#</a>lower-case()
+                                                          </h3>
+                                                          <p>Converts a string to lowercase.
+                                                          </p>
+                                                          <p>
+      <strong>Signature:</strong> <code>lower-case($value as xs:string?) as xs:string</code>
+                                                          </p>
+                                                          <figure class="code">
+                                                            <figcaption><span class="lang">xpath</span>
+                                                            </figcaption>
+                                                            <pre><code class="language-xpath">lower-case("HELLO")   =&gt; "hello"
+lower-case("XML")     =&gt; "xml"</code>
+                                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                          </figure>
+                                                          <p>
+      <strong>C# equivalent:</strong> <code>"HELLO".ToLowerInvariant()</code>
+                                                          </p>
+                                                          <p>
+      <strong>Practical example</strong> — case-insensitive comparison:
+                                                          </p>
+                                                          <figure class="code">
+                                                            <figcaption><span class="lang">xpath</span>
+                                                            </figcaption>
+                                                            <pre><code class="language-xpath">//book[lower-case(title) = "effective c#"]</code>
+                                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                          </figure>
+                                                          <hr>
+                                                            <h2 id="whitespace-and-normalization"><a class="anchor" href="#whitespace-and-normalization">#</a>Whitespace and Normalization
+                                                            </h2>
+                                                            <h3 id="normalize-space"><a class="anchor" href="#normalize-space">#</a>normalize-space()
+                                                            </h3>
+                                                            <p>Strips leading/trailing whitespace and collapses internal whitespace to single spaces.
+                                                            </p>
+                                                            <p>
+      <strong>Signature:</strong> <code>normalize-space($value as xs:string?) as xs:string</code>
+                                                            </p>
+                                                            <figure class="code">
+                                                              <figcaption><span class="lang">xpath</span>
+                                                              </figcaption>
+                                                              <pre><code class="language-xpath">normalize-space("  hello   world  ")   =&gt; "hello world"
 normalize-space("line1&amp;#10;line2")     =&gt; "line1 line2"
-normalize-space("")                    =&gt; ""</code></pre><p>
-      <strong>C# equivalent:</strong> <code>Regex.Replace(s.Trim(), @"\s+", " ")</code></p><p>
-      <strong>Why this matters:</strong> XML preserves whitespace in text nodes. When you read text from an XML document, it often contains newlines and indentation from the source file. <code>normalize-space()</code> cleans this up for display or comparison.</p><hr><h3 id="normalize-unicode"><a class="anchor" href="#normalize-unicode">#</a>normalize-unicode()</h3><p>Applies Unicode normalization to a string.</p><p>
-      <strong>Signature:</strong> <code>normalize-unicode($value as xs:string?, $form as xs:string?) as xs:string</code></p><pre><code class="language-xpath">normalize-unicode("café")            =&gt; "café" (NFC form — default)
+normalize-space("")                    =&gt; ""</code>
+                                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                            </figure>
+                                                            <p>
+      <strong>C# equivalent:</strong> <code>Regex.Replace(s.Trim(), @"\s+", " ")</code>
+                                                            </p>
+                                                            <p>
+      <strong>Why this matters:</strong> XML preserves whitespace in text nodes. When you read text from an XML document, it often contains newlines and indentation from the source file. <code>normalize-space()</code> cleans this up for display or comparison.
+                                                            </p>
+                                                            <hr>
+                                                              <h3 id="normalize-unicode"><a class="anchor" href="#normalize-unicode">#</a>normalize-unicode()
+                                                              </h3>
+                                                              <p>Applies Unicode normalization to a string.
+                                                              </p>
+                                                              <p>
+      <strong>Signature:</strong> <code>normalize-unicode($value as xs:string?, $form as xs:string?) as xs:string</code>
+                                                              </p>
+                                                              <figure class="code">
+                                                                <figcaption><span class="lang">xpath</span>
+                                                                </figcaption>
+                                                                <pre><code class="language-xpath">normalize-unicode("café")            =&gt; "café" (NFC form — default)
 normalize-unicode("café", "NFD")     =&gt; composed form
-normalize-unicode("café", "NFKC")    =&gt; compatibility composition</code></pre><p>
-      <strong>C# equivalent:</strong> <code>"café".Normalize(NormalizationForm.FormC)</code></p><p>
-      <strong>When you need this:</strong> When comparing strings from different sources that may use different Unicode representations for the same character (e.g., <code>é</code> as a single codepoint vs. <code>e</code> + combining accent).</p><hr><h3 id="translate"><a class="anchor" href="#translate">#</a>translate()</h3><p>Replaces individual characters, one-for-one. Not a search-and-replace — it's a character mapping.</p><p>
-      <strong>Signature:</strong> <code>translate($value as xs:string?, $from as xs:string, $to as xs:string) as xs:string</code></p><pre><code class="language-xpath">translate("hello", "helo", "HELO")     =&gt; "HELLO"
+normalize-unicode("café", "NFKC")    =&gt; compatibility composition</code>
+                                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                              </figure>
+                                                              <p>
+      <strong>C# equivalent:</strong> <code>"café".Normalize(NormalizationForm.FormC)</code>
+                                                              </p>
+                                                              <p>
+      <strong>When you need this:</strong> When comparing strings from different sources that may use different Unicode representations for the same character (e.g., <code>é</code> as a single codepoint vs. <code>e</code> + combining accent).
+                                                              </p>
+                                                              <hr>
+                                                                <h3 id="translate"><a class="anchor" href="#translate">#</a>translate()
+                                                                </h3>
+                                                                <p>Replaces individual characters, one-for-one. Not a search-and-replace — it's a character mapping.
+                                                                </p>
+                                                                <p>
+      <strong>Signature:</strong> <code>translate($value as xs:string?, $from as xs:string, $to as xs:string) as xs:string</code>
+                                                                </p>
+                                                                <figure class="code">
+                                                                  <figcaption><span class="lang">xpath</span>
+                                                                  </figcaption>
+                                                                  <pre><code class="language-xpath">translate("hello", "helo", "HELO")     =&gt; "HELLO"
 translate("(555) 123-4567", "()-", "")  =&gt; "555 1234567"
-translate("ABC", "ABC", "abc")         =&gt; "abc"</code></pre><p>
-      <strong>C# equivalent:</strong> Multiple <code>Replace()</code> calls, or <code>string.Create</code> with a character map.</p><p>
-      <strong>Practical example</strong> — stripping punctuation from phone numbers:</p><pre><code class="language-xpath">translate(@phone, "()- .", "")</code></pre><p>
-      <strong>Note:</strong> <code>translate()</code> maps characters 1:1. For pattern-based replacement, use <code>replace()</code> with regex.</p><hr><h2 id="regular-expressions"><a class="anchor" href="#regular-expressions">#</a>Regular Expressions</h2><p>XPath uses the same regex syntax as XML Schema (which is close to but not identical to .NET's <code>System.Text.RegularExpressions</code>).</p><h3 id="matches"><a class="anchor" href="#matches">#</a>matches()</h3><p>Tests whether a string matches a regular expression.</p><p>
-      <strong>Signature:</strong> <code>matches($value as xs:string?, $pattern as xs:string, $flags as xs:string?) as xs:boolean</code></p><pre><code class="language-xpath">matches("hello", "^h.*o$")            =&gt; true
+translate("ABC", "ABC", "abc")         =&gt; "abc"</code>
+                                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                </figure>
+                                                                <p>
+      <strong>C# equivalent:</strong> Multiple <code>Replace()</code> calls, or <code>string.Create</code> with a character map.
+                                                                </p>
+                                                                <p>
+      <strong>Practical example</strong> — stripping punctuation from phone numbers:
+                                                                </p>
+                                                                <figure class="code">
+                                                                  <figcaption><span class="lang">xpath</span>
+                                                                  </figcaption>
+                                                                  <pre><code class="language-xpath">translate(@phone, "()- .", "")</code>
+                                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                </figure>
+                                                                <p>
+      <strong>Note:</strong> <code>translate()</code> maps characters 1:1. For pattern-based replacement, use <code>replace()</code> with regex.
+                                                                </p>
+                                                                <hr>
+                                                                  <h2 id="regular-expressions"><a class="anchor" href="#regular-expressions">#</a>Regular Expressions
+                                                                  </h2>
+                                                                  <p>XPath uses the same regex syntax as XML Schema (which is close to but not identical to .NET's <code>System.Text.RegularExpressions</code>).
+                                                                  </p>
+                                                                  <h3 id="matches"><a class="anchor" href="#matches">#</a>matches()
+                                                                  </h3>
+                                                                  <p>Tests whether a string matches a regular expression.
+                                                                  </p>
+                                                                  <p>
+      <strong>Signature:</strong> <code>matches($value as xs:string?, $pattern as xs:string, $flags as xs:string?) as xs:boolean</code>
+                                                                  </p>
+                                                                  <figure class="code">
+                                                                    <figcaption><span class="lang">xpath</span>
+                                                                    </figcaption>
+                                                                    <pre><code class="language-xpath">matches("hello", "^h.*o$")            =&gt; true
 matches("Hello", "hello", "i")        =&gt; true   (: case-insensitive :)
 matches("2026-03-19", "\d{4}-\d{2}-\d{2}") =&gt; true
-matches("abc123", "[0-9]+")           =&gt; true   (: contains digits :)</code></pre><p>
+matches("abc123", "[0-9]+")           =&gt; true   (: contains digits :)</code>
+                                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                  </figure>
+                                                                  <p>
       <strong>Flags:</strong>
-| Flag | Meaning | C# Equivalent |
-|------|---------|---------------|
-| <code>i</code> | Case-insensitive | <code>RegexOptions.IgnoreCase</code> |
-| <code>m</code> | Multiline (^ and $ match line boundaries) | <code>RegexOptions.Multiline</code> |
-| <code>s</code> | Dot matches newlines | <code>RegexOptions.Singleline</code> |
-| <code>x</code> | Allow whitespace and comments in pattern | <code>RegexOptions.IgnorePatternWhitespace</code> |</p><p>
-      <strong>C# equivalent:</strong> <code>Regex.IsMatch("hello", "^h.*o$")</code></p><p>
-      <strong>Practical example</strong> — validating email-like patterns:</p><pre><code class="language-xpath">//user[matches(email, "^[^@]+@[^@]+\.[^@]+$")]</code></pre><hr><h3 id="replace"><a class="anchor" href="#replace">#</a>replace()</h3><p>Replaces parts of a string matching a regex pattern.</p><p>
-      <strong>Signature:</strong> <code>replace($value as xs:string?, $pattern as xs:string, $replacement as xs:string, $flags as xs:string?) as xs:string</code></p><pre><code class="language-xpath">replace("hello world", "world", "XPath")        =&gt; "hello XPath"
+                                                                  </p>
+                                                                  <div class="table-wrap">
+                                                                    <table>
+      
+                                                                      <thead>
+        
+                                                                        <tr>
+          
+                                                                          <th>
+            
+                                                                            <p>Flag
+                                                                            </p>
+          
+                                                                          </th>
+          
+                                                                          <th>
+            
+                                                                            <p>Meaning
+                                                                            </p>
+          
+                                                                          </th>
+          
+                                                                          <th>
+            
+                                                                            <p>C# Equivalent
+                                                                            </p>
+          
+                                                                          </th>
+        
+                                                                        </tr>
+      
+                                                                      </thead>
+      
+                                                                      <tbody>
+        
+                                                                        <tr>
+          
+                                                                          <td>
+            
+                                                                            <p>
+              <code>i</code>
+            
+                                                                            </p>
+          
+                                                                          </td>
+          
+                                                                          <td>
+            
+                                                                            <p>Case-insensitive
+                                                                            </p>
+          
+                                                                          </td>
+          
+                                                                          <td>
+            
+                                                                            <p>
+              <code>RegexOptions.IgnoreCase</code>
+            
+                                                                            </p>
+          
+                                                                          </td>
+        
+                                                                        </tr>
+        
+                                                                        <tr>
+          
+                                                                          <td>
+            
+                                                                            <p>
+              <code>m</code>
+            
+                                                                            </p>
+          
+                                                                          </td>
+          
+                                                                          <td>
+            
+                                                                            <p>Multiline (^ and $ match line boundaries)
+                                                                            </p>
+          
+                                                                          </td>
+          
+                                                                          <td>
+            
+                                                                            <p>
+              <code>RegexOptions.Multiline</code>
+            
+                                                                            </p>
+          
+                                                                          </td>
+        
+                                                                        </tr>
+        
+                                                                        <tr>
+          
+                                                                          <td>
+            
+                                                                            <p>
+              <code>s</code>
+            
+                                                                            </p>
+          
+                                                                          </td>
+          
+                                                                          <td>
+            
+                                                                            <p>Dot matches newlines
+                                                                            </p>
+          
+                                                                          </td>
+          
+                                                                          <td>
+            
+                                                                            <p>
+              <code>RegexOptions.Singleline</code>
+            
+                                                                            </p>
+          
+                                                                          </td>
+        
+                                                                        </tr>
+        
+                                                                        <tr>
+          
+                                                                          <td>
+            
+                                                                            <p>
+              <code>x</code>
+            
+                                                                            </p>
+          
+                                                                          </td>
+          
+                                                                          <td>
+            
+                                                                            <p>Allow whitespace and comments in pattern
+                                                                            </p>
+          
+                                                                          </td>
+          
+                                                                          <td>
+            
+                                                                            <p>
+              <code>RegexOptions.IgnorePatternWhitespace</code>
+            
+                                                                            </p>
+          
+                                                                          </td>
+        
+                                                                        </tr>
+      
+                                                                      </tbody>
+    
+                                                                    </table>
+                                                                  </div>
+                                                                  <p>
+      <strong>C# equivalent:</strong> <code>Regex.IsMatch("hello", "^h.*o$")</code>
+                                                                  </p>
+                                                                  <p>
+      <strong>Practical example</strong> — validating email-like patterns:
+                                                                  </p>
+                                                                  <figure class="code">
+                                                                    <figcaption><span class="lang">xpath</span>
+                                                                    </figcaption>
+                                                                    <pre><code class="language-xpath">//user[matches(email, "^[^@]+@[^@]+\.[^@]+$")]</code>
+                                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                  </figure>
+                                                                  <hr>
+                                                                    <h3 id="replace"><a class="anchor" href="#replace">#</a>replace()
+                                                                    </h3>
+                                                                    <p>Replaces parts of a string matching a regex pattern.
+                                                                    </p>
+                                                                    <p>
+      <strong>Signature:</strong> <code>replace($value as xs:string?, $pattern as xs:string, $replacement as xs:string, $flags as xs:string?) as xs:string</code>
+                                                                    </p>
+                                                                    <figure class="code">
+                                                                      <figcaption><span class="lang">xpath</span>
+                                                                      </figcaption>
+                                                                      <pre><code class="language-xpath">replace("hello world", "world", "XPath")        =&gt; "hello XPath"
 replace("2026-03-19", "(\d{4})-(\d{2})-(\d{2})", "$2/$3/$1")
                                                   =&gt; "03/19/2026"
 replace("  hello  ", "^\s+|\s+$", "")            =&gt; "hello" (: trim :)
-replace("aabbbcc", "(.)\1+", "$1")               =&gt; "abc"   (: collapse repeats :)</code></pre><p>
-      <strong>C# equivalent:</strong> <code>Regex.Replace("hello world", "world", "XPath")</code></p><p>
-      <strong>Backreferences:</strong> Use <code>$1</code>, <code>$2</code>, etc. in the replacement string to reference capture groups. This is the same as .NET's <code>$1</code> syntax.</p><p>
-      <strong>Practical example</strong> — reformatting dates:</p><pre><code class="language-xpath">replace(@date, "(\d{4})-(\d{2})-(\d{2})", "$3/$2/$1")
-(: "2026-03-19" becomes "19/03/2026" :)</code></pre><hr><h3 id="tokenize"><a class="anchor" href="#tokenize">#</a>tokenize()</h3><p>Splits a string by a regex pattern, returning a sequence of tokens.</p><p>
-      <strong>Signature:</strong> <code>tokenize($value as xs:string?, $pattern as xs:string?, $flags as xs:string?) as xs:string*</code></p><pre><code class="language-xpath">tokenize("a,b,c", ",")                     =&gt; ("a", "b", "c")
+replace("aabbbcc", "(.)\1+", "$1")               =&gt; "abc"   (: collapse repeats :)</code>
+                                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                    </figure>
+                                                                    <p>
+      <strong>C# equivalent:</strong> <code>Regex.Replace("hello world", "world", "XPath")</code>
+                                                                    </p>
+                                                                    <p>
+      <strong>Backreferences:</strong> Use <code>$1</code>, <code>$2</code>, etc. in the replacement string to reference capture groups. This is the same as .NET's <code>$1</code> syntax.
+                                                                    </p>
+                                                                    <p>
+      <strong>Practical example</strong> — reformatting dates:
+                                                                    </p>
+                                                                    <figure class="code">
+                                                                      <figcaption><span class="lang">xpath</span>
+                                                                      </figcaption>
+                                                                      <pre><code class="language-xpath">replace(@date, "(\d{4})-(\d{2})-(\d{2})", "$3/$2/$1")
+(: "2026-03-19" becomes "19/03/2026" :)</code>
+                                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                    </figure>
+                                                                    <hr>
+                                                                      <h3 id="tokenize"><a class="anchor" href="#tokenize">#</a>tokenize()
+                                                                      </h3>
+                                                                      <p>Splits a string by a regex pattern, returning a sequence of tokens.
+                                                                      </p>
+                                                                      <p>
+      <strong>Signature:</strong> <code>tokenize($value as xs:string?, $pattern as xs:string?, $flags as xs:string?) as xs:string*</code>
+                                                                      </p>
+                                                                      <figure class="code">
+                                                                        <figcaption><span class="lang">xpath</span>
+                                                                        </figcaption>
+                                                                        <pre><code class="language-xpath">tokenize("a,b,c", ",")                     =&gt; ("a", "b", "c")
 tokenize("one  two   three", "\s+")        =&gt; ("one", "two", "three")
 tokenize("2026-03-19", "-")                =&gt; ("2026", "03", "19")
-tokenize("path/to/file.txt", "/")          =&gt; ("path", "to", "file.txt")</code></pre><p>
-      <strong>C# equivalent:</strong> <code>"a,b,c".Split(',')</code> or <code>Regex.Split(s, pattern)</code></p><p>
-      <strong>Zero-argument form</strong> (XPath 3.1+): <code>tokenize($value)</code> splits on whitespace — equivalent to <code>normalize-space()</code> then split on spaces:</p><pre><code class="language-xpath">tokenize("  hello   world  ")              =&gt; ("hello", "world")</code></pre><p>
-      <strong>Practical example</strong> — working with comma-separated values in attributes:</p><pre><code class="language-xml">&lt;product categories="electronics,gadgets,sale"/&gt;</code></pre><pre><code class="language-xpath">tokenize(@categories, ",")   =&gt; ("electronics", "gadgets", "sale")</code></pre><hr><h2 id="unicode-functions"><a class="anchor" href="#unicode-functions">#</a>Unicode Functions</h2><p>These functions work at the codepoint level. Most are new in XPath 4.0.</p><h3 id="char"><a class="anchor" href="#char">#</a>char()</h3><p>Returns the character for a given Unicode codepoint. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>char($codepoint as xs:integer) as xs:string</code></p><pre><code class="language-xpath">char(65)       =&gt; "A"
+tokenize("path/to/file.txt", "/")          =&gt; ("path", "to", "file.txt")</code>
+                                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                      </figure>
+                                                                      <p>
+      <strong>C# equivalent:</strong> <code>"a,b,c".Split(',')</code> or <code>Regex.Split(s, pattern)</code>
+                                                                      </p>
+                                                                      <p>
+      <strong>Zero-argument form</strong> (XPath 3.1+): <code>tokenize($value)</code> splits on whitespace — equivalent to <code>normalize-space()</code> then split on spaces:
+                                                                      </p>
+                                                                      <figure class="code">
+                                                                        <figcaption><span class="lang">xpath</span>
+                                                                        </figcaption>
+                                                                        <pre><code class="language-xpath">tokenize("  hello   world  ")              =&gt; ("hello", "world")</code>
+                                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                      </figure>
+                                                                      <p>
+      <strong>Practical example</strong> — working with comma-separated values in attributes:
+                                                                      </p>
+                                                                      <figure class="code">
+                                                                        <figcaption><span class="lang">xml</span>
+                                                                        </figcaption>
+                                                                        <pre><code class="language-xml">&lt;product categories="electronics,gadgets,sale"/&gt;</code>
+                                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                      </figure>
+                                                                      <figure class="code">
+                                                                        <figcaption><span class="lang">xpath</span>
+                                                                        </figcaption>
+                                                                        <pre><code class="language-xpath">tokenize(@categories, ",")   =&gt; ("electronics", "gadgets", "sale")</code>
+                                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                      </figure>
+                                                                      <hr>
+                                                                        <h2 id="unicode-functions"><a class="anchor" href="#unicode-functions">#</a>Unicode Functions
+                                                                        </h2>
+                                                                        <p>These functions work at the codepoint level. Most are new in XPath 4.0.
+                                                                        </p>
+                                                                        <h3 id="char"><a class="anchor" href="#char">#</a>char()
+                                                                        </h3>
+                                                                        <p>Returns the character for a given Unicode codepoint. New in XPath 4.0.
+                                                                        </p>
+                                                                        <p>
+      <strong>Signature:</strong> <code>char($codepoint as xs:integer) as xs:string</code>
+                                                                        </p>
+                                                                        <figure class="code">
+                                                                          <figcaption><span class="lang">xpath</span>
+                                                                          </figcaption>
+                                                                          <pre><code class="language-xpath">char(65)       =&gt; "A"
 char(8364)     =&gt; "€"
-char(128522)   =&gt; "😊"</code></pre><p>
-      <strong>C# equivalent:</strong> <code>char.ConvertFromUtf32(65)</code></p><hr><h3 id="codepoint"><a class="anchor" href="#codepoint">#</a>codepoint()</h3><p>Returns the Unicode codepoint for the first character of a string. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>codepoint($char as xs:string) as xs:integer</code></p><pre><code class="language-xpath">codepoint("A")    =&gt; 65
-codepoint("€")    =&gt; 8364</code></pre><p>
-      <strong>C# equivalent:</strong> <code>char.ConvertToUtf32("A", 0)</code></p><hr><h3 id="string-to-codepoints"><a class="anchor" href="#string-to-codepoints">#</a>string-to-codepoints()</h3><p>Returns the sequence of Unicode codepoints for all characters in a string.</p><p>
-      <strong>Signature:</strong> <code>string-to-codepoints($value as xs:string?) as xs:integer*</code></p><pre><code class="language-xpath">string-to-codepoints("ABC")   =&gt; (65, 66, 67)
-string-to-codepoints("")      =&gt; ()</code></pre><p>
-      <strong>C# equivalent:</strong> <code>"ABC".Select(c =&gt; (int)c)</code></p><hr><h3 id="codepoints-to-string"><a class="anchor" href="#codepoints-to-string">#</a>codepoints-to-string()</h3><p>Constructs a string from a sequence of Unicode codepoints.</p><p>
-      <strong>Signature:</strong> <code>codepoints-to-string($codepoints as xs:integer*) as xs:string</code></p><pre><code class="language-xpath">codepoints-to-string((72, 101, 108, 108, 111))   =&gt; "Hello"</code></pre><p>
-      <strong>C# equivalent:</strong> <code>new string(codepoints.Select(c =&gt; (char)c).ToArray())</code></p><hr><h3 id="characters"><a class="anchor" href="#characters">#</a>characters()</h3><p>Splits a string into a sequence of individual characters. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>characters($value as xs:string) as xs:string*</code></p><pre><code class="language-xpath">characters("hello")   =&gt; ("h", "e", "l", "l", "o")</code></pre><p>
-      <strong>C# equivalent:</strong> <code>"hello".Select(c =&gt; c.ToString())</code></p><hr><h3 id="graphemes"><a class="anchor" href="#graphemes">#</a>graphemes()</h3><p>Splits a string into a sequence of grapheme clusters (user-perceived characters). New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>graphemes($value as xs:string) as xs:string*</code></p><pre><code class="language-xpath">graphemes("café")      =&gt; ("c", "a", "f", "é")</code></pre><p>
-      <strong>Why this exists:</strong> Some characters that appear as one glyph are stored as multiple codepoints (e.g., <code>é</code> can be <code>e</code> + combining accent). <code>characters()</code> would split them; <code>graphemes()</code> keeps them together.</p><p>
-      <strong>C# equivalent:</strong> <code>StringInfo.GetTextElementEnumerator(s)</code></p><hr><h2 id="uri-functions"><a class="anchor" href="#uri-functions">#</a>URI Functions</h2><h3 id="encode-for-uri"><a class="anchor" href="#encode-for-uri">#</a>encode-for-uri()</h3><p>Percent-encodes a string for use in a URI component.</p><p>
-      <strong>Signature:</strong> <code>encode-for-uri($value as xs:string?) as xs:string</code></p><pre><code class="language-xpath">encode-for-uri("hello world")        =&gt; "hello%20world"
+char(128522)   =&gt; "😊"</code>
+                                                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                        </figure>
+                                                                        <p>
+      <strong>C# equivalent:</strong> <code>char.ConvertFromUtf32(65)</code>
+                                                                        </p>
+                                                                        <hr>
+                                                                          <h3 id="codepoint"><a class="anchor" href="#codepoint">#</a>codepoint()
+                                                                          </h3>
+                                                                          <p>Returns the Unicode codepoint for the first character of a string. New in XPath 4.0.
+                                                                          </p>
+                                                                          <p>
+      <strong>Signature:</strong> <code>codepoint($char as xs:string) as xs:integer</code>
+                                                                          </p>
+                                                                          <figure class="code">
+                                                                            <figcaption><span class="lang">xpath</span>
+                                                                            </figcaption>
+                                                                            <pre><code class="language-xpath">codepoint("A")    =&gt; 65
+codepoint("€")    =&gt; 8364</code>
+                                                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                          </figure>
+                                                                          <p>
+      <strong>C# equivalent:</strong> <code>char.ConvertToUtf32("A", 0)</code>
+                                                                          </p>
+                                                                          <hr>
+                                                                            <h3 id="string-to-codepoints"><a class="anchor" href="#string-to-codepoints">#</a>string-to-codepoints()
+                                                                            </h3>
+                                                                            <p>Returns the sequence of Unicode codepoints for all characters in a string.
+                                                                            </p>
+                                                                            <p>
+      <strong>Signature:</strong> <code>string-to-codepoints($value as xs:string?) as xs:integer*</code>
+                                                                            </p>
+                                                                            <figure class="code">
+                                                                              <figcaption><span class="lang">xpath</span>
+                                                                              </figcaption>
+                                                                              <pre><code class="language-xpath">string-to-codepoints("ABC")   =&gt; (65, 66, 67)
+string-to-codepoints("")      =&gt; ()</code>
+                                                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                            </figure>
+                                                                            <p>
+      <strong>C# equivalent:</strong> <code>"ABC".Select(c =&gt; (int)c)</code>
+                                                                            </p>
+                                                                            <hr>
+                                                                              <h3 id="codepoints-to-string"><a class="anchor" href="#codepoints-to-string">#</a>codepoints-to-string()
+                                                                              </h3>
+                                                                              <p>Constructs a string from a sequence of Unicode codepoints.
+                                                                              </p>
+                                                                              <p>
+      <strong>Signature:</strong> <code>codepoints-to-string($codepoints as xs:integer*) as xs:string</code>
+                                                                              </p>
+                                                                              <figure class="code">
+                                                                                <figcaption><span class="lang">xpath</span>
+                                                                                </figcaption>
+                                                                                <pre><code class="language-xpath">codepoints-to-string((72, 101, 108, 108, 111))   =&gt; "Hello"</code>
+                                                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                              </figure>
+                                                                              <p>
+      <strong>C# equivalent:</strong> <code>new string(codepoints.Select(c =&gt; (char)c).ToArray())</code>
+                                                                              </p>
+                                                                              <hr>
+                                                                                <h3 id="characters"><a class="anchor" href="#characters">#</a>characters()
+                                                                                </h3>
+                                                                                <p>Splits a string into a sequence of individual characters. New in XPath 4.0.
+                                                                                </p>
+                                                                                <p>
+      <strong>Signature:</strong> <code>characters($value as xs:string) as xs:string*</code>
+                                                                                </p>
+                                                                                <figure class="code">
+                                                                                  <figcaption><span class="lang">xpath</span>
+                                                                                  </figcaption>
+                                                                                  <pre><code class="language-xpath">characters("hello")   =&gt; ("h", "e", "l", "l", "o")</code>
+                                                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                </figure>
+                                                                                <p>
+      <strong>C# equivalent:</strong> <code>"hello".Select(c =&gt; c.ToString())</code>
+                                                                                </p>
+                                                                                <hr>
+                                                                                  <h3 id="graphemes"><a class="anchor" href="#graphemes">#</a>graphemes()
+                                                                                  </h3>
+                                                                                  <p>Splits a string into a sequence of grapheme clusters (user-perceived characters). New in XPath 4.0.
+                                                                                  </p>
+                                                                                  <p>
+      <strong>Signature:</strong> <code>graphemes($value as xs:string) as xs:string*</code>
+                                                                                  </p>
+                                                                                  <figure class="code">
+                                                                                    <figcaption><span class="lang">xpath</span>
+                                                                                    </figcaption>
+                                                                                    <pre><code class="language-xpath">graphemes("café")      =&gt; ("c", "a", "f", "é")</code>
+                                                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                  </figure>
+                                                                                  <p>
+      <strong>Why this exists:</strong> Some characters that appear as one glyph are stored as multiple codepoints (e.g., <code>é</code> can be <code>e</code> + combining accent). <code>characters()</code> would split them; <code>graphemes()</code> keeps them together.
+                                                                                  </p>
+                                                                                  <p>
+      <strong>C# equivalent:</strong> <code>StringInfo.GetTextElementEnumerator(s)</code>
+                                                                                  </p>
+                                                                                  <hr>
+                                                                                    <h2 id="uri-functions"><a class="anchor" href="#uri-functions">#</a>URI Functions
+                                                                                    </h2>
+                                                                                    <h3 id="encode-for-uri"><a class="anchor" href="#encode-for-uri">#</a>encode-for-uri()
+                                                                                    </h3>
+                                                                                    <p>Percent-encodes a string for use in a URI component.
+                                                                                    </p>
+                                                                                    <p>
+      <strong>Signature:</strong> <code>encode-for-uri($value as xs:string?) as xs:string</code>
+                                                                                    </p>
+                                                                                    <figure class="code">
+                                                                                      <figcaption><span class="lang">xpath</span>
+                                                                                      </figcaption>
+                                                                                      <pre><code class="language-xpath">encode-for-uri("hello world")        =&gt; "hello%20world"
 encode-for-uri("a/b?c=d")           =&gt; "a%2Fb%3Fc%3Dd"
-encode-for-uri("100% done")          =&gt; "100%25%20done"</code></pre><p>
-      <strong>C# equivalent:</strong> <code>Uri.EscapeDataString("hello world")</code></p><hr><h3 id="iri-to-uri"><a class="anchor" href="#iri-to-uri">#</a>iri-to-uri()</h3><p>Converts an IRI (which may contain Unicode) to a valid URI.</p><p>
-      <strong>Signature:</strong> <code>iri-to-uri($value as xs:string?) as xs:string</code></p><pre><code class="language-xpath">iri-to-uri("http://example.com/résumé")
-  =&gt; "http://example.com/r%C3%A9sum%C3%A9"</code></pre><p>
-      <strong>C# equivalent:</strong> <code>Uri.EscapeUriString(iri)</code> (deprecated in .NET — use <code>Uri.TryCreate</code> instead)</p><hr><h3 id="escape-html-uri"><a class="anchor" href="#escape-html-uri">#</a>escape-html-uri()</h3><p>Minimally escapes a URI for embedding in HTML, preserving existing percent-encoding.</p><p>
-      <strong>Signature:</strong> <code>escape-html-uri($value as xs:string?) as xs:string</code></p><pre><code class="language-xpath">escape-html-uri("http://example.com/my page")
-  =&gt; "http://example.com/my%20page"</code></pre><p>
-      <strong>Note:</strong> Unlike <code>encode-for-uri</code>, this only escapes characters that are not valid in URIs. It does not re-encode already-encoded characters.</p><hr><h3 id="parse-uri"><a class="anchor" href="#parse-uri">#</a>parse-uri()</h3><p>Parses a URI string into a map of its components. New in XPath 4.0.</p><p>
-      <strong>Signature:</strong> <code>parse-uri($uri as xs:string) as map(xs:string, xs:string?)</code></p><pre><code class="language-xpath">parse-uri("https://example.com:8080/path?q=1#frag")
+encode-for-uri("100% done")          =&gt; "100%25%20done"</code>
+                                                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                    </figure>
+                                                                                    <p>
+      <strong>C# equivalent:</strong> <code>Uri.EscapeDataString("hello world")</code>
+                                                                                    </p>
+                                                                                    <hr>
+                                                                                      <h3 id="iri-to-uri"><a class="anchor" href="#iri-to-uri">#</a>iri-to-uri()
+                                                                                      </h3>
+                                                                                      <p>Converts an IRI (which may contain Unicode) to a valid URI.
+                                                                                      </p>
+                                                                                      <p>
+      <strong>Signature:</strong> <code>iri-to-uri($value as xs:string?) as xs:string</code>
+                                                                                      </p>
+                                                                                      <figure class="code">
+                                                                                        <figcaption><span class="lang">xpath</span>
+                                                                                        </figcaption>
+                                                                                        <pre><code class="language-xpath">iri-to-uri("http://example.com/résumé")
+  =&gt; "http://example.com/r%C3%A9sum%C3%A9"</code>
+                                                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                      </figure>
+                                                                                      <p>
+      <strong>C# equivalent:</strong> <code>Uri.EscapeUriString(iri)</code> (deprecated in .NET — use <code>Uri.TryCreate</code> instead)
+                                                                                      </p>
+                                                                                      <hr>
+                                                                                        <h3 id="escape-html-uri"><a class="anchor" href="#escape-html-uri">#</a>escape-html-uri()
+                                                                                        </h3>
+                                                                                        <p>Minimally escapes a URI for embedding in HTML, preserving existing percent-encoding.
+                                                                                        </p>
+                                                                                        <p>
+      <strong>Signature:</strong> <code>escape-html-uri($value as xs:string?) as xs:string</code>
+                                                                                        </p>
+                                                                                        <figure class="code">
+                                                                                          <figcaption><span class="lang">xpath</span>
+                                                                                          </figcaption>
+                                                                                          <pre><code class="language-xpath">escape-html-uri("http://example.com/my page")
+  =&gt; "http://example.com/my%20page"</code>
+                                                                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                        </figure>
+                                                                                        <p>
+      <strong>Note:</strong> Unlike <code>encode-for-uri</code>, this only escapes characters that are not valid in URIs. It does not re-encode already-encoded characters.
+                                                                                        </p>
+                                                                                        <hr>
+                                                                                          <h3 id="parse-uri"><a class="anchor" href="#parse-uri">#</a>parse-uri()
+                                                                                          </h3>
+                                                                                          <p>Parses a URI string into a map of its components. New in XPath 4.0.
+                                                                                          </p>
+                                                                                          <p>
+      <strong>Signature:</strong> <code>parse-uri($uri as xs:string) as map(xs:string, xs:string?)</code>
+                                                                                          </p>
+                                                                                          <figure class="code">
+                                                                                            <figcaption><span class="lang">xpath</span>
+                                                                                            </figcaption>
+                                                                                            <pre><code class="language-xpath">parse-uri("https://example.com:8080/path?q=1#frag")
   =&gt; map {
        "scheme": "https",
        "authority": "example.com:8080",
@@ -237,25 +1585,233 @@ encode-for-uri("100% done")          =&gt; "100%25%20done"</code></pre><p>
        "path": "/path",
        "query": "q=1",
        "fragment": "frag"
-     }</code></pre><p>
+     }</code>
+                                                                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                          </figure>
+                                                                                          <p>
       <strong>C# equivalent:</strong>
-    </p><pre><code class="language-csharp">var uri = new Uri("https://example.com:8080/path?q=1#frag");
-// uri.Scheme, uri.Host, uri.Port, uri.PathAndQuery, uri.Fragment</code></pre><hr><h3 id="build-uri"><a class="anchor" href="#build-uri">#</a>build-uri()</h3><p>Constructs a URI from a map of components. New in XPath 4.0. The inverse of <code>parse-uri()</code>.</p><p>
-      <strong>Signature:</strong> <code>build-uri($components as map(xs:string, xs:string?)) as xs:string</code></p><pre><code class="language-xpath">build-uri(map { "scheme": "https", "host": "example.com", "path": "/api/v2" })
-  =&gt; "https://example.com/api/v2"</code></pre><hr><h3 id="resolve-uri"><a class="anchor" href="#resolve-uri">#</a>resolve-uri()</h3><p>Resolves a relative URI against a base URI.</p><p>
-      <strong>Signature:</strong> <code>resolve-uri($relative as xs:string?, $base as xs:string?) as xs:anyURI?</code></p><pre><code class="language-xpath">resolve-uri("page.html", "https://example.com/docs/")
+    
+                                                                                          </p>
+                                                                                          <figure class="code">
+                                                                                            <figcaption><span class="lang">csharp</span>
+                                                                                            </figcaption>
+                                                                                            <pre><code class="language-csharp">var uri = new Uri("https://example.com:8080/path?q=1#frag");
+// uri.Scheme, uri.Host, uri.Port, uri.PathAndQuery, uri.Fragment</code>
+                                                                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                          </figure>
+                                                                                          <hr>
+                                                                                            <h3 id="build-uri"><a class="anchor" href="#build-uri">#</a>build-uri()
+                                                                                            </h3>
+                                                                                            <p>Constructs a URI from a map of components. New in XPath 4.0. The inverse of <code>parse-uri()</code>.
+                                                                                            </p>
+                                                                                            <p>
+      <strong>Signature:</strong> <code>build-uri($components as map(xs:string, xs:string?)) as xs:string</code>
+                                                                                            </p>
+                                                                                            <figure class="code">
+                                                                                              <figcaption><span class="lang">xpath</span>
+                                                                                              </figcaption>
+                                                                                              <pre><code class="language-xpath">build-uri(map { "scheme": "https", "host": "example.com", "path": "/api/v2" })
+  =&gt; "https://example.com/api/v2"</code>
+                                                                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                            </figure>
+                                                                                            <hr>
+                                                                                              <h3 id="resolve-uri"><a class="anchor" href="#resolve-uri">#</a>resolve-uri()
+                                                                                              </h3>
+                                                                                              <p>Resolves a relative URI against a base URI.
+                                                                                              </p>
+                                                                                              <p>
+      <strong>Signature:</strong> <code>resolve-uri($relative as xs:string?, $base as xs:string?) as xs:anyURI?</code>
+                                                                                              </p>
+                                                                                              <figure class="code">
+                                                                                                <figcaption><span class="lang">xpath</span>
+                                                                                                </figcaption>
+                                                                                                <pre><code class="language-xpath">resolve-uri("page.html", "https://example.com/docs/")
   =&gt; "https://example.com/docs/page.html"
 resolve-uri("../images/logo.png", "https://example.com/docs/guide/")
-  =&gt; "https://example.com/docs/images/logo.png"</code></pre><p>
-      <strong>C# equivalent:</strong> <code>new Uri(baseUri, relativeUri)</code></p><hr><h2 id="other-string-functions"><a class="anchor" href="#other-string-functions">#</a>Other String Functions</h2><h3 id="compare"><a class="anchor" href="#compare">#</a>compare()</h3><p>Compares two strings lexicographically, returning -1, 0, or 1.</p><p>
-      <strong>Signature:</strong> <code>compare($s1 as xs:string?, $s2 as xs:string?, $collation as xs:string?) as xs:integer?</code></p><pre><code class="language-xpath">compare("apple", "banana")    =&gt; -1
+  =&gt; "https://example.com/docs/images/logo.png"</code>
+                                                                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                              </figure>
+                                                                                              <p>
+      <strong>C# equivalent:</strong> <code>new Uri(baseUri, relativeUri)</code>
+                                                                                              </p>
+                                                                                              <hr>
+                                                                                                <h2 id="other-string-functions"><a class="anchor" href="#other-string-functions">#</a>Other String Functions
+                                                                                                </h2>
+                                                                                                <h3 id="compare"><a class="anchor" href="#compare">#</a>compare()
+                                                                                                </h3>
+                                                                                                <p>Compares two strings lexicographically, returning -1, 0, or 1.
+                                                                                                </p>
+                                                                                                <p>
+      <strong>Signature:</strong> <code>compare($s1 as xs:string?, $s2 as xs:string?, $collation as xs:string?) as xs:integer?</code>
+                                                                                                </p>
+                                                                                                <figure class="code">
+                                                                                                  <figcaption><span class="lang">xpath</span>
+                                                                                                  </figcaption>
+                                                                                                  <pre><code class="language-xpath">compare("apple", "banana")    =&gt; -1
 compare("hello", "hello")     =&gt; 0
-compare("zebra", "apple")     =&gt; 1</code></pre><p>
-      <strong>C# equivalent:</strong> <code>string.Compare("apple", "banana", StringComparison.Ordinal)</code></p><p>The optional <code>$collation</code> parameter allows locale-aware comparison — useful for sorting names in different languages.</p><hr><h3 id="codepoint-equal"><a class="anchor" href="#codepoint-equal">#</a>codepoint-equal()</h3><p>Compares two strings by Unicode codepoint, ignoring collation.</p><p>
-      <strong>Signature:</strong> <code>codepoint-equal($s1 as xs:string?, $s2 as xs:string?) as xs:boolean?</code></p><pre><code class="language-xpath">codepoint-equal("hello", "hello")   =&gt; true
-codepoint-equal("hello", "HELLO")   =&gt; false</code></pre><p>
-      <strong>C# equivalent:</strong> <code>string.Equals("hello", "hello", StringComparison.Ordinal)</code></p><p>
-      <strong>When to use this:</strong> When you want guaranteed binary comparison without any collation-dependent behavior. Faster than <code>compare()</code> when you only need equality.</p><hr><h3 id="collation-key"><a class="anchor" href="#collation-key">#</a>collation-key()</h3><p>Returns a collation key for a string, allowing efficient repeated comparisons under a given collation.</p><p>
-      <strong>Signature:</strong> <code>collation-key($value as xs:string, $collation as xs:string?) as xs:base64Binary</code></p><p>
-      <strong>When to use this:</strong> When sorting a large sequence — compute collation keys once, then compare keys instead of recomputing the collation for each comparison.</p><p>
-      <strong>C# equivalent:</strong> <code>CompareInfo.GetSortKey(s)</code></p></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+compare("zebra", "apple")     =&gt; 1</code>
+                                                                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                                </figure>
+                                                                                                <p>
+      <strong>C# equivalent:</strong> <code>string.Compare("apple", "banana", StringComparison.Ordinal)</code>
+                                                                                                </p>
+                                                                                                <p>The optional <code>$collation</code> parameter allows locale-aware comparison — useful for sorting names in different languages.
+                                                                                                </p>
+                                                                                                <hr>
+                                                                                                  <h3 id="codepoint-equal"><a class="anchor" href="#codepoint-equal">#</a>codepoint-equal()
+                                                                                                  </h3>
+                                                                                                  <p>Compares two strings by Unicode codepoint, ignoring collation.
+                                                                                                  </p>
+                                                                                                  <p>
+      <strong>Signature:</strong> <code>codepoint-equal($s1 as xs:string?, $s2 as xs:string?) as xs:boolean?</code>
+                                                                                                  </p>
+                                                                                                  <figure class="code">
+                                                                                                    <figcaption><span class="lang">xpath</span>
+                                                                                                    </figcaption>
+                                                                                                    <pre><code class="language-xpath">codepoint-equal("hello", "hello")   =&gt; true
+codepoint-equal("hello", "HELLO")   =&gt; false</code>
+                                                                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                                                                  </figure>
+                                                                                                  <p>
+      <strong>C# equivalent:</strong> <code>string.Equals("hello", "hello", StringComparison.Ordinal)</code>
+                                                                                                  </p>
+                                                                                                  <p>
+      <strong>When to use this:</strong> When you want guaranteed binary comparison without any collation-dependent behavior. Faster than <code>compare()</code> when you only need equality.
+                                                                                                  </p>
+                                                                                                  <hr>
+                                                                                                    <h3 id="collation-key"><a class="anchor" href="#collation-key">#</a>collation-key()
+                                                                                                    </h3>
+                                                                                                    <p>Returns a collation key for a string, allowing efficient repeated comparisons under a given collation.
+                                                                                                    </p>
+                                                                                                    <p>
+      <strong>Signature:</strong> <code>collation-key($value as xs:string, $collation as xs:string?) as xs:base64Binary</code>
+                                                                                                    </p>
+                                                                                                    <p>
+      <strong>When to use this:</strong> When sorting a large sequence — compute collation keys once, then compare keys instead of recomputing the collation for each comparison.
+                                                                                                    </p>
+                                                                                                    <p>
+      <strong>C# equivalent:</strong> <code>CompareInfo.GetSortKey(s)</code>
+                                                                                                    </p>
+                                                                                                  </article>
+                                                                                                </main>
+                                                                                                <aside class="toc" aria-label="On this page">
+                                                                                                  <p class="toc-label">On this page
+                                                                                                  </p>
+                                                                                                  <ul>
+                                                                                                    <li class="toc-h2"><a href="#contents">Contents</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h2"><a href="#basic-string-operations">Basic String Operations</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#string">string()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#string-length">string-length()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#concat">concat()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#string-join">string-join()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h2"><a href="#substring-operations">Substring Operations</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#substring">substring()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#substring-before">substring-before()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#substring-after">substring-after()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h2"><a href="#searching-and-testing">Searching and Testing</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#contains">contains()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#starts-with">starts-with()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#ends-with">ends-with()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#contains-token">contains-token()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h2"><a href="#case-conversion">Case Conversion</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#upper-case">upper-case()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#lower-case">lower-case()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h2"><a href="#whitespace-and-normalization">Whitespace and Normalization</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#normalize-space">normalize-space()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#normalize-unicode">normalize-unicode()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#translate">translate()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h2"><a href="#regular-expressions">Regular Expressions</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#matches">matches()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#replace">replace()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#tokenize">tokenize()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h2"><a href="#unicode-functions">Unicode Functions</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#char">char()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#codepoint">codepoint()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#string-to-codepoints">string-to-codepoints()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#codepoints-to-string">codepoints-to-string()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#characters">characters()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#graphemes">graphemes()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h2"><a href="#uri-functions">URI Functions</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#encode-for-uri">encode-for-uri()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#iri-to-uri">iri-to-uri()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#escape-html-uri">escape-html-uri()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#parse-uri">parse-uri()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#build-uri">build-uri()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#resolve-uri">resolve-uri()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h2"><a href="#other-string-functions">Other String Functions</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#compare">compare()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#codepoint-equal">codepoint-equal()</a>
+                                                                                                    </li>
+                                                                                                    <li class="toc-h3"><a href="#collation-key">collation-key()</a>
+                                                                                                    </li>
+                                                                                                  </ul>
+                                                                                                </aside>
+                                                                                              </div>
+                                                                                              <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                                                                                <div class="search-backdrop">
+                                                                                                </div>
+                                                                                                <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                                                                                  <div class="search-results" id="search-results">
+                                                                                                  </div>
+                                                                                                </div>
+                                                                                              </div>
+                                                                                              <footer class="site-footer">
+                                                                                                <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                                                                                </p>
+                                                                                              </footer>
+                                                                                              <script src="https://unpkg.com/lunr/lunr.js">
+                                                                                              </script>
+                                                                                              <script src="/js/prism.js">
+                                                                                              </script>
+                                                                                              <script src="/js/search.js">
+                                                                                              </script>
+                                                                                              <script src="/js/theme.js">
+                                                                                              </script>
+                                                                                              <script src="/js/toc.js">
+                                                                                              </script>
+                                                                                              <script src="/js/copy.js">
+                                                                                              </script>
+                                                                                            </body>
+                                                                                          </html>

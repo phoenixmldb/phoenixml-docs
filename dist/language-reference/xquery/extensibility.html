@@ -1,62 +1,636 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Extensibility — PhoenixmlDb Documentation</title><meta name="description" content="Extending XQuery with custom functions, modules, external functions, and .NET integration"><link rel="canonical" href="/language-reference/xquery/extensibility.html"><meta property="og:title" content="Extensibility"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xquery/extensibility.html"><meta property="og:description" content="Extending XQuery with custom functions, modules, external functions, and .NET integration"><link rel="stylesheet" href="/css/style.css"><script>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Extensibility — PhoenixmlDb Documentation
+          </title>
+          <meta name="description" content="Extending XQuery with custom functions, modules, external functions, and .NET integration">
+            <link rel="canonical" href="/language-reference/xquery/extensibility.html">
+              <meta property="og:title" content="Extensibility">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="/language-reference/xquery/extensibility.html">
+                    <meta property="og:description" content="Extending XQuery with custom functions, modules, external functions, and .NET integration">
+                      <link rel="stylesheet" href="/css/style.css">
+                        <link rel="stylesheet" href="/css/prism.css">
+                          <script>
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script></head><body><header class="site-header"><div class="header-content"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><div class="search-container"><input type="search" id="search-input" placeholder="Search docs..." aria-label="Search documentation"><div id="search-results" class="search-results" hidden="hidden"></div></div><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Getting Started</button><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>PhoenixmlDb</button><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>JSON Support</button><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Deployment</button><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>API Reference</button><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>Language Reference</button><ul class="nav-section-children"><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XML Foundations</button><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XPath</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Functions</button><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>XSLT</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Instructions Reference</button><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section open"><button class="nav-section-toggle" aria-expanded="true"><span class="nav-chevron">▸</span>XQuery</button><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li class="active"><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><button class="nav-section-toggle" aria-expanded="false"><span class="nav-chevron">▸</span>Tools</button><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><h1 id="extensibility"><a class="anchor" href="#extensibility">#</a>Extensibility</h1><p>Real projects outgrow the standard library quickly. You need domain-specific functions, integration with external systems, and custom processing logic. XQuery's extensibility model lets you build reusable libraries, declare functions whose implementation lives in the host environment, and integrate deeply with .NET applications.</p><p>If you have worked with C# extension methods, MEF/plugin systems, or <code>IServiceProvider</code> dependency injection, you already understand the motivation: make the language do what your application needs, not just what the specification committee anticipated.</p><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#why-extensibility-matters" title="">Why Extensibility Matters</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#user-defined-functions" title="">User-Defined Functions</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#library-modules" title="">Library Modules</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#external-functions" title="">External Functions</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#net-integration-with-phoenixmldb" title="">.NET Integration with PhoenixmlDb</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#extension-namespaces" title="">Extension Namespaces</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#database-integration" title="">Database Integration</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#combining-with-other-net-libraries" title="">Combining with Other .NET Libraries</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#practical-patterns" title="">Practical Patterns</a>
-        </p>
-      </li></ul><hr><h2 id="why-extensibility-matters"><a class="anchor" href="#why-extensibility-matters">#</a>Why Extensibility Matters</h2><p>Standard XQuery gives you powerful data querying and transformation. But consider what a real application needs:</p><ul><li>
-        <p>
-          <strong>Send an email</strong> when an order exceeds a threshold</p>
-      </li><li>
-        <p>
-          <strong>Call a REST API</strong> to enrich customer data with external information</p>
-      </li><li>
-        <p>
-          <strong>Validate</strong> a document against business rules that change monthly</p>
-      </li><li>
-        <p>
-          <strong>Format</strong> output using company-specific templates</p>
-      </li><li>
-        <p>
-          <strong>Log</strong> query activity to an audit trail</p>
-      </li><li>
-        <p>
-          <strong>Generate</strong> PDF invoices from XML order data</p>
-      </li></ul><p>None of these are in the XQuery specification. Extensibility bridges the gap between what XQuery provides and what your application requires.</p><p>
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/getting-started/installation.html">Installation</a>
+                                    </li>
+                                    <li><a href="/getting-started/quick-start.html">Quick Start</a>
+                                    </li>
+                                    <li><a href="/getting-started/first-application.html">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/metadata.html">Metadata</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/indexing.html">Indexing</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/transactions.html">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/configuration.html">Configuration</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a>
+                                        </li>
+                                        <li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a>
+                                    </li>
+                                    <li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a>
+                                        </li>
+                                        <li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xpath/functions/string.html">String Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/node.html">Node Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/map.html">Map Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/array.html">Array Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/math.html">Math Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="/language-reference/xpath/data-types.html">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/template-matching.html">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference
+                                          </p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/merge.html">Merging</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/packages.html">Packages</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/output-methods.html">Output Methods</a>
+                                        </li>
+                                        <li><a href="/language-reference/xslt/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/constructors.html">Constructors</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/operators.html">Operators</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/types.html">Type System</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/update-facility.html">Update Facility</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a>
+                                        </li>
+                                        <li class="active"><a href="/language-reference/xquery/extensibility.html">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="/tools/xslt-cli.html">xslt CLI</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-cli.html">xquery CLI</a>
+                                    </li>
+                                    <li><a href="/tools/crucible.html">Crucible</a>
+                                    </li>
+                                    <li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="/release-notes.html">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference
+                                  </p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/core/index.html">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="/api/core/containerid.html">ContainerId</a>
+                                        </li>
+                                        <li><a href="/api/core/containerinfo.html">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/containernotfoundexception.html">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/containeroptions.html">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/contenttype.html">ContentType</a>
+                                        </li>
+                                        <li><a href="/api/core/databasestatistics.html">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="/api/core/documentexistsexception.html">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentid.html">DocumentId</a>
+                                        </li>
+                                        <li><a href="/api/core/documentinfo.html">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="/api/core/documentnotfoundexception.html">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="/api/core/documentoptions.html">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/documentparseexception.html">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexdefinition.html">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/fulltextindexoptions.html">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="/api/core/icontainer.html">IContainer</a>
+                                        </li>
+                                        <li><a href="/api/core/idocument.html">IDocument</a>
+                                        </li>
+                                        <li><a href="/api/core/idocumentdatabase.html">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="/api/core/indexconfiguration.html">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="/api/core/indexdefinition.html">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/ireadtransaction.html">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/iwritetransaction.html">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="/api/core/ixdmnode.html">IXdmNode</a>
+                                        </li>
+                                        <li><a href="/api/core/metadataindexdefinition.html">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/nameindexdefinition.html">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/namespaceid.html">NamespaceId</a>
+                                        </li>
+                                        <li><a href="/api/core/nodeid.html">NodeId</a>
+                                        </li>
+                                        <li><a href="/api/core/pathindexdefinition.html">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/qname.html">QName</a>
+                                        </li>
+                                        <li><a href="/api/core/transactionexception.html">TransactionException</a>
+                                        </li>
+                                        <li><a href="/api/core/transactiontimeoutexception.html">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="/api/core/validationmode.html">ValidationMode</a>
+                                        </li>
+                                        <li><a href="/api/core/valueindexdefinition.html">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmnodekind.html">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="/api/core/xdmvaluetype.html">XdmValueType</a>
+                                        </li>
+                                        <li><a href="/api/core/xmldbexception.html">XmlDbException</a>
+                                        </li>
+                                        <li><a href="/api/core/xqueryexception.html">XQueryException</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XDM
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xdm/index.html">PhoenixmlDb.XDM API</a>
+                                        </li>
+                                        <li><a href="/api/xdm/daytimeduration.html">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/namespacebinding.html">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="/api/xdm/parseresult.html">ParseResult</a>
+                                        </li>
+                                        <li><a href="/api/xdm/textnodeitem.html">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmattribute.html">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmcomment.html">XdmComment</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmdocument.html">XdmDocument</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmelement.html">XdmElement</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnamespace.html">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmnode.html">XdmNode</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmprocessinginstruction.html">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmqname.html">XdmQName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtext.html">XdmText</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtype.html">XdmType</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmtypename.html">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xdmvalue.html">XdmValue</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmldocumentparser.html">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xmlserializer.html">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsanyuri.html">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdate.html">XsDate</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsdatetime.html">XsDateTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsduration.html">XsDuration</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgday.html">XsGDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonth.html">XsGMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgmonthday.html">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyear.html">XsGYear</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsgyearmonth.html">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xstime.html">XsTime</a>
+                                        </li>
+                                        <li><a href="/api/xdm/xsuntypedatomic.html">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="/api/xdm/yearmonthduration.html">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xquery/index.html">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatemetadataprovider.html">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/delegatenodeprovider.html">DelegateNodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/idocumentresolver.html">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="/api/xquery/imetadataprovider.html">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/inodeprovider.html">INodeProvider</a>
+                                        </li>
+                                        <li><a href="/api/xquery/parseerror.html">ParseError</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryastbuilder.html">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryerrorlistener.html">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparseexception.html">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="/api/xquery/xqueryparserfacade.html">XQueryParserFacade</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT
+                                      </p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="/api/xslt/index.html">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xqueryexpressionparser.html">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="/api/xslt/xslttransformer.html">XsltTransformer</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">XQuery
+                                </p>
+                                <h1 class="page-title">Extensibility
+                                </h1>
+                                <p class="page-subtitle">Extending XQuery with custom functions, modules, external functions, and .NET integration
+                                </p>
+                                <h1 id="extensibility"><a class="anchor" href="#extensibility">#</a>Extensibility
+                                </h1>
+                                <p>Real projects outgrow the standard library quickly. You need domain-specific functions, integration with external systems, and custom processing logic. XQuery's extensibility model lets you build reusable libraries, declare functions whose implementation lives in the host environment, and integrate deeply with .NET applications.
+                                </p>
+                                <p>If you have worked with C# extension methods, MEF/plugin systems, or <code>IServiceProvider</code> dependency injection, you already understand the motivation: make the language do what your application needs, not just what the specification committee anticipated.
+                                </p>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents
+                                </h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#why-extensibility-matters">Why Extensibility Matters</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#user-defined-functions">User-Defined Functions</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#library-modules">Library Modules</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#external-functions">External Functions</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#net-integration-with-phoenixmldb">.NET Integration with PhoenixmlDb</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#extension-namespaces">Extension Namespaces</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#database-integration">Database Integration</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#combining-with-other-net-libraries">Combining with Other .NET Libraries</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#practical-patterns">Practical Patterns</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="why-extensibility-matters"><a class="anchor" href="#why-extensibility-matters">#</a>Why Extensibility Matters
+                                  </h2>
+                                  <p>Standard XQuery gives you powerful data querying and transformation. But consider what a real application needs:
+                                  </p>
+                                  <ul>
+                                    <li>
+        
+                                      <p>
+          <strong>Send an email</strong> when an order exceeds a threshold
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <strong>Call a REST API</strong> to enrich customer data with external information
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <strong>Validate</strong> a document against business rules that change monthly
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <strong>Format</strong> output using company-specific templates
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <strong>Log</strong> query activity to an audit trail
+                                      </p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>
+          <strong>Generate</strong> PDF invoices from XML order data
+                                      </p>
+      
+                                    </li>
+                                  </ul>
+                                  <p>None of these are in the XQuery specification. Extensibility bridges the gap between what XQuery provides and what your application requires.
+                                  </p>
+                                  <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// C# solves the same problem with extension methods, DI, and plugins
+    
+                                  </p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">csharp</span>
+                                    </figcaption>
+                                    <pre><code class="language-csharp">// C# solves the same problem with extension methods, DI, and plugins
 public static class OrderExtensions
 {
     // Domain-specific logic added to existing types
@@ -65,7 +639,22 @@ public static class OrderExtensions
 }
 // Dependency injection — runtime-provided implementations
 services.AddScoped&lt;IEmailService, SmtpEmailService&gt;();
-services.AddScoped&lt;IPaymentGateway, StripeGateway&gt;();</code></pre><p>XQuery achieves the same extensibility through user-defined functions, library modules, external functions, and host-environment integration.</p><hr><h2 id="user-defined-functions"><a class="anchor" href="#user-defined-functions">#</a>User-Defined Functions</h2><p>This section provides a brief recap. For comprehensive coverage, see <a href="functions-modules.html" title="">Functions and Modules</a>.</p><p>Functions are the basic unit of reuse in XQuery:</p><pre><code class="language-xquery">declare function local:calculate-tax(
+services.AddScoped&lt;IPaymentGateway, StripeGateway&gt;();</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>XQuery achieves the same extensibility through user-defined functions, library modules, external functions, and host-environment integration.
+                                  </p>
+                                  <hr>
+                                    <h2 id="user-defined-functions"><a class="anchor" href="#user-defined-functions">#</a>User-Defined Functions
+                                    </h2>
+                                    <p>This section provides a brief recap. For comprehensive coverage, see <a href="functions-modules.html">Functions and Modules</a>.
+                                    </p>
+                                    <p>Functions are the basic unit of reuse in XQuery:
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">declare function local:calculate-tax(
   $amount as xs:decimal,
   $state as xs:string
 ) as xs:decimal {
@@ -77,7 +666,24 @@ services.AddScoped&lt;IPaymentGateway, StripeGateway&gt;();</code></pre><p>XQuer
   return round($amount * $rate, 2)
 };
 local:calculate-tax(199.99, "CA")
-(: Result: 14.50 :)</code></pre><p>Functions can be recursive, accept and return functions (higher-order), and work with any XQuery type — sequences, maps, arrays, and XML nodes.</p><hr><h2 id="library-modules"><a class="anchor" href="#library-modules">#</a>Library Modules</h2><p>Library modules package functions into reusable units that any query can import. They are the XQuery equivalent of C# class libraries or NuGet packages.</p><h3 id="creating-a-module"><a class="anchor" href="#creating-a-module">#</a>Creating a Module</h3><p>A library module file starts with a <code>module namespace</code> declaration and contains only function and variable declarations — no body expression:</p><pre><code class="language-xquery">(: file: lib/string-utils.xqm :)
+(: Result: 14.50 :)</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>Functions can be recursive, accept and return functions (higher-order), and work with any XQuery type — sequences, maps, arrays, and XML nodes.
+                                    </p>
+                                    <hr>
+                                      <h2 id="library-modules"><a class="anchor" href="#library-modules">#</a>Library Modules
+                                      </h2>
+                                      <p>Library modules package functions into reusable units that any query can import. They are the XQuery equivalent of C# class libraries or NuGet packages.
+                                      </p>
+                                      <h3 id="creating-a-module"><a class="anchor" href="#creating-a-module">#</a>Creating a Module
+                                      </h3>
+                                      <p>A library module file starts with a <code>module namespace</code> declaration and contains only function and variable declarations — no body expression:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">(: file: lib/string-utils.xqm :)
 module namespace str = "http://example.com/string-utils";
 declare function str:title-case($text as xs:string) as xs:string {
   string-join(
@@ -98,9 +704,17 @@ declare function str:truncate(
 ) as xs:string {
   if (string-length($text) &lt;= $max) then $text
   else concat(substring($text, 1, $max - 3), "...")
-};</code></pre><p>
+};</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// A class library project: StringUtils.cs
+    
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">csharp</span>
+                                        </figcaption>
+                                        <pre><code class="language-csharp">// A class library project: StringUtils.cs
 namespace Example.StringUtils;
 public static class StringHelpers
 {
@@ -110,29 +724,99 @@ public static class StringHelpers
         Regex.Replace(text.ToLower().Trim(), @"[^a-z0-9]+", "-");
     public static string Truncate(string text, int max) =&gt;
         text.Length &lt;= max ? text : text[..(max - 3)] + "...";
-}</code></pre><h3 id="importing-a-module"><a class="anchor" href="#importing-a-module">#</a>Importing a Module</h3><pre><code class="language-xquery">import module namespace str = "http://example.com/string-utils" at "lib/string-utils.xqm";
+}</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="importing-a-module"><a class="anchor" href="#importing-a-module">#</a>Importing a Module
+                                      </h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">import module namespace str = "http://example.com/string-utils" at "lib/string-utils.xqm";
 str:title-case("hello world")  (: Result: "Hello World" :)
-str:slug("My Blog Post!")       (: Result: "my-blog-post-" :)</code></pre><h3 id="module-location-resolution"><a class="anchor" href="#module-location-resolution">#</a>Module Location Resolution</h3><p>The <code>at</code> clause specifies where the processor should find the module file. This can be:</p><ul><li>
-        <p>
-          <strong>A relative path</strong> — resolved against the base URI of the importing module:</p>
-        <pre><code class="language-xquery">import module namespace util = "http://example.com/util" at "lib/util.xqm";</code></pre>
-      </li><li>
-        <p>
-          <strong>An absolute path</strong> — a full file path or URL:</p>
-        <pre><code class="language-xquery">import module namespace util = "http://example.com/util"
-  at "file:///opt/xquery-libs/util.xqm";</code></pre>
-      </li><li>
-        <p>
-          <strong>Omitted</strong> — the processor resolves the module by namespace URI using a module repository or catalog:</p>
-        <pre><code class="language-xquery">import module namespace util = "http://example.com/util";
-(: The processor knows where to find this namespace :)</code></pre>
-      </li></ul><h3 id="versioning-with-namespaces"><a class="anchor" href="#versioning-with-namespaces">#</a>Versioning with Namespaces</h3><p>Use namespace URIs to version your modules:</p><pre><code class="language-xquery">(: Version 1 :)
+str:slug("My Blog Post!")       (: Result: "my-blog-post-" :)</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="module-location-resolution"><a class="anchor" href="#module-location-resolution">#</a>Module Location Resolution
+                                      </h3>
+                                      <p>The <code>at</code> clause specifies where the processor should find the module file. This can be:
+                                      </p>
+                                      <ul>
+                                        <li>
+        
+                                          <p>
+          <strong>A relative path</strong> — resolved against the base URI of the importing module:
+                                          </p>
+        
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">import module namespace util = "http://example.com/util" at "lib/util.xqm";</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+      
+                                        </li>
+                                        <li>
+        
+                                          <p>
+          <strong>An absolute path</strong> — a full file path or URL:
+                                          </p>
+        
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">import module namespace util = "http://example.com/util"
+  at "file:///opt/xquery-libs/util.xqm";</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+      
+                                        </li>
+                                        <li>
+        
+                                          <p>
+          <strong>Omitted</strong> — the processor resolves the module by namespace URI using a module repository or catalog:
+                                          </p>
+        
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">import module namespace util = "http://example.com/util";
+(: The processor knows where to find this namespace :)</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+      
+                                        </li>
+                                      </ul>
+                                      <h3 id="versioning-with-namespaces"><a class="anchor" href="#versioning-with-namespaces">#</a>Versioning with Namespaces
+                                      </h3>
+                                      <p>Use namespace URIs to version your modules:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">(: Version 1 :)
 module namespace api-v1 = "http://example.com/api/v1";
 (: Version 2 — new features, breaking changes :)
-module namespace api-v2 = "http://example.com/api/v2";</code></pre><p>Callers import the version they need:</p><pre><code class="language-xquery">(: Legacy queries use v1 :)
+module namespace api-v2 = "http://example.com/api/v2";</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>Callers import the version they need:
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">(: Legacy queries use v1 :)
 import module namespace api = "http://example.com/api/v1" at "api-v1.xqm";
 (: New queries use v2 :)
-import module namespace api = "http://example.com/api/v2" at "api-v2.xqm";</code></pre><h3 id="building-a-module-library"><a class="anchor" href="#building-a-module-library">#</a>Building a Module Library</h3><p>A realistic project might organize modules like this:</p><pre><code>lib/
+import module namespace api = "http://example.com/api/v2" at "api-v2.xqm";</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="building-a-module-library"><a class="anchor" href="#building-a-module-library">#</a>Building a Module Library
+                                      </h3>
+                                      <p>A realistic project might organize modules like this:
+                                      </p>
+                                      <figure class="code">
+                                        <pre><code>lib/
   string-utils.xqm      (: string manipulation :)
   date-utils.xqm         (: date formatting and parsing :)
   validation.xqm         (: business rule validation :)
@@ -142,11 +826,30 @@ import module namespace api = "http://example.com/api/v2" at "api-v2.xqm";</code
     indexes.xqm          (: index management :)
   api/
     rest-client.xqm      (: REST API helpers :)
-    auth.xqm             (: authentication functions :)</code></pre><pre><code class="language-xquery">(: A main module importing several library modules :)
+    auth.xqm             (: authentication functions :)</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">(: A main module importing several library modules :)
 import module namespace str = "http://example.com/strings" at "lib/string-utils.xqm";
 import module namespace dt = "http://example.com/dates" at "lib/date-utils.xqm";
 import module namespace val = "http://example.com/validation" at "lib/validation.xqm";
-import module namespace db = "http://example.com/db" at "lib/db/queries.xqm";</code></pre><hr><h2 id="external-functions"><a class="anchor" href="#external-functions">#</a>External Functions</h2><p>External functions are declared in XQuery but implemented by the host environment. The XQuery file specifies the function signature; the host (your .NET application) provides the actual code.</p><h3 id="declaring-external-functions"><a class="anchor" href="#declaring-external-functions">#</a>Declaring External Functions</h3><pre><code class="language-xquery">(: Declare an external function — no body, just a signature :)
+import module namespace db = "http://example.com/db" at "lib/db/queries.xqm";</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <hr>
+                                        <h2 id="external-functions"><a class="anchor" href="#external-functions">#</a>External Functions
+                                        </h2>
+                                        <p>External functions are declared in XQuery but implemented by the host environment. The XQuery file specifies the function signature; the host (your .NET application) provides the actual code.
+                                        </p>
+                                        <h3 id="declaring-external-functions"><a class="anchor" href="#declaring-external-functions">#</a>Declaring External Functions
+                                        </h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">(: Declare an external function — no body, just a signature :)
 declare namespace app = "http://example.com/app";
 declare function app:send-email(
   $to as xs:string,
@@ -159,7 +862,19 @@ declare function app:log(
 ) external;
 declare function app:get-config(
   $key as xs:string
-) as xs:string? external;</code></pre><p>The <code>external</code> keyword tells the processor that the function body is not in XQuery — it will be provided at runtime by the host.</p><h3 id="using-external-functions"><a class="anchor" href="#using-external-functions">#</a>Using External Functions</h3><p>Once declared, external functions are called like any other function:</p><pre><code class="language-xquery">declare namespace app = "http://example.com/app";
+) as xs:string? external;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>The <code>external</code> keyword tells the processor that the function body is not in XQuery — it will be provided at runtime by the host.
+                                        </p>
+                                        <h3 id="using-external-functions"><a class="anchor" href="#using-external-functions">#</a>Using External Functions
+                                        </h3>
+                                        <p>Once declared, external functions are called like any other function:
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">declare namespace app = "http://example.com/app";
 declare function app:send-email($to as xs:string, $subject as xs:string, $body as xs:string) as xs:boolean external;
 declare function app:log($level as xs:string, $message as xs:string) external;
 for $order in //order[total &gt; 10000]
@@ -172,9 +887,17 @@ let $email-sent := app:send-email(
 return (
   app:log("INFO", concat("Notification sent for order ", $order/@id, ": ", $email-sent)),
   &lt;processed order-id="{ $order/@id }" notified="{ $email-sent }"/&gt;
-)</code></pre><p>
+)</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// External functions are like interface methods — declared but not implemented
+    
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">// External functions are like interface methods — declared but not implemented
 // The host provides the implementation, similar to dependency injection
 public interface INotificationService
 {
@@ -183,7 +906,22 @@ public interface INotificationService
     string? GetConfig(string key);
 }
 // At runtime, a concrete implementation is injected
-services.AddScoped&lt;INotificationService, SmtpNotificationService&gt;();</code></pre><hr><h2 id="net-integration-with-phoenixmldb"><a class="anchor" href="#net-integration-with-phoenixmldb">#</a>.NET Integration with PhoenixmlDb</h2><p>PhoenixmlDb provides a .NET API for running XQuery from C# applications. This is how you connect the XQuery world to the .NET world.</p><h3 id="setting-external-variables-from-c"><a class="anchor" href="#setting-external-variables-from-c">#</a>Setting External Variables from C#</h3><p>Pass data from your .NET application into an XQuery query:</p><pre><code class="language-csharp">var engine = new XQueryEngine();
+services.AddScoped&lt;INotificationService, SmtpNotificationService&gt;();</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <hr>
+                                          <h2 id="net-integration-with-phoenixmldb"><a class="anchor" href="#net-integration-with-phoenixmldb">#</a>.NET Integration with PhoenixmlDb
+                                          </h2>
+                                          <p>PhoenixmlDb provides a .NET API for running XQuery from C# applications. This is how you connect the XQuery world to the .NET world.
+                                          </p>
+                                          <h3 id="setting-external-variables-from-c"><a class="anchor" href="#setting-external-variables-from-c">#</a>Setting External Variables from C#
+                                          </h3>
+                                          <p>Pass data from your .NET application into an XQuery query:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">var engine = new XQueryEngine();
 // Simple types
 engine.SetVariable("user-id", "U12345");
 engine.SetVariable("page", 1);
@@ -192,7 +930,15 @@ engine.SetVariable("include-archived", false);
 engine.SetVariable("report-date", DateTime.Now.ToString("yyyy-MM-dd"));
 // Execute the query
 string xquery = File.ReadAllText("reports/user-orders.xq");
-var result = await engine.ExecuteAsync(xquery);</code></pre><p>The XQuery file declares matching external variables:</p><pre><code class="language-xquery">declare variable $user-id as xs:string external;
+var result = await engine.ExecuteAsync(xquery);</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>The XQuery file declares matching external variables:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">declare variable $user-id as xs:string external;
 declare variable $page as xs:integer external;
 declare variable $page-size as xs:integer external := 25;
 declare variable $include-archived as xs:boolean external := false();
@@ -200,7 +946,15 @@ declare variable $report-date as xs:date external;
 for $order in collection("orders")/order[customer-id = $user-id]
 where if ($include-archived) then true() else $order/status != "archived"
 order by xs:date($order/date) descending
-return $order</code></pre><h3 id="passing-xml-documents"><a class="anchor" href="#passing-xml-documents">#</a>Passing XML Documents</h3><pre><code class="language-csharp">// Load an XML document and pass it to the query
+return $order</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="passing-xml-documents"><a class="anchor" href="#passing-xml-documents">#</a>Passing XML Documents
+                                          </h3>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">// Load an XML document and pass it to the query
 var xmlDoc = XDocument.Load("data/customers.xml");
 engine.SetVariable("input", xmlDoc);
 string xquery = @"
@@ -209,7 +963,17 @@ string xquery = @"
     where $c/status = 'active'
     return $c/name/text()
 ";
-var result = await engine.ExecuteAsync(xquery);</code></pre><h3 id="registering-extension-functions-from-net"><a class="anchor" href="#registering-extension-functions-from-net">#</a>Registering Extension Functions from .NET</h3><p>Register C# methods as XQuery functions, making them callable from within queries:</p><pre><code class="language-csharp">var engine = new XQueryEngine();
+var result = await engine.ExecuteAsync(xquery);</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="registering-extension-functions-from-net"><a class="anchor" href="#registering-extension-functions-from-net">#</a>Registering Extension Functions from .NET
+                                          </h3>
+                                          <p>Register C# methods as XQuery functions, making them callable from within queries:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">var engine = new XQueryEngine();
 // Register a simple function
 engine.RegisterFunction(
     "http://example.com/app",  // namespace URI
@@ -237,7 +1001,15 @@ engine.RegisterFunction(
     "http://example.com/app",
     "get-config",
     (string key) =&gt; Configuration[key]
-);</code></pre><p>Now XQuery can call these functions:</p><pre><code class="language-xquery">declare namespace app = "http://example.com/app";
+);</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>Now XQuery can call these functions:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">declare namespace app = "http://example.com/app";
 declare function app:get-exchange-rate($from as xs:string, $to as xs:string) as xs:decimal external;
 declare function app:send-email($to as xs:string, $subject as xs:string, $body as xs:string) as xs:boolean external;
 declare function app:get-config($key as xs:string) as xs:string? external;
@@ -248,7 +1020,15 @@ return app:send-email(
   $order/customer/email,
   concat("Large order alert: #", $order/@id),
   concat("Total (EUR): ", round($order/total * $rate, 2))
-)</code></pre><h3 id="reading-query-results-back-into-net-types"><a class="anchor" href="#reading-query-results-back-into-net-types">#</a>Reading Query Results Back into .NET Types</h3><pre><code class="language-csharp">var engine = new XQueryEngine();
+)</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="reading-query-results-back-into-net-types"><a class="anchor" href="#reading-query-results-back-into-net-types">#</a>Reading Query Results Back into .NET Types
+                                          </h3>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">var engine = new XQueryEngine();
 string xquery = @"
     for $p in collection('products')/product
     where $p/price &gt; 100
@@ -279,7 +1059,17 @@ string xmlQuery = @"
     }&lt;/products&gt;
 ";
 var xmlResult = await engine.ExecuteAsync(xmlQuery);
-var xdoc = XDocument.Parse(xmlResult.ToString());</code></pre><h3 id="using-the-xquery-engine-programmatically"><a class="anchor" href="#using-the-xquery-engine-programmatically">#</a>Using the XQuery Engine Programmatically</h3><p>A complete example showing the engine lifecycle:</p><pre><code class="language-csharp">public class OrderReportService
+var xdoc = XDocument.Parse(xmlResult.ToString());</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="using-the-xquery-engine-programmatically"><a class="anchor" href="#using-the-xquery-engine-programmatically">#</a>Using the XQuery Engine Programmatically
+                                          </h3>
+                                          <p>A complete example showing the engine lifecycle:
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">public class OrderReportService
 {
     private readonly XQueryEngine _engine;
     private readonly IConfiguration _config;
@@ -307,29 +1097,81 @@ var xdoc = XDocument.Parse(xmlResult.ToString());</code></pre><h3 id="using-the-
         var result = await _engine.ExecuteAsync(query);
         return result.ToString();
     }
-}</code></pre><hr><h2 id="extension-namespaces"><a class="anchor" href="#extension-namespaces">#</a>Extension Namespaces</h2><p>When creating extension functions, follow namespace conventions to avoid collisions and communicate intent:</p><pre><code class="language-xquery">(: Application-specific extensions :)
+}</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <hr>
+                                            <h2 id="extension-namespaces"><a class="anchor" href="#extension-namespaces">#</a>Extension Namespaces
+                                            </h2>
+                                            <p>When creating extension functions, follow namespace conventions to avoid collisions and communicate intent:
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: Application-specific extensions :)
 declare namespace app = "http://yourcompany.com/app";
 (: Domain-specific extensions :)
 declare namespace crm = "http://yourcompany.com/crm";
 declare namespace inv = "http://yourcompany.com/inventory";
 (: Infrastructure extensions :)
 declare namespace log = "http://yourcompany.com/logging";
-declare namespace cache = "http://yourcompany.com/cache";</code></pre><p>
+declare namespace cache = "http://yourcompany.com/cache";</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>
       <strong>Conventions:</strong>
-    </p><ul><li>
-        <p>Use your organization's domain in the namespace URI</p>
-      </li><li>
-        <p>Group related functions under the same namespace</p>
-      </li><li>
-        <p>Use meaningful prefixes that are short but descriptive</p>
-      </li><li>
-        <p>Document your extension namespaces for other developers</p>
-      </li></ul><p>
+    
+                                            </p>
+                                            <ul>
+                                              <li>
+        
+                                                <p>Use your organization's domain in the namespace URI
+                                                </p>
+      
+                                              </li>
+                                              <li>
+        
+                                                <p>Group related functions under the same namespace
+                                                </p>
+      
+                                              </li>
+                                              <li>
+        
+                                                <p>Use meaningful prefixes that are short but descriptive
+                                                </p>
+      
+                                              </li>
+                                              <li>
+        
+                                                <p>Document your extension namespaces for other developers
+                                                </p>
+      
+                                              </li>
+                                            </ul>
+                                            <p>
       <strong>C# parallel:</strong>
-    </p><pre><code class="language-csharp">// Same principle as C# namespace conventions
+    
+                                            </p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">csharp</span>
+                                              </figcaption>
+                                              <pre><code class="language-csharp">// Same principle as C# namespace conventions
 namespace YourCompany.App { /* ... */ }
 namespace YourCompany.CRM { /* ... */ }
-namespace YourCompany.Infrastructure.Logging { /* ... */ }</code></pre><hr><h2 id="database-integration"><a class="anchor" href="#database-integration">#</a>Database Integration</h2><p>PhoenixmlDb stores XML documents in collections. XQuery accesses them through <code>doc()</code> and <code>collection()</code>:</p><h3 id="accessing-documents"><a class="anchor" href="#accessing-documents">#</a>Accessing Documents</h3><pre><code class="language-xquery">(: Load a single document by URI :)
+namespace YourCompany.Infrastructure.Logging { /* ... */ }</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <hr>
+                                              <h2 id="database-integration"><a class="anchor" href="#database-integration">#</a>Database Integration
+                                              </h2>
+                                              <p>PhoenixmlDb stores XML documents in collections. XQuery accesses them through <code>doc()</code> and <code>collection()</code>:
+                                              </p>
+                                              <h3 id="accessing-documents"><a class="anchor" href="#accessing-documents">#</a>Accessing Documents
+                                              </h3>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">(: Load a single document by URI :)
 let $config := doc("config.xml")
 (: Query all documents in a collection :)
 for $customer in collection("customers")/customer
@@ -343,7 +1185,15 @@ return
     &lt;order-id&gt;{ string($order/@id) }&lt;/order-id&gt;
     &lt;customer-name&gt;{ $customer/name/text() }&lt;/customer-name&gt;
     &lt;total&gt;{ $order/total/text() }&lt;/total&gt;
-  &lt;/order-summary&gt;</code></pre><h3 id="managing-collections-from-net"><a class="anchor" href="#managing-collections-from-net">#</a>Managing Collections from .NET</h3><pre><code class="language-csharp">var db = new PhoenixmlDatabase("connection-string");
+  &lt;/order-summary&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="managing-collections-from-net"><a class="anchor" href="#managing-collections-from-net">#</a>Managing Collections from .NET
+                                              </h3>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">csharp</span>
+                                                </figcaption>
+                                                <pre><code class="language-csharp">var db = new PhoenixmlDatabase("connection-string");
 // Store documents
 await db.StoreDocumentAsync("customers", "C001.xml", customerXml);
 await db.StoreDocumentAsync("orders", "O5001.xml", orderXml);
@@ -355,7 +1205,20 @@ string xquery = @"
     order by $c/total-orders descending
     return $c
 ";
-var topCustomers = await engine.ExecuteAsync(xquery);</code></pre><hr><h2 id="combining-with-other-net-libraries"><a class="anchor" href="#combining-with-other-net-libraries">#</a>Combining with Other .NET Libraries</h2><p>XQuery results flow naturally into the rest of the .NET ecosystem.</p><h3 id="xquery-results-to-system-text-json"><a class="anchor" href="#xquery-results-to-system-text-json">#</a>XQuery Results to System.Text.Json</h3><pre><code class="language-csharp">// Execute XQuery that returns maps (JSON-friendly)
+var topCustomers = await engine.ExecuteAsync(xquery);</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <hr>
+                                                <h2 id="combining-with-other-net-libraries"><a class="anchor" href="#combining-with-other-net-libraries">#</a>Combining with Other .NET Libraries
+                                                </h2>
+                                                <p>XQuery results flow naturally into the rest of the .NET ecosystem.
+                                                </p>
+                                                <h3 id="xquery-results-to-system-text-json"><a class="anchor" href="#xquery-results-to-system-text-json">#</a>XQuery Results to System.Text.Json
+                                                </h3>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">csharp</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-csharp">// Execute XQuery that returns maps (JSON-friendly)
 string xquery = @"
     array {
       for $p in collection('products')/product
@@ -371,7 +1234,15 @@ var result = await engine.ExecuteAsync(xquery);
 string json = JsonSerializer.Serialize(result, new JsonSerializerOptions
 {
     WriteIndented = true
-});</code></pre><h3 id="xquery-results-to-httpclient"><a class="anchor" href="#xquery-results-to-httpclient">#</a>XQuery Results to HttpClient</h3><pre><code class="language-csharp">// Build an API request payload from XQuery results
+});</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <h3 id="xquery-results-to-httpclient"><a class="anchor" href="#xquery-results-to-httpclient">#</a>XQuery Results to HttpClient
+                                                </h3>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">csharp</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-csharp">// Build an API request payload from XQuery results
 var payload = await engine.ExecuteAsync(@"
     &lt;request&gt;
       &lt;orders&gt;{
@@ -385,7 +1256,15 @@ var payload = await engine.ExecuteAsync(@"
 ");
 var httpClient = new HttpClient();
 var content = new StringContent(payload.ToString(), Encoding.UTF8, "application/xml");
-var response = await httpClient.PostAsync("https://api.example.com/process", content);</code></pre><h3 id="xquery-with-entity-framework"><a class="anchor" href="#xquery-with-entity-framework">#</a>XQuery with Entity Framework</h3><pre><code class="language-csharp">// Use XQuery to transform data that came from a relational database
+var response = await httpClient.PostAsync("https://api.example.com/process", content);</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <h3 id="xquery-with-entity-framework"><a class="anchor" href="#xquery-with-entity-framework">#</a>XQuery with Entity Framework
+                                                </h3>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">csharp</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-csharp">// Use XQuery to transform data that came from a relational database
 var orders = await context.Orders
     .Where(o =&gt; o.Status == "shipped")
     .Select(o =&gt; new { o.Id, o.CustomerName, o.Total, o.ShipDate })
@@ -413,7 +1292,20 @@ string xquery = @"
     }
     &lt;/shipping-report&gt;
 ";
-var report = await engine.ExecuteAsync(xquery);</code></pre><hr><h2 id="practical-patterns"><a class="anchor" href="#practical-patterns">#</a>Practical Patterns</h2><h3 id="custom-validation-functions"><a class="anchor" href="#custom-validation-functions">#</a>Custom Validation Functions</h3><p>Build domain-specific validation as a library module, then call it from queries or from .NET:</p><pre><code class="language-xquery">(: file: lib/validation.xqm :)
+var report = await engine.ExecuteAsync(xquery);</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <hr>
+                                                  <h2 id="practical-patterns"><a class="anchor" href="#practical-patterns">#</a>Practical Patterns
+                                                  </h2>
+                                                  <h3 id="custom-validation-functions"><a class="anchor" href="#custom-validation-functions">#</a>Custom Validation Functions
+                                                  </h3>
+                                                  <p>Build domain-specific validation as a library module, then call it from queries or from .NET:
+                                                  </p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xquery</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xquery">(: file: lib/validation.xqm :)
 module namespace val = "http://example.com/validation";
 declare function val:validate-order($order as element(order)) as element(errors)? {
   let $errors := (
@@ -436,14 +1328,30 @@ declare function val:validate-order($order as element(order)) as element(errors)
     if (exists($errors))
     then &lt;errors&gt;{ $errors }&lt;/errors&gt;
     else ()
-};</code></pre><pre><code class="language-xquery">(: Main query using validation :)
+};</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xquery</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xquery">(: Main query using validation :)
 import module namespace val = "http://example.com/validation" at "lib/validation.xqm";
 for $order in collection("pending-orders")/order
 let $errors := val:validate-order($order)
 return
   if ($errors)
   then &lt;rejected order-id="{ $order/@id }"&gt;{ $errors }&lt;/rejected&gt;
-  else &lt;accepted order-id="{ $order/@id }"/&gt;</code></pre><h3 id="data-enrichment-calling-external-apis"><a class="anchor" href="#data-enrichment-calling-external-apis">#</a>Data Enrichment — Calling External APIs</h3><p>Use external functions to enrich XML data with information from external services:</p><pre><code class="language-xquery">declare namespace geo = "http://example.com/geo";
+  else &lt;accepted order-id="{ $order/@id }"/&gt;</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <h3 id="data-enrichment-calling-external-apis"><a class="anchor" href="#data-enrichment-calling-external-apis">#</a>Data Enrichment — Calling External APIs
+                                                  </h3>
+                                                  <p>Use external functions to enrich XML data with information from external services:
+                                                  </p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xquery</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xquery">declare namespace geo = "http://example.com/geo";
 declare function geo:geocode($address as xs:string) as element(location)? external;
 declare function geo:distance($lat1 as xs:decimal, $lon1 as xs:decimal,
                                $lat2 as xs:decimal, $lon2 as xs:decimal) as xs:decimal external;
@@ -460,7 +1368,17 @@ return
             distance-miles="{ round($dist, 1) }"
             shipping-zone="{ if ($dist &lt; 100) then 'local'
                              else if ($dist &lt; 500) then 'regional'
-                             else 'national' }"/&gt;</code></pre><p>The .NET application registers the <code>geo:geocode</code> and <code>geo:distance</code> functions using its own geocoding service.</p><h3 id="report-generation"><a class="anchor" href="#report-generation">#</a>Report Generation</h3><pre><code class="language-xquery">declare namespace fmt = "http://example.com/format";
+                             else 'national' }"/&gt;</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <p>The .NET application registers the <code>geo:geocode</code> and <code>geo:distance</code> functions using its own geocoding service.
+                                                  </p>
+                                                  <h3 id="report-generation"><a class="anchor" href="#report-generation">#</a>Report Generation
+                                                  </h3>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xquery</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xquery">declare namespace fmt = "http://example.com/format";
 declare function fmt:currency($amount as xs:decimal) as xs:string external;
 declare variable $report-date as xs:date external;
 &lt;report date="{ $report-date }"&gt;
@@ -485,7 +1403,17 @@ declare variable $report-date as xs:date external;
                 revenue="{ fmt:currency(sum($order/total)) }"/&gt;
   }
   &lt;/by-category&gt;
-&lt;/report&gt;</code></pre><h3 id="etl-pipeline-xquery-with-net-processing"><a class="anchor" href="#etl-pipeline-xquery-with-net-processing">#</a>ETL Pipeline — XQuery with .NET Processing</h3><p>Combine XQuery transformation with .NET I/O and business logic:</p><pre><code class="language-csharp">public class EtlPipeline
+&lt;/report&gt;</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <h3 id="etl-pipeline-xquery-with-net-processing"><a class="anchor" href="#etl-pipeline-xquery-with-net-processing">#</a>ETL Pipeline — XQuery with .NET Processing
+                                                  </h3>
+                                                  <p>Combine XQuery transformation with .NET I/O and business logic:
+                                                  </p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">csharp</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-csharp">public class EtlPipeline
 {
     private readonly XQueryEngine _engine;
     public async Task RunDailyImportAsync()
@@ -518,7 +1446,15 @@ declare variable $report-date as xs:date external;
             await db.StoreDocumentAsync("imported-records", $"{id}.xml", doc.ToString());
         }
     }
-}</code></pre><p>The transformation query:</p><pre><code class="language-xquery">(: file: etl/transform.xq :)
+}</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <p>The transformation query:
+                                                  </p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xquery</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xquery">(: file: etl/transform.xq :)
 declare variable $source external;
 declare variable $import-date as xs:date external;
 let $feed := parse-xml($source)/feed
@@ -535,4 +1471,103 @@ return
         &lt;imported-on&gt;{ $import-date }&lt;/imported-on&gt;
       &lt;/record&gt;
   }
-  &lt;/records&gt;</code></pre></article></main></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible">Crucible</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script></body></html>
+  &lt;/records&gt;</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                </article>
+                                              </main>
+                                              <aside class="toc" aria-label="On this page">
+                                                <p class="toc-label">On this page
+                                                </p>
+                                                <ul>
+                                                  <li class="toc-h2"><a href="#contents">Contents</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#why-extensibility-matters">Why Extensibility Matters</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#user-defined-functions">User-Defined Functions</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#library-modules">Library Modules</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#creating-a-module">Creating a Module</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#importing-a-module">Importing a Module</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#module-location-resolution">Module Location Resolution</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#versioning-with-namespaces">Versioning with Namespaces</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#building-a-module-library">Building a Module Library</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#external-functions">External Functions</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#declaring-external-functions">Declaring External Functions</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#using-external-functions">Using External Functions</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#net-integration-with-phoenixmldb">.NET Integration with PhoenixmlDb</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#setting-external-variables-from-c">Setting External Variables from C#</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#passing-xml-documents">Passing XML Documents</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#registering-extension-functions-from-net">Registering Extension Functions from .NET</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#reading-query-results-back-into-net-types">Reading Query Results Back into .NET Types</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#using-the-xquery-engine-programmatically">Using the XQuery Engine Programmatically</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#extension-namespaces">Extension Namespaces</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#database-integration">Database Integration</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#accessing-documents">Accessing Documents</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#managing-collections-from-net">Managing Collections from .NET</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#combining-with-other-net-libraries">Combining with Other .NET Libraries</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#xquery-results-to-system-text-json">XQuery Results to System.Text.Json</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#xquery-results-to-httpclient">XQuery Results to HttpClient</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#xquery-with-entity-framework">XQuery with Entity Framework</a>
+                                                  </li>
+                                                  <li class="toc-h2"><a href="#practical-patterns">Practical Patterns</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#custom-validation-functions">Custom Validation Functions</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#data-enrichment-calling-external-apis">Data Enrichment — Calling External APIs</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#report-generation">Report Generation</a>
+                                                  </li>
+                                                  <li class="toc-h3"><a href="#etl-pipeline-xquery-with-net-processing">ETL Pipeline — XQuery with .NET Processing</a>
+                                                  </li>
+                                                </ul>
+                                              </aside>
+                                            </div>
+                                            <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                              <div class="search-backdrop">
+                                              </div>
+                                              <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                                <div class="search-results" id="search-results">
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <footer class="site-footer">
+                                              <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" noreferrer="noreferrer" noopener="noopener">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" noreferrer="noreferrer" noopener="noopener">Endpoint Systems</a>
+                                              </p>
+                                            </footer>
+                                            <script src="https://unpkg.com/lunr/lunr.js">
+                                            </script>
+                                            <script src="/js/prism.js">
+                                            </script>
+                                            <script src="/js/search.js">
+                                            </script>
+                                            <script src="/js/theme.js">
+                                            </script>
+                                            <script src="/js/toc.js">
+                                            </script>
+                                            <script src="/js/copy.js">
+                                            </script>
+                                          </body>
+                                        </html>
