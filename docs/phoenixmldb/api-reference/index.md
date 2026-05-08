@@ -41,7 +41,19 @@ ITransaction BeginTransaction(TransactionOptions options);
 // Lifecycle
 void Flush();
 void Dispose();
+
+// Storage management
+void Backup(string destinationPath, bool compact = false);
+Task<long> SnapshotAsync(Stream output, SnapshotOptions? options = null,
+    CancellationToken cancellationToken = default);
+StorageStatistics GetStatistics();
+bool IsReadOnly { get; }
 ```
+
+See [Backup and Recovery](../documents-and-storage.md#backup-and-recovery)
+for guidance on which API to use; see
+[Read-Only Mode](../documents-and-storage.md#read-only-mode) for the
+constraints on `ReadOnly = true`.
 
 ### DatabaseOptions
 

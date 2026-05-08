@@ -326,9 +326,80 @@ var options = new DatabaseOptions { NoSync = true };
 
 ```csharp
 var options = new DatabaseOptions { ReadOnly = true };
+using var db = new XmlDatabase("./data", options);
 ```
 
-Useful for analytics workloads, backup processes, and multi-process read access.
+Read-only mode opens the database without write capability. The on-disk
+environment is still memory-mapped, so reads are fast; only mutations are
+disallowed.
+
+**When to use:**
+
+- Analytics or reporting workloads against a production database
+- Read replicas that consume snapshots from a primary
+- Multi-process scenarios where one writer and many readers share a directory
+- Browsing a backup or snapshot without risk of accidental modification
+- Embedding a fixed dataset (e.g. shipped reference data) in an application
+
+**What works:**
+
+- All query operations (XPath, XQuery, XSLT, LINQ)
+- Reading documents, attributes, metadata, and indexes
+- Multiple concurrent read transactions across threads and processes
+- `db.GetStatistics()`, `db.SnapshotAsync(...)`
+
+**What does not work — and why:**
+
+Read-only mode cannot create new structures on disk. Any operation that
+would allocate a new container, document, index, or namespace ID raises
+an exception. Specifically, **the named databases (containers and indexes)
+that the application uses must already exist in the on-disk environment** —
+read-only mode cannot allocate them.
+
+This means you cannot open a brand-new empty directory in read-only mode
+and then "fill it in" lazily. The directory must have been initialized by
+a writer first.
+
+```csharp
+// ❌ This fails: directory has no data yet
+Directory.CreateDirectory("./fresh");
+using var db = new XmlDatabase("./fresh", new DatabaseOptions { ReadOnly = true });
+db.GetContainer("my_container");  // Throws — container database doesn't exist
+
+// ✅ This works: writer initializes first, then reader attaches
+using (var writer = new XmlDatabase("./fresh"))
+{
+    writer.CreateContainer("my_container");
+    // (writer disposes, data is on disk)
+}
+
+using var reader = new XmlDatabase("./fresh", new DatabaseOptions { ReadOnly = true });
+reader.GetContainer("my_container");  // Works — container exists
+```
+
+**Multiple readers:**
+
+PhoenixmlDb supports many concurrent readers per process and across
+processes. Each reader gets a consistent snapshot at the moment its
+transaction begins (see [MVCC](transactions.md#mvcc-multi-version-concurrency-control)).
+
+A reader transaction can be held open while sub-queries spin up additional
+short-lived read transactions on the same thread — the engine does not bind
+reader slots to the calling thread, so there is no per-thread reader limit
+beyond `MaxReaders` (default 126).
+
+**Multi-process pattern:**
+
+```csharp
+// Process A — writer (long-running service)
+using var writer = new XmlDatabase("./shared");
+
+// Process B, C, D — readers (CLI tools, dashboards, etc.)
+using var reader = new XmlDatabase("./shared", new DatabaseOptions { ReadOnly = true });
+```
+
+Readers see a consistent snapshot per transaction; the writer's commits
+become visible to readers that begin a transaction after the commit.
 
 ### Write Map Mode
 
@@ -370,21 +441,86 @@ PhoenixmlDb creates these files in the database directory:
 
 ## Backup and Recovery
 
-### Online Backup
+PhoenixmlDb offers three backup approaches; pick the one that matches your
+operational constraints.
+
+### File-based Backup (`Backup`)
+
+The simplest option — writes the entire environment to a target directory.
+Safe to run while the database is active; the LMDB MVCC snapshot guarantees
+the backup reflects a single consistent moment in time.
 
 ```csharp
-// Create consistent backup while database is active
+// Active database — backup runs without quiescing writers
 db.Backup("./backup");
+
+// Optional: compact during backup (smaller output, slower)
+db.Backup("./backup", compact: true);
 ```
+
+The output directory contains a complete `data.mdb` ready to be opened by a
+new `XmlDatabase("./backup")`.
+
+**Use when:** you can afford a target directory on the same machine
+(local backups, disk-to-disk replication, periodic snapshots to a SAN
+mount).
+
+### Stream-based Snapshot (`SnapshotAsync`)
+
+Writes the snapshot bytes to any `Stream` — local file, network socket,
+S3 multipart upload, gRPC response, etc. Same MVCC consistency
+guarantees as `Backup`. Recommended for large databases or when the
+backup target is remote.
+
+```csharp
+// Snapshot to a local file
+await using var fs = File.Create("./backup.mdb");
+var bytes = await db.SnapshotAsync(fs);
+Console.WriteLine($"Wrote {bytes} bytes");
+
+// Snapshot to S3 via the AWS SDK
+await using var s3Stream = new S3UploadStream(s3Client, "my-bucket", "backups/db-2026-01-01.mdb");
+await db.SnapshotAsync(s3Stream);
+```
+
+**Why streams instead of `byte[]`:** XML databases routinely grow to multiple
+gigabytes. A `byte[]` API caps the snapshot at 2 GB and forces full
+in-memory materialization; the stream API has neither limit.
+
+### Restore from Snapshot
+
+```csharp
+// Restore a stream-based snapshot to a target directory.
+// The target must not contain a live LMDB environment.
+await using var snap = File.OpenRead("./backup.mdb");
+await LmdbStorageEngine.RestoreFromSnapshotAsync(snap, "./restored");
+
+// Open the restored database
+using var db = new XmlDatabase("./restored");
+```
+
+The restore writes to a temporary file inside the target directory and
+atomic-renames into place, so an interrupted stream cannot leave a
+half-written `data.mdb`.
 
 ### Offline Backup
 
+When the database is not running, you can copy the files directly:
+
 ```bash
-# Stop application, then copy files
+# Cleanest: stop the writer first, then copy
+systemctl stop my-app
 cp -r ./data ./backup
+systemctl start my-app
 ```
 
+Copying a live database directory with `cp` (without using `Backup` or
+`SnapshotAsync`) risks an inconsistent snapshot if writes happen during
+the copy. Use one of the engine APIs above for live databases.
+
 ### Recovery
+
+For file-based backups:
 
 ```csharp
 // Restore from backup
@@ -396,6 +532,8 @@ if (Directory.Exists("./backup"))
 
 using var db = new XmlDatabase("./data");
 ```
+
+For stream-based snapshots, see `RestoreFromSnapshotAsync` above.
 
 ## Disk Space Management
 

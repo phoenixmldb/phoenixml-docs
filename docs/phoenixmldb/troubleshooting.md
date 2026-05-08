@@ -64,6 +64,44 @@ phoenixmldb-admin check ./data
 phoenixmldb-admin restore ./data --from backup.tar
 ```
 
+### "Permission denied" opening a read-only database
+
+**Symptom:** `LightningException: Permission denied` on the first call to
+`GetContainer`, `Query`, or any operation that touches a named structure,
+when the engine was opened with `ReadOnly = true`.
+
+**Cause:** Read-only mode cannot allocate new named databases on disk. If
+the directory is brand-new (or was never written to with the same set of
+containers/indexes the application expects), the structures don't exist
+and read-only mode can't create them.
+
+**Solution:** Initialize the database with a writer first, then attach
+read-only:
+
+```csharp
+using (var writer = new XmlDatabase("./data"))
+{
+    writer.CreateContainer("my_container");
+}
+
+using var reader = new XmlDatabase("./data", new DatabaseOptions { ReadOnly = true });
+```
+
+See [Read-Only Mode](documents-and-storage.md#read-only-mode) for the full
+lifecycle.
+
+### "MDB_BAD_VALSIZE" on long namespace URIs
+
+**Symptom:** `LightningException: MDB_BAD_VALSIZE: Unsupported size of
+key/DB name/data` when interning a namespace URI longer than ~500 bytes.
+
+**Cause:** Older versions used the URI bytes directly as the LMDB key,
+which is capped at 511 bytes. Resolved in current builds — the reverse
+namespace map now keys on a SHA-256 hash of the URI.
+
+**Solution:** Upgrade to the current PhoenixmlDb release. Existing
+databases are migrated automatically on first open with the new build.
+
 ## Query Issues
 
 ### Slow Queries
