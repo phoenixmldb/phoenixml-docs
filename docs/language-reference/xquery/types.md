@@ -6,17 +6,26 @@ sort: 6
 
 # Type System
 
-XQuery has a rich, formally specified type system built on XML Schema. If you're coming from C#, many concepts will be familiar — atomic types, function types, records — but the details differ in important ways. The biggest difference: everything in XQuery is a **sequence**, and the type system reflects that.
+XQuery has a rich, formally specified type system built on XML Schema. Everything in XQuery is a **sequence**, and the type system reflects that.
+
+> For C# developers: many concepts are familiar — atomic types, function types, records — but the details differ in important ways.
 
 ## Contents
 
 - [Atomic Types](#atomic-types)
+
 - [Sequence Types](#sequence-types)
+
 - [Function Types](#function-types)
+
 - [Record Types](#record-types)
+
 - [Enum Types](#enum-types)
+
 - [Union Types](#union-types)
+
 - [Type Testing and Casting](#type-testing-and-casting)
+
 - [Type Promotion](#type-promotion)
 
 ---
@@ -112,7 +121,7 @@ xs:double("3.14")
 
 ### Untyped Data
 
-When you read XML without a schema, text content is `xs:untypedAtomic`. XQuery automatically converts untyped values during comparisons and arithmetic, but explicit casting is safer:
+When you read XML without a schema, text content is `xs:untypedAtomic`. XQuery automatically transforms untyped values during comparisons and arithmetic. Explicit casting is safer:
 
 ```xquery
 (: $book/price is xs:untypedAtomic from unvalidated XML :)
@@ -510,7 +519,7 @@ declare function local:strict($x as union(xs:string, xs:integer, xs:decimal)) as
 
 ## Type Testing and Casting
 
-XQuery provides four type-related expressions for testing, asserting, and converting types.
+XQuery provides four type-related expressions for testing, asserting, and transforming types.
 
 ### instance of
 
@@ -577,7 +586,7 @@ else
 
 ### cast as
 
-Converts a value to a different type. Raises an error if the conversion fails.
+Transforms a value into a different type. Raises an error if the transformation fails.
 
 ```xquery
 "42" cast as xs:integer          (: 42 :)
@@ -595,7 +604,7 @@ int.Parse("42")    // 42 — closer equivalent
 
 ### treat as
 
-Asserts that a value is a certain type **without converting it**. If the value doesn't match, it raises a type error. This is a compile-time/static-type hint, not a runtime conversion.
+Asserts that a value is a certain type **without transforming it**. If the value doesn't match, it raises a type error. This is a compile-time/static-type hint, not a runtime transformation.
 
 ```xquery
 $value treat as xs:integer

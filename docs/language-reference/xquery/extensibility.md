@@ -8,51 +8,123 @@ sort: 12
 
 Real projects outgrow the standard library quickly. You need domain-specific functions, integration with external systems, and custom processing logic. XQuery's extensibility model lets you build reusable libraries, declare functions whose implementation lives in the host environment, and integrate deeply with .NET applications.
 
-If you have worked with C# extension methods, MEF/plugin systems, or `IServiceProvider` dependency injection, you already understand the motivation: make the language do what your application needs, not just what the specification committee anticipated.
+> For C# developers: the motivation matches C# extension methods, MEF/plugin systems, and `IServiceProvider` dependency injection. The language does what your application needs, not just what the specification committee anticipated.
 
 ## Contents
 
 - [Why Extensibility Matters](#why-extensibility-matters)
+
+- [Custom Functions in C#: the XQueryFunction Model](#custom-functions-in-c-the-xqueryfunction-model)
+
 - [User-Defined Functions](#user-defined-functions)
+
 - [Library Modules](#library-modules)
+
 - [External Functions](#external-functions)
+
 - [.NET Integration with PhoenixmlDb](#net-integration-with-phoenixmldb)
+
 - [Extension Namespaces](#extension-namespaces)
+
 - [Database Integration](#database-integration)
+
 - [Combining with Other .NET Libraries](#combining-with-other-net-libraries)
+
 - [Practical Patterns](#practical-patterns)
 
 ---
 
 ## Why Extensibility Matters
 
-Standard XQuery gives you powerful data querying and transformation. But consider what a real application needs:
+Standard XQuery gives you rich data querying and transformation. But consider what a real application needs:
 
-- **Send an email** when an order exceeds a threshold
-- **Call a REST API** to enrich customer data with external information
-- **Validate** a document against business rules that change monthly
-- **Format** output using company-specific templates
-- **Log** query activity to an audit trail
-- **Generate** PDF invoices from XML order data
+- **Send an email** when an order exceeds a threshold.
+
+- **Call a REST API** to enrich customer data with external information.
+
+- **Validate** a document against business rules that change monthly.
+
+- **Format** output using company-specific templates.
+
+- **Log** query activity to an audit trail.
+
+- **Generate** PDF invoices from XML order data.
 
 None of these are in the XQuery specification. Extensibility bridges the gap between what XQuery provides and what your application requires.
 
-**C# parallel:**
+> For C# developers: C# solves the same problem with extension methods, DI, and plugins.
+
 ```csharp
-// C# solves the same problem with extension methods, DI, and plugins
 public static class OrderExtensions
 {
-    // Domain-specific logic added to existing types
     public static decimal CalculateTax(this Order order, string state) { /* ... */ }
     public static bool RequiresApproval(this Order order) => order.Total > 10_000m;
 }
 
-// Dependency injection — runtime-provided implementations
 services.AddScoped<IEmailService, SmtpEmailService>();
 services.AddScoped<IPaymentGateway, StripeGateway>();
 ```
 
 XQuery achieves the same extensibility through user-defined functions, library modules, external functions, and host-environment integration.
+
+---
+
+## Custom Functions in C#: the XQueryFunction Model
+
+PhoenixmlDb's core extension point for custom functions is the abstract class `XQueryFunction`, in the `PhoenixmlDb.XQuery` namespace. Subclass it to add a function the engine can call from any query.
+
+`XQueryFunction` exposes four members you implement:
+
+| Member | Purpose |
+|--------|---------|
+| `QName Name` | The function's qualified name, as it appears in a query |
+| `XdmSequenceType ReturnType` | The static return type of the function |
+| `IReadOnlyList<FunctionParameterDef> Parameters` | The declared parameters, in order |
+| `ValueTask<object?> InvokeAsync(IReadOnlyList<object?> arguments, ExecutionContext context)` | The C# method body where the custom logic runs |
+
+Here is a custom function that looks up an exchange rate:
+
+```csharp
+using PhoenixmlDb.Core;
+using PhoenixmlDb.XQuery;
+
+public sealed class ExchangeRateFunction : XQueryFunction
+{
+    public override QName Name => new(NamespaceId.None, "get-exchange-rate");
+
+    public override XdmSequenceType ReturnType => XdmSequenceType.Decimal;
+
+    public override IReadOnlyList<FunctionParameterDef> Parameters =>
+    [
+        new() { Name = new QName(NamespaceId.None, "from"), Type = XdmSequenceType.String },
+        new() { Name = new QName(NamespaceId.None, "to"), Type = XdmSequenceType.String },
+    ];
+
+    public override ValueTask<object?> InvokeAsync(
+        IReadOnlyList<object?> arguments,
+        ExecutionContext context)
+    {
+        var from = (string)arguments[0]!;
+        var to = (string)arguments[1]!;
+
+        // The custom logic runs here — call an external API, a cache, or a
+        // rate table, then return the result.
+        decimal rate = LookUpExchangeRate(from, to);
+        return ValueTask.FromResult<object?>(rate);
+    }
+}
+```
+
+Register an instance with the engine's `FunctionLibrary` before running a query:
+
+```csharp
+FunctionLibrary library = FunctionLibrary.Standard.Copy();
+library.Register(new ExchangeRateFunction());
+```
+
+`Register` adds the function under its `Name` and arity, so the query resolves calls to `get-exchange-rate($from, $to)` against your `InvokeAsync` implementation. Every custom function you write follows this same shape: subclass `XQueryFunction`, describe its signature through the four members, and register it with `FunctionLibrary.Register`.
+
+> For C# developers: `XQueryFunction` plays the role of a strongly-typed delegate registration. `Name`, `ReturnType`, and `Parameters` are the equivalent of a method signature. `InvokeAsync` is the method body. `FunctionLibrary.Register` is the equivalent of adding a service to an `IServiceCollection`.
 
 ---
 
@@ -498,10 +570,14 @@ declare namespace cache = "http://yourcompany.com/cache";
 ```
 
 **Conventions:**
-- Use your organization's domain in the namespace URI
-- Group related functions under the same namespace
-- Use meaningful prefixes that are short but descriptive
-- Document your extension namespaces for other developers
+
+- Use your organization's domain in the namespace URI.
+
+- Group related functions under the same namespace.
+
+- Use meaningful prefixes that are short but descriptive.
+
+- Document your extension namespaces for other developers.
 
 **C# parallel:**
 ```csharp

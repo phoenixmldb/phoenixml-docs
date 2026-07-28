@@ -6,9 +6,9 @@ sort: 4
 
 # XQuery
 
-XQuery is a full programming language for querying and constructing XML. Where XPath selects nodes from a document, XQuery can build entirely new documents from multiple sources — think of it as SQL for hierarchical data.
+XQuery is a full programming language for querying and constructing XML. XPath selects nodes from a document. XQuery builds entirely new documents from multiple sources.
 
-If XPath is `SELECT column FROM table WHERE condition`, XQuery is the full SQL with `JOIN`, subqueries, and `INSERT INTO`.
+> For C# developers: XQuery resembles SQL for hierarchical data. If XPath is `SELECT column FROM table WHERE condition`, XQuery is the full SQL with `JOIN`, subqueries, and `INSERT INTO`.
 
 ## What's Here
 
@@ -29,7 +29,7 @@ If XPath is `SELECT column FROM table WHERE condition`, XQuery is the full SQL w
 
 ### Direct Element Constructors
 
-XQuery can build XML inline using XML-literal syntax with embedded expressions in curly braces `{}`. This is one of XQuery's most powerful features — your query output looks like the XML it produces:
+XQuery builds XML inline using XML-literal syntax with embedded expressions in curly braces `{}`. The query output looks like the XML it produces:
 
 ```xquery
 <root>
@@ -68,11 +68,10 @@ function local:get-users() { ... };
 
 Annotations are declared with `%name` or `%name("value")` before the `function` or `variable` keyword. The built-in annotations `%public` and `%private` control visibility in library modules.
 
-## The LINQ Parallel
+## The FLWOR Expression
 
-XQuery's FLWOR expression maps almost directly to LINQ query syntax:
+XQuery's FLWOR expression selects, filters, sorts, and returns data in one pipeline:
 
-**XQuery:**
 ```xquery
 for $book in /catalog/book
 where $book/price > 30
@@ -80,12 +79,13 @@ order by $book/title
 return <result>{ $book/title, $book/price }</result>
 ```
 
-**LINQ:**
+The FLWOR version handles namespaces natively and runs on any XQuery processor.
+
+> For C# developers: FLWOR maps almost directly to LINQ query syntax.
+
 ```csharp
 from book in catalog.Elements("book")
 where (decimal)book.Element("price") > 30
 orderby (string)book.Element("title")
 select new XElement("result", book.Element("title"), book.Element("price"))
 ```
-
-The XQuery version is more concise, handles namespaces natively, and runs on any XQuery processor — not just .NET.

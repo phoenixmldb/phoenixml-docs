@@ -6,14 +6,20 @@ sort: 8
 
 # Functions and Modules
 
-XQuery is a full programming language, not just a query syntax. You can define functions, organize them into modules, and build reusable libraries — much like writing class libraries in C#.
+XQuery is a full programming language, not just a query syntax. You can define functions, organize them into modules, and build reusable libraries.
+
+> For C# developers: an XQuery module resembles a C# class library — a package of reusable functions.
 
 ## Contents
 
 - [User-Defined Functions](#user-defined-functions)
+
 - [Function Features](#function-features)
+
 - [Modules](#modules)
+
 - [The XQuery Prolog](#the-xquery-prolog)
+
 - [Common Patterns](#common-patterns)
 
 ---
@@ -47,10 +53,13 @@ declare function local:function-name(
 };
 ```
 
-- `local:` is the namespace prefix for local functions (not imported from a module)
-- Parameter types are optional but recommended
-- The return type is optional but recommended
-- The body is a single expression (no statements — XQuery is functional)
+- `local:` is the namespace prefix for local functions not imported from a module.
+
+- Parameter types are optional but recommended.
+
+- The return type is optional but recommended.
+
+- The body is a single expression. XQuery has no statements.
 
 ### Multiple Parameters
 
@@ -362,4 +371,6 @@ tmpl:page("Products", (
 ))
 ```
 
-This is remarkably similar to component-based web development — small, reusable templates composed into larger pages. The difference is that the "rendering engine" is XQuery, and the "data layer" is XML.
+Small, reusable templates compose into larger pages, the same pattern as component-based web development.
+
+> For C# developers: this template module resembles component-based web development. The "rendering engine" is XQuery. The "data layer" is XML.

@@ -6,20 +6,30 @@ sort: 10
 
 # Full-Text Search
 
-XQuery's built-in `contains()` function does exact substring matching — it finds `"data"` inside `"database"` but cannot search linguistically. Full-Text Search adds the features you would expect from a real search engine: stemming, case-insensitive matching, diacritics normalization, stop words, wildcards, proximity search, and relevance scoring.
+XQuery's built-in `contains()` function does exact substring matching. It finds `"data"` inside `"database"` but cannot search linguistically. Full-Text Search adds the features of a real search engine: stemming, case-insensitive matching, diacritics normalization, stop words, wildcards, proximity search, and relevance scoring.
 
-If you have used Lucene.NET, Elasticsearch, or SQL Server's `CONTAINS` / `FREETEXT` predicates, XQuery Full-Text solves the same problems but is integrated directly into the query language — no separate index API or raw SQL strings needed.
+XQuery Full-Text integrates these features directly into the query language. It needs no separate index API and no raw SQL strings.
+
+> For C# developers: XQuery Full-Text solves the same problem as Lucene.NET, Elasticsearch, or SQL Server's `CONTAINS` / `FREETEXT` predicates.
 
 ## Contents
 
 - [Why Full-Text in XQuery](#why-full-text-in-xquery)
+
 - [ft:contains — The Basic Predicate](#ftcontains--the-basic-predicate)
+
 - [Match Options](#match-options)
+
 - [Search Modes](#search-modes)
+
 - [Logical Combinations](#logical-combinations)
+
 - [Positional Filters](#positional-filters)
+
 - [Full-Text Functions](#full-text-functions)
+
 - [Scoring and Relevance](#scoring-and-relevance)
+
 - [Practical Examples](#practical-examples)
 
 ---

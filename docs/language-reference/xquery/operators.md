@@ -11,16 +11,27 @@ XQuery inherits most of its operators from XPath and adds several of its own. Th
 ## Contents
 
 - [Arithmetic Operators](#arithmetic-operators)
+
 - [Comparison Operators](#comparison-operators)
+
 - [Node Comparison](#node-comparison)
+
 - [Logical Operators](#logical-operators)
+
 - [Sequence Operators](#sequence-operators)
+
 - [Range Operator](#range-operator)
+
 - [String Concatenation](#string-concatenation)
+
 - [Simple Map Operator](#simple-map-operator)
+
 - [Arrow Operators](#arrow-operators)
+
 - [Lookup Operator](#lookup-operator)
+
 - [Otherwise Operator](#otherwise-operator)
+
 - [Operator Precedence](#operator-precedence)
 
 ---
@@ -331,7 +342,7 @@ concat("Hello", " ", "World")
 concat($first-name, " ", $last-name)
 ```
 
-The `||` operator atomizes its operands and converts them to strings automatically. This means you can concatenate non-string values without explicit casting:
+The `||` operator atomizes its operands and transforms them into strings automatically. You can concatenate non-string values without explicit casting:
 
 ```xquery
 "Price: $" || $product/price || " (qty: " || $item/@qty || ")"

@@ -6,15 +6,22 @@ sort: 4
 
 # Conditionals and Error Handling
 
-XQuery's conditionals are all **expressions** — they return values. There are no statements. This is the biggest mental shift for C# developers: every `if`, every `switch`, every `try/catch` produces a result that can be assigned, returned, or embedded inside XML.
+XQuery's conditionals are all **expressions** — they return values. There are no statements. In XQuery, every `if`, `switch`, and `try/catch` is an expression. Each one produces a result. You can assign it, return it, or embed it inside XML.
+
+> For C# developers: this is the biggest mental shift from C#, where `if` and `try/catch` are statements with no return value.
 
 ## Contents
 
 - [if/then/else](#ifthenelse)
+
 - [Braced if](#braced-if)
+
 - [switch Expression](#switch-expression)
+
 - [typeswitch Expression](#typeswitch-expression)
+
 - [try/catch](#trycatch)
+
 - [otherwise Operator](#otherwise-operator)
 
 ---
@@ -117,7 +124,8 @@ XQuery 4.0 adds a shorthand `if` without `else`. The result is the empty sequenc
 
 This is equivalent to `if (...) then ... else ()` but more concise. The braces `{}` replace `then`, and the absence of `else` implicitly returns `()`.
 
-**C# parallel:** There's no exact equivalent, but it's similar in spirit to conditional output in Razor views:
+> For C# developers: C# has no exact equivalent, but braced `if` is similar in spirit to conditional output in Razor views.
+
 ```csharp
 @if (product.IsFeatured) { <badge>Featured</badge> }
 ```

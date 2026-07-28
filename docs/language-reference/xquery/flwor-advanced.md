@@ -6,15 +6,20 @@ sort: 2
 
 # Advanced FLWOR
 
-The [basic FLWOR page](flwor.md) covers `for`, `let`, `where`, `order by`, and `return`. This page covers the clauses that make FLWOR a genuinely powerful data processing language: window clauses, count, group by, and the XQuery 4.0 additions `while` and `otherwise`.
+The [basic FLWOR page](flwor.md) covers `for`, `let`, `where`, `order by`, and `return`. This page covers the FLWOR clauses that group, sort, and window query results: window clauses, count, group by, and the XQuery 4.0 additions `while` and `otherwise`.
 
 ## Contents
 
 - [Window Clauses](#window-clauses)
+
 - [Count Clause](#count-clause)
+
 - [Group By Clause](#group-by-clause)
+
 - [While Clause](#while-clause)
+
 - [Otherwise Clause](#otherwise-clause)
+
 - [Combining Clauses](#combining-clauses)
 
 ---
