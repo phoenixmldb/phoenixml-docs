@@ -1,4 +1,5 @@
 """STE-informed markdown checker for phoenixml.dev language-reference docs."""
+import argparse
 import re
 import sys
 from dataclasses import dataclass, field
@@ -168,3 +169,80 @@ def check_sentence_length(lines: list, config: Config) -> list:
                 f"\"{sent[:60]}...\"",
             ))
     return findings
+
+
+_PASSIVE = re.compile(
+    r"\b(is|are|was|were|be|been|being)\b\s+\w+(ed|en)\b", re.IGNORECASE)
+
+
+def check_passive(lines: list, config: Config) -> list:
+    findings = []
+    for ln in lines:
+        if not ln.text.strip():
+            continue
+        if _PASSIVE.search(ln.text):
+            findings.append(Finding(
+                ln.lineno, "warn", "passive-voice",
+                "possible passive voice; prefer active",
+            ))
+    return findings
+
+
+def check_gerund_lead(lines: list, config: Config) -> list:
+    findings = []
+    allow = {t.lower() for t in config.allow_analogy_terms}
+    for ln in lines:
+        t = ln.text.strip()
+        if not t or t.startswith("#") or t.startswith("|"):
+            continue
+        first = re.split(r"\W+", t)[0]
+        if first.lower().endswith("ing") and first.lower() not in allow:
+            findings.append(Finding(
+                ln.lineno, "warn", "gerund-lead",
+                f"line begins with a gerund \"{first}\"; prefer an imperative verb",
+            ))
+    return findings
+
+
+def check_placeholders(lines: list, config: Config) -> list:
+    findings = []
+    for ln in lines:
+        low = ln.text.lower()
+        for marker in config.placeholder_markers:
+            if marker.lower() in low:
+                findings.append(Finding(
+                    ln.lineno, "error", "placeholder",
+                    f"placeholder marker \"{marker}\"",
+                ))
+    return findings
+
+
+def check_file(path: str, config: Config) -> list:
+    with open(path, encoding="utf-8") as fh:
+        lines = mark_callouts(strip_markdown(fh.read()), config)
+    findings = []
+    for fn in (check_sentence_length, check_banned, check_terminology,
+               check_passive, check_gerund_lead, check_placeholders):
+        findings.extend(fn(lines, config))
+    return sorted(findings, key=lambda f: (f.line, f.code))
+
+
+def main(argv=None) -> int:
+    argv = sys.argv[1:] if argv is None else argv
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--config", default="tools/ste-wordlist.yaml")
+    ap.add_argument("--strict", action="store_true")
+    ap.add_argument("paths", nargs="+")
+    ns = ap.parse_args(argv)
+    config = load_config(ns.config)
+    exit_code = 0
+    for path in ns.paths:
+        for f in check_file(path, config):
+            print(f"{path}:{f.line}: [{f.severity.upper()}] {f.code}: {f.message}")
+            if f.severity == "error" or (ns.strict and f.severity == "warn"):
+                exit_code = 1
+    return exit_code
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

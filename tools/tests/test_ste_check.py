@@ -66,3 +66,18 @@ def test_terminology_variant_flagged():
     lines = s.mark_callouts(s.strip_markdown("Match the opening tag first.\n"), cfg)
     findings = s.check_terminology(lines, cfg)
     assert any(f.code == "terminology" and "element" in f.message for f in findings)
+
+def test_placeholder_flagged():
+    cfg = s.load_config(CONFIG)
+    lines = s.mark_callouts(s.strip_markdown("This section is TODO.\n"), cfg)
+    findings = s.check_placeholders(lines, cfg)
+    assert any(f.code == "placeholder" for f in findings)
+
+def test_check_file_and_exit(tmp_path):
+    cfg_path = CONFIG
+    good = tmp_path / "good.md"
+    good.write_text("XSLT transforms XML documents. You write template rules.\n")
+    assert s.main(["--config", cfg_path, str(good)]) == 0
+    bad = tmp_path / "bad.md"
+    bad.write_text("You can leverage this. TODO finish.\n")
+    assert s.main(["--config", cfg_path, str(bad)]) == 1
