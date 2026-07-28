@@ -425,14 +425,15 @@ using PhoenixmlDb.Xslt;
 
 var transformer = new XsltTransformer();
 await transformer.LoadStylesheetAsync(stylesheet, new Uri("catalog.xslt"));
-var result = await transformer.TransformAsync(sourceXml);
 
 // Primary result
-string indexHtml = result.PrimaryResult;
+string indexHtml = await transformer.TransformAsync(sourceXml);
 File.WriteAllText("output/index.html", indexHtml);
 
-// Secondary result documents (from xsl:result-document)
-foreach (var (href, content) in result.SecondaryResultDocuments)
+// Secondary result documents (from xsl:result-document), read from the
+// transformer AFTER TransformAsync returns — it repopulates this
+// dictionary on every call.
+foreach (var (href, content) in transformer.SecondaryResultDocuments)
 {
     var outputPath = Path.Combine("output", href);
     Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
@@ -452,16 +453,20 @@ This design lets you:
 
 ### Controlling the Base URI
 
-The processor resolves `href` values in `xsl:result-document` relative to the base output URI. In the PhoenixmlDb API, you can set this base URI when calling the transform:
+The processor resolves `href` values in `xsl:result-document` relative to the base output URI. `XsltTransformer` exposes no C# property for this. There is no `TransformOptions` type and no base-output-uri setter on the transformer. The base output URI is instead controlled from XQuery's `fn:transform()`, via the `"base-output-uri"` entry in its options map, or implicitly by the stylesheet and its serialization. From C#, the keys in `SecondaryResultDocuments` are the literal `href` values. Resolve or rewrite them yourself if you need a different output root:
 
 ```csharp
-var options = new TransformOptions
+var transformer = new XsltTransformer();
+await transformer.LoadStylesheetAsync(stylesheet, new Uri("catalog.xslt"));
+_ = await transformer.TransformAsync(sourceXml);
+
+// Rewrite hrefs onto a chosen output root in application code
+var outputRoot = new Uri("file:///output/site/");
+foreach (var (href, content) in transformer.SecondaryResultDocuments)
 {
-    BaseOutputUri = new Uri("file:///output/site/")
-};
-
-var result = await transformer.TransformAsync(sourceXml, options);
-
-// result.SecondaryResultDocuments keys are now relative to /output/site/
+    var outputPath = new Uri(outputRoot, href).LocalPath;
+    Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
+    File.WriteAllText(outputPath, content);
+}
 // e.g., "products/WP-001.html", "api/catalog.json"
 ```
