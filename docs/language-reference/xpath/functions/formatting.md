@@ -74,7 +74,7 @@ See [Date and Time Functions](date-time.md#formatting) for `format-date()`, `for
 
 ### serialize()
 
-Converts a node or value to its serialized string form (XML, JSON, HTML, or text).
+Transforms a node or value to its serialized string form (XML, JSON, HTML, or text).
 
 **Signature:** `serialize($value as item()*, $params as item()?) as xs:string`
 

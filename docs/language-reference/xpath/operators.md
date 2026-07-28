@@ -111,7 +111,7 @@ not((1, 2, 3) = 2)      => false (: because 2 = 2 :)
 
 ### Comparison Type Coercion
 
-XPath automatically converts types during comparison:
+XPath automatically transforms types during comparison:
 
 ```xpath
 "42" = 42               => true  (: string compared to integer — string is cast :)
@@ -149,7 +149,7 @@ exists(//config) and //config/@debug = 'true'
 
 ### Effective Boolean Value
 
-XPath automatically converts values to boolean in conditional contexts:
+XPath automatically transforms values to boolean in conditional contexts:
 
 | Value | Boolean |
 |-------|---------|

@@ -29,7 +29,7 @@ terminology:
   - canonical: "element"
     variants: ["tag"]
   - canonical: "transform"
-    variants: ["convert", "munge"]
+    variants: ["convert", "converts", "converted", "converting", "munge"]
   - canonical: "stylesheet"
     variants: ["style sheet", "style-sheet"]
 

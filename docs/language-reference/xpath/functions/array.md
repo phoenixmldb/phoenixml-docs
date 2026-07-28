@@ -296,11 +296,11 @@ array:index-where([3, 1, 4, 1, 5], function($n) { $n > 3 })
 
 ### array:members()
 
-Converts an array to a sequence of its members (each wrapped in a single-item array). New in XPath 4.0.
+Transforms an array to a sequence of its members (each wrapped in a single-item array). New in XPath 4.0.
 
 ### array:items()
 
-Converts an array to a flat sequence. New in XPath 4.0.
+Transforms an array to a flat sequence. New in XPath 4.0.
 
 ```xpath
 array:items([1, 2, 3])   => (1, 2, 3)
