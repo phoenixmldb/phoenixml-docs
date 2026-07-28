@@ -36,3 +36,15 @@ def test_strip_frontmatter_and_code():
     assert by_no[9].text.strip() == ""
     # callout line flagged
     assert by_no[10].is_callout is True
+
+def test_sentence_length_flags_long_sentence():
+    cfg = s.load_config(CONFIG)
+    long = "This sentence has far too many words in it because " + " ".join(["word"] * 30) + "."
+    lines = s.mark_callouts(s.strip_markdown(long + "\n"), cfg)
+    findings = s.check_sentence_length(lines, cfg)
+    assert any(f.code == "sentence-length" and f.severity == "error" for f in findings)
+
+def test_sentence_length_passes_short_sentence():
+    cfg = s.load_config(CONFIG)
+    lines = s.mark_callouts(s.strip_markdown("XSLT transforms XML documents.\n"), cfg)
+    assert s.check_sentence_length(lines, cfg) == []

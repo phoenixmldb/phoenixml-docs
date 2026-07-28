@@ -87,3 +87,50 @@ def mark_callouts(lines: list, config: Config) -> list:
                 ln.is_callout = True
                 break
     return lines
+
+
+@dataclass
+class Finding:
+    line: int
+    severity: str
+    code: str
+    message: str
+
+
+_SENT_SPLIT = re.compile(r"(?<=[.!?])\s+")
+
+
+def _sentences(lines: list):
+    """Yield (start_lineno, sentence_text) across contiguous prose lines."""
+    buf, start = [], None
+    for ln in lines:
+        if ln.text.strip():
+            if start is None:
+                start = ln.lineno
+            buf.append(ln.text.strip())
+        else:
+            if buf:
+                yield from _emit(start, " ".join(buf))
+            buf, start = [], None
+    if buf:
+        yield from _emit(start, " ".join(buf))
+
+
+def _emit(start, blob):
+    for sent in _SENT_SPLIT.split(blob):
+        sent = sent.strip()
+        if sent:
+            yield start, sent
+
+
+def check_sentence_length(lines: list, config: Config) -> list:
+    findings = []
+    for start, sent in _sentences(lines):
+        words = [w for w in re.split(r"\s+", sent) if w]
+        if len(words) > config.max_sentence_words:
+            findings.append(Finding(
+                start, "error", "sentence-length",
+                f"sentence has {len(words)} words (max {config.max_sentence_words}): "
+                f"\"{sent[:60]}...\"",
+            ))
+    return findings
