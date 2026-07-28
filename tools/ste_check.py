@@ -123,6 +123,40 @@ def _emit(start, blob):
             yield start, sent
 
 
+def _word_re(term: str):
+    return re.compile(r"\b" + re.escape(term) + r"\b", re.IGNORECASE)
+
+
+def check_banned(lines: list, config: Config) -> list:
+    findings = []
+    for ln in lines:
+        if ln.is_callout or not ln.text.strip():
+            continue
+        for term, repl in config.banned.items():
+            if _word_re(term).search(ln.text):
+                findings.append(Finding(
+                    ln.lineno, "error", "banned-word",
+                    f"avoid \"{term}\" -> {repl}",
+                ))
+    return findings
+
+
+def check_terminology(lines: list, config: Config) -> list:
+    findings = []
+    for ln in lines:
+        if ln.is_callout or not ln.text.strip():
+            continue
+        for entry in config.terminology:
+            canonical = entry.get("canonical", "")
+            for variant in entry.get("variants", []):
+                if _word_re(variant).search(ln.text):
+                    findings.append(Finding(
+                        ln.lineno, "error", "terminology",
+                        f"use \"{canonical}\" not \"{variant}\"",
+                    ))
+    return findings
+
+
 def check_sentence_length(lines: list, config: Config) -> list:
     findings = []
     for start, sent in _sentences(lines):

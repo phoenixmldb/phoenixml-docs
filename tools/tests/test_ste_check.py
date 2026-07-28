@@ -48,3 +48,21 @@ def test_sentence_length_passes_short_sentence():
     cfg = s.load_config(CONFIG)
     lines = s.mark_callouts(s.strip_markdown("XSLT transforms XML documents.\n"), cfg)
     assert s.check_sentence_length(lines, cfg) == []
+
+def test_banned_word_flagged_in_prose():
+    cfg = s.load_config(CONFIG)
+    lines = s.mark_callouts(s.strip_markdown("You can leverage the engine.\n"), cfg)
+    findings = s.check_banned(lines, cfg)
+    assert any(f.code == "banned-word" and "leverage" in f.message for f in findings)
+
+def test_banned_word_allowed_in_callout():
+    cfg = s.load_config(CONFIG)
+    src = "> For C# developers: leverage your LINQ knowledge here.\n"
+    lines = s.mark_callouts(s.strip_markdown(src), cfg)
+    assert s.check_banned(lines, cfg) == []
+
+def test_terminology_variant_flagged():
+    cfg = s.load_config(CONFIG)
+    lines = s.mark_callouts(s.strip_markdown("Match the opening tag first.\n"), cfg)
+    findings = s.check_terminology(lines, cfg)
+    assert any(f.code == "terminology" and "element" in f.message for f in findings)
