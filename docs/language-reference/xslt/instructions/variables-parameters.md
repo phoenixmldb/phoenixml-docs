@@ -6,7 +6,24 @@ sort: 3
 
 # Variables and Parameters
 
-Variables and parameters in XSLT look similar to their C# counterparts but behave differently in one critical way: **XSLT variables are immutable**. Once set, a variable's value cannot be changed. This is functional programming — you build new values instead of mutating existing ones.
+Variables and parameters in XSLT look similar to their C# counterparts, but they behave differently in one critical way: **XSLT variables are immutable**. Once a variable is set, its value cannot change. XSLT follows functional programming: you build new values instead of mutating existing ones.
+
+> For C# developers: an `xsl:variable` with a simple `select` value
+> corresponds to `var x = 42;`, and one with an `as` attribute corresponds to
+> a typed local, such as `int x = 42;`. The content form, which builds a
+> temporary tree, corresponds to constructing an `XDocument`. A template
+> parameter with a default `select` value corresponds to a method parameter
+> with a default value, and `required="yes"` corresponds to a parameter with
+> no default. A global stylesheet parameter works like dependency injection:
+> the calling code supplies configuration values that the stylesheet then
+> uses, similar to `XsltArgumentList.AddParam(...)` from C#. A static
+> parameter with `use-when` corresponds to `#if DEBUG` or another
+> preprocessor directive, evaluated at compile time rather than at run time.
+> A tunnel parameter corresponds to an ambient context such as `AsyncLocal<T>`,
+> to dependency injection reaching deep into a call chain, or to React's
+> Context API. Variable scope follows the same block-scoping rules as C#.
+> Finally, an XSLT variable is conceptually `const`: you never reassign one,
+> you create a new one.
 
 ## Contents
 
@@ -22,7 +39,7 @@ Variables and parameters in XSLT look similar to their C# counterparts but behav
 
 ## xsl:variable
 
-Declares a variable — a named, immutable value.
+Declares a variable: a named, immutable value.
 
 ### Using select (Simple Values)
 
@@ -51,11 +68,11 @@ When you need to build a temporary tree (a document fragment), use the content f
 <xsl:copy-of select="$product-card"/>
 ```
 
-**Important:** When you use the content form without an `as` attribute, the variable holds a *temporary tree* (document node). You can read from it, but nodes in it are detached from the original document — they have no parent, no siblings, and no relationship to the source tree.
+**Important:** when you use the content form without an `as` attribute, the variable holds a *temporary tree* (document node). You can read from it, but the nodes in it are detached from the original document. They have no parent, no siblings, and no relationship to the source tree.
 
 ### The as Attribute (Typing)
 
-The `as` attribute declares the expected type. This is optional but recommended for clarity and early error detection:
+The `as` attribute declares the expected type. This attribute is optional, but recommended for clarity and early error detection:
 
 ```xml
 <xsl:variable name="price" as="xs:decimal" select="price"/>
@@ -64,7 +81,7 @@ The `as` attribute declares the expected type. This is optional but recommended 
 <xsl:variable name="items" as="element(product)*" select="//product[@category = 'electronics']"/>
 ```
 
-If the actual value does not match the declared type, the processor raises a type error — similar to a compile-time error in C#.
+If the actual value does not match the declared type, the processor raises a type error, similar to a compile-time error in C#.
 
 **C# parallel:**
 
@@ -88,7 +105,7 @@ If the actual value does not match the declared type, the processor raises a typ
 
 ## xsl:param
 
-Declares a parameter — a variable whose value can be supplied by the caller. Parameters appear in three places:
+Declares a parameter: a variable whose value the caller can supply. Parameters appear in three places.
 
 ### Template Parameters
 
@@ -108,7 +125,7 @@ Declares a parameter — a variable whose value can be supplied by the caller. P
 </xsl:template>
 ```
 
-The `select` attribute provides a default value. If the caller does not pass the parameter, the default is used.
+The `select` attribute provides a default value. If the caller does not pass the parameter, the template uses the default.
 
 **C# parallel:** Method parameters with default values:
 
@@ -129,11 +146,11 @@ Use `required="yes"` to force the caller to supply a value:
 </xsl:template>
 ```
 
-If the caller omits a required parameter, the processor raises an error. This is equivalent to a C# method parameter without a default value.
+If the caller omits a required parameter, the processor raises an error. This behavior is equivalent to a C# method parameter without a default value.
 
 ### Stylesheet Parameters (Global)
 
-Parameters declared as children of `xsl:stylesheet` are global — they can be set by the calling application:
+Parameters declared as children of `xsl:stylesheet` are global: the calling application can set them.
 
 ```xml
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0">
@@ -205,7 +222,7 @@ RenderProduct(product, showPrice: false, currency: "GBP");
 
 ## Static Parameters
 
-XSLT 3.0 introduces static parameters with `static="yes"`. These are evaluated at compile time, enabling conditional compilation.
+XSLT 3.0 introduces static parameters with `static="yes"`. The processor evaluates these at compile time, which enables conditional compilation.
 
 ```xml
 <xsl:param name="debug" as="xs:boolean" select="false()" static="yes"/>
@@ -214,7 +231,7 @@ XSLT 3.0 introduces static parameters with `static="yes"`. These are evaluated a
 
 ### Compile-Time Conditional: use-when
 
-Static parameters are primarily used with the `use-when` attribute, which conditionally includes or excludes declarations at compile time:
+Static parameters are used primarily with the `use-when` attribute, which conditionally includes or excludes declarations at compile time:
 
 ```xml
 <xsl:param name="debug" as="xs:boolean" select="false()" static="yes"/>
@@ -258,13 +275,13 @@ Static parameters are primarily used with the `use-when` attribute, which condit
 #endif
 ```
 
-**Key difference:** Static parameters are resolved when the stylesheet is compiled, not when it runs. Changing a static parameter requires recompiling the stylesheet.
+**Key difference:** the processor resolves static parameters when it compiles the stylesheet, not when the stylesheet runs. Changing a static parameter requires recompiling the stylesheet.
 
 ---
 
 ## Tunnel Parameters
 
-Tunnel parameters solve a problem that every deep call chain creates: how do you pass a value through multiple layers of templates without adding the parameter to every intermediate template?
+Every deep call chain creates the same problem: how do you pass a value through multiple layers of templates? Tunnel parameters solve this problem without adding the parameter to every intermediate template.
 
 ### The Problem
 
@@ -322,17 +339,13 @@ The `currency` parameter passes invisibly through the `category` template.
 
 ### Rules
 
-- The sender must specify `tunnel="yes"` on `xsl:with-param`
-- The receiver must specify `tunnel="yes"` on `xsl:param`
-- Intermediate templates do not need to declare or forward the parameter
-- Tunnel parameters and regular parameters are separate — you can have a tunnel parameter and a regular parameter with the same name
-- Tunnel parameters propagate through `xsl:apply-templates` and `xsl:call-template`
+- The sender must specify `tunnel="yes"` on `xsl:with-param`.
+- The receiver must specify `tunnel="yes"` on `xsl:param`.
+- Intermediate templates do not need to declare or forward the parameter.
+- Tunnel parameters and regular parameters are separate. You can have a tunnel parameter and a regular parameter with the same name.
+- Tunnel parameters propagate through `xsl:apply-templates` and `xsl:call-template`.
 
-**C# parallel:** Tunnel parameters are conceptually similar to:
-
-- **Ambient context / AsyncLocal:** Values that flow through the call stack without explicit passing (`AsyncLocal<T>`, `HttpContext.Current`)
-- **Dependency injection:** Services injected deep in the call chain without intermediate classes knowing about them
-- **React Context / Angular Services:** For web developers, tunnel parameters work like React's Context API
+The following C# code shows the same ambient-context shape, using `AsyncLocal<T>`:
 
 ```csharp
 // C# ambient context (similar concept)
@@ -353,7 +366,7 @@ public static class CurrencyContext
 
 ### Scope
 
-Variables are visible from their declaration to the end of their enclosing block:
+A variable is visible from its declaration to the end of its enclosing block:
 
 ```xml
 <xsl:template match="product">
@@ -370,8 +383,6 @@ Variables are visible from their declaration to the end of their enclosing block
   <p><xsl:value-of select="$name"/></p>
 </xsl:template>
 ```
-
-**C# parallel:** Block scoping — variables declared inside `{ }` are not visible outside.
 
 ### Shadowing
 
@@ -390,7 +401,7 @@ You can declare a variable with the same name as an outer variable. The inner de
 <p><xsl:value-of select="$label"/></p>  <!-- "default" -->
 ```
 
-**Note:** Shadowing is legal but can be confusing. Many XSLT processors emit warnings for shadowed variables.
+**Note:** shadowing is legal, but it can confuse readers. Many XSLT processors emit warnings for shadowed variables.
 
 ### Top-Level vs. Local Variables
 
@@ -409,13 +420,13 @@ Variables declared as children of `xsl:stylesheet` are global:
 </xsl:stylesheet>
 ```
 
-Global variables are evaluated lazily — they are computed the first time they are referenced.
+The processor evaluates global variables lazily: it computes each one the first time a template references it.
 
 ---
 
 ## Working with Immutable Variables
 
-Coming from C#, the biggest adjustment is that you cannot reassign variables. There is no `$counter = $counter + 1`. Here are the patterns that replace mutable state.
+Coming from C#, the biggest adjustment is that you cannot reassign variables. There is no `$counter = $counter + 1`. The following patterns replace mutable state.
 
 ### Pattern 1: Compute Everything in One Expression
 
@@ -435,7 +446,7 @@ Instead of building a value incrementally, compute it in a single XPath expressi
 
 ### Pattern 2: Chained Variables
 
-When you need multi-step computation, use a chain of variables where each builds on the previous:
+When you need multi-step computation, use a chain of variables where each builds on the previous one:
 
 ```xml
 <xsl:variable name="raw-price" select="price"/>
@@ -446,7 +457,7 @@ When you need multi-step computation, use a chain of variables where each builds
 <span class="price"><xsl:value-of select="$formatted"/></span>
 ```
 
-**C# parallel:** This is like a LINQ pipeline or a series of `let` clauses:
+This pattern resembles a LINQ pipeline, or a series of `let` clauses:
 
 ```csharp
 var formatted = product.Price
@@ -457,7 +468,7 @@ var formatted = product.Price
 
 ### Pattern 3: xsl:iterate for Running Totals
 
-When you genuinely need a running accumulator (like a `foreach` with mutable state), use `xsl:iterate`:
+When you genuinely need a running accumulator, like a `foreach` with mutable state, use `xsl:iterate`:
 
 ```xml
 <!-- Running total of prices -->
@@ -488,5 +499,3 @@ For algorithms that need mutable state in C#, XSLT uses recursion:
   <xsl:sequence select="if ($n le 1) then 1 else $n * my:factorial($n - 1)"/>
 </xsl:function>
 ```
-
-**C# parallel:** `const` and `readonly` — XSLT variables are conceptually `const`. You never reassign them; you create new ones.

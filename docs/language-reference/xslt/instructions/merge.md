@@ -6,29 +6,11 @@ sort: 13
 
 # Merging
 
-`xsl:merge` (XSLT 3.0) combines multiple pre-sorted input sources into a single sorted output. If you have ever written a merge-sort or joined two sorted lists in C#, the concept is the same — except XSLT gives you a declarative way to express it.
+`xsl:merge` (XSLT 3.0) combines multiple pre-sorted input sources into a single sorted output. XSLT expresses this merge declaratively.
 
-## Contents
+> For C# developers: `xsl:merge` solves the same problem as a merge-sort or a join of two sorted lists. `for-each-source` corresponds to iterating over files in a directory, and `for-each-item` corresponds to selecting records within each file. A master-detail join between customers and orders corresponds to a LINQ group join.
 
-- [Why Merge?](#why-merge)
-- [xsl:merge — Structure Overview](#xslmerge--structure-overview)
-- [xsl:merge-source — Defining Inputs](#xslmerge-source--defining-inputs)
-- [xsl:merge-key — Defining Sort Keys](#xslmerge-key--defining-sort-keys)
-- [xsl:merge-action — Processing Matched Groups](#xslmerge-action--processing-matched-groups)
-- [Complete Examples](#complete-examples)
-- [Comparison with for-each-group](#comparison-with-for-each-group)
-
----
-
-## Why Merge?
-
-Consider these real-world scenarios:
-
-- **Log aggregation:** Three servers each produce a timestamped log file. You need a single combined log sorted by timestamp.
-- **Data feeds:** A product catalog arrives from multiple suppliers, each sorted by SKU. You need a merged catalog.
-- **Master-detail joins:** An orders file and a customers file are both sorted by customer ID. You need to join them.
-
-In C#, you might solve these with LINQ's `Join` or by manually interleaving sorted enumerables:
+In C#, you might solve a two-source merge with LINQ's `Join`, or by manually interleaving sorted enumerables:
 
 ```csharp
 // C# merge of two sorted lists by key
@@ -42,7 +24,55 @@ var joined = from order in orders
              select new { order, customer };
 ```
 
-The XSLT `xsl:merge` instruction does the same thing declaratively, and it can process inputs in a streaming fashion — meaning it never needs to hold the entire dataset in memory.
+This C# code iterates over files in a directory and selects records within each file:
+
+```csharp
+var entries = Directory.GetFiles("server-logs/")
+    .SelectMany(file => LoadXml(file).Descendants("entry"));
+```
+
+This C# code performs the equivalent master-detail join with a LINQ group join:
+
+```csharp
+var result = from cust in customers
+             join order in orders on cust.Id equals order.CustomerId into custOrders
+             select new {
+                 cust.Id,
+                 cust.Name,
+                 cust.Tier,
+                 OrderCount = custOrders.Count(),
+                 TotalSpent = custOrders.Sum(o => o.Total),
+                 Orders = custOrders.ToList()
+             };
+```
+
+## Contents
+
+- [Why Merge?](#why-merge)
+
+- [xsl:merge — Structure Overview](#xslmerge--structure-overview)
+
+- [xsl:merge-source — Defining Inputs](#xslmerge-source--defining-inputs)
+
+- [xsl:merge-key — Defining Sort Keys](#xslmerge-key--defining-sort-keys)
+
+- [xsl:merge-action — Processing Matched Groups](#xslmerge-action--processing-matched-groups)
+
+- [Complete Examples](#complete-examples)
+
+- [Comparison with for-each-group](#comparison-with-for-each-group)
+
+---
+
+## Why Merge?
+
+Consider these real-world scenarios:
+
+- **Log aggregation:** Three servers each produce a timestamped log file. You need a single combined log sorted by timestamp.
+- **Data feeds:** A product catalog arrives from multiple suppliers, each sorted by SKU. You need a merged catalog.
+- **Master-detail joins:** An orders file and a customers file are both sorted by customer ID. You need to join them.
+
+The XSLT `xsl:merge` instruction performs this merge declaratively. It can process inputs in a streaming fashion. A streaming merge never needs to hold the entire dataset in memory.
 
 ---
 
@@ -72,7 +102,7 @@ Every merge has three parts:
 </xsl:merge>
 ```
 
-The processor walks through all sources in parallel, advancing through each source based on the merge key order. When records from different sources share the same key value, they are grouped together and handed to `xsl:merge-action`.
+The processor walks through all sources in parallel. It advances through each source based on the merge key order. When records from different sources share the same key value, the processor groups them and hands the group to `xsl:merge-action`.
 
 ---
 
@@ -107,16 +137,9 @@ When you have multiple documents (a collection), use `for-each-source` and `for-
 </xsl:merge-source>
 ```
 
-**C# parallel:** `for-each-source` is like iterating over files in a directory, and `for-each-item` is like selecting records within each file:
-
-```csharp
-var entries = Directory.GetFiles("server-logs/")
-    .SelectMany(file => LoadXml(file).Descendants("entry"));
-```
-
 ### sort-before-merge
 
-By default, `xsl:merge` assumes each source is already sorted by the merge key. If a source is not pre-sorted, set `sort-before-merge="yes"`:
+Setting `sort-before-merge="yes"` loses the streaming advantage, because the processor must load the entire source into memory to sort it. By default, `xsl:merge` assumes each source is already sorted by the merge key. If a source is not pre-sorted, set `sort-before-merge="yes"`:
 
 ```xml
 <xsl:merge-source name="unsorted-data"
@@ -126,11 +149,11 @@ By default, `xsl:merge` assumes each source is already sorted by the merge key. 
 </xsl:merge-source>
 ```
 
-When `sort-before-merge="yes"`, the processor sorts the items from that source before beginning the merge. This is convenient but loses the streaming advantage — the entire source must be loaded into memory for sorting.
+When set, the processor sorts the items from that source before beginning the merge.
 
 ### The name Attribute
 
-Each source can optionally have a `name`. This lets you distinguish which source a record came from inside the `xsl:merge-action`:
+Each source can optionally have a `name` attribute. The name lets you identify which source a record came from inside `xsl:merge-action`:
 
 ```xml
 <xsl:merge-source name="customers" select="doc('customers.xml')//customer">
@@ -142,7 +165,7 @@ Each source can optionally have a `name`. This lets you distinguish which source
 </xsl:merge-source>
 ```
 
-Inside the action, `current-merge-group('customers')` returns only the records from the customers source, and `current-merge-group('orders')` returns only the records from the orders source.
+Inside the action, `current-merge-group('customers')` returns only the records from the customers source. `current-merge-group('orders')` returns only the records from the orders source.
 
 ---
 
@@ -162,7 +185,7 @@ Inside the action, `current-merge-group('customers')` returns only the records f
 
 ### Multiple Merge Keys
 
-Like `xsl:sort`, you can have multiple `xsl:merge-key` elements for compound keys. They are evaluated in order — the first is the primary key, the second is the tiebreaker:
+Like `xsl:sort`, `xsl:merge-key` supports multiple elements for compound keys. The processor evaluates them in order: the first is the primary key, and the second is the tiebreaker:
 
 ```xml
 <xsl:merge-source name="transactions"
@@ -180,7 +203,7 @@ All merge sources must have compatible merge keys — the same number of `xsl:me
 
 ## xsl:merge-action — Processing Matched Groups
 
-`xsl:merge-action` is the body of the merge — it runs once for each distinct merge key value found across all sources. Inside it, two functions are available:
+`xsl:merge-action` is the body of the merge. It runs once for each distinct merge key value found across all sources. Inside it, two functions are available:
 
 ### current-merge-group()
 
@@ -218,7 +241,7 @@ Returns the current merge key value. If there are multiple merge keys, it return
 
 ### Merging Log Files from Multiple Servers
 
-Three servers produce log files, each sorted by timestamp. We merge them into a single chronological log.
+Three servers produce log files, each sorted by timestamp. The stylesheet merges them into a single chronological log.
 
 Input — `server1.xml`:
 
@@ -379,21 +402,6 @@ Output:
 </customer-orders>
 ```
 
-**C# parallel:**
-
-```csharp
-var result = from cust in customers
-             join order in orders on cust.Id equals order.CustomerId into custOrders
-             select new {
-                 cust.Id,
-                 cust.Name,
-                 cust.Tier,
-                 OrderCount = custOrders.Count(),
-                 TotalSpent = custOrders.Sum(o => o.Total),
-                 Orders = custOrders.ToList()
-             };
-```
-
 ### Merging Sorted Data Feeds with Collections
 
 When log files are in a directory, use `for-each-source` with a collection:
@@ -416,7 +424,7 @@ When log files are in a directory, use `for-each-source` with a collection:
 </xsl:merge>
 ```
 
-This pattern handles any number of log files without listing them individually.
+This pattern handles every log file in the directory without listing them individually.
 
 ---
 
@@ -434,17 +442,23 @@ Both `xsl:merge` and `xsl:for-each-group group-by` can combine records by a shar
 
 ### When to Use merge
 
-- Your inputs are already sorted (log files with timestamps, database exports with IDs)
-- You have multiple source documents
-- The data is too large to load entirely into memory (streaming)
-- You are performing a join between two datasets by a common key
+- Your inputs are already sorted (log files with timestamps, database exports with IDs).
+
+- You have multiple source documents.
+
+- The data is too large to load entirely into memory (streaming).
+
+- You are performing a join between two datasets by a common key.
 
 ### When to Use for-each-group
 
-- Your data is not sorted, or the sort order does not match the grouping key
-- You have a single source document
-- The data fits in memory
-- You need one of the four grouping modes (group-by, group-adjacent, group-starting-with, group-ending-with)
+- Your data is not sorted, or the sort order does not match the grouping key.
+
+- You have a single source document.
+
+- The data fits in memory.
+
+- You need one of the four grouping modes (group-by, group-adjacent, group-starting-with, group-ending-with).
 
 ### Side-by-Side Comparison
 
@@ -479,4 +493,4 @@ Merge approach (each feed is sorted by SKU):
 </xsl:merge>
 ```
 
-Both produce the same result, but the merge version can process arbitrarily large feeds without holding them all in memory.
+Both approaches produce the same result. The merge version can process very large feeds without holding them all in memory.

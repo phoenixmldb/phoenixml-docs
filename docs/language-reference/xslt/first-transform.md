@@ -6,11 +6,11 @@ sort: 1
 
 # Your First Transform
 
-Let's transform an XML document into HTML. We'll start with the simplest possible stylesheet and build up, explaining each concept as it appears.
+This tutorial transforms an XML document into HTML. It starts with the simplest possible stylesheet and builds up, explaining each concept as it appears.
 
 ## The Source Document
 
-We'll work with this product catalog:
+This example uses the following product catalog:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -35,7 +35,7 @@ We'll work with this product catalog:
 
 ## Step 1: The Minimal Stylesheet
 
-Every XSLT stylesheet is an XML document. Here's the absolute minimum:
+Every XSLT stylesheet is an XML document. The following example shows the minimum required elements:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -56,12 +56,12 @@ Every XSLT stylesheet is an XML document. Here's the absolute minimum:
 </xsl:stylesheet>
 ```
 
-**What's happening:**
+**What happens:**
 
 1. `<xsl:stylesheet>` declares this is an XSLT stylesheet. The `xmlns:xsl` namespace is required.
 2. `<xsl:output method="html">` tells the engine to produce HTML output (not XML).
 3. `<xsl:template match="/">` is a **template rule** that matches the document root. When the engine encounters the root, it executes this template.
-4. Everything inside the template that isn't an `xsl:` element is **literal result elements** — copied directly to the output.
+4. Everything inside the template that is not an `xsl:` element is a **literal result element**, copied directly to the output.
 5. `<xsl:value-of select="count(//product)"/>` evaluates an XPath expression and inserts the result as text.
 
 **Output:**
@@ -76,11 +76,20 @@ Every XSLT stylesheet is an XML document. Here's the absolute minimum:
 </html>
 ```
 
-If you've written Razor views, this should feel familiar — it's a template with embedded expressions. The difference is that the "expressions" are XPath, and the matching is automatic.
+An XSLT stylesheet pairs a template with match patterns. The template holds
+literal output. The match patterns select input nodes and fill embedded
+XPath expressions with their values.
+
+> For C# developers: a stylesheet resembles a Razor view. Both mix literal
+> output with embedded expressions. XSLT's expressions are XPath, and its
+> pattern matching runs automatically against the input tree. Later steps
+> use `xsl:for-each`, which resembles a C# `foreach` loop, and `xsl:if`,
+> which resembles a C# `if` with no `else` branch. Attribute value
+> templates resemble C# string interpolation.
 
 ## Step 2: Iterating with xsl:for-each
 
-Let's list the products:
+The following example lists the products:
 
 ```xml
 <xsl:template match="/">
@@ -101,7 +110,7 @@ Let's list the products:
 </xsl:template>
 ```
 
-`xsl:for-each` is like C#'s `foreach` — it iterates over the nodes selected by the `select` expression. Inside the loop, `.` (the context node) is the current product.
+`xsl:for-each` iterates over the nodes selected by the `select` expression. Inside the loop, `.` (the context node) is the current product.
 
 **Output:**
 ```html
@@ -114,7 +123,7 @@ Let's list the products:
 
 ## Step 3: Conditionals with xsl:if
 
-Let's mark products over $50:
+The following example marks products over $50:
 
 ```xml
 <xsl:for-each select="//product">
@@ -127,11 +136,11 @@ Let's mark products over $50:
 </xsl:for-each>
 ```
 
-`xsl:if` is a simple conditional — like C#'s `if` without `else`. For if/else logic, use `xsl:choose` (covered in [Instructions Reference](instructions/index.md)).
+`xsl:if` is a simple conditional with no `else` branch. For if/else logic, use `xsl:choose` (covered in [Instructions Reference](instructions/index.md)).
 
 ## Step 4: Accessing Attributes
 
-Let's use the `id` and `category` attributes:
+The following example uses the `id` and `category` attributes:
 
 ```xml
 <xsl:for-each select="//product">
@@ -141,7 +150,7 @@ Let's use the `id` and `category` attributes:
 </xsl:for-each>
 ```
 
-The `{@id}` syntax is an **attribute value template** — it evaluates the XPath expression inside `{}` and inserts the result. This is the XSLT equivalent of C#'s string interpolation `$"category-{product.Category}"`.
+The `{@id}` syntax is an **attribute value template**. It evaluates the XPath expression inside `{}` and inserts the result.
 
 **Output:**
 ```html
@@ -152,7 +161,7 @@ The `{@id}` syntax is an **attribute value template** — it evaluates the XPath
 
 ## Step 5: Sorting
 
-Let's sort products by price, cheapest first:
+The following example sorts products by price, cheapest first:
 
 ```xml
 <xsl:for-each select="//product">
@@ -161,11 +170,11 @@ Let's sort products by price, cheapest first:
 </xsl:for-each>
 ```
 
-`xsl:sort` must be the first child of `xsl:for-each`. The `data-type="number"` is important — without it, "89.99" sorts after "9" because string sorting is lexicographic.
+`xsl:sort` must be the first child of `xsl:for-each`. Include `data-type="number"` for numeric sorting. Without it, XSLT sorts values lexicographically, so "89.99" sorts after "9".
 
-## Step 6: Template Matching (The Real Power)
+## Step 6: Template Matching
 
-Everything above uses `xsl:for-each`, which is the imperative approach. The real power of XSLT is **template matching** — defining rules that automatically fire for different node types.
+Everything above uses `xsl:for-each`, the imperative approach. **Template matching** defines rules that automatically fire for different node types.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -197,11 +206,11 @@ Everything above uses `xsl:for-each`, which is the imperative approach. The real
 
 **What changed:**
 
-1. The root template calls `<xsl:apply-templates select="catalog/product"/>` — this tells the engine to find template rules that match each product element.
+1. The root template calls `<xsl:apply-templates select="catalog/product"/>`. This tells the engine to find template rules that match each product element.
 2. The `<xsl:template match="product">` rule fires for each product.
-3. The engine handles the iteration — you don't write a loop.
+3. The engine handles the iteration. You do not write a loop.
 
-**Why this matters:** With `xsl:for-each`, the root template knows about products. With template matching, each template is self-contained. You can add new element types just by adding new templates — the existing ones don't change. This is the Open/Closed Principle, built into the language.
+**Why this matters:** With `xsl:for-each`, the root template knows about products. With template matching, each template is self-contained. You can add new element types by adding new templates. The existing templates do not change. This pattern applies the Open/Closed Principle.
 
 ## Running This in .NET
 
@@ -226,10 +235,10 @@ Or using the Crucible CLI:
 xslt catalog.xslt catalog.xml -o catalog.html
 ```
 
-## What's Next
+## Next Steps
 
-This tutorial covered the basics — `xsl:value-of`, `xsl:for-each`, `xsl:if`, `xsl:sort`, attribute value templates, and template matching. The next pages cover:
+This tutorial covered the basics: `xsl:value-of`, `xsl:for-each`, `xsl:if`, `xsl:sort`, attribute value templates, and template matching. The next pages cover the following topics:
 
-- [Template Matching](template-matching.md) — the paradigm shift from imperative to declarative
-- [Instructions Reference](instructions/index.md) — the complete set of XSLT instructions
-- [Output Methods](output-methods.md) — producing HTML, XML, JSON, and text
+- [Template Matching](template-matching.md) — the paradigm shift from imperative to declarative.
+- [Instructions Reference](instructions/index.md) — the complete set of XSLT instructions.
+- [Output Methods](output-methods.md) — producing HTML, XML, JSON, and text.

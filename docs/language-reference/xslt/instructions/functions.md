@@ -6,7 +6,9 @@ sort: 9
 
 # User-Defined Functions
 
-`xsl:function` lets you define custom functions that you can call from any XPath expression — in `select`, `test`, `match`, AVTs, sort keys, and predicates. Unlike templates, which process nodes and produce output, functions take arguments and return values. They are the XSLT equivalent of static utility methods.
+`xsl:function` defines a custom function that you can call from any XPath expression — in `select`, `test`, `match`, AVTs, sort keys, and predicates. Templates process nodes and produce output. A function instead takes arguments and returns a value.
+
+> For C# developers: `xsl:function` corresponds to a static method. The namespace-prefix requirement mirrors C# namespaces — it qualifies your function name to avoid collisions with `System.*` or the built-in XPath library. Like a static method, a function has no `this` reference. `.` (dot) is not the context node inside its body; pass every value it needs as a parameter. Function items (`name#arity`) and anonymous functions (`function($x) {...}`) map to `Func<T>` and lambda expressions. Method overloading by parameter count works the same way it does in C#. The `cache` attribute performs memoization, similar to caching results in a `ConcurrentDictionary`.
 
 ## Contents
 
@@ -14,9 +16,11 @@ sort: 9
 - [Function Parameters](#function-parameters)
 - [Returning Values](#returning-values)
 - [Calling Functions](#calling-functions)
+
 - [Recursive Functions](#recursive-functions)
 - [Higher-Order Functions](#higher-order-functions)
 - [Function Visibility in Packages](#function-visibility-in-packages)
+
 - [Caching and Side Effects](#caching-and-side-effects)
 - [Practical Examples](#practical-examples)
 
@@ -53,7 +57,7 @@ A function is a top-level declaration (child of `xsl:stylesheet`) with a namespa
 
 ### Naming Rules
 
-Function names **must** use a namespace prefix. This is a hard requirement — unprefixed function names are reserved for the built-in XPath function library:
+Function names must use a namespace prefix. This is a hard requirement: unprefixed function names are reserved for the built-in XPath function library.
 
 ```xml
 <!-- CORRECT: prefixed name -->
@@ -63,7 +67,7 @@ Function names **must** use a namespace prefix. This is a hard requirement — u
 <xsl:function name="discount">...</xsl:function>
 ```
 
-Choose a namespace URI for your project's functions and declare it on the stylesheet:
+Choose a namespace URI for your project's functions and declare it on the stylesheet.
 
 ```xml
 <xsl:stylesheet xmlns:fn="http://example.com/catalog/functions" ...>
@@ -74,13 +78,11 @@ Choose a namespace URI for your project's functions and declare it on the styles
 </xsl:stylesheet>
 ```
 
-**C# parallel:** The namespace requirement is like C# namespaces — you must qualify your types to avoid collisions with `System.*`.
-
 ---
 
 ## Function Parameters
 
-Parameters are declared with `xsl:param` inside the function body, in the order they will be passed by the caller. Unlike template parameters, function parameters are always positional and cannot have defaults.
+`xsl:param` declares parameters inside the function body, in the order the caller passes them. Unlike template parameters, function parameters are always positional and cannot have defaults.
 
 ```xml
 <xsl:function name="my:tax" as="xs:decimal">
@@ -94,7 +96,7 @@ Parameters are declared with `xsl:param` inside the function body, in the order 
 
 ### Arity (Parameter Count)
 
-XSLT allows function overloading by arity — you can define multiple functions with the same name but different numbers of parameters:
+XSLT allows function overloading by arity: you can define several functions with the same name but a different number of parameters.
 
 ```xml
 <!-- One-argument version: uses default tax rate -->
@@ -111,9 +113,9 @@ XSLT allows function overloading by arity — you can define multiple functions 
 </xsl:function>
 ```
 
-Now `my:tax(29.99)` calls the one-argument version and `my:tax(29.99, 0.10)` calls the two-argument version.
+Now `my:tax(29.99)` calls the one-argument version, and `my:tax(29.99, 0.10)` calls the two-argument version.
 
-**C# parallel:** Method overloading:
+Equivalent C#:
 
 ```csharp
 static decimal Tax(decimal price) => price * 0.08m;
@@ -122,7 +124,7 @@ static decimal Tax(decimal price, decimal rate) => price * rate;
 
 ### Typing Parameters
 
-Always declare types with `as`. Without it, the parameter accepts any value, which makes errors harder to diagnose:
+Always declare types with `as`. Without a declared type, the parameter accepts any value, and errors become harder to diagnose.
 
 ```xml
 <!-- Typed: error if called with wrong type -->
@@ -142,7 +144,7 @@ Always declare types with `as`. Without it, the parameter accepts any value, whi
 
 ## Returning Values
 
-Functions return whatever their body produces. Use `xsl:sequence` to return typed values:
+A function returns whatever its body produces. Use `xsl:sequence` to return a typed value.
 
 ```xml
 <!-- Return a string -->
@@ -176,7 +178,7 @@ Functions return whatever their body produces. Use `xsl:sequence` to return type
 
 ### Do Not Use xsl:value-of in Functions
 
-This is a common mistake. `xsl:value-of` creates a text node, not a typed value. If your function declares `as="xs:integer"`, returning via `xsl:value-of` will fail because a text node is not an integer:
+This is a common mistake. `xsl:value-of` creates a text node, not a typed value. If your function declares `as="xs:integer"`, returning via `xsl:value-of` fails, because a text node is not an integer.
 
 ```xml
 <!-- WRONG: returns a text node, not an integer -->
@@ -192,11 +194,11 @@ This is a common mistake. `xsl:value-of` creates a text node, not a typed value.
 </xsl:function>
 ```
 
-**C# parallel:** `xsl:sequence` is `return value;`. `xsl:value-of` is `return value.ToString();` — it loses the type.
+`xsl:sequence` returns the value with its declared type intact. `xsl:value-of` transforms the value into a string first, so the function loses the original type.
 
 ### Multi-Step Return Values
 
-When the return value requires multiple instructions to construct, the function body is a sequence constructor — all items produced by the body form the return value:
+When the return value needs several instructions to construct, the function body is a sequence constructor. Every item the body produces becomes part of the return value.
 
 ```xml
 <xsl:function name="my:price-label" as="xs:string">
@@ -219,7 +221,7 @@ When the return value requires multiple instructions to construct, the function 
 
 ## Calling Functions
 
-Functions are called from XPath expressions, which means they can appear anywhere an expression is allowed:
+Functions are called from XPath expressions, so they can appear anywhere an expression is allowed.
 
 ```xml
 <!-- In a select expression -->
@@ -251,7 +253,7 @@ Functions are called from XPath expressions, which means they can appear anywher
 
 ### Context Node in Functions
 
-Unlike templates, functions do **not** have a context node. Inside a function body, `.` (dot) is not meaningful unless you explicitly pass a node as a parameter:
+Unlike templates, functions do **not** have a context node. Inside a function body, `.` (dot) is not meaningful unless you explicitly pass a node as a parameter.
 
 ```xml
 <!-- WRONG: what is "." inside the function? -->
@@ -266,13 +268,11 @@ Unlike templates, functions do **not** have a context node. Inside a function bo
 </xsl:function>
 ```
 
-**C# parallel:** Functions are like static methods — they have no `this` reference. You must pass everything they need as arguments.
-
 ---
 
 ## Recursive Functions
 
-Since XSLT variables are immutable, recursion replaces loops for algorithms that need accumulating state. Functions can call themselves.
+XSLT variables are immutable, so recursion replaces loops for algorithms that need accumulating state. A function can call itself.
 
 ### Simple Recursion
 
@@ -313,7 +313,7 @@ Since XSLT variables are immutable, recursion replaces loops for algorithms that
 
 ### Tail Recursion Optimization
 
-Many XSLT processors optimize tail-recursive functions (where the recursive call is the last operation). Write your recursive functions in tail-recursive form when possible:
+Many XSLT processors optimize tail-recursive functions, where the recursive call is the last operation. Write recursive functions in tail-recursive form when possible.
 
 ```xml
 <!-- Tail-recursive factorial -->
@@ -330,7 +330,7 @@ Many XSLT processors optimize tail-recursive functions (where the recursive call
 </xsl:function>
 ```
 
-**C# parallel:** This is like writing a loop as a recursive method — common in functional C# or when using LINQ's `Aggregate`:
+Equivalent C#:
 
 ```csharp
 static int Factorial(int n) => Factorial(n, 1);
@@ -341,11 +341,11 @@ static int Factorial(int n, int acc) => n <= 1 ? acc : Factorial(n - 1, n * acc)
 
 ## Higher-Order Functions
 
-XSLT 3.0 supports higher-order functions — you can pass functions as arguments to other functions. This enables powerful abstractions like map, filter, and reduce over sequences.
+XSLT 3.0 supports higher-order functions: you can pass a function as an argument to another function. This enables abstractions such as map, filter, and reduce over sequences.
 
 ### Function Items
 
-A named function can be referenced as a value using the `function-name#arity` syntax:
+A named function can be referenced as a value using the `function-name#arity` syntax.
 
 ```xml
 <!-- Get a reference to the built-in contains() function (arity 2) -->
@@ -383,7 +383,7 @@ A named function can be referenced as a value using the `function-name#arity` sy
 
 ### Anonymous Functions (Inline Functions)
 
-XSLT 3.0 also supports anonymous functions (lambda expressions) using the XPath `function()` syntax:
+XSLT 3.0 also supports anonymous functions (lambda expressions) using the XPath `function()` syntax.
 
 ```xml
 <!-- Sort products by a custom key using an anonymous function -->
@@ -396,7 +396,7 @@ XSLT 3.0 also supports anonymous functions (lambda expressions) using the XPath 
   })"/>
 ```
 
-**C# parallel:** Higher-order functions map directly to C#'s `Func<T>` and lambda expressions:
+Equivalent C#:
 
 ```csharp
 // Function reference
@@ -413,7 +413,7 @@ var formatted = products.Select(p => FormatPrice(p.Price));
 
 ## Function Visibility in Packages
 
-When using XSLT packages (modular stylesheet libraries), you control which functions are visible to importing stylesheets with the `visibility` attribute:
+XSLT packages are modular stylesheet libraries. The `visibility` attribute controls which functions are visible to importing stylesheets.
 
 | Visibility | Description |
 |------------|-------------|
@@ -449,7 +449,7 @@ When using XSLT packages (modular stylesheet libraries), you control which funct
 </xsl:package>
 ```
 
-**C# parallel:**
+The table below maps each XSLT visibility value to its closest C# access modifier.
 
 | XSLT Visibility | C# Equivalent |
 |------------------|---------------|
@@ -464,7 +464,7 @@ When using XSLT packages (modular stylesheet libraries), you control which funct
 
 ### The cache Attribute
 
-XSLT 3.0 introduces the `cache` attribute for memoization. When `cache="yes"`, the processor stores the result of each unique combination of arguments and returns the cached result on subsequent calls with the same arguments:
+XSLT 3.0 introduces the `cache` attribute for memoization. When `cache="yes"`, the processor stores the result of each unique combination of arguments and returns the cached result on later calls with the same arguments.
 
 ```xml
 <xsl:function name="my:expensive-lookup" as="xs:string" cache="yes">
@@ -473,9 +473,9 @@ XSLT 3.0 introduces the `cache` attribute for memoization. When `cache="yes"`, t
 </xsl:function>
 ```
 
-If `my:expensive-lookup('A001')` is called 1000 times (once per product in the catalog), the document lookup happens only once. Subsequent calls return the cached result.
+If `my:expensive-lookup('A001')` runs 1000 times, once per product in the catalog, the document lookup happens only once. Later calls return the cached result.
 
-**C# parallel:** `ConcurrentDictionary` as a memoization cache:
+Equivalent C#:
 
 ```csharp
 private static readonly ConcurrentDictionary<string, string> _cache = new();
@@ -486,7 +486,7 @@ static string ExpensiveLookup(string code) =>
 
 ### The new-each-time Attribute
 
-This attribute tells the processor whether the function might have side effects or depend on context that changes between calls:
+This attribute tells the processor whether the function might have side effects, or depend on context that changes between calls.
 
 | Value | Meaning |
 |-------|---------|
@@ -508,7 +508,7 @@ This attribute tells the processor whether the function might have side effects 
 </xsl:function>
 ```
 
-**Tip:** If your function only depends on its parameters (no global variables, no `doc()`, no `current-date()`), set `new-each-time="no"` and consider `cache="yes"`. This gives the processor maximum freedom to optimize.
+**Tip:** If your function depends only on its parameters (no global variables, no `doc()`, no `current-date()`), set `new-each-time="no"` and consider `cache="yes"`. This gives the processor the most freedom to optimize the call.
 
 ---
 
@@ -592,7 +592,7 @@ This attribute tells the processor whether the function might have side effects 
 <!-- $shout-price(29.99) returns "$29.99" uppercased to "$29.99" -->
 ```
 
-**C# parallel summary:**
+The table below summarizes the C# equivalents used throughout this page.
 
 | XSLT | C# |
 |------|-----|

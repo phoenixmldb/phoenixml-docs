@@ -6,7 +6,9 @@ sort: 7
 
 # Node Construction
 
-Most of the time you write literal result elements directly in your stylesheet — `<div>`, `<span>`, `<product>`. But when the element or attribute name is not known until runtime, you need dynamic node construction. XSLT provides four instructions for this, plus a powerful shorthand called attribute value templates (AVTs) that you will use constantly.
+Most stylesheets write literal result elements directly, such as `<div>`, `<span>`, or `<product>`. When the element or attribute name is not known until runtime, you need dynamic node construction. XSLT provides four instructions for this, plus a shorthand called attribute value templates (AVTs) that you will use often.
+
+> For C# developers: several node-construction features correspond to familiar .NET APIs. An AVT corresponds to string interpolation, such as `$"/products/{product.Id}"`. `expand-text="yes"` extends that interpolation to text content, so the whole stylesheet reads like Razor or C# string interpolation, such as `$"Product: {name}, Price: ${price:N2}"`. `xsl:element` corresponds to `new XElement(fieldName, value)`, where the `XElement` constructor takes the element name as a string parameter. `xsl:attribute` corresponds to `new XAttribute(attrName, value)`, or to setting a property dynamically through reflection. The `separator` attribute corresponds to `string.Join(" ", classList.Where(c => c != null))` when building a CSS class list from conditional parts. `xsl:namespace` corresponds to `new XAttribute(XNamespace.Xmlns + "xsi", uri)`, manually adding a namespace declaration to an `XElement`. `xsl:document` corresponds to `new XDocument(new XElement("products", ...))`, constructing an in-memory XML document for further processing.
 
 ## Contents
 
@@ -22,7 +24,7 @@ Most of the time you write literal result elements directly in your stylesheet �
 
 ## Attribute Value Templates (AVTs)
 
-Before covering the dynamic construction instructions, you need to understand AVTs — they are the single most-used feature for putting computed values into output attributes.
+Before covering the dynamic construction instructions, you need to understand AVTs. AVTs are the most common way to put computed values into output attributes.
 
 An AVT is any attribute on a literal result element (or on certain XSLT instruction attributes) that contains `{expression}` placeholders. The processor evaluates the XPath expression and substitutes the string result.
 
@@ -37,8 +39,6 @@ Given `<product id="WP-001"><name>Widget Pro</name></product>`, this produces:
 ```html
 <a href="/products/WP-001">Widget Pro</a>
 ```
-
-**C# parallel:** This is exactly string interpolation — `$"/products/{product.Id}"`.
 
 ### Multiple Expressions in One Attribute
 
@@ -73,9 +73,11 @@ Output:
 
 AVTs are available on:
 
-- **Literal result element attributes** — `<div class="{$class}">` (the most common use)
-- **Certain XSLT instruction attributes** — marked in the spec as "attribute value template." For example, `xsl:element/@name`, `xsl:attribute/@name`, `xsl:result-document/@href`, `xsl:sort/@order`
-- **Not** on `select`, `test`, or `match` attributes — those are already XPath expressions
+- **Literal result element attributes** — `<div class="{$class}">` (the most common use).
+
+- **Certain XSLT instruction attributes** — marked in the spec as "attribute value template." For example, `xsl:element/@name`, `xsl:attribute/@name`, `xsl:result-document/@href`, `xsl:sort/@order`.
+
+- **Not** on `select`, `test`, or `match` attributes — those are already XPath expressions.
 
 ### Common AVT Patterns
 
@@ -103,7 +105,7 @@ AVTs are available on:
 
 ## Text Value Templates
 
-XSLT 3.0 extends the AVT concept to text content with `expand-text="yes"`. When enabled, `{expression}` works inside text nodes too — not just in attributes.
+XSLT 3.0 extends the AVT concept to text content with `expand-text="yes"`. When enabled, `{expression}` works inside text nodes, not only in attributes.
 
 ```xml
 <xsl:template match="product" expand-text="yes">
@@ -115,7 +117,7 @@ XSLT 3.0 extends the AVT concept to text content with `expand-text="yes"`. When 
 </xsl:template>
 ```
 
-This is equivalent to writing `<xsl:value-of select="name"/>` everywhere, but far more readable. You can enable it on any element — `xsl:stylesheet`, `xsl:template`, or any literal result element — and it applies to all descendant text nodes.
+This is equivalent to writing `<xsl:value-of select="name"/>` everywhere, but it is more readable. You can enable it on any element, such as `xsl:stylesheet`, `xsl:template`, or a literal result element. It then applies to all descendant text nodes.
 
 ### Enabling Globally
 
@@ -128,8 +130,6 @@ Most stylesheets enable it on the root element:
   <!-- All templates can now use {expression} in text -->
 </xsl:stylesheet>
 ```
-
-**C# parallel:** `expand-text="yes"` turns your entire stylesheet into something that feels like Razor or C# string interpolation — `$"Product: {name}, Price: ${price:N2}"`.
 
 ### Escaping in Text Value Templates
 
@@ -155,7 +155,7 @@ Output:
 
 ## xsl:element
 
-Creates an element whose name is computed at runtime. Use this when you cannot write the element name as a literal in your stylesheet.
+`xsl:element` creates an element whose name is computed at runtime. Use it when you cannot write the element name as a literal in the stylesheet.
 
 ```xml
 <xsl:element name="{$element-name}">
@@ -191,8 +191,6 @@ Output:
 <lastName>Smith</lastName>
 <email>alice@example.com</email>
 ```
-
-**C# parallel:** `new XElement(fieldName, value)` — the `XElement` constructor takes the element name as a string parameter.
 
 ### Namespace Handling
 
@@ -279,7 +277,7 @@ Here `xsl:element` chooses between `<th>` and `<td>` based on position — somet
 
 ## xsl:attribute
 
-Creates an attribute on the parent element, with a name that can be computed at runtime.
+`xsl:attribute` creates an attribute on the parent element. Its name can be computed at runtime.
 
 ```xml
 <xsl:attribute name="class">product-card</xsl:attribute>
@@ -303,7 +301,7 @@ For static attribute names, AVTs are always cleaner:
 Use `xsl:attribute` when:
 
 1. **The attribute name is dynamic:** `<xsl:attribute name="{$attr-name}">...</xsl:attribute>`
-2. **The attribute value requires complex construction** with multiple instructions
+2. **The attribute value requires complex construction:** multiple instructions build the value
 3. **You are conditionally adding an attribute:**
 
 ```xml
@@ -338,8 +336,6 @@ Given `<product id="WP-001" category="electronics" status="active">`, output:
 </div>
 ```
 
-**C# parallel:** `new XAttribute(attrName, value)` or setting a property dynamically with reflection.
-
 ### The separator Attribute
 
 When the content of `xsl:attribute` produces a sequence, the `separator` attribute controls how items are joined. This is useful for multi-value attributes like CSS classes:
@@ -368,9 +364,7 @@ A product that is on sale and featured produces:
 <div class="product-card on-sale featured">...</div>
 ```
 
-Without `separator`, the default is to concatenate everything with no delimiter. The `separator` attribute is particularly helpful because it automatically handles the case where some conditional items are absent — no extra spaces or dangling separators.
-
-**C# parallel:** `string.Join(" ", classList.Where(c => c != null))` — building a CSS class list from conditional parts.
+Without `separator`, the default behavior concatenates everything with no delimiter. The `separator` attribute handles absent conditional items automatically, without extra spaces or dangling separators.
 
 ### Placement Rules
 
@@ -397,7 +391,7 @@ The attribute instruction must come first:
 
 ## xsl:namespace
 
-Creates a namespace declaration on the parent element. This is rarely needed because namespace declarations are usually handled automatically — when you create an element in a namespace, the serializer adds the necessary `xmlns` declarations. But occasionally you need explicit control.
+`xsl:namespace` creates a namespace declaration on the parent element. This instruction is rarely needed, because the serializer usually adds `xmlns` declarations automatically when you create an element in a namespace. Occasionally, however, you need explicit control.
 
 ### When You Need xsl:namespace
 
@@ -431,7 +425,7 @@ Output:
 
 ### Dynamic Namespace Prefix
 
-The `name` attribute specifies the prefix; the `select` attribute (or content) specifies the URI:
+The `name` attribute specifies the prefix. The `select` attribute, or the content, specifies the URI:
 
 ```xml
 <!-- Add a namespace with a dynamic prefix -->
@@ -445,13 +439,11 @@ Use an empty `name` to set the default namespace:
 <xsl:namespace name="" select="'http://www.w3.org/1999/xhtml'"/>
 ```
 
-**C# parallel:** `new XAttribute(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance")` — manually adding namespace declarations to an `XElement`.
-
 ---
 
 ## xsl:document
 
-Creates a new document node (the root of a tree). This is primarily useful for constructing temporary trees that you want to process further — for example, building an intermediate XML structure and then transforming it.
+`xsl:document` creates a new document node, the root of a tree. Use it to construct a temporary tree that you want to process further. For example, you can build an intermediate XML structure and then transform it.
 
 ```xml
 <xsl:variable name="temp-doc" as="document-node()">
@@ -509,8 +501,6 @@ The explicit `xsl:document` form is useful when:
 2. **You need validation** — `xsl:document` supports the `validation` and `type` attributes for schema validation of the constructed tree.
 
 3. **You are building a multi-pass transformation** where the first pass constructs an intermediate document and the second pass transforms it to final output.
-
-**C# parallel:** `new XDocument(new XElement("products", ...))` — constructing an in-memory XML document for further processing.
 
 ### Multi-Pass Transformation Example
 
@@ -578,9 +568,9 @@ Use **xsl:element / xsl:attribute** when:
 
 ### Decision Flowchart
 
-1. **Is the element/attribute name fixed?** Use a literal result element with AVTs for attribute values.
-2. **Is the name computed from data?** Use `xsl:element` or `xsl:attribute`.
-3. **Is the name one of a small, known set?** Consider `xsl:choose` with literal elements — it is more readable than `xsl:element` when there are only two or three alternatives.
+1. **Is the element or attribute name fixed**? Use a literal result element with AVTs for attribute values.
+2. **Is the name computed from data**? Use `xsl:element` or `xsl:attribute`.
+3. **Is the name one of a small, known set**? Consider `xsl:choose` with literal elements. It is more readable than `xsl:element` when there are only two or three alternatives.
 
 ```xml
 <!-- For a small set of known names, choose + literal is clearer -->
@@ -597,7 +587,7 @@ Use **xsl:element / xsl:attribute** when:
 </xsl:element>
 ```
 
-**C# parallel summary:**
+### C# Parallel Summary
 
 | XSLT | C# (LINQ to XML) | C# (String Interpolation) |
 |------|-------------------|---------------------------|

@@ -6,19 +6,29 @@ sort: 5
 
 # Extensibility
 
-XSLT stylesheets rarely exist in isolation. Real transforms need domain-specific logic, access to external data, and integration with the host application. XSLT's extensibility model provides multiple mechanisms for this: user-defined functions, packages, extension functions registered from the host environment, and import/include hierarchies.
+XSLT stylesheets rarely run in isolation. Real transforms need domain-specific logic, access to external data, and integration with the host application. The extensibility model provides several mechanisms for this: user-defined functions, packages, extension functions registered from the host environment, and import/include hierarchies.
 
-If you have worked with C# middleware, Razor tag helpers, or plugin architectures with `IServiceCollection`, you already understand the pattern: extend the framework's built-in capabilities with application-specific behavior.
+> For C# developers: this pattern resembles ASP.NET Core middleware, Razor tag
+> helpers, and plugin architectures built on `IServiceCollection`. Each one
+> extends a framework's built-in capabilities with application-specific
+> behavior.
 
 ## Contents
 
 - [Why Extensibility Matters](#why-extensibility-matters)
+
 - [xsl:function — User-Defined Functions](#xslfunction--user-defined-functions)
+
 - [Packages — Reusable Stylesheet Libraries](#packages--reusable-stylesheet-libraries)
+
 - [Extension Functions from .NET](#extension-functions-from-net)
+
 - [Extension Instructions and xsl:fallback](#extension-instructions-and-xslfallback)
+
 - [Import and Include](#import-and-include)
+
 - [Practical Patterns](#practical-patterns)
+
 - [Integration Examples](#integration-examples)
 
 ---
@@ -28,12 +38,16 @@ If you have worked with C# middleware, Razor tag helpers, or plugin architecture
 Consider a real XSLT transform for generating invoices. You need to:
 
 - **Format currency** according to the customer's locale
+
 - **Calculate tax** based on jurisdiction-specific rules that change quarterly
+
 - **Look up** the current exchange rate from an API
+
 - **Generate** a unique invoice number from a database sequence
+
 - **Send** the rendered invoice to a print queue or email service
 
-Standard XSLT can handle the XML transformation. Extensibility handles everything else — the parts where the stylesheet needs to talk to the outside world.
+Standard XSLT handles the XML transform itself. Extensibility handles everything else: the parts where the stylesheet connects to the outside world.
 
 **C# parallel:**
 ```csharp
@@ -84,13 +98,18 @@ This section provides a brief recap. For comprehensive coverage, see [User-Defin
 
 Functions can be recursive, accept other functions as arguments (higher-order functions), and return any XPath type — strings, numbers, nodes, maps, arrays, or sequences.
 
+When a stylesheet function shares its name and arity with an extension function registered from the host, the `override-extension-function` attribute on `xsl:function` controls which one wins. Set it to `yes` to let the stylesheet function take precedence over the host-registered extension function, or to `no` to keep the host-registered version. The value must agree with the `override` attribute when both are present on the same `xsl:function`.
+
 ---
 
 ## Packages — Reusable Stylesheet Libraries
 
 This section provides a brief recap. For comprehensive coverage, see [Packages](instructions/packages.md).
 
-XSLT 3.0 packages bundle stylesheets into reusable libraries with controlled visibility — like NuGet packages for XSLT.
+XSLT 3.0 packages bundle stylesheets into reusable libraries with controlled visibility.
+
+> For C# developers: an XSLT package resembles a NuGet package. Both bundle
+> reusable code and both expose a controlled surface to consumers.
 
 ### Defining a Package
 
@@ -154,7 +173,7 @@ XSLT 3.0 packages bundle stylesheets into reusable libraries with controlled vis
 
 ## Extension Functions from .NET
 
-PhoenixmlDb allows you to register .NET methods that become callable from XPath expressions within XSLT stylesheets. This is the primary mechanism for connecting XSLT to the outside world.
+PhoenixmlDb lets you register .NET methods as functions callable from XPath expressions in a stylesheet. This is the primary mechanism for connecting XSLT to the outside world.
 
 ### Setting Stylesheet Parameters from C#
 
@@ -493,7 +512,7 @@ public class CustomRenderer : BaseRenderer
 
 ### xsl:include — Same Precedence
 
-Included stylesheets are treated as if their content were copy-pasted into the including stylesheet. There is no precedence difference:
+The processor treats an included stylesheet as if its content appears directly in the including stylesheet. There is no precedence difference:
 
 ```xml
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0">
@@ -924,4 +943,4 @@ public class DocGenerationTask
   run: dotnet run --project tools/DocGen -- src/ docs/api/
 ```
 
-The XSLT stylesheet handles all the formatting logic — converting raw XML doc comments into navigable, styled HTML pages — while the .NET code handles file I/O, parameter passing, and build integration.
+The stylesheet handles the formatting logic. It transforms raw XML doc comments into navigable, styled HTML pages. The .NET code handles file I/O, parameter passing, and build integration.

@@ -6,32 +6,44 @@ sort: 16
 
 # Packages
 
-XSLT 3.0 introduces packages — a system for bundling stylesheets into reusable, encapsulated libraries with controlled visibility. If you have worked with NuGet packages, C# assemblies, and access modifiers (`public`, `internal`, `sealed`), you already understand the motivation: ship reusable code with a clean public API while hiding implementation details.
+XSLT 3.0 introduces packages: a system for bundling stylesheets into reusable, encapsulated libraries with controlled visibility. Packages ship reusable code with a clean public API while hiding implementation details.
+
+> For C# developers: if you have worked with NuGet packages, C# assemblies,
+> and access modifiers (`public`, `internal`, `sealed`), you already
+> understand the motivation for packages. `xsl:package` corresponds to a NuGet
+> package or class library assembly. `xsl:expose visibility="public"`
+> corresponds to the `public` modifier, `visibility="private"` corresponds to
+> `private`/`internal`, `visibility="final"` corresponds to a `sealed` class
+> or non-virtual method, and `visibility="abstract"` corresponds to an
+> `abstract` method. `xsl:use-package` corresponds to a `<PackageReference>`
+> in a `.csproj` file. `xsl:override` corresponds to the `override` keyword on
+> a virtual method. `xsl:accept` corresponds to controlling which types are
+> visible through `using` or `global using`.
 
 ## Contents
 
-- [Why Packages?](#why-packages)
-- [xsl:package — Declaring a Package](#xslpackage--declaring-a-package)
-- [xsl:expose — Controlling Visibility](#xslexpose--controlling-visibility)
-- [xsl:use-package — Importing a Package](#xsluse-package--importing-a-package)
-- [xsl:accept — Adjusting Imported Visibility](#xslaccept--adjusting-imported-visibility)
-- [xsl:override — Overriding Package Components](#xsloverride--overriding-package-components)
-- [The Visibility System](#the-visibility-system)
-- [Comparison with xsl:import and xsl:include](#comparison-with-xslimport-and-xslinclude)
-- [Design Patterns](#design-patterns)
+- [Why Packages?](#why-packages).
+- [xsl:package — Declaring a Package](#xslpackage--declaring-a-package).
+- [xsl:expose — Controlling Visibility](#xslexpose--controlling-visibility).
+- [xsl:use-package — Importing a Package](#xsluse-package--importing-a-package).
+- [xsl:accept — Adjusting Imported Visibility](#xslaccept--adjusting-imported-visibility).
+- [xsl:override — Overriding Package Components](#xsloverride--overriding-package-components).
+- [The Visibility System](#the-visibility-system).
+- [Comparison with xsl:import and xsl:include](#comparison-with-xslimport-and-xslinclude).
+- [Design Patterns](#design-patterns).
 
 ---
 
 ## Why Packages?
 
-Before XSLT 3.0, stylesheet reuse relied on `xsl:import` and `xsl:include`. These work, but they have problems:
+Before XSLT 3.0, stylesheet reuse relied on `xsl:import` and `xsl:include`. These instructions work, but they raise several problems:
 
 - **No encapsulation:** Every template, function, and variable in an imported stylesheet is visible to the importing stylesheet. Internal helpers leak into the public API.
 - **Name collisions:** Two imported stylesheets that define the same template or function conflict unpredictably.
 - **Fragile overriding:** Import precedence rules are subtle and easy to get wrong.
 - **No versioning:** There is no way to specify which version of a library you depend on.
 
-Packages solve all of these problems.
+Packages solve these problems.
 
 **C# parallel:**
 
@@ -95,7 +107,7 @@ A package is declared using `xsl:package` as the root element instead of `xsl:st
 
 ### declared-modes
 
-When `declared-modes="yes"`, modes must be explicitly declared with `xsl:mode` to be accessible. This prevents accidental mode leakage:
+When `declared-modes="yes"`, modes must be explicitly declared with `xsl:mode` to be accessible. This attribute prevents accidental mode leakage:
 
 ```xml
 <xsl:package name="http://example.com/formatter"
@@ -127,7 +139,7 @@ When `declared-modes="yes"`, modes must be explicitly declared with `xsl:mode` t
 
 ### Setting Visibility on Individual Components
 
-The simplest approach is to set `visibility` directly on each component:
+The simplest approach sets `visibility` directly on each component:
 
 ```xml
 <xsl:function name="my:public-function" visibility="public">...</xsl:function>
@@ -206,7 +218,7 @@ The processor selects the highest available version that matches the constraint.
 
 ### Package Catalog
 
-How does the processor find the package file? Through a **package catalog** — a configuration that maps package names and versions to file locations. The catalog format is processor-specific. A typical catalog might look like:
+How does the processor find the package file? Through a **package catalog**: a configuration that maps package names and versions to file locations. The catalog format is processor-specific. A typical catalog might look like:
 
 ```xml
 <!-- Saxon-style package catalog -->
@@ -220,13 +232,11 @@ How does the processor find the package file? Through a **package catalog** — 
 </catalog>
 ```
 
-**C# parallel:** This is like NuGet package resolution — the package name and version constraint are resolved to a specific `.nupkg` file from configured sources.
-
 ---
 
 ## xsl:accept — Adjusting Imported Visibility
 
-When you import a package, you may not need all of its public components. `xsl:accept` lets you narrow the visibility of imported components — you can hide components you do not use or rename them to avoid conflicts.
+When you import a package, you may not need all of its public components. `xsl:accept` narrows the visibility of imported components: you can hide components you do not use, or rename them to avoid conflicts.
 
 ```xml
 <xsl:use-package name="http://example.com/html-utils" package-version="2.1">
@@ -238,7 +248,7 @@ When you import a package, you may not need all of its public components. `xsl:a
 
 ### Visibility Narrowing Rules
 
-`xsl:accept` can only narrow visibility — it cannot make a private component public. The allowed transitions:
+`xsl:accept` can only narrow visibility. It cannot make a private component public. The allowed transitions:
 
 | Original | Can Be Changed To |
 |----------|------------------|
@@ -249,11 +259,9 @@ When you import a package, you may not need all of its public components. `xsl:a
 
 ### Why Use xsl:accept?
 
-- **Avoid name collisions:** If two packages export functions with the same name, hide one.
-- **Minimize API surface:** Only expose what your stylesheet actually uses.
-- **Documentation:** Makes it clear which parts of the package your stylesheet depends on.
-
-**C# parallel:** This is like choosing specific types to import with `using static` rather than importing an entire namespace, or using `[assembly: InternalsVisibleTo]` selectively.
+- **Avoid name collisions:** if two packages export functions with the same name, hide one.
+- **Minimize API surface:** only expose what your stylesheet actually uses.
+- **Documentation:** makes it clear which parts of the package your stylesheet depends on.
 
 ---
 
@@ -293,7 +301,7 @@ When a package declares components as `public` (overridable) or `abstract` (must
 
 ### Abstract Components
 
-A package can declare abstract components that must be provided by the user:
+A package can declare abstract components that the user must provide:
 
 ```xml
 <!-- In the package -->
@@ -323,7 +331,8 @@ A package can declare abstract components that must be provided by the user:
 </xsl:package>
 ```
 
-**C# parallel:** This is exactly like abstract methods in a base class:
+> For C# developers: this pattern is exactly like abstract methods in a base
+> class, with a sealed method that calls them.
 
 ```csharp
 public abstract class ReportGenerator
@@ -359,11 +368,11 @@ XSLT 3.0 defines five visibility levels for package components:
 
 ### Choosing the Right Visibility
 
-- **`public`** — Use for templates and functions that users might want to customize. This is the equivalent of a `virtual` method in C#.
-- **`final`** — Use for components that form the package's core logic and must not be altered. This is the equivalent of a `sealed` method.
-- **`abstract`** — Use for extension points where the package cannot provide a default implementation. This is the equivalent of an `abstract` method.
-- **`private`** — Use for internal helpers that support the public API. This is the equivalent of `private` or `internal`.
-- **`hidden`** — Like `private`, but even more restricted. Hidden components cannot be referenced by `xsl:accept` in the using stylesheet. Use this for implementation details that should be completely invisible.
+- **`public`** — use for templates and functions that users might want to customize. This is the equivalent of a `virtual` method in C#.
+- **`final`** — use for components that form the package's core logic and must not be altered. This is the equivalent of a `sealed` method.
+- **`abstract`** — use for extension points where the package cannot provide a default implementation. This is the equivalent of an `abstract` method.
+- **`private`** — use for internal helpers that support the public API. This is the equivalent of `private` or `internal`.
+- **`hidden`** — like `private`, but even more restricted. `xsl:accept` in the using stylesheet cannot reference hidden components. Use this visibility for implementation details that should stay completely invisible.
 
 ### Default Visibility
 
@@ -410,7 +419,7 @@ You can migrate from `xsl:import` to packages incrementally:
 </xsl:stylesheet>
 ```
 
-The imported stylesheets become packages by changing `xsl:stylesheet` to `xsl:package` and adding visibility declarations.
+The imported stylesheets become packages when you change `xsl:stylesheet` to `xsl:package` and add visibility declarations.
 
 ---
 
@@ -591,7 +600,7 @@ A package that requires the user to provide specific implementations:
 </xsl:stylesheet>
 ```
 
-**C# parallel:** This pattern mirrors dependency injection or the Template Method design pattern:
+This pattern mirrors dependency injection, or the Template Method design pattern:
 
 ```csharp
 public abstract class EmailTemplate

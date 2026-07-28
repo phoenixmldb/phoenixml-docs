@@ -6,7 +6,9 @@ sort: 11
 
 # String Analysis
 
-`xsl:analyze-string` applies a regular expression to a string and processes the matched and unmatched portions separately. It is the XSLT equivalent of iterating over regex matches — you get fine-grained control over how each match is transformed into output.
+`xsl:analyze-string` applies a regular expression to a string. It splits the string into matched and unmatched portions and processes each portion separately. This gives fine-grained control over how each match transforms into output.
+
+> For C# developers: `xsl:analyze-string` is the XSLT equivalent of iterating over regex matches with `Regex.Matches()` or a `MatchEvaluator`. `regex-group(N)` corresponds to `match.Groups[N].Value`.
 
 ## Contents
 
@@ -264,7 +266,7 @@ XSLT uses XML Schema regular expressions (with XPath extensions), not Perl-compa
 | Named groups | `(?<name>...)` | Not supported |
 | Character class subtraction | Not standard | `[a-z-[aeiou]]` (vowels removed from a-z) |
 
-The lack of lookahead/lookbehind means some complex patterns require different approaches in XSLT — often by using `xsl:analyze-string` with simpler patterns and handling the logic in the matching/non-matching substring bodies.
+The lack of lookahead and lookbehind means some complex patterns need a different approach in XSLT. Use `xsl:analyze-string` with simpler patterns instead, and handle the extra logic in the matching or non-matching substring bodies.
 
 ---
 
@@ -356,7 +358,7 @@ This nests two `xsl:analyze-string` calls — first to highlight keywords, then 
 
 ### Link Detection in Text
 
-Convert URLs and email addresses in plain text to clickable links:
+Transform URLs and email addresses in plain text into clickable links:
 
 ```xml
 <xsl:function name="my:linkify" as="node()*">
@@ -418,7 +420,7 @@ Parse a price string like "$1,234.56" into a number:
 
 ### Markdown-Like Formatting
 
-Convert simple markup conventions in plain text:
+Transform simple markup conventions in plain text:
 
 ```xml
 <xsl:function name="my:simple-format" as="node()*">

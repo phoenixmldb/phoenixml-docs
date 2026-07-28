@@ -6,7 +6,48 @@ sort: 15
 
 # Streaming and Accumulators
 
-When a document is too large to fit in memory — tens of gigabytes of log data, massive data exports, or continuous feeds — XSLT 3.0's streaming features let you process it in a single pass without building the entire tree. If you have worked with `IAsyncEnumerable`, `Utf8JsonReader`, or `System.IO.Pipelines` in C#, the motivation is the same: process data as it flows through, never holding more than a small window in memory.
+Some documents are too large to fit in memory: tens of gigabytes of log data, massive data exports, or continuous feeds. XSLT 3.0's streaming features process a document in a single pass, without building the entire tree.
+
+> For C# developers: if you have worked with `IAsyncEnumerable`,
+> `Utf8JsonReader`, or `System.IO.Pipelines`, the motivation is the same.
+> Process data as it flows through, and never hold more than a small window
+> in memory. `XmlDocument` or `XDocument` loads everything into memory, like
+> non-streaming XSLT. `XmlReader` and `Utf8JsonReader` stream through the
+> data, but you lose the ability to navigate freely. XSLT streaming gives you
+> the memory efficiency of `XmlReader`, together with the declarative
+> structure of templates. `xsl:fork` resembles `Channel<T>` fan-out, or `tee`
+> in Unix: one input stream split to multiple consumers. `xsl:accumulator`
+> resembles `Aggregate()` over an `IAsyncEnumerable`, or a callback
+> registered on a SAX parser that updates shared state. Declaring
+> `use-accumulators` on a mode resembles subscribing to specific events
+> instead of receiving all of them.
+
+The following C# code contrasts a full in-memory load with a streaming read:
+
+```csharp
+// Non-streaming: full tree in memory
+var doc = XDocument.Load("huge-file.xml");
+var items = doc.Descendants("item").Where(x => ...);
+
+// Streaming: one node at a time
+using var reader = XmlReader.Create("huge-file.xml");
+while (reader.Read())
+{
+    if (reader.NodeType == XmlNodeType.Element && reader.Name == "item")
+    {
+        // Process one item at a time
+    }
+}
+```
+
+Subscribing to specific accumulators works like subscribing to specific events:
+
+```csharp
+// Only subscribe to the events you need
+stream.OnError += HandleError;
+stream.OnLargeTransaction += TrackMaxAmount;
+// Not subscribing to OnInfo saves processing time
+```
 
 ## Contents
 
@@ -21,7 +62,7 @@ When a document is too large to fit in memory — tens of gigabytes of log data,
 
 ## Primary Source Streaming
 
-The simplest way to enable streaming is to declare a streamable mode for the primary input document. When the default mode (or a named mode) is streamable, the XSLT processor reads the principal source document through an XmlReader rather than building a full in-memory tree:
+The simplest way to enable streaming declares a streamable mode for the primary input document. When the default mode, or a named mode, is streamable, the processor reads the principal source document through an `XmlReader`. It does not build a full in-memory tree:
 
 ```xml
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0">
@@ -60,42 +101,22 @@ You can check at compile time whether the processor supports streaming:
 
 ## The Streaming Concept
 
-In conventional (non-streaming) XSLT processing, the entire input document is parsed into an in-memory tree before any templates execute. This is fine for documents up to a few hundred megabytes, but fails for larger documents.
+In conventional (non-streaming) XSLT processing, the processor parses the entire input document into an in-memory tree before any templates execute. This approach works well for documents up to a few hundred megabytes, but it fails for larger documents.
 
-Streaming changes the execution model: the processor reads the document as a stream of events (start-element, text, end-element) and executes templates as each node passes by. At any point, only the current node and its ancestors are in memory.
+Streaming changes the execution model. The processor reads the document as a stream of events (start-element, text, end-element) and executes templates as each node passes by. At any point, only the current node and its ancestors are in memory.
 
 ### When You Need Streaming
 
-- The document is too large for available memory (multi-gigabyte XML exports)
-- You want to start producing output before the entire input is read
-- You are processing a continuous feed that never ends
-- You want to minimize memory footprint even for moderate-sized documents
+- The document is too large for available memory (multi-gigabyte XML exports).
+- You want to start producing output before the processor reads the entire input.
+- You are processing a continuous feed that never ends.
+- You want to minimize memory footprint even for moderate-sized documents.
 
 ### When You Do Not Need Streaming
 
-- Documents fit comfortably in memory (most XML files)
-- You need random access to the document (looking backward or forward freely)
-- The transformation requires multiple passes over the same data
-
-**C# parallel:** The same trade-off exists in .NET. `XmlDocument` or `XDocument` loads everything into memory (like non-streaming XSLT). `XmlReader` and `Utf8JsonReader` stream through the data, but you lose the ability to navigate freely:
-
-```csharp
-// Non-streaming: full tree in memory
-var doc = XDocument.Load("huge-file.xml");
-var items = doc.Descendants("item").Where(x => ...);
-
-// Streaming: one node at a time
-using var reader = XmlReader.Create("huge-file.xml");
-while (reader.Read())
-{
-    if (reader.NodeType == XmlNodeType.Element && reader.Name == "item")
-    {
-        // Process one item at a time
-    }
-}
-```
-
-XSLT streaming gives you the memory efficiency of `XmlReader` with the declarative power of templates.
+- Documents fit comfortably in memory (most XML files).
+- You need random access to the document, looking backward or forward freely.
+- The transformation requires multiple passes over the same data.
 
 ---
 
@@ -151,7 +172,7 @@ XSLT streaming gives you the memory efficiency of `XmlReader` with the declarati
 </xsl:stylesheet>
 ```
 
-This stylesheet reads a potentially enormous transactions file and outputs only those exceeding $10,000, without ever loading the whole file into memory.
+This stylesheet reads a potentially enormous transactions file. It outputs only the transactions exceeding $10,000, without loading the whole file into memory.
 
 ### Replacing doc() with xsl:source-document
 
@@ -178,7 +199,7 @@ Note the change from `$data//record` (using the `//` descendant axis, which requ
 
 ## xsl:accumulator and xsl:accumulator-rule
 
-Accumulators maintain running state as the processor streams through a document. They solve the problem that streaming templates cannot look backward — once a node has passed, it is gone. An accumulator watches the stream and updates a value as each matching node passes by.
+Accumulators maintain running state as the processor streams through a document. Streaming templates cannot look backward: once a node has passed, it is gone. An accumulator watches the stream and updates a value as each matching node passes by.
 
 **C# parallel:** Think of accumulators like `Aggregate()` over an `IAsyncEnumerable`, or like registering callbacks on a SAX parser that update shared state:
 
@@ -231,8 +252,8 @@ Each rule specifies when and how to update the accumulated value:
 
 ### Phase: start vs. end
 
-- **`start`** — fires when the opening tag is encountered. At this point, the element's attributes are available, but child content has not been read yet.
-- **`end`** — fires when the closing tag is encountered. At this point, the element's text content has been read (but not stored in memory).
+- **`start`** — fires when the processor reads the opening element. At this point, the element's attributes are available, but child content has not been read yet.
+- **`end`** — fires when the processor reads the closing element. At this point, the element's text content has been read, but not stored in memory.
 
 ```xml
 <!-- Count elements as they open -->
@@ -347,7 +368,7 @@ Output:
 
 ### Context Tracking Accumulator
 
-A powerful pattern: track which section you are in while streaming, so inner elements can reference the current section name without looking backward:
+This pattern tracks which section you are in while streaming, so inner elements can reference the current section name without looking backward:
 
 ```xml
 <xsl:accumulator name="current-section" as="xs:string"
@@ -367,7 +388,7 @@ A powerful pattern: track which section you are in while streaming, so inner ele
 
 ## xsl:fork
 
-`xsl:fork` splits processing into independent branches that each consume the streamed document independently. Without `xsl:fork`, a streaming template can only make one downward pass through the children. With `xsl:fork`, you can process the same children in multiple ways simultaneously.
+`xsl:fork` splits processing into independent branches that each consume the streamed document independently. Without `xsl:fork`, a streaming template can make only one downward pass through the children. With `xsl:fork`, you can process the same children in multiple ways simultaneously.
 
 **C# parallel:** Think of `xsl:fork` like `Channel<T>` fan-out, or `tee` in Unix — one input stream split to multiple consumers:
 
@@ -414,32 +435,32 @@ Task.WhenAll(
 </xsl:template>
 ```
 
-Each `xsl:sequence` inside `xsl:fork` is an independent branch. The processor feeds each branch from the same stream of events. The branches cannot communicate with each other, but they can each produce output that is concatenated in order.
+Each `xsl:sequence` inside `xsl:fork` is an independent branch. The processor feeds each branch from the same stream of events. The branches cannot communicate with each other, but they can each produce output, which the processor concatenates in order.
 
 ### When to Use xsl:fork
 
 Use `xsl:fork` when a single streaming pass needs to produce multiple independent outputs from the same data:
 
-- Generating both a summary and detail view in one pass
-- Writing to multiple result documents from the same streamed input
-- Applying different filters to the same stream
+- Generating both a summary and detail view in one pass.
+- Writing to multiple result documents from the same streamed input.
+- Applying different filters to the same stream.
 
-Without `xsl:fork`, you would need multiple passes over the document (defeating the purpose of streaming) or would need to handle everything in a single set of templates.
+Without `xsl:fork`, you would need multiple passes over the document, which defeats the purpose of streaming. Alternatively, you would need to handle everything in a single set of templates.
 
 ---
 
 ## Streamability Rules
 
-Not every XSLT stylesheet can be executed in streaming mode. The processor enforces streamability rules that ensure the transformation can work in a single forward pass.
+Not every XSLT stylesheet can run in streaming mode. The processor enforces streamability rules that ensure the transformation works in a single forward pass.
 
 ### Core Principle
 
-In streaming mode, a node is available only while the processor is "positioned" on it. Once the processor moves past a node, it is gone. This means:
+In streaming mode, a node is available only while the processor is positioned on it. Once the processor moves past a node, that node is gone. This means:
 
-- You can read **attributes** and **namespace nodes** of the current element (they arrive with the start tag)
-- You can process **child nodes** in document order (one at a time, as they stream by)
-- You **cannot** go backward (no preceding siblings, no ancestor's other children)
-- You **cannot** read the same child node twice
+- You can read **attributes** and **namespace nodes** of the current element (they arrive with the start element).
+- You can process **child nodes** in document order, one at a time, as they stream by.
+- You **cannot** go backward: no preceding siblings, no ancestor's other children.
+- You **cannot** read the same child node twice.
 
 ### Consuming vs. Non-Consuming Operations
 
@@ -448,14 +469,14 @@ In streaming mode, a node is available only while the processor is "positioned" 
 | **Non-consuming** | Reads data available without advancing the stream | `@attribute`, `name()`, `position()`, `accumulator-before()` |
 | **Consuming** | Reads child content, advancing the stream | `string(.)`, `xsl:apply-templates`, `xsl:for-each select="child"` |
 
-The key rule: **you can perform at most one consuming operation on any given node.** You cannot, for example, both `xsl:apply-templates` to the children and then `xsl:value-of select="."` on the same element — both consume the children.
+The key rule: you can perform at most one consuming operation on any given node. For example, you cannot both apply templates to the children and then evaluate `xsl:value-of select="."` on the same element — both operations consume the children.
 
 ### Grounded vs. Free-Ranging Expressions
 
-- **Grounded expression:** Evaluates to a value without navigating through streamed content. Examples: `@id`, `$variable`, `position()`, literal values.
-- **Free-ranging expression:** Navigates through descendant content. Examples: `.//item`, `string(.)`, `sum(item/price)`.
+- **Grounded expression:** evaluates to a value without navigating through streamed content. Examples: `@id`, `$variable`, `position()`, literal values.
+- **Free-ranging expression:** navigates through descendant content. Examples: `.//item`, `string(.)`, `sum(item/price)`.
 
-A streamable template can use one free-ranging expression (consuming the children), but everything else must be grounded.
+A streamable template can use one free-ranging expression, which consumes the children, but every other expression must be grounded.
 
 ### Making Templates Streamable
 
@@ -506,19 +527,19 @@ Here are common patterns and their streamable alternatives:
 
 ### Streamability Checklist
 
-Before making a stylesheet streamable, verify:
+Before making a stylesheet streamable, verify each of the following:
 
-1. Templates process children in document order only (no backward navigation)
-2. Each template performs at most one consuming operation on the streamed input
-3. Conditions and computations use only attributes, accumulators, or variables (not child content multiple times)
-4. The `xsl:mode` declaration includes `streamable="yes"`
-5. Accumulators are declared with `streamable="yes"`
+1. Templates process children in document order only, with no backward navigation.
+2. Each template performs at most one consuming operation on the streamed input.
+3. Conditions and computations use only attributes, accumulators, or variables, not child content read multiple times.
+4. The `xsl:mode` declaration includes `streamable="yes"`.
+5. Accumulators are declared with `streamable="yes"`.
 
 ---
 
 ## use-accumulators on Modes
 
-For accumulators to fire during streaming, the mode must declare which accumulators it uses. This is a whitelist — unlisted accumulators are not evaluated, which saves processing time.
+For accumulators to fire during streaming, the mode must declare which accumulators it uses. This declaration works as an allowlist: the processor skips unlisted accumulators, which saves processing time.
 
 ```xml
 <!-- Declare a streamable mode with specific accumulators -->
@@ -545,28 +566,19 @@ And on `xsl:source-document`:
 </xsl:source-document>
 ```
 
-### Why the Whitelist?
+### Why the Allowlist?
 
-Evaluating accumulators has a cost — each accumulator-rule must be tested against every node in the stream. By declaring which accumulators a mode uses, the processor can skip unnecessary evaluations. This matters when streaming millions of nodes per second.
-
-**C# parallel:** This is similar to subscribing to specific events rather than receiving all events:
-
-```csharp
-// Only subscribe to the events you need
-stream.OnError += HandleError;
-stream.OnLargeTransaction += TrackMaxAmount;
-// Not subscribing to OnInfo saves processing time
-```
+Accumulators carry a real cost: the processor must test each accumulator-rule against every node in the stream. By declaring which accumulators a mode uses, the processor can skip unnecessary evaluations. This distinction matters when streaming millions of nodes per second.
 
 ---
 
 ## Streaming Limitations
 
-While streaming enables processing of arbitrarily large documents, it imposes certain restrictions:
+Streaming enables processing of arbitrarily large documents, but it imposes certain restrictions.
 
 ### `last()` is Not Available
 
-In streaming mode, the processor does not know the total size of the sequence being iterated. The `last()` function — which returns the size of the current sequence — is therefore unavailable:
+In streaming mode, the processor does not know the total size of the sequence it is iterating over. The `last()` function, which returns the size of the current sequence, is therefore unavailable:
 
 ```xml
 <!-- NOT AVAILABLE in streaming mode -->
@@ -580,16 +592,16 @@ In streaming mode, the processor does not know the total size of the sequence be
      or restructure the logic to not depend on last() -->
 ```
 
-If you need to know when you are processing the final item, consider using an accumulator to track state, or post-process the output.
+If you need to know when you are processing the final item, use an accumulator to track state, or post-process the output.
 
 ### `xsl:fork` Executes Sequentially
 
-Although `xsl:fork` is conceptually a parallel construct (splitting the stream to multiple consumers), in PhoenixmlDb the branches execute **sequentially**, not in parallel. Each branch processes the stream independently, but one at a time. The output of all branches is concatenated in document order.
+`xsl:fork` is conceptually a parallel construct: it splits the stream to multiple consumers. In PhoenixmlDb, though, the branches execute **sequentially**, not in parallel. Each branch processes the stream independently, but one at a time. The processor concatenates the output of all branches in document order.
 
-This means `xsl:fork` is functionally correct — it produces the right output — but does not provide a parallelism performance benefit. It remains useful for structuring streaming stylesheets where multiple independent consuming operations are needed on the same streamed input.
+This means `xsl:fork` is functionally correct — it produces the right output — but it does not provide a parallelism performance benefit. It remains useful for structuring streaming stylesheets that need multiple independent consuming operations on the same streamed input.
 
 ### Other Restrictions
 
-- **No backward navigation** — Axes like `preceding-sibling`, `preceding`, and `ancestor` content are not available (ancestor *names* and *attributes* are available via accumulators or `ancestor::*/name()`)
-- **Single consuming operation per node** — Each template can perform at most one operation that reads child content
-- **No `xsl:number` with `level="any"`** — This requires counting across the entire document, which is incompatible with streaming
+- **No backward navigation** — axes like `preceding-sibling`, `preceding`, and `ancestor` content are not available (ancestor *names* and *attributes* are available through accumulators or `ancestor::*/name()`).
+- **Single consuming operation per node** — each template can perform at most one operation that reads child content.
+- **No `xsl:number` with `level="any"`** — this level requires counting across the entire document, which is incompatible with streaming.

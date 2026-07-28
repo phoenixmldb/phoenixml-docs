@@ -6,13 +6,16 @@ sort: 5
 
 # Grouping
 
-`xsl:for-each-group` is one of the most powerful XSLT instructions. It takes a flat sequence and organizes it into groups using one of four modes. Before XSLT 2.0, grouping required the "Muenchian method" — a clever but cryptic hack using keys. Now it is a first-class operation.
+`xsl:for-each-group` takes a flat sequence and organizes it into groups, using one of four modes. Before XSLT 2.0, grouping required the "Muenchian method" — a cryptic hack that used keys. Now it is a first-class operation.
+
+> For C# developers: `group-by` corresponds to `items.GroupBy(x => x.Category)`. `group-adjacent` groups only consecutive items with the same key; the closest LINQ equivalent is `MoreLINQ.GroupAdjacent()`. `group-starting-with` and `group-ending-with` split a list at items matching a pattern, with no direct LINQ equivalent. `for-each` inside a group maps to a nested `.Select()` or `.OrderBy()` call.
 
 ## Contents
 
 - [group-by](#group-by)
 - [group-adjacent](#group-adjacent)
 - [group-starting-with](#group-starting-with)
+
 - [group-ending-with](#group-ending-with)
 - [Sorting Within Groups](#sorting-within-groups)
 - [Nested Grouping](#nested-grouping)
@@ -31,9 +34,7 @@ All four modes use the same instruction, `xsl:for-each-group`, with different at
 
 ## group-by
 
-Groups items by a computed key. All items with the same key value are placed in the same group, regardless of their position in the sequence.
-
-**C# parallel:** `items.GroupBy(x => x.Category)`
+Groups items by a computed key. Items with the same key value are placed in the same group, regardless of their position in the sequence.
 
 ### Basic Example
 
@@ -91,7 +92,7 @@ Output:
 
 ### Group Order
 
-The groups appear in the order of the first occurrence of each key in the input sequence. In the example above, "electronics" appears first because the first product is in that category.
+The groups appear in the order of the first occurrence of each key in the input sequence. In the example above, "electronics" appears first, because the first product is in that category.
 
 ### Composite Keys
 
@@ -103,7 +104,7 @@ Use `composite="yes"` (XSLT 3.0) to group by multiple values:
 </xsl:for-each-group>
 ```
 
-For grouping by multiple independent keys, concatenate them:
+To group by multiple independent keys, concatenate them:
 
 ```xml
 <!-- Group by category AND status -->
@@ -115,7 +116,7 @@ For grouping by multiple independent keys, concatenate them:
 </xsl:for-each-group>
 ```
 
-Or more cleanly, use a composite grouping key with a sequence:
+A cleaner alternative uses a composite grouping key with a sequence:
 
 ```xml
 <xsl:for-each-group select="//product"
@@ -126,7 +127,7 @@ Or more cleanly, use a composite grouping key with a sequence:
 
 ### Aggregate Functions on Groups
 
-Since `current-group()` returns all items in the group, you can compute aggregates:
+`current-group()` returns all items in the group, so you can compute aggregates.
 
 ```xml
 <xsl:for-each-group select="//product" group-by="@category">
@@ -140,7 +141,7 @@ Since `current-group()` returns all items in the group, you can compute aggregat
 </xsl:for-each-group>
 ```
 
-**C# parallel:**
+Equivalent C#:
 
 ```csharp
 var summary = products
@@ -161,13 +162,11 @@ var summary = products
 
 Groups consecutive items that have the same key. Items with the same key that are not adjacent form separate groups.
 
-**C# parallel:** There is no built-in LINQ equivalent. The closest is `MoreLINQ.GroupAdjacent()` or manually implementing "chunk by" logic.
-
 ### When to Use group-adjacent
 
 Use `group-adjacent` when the order matters and you want to group runs of consecutive items. Classic use cases:
 
-- Converting flat data into nested structures
+- Transforming flat data into nested structures
 - Grouping consecutive paragraphs with the same style
 - Collapsing adjacent duplicate values
 
@@ -241,9 +240,7 @@ Output:
 
 ## group-starting-with
 
-Starts a new group whenever an item matches a pattern. All items after the matching item (up to the next match) belong to the same group.
-
-**C# parallel:** No direct equivalent. Closest is splitting a list at elements matching a predicate.
+Starts a new group whenever an item matches a pattern. All items after the matching item, up to the next match, belong to the same group.
 
 ### When to Use group-starting-with
 
@@ -291,7 +288,7 @@ Output:
 
 ### Pattern vs. Expression
 
-`group-starting-with` uses a **match pattern** (like `xsl:template match`), not a grouping key expression. It tests each item against the pattern — when it matches, a new group begins.
+`group-starting-with` uses a match pattern (like `xsl:template match`), not a grouping key expression. It tests each item against the pattern, and a match starts a new group.
 
 ```xml
 <!-- Start new group at any heading (h1 through h6) -->
@@ -305,7 +302,7 @@ Output:
 
 ### Handling Items Before the First Match
 
-If the sequence starts with items that do not match the pattern, they form their own group. This "preamble" group has no starting match:
+If the sequence starts with items that do not match the pattern, they form their own group. This "preamble" group has no starting match.
 
 ```xml
 <body>
@@ -343,11 +340,9 @@ To handle this, check whether the first item in the group matches:
 
 Ends the current group when an item matches a pattern. The matching item is the last item in its group.
 
-**C# parallel:** No direct equivalent. It is the mirror image of `group-starting-with`.
-
 ### When to Use group-ending-with
 
-Use when a marker indicates the end of a group rather than the start. Common use cases:
+Use `group-ending-with` when a marker indicates the end of a group rather than the start. Common use cases:
 
 - Page breaks (the break marker ends a page)
 - Sentence boundaries
@@ -393,17 +388,17 @@ Output:
 </div>
 ```
 
-Note that we filter out the `page-break` elements from the output using `[not(self::page-break)]`.
+The `[not(self::page-break)]` predicate filters the `page-break` elements out of the output.
 
 ### Trailing Items
 
-If the sequence ends without a match, the remaining items form a final group. In the example above, the paragraph after the last `page-break` forms its own page — no trailing `page-break` is needed.
+If the sequence ends without a match, the remaining items form a final group. In the example above, the paragraph after the last `page-break` forms its own page — it needs no trailing `page-break`.
 
 ---
 
 ## Sorting Within Groups
 
-You can sort the groups themselves and sort items within each group independently.
+You can sort the groups themselves, and sort items within each group independently.
 
 ### Sorting Groups
 
@@ -443,7 +438,7 @@ Use a nested `xsl:for-each` with `xsl:sort` inside the group body:
 
 ### Sorting Groups by Aggregate
 
-Sort groups by a computed value like count or total:
+Sort groups by a computed value, such as a count or a total:
 
 ```xml
 <!-- Show categories with the most products first -->
@@ -497,7 +492,7 @@ You can nest `xsl:for-each-group` to create multi-level hierarchies.
 </xsl:for-each-group>
 ```
 
-**C# parallel:**
+Equivalent C#:
 
 ```csharp
 var grouped = products
@@ -517,7 +512,7 @@ var grouped = products
 
 ### Categorized Product Listing
 
-A complete example that builds a categorized product page with navigation:
+A complete example builds a categorized product page with navigation:
 
 ```xml
 <xsl:template match="catalog">
@@ -561,7 +556,7 @@ A complete example that builds a categorized product page with navigation:
 </xsl:template>
 ```
 
-### Converting Flat Data to Hierarchical XML
+### Transforming Flat Data into Hierarchical XML
 
 Transform a flat CSV-style structure into nested XML:
 

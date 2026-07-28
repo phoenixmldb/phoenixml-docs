@@ -6,17 +6,17 @@ sort: 17
 
 # Dynamic Evaluation
 
-`xsl:evaluate` (XSLT 3.0) compiles and executes an XPath expression provided as a string at runtime. This is the XSLT equivalent of runtime expression compilation in dynamic languages — powerful, occasionally necessary, and something you should use judiciously.
+`xsl:evaluate` (XSLT 3.0) compiles and executes an XPath expression provided as a string at runtime. This is the XSLT equivalent of runtime expression compilation in dynamic languages. It is occasionally necessary, and you should use it judiciously.
 
 ## Contents
 
-- [When You Need Dynamic Evaluation](#when-you-need-dynamic-evaluation)
-- [xsl:evaluate — Syntax and Attributes](#xslevaluate--syntax-and-attributes)
-- [Binding Variables with xsl:with-param](#binding-variables-with-xslwith-param)
-- [Namespace Resolution](#namespace-resolution)
-- [Security Considerations](#security-considerations)
-- [Use Cases](#use-cases)
-- [When Not to Use xsl:evaluate](#when-not-to-use-xslevaluate)
+- [When You Need Dynamic Evaluation](#when-you-need-dynamic-evaluation).
+- [xsl:evaluate — Syntax and Attributes](#xslevaluate--syntax-and-attributes).
+- [Binding Variables with xsl:with-param](#binding-variables-with-xslwith-param).
+- [Namespace Resolution](#namespace-resolution).
+- [Security Considerations](#security-considerations).
+- [Use Cases](#use-cases).
+- [When Not to Use xsl:evaluate](#when-not-to-use-xslevaluate).
 
 ---
 
@@ -248,10 +248,10 @@ The `namespace-context="."` ensures that any namespace declarations on the `<col
 
 XPath by itself cannot modify the file system or execute system commands. However, an attacker-controlled expression could:
 
-- **Read sensitive data:** `doc('/etc/passwd')` or `doc('file:///C:/secrets/config.xml')`
-- **Cause denial of service:** Expressions with exponential complexity, like deeply nested `for` loops
-- **Access other documents:** `collection()`, `doc()`, `unparsed-text()` can reach files on the server
-- **Exfiltrate data:** If the output goes to the user, sensitive data from other documents could be exposed
+- **Read sensitive data:** using `doc('/etc/passwd')` or `doc('file:///C:/secrets/config.xml')`.
+- **Cause denial of service:** using expressions with exponential complexity, such as deeply nested `for` loops.
+- **Access other documents:** `collection()`, `doc()`, and `unparsed-text()` can reach files on the server.
+- **Exfiltrate data:** if the output reaches the user, it can expose sensitive data from other documents.
 
 ### Mitigation Strategies
 

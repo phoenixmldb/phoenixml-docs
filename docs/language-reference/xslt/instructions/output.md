@@ -6,7 +6,19 @@ sort: 1
 
 # Output Instructions
 
-These instructions control what your stylesheet produces — text, typed values, comments, processing instructions, and diagnostic messages. If templates are the structure of your transformation, output instructions are the bricks.
+These instructions control what your stylesheet produces: text, typed values, comments, processing instructions, and diagnostic messages. If templates form the structure of a transformation, output instructions are the bricks.
+
+> For C# developers: several of these instructions have a direct Razor
+> parallel. `xsl:value-of` works like `@Model.Name` — it evaluates an
+> expression and inserts the string value into the output. `xsl:text` works
+> like a `@:` line in Razor — it marks content explicitly as text output.
+> `disable-output-escaping` corresponds to `Html.Raw()`: the same capability,
+> with the same caution against misuse. `xsl:comment` corresponds to `<!-- -->`
+> in Razor, and `xsl:sequence` corresponds to a `return` statement — where
+> `xsl:value-of` is closer to `return value.ToString()`, since it discards the
+> original type. `xsl:message` corresponds to `Debug.WriteLine()` or
+> `Console.Error.WriteLine()`; `xsl:message terminate="yes"` corresponds to
+> `throw new Exception()`.
 
 ## Contents
 
@@ -39,11 +51,9 @@ Given `<product><name>Widget Pro</name><price>29.99</price></product>`, this pro
 <p>Widget Pro: $29.99</p>
 ```
 
-**C# parallel:** This is like Razor's `@Model.Name` — it evaluates an expression and inserts the string value into the output.
-
 ### The separator Attribute
 
-When `select` evaluates to a sequence of multiple items, `separator` controls how they are joined. The default separator is a single space in XSLT 2.0+ (it was undefined in XSLT 1.0, which only took the first item).
+When `select` evaluates to a sequence of multiple items, `separator` controls how they are joined. The default separator is a single space in XSLT 2.0+. In XSLT 1.0 this was undefined, and only the first item was used.
 
 ```xml
 <!-- Input: multiple <tag> children -->
@@ -66,11 +76,9 @@ When `select` evaluates to a sequence of multiple items, `separator` controls ho
 <!-- Output: ABC -->
 ```
 
-**C# parallel:** `string.Join(", ", tags)`
-
 ### Content Instead of select
 
-You can put a sequence constructor inside `xsl:value-of` instead of using `select`. The output of the constructor is atomized and converted to a string:
+You can put a sequence constructor inside `xsl:value-of` instead of using `select`. The processor atomizes the output of the constructor, then transforms it into a string:
 
 ```xml
 <xsl:value-of>
@@ -81,7 +89,7 @@ You can put a sequence constructor inside `xsl:value-of` instead of using `selec
 </xsl:value-of>
 ```
 
-This is rarely needed — string concatenation in the `select` attribute or literal text is usually cleaner.
+You rarely need this form. String concatenation in the `select` attribute, or literal text, is usually cleaner.
 
 ### value-of vs. sequence
 
@@ -110,11 +118,11 @@ This is a critical distinction:
 
 ## xsl:text
 
-Produces a text node with exact whitespace control. While you can write literal text directly in a template, `xsl:text` gives you precise control over what whitespace appears in the output.
+Produces a text node with exact whitespace control. You can write literal text directly in a template, but `xsl:text` gives you precise control over what whitespace appears in the output.
 
 ### Why xsl:text Exists
 
-In XSLT, whitespace between instructions is significant — it ends up in the output. Consider:
+In XSLT, whitespace between instructions is significant. It ends up in the output. Consider:
 
 ```xml
 <xsl:template match="product">
@@ -126,7 +134,7 @@ In XSLT, whitespace between instructions is significant — it ends up in the ou
 </xsl:template>
 ```
 
-This produces `<span>\n    Widget Pro\n    -\n    WP-001\n  </span>` with newlines and indentation — usually not what you want. Using `xsl:text` lets you control the output exactly:
+This produces `<span>\n    Widget Pro\n    -\n    WP-001\n  </span>` with newlines and indentation. That is usually not what you want. `xsl:text` lets you control the output exactly:
 
 ```xml
 <xsl:template match="product">
@@ -138,7 +146,7 @@ This produces `<span>\n    Widget Pro\n    -\n    WP-001\n  </span>` with newlin
 </xsl:template>
 ```
 
-Now the output is `<span>Widget Pro - WP-001</span>` (plus the whitespace around the `span` tags, but the content between the text nodes is controlled).
+Now the output is `<span>Widget Pro - WP-001</span>` (plus the whitespace around the `span` element, but the content between the text nodes is controlled).
 
 For fully clean output, wrap everything:
 
@@ -148,8 +156,6 @@ For fully clean output, wrap everything:
 </xsl:template>
 <!-- Output: <span>Widget Pro - WP-001</span> -->
 ```
-
-**C# parallel:** Think of `xsl:text` like a `@:` line in Razor — it explicitly marks content as text output rather than code.
 
 ### disable-output-escaping
 
@@ -165,9 +171,7 @@ The `disable-output-escaping` attribute (abbreviated `doe` in some discussions) 
 <!-- Output: <br/> (raw markup injected into output) -->
 ```
 
-**Warning:** `disable-output-escaping` is widely considered an anti-pattern. It breaks the tree model — you are injecting raw characters into what should be a well-formed node tree. It does not work in all serialization scenarios and is not supported by all processors. If you need to produce raw markup, consider using `xsl:output method="html"` or building proper nodes with `xsl:element`.
-
-**C# parallel:** `Html.Raw()` in Razor — same capability, same "use with caution" advice.
+**Warning:** most developers consider `disable-output-escaping` an anti-pattern. It breaks the tree model: it injects raw characters into what should be a well-formed node tree. It does not work in every serialization scenario, and not every processor supports it. If you need to produce raw markup, use `xsl:output method="html"` or build proper nodes with `xsl:element`.
 
 ### Outputting Special Characters
 
@@ -191,7 +195,7 @@ The `disable-output-escaping` attribute (abbreviated `doe` in some discussions) 
 
 ## xsl:sequence
 
-Returns a value — any value — without converting it to a string. This is the most important output instruction for XSLT 2.0+ and is essential for writing functions.
+Returns a value, of any type, without transforming it into a string. This is the most important output instruction for XSLT 2.0+, and it is essential for writing functions.
 
 ### Basic Usage
 
@@ -205,7 +209,7 @@ Returns a value — any value — without converting it to a string. This is the
 
 ### Why xsl:sequence Matters for Functions
 
-When you write an `xsl:function`, the return value is the sequence constructed by the function body. If you use `xsl:value-of`, you always get a text node — even if you wanted a number or a boolean:
+When you write an `xsl:function`, the return value is the sequence the function body constructs. `xsl:value-of` always returns a text node, even when you want a number or a boolean:
 
 ```xml
 <!-- WRONG: returns a text node "42", not the integer 42 -->
@@ -219,11 +223,9 @@ When you write an `xsl:function`, the return value is the sequence constructed b
 </xsl:function>
 ```
 
-**C# parallel:** `xsl:sequence` is like a `return` statement. `xsl:value-of` is like `return value.ToString()` — it works, but you lose the type.
-
 ### Returning Nodes
 
-`xsl:sequence` returns a reference to existing nodes, while `xsl:copy-of` creates deep copies. This matters for identity comparisons and performance:
+`xsl:sequence` returns a reference to existing nodes, while `xsl:copy-of` creates deep copies. This distinction matters for identity comparisons and performance:
 
 ```xml
 <!-- Returns a reference to the original node -->
@@ -296,9 +298,9 @@ The content is a sequence constructor, so you can use any XSLT instruction insid
 
 ### Practical Uses
 
-- **Debug markers:** Inject comments to trace which template produced which output
-- **Build metadata:** Stamp generation time, source file, or version info
-- **Conditional comments for IE:** (historical, but still found in legacy code)
+- **Debug markers:** inject comments to trace which template produced which output.
+- **Build metadata:** stamp generation time, source file, or version info.
+- **Conditional comments for IE:** a historical pattern, still found in legacy code.
 
 ```xml
 <!-- Debug: mark template boundaries -->
@@ -311,9 +313,7 @@ The content is a sequence constructor, so you can use any XSLT instruction insid
 </xsl:template>
 ```
 
-**C# parallel:** `<!-- -->` in Razor, or `@* *@` for Razor comments (which don't appear in output).
-
-**Note:** The XSLT processor will automatically prevent `--` from appearing inside the comment content (it would break well-formedness). If your content contains `--`, a space is inserted to produce `- -`.
+**Note:** The XSLT processor automatically prevents `--` from appearing inside the comment content, since it would break well-formedness. If your content contains `--`, the processor inserts a space to produce `- -`.
 
 ---
 
@@ -347,9 +347,9 @@ The `name` attribute can be an attribute value template:
 
 Processing instructions are relatively uncommon in modern XML, but you may encounter them for:
 
-- **Stylesheet associations:** `<?xml-stylesheet?>` in XML documents
-- **Application-specific directives:** Some systems use PIs for page breaks, soft hyphens, or other rendering hints
-- **PHP-style template markers:** If you are generating PHP output from XSLT
+- **Stylesheet associations:** the `<?xml-stylesheet?>` PI in XML documents.
+- **Application-specific directives:** some systems use PIs for page breaks, soft hyphens, or other rendering hints.
+- **PHP-style template markers:** for XSLT output that generates PHP.
 
 ```xml
 <!-- Generate a PHP include -->
@@ -359,13 +359,13 @@ Processing instructions are relatively uncommon in modern XML, but you may encou
 <!-- Output: <?php include 'header.php';?> -->
 ```
 
-**Note:** You cannot generate the XML declaration (`<?xml version="1.0"?>`) with `xsl:processing-instruction` — use `xsl:output` for that.
+**Note:** You cannot generate the XML declaration (`<?xml version="1.0"?>`) with `xsl:processing-instruction`. Use `xsl:output` for that.
 
 ---
 
 ## xsl:message
 
-Sends a message to the XSLT processor's message output — typically the console or a log. This is your primary debugging tool.
+Sends a message to the XSLT processor's message output, typically the console or a log. This is your primary debugging tool.
 
 ### Basic Diagnostic Output
 
@@ -376,11 +376,11 @@ Sends a message to the XSLT processor's message output — typically the console
 </xsl:template>
 ```
 
-The message appears on stderr (or the processor's message handler) but does not appear in the transformation output. This is exactly like `Console.Error.WriteLine()` or `Debug.WriteLine()` in C#.
+The message appears on stderr, or the processor's message handler, but it does not appear in the transformation output.
 
 ### The terminate Attribute
 
-Setting `terminate="yes"` turns the message into a fatal error — the transformation stops immediately:
+Setting `terminate="yes"` turns the message into a fatal error. The transformation stops immediately:
 
 ```xml
 <xsl:template match="product[not(@id)]">
@@ -391,7 +391,7 @@ Setting `terminate="yes"` turns the message into a fatal error — the transform
 </xsl:template>
 ```
 
-**C# parallel:** `throw new InvalidOperationException("...")` — `terminate="yes"` is an exception you cannot catch (in XSLT 2.0). In XSLT 3.0, it raises a recoverable error that `xsl:try`/`xsl:catch` can handle.
+In XSLT 2.0, `terminate="yes"` raises an error you cannot catch. In XSLT 3.0, it raises a recoverable error that `xsl:try`/`xsl:catch` can handle.
 
 ### The select Attribute
 
@@ -412,7 +412,7 @@ You can specify an error code for programmatic error handling:
 </xsl:message>
 ```
 
-This error code can be caught by `xsl:catch`:
+`xsl:catch` can catch this error code:
 
 ```xml
 <xsl:try>
