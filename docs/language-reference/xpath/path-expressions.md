@@ -6,7 +6,8 @@ sort: 1
 
 # Path Expressions
 
-Path expressions are the core of XPath. They navigate the document tree by following steps separated by `/`, much like file system paths.
+Path expressions are the core of XPath. A path expression navigates the
+document tree through a series of steps separated by `/`.
 
 ## Basic Navigation
 
@@ -26,20 +27,25 @@ Each step selects a set of nodes. The next step runs from each selected node.
 | `/catalog/book` | `doc.Root.Elements("book")` |
 | `/catalog/book/title` | `doc.Root.Elements("book").Elements("title")` |
 
+> For C# developers: several XPath constructs mirror LINQ to XML methods.
+> `//` resembles `Descendants()`. A predicate in brackets resembles a
+> `.Where()` call. The `|` operator resembles `.Union()`. It also preserves
+> document order, which `.Union()` does not guarantee.
+
 ## Descendant Shortcut: `//`
 
-`//` selects descendants at any depth — like `Descendants()` in LINQ:
+`//` selects descendants at any depth:
 
 ```
 //title        => every <title> element in the document
 //book/title   => every <title> that is a child of a <book>, at any depth
 ```
 
-Use `//` sparingly in large documents — it searches the entire subtree.
+Use `//` sparingly in large documents. It searches the entire subtree.
 
 ## Predicates: Filtering
 
-Square brackets filter the selected nodes, like `.Where()` in LINQ:
+Square brackets filter the selected nodes:
 
 ```
 /catalog/book[1]                    => first book (XPath is 1-based!)
@@ -55,7 +61,7 @@ Predicates can be combined:
 /catalog/book[@category='programming'][price < 50]
 ```
 
-This selects programming books under $50 — equivalent to chaining `.Where()` calls.
+This selects programming books under $50.
 
 ## Attributes: `@`
 
@@ -68,7 +74,8 @@ The `@` prefix selects attributes:
 
 ## Axes: Navigating in Every Direction
 
-By default, XPath navigates to **children**. But the tree has more relationships. Axes let you navigate in any direction:
+By default, XPath navigates to **children**. The tree has other
+relationships. Axes select nodes along any of these relationships.
 
 | Axis | Direction | LINQ Equivalent |
 |------|-----------|-----------------|
@@ -92,6 +99,8 @@ self::*         => .           (. is shorthand for self)
 
 ## Wildcards
 
+A wildcard selects nodes at a step without naming them:
+
 ```
 /catalog/*       => all children of catalog (any element)
 /catalog/book/@* => all attributes of book elements
@@ -106,11 +115,12 @@ The `|` operator combines results from multiple paths:
 //title | //author    => all title and author elements
 ```
 
-Like LINQ's `.Union()` — but preserves document order.
+The combined result preserves document order.
 
 ## Putting It Together
 
-A real-world example — find all books published after 2010 with a price in USD:
+This example selects the titles of books published after 2010 with a price
+in USD:
 
 ```xpath
 /catalog/book[published > '2010-01-01']
@@ -118,4 +128,6 @@ A real-world example — find all books published after 2010 with a price in USD
              /title
 ```
 
-This reads naturally: "from the catalog, select books published after 2010 with USD pricing, then get their titles."
+The first predicate filters by publication date. The second predicate
+filters by currency. The final step returns the title of each remaining
+book.
