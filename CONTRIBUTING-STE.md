@@ -34,28 +34,29 @@ Apply these rules to every sentence you write in prose:
 
 ### Before / after: sentence length and voice
 
-BEFORE (from the old `xquery/conditionals.md`), 26 words, two ideas fused:
+BEFORE (verbatim, from `xquery/conditionals.md`), 27 words, two ideas fused:
 
 ```text
-This is the biggest mental shift for C# developers: every `if` is an
-expression, not a statement, and it always produces a value that flows into
-the result.
+This is the biggest mental shift for C# developers: every `if`, every
+`switch`, every `try/catch` produces a result that can be assigned,
+returned, or embedded inside XML.
 ```
 
-AFTER, split into three short sentences:
+AFTER, split into shorter sentences:
 
 ```text
-In XQuery, every `if` is an expression, not a statement. It always produces
-a value. That value flows into the result.
+In XQuery, every `if`, `switch`, and `try/catch` is an expression. Each one
+produces a result. You can assign it, return it, or embed it inside XML.
 ```
 
 ### Before / after: banned words
 
-BEFORE (from the old `xquery/flwor-advanced.md`), using a banned word:
+BEFORE (verbatim, from `xquery/flwor-advanced.md`), using a banned word:
 
 ```text
-This page covers the clauses that make FLWOR a genuinely powerful,
-full-featured query tool.
+This page covers the clauses that make FLWOR a genuinely powerful data
+processing language: window clauses, count, group by, and the XQuery 4.0
+additions `while` and `otherwise`.
 ```
 
 The banned word `powerful` asserts a quality instead of naming a capability.
@@ -68,18 +69,17 @@ results.
 
 ### Before / after: terminology
 
-BEFORE (from the old `xpath/data-types.md`), using a banned variant term:
+BEFORE (verbatim, from `xpath/data-types.md`), using a banned variant term:
 
 ```text
-XPath does not convert a string to a number automatically in every context.
+In most contexts this doesn't matter because they convert automatically.
 ```
 
 The word `convert` is a banned variant of the canonical term `transform`.
 AFTER:
 
 ```text
-XPath does not transform a string to a number automatically in every
-context.
+In most contexts this doesn't matter because they transform automatically.
 ```
 
 ## 2. The quarantined-analogy rule
@@ -138,8 +138,14 @@ reader:
 - Link URLs (the checker strips a Markdown link to its visible text).
 
 Established multi-word technical names keep their form. This applies even
-when a component word ends in "-ing". "Path Expressions" and "Template
-Matching" are not gerund-lead violations.
+when a component word ends in "-ing", such as "Path Expressions" or
+"Template Matching".
+
+The gerund-lead check only allowlists a term when it is the first word of a
+physical line. A line break can leave the second word of such a term, for
+example "Matching", at the start of the next line. The checker then still
+emits a WARN-severity finding. This is a known heuristic limitation, not a
+real violation. WARN findings do not fail the build; skim them and move on.
 
 ## 4. Running the checker
 
