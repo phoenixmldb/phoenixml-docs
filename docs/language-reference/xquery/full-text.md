@@ -763,10 +763,10 @@ local:search("articles-de", "Datenbanken", "de")
 ### C# Integration — Running Full-Text Queries
 
 ```csharp
+using PhoenixmlDb.XQuery.Execution;
+
 // Running full-text XQuery from a .NET application
-var engine = new XQueryEngine();
-engine.SetVariable("query", userSearchInput);
-engine.SetVariable("category", selectedCategory ?? "");
+var engine = new QueryEngine();
 
 string xquery = @"
     declare variable $query external;
@@ -784,12 +784,14 @@ string xquery = @"
       </result>
 ";
 
-var results = await engine.ExecuteAsync(xquery);
+var compiled = engine.Compile(xquery);
+using var context = engine.CreateContext();
+context.SetExternalVariable("query", userSearchInput);
+context.SetExternalVariable("category", selectedCategory ?? "");
 
-// Map results to C# objects
-var searchResults = results.Select(r => new SearchResult
+var results = new List<object?>();
+await foreach (var item in compiled.ExecutionPlan!.ExecuteAsync(context))
 {
-    Title = r.Element("title")?.Value,
-    Score = double.Parse(r.Element("score")?.Value ?? "0")
-}).ToList();
+    results.Add(item);
+}
 ```

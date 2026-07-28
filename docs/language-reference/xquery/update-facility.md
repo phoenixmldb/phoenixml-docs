@@ -576,18 +576,26 @@ All update operations execute against the `InMemoryUpdatableNodeStore`, which pr
 - **Conflict detection.** The engine detects conflicting updates on the same node, for example two `replace node` on the same target, and reports them as errors.
 
 ```csharp
-// From C#, execute an update query
-var engine = new XQueryEngine();
-engine.SetVariable("order-id", "O100");
-engine.SetVariable("new-status", "shipped");
+using PhoenixmlDb.XQuery.Execution;
 
-await engine.ExecuteAsync(@"
+// From C#, execute an update query
+var engine = new QueryEngine();
+var compiled = engine.Compile(@"
   let $order := //order[@id = $order-id]
   return (
     replace value of node $order/@status with $new-status,
     insert node <shipped-date>{ current-date() }</shipped-date> as last into $order
   )
 ");
+
+using var context = engine.CreateContext();
+context.SetExternalVariable("order-id", "O100");
+context.SetExternalVariable("new-status", "shipped");
+
+await foreach (var _ in compiled.ExecutionPlan!.ExecuteAsync(context))
+{
+    // Drains the plan so the pending update list is applied; this query returns no items.
+}
 ```
 
 ---

@@ -343,13 +343,22 @@ declare variable $page-size as xs:integer external := 25;
 The caller provides the values:
 
 ```csharp
+using PhoenixmlDb.XQuery.Execution;
+
 // C# — setting external variables before execution
-var engine = new XQueryEngine();
-engine.SetVariable("user-id", userId);
-engine.SetVariable("page", currentPage);
+var engine = new QueryEngine();
+var compiled = engine.Compile(query);
+
+using var context = engine.CreateContext();
+context.SetExternalVariable("user-id", userId);
+context.SetExternalVariable("page", currentPage);
 // page-size not set — defaults to 25
 
-var results = await engine.ExecuteAsync(query);
+var results = new List<object?>();
+await foreach (var item in compiled.ExecutionPlan!.ExecuteAsync(context))
+{
+    results.Add(item);
+}
 ```
 
 **C# parallel:**
@@ -808,11 +817,20 @@ return
 
 **Running this from C#:**
 ```csharp
-var engine = new XQueryEngine();
-engine.SetVariable("department", "Engineering");
-engine.SetVariable("report-date", DateTime.Now.ToString("yyyy-MM-dd"));
-engine.SetVariable("include-inactive", false);
+using PhoenixmlDb.XQuery.Execution;
 
-var report = await engine.ExecuteAsync(File.ReadAllText("employee-report.xq"));
+var engine = new QueryEngine();
+var compiled = engine.Compile(File.ReadAllText("employee-report.xq"));
+
+using var context = engine.CreateContext();
+context.SetExternalVariable("department", "Engineering");
+context.SetExternalVariable("report-date", DateTime.Now.ToString("yyyy-MM-dd"));
+context.SetExternalVariable("include-inactive", false);
+
+string report = "";
+await foreach (var item in compiled.ExecutionPlan!.ExecuteAsync(context))
+{
+    report += item;
+}
 Console.WriteLine(report);
 ```
