@@ -23,3 +23,5 @@ If you've spent your career working with JSON and REST APIs, you might wonder wh
 - **[XPath](xpath/index.md)** — The query language for XML.
 - **[XSLT](xslt/index.md)** — Transform XML documents into HTML, JSON, CSV, or plain text.
 - **[XQuery](xquery/index.md)** — A full programming language for querying and constructing XML.
+- **[XInclude](xinclude/index.md)** — Assemble one XML document out of several source files.
+- **[XPointer](xpointer/index.md)** — Select a fragment of a target document for XInclude to pull in.
