@@ -575,7 +575,7 @@ encode-for-uri("100% done")          => "100%25%20done"
 
 ### iri-to-uri()
 
-Transforms an IRI, which may contain Unicode characters, into a valid URI.
+Converts an IRI, which may contain Unicode characters, into a valid URI.
 
 **Signature:** `iri-to-uri($value as xs:string?) as xs:string`
 

@@ -121,7 +121,7 @@ xs:double("3.14")
 
 ### Untyped Data
 
-When you read XML without a schema, text content is `xs:untypedAtomic`. XQuery automatically transforms untyped values during comparisons and arithmetic. Explicit casting is safer:
+When you read XML without a schema, text content is `xs:untypedAtomic`. XQuery automatically converts untyped values during comparisons and arithmetic. Explicit casting is safer:
 
 ```xquery
 (: $book/price is xs:untypedAtomic from unvalidated XML :)
@@ -519,7 +519,7 @@ declare function local:strict($x as union(xs:string, xs:integer, xs:decimal)) as
 
 ## Type Testing and Casting
 
-XQuery provides four type-related expressions for testing, asserting, and transforming types.
+XQuery provides four type-related expressions for testing, asserting, and converting types.
 
 ### instance of
 
@@ -586,7 +586,7 @@ else
 
 ### cast as
 
-Transforms a value into a different type. Raises an error if the transformation fails.
+Converts a value into a different type. Raises an error if the conversion fails.
 
 ```xquery
 "42" cast as xs:integer          (: 42 :)
@@ -604,7 +604,7 @@ int.Parse("42")    // 42 — closer equivalent
 
 ### treat as
 
-Asserts that a value is a certain type **without transforming it**. If the value doesn't match, it raises a type error. This is a compile-time/static-type hint, not a runtime transformation.
+Asserts that a value is a certain type **without converting it**. If the value doesn't match, it raises a type error. This is a compile-time/static-type hint, not a runtime conversion.
 
 ```xquery
 $value treat as xs:integer

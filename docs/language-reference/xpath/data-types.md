@@ -111,11 +111,11 @@ Strings in XPath are sequences of Unicode characters. XPath strings are immutabl
 ""                             (: empty string :)
 ```
 
-**String vs untypedAtomic:** An element's text content is `xs:untypedAtomic`, not `xs:string`. In most contexts this does not matter because they transform automatically. However, `xs:string` values compare using collation, while `xs:untypedAtomic` values promote to the type of the other operand.
+**String vs untypedAtomic:** An element's text content is `xs:untypedAtomic`, not `xs:string`. In most contexts this does not matter because they convert automatically. However, `xs:string` values compare using collation, while `xs:untypedAtomic` values promote to the type of the other operand.
 
 ### Boolean Type
 
-XPath booleans follow [effective boolean value](functions/boolean.md) rules that automatically transform other types to boolean:
+XPath booleans follow [effective boolean value](functions/boolean.md) rules that automatically convert other types to boolean:
 
 ```xpath
 boolean("hello")   => true    (: non-empty string :)
@@ -195,7 +195,7 @@ else 0
 
 ### The `treat as` Assertion
 
-Asserts a type at compile time without transforming the value. Raises an error if the type does not match at runtime:
+Asserts a type at compile time without converting the value. Raises an error if the type does not match at runtime:
 
 ```xpath
 $value treat as xs:integer    (: assert $value is an integer :)

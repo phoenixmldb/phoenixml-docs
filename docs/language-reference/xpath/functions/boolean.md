@@ -6,7 +6,7 @@ sort: 5
 
 # Boolean Functions
 
-XPath has four boolean functions. XPath defines "effective boolean value" rules. These rules transform other types to a boolean automatically in conditional contexts.
+XPath has four boolean functions. XPath defines "effective boolean value" rules. These rules convert other types to a boolean automatically in conditional contexts.
 
 > For C# developers: C# has no equivalent implicit conversion to boolean. XPath's effective boolean value rules convert an empty sequence, an empty string, or a zero value to `false` automatically. XPath's `true` and `false` are function calls, not literal keywords like C#'s `true`.
 
@@ -14,7 +14,7 @@ XPath has four boolean functions. XPath defines "effective boolean value" rules.
 
 ### boolean()
 
-Transforms a value to boolean using XPath's effective boolean value rules.
+Converts a value to boolean using XPath's effective boolean value rules.
 
 **Signature:** `boolean($value as item()*) as xs:boolean`
 
@@ -38,7 +38,7 @@ boolean((1, 2))     => true     (: non-empty sequence starting with a node or va
 
 **C# equivalent:** None. See the callout above.
 
-**Why this matters:** In XPath, you can write `if (//error) then ...`. The sequence of error elements transforms to `true` automatically when any exist. You do not need `if (count(//error) > 0)`.
+**Why this matters:** In XPath, you can write `if (//error) then ...`. The sequence of error elements converts to `true` automatically when any exist. You do not need `if (count(//error) > 0)`.
 
 ---
 

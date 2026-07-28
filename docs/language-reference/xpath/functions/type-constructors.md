@@ -97,7 +97,7 @@ For schema compatibility:
 
 ### xs:string()
 
-Transforms any value to a string.
+Converts any value to a string.
 
 ```xpath
 xs:string(42)          => "42"

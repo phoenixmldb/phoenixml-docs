@@ -785,7 +785,7 @@ public class XsltMiddleware
             var transformer = new XsltTransformer();
             await transformer.LoadStylesheetAsync(
                 await File.ReadAllTextAsync(_stylesheetPath),
-                new Uri(_stylesheetPath).AbsoluteUri);
+                new Uri(_stylesheetPath));
             transformer.SetParameter("request-path", context.Request.Path.Value ?? "/");
             transformer.SetParameter("timestamp", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
@@ -823,7 +823,7 @@ public class XsltCli
 
         var transformer = new XsltTransformer();
         var stylesheet = await File.ReadAllTextAsync(stylesheetPath);
-        await transformer.LoadStylesheetAsync(stylesheet, new Uri(stylesheetPath).AbsoluteUri);
+        await transformer.LoadStylesheetAsync(stylesheet, new Uri(stylesheetPath));
 
         // Pass environment variables as parameters
         transformer.SetParameter("build-date", DateTime.Now.ToString("yyyy-MM-dd"));
@@ -898,7 +898,7 @@ public class DocGenerationTask
         var transformer = new XsltTransformer();
         await transformer.LoadStylesheetAsync(
             await File.ReadAllTextAsync("build/api-docs.xsl"),
-            "file:///build/api-docs.xsl");
+            new Uri("file:///build/api-docs.xsl"));
 
         transformer.SetParameter("project-name", "MyProject");
         transformer.SetParameter("version", GetVersionFromCsproj());

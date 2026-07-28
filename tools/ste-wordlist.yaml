@@ -29,7 +29,10 @@ terminology:
   - canonical: "element"
     variants: ["tag"]
   - canonical: "transform"
-    variants: ["convert", "converts", "converted", "converting", "munge"]
+    # convert/cast/coerce are allowed for type conversion (cast as, treat as,
+    # xs:string(), iri-to-uri, etc.) — "transform" is reserved for XSLT /
+    # whole-document transformation.
+    variants: ["munge"]
   - canonical: "stylesheet"
     variants: ["style sheet", "style-sheet"]
 

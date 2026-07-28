@@ -342,7 +342,7 @@ concat("Hello", " ", "World")
 concat($first-name, " ", $last-name)
 ```
 
-The `||` operator atomizes its operands and transforms them into strings automatically. You can concatenate non-string values without explicit casting:
+The `||` operator atomizes its operands and converts them into strings automatically. You can concatenate non-string values without explicit casting:
 
 ```xquery
 "Price: $" || $product/price || " (qty: " || $item/@qty || ")"

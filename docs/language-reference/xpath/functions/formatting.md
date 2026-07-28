@@ -6,7 +6,7 @@ sort: 11
 
 # Formatting Functions
 
-These functions transform values into formatted strings for display.
+These functions convert values into formatted strings for display.
 
 > For C# developers: these functions serve the same purpose as C#'s `ToString()` format strings. XPath uses its own picture string syntax instead.
 
@@ -74,7 +74,7 @@ See [Date and Time Functions](date-time.md#formatting) for `format-date()`, `for
 
 ### serialize()
 
-Transforms a node or value to its serialized string form (XML, JSON, HTML, or text).
+Converts a node or value to its serialized string form (XML, JSON, HTML, or text).
 
 **Signature:** `serialize($value as item()*, $params as item()?) as xs:string`
 
