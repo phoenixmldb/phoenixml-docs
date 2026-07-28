@@ -6,9 +6,9 @@ sort: 3
 
 # Date and Time Functions
 
-XPath has first-class date and time types — unlike JSON where dates are just strings. This means you can compare dates, extract components, add durations, and format for display without parsing strings yourself.
+XPath has first-class date and time types. JSON represents dates only as strings. XPath lets you compare dates, extract components, add durations, and format values for display without parsing strings yourself.
 
-If you've struggled with `DateTime.Parse()` and format strings in C#, XPath's approach will feel more structured.
+> For C# developers: XPath's date functions replace `DateTime.Parse()` and manual format strings. XPath works with typed date and time values directly, which gives the code a more structured approach.
 
 ## Contents
 

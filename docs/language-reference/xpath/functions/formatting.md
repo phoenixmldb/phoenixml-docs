@@ -6,7 +6,9 @@ sort: 11
 
 # Formatting Functions
 
-These functions convert values to formatted strings for display. If you've used C#'s `ToString()` format strings, these serve the same purpose with XPath's own picture string syntax.
+These functions transform values into formatted strings for display.
+
+> For C# developers: these functions serve the same purpose as C#'s `ToString()` format strings. XPath uses its own picture string syntax instead.
 
 ---
 
@@ -91,9 +93,9 @@ serialize(map { "name": "Alice", "age": 30 },
 **C# equivalent:** `element.ToString()` for XML, `JsonSerializer.Serialize()` for JSON.
 
 **Use cases:**
-- Embedding XML as a string in another format
-- Producing JSON output from an XSLT transformation
-- Debugging — see the actual serialized form of a value
+- Embedding XML as a string in another format.
+- Producing JSON output from an XSLT transformation.
+- Debugging — see the actual serialized form of a value.
 
 ---
 
@@ -111,7 +113,7 @@ parse-html("<p>Hello <b>world</b></p>")//b   => "world"
 
 **C# equivalent:** Using an HTML parser library like `HtmlAgilityPack`.
 
-**Why this matters:** XPath 4.0 can now work with HTML content directly, making it useful for web scraping and content extraction scenarios.
+**Why this matters:** XPath 4.0 works with HTML content directly. This helps with web scraping and content extraction.
 
 ---
 

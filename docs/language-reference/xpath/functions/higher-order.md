@@ -6,15 +6,13 @@ sort: 10
 
 # Higher-Order Functions
 
-Higher-order functions accept other functions as arguments. If you've used LINQ's `Select`, `Where`, `Aggregate`, and `OrderBy`, these are the XPath equivalents.
-
-XPath 3.1 introduced inline function expressions (lambdas), making these practical:
+Higher-order functions accept other functions as arguments. XPath 3.1 introduced inline function expressions, called lambdas. Lambdas make higher-order functions practical to use.
 
 ```xpath
 function($x) { $x * 2 }         (: anonymous function :)
 ```
 
-This is the XPath equivalent of C#'s `x => x * 2`.
+> For C# developers: several of these functions mirror LINQ methods. `for-each` mirrors `Select`. `filter` mirrors `Where`. `for-each-pair` mirrors `Zip`. `fold-left` mirrors `Aggregate`. `some` mirrors `Any`. `every` mirrors `All`. `highest` resembles `OrderByDescending(...).First()`, but it returns every item tied for the maximum. `function-lookup` resembles reflection, such as `typeof(Math).GetMethod(...)`. `apply` resembles `method.Invoke(null, args)`. The anonymous function syntax `function($x) { $x * 2 }` is equivalent to C#'s `x => x * 2`.
 
 ---
 
@@ -22,7 +20,7 @@ This is the XPath equivalent of C#'s `x => x * 2`.
 
 ### for-each()
 
-Applies a function to each item in a sequence, returning the results. This is LINQ's `Select`.
+Applies a function to each item in a sequence and returns the results.
 
 **Signature:** `for-each($seq as item()*, $fn as function(item()) as item()*) as item()*`
 
@@ -34,13 +32,11 @@ for-each(//book/title, function($t) { upper-case($t) })
 => ("EFFECTIVE C#", "XML IN A NUTSHELL")
 ```
 
-**C# equivalent:** `items.Select(n => n * 2)`
-
 ---
 
 ### filter()
 
-Keeps items where the predicate function returns true. This is LINQ's `Where`.
+Keeps the items where the predicate function returns true.
 
 **Signature:** `filter($seq as item()*, $fn as function(item()) as xs:boolean) as item()*`
 
@@ -52,13 +48,11 @@ filter(//book, function($b) { $b/price > 30 })
 => books over $30
 ```
 
-**C# equivalent:** `items.Where(n => n % 2 == 0)`
-
 ---
 
 ### for-each-pair()
 
-Applies a function to pairs of items from two sequences. This is LINQ's `Zip`.
+Applies a function to pairs of items taken from two sequences.
 
 **Signature:** `for-each-pair($seq1 as item()*, $seq2 as item()*, $fn as function(item(), item()) as item()*) as item()*`
 
@@ -78,15 +72,13 @@ for-each-pair(
 => ("Widget: $9.99", "Gadget: $24.50")
 ```
 
-**C# equivalent:** `a.Zip(b, (x, y) => x + y)`
-
 ---
 
 ## Folding (Reducing)
 
 ### fold-left()
 
-Reduces a sequence to a single value by applying a function from left to right. This is LINQ's `Aggregate`.
+Reduces a sequence to a single value. It applies a function to each item from left to right.
 
 **Signature:** `fold-left($seq as item()*, $initial as item()*, $fn as function(item()*, item()) as item()*) as item()*`
 
@@ -108,20 +100,18 @@ fold-left(//name, "",
 => "Alice, Bob, Charlie"
 ```
 
-**C# equivalent:** `items.Aggregate(0, (acc, n) => acc + n)`
-
 ---
 
 ### fold-right()
 
-Same as `fold-left`, but processes from right to left.
+Works like `fold-left`, but processes items from right to left.
 
 ```xpath
 fold-right(("a", "b", "c"), "", function($s, $acc) { $s || $acc })
 => "abc"
 ```
 
-**When to use:** `fold-left` is more common. `fold-right` matters when the operation is not associative and order matters (e.g., building nested structures).
+**When to use:** `fold-left` is more common. `fold-right` matters when the operation is not associative and order matters, such as when you build nested structures.
 
 ---
 
@@ -129,7 +119,7 @@ fold-right(("a", "b", "c"), "", function($s, $acc) { $s || $acc })
 
 ### some()
 
-Tests whether at least one item satisfies a predicate. This is LINQ's `Any`.
+Tests whether at least one item satisfies a predicate.
 
 **Signature:** `some($seq as item()*, $fn as function(item()) as xs:boolean) as xs:boolean`
 
@@ -139,15 +129,13 @@ some((1, 2, 3), function($n) { $n > 5 })   => false
 some(//book, function($b) { $b/price > 100 }) => true if any book costs over $100
 ```
 
-**C# equivalent:** `items.Any(n => n > 2)`
-
-**Note:** XPath also supports `some $x in (1, 2, 3) satisfies $x > 2` as an expression — the function form is more composable.
+**Note:** XPath also supports `some $x in (1, 2, 3) satisfies $x > 2` as an expression. The function form composes with other higher-order functions; the expression form does not.
 
 ---
 
 ### every()
 
-Tests whether all items satisfy a predicate. This is LINQ's `All`.
+Tests whether all items satisfy a predicate.
 
 **Signature:** `every($seq as item()*, $fn as function(item()) as xs:boolean) as xs:boolean`
 
@@ -156,15 +144,13 @@ every((2, 4, 6), function($n) { $n mod 2 = 0 })   => true
 every((2, 3, 6), function($n) { $n mod 2 = 0 })   => false
 ```
 
-**C# equivalent:** `items.All(n => n % 2 == 0)`
-
 ---
 
 ## Selection
 
 ### highest()
 
-Returns items with the highest key value. New in XPath 4.0.
+Returns the items with the highest key value. New in XPath 4.0.
 
 **Signature:** `highest($seq as item()*, $key as function(item()) as xs:anyAtomicType?) as item()*`
 
@@ -173,13 +159,11 @@ highest(//book, function($b) { $b/price })
 => the most expensive book(s)
 ```
 
-**C# equivalent:** `books.OrderByDescending(b => b.Price).First()` — but `highest()` returns all items tied for the maximum.
-
 ---
 
 ### lowest()
 
-Returns items with the lowest key value. New in XPath 4.0.
+Returns the items with the lowest key value. New in XPath 4.0.
 
 ```xpath
 lowest(//book, function($b) { $b/price })
@@ -213,7 +197,7 @@ function-arity(abs#1)       => 1
 
 ### function-lookup()
 
-Looks up a function by name and arity at runtime.
+Looks up a function by its name and arity at runtime.
 
 **Signature:** `function-lookup($name as xs:QName, $arity as xs:integer) as function(*)?`
 
@@ -222,8 +206,6 @@ let $fn := function-lookup(xs:QName("fn:abs"), 1)
 return $fn(-5)
 => 5
 ```
-
-**C# equivalent:** Reflection — `typeof(Math).GetMethod("Abs", new[] { typeof(int) })`
 
 ---
 
@@ -236,5 +218,3 @@ Calls a function with an array of arguments.
 ```xpath
 apply(concat#3, ["a", "b", "c"])   => "abc"
 ```
-
-**C# equivalent:** `method.Invoke(null, args)`

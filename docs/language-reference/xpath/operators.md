@@ -6,7 +6,9 @@ sort: 3
 
 # Operators and Comparisons
 
-XPath's operators look familiar — `+`, `-`, `=`, `<`, `and`, `or` — but some have subtly different semantics than their C# counterparts. Understanding these differences prevents bugs that are hard to diagnose.
+XPath's operators look familiar: `+`, `-`, `=`, `<`, `and`, `or`. Several of them have different semantics than their C# counterparts. Understanding these differences prevents bugs that are hard to diagnose.
+
+> For C# developers: XPath's arithmetic operators, type promotion, and `and`/`or` short-circuiting all match C#. The `||` string operator resembles C# string interpolation or `string.Concat()`. The `to` operator resembles `Enumerable.Range`. `union` resembles `Union()`, and `intersect`/`except` resemble `Intersect()`/`Except()`, but all three preserve document order. `some`/`every` resemble `Any()`/`All()`. The `!` operator resembles `Select()`. The `=>` operator resembles method chaining. `let` resembles a local variable declaration. XPath's `if` always requires both `then` and `else`, unlike the C# ternary `? :`.
 
 ## Contents
 
@@ -21,7 +23,7 @@ XPath's operators look familiar — `+`, `-`, `=`, `<`, `and`, `or` — but some
 
 ## Arithmetic Operators
 
-These work as you'd expect from C#:
+The following table lists the XPath arithmetic operators.
 
 | Operator | XPath | C# | Example |
 |----------|-------|----|---------|
@@ -50,13 +52,13 @@ XPath automatically promotes numeric types during arithmetic:
 5 + 3.0e0      => 8.0e0  (: integer + double = double :)
 ```
 
-This matches C#'s implicit numeric conversions.
+This promotion happens automatically during arithmetic.
 
 ---
 
 ## Comparison Operators
 
-This is where XPath diverges significantly from C#. XPath has **two kinds** of comparison operators.
+This is where XPath differs most from C#. XPath has **two kinds** of comparison operators.
 
 ### Value Comparisons (Strict)
 
@@ -78,7 +80,7 @@ Compare exactly two atomic values. Raise an error if either operand is a sequenc
 (1, 2) eq 1         => ERROR: left operand has more than one item
 ```
 
-**Use value comparisons when:** you know both sides are single values and want strict, predictable behavior.
+**Use value comparisons when:** both sides are single values and the comparison needs strict, predictable behavior.
 
 ### General Comparisons (Flexible)
 
@@ -97,7 +99,7 @@ Compare sequences by checking if **any pair** of items satisfies the comparison.
 (1, 2, 3) != 2         => true   (: 1 != 2, so there exists a non-match :)
 ```
 
-**The `!=` trap:** In C#, `x != y` means "x is not equal to y." In XPath, `(1, 2) != 2` is `true` because `1 != 2` — there *exists* a pair that doesn't match. This catches people off guard.
+**The `!=` trap:** In C#, `x != y` means x is not equal to y. In XPath, `(1, 2) != 2` returns `true` because one pair, `1 != 2`, does not match. This behavior surprises many developers.
 
 ```xpath
 (: These are NOT equivalent! :)
@@ -129,7 +131,7 @@ This is convenient but can hide bugs. If `@price` contains "N/A", the comparison
 //book[@category='data' or @category='programming']
 ```
 
-**Short-circuit evaluation:** XPath `and` and `or` short-circuit just like C#'s `&&` and `||`.
+**Short-circuit evaluation:** XPath's `and` and `or` operators short-circuit.
 
 ```xpath
 exists(//config) and //config/@debug = 'true'
@@ -160,7 +162,7 @@ XPath automatically converts values to boolean in conditional contexts:
 | Empty sequence `()` | `false` |
 | Non-empty sequence | `true` (if first item is a node) |
 
-This means you can write:
+As a result, the following two expressions are equivalent:
 
 ```xpath
 if (//error) then "Problems found" else "All clear"
@@ -181,9 +183,7 @@ XPath 3.1 introduced the `||` operator for string concatenation:
 "Count: " || count(//item)          => "Count: 5"
 ```
 
-**C# equivalent:** `$"hello {world}"` or `string.Concat()`
-
-**Note:** `||` was added in XPath 3.1. In XPath 2.0, you'd use `concat("hello", " ", "world")`.
+**Note:** XPath 2.0 uses `concat("hello", " ", "world")` instead.
 
 ---
 
@@ -197,8 +197,6 @@ Creates a sequence of consecutive integers:
 1 to 5           => (1, 2, 3, 4, 5)
 3 to 7           => (3, 4, 5, 6, 7)
 ```
-
-**C# equivalent:** `Enumerable.Range(1, 5)`
 
 ### Comma: `,`
 
@@ -219,16 +217,12 @@ Combines node sequences in document order, removing duplicates:
 //h1 union //h2 union //h3   => all heading elements
 ```
 
-**C# equivalent:** `titles.Union(authors)` (but preserves document order)
-
 ### Intersect and Except
 
 ```xpath
 $set1 intersect $set2    (: nodes in both sets :)
 $set1 except $set2       (: nodes in set1 but not set2 :)
 ```
-
-**C# equivalent:** `set1.Intersect(set2)` and `set1.Except(set2)`
 
 ---
 
@@ -244,12 +238,12 @@ then sum(//item/price) div count(//item)
 else 0
 ```
 
-**C# equivalent:** The ternary `? :` operator:
+In C#:
 ```csharp
 price > 100 ? "expensive" : "affordable"
 ```
 
-**Note:** Unlike C#'s ternary, XPath's `if` requires both `then` and `else` branches — there's no standalone `if` without `else`.
+**Note:** XPath's `if` always requires both a `then` branch and an `else` branch. XPath has no standalone `if` without `else`.
 
 ### Quantified Expressions
 
@@ -258,8 +252,6 @@ some $x in (1, 2, 3) satisfies $x > 2     => true
 every $x in (1, 2, 3) satisfies $x > 0    => true
 every $x in (1, 2, 3) satisfies $x > 2    => false
 ```
-
-**C# equivalent:** `items.Any(x => x > 2)` and `items.All(x => x > 0)`
 
 ### Simple Map: `!`
 
@@ -270,8 +262,6 @@ Applies an expression to each item in a sequence:
 //book ! title                 => all title children of books
 ("hello", "world") ! upper-case(.)  => ("HELLO", "WORLD")
 ```
-
-**C# equivalent:** `items.Select(x => x * 2)`
 
 The `!` operator is more concise than `for-each()` for simple mappings.
 
@@ -285,12 +275,12 @@ Pipes a value into a function (XPath 3.1+):
 (1, 2, 3, 4, 5) => sum()                  => 15
 ```
 
-**C# equivalent:** Method chaining or the pipe pattern:
+In C#, the equivalent is method chaining:
 ```csharp
 "hello world".ToUpper()
 ```
 
-The arrow operator makes chains of function calls read left-to-right instead of inside-out.
+The arrow operator makes chains of function calls read left to right instead of inside out.
 
 ### Let Expressions
 
@@ -302,7 +292,7 @@ let $total := sum(//price),
 return $total div $count
 ```
 
-**C# equivalent:**
+In C#:
 ```csharp
 var total = prices.Sum();
 var count = prices.Count();

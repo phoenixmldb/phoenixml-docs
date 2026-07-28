@@ -6,7 +6,9 @@ sort: 5
 
 # Boolean Functions
 
-XPath has just four boolean functions. Booleans work differently than in C# in one key way: XPath has "effective boolean value" rules that automatically convert other types to boolean in conditional contexts.
+XPath has four boolean functions. XPath defines "effective boolean value" rules. These rules transform other types to a boolean automatically in conditional contexts.
+
+> For C# developers: C# has no equivalent implicit conversion to boolean. XPath's effective boolean value rules convert an empty sequence, an empty string, or a zero value to `false` automatically. XPath's `true` and `false` are function calls, not literal keywords like C#'s `true`.
 
 ---
 
@@ -34,9 +36,9 @@ boolean((1, 2))     => true     (: non-empty sequence starting with a node or va
 | Single `xs:string` | `true` if non-empty |
 | Single number | `true` if non-zero and not NaN |
 
-**C# equivalent:** There's no single C# equivalent — C# doesn't implicitly convert strings or numbers to booleans.
+**C# equivalent:** None. See the callout above.
 
-**Why this matters:** In XPath, you can write `if (//error) then ...` and it works — the sequence of error nodes is automatically converted to `true` if any exist. You don't need `if (count(//error) > 0)`.
+**Why this matters:** In XPath, you can write `if (//error) then ...`. The sequence of error elements converts to `true` automatically when any exist. You do not need `if (count(//error) > 0)`.
 
 ---
 
@@ -50,7 +52,7 @@ Returns `true`. Needed because XPath doesn't have boolean literals.
 true()   => true
 ```
 
-**Note:** Unlike C#'s `true`, this is a function call with parentheses. XPath 4.0 also allows the keyword `true` without parentheses in some contexts.
+**Note:** This is a function call with parentheses, not a literal value. XPath 4.0 also allows the keyword `true` without parentheses in some contexts.
 
 ---
 

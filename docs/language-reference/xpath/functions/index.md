@@ -12,11 +12,11 @@ XPath 4.0 provides over 240 built-in functions organized across several namespac
 
 Each function is documented with:
 
-- **Signature** — the function name, parameters, and return type
-- **Description** — what the function does
-- **Examples** — XPath expressions with expected results, using realistic XML when relevant
-- **C# equivalent** — the closest .NET equivalent, so you can map to what you already know
-- **Notes** — edge cases, version history (XPath 3.1 vs 4.0), and common pitfalls
+- **Signature** — the function name, parameters, and return type.
+- **Description** — what the function does.
+- **Examples** — XPath expressions with expected results, using realistic XML when relevant.
+- **C# equivalent** — the closest .NET equivalent for the function.
+- **Notes** — edge cases, version history (XPath 3.1 vs 4.0), and common pitfalls.
 
 Functions are in the `fn:` namespace by default — you don't need to prefix them. The `math:`, `map:`, and `array:` namespaces require prefixes.
 
@@ -39,11 +39,11 @@ Functions are in the `fn:` namespace by default — you don't need to prefix the
 
 ## A Note on Extensibility
 
-XPath's function library is fixed — you cannot define custom functions in XPath alone. This is by design: XPath is a query language embedded in host languages that provide extensibility.
+The XPath function library is fixed. You cannot define custom functions in XPath alone. XPath is a query language, and it runs embedded in host languages that provide extensibility.
 
-- In **XSLT**, use `xsl:function` to define custom functions callable from any XPath expression in your stylesheet
-- In **XQuery**, use `declare function` to define functions callable from XPath expressions within your queries
-- In **.NET**, the PhoenixmlDb engine supports registering extension functions from C# code
+- In **XSLT**, use `xsl:function` to define custom functions. You can call them from any XPath expression in your stylesheet.
+- In **XQuery**, use `declare function` to define functions. You can call them from XPath expressions within your queries.
+- In **.NET**, the PhoenixmlDb engine supports registering extension functions from C# code.
 
 See the [XSLT](../../xslt/index.md) and [XQuery](../../xquery/index.md) sections for details on writing custom functions. The built-in functions documented here are available in all three contexts.
 
