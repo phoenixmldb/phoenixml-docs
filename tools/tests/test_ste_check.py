@@ -67,6 +67,17 @@ def test_terminology_variant_flagged():
     findings = s.check_terminology(lines, cfg)
     assert any(f.code == "terminology" and "element" in f.message for f in findings)
 
+def test_passive_allow_suppresses_state_phrasing():
+    cfg = s.load_config(CONFIG)
+    # "is required" is seeded in passive_allow as a common false positive
+    # (adjectival state, not a true passive construction).
+    lines = s.mark_callouts(s.strip_markdown("The XSLT namespace is required.\n"), cfg)
+    assert s.check_passive(lines, cfg) == []
+    # a real passive construction not on the allow list still fires.
+    lines = s.mark_callouts(s.strip_markdown("The document is transformed by the engine.\n"), cfg)
+    findings = s.check_passive(lines, cfg)
+    assert any(f.code == "passive-voice" for f in findings)
+
 def test_placeholder_flagged():
     cfg = s.load_config(CONFIG)
     lines = s.mark_callouts(s.strip_markdown("This section is TODO.\n"), cfg)

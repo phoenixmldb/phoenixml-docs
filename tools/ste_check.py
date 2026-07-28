@@ -15,6 +15,11 @@ class Config:
     allow_analogy_terms: list = field(default_factory=list)
     callout_prefixes: list = field(default_factory=list)
     placeholder_markers: list = field(default_factory=list)
+    # Phrases that suppress a passive-voice finding when present (case-insensitive
+    # substring match) on the same line. Seeded from Task 6 baseline review with
+    # adjectival past-participle "state" phrasing ("is used", "is required", ...)
+    # that the passive-voice heuristic mistakes for true passive constructions.
+    passive_allow: list = field(default_factory=list)
 
 
 @dataclass
@@ -34,6 +39,7 @@ def load_config(path: str) -> Config:
         allow_analogy_terms=list(data.get("allow_analogy_terms", [])),
         callout_prefixes=list(data.get("callout_prefixes", [])),
         placeholder_markers=list(data.get("placeholder_markers", [])),
+        passive_allow=list(data.get("passive_allow", [])),
     )
 
 
@@ -177,10 +183,14 @@ _PASSIVE = re.compile(
 
 def check_passive(lines: list, config: Config) -> list:
     findings = []
+    allow = [p.lower() for p in config.passive_allow]
     for ln in lines:
         if not ln.text.strip():
             continue
         if _PASSIVE.search(ln.text):
+            low = ln.text.lower()
+            if any(phrase in low for phrase in allow):
+                continue
             findings.append(Finding(
                 ln.lineno, "warn", "passive-voice",
                 "possible passive voice; prefer active",

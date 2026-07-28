@@ -34,8 +34,27 @@ terminology:
     variants: ["style sheet", "style-sheet"]
 
 # analogy terms allowed anywhere (they are technical proper nouns, not idioms)
+# "String" and "Everything" are also seeded here: the gerund-lead check only
+# tests whether the first word ends in "ing", so these non-gerund words
+# ("String functions...", "Everything above...") were false-flagged.
 allow_analogy_terms:
   - "LINQ"
   - "Razor"
   - "Handlebars"
   - "IServiceProvider"
+  - "String"
+  - "Everything"
+
+# Task 6 baseline review: passive-voice regex (be/is/are + -ed/-en word) also
+# matches adjectival past-participle "state" phrasing that isn't true passive
+# voice in technical prose ("the namespace is required", "default is used").
+# Phrases here suppress the finding on a line via case-insensitive substring
+# match; only phrases actually observed as false positives in the baseline
+# are listed, so genuine passive-voice findings elsewhere are untouched.
+passive_allow:
+  - "is used"
+  - "are used"
+  - "is called"
+  - "are called"
+  - "is required"
+  - "are required"
