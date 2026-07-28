@@ -6,7 +6,15 @@ sort: 18
 
 # Number Formatting
 
-XSLT provides three instructions for controlling how numbers and characters appear in the output: `xsl:number` for generating formatted counters and numbering schemes, `xsl:decimal-format` for customizing how `format-number()` renders decimal values, and `xsl:character-map` for post-serialization character substitutions.
+XSLT provides three instructions for numbers and characters in the output. `xsl:number` generates formatted counters and numbering schemes. `xsl:decimal-format` customizes how `format-number()` renders decimal values. `xsl:character-map` performs character substitutions after serialization.
+
+> For C# developers: none of these instructions has a single C# equivalent.
+> `xsl:number` combines counting logic, similar to LINQ's `IndexOf` or a list
+> position, with a format string like `ToString("D3")` for zero-padding or a
+> custom Roman-numeral formatter. `xsl:decimal-format` corresponds to
+> `CultureInfo.NumberFormat` or a custom `NumberFormatInfo`. `xsl:character-map`
+> corresponds to `string.Replace()` applied to the final output, or a custom
+> `TextWriter` that substitutes characters.
 
 ## Contents
 
@@ -18,9 +26,7 @@ XSLT provides three instructions for controlling how numbers and characters appe
 
 ## xsl:number
 
-`xsl:number` generates a formatted number, most commonly used for numbering items in the output — chapter numbers, list item numbers, footnote markers, and outline numbering.
-
-**C# parallel:** There is no single C# equivalent. `xsl:number` combines counting logic (like LINQ's `IndexOf` or list position) with format strings (like `ToString("D3")` for zero-padding or custom Roman numeral formatters).
+`xsl:number` generates a formatted number. Common uses include chapter numbers, list item numbers, footnote markers, and outline numbering.
 
 ### Basic Usage
 
@@ -43,7 +49,7 @@ Output:
 
 ### How xsl:number Counts
 
-`xsl:number` does not simply use `position()`. It counts nodes in the source document based on the `level`, `count`, and `from` attributes. This distinction matters: `position()` reflects processing order (which can be affected by sorting), while `xsl:number` reflects document structure.
+`xsl:number` does not use `position()`. It counts nodes in the source document, based on the `level`, `count`, and `from` attributes. `position()` reflects processing order, and sorting can change that order. `xsl:number` reflects document structure instead.
 
 ### The level Attribute
 
@@ -76,7 +82,7 @@ Output: `1. First`, `2. Second`, `3. Third`
 
 #### level="multiple"
 
-Counts at multiple levels of the hierarchy, producing composite numbers like `1.1`, `1.2`, `2.1`. This is the key to outline numbering.
+Counts at multiple levels of the hierarchy. The result is a composite number, such as `1.1`, `1.2`, or `2.1`. Outline numbering relies on this level value.
 
 ```xml
 <xsl:template match="section/title">
@@ -120,7 +126,7 @@ Output:
 
 #### level="any"
 
-Counts all matching nodes in the document, regardless of hierarchy. Useful for footnotes or sequential numbering across sections.
+Counts all matching nodes in the document, regardless of hierarchy. Use this level for footnotes or sequential numbering across sections.
 
 ```xml
 <xsl:template match="footnote">
@@ -148,11 +154,11 @@ No matter how deeply nested footnotes are in sections, they get sequential numbe
 </xsl:template>
 ```
 
-In this example, each `section` resets the count. Items in the first section are numbered 1, 2, 3; items in the second section start over at 1.
+In this example, each `section` resets the count. Items in the first section are numbered 1, 2, 3. Items in the second section start over at 1.
 
 ### The format Attribute
 
-The `format` attribute controls the output style. The first character (or characters) of the format string determines the numbering system:
+The `format` attribute controls the output style. The first character, or characters, of the format string determines the numbering system:
 
 | Format | Output | Description |
 |--------|--------|-------------|
@@ -301,7 +307,7 @@ Instead of counting nodes, you can format a specific number:
 
 ## xsl:decimal-format
 
-`xsl:decimal-format` declares a named (or default) decimal format that controls how the `format-number()` function renders numeric values. This is a top-level declaration.
+`xsl:decimal-format` declares a named, or default, decimal format. This format controls how the `format-number()` function renders numeric values. It is a top-level declaration.
 
 **C# parallel:** `CultureInfo.NumberFormat` or custom `NumberFormatInfo`:
 
@@ -458,7 +464,7 @@ Output for `$locale = 'de'` with amount 1234567.89:
 
 ## xsl:character-map and xsl:output-character
 
-`xsl:character-map` defines a mapping from single characters to replacement strings that is applied during serialization. Unlike most XSLT processing (which operates on the data model), character maps operate on the serialized output bytes.
+`xsl:character-map` defines a mapping from single characters to replacement strings. The serializer applies this mapping during serialization. Unlike most XSLT processing, which operates on the data model, character maps operate on the serialized output bytes.
 
 **C# parallel:** `string.Replace()` applied to the final output, or custom `TextWriter` that substitutes characters:
 
@@ -478,7 +484,7 @@ The XML serializer normally escapes certain characters:
 - `>` becomes `&gt;`
 - `&` becomes `&amp;`
 
-Sometimes you need to output characters that would otherwise be escaped, or you need to replace characters with multi-character strings. Character maps let you do this without resorting to `disable-output-escaping`.
+Sometimes you need to output characters that the serializer would otherwise escape, or you need to replace characters with multi-character strings. Character maps let you do this without `disable-output-escaping`.
 
 ### Declaring a Character Map
 
@@ -541,7 +547,7 @@ Then in your templates, use the placeholder characters:
 </xsl:template>
 ```
 
-This approach is cleaner than `disable-output-escaping` because it works with any output method and does not break the XSLT data model.
+This approach is cleaner than `disable-output-escaping`. It works with any output method and does not break the XSLT data model.
 
 ### Composing Character Maps
 

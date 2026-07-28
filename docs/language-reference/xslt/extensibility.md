@@ -6,19 +6,29 @@ sort: 5
 
 # Extensibility
 
-XSLT stylesheets rarely exist in isolation. Real transforms need domain-specific logic, access to external data, and integration with the host application. XSLT's extensibility model provides multiple mechanisms for this: user-defined functions, packages, extension functions registered from the host environment, and import/include hierarchies.
+XSLT stylesheets rarely run in isolation. Real transforms need domain-specific logic, access to external data, and integration with the host application. The extensibility model provides several mechanisms for this: user-defined functions, packages, language-level extension functions and instructions, and import/include hierarchies. On the .NET side, PhoenixmlDb exposes a transform-hosting API. Load a stylesheet, pass in parameters, run the transform, and read back the results, including secondary result documents.
 
-If you have worked with C# middleware, Razor tag helpers, or plugin architectures with `IServiceCollection`, you already understand the pattern: extend the framework's built-in capabilities with application-specific behavior.
+> For C# developers: this pattern resembles ASP.NET Core middleware, Razor tag
+> helpers, and plugin architectures built on `IServiceCollection`. Each one
+> extends a framework's built-in capabilities with application-specific
+> behavior.
 
 ## Contents
 
 - [Why Extensibility Matters](#why-extensibility-matters)
+
 - [xsl:function — User-Defined Functions](#xslfunction--user-defined-functions)
+
 - [Packages — Reusable Stylesheet Libraries](#packages--reusable-stylesheet-libraries)
+
 - [Extension Functions from .NET](#extension-functions-from-net)
+
 - [Extension Instructions and xsl:fallback](#extension-instructions-and-xslfallback)
+
 - [Import and Include](#import-and-include)
+
 - [Practical Patterns](#practical-patterns)
+
 - [Integration Examples](#integration-examples)
 
 ---
@@ -28,12 +38,16 @@ If you have worked with C# middleware, Razor tag helpers, or plugin architecture
 Consider a real XSLT transform for generating invoices. You need to:
 
 - **Format currency** according to the customer's locale
+
 - **Calculate tax** based on jurisdiction-specific rules that change quarterly
+
 - **Look up** the current exchange rate from an API
+
 - **Generate** a unique invoice number from a database sequence
+
 - **Send** the rendered invoice to a print queue or email service
 
-Standard XSLT can handle the XML transformation. Extensibility handles everything else — the parts where the stylesheet needs to talk to the outside world.
+Standard XSLT handles the XML transform itself. Extensibility handles everything else: the parts where the stylesheet connects to the outside world.
 
 **C# parallel:**
 ```csharp
@@ -84,13 +98,18 @@ This section provides a brief recap. For comprehensive coverage, see [User-Defin
 
 Functions can be recursive, accept other functions as arguments (higher-order functions), and return any XPath type — strings, numbers, nodes, maps, arrays, or sequences.
 
+When a stylesheet function shares its name and arity with an extension function, the `override-extension-function` attribute on `xsl:function` controls which one wins. Set it to `yes` to let the stylesheet function take precedence over the extension function, or to `no` to keep the extension function's version. The value must agree with the `override` attribute when both are present on the same `xsl:function`. (As noted below, PhoenixmlDb has no way to register a C#-backed extension function today. In practice this attribute matters for extension functions from other sources, such as a different processor, not for host-registered .NET callbacks.)
+
 ---
 
 ## Packages — Reusable Stylesheet Libraries
 
 This section provides a brief recap. For comprehensive coverage, see [Packages](instructions/packages.md).
 
-XSLT 3.0 packages bundle stylesheets into reusable libraries with controlled visibility — like NuGet packages for XSLT.
+XSLT 3.0 packages bundle stylesheets into reusable libraries with controlled visibility.
+
+> For C# developers: an XSLT package resembles a NuGet package. Both bundle
+> reusable code and both expose a controlled surface to consumers.
 
 ### Defining a Package
 
@@ -154,7 +173,9 @@ XSLT 3.0 packages bundle stylesheets into reusable libraries with controlled vis
 
 ## Extension Functions from .NET
 
-PhoenixmlDb allows you to register .NET methods that become callable from XPath expressions within XSLT stylesheets. This is the primary mechanism for connecting XSLT to the outside world.
+> **No custom C# extension functions today.** In XQuery, you subclass `XQueryFunction` and register it with `FunctionLibrary.Register`, and it becomes callable from XQuery. The XSLT engine has no equivalent. It exposes **no public API for registering a C#-backed function** that a stylesheet can call from XPath. `XsltTransformer` builds its function library internally, from the standard function library plus the stylesheet's own `xsl:function` declarations. It never accepts a caller-supplied library.
+>
+> Connecting XSLT to the outside world today happens at the language level. Use `xsl:function`, extension instructions (declared via `extension-element-prefixes`), or packages — not a C# delegate handed to the engine. The .NET integration surface below covers what IS available: loading a stylesheet, passing in parameters, running the transform, and reading back results.
 
 ### Setting Stylesheet Parameters from C#
 
@@ -214,68 +235,28 @@ public class ReportGenerator
 }
 ```
 
-### Registering Extension Functions
+### What You Can (and Can't) Do From the Stylesheet Side
 
-Register C# methods that XSLT can call from XPath expressions:
-
-```csharp
-var transformer = new XsltTransformer();
-await transformer.LoadStylesheetAsync(stylesheet, baseUri);
-
-// Register a function that returns a value
-transformer.RegisterFunction(
-    "http://example.com/ext",   // namespace URI
-    "get-exchange-rate",         // local name
-    (string from, string to) =>
-    {
-        using var client = new HttpClient();
-        var response = client.GetStringAsync(
-            $"https://api.rates.com/latest?base={from}&symbols={to}"
-        ).Result;
-        var data = JsonSerializer.Deserialize<RateResponse>(response);
-        return data?.Rates[to] ?? 1.0m;
-    }
-);
-
-// Register a function that formats values
-transformer.RegisterFunction(
-    "http://example.com/ext",
-    "format-phone",
-    (string phone) =>
-    {
-        if (phone.Length == 10)
-            return $"({phone[..3]}) {phone[3..6]}-{phone[6..]}";
-        return phone;
-    }
-);
-
-// Register a function that logs
-transformer.RegisterFunction(
-    "http://example.com/ext",
-    "log-message",
-    (string level, string message) =>
-    {
-        var logger = LoggerFactory.Create(b => b.AddConsole())
-            .CreateLogger("XSLT");
-        logger.Log(level == "error" ? LogLevel.Error : LogLevel.Information, message);
-        return true;
-    }
-);
-```
-
-The stylesheet calls these functions:
+Pure computation — formatting, lookups against data already in scope, string and number manipulation — belongs in `xsl:function`. There is no host-registered C# callback to put it in instead:
 
 ```xml
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                  xmlns:ext="http://example.com/ext"
                  version="3.0">
 
-  <xsl:template match="price">
-    <xsl:variable name="rate" select="ext:get-exchange-rate('USD', 'EUR')"/>
-    <price-eur>
-      <xsl:value-of select="format-number(. * $rate, '#,##0.00')"/>
-    </price-eur>
-  </xsl:template>
+  <xsl:function name="ext:format-phone" as="xs:string">
+    <xsl:param name="phone" as="xs:string"/>
+    <xsl:choose>
+      <xsl:when test="string-length($phone) = 10">
+        <xsl:sequence select="concat('(', substring($phone, 1, 3), ') ',
+                                      substring($phone, 4, 3), '-',
+                                      substring($phone, 7, 4))"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="$phone"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
 
   <xsl:template match="phone">
     <formatted-phone>
@@ -285,6 +266,14 @@ The stylesheet calls these functions:
 
 </xsl:stylesheet>
 ```
+
+Some things need a side effect the stylesheet cannot itself perform. Examples include an outbound HTTP call to a live exchange-rate API, a write to an application logger, or a database lookup by key. None of those are **reachable from XSLT today**. There is no supported way to plug a C# delegate into the function library XPath resolves against. If your transform needs that kind of data, the honest options are:
+
+- **Fetch it before the transform runs.** Pass the result in as a stylesheet parameter with `SetParameter` (see above).
+- **Fetch it as XML, then pass it in as an additional source document.** Use a node-typed parameter, or a `document()` URI.
+- **Do the enrichment as a post-processing step in C#**, after `TransformAsync` returns, using the primary result and `SecondaryResultDocuments`.
+
+There is no public API today for registering a C#-backed extension function that XSLT can call mid-transform.
 
 ### Handling Secondary Result Documents
 
@@ -493,7 +482,7 @@ public class CustomRenderer : BaseRenderer
 
 ### xsl:include — Same Precedence
 
-Included stylesheets are treated as if their content were copy-pasted into the including stylesheet. There is no precedence difference:
+The processor treats an included stylesheet as if its content appears directly in the including stylesheet. There is no precedence difference:
 
 ```xml
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0">
@@ -696,39 +685,48 @@ var finalOutput = await transformer.TransformAsync(enriched);
 await File.WriteAllTextAsync("output/report.html", finalOutput);
 ```
 
-### Data Access via Extension Functions
+### Data Access — Fetch First, Then Transform
 
-Query a database from within an XSLT transform by registering data access functions:
+Because there is no host-registered extension function, a stylesheet cannot reach out to a database or API mid-transform. Fetch the data in C# BEFORE calling `TransformAsync`, serialize it as XML, and pass it as a string parameter. The stylesheet then parses it with the standard `parse-xml()` function:
 
 ```csharp
-transformer.RegisterFunction(
-    "http://example.com/db",
-    "lookup-customer",
-    (string customerId) =>
+using PhoenixmlDb.Xslt;
+
+// 1. Fetch the data the stylesheet needs, in C#, before transforming
+var customers = new StringBuilder("<customers>");
+using (var conn = new SqlConnection(connectionString))
+{
+    conn.Open();
+    using var cmd = new SqlCommand("SELECT Id, Name, Email FROM Customers", conn);
+    using var reader = cmd.ExecuteReader();
+    while (reader.Read())
     {
-        using var conn = new SqlConnection(connectionString);
-        conn.Open();
-        using var cmd = new SqlCommand("SELECT Name, Email FROM Customers WHERE Id = @id", conn);
-        cmd.Parameters.AddWithValue("@id", customerId);
-        using var reader = cmd.ExecuteReader();
-        if (reader.Read())
-        {
-            return $"<customer name='{SecurityElement.Escape(reader.GetString(0))}' " +
-                   $"email='{SecurityElement.Escape(reader.GetString(1))}'/>";
-        }
-        return "<customer/>";
+        customers.Append(
+            $"<customer id='{SecurityElement.Escape(reader.GetString(0))}' " +
+            $"name='{SecurityElement.Escape(reader.GetString(1))}' " +
+            $"email='{SecurityElement.Escape(reader.GetString(2))}'/>");
     }
-);
+}
+customers.Append("</customers>");
+
+// 2. Pass the fetched XML in as a stylesheet parameter
+var transformer = new XsltTransformer();
+await transformer.LoadStylesheetAsync(stylesheet, baseUri);
+transformer.SetParameter("customers-xml", customers.ToString());
+
+var html = await transformer.TransformAsync(orderXml);
 ```
 
+The stylesheet parses the parameter with the standard `parse-xml()` function and looks up by key:
+
 ```xml
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                 xmlns:db="http://example.com/db"
-                 version="3.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0">
+
+  <xsl:param name="customers-xml" as="xs:string" select="'&lt;customers/&gt;'"/>
+  <xsl:variable name="customers" select="parse-xml($customers-xml)/customers"/>
 
   <xsl:template match="order">
-    <xsl:variable name="customer"
-                  select="parse-xml-fragment(db:lookup-customer(@customer-id))/*"/>
+    <xsl:variable name="customer" select="$customers/customer[@id = current()/@customer-id]"/>
     <div class="order">
       <h2>Order #<xsl:value-of select="@id"/></h2>
       <p>Customer: <xsl:value-of select="$customer/@name"/></p>
@@ -739,6 +737,8 @@ transformer.RegisterFunction(
 
 </xsl:stylesheet>
 ```
+
+This keeps the same separation of concerns extension functions would give you: the stylesheet stays declarative, and the data access lives in C#. It just doesn't rely on an API the engine does not have.
 
 ---
 
@@ -785,7 +785,7 @@ public class XsltMiddleware
             var transformer = new XsltTransformer();
             await transformer.LoadStylesheetAsync(
                 await File.ReadAllTextAsync(_stylesheetPath),
-                new Uri(_stylesheetPath).AbsoluteUri);
+                new Uri(_stylesheetPath));
             transformer.SetParameter("request-path", context.Request.Path.Value ?? "/");
             transformer.SetParameter("timestamp", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
@@ -823,7 +823,7 @@ public class XsltCli
 
         var transformer = new XsltTransformer();
         var stylesheet = await File.ReadAllTextAsync(stylesheetPath);
-        await transformer.LoadStylesheetAsync(stylesheet, new Uri(stylesheetPath).AbsoluteUri);
+        await transformer.LoadStylesheetAsync(stylesheet, new Uri(stylesheetPath));
 
         // Pass environment variables as parameters
         transformer.SetParameter("build-date", DateTime.Now.ToString("yyyy-MM-dd"));
@@ -898,7 +898,7 @@ public class DocGenerationTask
         var transformer = new XsltTransformer();
         await transformer.LoadStylesheetAsync(
             await File.ReadAllTextAsync("build/api-docs.xsl"),
-            "file:///build/api-docs.xsl");
+            new Uri("file:///build/api-docs.xsl"));
 
         transformer.SetParameter("project-name", "MyProject");
         transformer.SetParameter("version", GetVersionFromCsproj());
@@ -924,4 +924,4 @@ public class DocGenerationTask
   run: dotnet run --project tools/DocGen -- src/ docs/api/
 ```
 
-The XSLT stylesheet handles all the formatting logic — converting raw XML doc comments into navigable, styled HTML pages — while the .NET code handles file I/O, parameter passing, and build integration.
+The stylesheet handles the formatting logic. It transforms raw XML doc comments into navigable, styled HTML pages. The .NET code handles file I/O, parameter passing, and build integration.

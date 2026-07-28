@@ -6,7 +6,9 @@ sort: 6
 
 # Node Functions
 
-These functions inspect and access properties of XML nodes — names, namespaces, document URIs, and related information. They're essential when writing XSLT templates that need to work generically with different element types.
+These functions inspect and access properties of XML nodes: names, namespaces, document URIs, and related information. XSLT templates need them to work generically across different element types.
+
+> For C# developers: several of these functions have a LINQ to XML counterpart. `root` resembles `node.Document`. `base-uri` resembles `node.BaseUri`. `data` resembles `element.Value`. `name` resembles `element.Name.ToString()`, though LINQ to XML uses a `{namespace}local` format. `local-name` resembles `element.Name.LocalName`. `namespace-uri` resembles `element.Name.NamespaceName`. `doc` resembles `XDocument.Load("catalog.xml")`.
 
 ## Contents
 
@@ -21,7 +23,7 @@ These functions inspect and access properties of XML nodes — names, namespaces
 
 ### root()
 
-Returns the root node (document node) of the tree containing a given node.
+Returns the root node (document node) of the tree that contains a given node.
 
 **Signature:** `root($node as node()?) as node()?`
 
@@ -30,13 +32,11 @@ root()                    => the document node of the context node
 root(//item[1])           => the document node containing that item
 ```
 
-**C# equivalent:** `node.Document` in LINQ to XML
-
 ---
 
 ### base-uri()
 
-Returns the base URI of a node, used for resolving relative URIs.
+Returns the base URI of a node, used to resolve relative URIs.
 
 **Signature:** `base-uri($node as node()?) as xs:anyURI?`
 
@@ -45,13 +45,11 @@ base-uri()                => base URI of the context node
 base-uri(/order)          => base URI of the order element
 ```
 
-**C# equivalent:** `node.BaseUri` in LINQ to XML
-
 ---
 
 ### document-uri()
 
-Returns the URI of the document containing a node.
+Returns the URI of the document that contains a node.
 
 **Signature:** `document-uri($node as node()?) as xs:anyURI?`
 
@@ -63,7 +61,7 @@ document-uri(/)           => URI of the current document
 
 ### data()
 
-Returns the typed value of a node or sequence of nodes.
+Returns the typed value of a node or a sequence of nodes.
 
 **Signature:** `data($values as item()*) as xs:anyAtomicType*`
 
@@ -72,15 +70,13 @@ data(//price)             => sequence of price values (typed if schema-aware)
 data(@id)                 => the id attribute's value
 ```
 
-**C# equivalent:** `element.Value` in LINQ to XML
-
 ---
 
 ## Name Functions
 
 ### name()
 
-Returns the qualified name of a node as a string (including prefix if present).
+Returns the qualified name of a node as a string, including the prefix if present.
 
 **Signature:** `name($node as node()?) as xs:string`
 
@@ -88,8 +84,6 @@ Returns the qualified name of a node as a string (including prefix if present).
 (: Given <xsl:template match="/"> :)
 name(.)   => "xsl:template"
 ```
-
-**C# equivalent:** `element.Name.ToString()` in LINQ to XML (though LINQ to XML uses `{namespace}local` format)
 
 ---
 
@@ -108,8 +102,6 @@ local-name()    => "order"
 local-name(@id) => "id"
 ```
 
-**C# equivalent:** `element.Name.LocalName`
-
 ---
 
 ### namespace-uri()
@@ -126,13 +118,11 @@ namespace-uri(.)   => "http://www.w3.org/1999/XSL/Transform"
 namespace-uri()    => ""
 ```
 
-**C# equivalent:** `element.Name.NamespaceName`
-
 ---
 
 ### node-name()
 
-Returns the name of a node as an `xs:QName` (qualified name with namespace).
+Returns the name of a node as an `xs:QName`: a qualified name with a namespace.
 
 **Signature:** `node-name($node as node()?) as xs:QName?`
 
@@ -140,7 +130,7 @@ Returns the name of a node as an `xs:QName` (qualified name with namespace).
 node-name(//order)   => QName for "order"
 ```
 
-**Difference from `name()`:** `node-name()` returns a typed QName (with namespace URI), while `name()` returns a string. Use `node-name()` when you need to compare names programmatically; use `name()` for display.
+**Difference from `name()`:** `node-name()` returns a typed QName with a namespace URI. `name()` returns a string. Use `node-name()` to compare names programmatically. Use `name()` for display.
 
 ---
 
@@ -186,8 +176,6 @@ doc("catalog.xml")//book                  => all books in catalog.xml
 doc("https://example.com/data.xml")/root  => load from URL
 ```
 
-**C# equivalent:** `XDocument.Load("catalog.xml")`
-
 **Common XSLT pattern** — joining data from multiple documents:
 ```xpath
 for $id in //order/product-id
@@ -198,7 +186,7 @@ return doc("products.xml")//product[@id = $id]/name
 
 ### doc-available()
 
-Tests whether a document can be loaded without actually loading it.
+Tests whether a document can be loaded, without loading it.
 
 **Signature:** `doc-available($uri as xs:string?) as xs:boolean`
 

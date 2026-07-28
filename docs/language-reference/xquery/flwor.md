@@ -6,9 +6,7 @@ sort: 1
 
 # FLWOR Expressions
 
-FLWOR (pronounced "flower") is XQuery's core construct. It stands for **F**or, **L**et, **W**here, **O**rder by, **R**eturn — and maps almost directly to LINQ query syntax.
-
-If you've written LINQ queries in C#, FLWOR will feel immediately familiar:
+FLWOR (pronounced "flower") is XQuery's core construct. It stands for **F**or, **L**et, **W**here, **O**rder by, **R**eturn.
 
 | LINQ | FLWOR |
 |------|-------|
@@ -17,6 +15,8 @@ If you've written LINQ queries in C#, FLWOR will feel immediately familiar:
 | `where` | `where` |
 | `orderby` | `order by` |
 | `select` | `return` |
+
+> For C# developers: FLWOR maps almost directly to LINQ query syntax. Each FLWOR clause has a direct LINQ counterpart, shown in the table above.
 
 ## Basic Structure
 

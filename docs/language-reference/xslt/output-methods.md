@@ -6,18 +6,18 @@ sort: 4
 
 # Output Methods
 
-One of XSLT's greatest strengths is producing multiple output formats from the same source data. The `xsl:output` declaration controls how the transformation result is serialized.
+XSLT can produce multiple output formats from the same source data. The `xsl:output` declaration controls how the transformation result is serialized.
 
 ## Contents
 
-- [HTML Output](#html-output)
-- [XML Output](#xml-output)
-- [Text Output](#text-output)
-- [JSON Output](#json-output)
-- [CSV Output](#csv-output)
-- [Adaptive Output](#adaptive-output)
-- [Multiple Outputs in One Stylesheet](#multiple-outputs-in-one-stylesheet)
-- [Serialization Parameters](#serialization-parameters)
+- [HTML Output](#html-output).
+- [XML Output](#xml-output).
+- [Text Output](#text-output).
+- [JSON Output](#json-output).
+- [CSV Output](#csv-output).
+- [Adaptive Output](#adaptive-output).
+- [Multiple Outputs in One Stylesheet](#multiple-outputs-in-one-stylesheet).
+- [Serialization Parameters](#serialization-parameters).
 
 ---
 
@@ -30,11 +30,11 @@ The most common output for web-facing transforms:
 ```
 
 **What HTML mode does:**
-- Outputs `<!DOCTYPE html>` for HTML5
-- Self-closes void elements correctly (`<br>`, `<img>`, `<meta>`, not `<br/>`)
-- Does not escape `<script>` and `<style>` content
-- Includes `<meta charset="UTF-8">` when requested
-- Writes boolean attributes correctly (`<input disabled>` not `<input disabled="disabled">`)
+- Outputs `<!DOCTYPE html>` for HTML5.
+- Self-closes void elements correctly (`<br>`, `<img>`, `<meta>`, not `<br/>`).
+- Does not escape `<script>` and `<style>` content.
+- Includes `<meta charset="UTF-8">` when requested.
+- Writes boolean attributes correctly (`<input disabled>` not `<input disabled="disabled">`).
 
 ```xml
 <xsl:template match="/">
@@ -70,7 +70,7 @@ For XML-compatible HTML:
 <xsl:output method="xhtml" indent="yes" encoding="UTF-8"/>
 ```
 
-Produces well-formed XML that is also valid HTML — `<br/>`, `<meta ... />`, etc.
+Produces well-formed XML that is also valid HTML, for example `<br/>` and `<meta ... />`.
 
 ---
 
@@ -83,11 +83,11 @@ The default output method. Produces well-formed XML.
 ```
 
 **Use cases:**
-- Transforming one XML format to another (e.g., data conversion between standards)
-- Generating SVG, MathML, RSS/Atom feeds
-- Producing intermediate XML for further processing
+- Transforming one XML format to another, for example data transformation between standards.
+- Generating SVG, MathML, RSS/Atom feeds.
+- Producing intermediate XML for further processing.
 
-**Example — converting a product catalog to an Atom feed:**
+**Example: transforming a product catalog to an Atom feed:**
 
 ```xml
 <xsl:output method="xml" indent="yes"/>
@@ -121,10 +121,10 @@ Produces plain text with no markup:
 ```
 
 **What text mode does:**
-- No XML/HTML escaping — `<` is output as `<`, not `&lt;`
-- No XML declaration
-- Only text nodes are output (element tags are suppressed)
-- Whitespace from the stylesheet is preserved (be careful!)
+- No XML/HTML escaping: `<` is output as `<`, not `&lt;`.
+- No XML declaration.
+- Only text nodes are output (elements are suppressed).
+- Whitespace from the stylesheet passes through unchanged.
 
 ### Example: Generating a CSV File
 
@@ -234,15 +234,17 @@ XSLT 3.0 can produce JSON directly. The approach uses XPath maps and arrays:
 }
 ```
 
-**C# comparison:** This is like building a `Dictionary<string, object>` and calling `JsonSerializer.Serialize()` — but the data selection and structure are expressed in XPath.
-
-**Key insight for JSON developers:** You're already comfortable with JSON. XSLT 3.0 lets you use XPath to query XML and output JSON — bridging the two formats. This is one of the most compelling use cases for .NET developers doing data integration.
+> For C# developers: building this map and array structure resembles
+> constructing a `Dictionary<string, object>` and calling
+> `JsonSerializer.Serialize()`. Here, the data selection and structure are
+> both expressed in XPath. This pattern is useful for data integration
+> tasks that bridge XML and JSON.
 
 ---
 
 ## CSV Output
 
-PhoenixmlDb supports `method="csv"` as a built-in output method for producing comma-separated values directly, without manually building CSV with `method="text"`:
+PhoenixmlDb supports `method="csv"` as a built-in output method. It produces comma-separated values directly, without manually building CSV with `method="text"`.
 
 ```xml
 <xsl:output method="csv" encoding="UTF-8"/>
@@ -288,11 +290,11 @@ XSLT 3.0's adaptive output method automatically chooses the serialization based 
 <xsl:output method="adaptive"/>
 ```
 
-- If the result is a document node → serialized as XML
-- If the result is a map or array → serialized as JSON
-- If the result is an atomic value → serialized as text
+- A document node result serializes as XML
+- A map or array result serializes as JSON
+- An atomic value result serializes as text
 
-Useful for functions and transforms that may return different types.
+This method is useful for functions and transforms that return different types.
 
 ---
 
@@ -332,7 +334,11 @@ Using `xsl:result-document`, a single stylesheet can produce multiple files with
 </xsl:template>
 ```
 
-**One XSLT, four output files in three formats.** This is the kind of thing that takes significant code in C# but is natural in XSLT.
+This single stylesheet produces four output files in three formats.
+
+> For C# developers: producing multiple output formats from one pass
+> requires substantial code in C#. `xsl:result-document` does this
+> natively in XSLT.
 
 ---
 

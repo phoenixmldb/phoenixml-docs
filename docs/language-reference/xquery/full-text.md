@@ -6,20 +6,30 @@ sort: 10
 
 # Full-Text Search
 
-XQuery's built-in `contains()` function does exact substring matching — it finds `"data"` inside `"database"` but cannot search linguistically. Full-Text Search adds the features you would expect from a real search engine: stemming, case-insensitive matching, diacritics normalization, stop words, wildcards, proximity search, and relevance scoring.
+XQuery's built-in `contains()` function does exact substring matching. It finds `"data"` inside `"database"` but cannot search linguistically. Full-Text Search adds the features of a real search engine: stemming, case-insensitive matching, diacritics normalization, stop words, wildcards, proximity search, and relevance scoring.
 
-If you have used Lucene.NET, Elasticsearch, or SQL Server's `CONTAINS` / `FREETEXT` predicates, XQuery Full-Text solves the same problems but is integrated directly into the query language — no separate index API or raw SQL strings needed.
+XQuery Full-Text integrates these features directly into the query language. It needs no separate index API and no raw SQL strings.
+
+> For C# developers: XQuery Full-Text solves the same problem as Lucene.NET, Elasticsearch, or SQL Server's `CONTAINS` / `FREETEXT` predicates.
 
 ## Contents
 
 - [Why Full-Text in XQuery](#why-full-text-in-xquery)
+
 - [ft:contains — The Basic Predicate](#ftcontains--the-basic-predicate)
+
 - [Match Options](#match-options)
+
 - [Search Modes](#search-modes)
+
 - [Logical Combinations](#logical-combinations)
+
 - [Positional Filters](#positional-filters)
+
 - [Full-Text Functions](#full-text-functions)
+
 - [Scoring and Relevance](#scoring-and-relevance)
+
 - [Practical Examples](#practical-examples)
 
 ---
@@ -753,10 +763,10 @@ local:search("articles-de", "Datenbanken", "de")
 ### C# Integration — Running Full-Text Queries
 
 ```csharp
+using PhoenixmlDb.XQuery.Execution;
+
 // Running full-text XQuery from a .NET application
-var engine = new XQueryEngine();
-engine.SetVariable("query", userSearchInput);
-engine.SetVariable("category", selectedCategory ?? "");
+var engine = new QueryEngine();
 
 string xquery = @"
     declare variable $query external;
@@ -774,12 +784,14 @@ string xquery = @"
       </result>
 ";
 
-var results = await engine.ExecuteAsync(xquery);
+var compiled = engine.Compile(xquery);
+using var context = engine.CreateContext();
+context.SetExternalVariable("query", userSearchInput);
+context.SetExternalVariable("category", selectedCategory ?? "");
 
-// Map results to C# objects
-var searchResults = results.Select(r => new SearchResult
+var results = new List<object?>();
+await foreach (var item in compiled.ExecutionPlan!.ExecuteAsync(context))
 {
-    Title = r.Element("title")?.Value,
-    Score = double.Parse(r.Element("score")?.Value ?? "0")
-}).ToList();
+    results.Add(item);
+}
 ```

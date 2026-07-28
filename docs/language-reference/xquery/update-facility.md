@@ -10,19 +10,28 @@ XQuery was originally a read-only language. The Update Facility (XUF) adds the a
 
 The Update Facility is **fully operational** in PhoenixmlDb. All update expressions — `insert`, `delete`, `replace`, `rename`, and `transform` (copy-modify-return) — are fully implemented and execute against the `InMemoryUpdatableNodeStore`. This means updates are applied in-memory with full Pending Update List semantics, atomic application, and conflict detection.
 
-If you're coming from C#, think of it as a combination of Entity Framework's change tracking (modifications are staged, then flushed) and LINQ to XML's mutation methods (`Add`, `Remove`, `ReplaceWith`).
+> For C# developers: the Update Facility combines two familiar ideas. It stages modifications like Entity Framework's change tracking. It applies them with methods like LINQ to XML's `Add`, `Remove`, and `ReplaceWith`.
 
 ## Contents
 
 - [Why Update Facility Exists](#why-update-facility-exists)
+
 - [insert](#insert)
+
 - [delete](#delete)
+
 - [replace node](#replace-node)
+
 - [replace value of node](#replace-value-of-node)
+
 - [rename](#rename)
+
 - [Transform Expression](#transform-expression)
+
 - [Pending Update Lists](#pending-update-lists)
+
 - [Combining Updates](#combining-updates)
+
 - [Use Cases](#use-cases)
 
 ---
@@ -422,7 +431,7 @@ local:apply-patches(
 
 ### Transform for JSON Output
 
-Transform is useful for sanitizing XML before converting to JSON:
+Transform is useful for sanitizing XML before transforming it into JSON:
 
 ```xquery
 for $user in //users/user
@@ -558,24 +567,35 @@ return (
 
 All update operations execute against the `InMemoryUpdatableNodeStore`, which provides a mutable node store optimized for XQuery Update:
 
-- **Full PUL support** — Pending Update Lists are collected, validated for conflicts, and applied atomically
-- **Node identity preservation** — Nodes retain their identity across updates (important for `replace value of node` which modifies content without replacing the node)
-- **Deep copy semantics** — The `transform` (copy-modify-return) expression creates true deep copies, so the original nodes are never affected
-- **Conflict detection** — Conflicting updates on the same node (e.g., two `replace node` on the same target) are detected and reported as errors
+- **Full PUL support.** The engine collects Pending Update Lists, validates them for conflicts, and applies them atomically.
+
+- **Node identity preservation.** Nodes retain their identity across updates. This matters for `replace value of node`, which modifies content without replacing the node.
+
+- **Deep copy semantics.** The `transform` (copy-modify-return) expression creates true deep copies. The original nodes are never affected.
+
+- **Conflict detection.** The engine detects conflicting updates on the same node, for example two `replace node` on the same target, and reports them as errors.
 
 ```csharp
-// From C#, execute an update query
-var engine = new XQueryEngine();
-engine.SetVariable("order-id", "O100");
-engine.SetVariable("new-status", "shipped");
+using PhoenixmlDb.XQuery.Execution;
 
-await engine.ExecuteAsync(@"
+// From C#, execute an update query
+var engine = new QueryEngine();
+var compiled = engine.Compile(@"
   let $order := //order[@id = $order-id]
   return (
     replace value of node $order/@status with $new-status,
     insert node <shipped-date>{ current-date() }</shipped-date> as last into $order
   )
 ");
+
+using var context = engine.CreateContext();
+context.SetExternalVariable("order-id", "O100");
+context.SetExternalVariable("new-status", "shipped");
+
+await foreach (var _ in compiled.ExecutionPlan!.ExecuteAsync(context))
+{
+    // Drains the plan so the pending update list is applied; this query returns no items.
+}
 ```
 
 ---
@@ -707,4 +727,4 @@ foreach (var order in overdueOrders.ToList())
 doc.Save("orders.xml");
 ```
 
-The XQuery version is more concise, and the atomic application of the PUL means you don't have to worry about partial failures — either all overdue orders are updated, or none are.
+The XQuery version is more concise. The atomic application of the PUL removes the worry about partial failures. Either all overdue orders are updated, or none are.

@@ -6,7 +6,9 @@ sort: 2
 
 # Numeric Functions
 
-XPath's numeric functions cover rounding, absolute values, and aggregate operations over sequences. If you're used to `System.Math` and LINQ aggregates in C#, these map directly.
+XPath's numeric functions cover rounding, absolute values, and aggregate operations over sequences.
+
+> For C# developers: these functions map directly to `System.Math` and to LINQ aggregate methods. `round` maps to `Math.Round`, though XPath rounds half up while C# rounds half to even by default. `round-half-to-even` is C#'s default rounding mode. `floor` maps to `Math.Floor`. `ceiling` maps to `Math.Ceiling`. `abs` maps to `Math.Abs`. `sum` maps to `items.Sum()`. `avg` maps to `items.Average()`. `min` and `max` map to `items.Min()` and `items.Max()`, but also work with dates and strings, unlike C#'s versions, which require `IComparable`. `count` maps to `items.Count()` or `.Length`. `is-NaN` maps to `double.IsNaN`.
 
 ## Contents
 
@@ -35,8 +37,6 @@ round(3.14159, 2) => 3.14
 round(1234, -2)   => 1200     (: negative precision rounds to tens, hundreds, etc. :)
 ```
 
-**C# equivalent:** `Math.Round(3.7)` — but note C# uses "round half to even" (banker's rounding) by default, while XPath rounds half up.
-
 | Value | XPath `round()` | C# `Math.Round()` |
 |-------|------------------|--------------------|
 | 2.5 | 3 | 2 (banker's rounding) |
@@ -49,7 +49,7 @@ To get XPath-style rounding in C#, use `Math.Round(value, MidpointRounding.AwayF
 
 ### round-half-to-even()
 
-Rounds using banker's rounding (round half to nearest even number). This minimizes cumulative rounding bias.
+Rounds using banker's rounding: round half to the nearest even number. This minimizes cumulative rounding bias.
 
 **Signature:** `round-half-to-even($value as xs:numeric?, $precision as xs:integer?) as xs:numeric?`
 
@@ -60,15 +60,13 @@ round-half-to-even(2.45, 1)  => 2.4
 round-half-to-even(2.55, 1)  => 2.6
 ```
 
-**C# equivalent:** `Math.Round(2.5)` — this is C#'s default rounding mode.
-
-**When to use:** Financial calculations where rounding bias accumulates over many operations.
+**When to use:** Use this function for financial calculations, where rounding bias accumulates over many operations.
 
 ---
 
 ### floor()
 
-Rounds down to the nearest integer (toward negative infinity).
+Rounds down to the nearest integer, toward negative infinity.
 
 **Signature:** `floor($value as xs:numeric?) as xs:numeric?`
 
@@ -79,13 +77,11 @@ floor(-3.2)   => -4      (: toward negative infinity, not toward zero! :)
 floor(-3.7)   => -4
 ```
 
-**C# equivalent:** `Math.Floor(3.7)`
-
 ---
 
 ### ceiling()
 
-Rounds up to the nearest integer (toward positive infinity).
+Rounds up to the nearest integer, toward positive infinity.
 
 **Signature:** `ceiling($value as xs:numeric?) as xs:numeric?`
 
@@ -95,8 +91,6 @@ ceiling(3.7)   => 4
 ceiling(-3.2)  => -3     (: toward positive infinity :)
 ceiling(-3.7)  => -3
 ```
-
-**C# equivalent:** `Math.Ceiling(3.2)`
 
 **Practical example** — calculating pages needed:
 ```xpath
@@ -120,8 +114,6 @@ abs(-3.14)  => 3.14
 abs(0)      => 0
 ```
 
-**C# equivalent:** `Math.Abs(-5)`
-
 **Practical example** — finding the magnitude of a difference:
 ```xpath
 abs(//actual - //expected)   (: deviation regardless of direction :)
@@ -131,7 +123,7 @@ abs(//actual - //expected)   (: deviation regardless of direction :)
 
 ## Aggregation
 
-These functions operate on sequences — the XPath equivalent of LINQ aggregate methods.
+These functions operate on sequences.
 
 ### sum()
 
@@ -147,8 +139,6 @@ sum(())                         => 0        (: empty sequence :)
 sum((), 0.00)                   => 0.00     (: with explicit zero value :)
 ```
 
-**C# equivalent:** `items.Sum()` or `items.Sum(x => x.Price)`
-
 Given this XML:
 ```xml
 <order>
@@ -162,7 +152,7 @@ Given this XML:
 sum(/order/item/price)     => 39.48
 ```
 
-**Note:** To sum products (price × quantity), you need a `for` expression or `sum(for $i in //item return $i/price * $i/qty)`.
+**Note:** To sum products (price × quantity), use a `for` expression: `sum(for $i in //item return $i/price * $i/qty)`.
 
 ---
 
@@ -177,8 +167,6 @@ avg((1, 2, 3, 4, 5))     => 3
 avg(//item/price)          => average price
 avg(())                    => ()    (: empty sequence returns empty :)
 ```
-
-**C# equivalent:** `items.Average()`
 
 ---
 
@@ -195,10 +183,6 @@ min(//order/@date)                          => earliest date (works with xs:date
 min(("banana", "apple", "cherry"))         => "apple" (: string comparison :)
 ```
 
-**C# equivalent:** `items.Min()`
-
-**Note:** `min()` works with dates, strings, and numbers — unlike C#'s `Min()` which needs `IComparable`.
-
 ---
 
 ### max()
@@ -212,8 +196,6 @@ max((3, 1, 4, 1, 5))        => 5
 max(//item/price)             => highest price
 max(//order/@date)            => most recent date
 ```
-
-**C# equivalent:** `items.Max()`
 
 ---
 
@@ -230,9 +212,7 @@ count(//book[@category='data']) => number of data books
 count(())                      => 0
 ```
 
-**C# equivalent:** `items.Count()` or `.Length`
-
-**Practical example** — conditional based on count:
+**Practical example** — a condition based on count:
 ```xpath
 if (count(//error) > 0) then "Errors found" else "All clear"
 ```
@@ -253,6 +233,4 @@ is-NaN(42)                     => false
 is-NaN(0 div 0.0e0)            => true
 ```
 
-**C# equivalent:** `double.IsNaN(value)`
-
-**Why this exists:** The expression `$x = $x` returns `false` when `$x` is `NaN` (IEEE 754 behavior), which is counterintuitive. `is-NaN()` is the explicit test.
+**Why this exists:** The expression `$x = $x` returns `false` when `$x` is `NaN`, under IEEE 754 behavior. This result is counterintuitive. `is-NaN()` is the explicit test.

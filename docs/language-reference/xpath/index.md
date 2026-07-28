@@ -6,9 +6,11 @@ sort: 2
 
 # XPath
 
-XPath is a query language for selecting nodes in XML documents. If LINQ is how .NET developers query collections, XPath is how the XML world queries document trees — and it's been doing it since 1999.
+XPath is a query language for selecting nodes in XML documents. The XML world has used XPath to query document trees since 1999.
 
-XPath is not a standalone tool. It's embedded in XSLT (for matching and selecting), in XQuery (as the navigation syntax), and available directly in .NET via `XPathNavigator` and PhoenixmlDb.
+> For .NET developers: XPath resembles LINQ for XML. Both let a developer query a tree of data with a compact, declarative syntax.
+
+XPath is not a standalone tool. XSLT uses XPath for matching and selecting nodes. XQuery uses XPath as its navigation syntax. XPath is also available directly in .NET through `XPathNavigator` and through PhoenixmlDb.
 
 ## What's Here
 
@@ -48,4 +50,4 @@ Given this XML:
 | All prices anywhere | `//price` | `.Descendants("price")` |
 | Programming books | `/catalog/book[@category='programming']` | `.Where(b => b.Attribute("category")?.Value == "programming")` |
 
-Notice how XPath expressions are more concise than their LINQ equivalents — and they're portable across any XML tool, not just .NET.
+XPath expressions are more concise than the equivalent LINQ code. XPath also works with any XML tool, not only .NET.

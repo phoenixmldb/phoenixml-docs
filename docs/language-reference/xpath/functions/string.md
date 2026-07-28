@@ -6,20 +6,28 @@ sort: 1
 
 # String Functions
 
-String functions are the most commonly used category in XPath. If you've worked with `System.String` methods in C#, most of these will feel familiar — with a few important differences around how XPath handles Unicode and sequences.
+String functions are the most commonly used category in XPath. All string functions are in the default `fn:` namespace.
 
-All string functions are in the default `fn:` namespace.
+> For C# developers: many of these functions resemble `System.String` methods, each noted below as a C# equivalent. Three differences matter. XPath counts Unicode characters, not bytes. Several functions work on a sequence of strings, not a single string. Position-based functions such as `substring()` are 1-based, not 0-based. XPath's regex syntax closely resembles, but does not exactly match, .NET's `System.Text.RegularExpressions` syntax. Regex backreference syntax (`$1`, `$2`, and so on) matches .NET's regex replacement syntax.
 
 ## Contents
 
 - [Basic String Operations](#basic-string-operations)
+
 - [Substring Operations](#substring-operations)
+
 - [Searching and Testing](#searching-and-testing)
+
 - [Case Conversion](#case-conversion)
+
 - [Whitespace and Normalization](#whitespace-and-normalization)
+
 - [Regular Expressions](#regular-expressions)
+
 - [Unicode Functions](#unicode-functions)
+
 - [URI Functions](#uri-functions)
+
 - [Other String Functions](#other-string-functions)
 
 ---
@@ -28,7 +36,7 @@ All string functions are in the default `fn:` namespace.
 
 ### string()
 
-Converts a value to its string representation.
+Returns the string representation of a value.
 
 **Signature:** `string($value?) as xs:string`
 
@@ -41,7 +49,7 @@ string(//price[1])    => "39.99"   (: string value of a node :)
 
 **C# equivalent:** `.ToString()` or `Convert.ToString()`
 
-**Note:** When called with no arguments, `string()` returns the string value of the context node — a common pattern in XSLT template matching.
+**Note:** When called with no arguments, `string()` returns the string value of the context node. This is a common pattern in XSLT template matching.
 
 ---
 
@@ -116,7 +124,7 @@ string-join(/order/item/name, ", ")   => "Widget, Gadget, Gizmo"
 
 ### substring()
 
-Extracts a portion of a string. **Warning:** XPath uses 1-based indexing, not 0-based like C#.
+Extracts a portion of a string. **Warning:** XPath uses 1-based indexing. Position 1 is the first character.
 
 **Signature:** `substring($value as xs:string?, $start as xs:double, $length as xs:double?) as xs:string`
 
@@ -267,7 +275,7 @@ contains-token("btn btn-primary active", "bt")            => false (: partial ma
 
 ### upper-case()
 
-Converts a string to uppercase.
+Transforms a string to uppercase.
 
 **Signature:** `upper-case($value as xs:string?) as xs:string`
 
@@ -283,7 +291,7 @@ upper-case("")        => ""
 
 ### lower-case()
 
-Converts a string to lowercase.
+Transforms a string to lowercase.
 
 **Signature:** `lower-case($value as xs:string?) as xs:string`
 
@@ -317,7 +325,7 @@ normalize-space("")                    => ""
 
 **C# equivalent:** `Regex.Replace(s.Trim(), @"\s+", " ")`
 
-**Why this matters:** XML preserves whitespace in text nodes. When you read text from an XML document, it often contains newlines and indentation from the source file. `normalize-space()` cleans this up for display or comparison.
+**Why this matters:** XML preserves whitespace in text nodes. Text read from an XML document often contains newlines and indentation from the source file. `normalize-space()` removes this extra whitespace before display or comparison.
 
 ---
 
@@ -335,13 +343,13 @@ normalize-unicode("café", "NFKC")    => compatibility composition
 
 **C# equivalent:** `"café".Normalize(NormalizationForm.FormC)`
 
-**When you need this:** When comparing strings from different sources that may use different Unicode representations for the same character (e.g., `é` as a single codepoint vs. `e` + combining accent).
+**When you need this:** Use this function when comparing strings from different sources. Different sources may represent the same character with different Unicode forms, such as `é` as one codepoint or as `e` plus a combining accent.
 
 ---
 
 ### translate()
 
-Replaces individual characters, one-for-one. Not a search-and-replace — it's a character mapping.
+Replaces individual characters using a one-to-one character mapping. It does not search and replace substrings.
 
 **Signature:** `translate($value as xs:string?, $from as xs:string, $to as xs:string) as xs:string`
 
@@ -364,7 +372,7 @@ translate(@phone, "()- .", "")
 
 ## Regular Expressions
 
-XPath uses the same regex syntax as XML Schema (which is close to but not identical to .NET's `System.Text.RegularExpressions`).
+XPath uses the XML Schema regular expression syntax, which differs slightly from other regex dialects.
 
 ### matches()
 
@@ -412,7 +420,7 @@ replace("aabbbcc", "(.)\1+", "$1")               => "abc"   (: collapse repeats 
 
 **C# equivalent:** `Regex.Replace("hello world", "world", "XPath")`
 
-**Backreferences:** Use `$1`, `$2`, etc. in the replacement string to reference capture groups. This is the same as .NET's `$1` syntax.
+**Backreferences:** Use `$1`, `$2`, and so on in the replacement string to reference capture groups.
 
 **Practical example** — reformatting dates:
 ```xpath
@@ -541,7 +549,7 @@ Splits a string into a sequence of grapheme clusters (user-perceived characters)
 graphemes("café")      => ("c", "a", "f", "é")
 ```
 
-**Why this exists:** Some characters that appear as one glyph are stored as multiple codepoints (e.g., `é` can be `e` + combining accent). `characters()` would split them; `graphemes()` keeps them together.
+**Why this exists:** Some characters that appear as one glyph consist of multiple codepoints, such as `é` as `e` plus a combining accent. `characters()` splits these into separate items; `graphemes()` keeps them together.
 
 **C# equivalent:** `StringInfo.GetTextElementEnumerator(s)`
 
@@ -567,7 +575,7 @@ encode-for-uri("100% done")          => "100%25%20done"
 
 ### iri-to-uri()
 
-Converts an IRI (which may contain Unicode) to a valid URI.
+Converts an IRI, which may contain Unicode characters, into a valid URI.
 
 **Signature:** `iri-to-uri($value as xs:string?) as xs:string`
 
@@ -668,7 +676,7 @@ compare("zebra", "apple")     => 1
 
 **C# equivalent:** `string.Compare("apple", "banana", StringComparison.Ordinal)`
 
-The optional `$collation` parameter allows locale-aware comparison — useful for sorting names in different languages.
+The optional `$collation` parameter enables locale-aware comparison. This is useful for sorting names in different languages.
 
 ---
 
@@ -685,7 +693,7 @@ codepoint-equal("hello", "HELLO")   => false
 
 **C# equivalent:** `string.Equals("hello", "hello", StringComparison.Ordinal)`
 
-**When to use this:** When you want guaranteed binary comparison without any collation-dependent behavior. Faster than `compare()` when you only need equality.
+**When to use this:** Use this function for a guaranteed binary comparison, without collation-dependent behavior. It runs faster than `compare()` when you only need an equality check.
 
 ---
 
@@ -695,6 +703,6 @@ Returns a collation key for a string, allowing efficient repeated comparisons un
 
 **Signature:** `collation-key($value as xs:string, $collation as xs:string?) as xs:base64Binary`
 
-**When to use this:** When sorting a large sequence — compute collation keys once, then compare keys instead of recomputing the collation for each comparison.
+**When to use this:** Use this function when sorting a large sequence. Compute the collation keys once, then compare keys instead of recomputing the collation for each comparison.
 
 **C# equivalent:** `CompareInfo.GetSortKey(s)`

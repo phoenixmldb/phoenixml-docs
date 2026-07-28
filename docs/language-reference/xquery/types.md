@@ -6,17 +6,26 @@ sort: 6
 
 # Type System
 
-XQuery has a rich, formally specified type system built on XML Schema. If you're coming from C#, many concepts will be familiar — atomic types, function types, records — but the details differ in important ways. The biggest difference: everything in XQuery is a **sequence**, and the type system reflects that.
+XQuery has a rich, formally specified type system built on XML Schema. Everything in XQuery is a **sequence**, and the type system reflects that.
+
+> For C# developers: many concepts are familiar — atomic types, function types, records — but the details differ in important ways.
 
 ## Contents
 
 - [Atomic Types](#atomic-types)
+
 - [Sequence Types](#sequence-types)
+
 - [Function Types](#function-types)
+
 - [Record Types](#record-types)
+
 - [Enum Types](#enum-types)
+
 - [Union Types](#union-types)
+
 - [Type Testing and Casting](#type-testing-and-casting)
+
 - [Type Promotion](#type-promotion)
 
 ---
@@ -112,7 +121,7 @@ xs:double("3.14")
 
 ### Untyped Data
 
-When you read XML without a schema, text content is `xs:untypedAtomic`. XQuery automatically converts untyped values during comparisons and arithmetic, but explicit casting is safer:
+When you read XML without a schema, text content is `xs:untypedAtomic`. XQuery automatically converts untyped values during comparisons and arithmetic. Explicit casting is safer:
 
 ```xquery
 (: $book/price is xs:untypedAtomic from unvalidated XML :)
@@ -577,7 +586,7 @@ else
 
 ### cast as
 
-Converts a value to a different type. Raises an error if the conversion fails.
+Converts a value into a different type. Raises an error if the conversion fails.
 
 ```xquery
 "42" cast as xs:integer          (: 42 :)

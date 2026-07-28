@@ -6,22 +6,32 @@ sort: 11
 
 # Prolog and Declarations
 
-Every XQuery file begins with an optional **prolog** — a header section that sets up the execution environment before the main query body runs. The prolog declares namespaces, imports modules, defines variables and functions, and configures serialization.
+Every XQuery file begins with an optional **prolog**, a header section that sets up the execution environment before the main query body runs. The prolog declares namespaces, imports modules, defines variables and functions, and configures serialization.
 
-If you are coming from C#, the prolog is a combination of `using` directives, assembly-level attributes, `.csproj` properties, and global configuration — all in one place at the top of the file.
+> For C# developers: the prolog combines several familiar concepts. It holds `using` directives, assembly-level attributes, `.csproj` properties, and global configuration, all at the top of the file.
 
 ## Contents
 
 - [What the Prolog Is](#what-the-prolog-is)
+
 - [Version Declaration](#version-declaration)
+
 - [Module Declaration](#module-declaration)
+
 - [Namespace Declarations](#namespace-declarations)
+
 - [Imports](#imports)
+
 - [Variable Declarations](#variable-declarations)
+
 - [Option Declarations](#option-declarations)
+
 - [Environment Settings](#environment-settings)
+
 - [Declaration Order](#declaration-order)
+
 - [Main Module vs Library Module](#main-module-vs-library-module)
+
 - [Complete Example](#complete-example)
 
 ---
@@ -319,7 +329,7 @@ static readonly DateTime StartDate = new DateTime(2025, 1, 1);
 
 ### External Variables
 
-External variables are declared in the query but their values are provided by the calling environment (a .NET application, a command-line tool, or a database engine):
+The query declares external variables. The calling environment provides their values — a .NET application, a command-line tool, or a database engine:
 
 ```xquery
 (: Declared in the query — no default value :)
@@ -333,13 +343,22 @@ declare variable $page-size as xs:integer external := 25;
 The caller provides the values:
 
 ```csharp
+using PhoenixmlDb.XQuery.Execution;
+
 // C# — setting external variables before execution
-var engine = new XQueryEngine();
-engine.SetVariable("user-id", userId);
-engine.SetVariable("page", currentPage);
+var engine = new QueryEngine();
+var compiled = engine.Compile(query);
+
+using var context = engine.CreateContext();
+context.SetExternalVariable("user-id", userId);
+context.SetExternalVariable("page", currentPage);
 // page-size not set — defaults to 25
 
-var results = await engine.ExecuteAsync(query);
+var results = new List<object?>();
+await foreach (var item in compiled.ExecutionPlan!.ExecuteAsync(context))
+{
+    results.Add(item);
+}
 ```
 
 **C# parallel:**
@@ -574,8 +593,9 @@ declare copy-namespaces preserve, no-inherit;
 declare copy-namespaces no-preserve, no-inherit;
 ```
 
-- **preserve** / **no-preserve** — whether in-scope namespaces from the original node are copied
-- **inherit** / **no-inherit** — whether the copied node inherits namespaces from its new parent
+- **preserve** / **no-preserve** controls whether in-scope namespaces from the original node are copied.
+
+- **inherit** / **no-inherit** controls whether the copied node inherits namespaces from its new parent.
 
 ### Base URI
 
@@ -797,11 +817,20 @@ return
 
 **Running this from C#:**
 ```csharp
-var engine = new XQueryEngine();
-engine.SetVariable("department", "Engineering");
-engine.SetVariable("report-date", DateTime.Now.ToString("yyyy-MM-dd"));
-engine.SetVariable("include-inactive", false);
+using PhoenixmlDb.XQuery.Execution;
 
-var report = await engine.ExecuteAsync(File.ReadAllText("employee-report.xq"));
+var engine = new QueryEngine();
+var compiled = engine.Compile(File.ReadAllText("employee-report.xq"));
+
+using var context = engine.CreateContext();
+context.SetExternalVariable("department", "Engineering");
+context.SetExternalVariable("report-date", DateTime.Now.ToString("yyyy-MM-dd"));
+context.SetExternalVariable("include-inactive", false);
+
+string report = "";
+await foreach (var item in compiled.ExecutionPlan!.ExecuteAsync(context))
+{
+    report += item;
+}
 Console.WriteLine(report);
 ```

@@ -6,7 +6,9 @@ sort: 2
 
 # Control Flow
 
-XSLT provides conditional instructions that determine what output to produce based on runtime conditions. If you come from C#, you will find familiar concepts here — `if`, `switch`, and some patterns that have no direct C# equivalent but solve real problems elegantly.
+XSLT provides conditional instructions that determine what output to produce based on runtime conditions. Some of these instructions have no direct equivalent in general-purpose languages.
+
+> For C# developers: `xsl:if` and `xsl:choose` map to `if` and `switch`. Other instructions, such as `xsl:where-populated`, `xsl:on-empty`, and `xsl:on-non-empty`, have no direct C# equivalent but solve real formatting problems.
 
 ## Contents
 
@@ -33,7 +35,7 @@ Simple conditional — if the test expression is true, execute the body. There i
 
 ### Effective Boolean Value
 
-The `test` attribute evaluates its XPath expression and converts the result to a boolean using the "effective boolean value" (EBV) rules. Understanding EBV is essential for writing correct conditions:
+The `test` attribute evaluates its XPath expression and transforms the result into a boolean using the "effective boolean value" (EBV) rules. Understanding EBV is essential for writing correct conditions:
 
 | Expression Result | Boolean Value | Example |
 |---|---|---|
@@ -131,10 +133,10 @@ var tier = price switch
 
 ### Structure Rules
 
-- `xsl:choose` must contain one or more `xsl:when` elements
-- `xsl:otherwise` is optional and must be last
-- The first `xsl:when` whose `test` is true wins — subsequent branches are skipped (just like `else if`)
-- If no `xsl:when` matches and there is no `xsl:otherwise`, nothing is produced
+- `xsl:choose` must contain one or more `xsl:when` elements.
+- `xsl:otherwise` is optional. It must come last.
+- The first `xsl:when` whose `test` is true wins. Later branches do not run, the same as `else if`.
+- If no `xsl:when` matches and there is no `xsl:otherwise`, the instruction produces nothing.
 
 ### Pattern: Value Mapping
 
@@ -393,9 +395,9 @@ var displayTags = product.Tags.Any()
 
 ### Placement Rules
 
-- `xsl:on-empty` and `xsl:on-non-empty` must be the last instructions in their parent sequence constructor
-- They evaluate whether everything before them in the same parent produced output
-- They can appear inside `xsl:where-populated` for layered conditional logic
+- `xsl:on-empty` and `xsl:on-non-empty` must be the last instructions in their parent sequence constructor.
+- They evaluate whether everything before them in the same parent produced output.
+- They can appear inside `xsl:where-populated` for layered conditional logic.
 
 ---
 
@@ -486,7 +488,7 @@ if (!string.IsNullOrWhiteSpace(product.Image?.Src))
 <!-- Output: electronics, sale, new -->
 ```
 
-Or more simply, use `xsl:value-of` with `separator`:
+Or use `xsl:value-of` with `separator`:
 
 ```xml
 <xsl:value-of select="tag" separator=", "/>

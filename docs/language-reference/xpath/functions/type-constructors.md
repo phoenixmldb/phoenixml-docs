@@ -6,7 +6,9 @@ sort: 12
 
 # Type Constructors
 
-Type constructor functions cast values between XPath's type system (based on XML Schema Definition types). They're in the `xs:` namespace and work like explicit casts in C#.
+Type constructor functions cast values between the types in XPath's type system, based on XML Schema Definition types. They live in the `xs:` namespace.
+
+> For C# developers: type constructors work like explicit casts, such as `(int)value` or `int.Parse("42")`.
 
 ## Why Type Constructors Exist
 
@@ -38,7 +40,7 @@ xs:integer("abc")      => ERROR (: not a valid integer :)
 
 ### xs:decimal()
 
-Arbitrary-precision decimal — like C#'s `decimal`.
+An arbitrary-precision decimal number.
 
 ```xpath
 xs:decimal("3.14159")  => 3.14159
@@ -49,7 +51,7 @@ xs:decimal(42)         => 42.0
 
 ### xs:double()
 
-IEEE 754 double-precision — like C#'s `double`.
+An IEEE 754 double-precision floating-point number.
 
 ```xpath
 xs:double("3.14")      => 3.14
@@ -62,7 +64,7 @@ xs:double("NaN")       => NaN
 
 ### xs:float()
 
-IEEE 754 single-precision — like C#'s `float`.
+An IEEE 754 single-precision floating-point number.
 
 ```xpath
 xs:float("3.14")       => 3.14 (single precision)
@@ -247,4 +249,4 @@ type(xs:date("2026-03-19")) => "xs:date"
 
 **C# equivalent:** `value.GetType().Name`
 
-This is invaluable for debugging — when an XPath expression produces unexpected results, `type()` tells you what type you're actually working with.
+This helps with debugging. When an XPath expression produces unexpected results, `type()` shows the actual type of a value.

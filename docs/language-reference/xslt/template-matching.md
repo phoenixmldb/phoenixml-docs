@@ -6,11 +6,15 @@ sort: 2
 
 # Template Matching
 
-Template matching is the core concept that makes XSLT different from every other transformation language you've used. Instead of writing code that walks a tree, you write rules that fire when patterns match. The XSLT engine handles the traversal.
+Template matching is the core concept that makes XSLT different from other transformation languages. Instead of writing code that walks a tree, you write rules that fire when patterns match. The engine handles the traversal.
 
 ## The Mental Model
 
-Think of XSLT templates like C# pattern matching in a `switch` expression — except the engine automatically applies them as it walks the document tree:
+XSLT templates fire declaratively when the engine matches a pattern in the document tree.
+
+> For C# developers: XSLT template rules resemble C# pattern matching in a
+> `switch` expression. The engine applies them automatically as it walks
+> the document tree. C# requires an explicit loop instead.
 
 ```csharp
 // C# — you control the traversal
@@ -42,7 +46,9 @@ foreach (var node in document.Descendants())
 </xsl:template>
 ```
 
-The XSLT version is more concise, but the real advantage is composability — each template is independent, and `xsl:apply-templates` delegates to whatever templates match the children.
+The XSLT version is more concise. Its main advantage is composability: each
+template is independent, and `xsl:apply-templates` delegates to whatever
+templates match the children.
 
 ## How Template Matching Works
 
@@ -55,7 +61,7 @@ When you write `<xsl:apply-templates/>`, the engine:
 3. Executes that template with the child as the new context node
 4. Concatenates all the outputs
 
-This is recursive — each template can call `xsl:apply-templates` again, processing its own children.
+This process is recursive. Each template can call `xsl:apply-templates` again, processing its own children.
 
 ```xml
 <xsl:template match="catalog">
@@ -168,7 +174,7 @@ More specific patterns have higher priority:
 | `product` | 0 (element name) |
 | `*` | -0.5 (wildcard) |
 
-The most specific match wins — similar to CSS specificity.
+The most specific pattern match wins.
 
 ### Explicit Priority
 
@@ -189,7 +195,7 @@ Templates from imported stylesheets have lower precedence than templates in the 
 <!-- templates here override imported ones with the same match pattern -->
 ```
 
-This is how you build theme overrides — import a base theme, then override specific templates.
+Use this pattern to build theme overrides: import a base theme, then override specific templates.
 
 ## Built-in Template Rules
 
@@ -207,7 +213,9 @@ XSLT has default templates that fire when no explicit template matches. They imp
 </xsl:template>
 ```
 
-This means: **if you don't write any templates at all, XSLT outputs all the text content of the document.** The built-in rules walk the entire tree and output every text node. Understanding this prevents the common confusion of "why am I getting all this text in my output?"
+This means: **if you write no templates, XSLT outputs all the text content of the document.**
+
+The built-in rules walk the entire tree and output every text node. This behavior explains a common point of confusion: unexpected text appearing in the output.
 
 To suppress unwanted text, add an empty template:
 
@@ -217,7 +225,7 @@ To suppress unwanted text, add an empty template:
 
 ## Modes
 
-Modes let you process the same nodes differently in different contexts. Think of them as "method overloads" for templates:
+Modes let you process the same nodes differently in different contexts.
 
 ```xml
 <!-- Default mode: full rendering -->
@@ -256,7 +264,10 @@ Use them with:
 <table><xsl:apply-templates select="//product" mode="summary"/></table>
 ```
 
-**C# parallel:** This is like having different `Render()` methods on a view model — `RenderFull()`, `RenderSummary()`, `RenderTocEntry()` — selected by the caller.
+> For C# developers: modes resemble method overloads for templates.
+> Different modes act like different `Render()` methods on a view model —
+> for example `RenderFull()`, `RenderSummary()`, and `RenderTocEntry()` —
+> selected by the caller.
 
 ## Named Templates
 
@@ -274,7 +285,7 @@ Templates can also be called by name, like functions:
 <xsl:call-template name="page-header"/>
 ```
 
-Named templates are useful for reusable page fragments that don't map to specific XML elements.
+Named templates are useful for reusable page fragments that do not map to specific XML elements.
 
 ## Parameters
 
@@ -297,4 +308,5 @@ Templates can accept parameters:
 </xsl:apply-templates>
 ```
 
-**C# parallel:** Method parameters — `RenderProduct(showDescription: false)`.
+> For C# developers: this resembles method parameters, for example
+> `RenderProduct(showDescription: false)`.

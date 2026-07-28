@@ -6,9 +6,11 @@ sort: 8
 
 # Array Functions
 
-Arrays are ordered, indexable collections introduced in XPath 3.1. Unlike sequences (which are flat), arrays can be nested — an array can contain other arrays. Think of them as `List<object>` in C# or JSON arrays.
+Arrays are ordered, indexable collections introduced in XPath 3.1. Sequences are flat, but arrays can be nested. An array can contain other arrays.
 
 All array functions are in the `array:` namespace.
+
+> For C# developers: an XPath array resembles `List<object>` in C#. It also matches the structure of a JSON array.
 
 ## Sequences vs Arrays
 
@@ -135,7 +137,7 @@ array:slice([1, 2, 3, 4, 5, 6, 7, 8], 2, 7, 2)   => [2, 4, 6]
 
 ## Modification
 
-Arrays are immutable — these return new arrays.
+Arrays are immutable. These functions return new arrays.
 
 ### array:put()
 

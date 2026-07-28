@@ -6,7 +6,9 @@ sort: 7
 
 # Map Functions
 
-Maps are XPath's key-value data structure, introduced in XPath 3.1. If you work with `Dictionary<TKey, TValue>` in C# or JSON objects, maps are the XPath equivalent.
+Maps are the XPath key-value data structure. XPath 3.1 introduced maps.
+
+> For C# developers: an XPath map resembles `Dictionary<TKey, TValue>` or a JSON object. `map:merge` resembles combining several dictionaries, with later entries winning on a key conflict. `map:build` resembles `ToDictionary`. `map:get` resembles `dict["key"]` or `dict.GetValueOrDefault("key")`. `map:contains` resembles `ContainsKey`. `map:size` resembles `Count`. `map:keys` resembles `Keys`. `map:put` resembles `SetItem` on an immutable dictionary. `map:remove` resembles `Remove` on an immutable dictionary. `map:for-each` resembles `Select` over key-value pairs. `map:filter` resembles `Where` followed by `ToDictionary`. `map:group-by` resembles `GroupBy` followed by `ToDictionary`.
 
 All map functions are in the `map:` namespace.
 
@@ -23,7 +25,7 @@ All map functions are in the `map:` namespace.
 
 ### Map Literals
 
-Maps can be created with literal syntax:
+You can create a map with literal syntax:
 
 ```xpath
 map { "name": "Alice", "age": 30 }
@@ -31,7 +33,6 @@ map { 1: "one", 2: "two", 3: "three" }
 map { }   (: empty map :)
 ```
 
-**C# equivalent:**
 ```csharp
 new Dictionary<string, object> { ["name"] = "Alice", ["age"] = 30 }
 ```
@@ -40,7 +41,7 @@ new Dictionary<string, object> { ["name"] = "Alice", ["age"] = 30 }
 
 ### map:merge()
 
-Merges multiple maps into one. Later entries override earlier ones for duplicate keys.
+Merges several maps into one. Later entries override earlier ones for duplicate keys.
 
 **Signature:** `map:merge($maps as map(*)*) as map(*)`
 
@@ -51,8 +52,6 @@ map:merge((
 ))
 => map { "a": 1, "b": 3, "c": 4 }
 ```
-
-**C# equivalent:** Multiple `.Union()` or `ToDictionary` calls with conflict resolution.
 
 ---
 
@@ -82,7 +81,7 @@ Creates a map from a sequence of key-value pair maps. New in XPath 4.0.
 
 ### map:build()
 
-Builds a map from a sequence using key and value functions. New in XPath 4.0.
+Builds a map from a sequence, using a key function and a value function. New in XPath 4.0.
 
 **Signature:** `map:build($seq as item()*, $key as function(item()) as xs:anyAtomicType, $value as function(item()) as item()*) as map(*)`
 
@@ -92,8 +91,6 @@ map:build(//book,
   function($b) { $b/title/string() })
 => map { "978-0-123...": "Effective C#", "978-0-987...": "XML in a Nutshell" }
 ```
-
-**C# equivalent:** `books.ToDictionary(b => b.Isbn, b => b.Title)`
 
 ---
 
@@ -116,8 +113,6 @@ $person?name       => same as map:get($person, "name")
 $person?age        => same as map:get($person, "age")
 ```
 
-**C# equivalent:** `dict["name"]` or `dict.GetValueOrDefault("name")`
-
 ---
 
 ### map:contains()
@@ -130,8 +125,6 @@ Tests whether a map contains a key.
 map:contains(map { "name": "Alice" }, "name")    => true
 map:contains(map { "name": "Alice" }, "email")   => false
 ```
-
-**C# equivalent:** `dict.ContainsKey("name")`
 
 ---
 
@@ -146,8 +139,6 @@ map:size(map { "a": 1, "b": 2 })   => 2
 map:size(map { })                    => 0
 ```
 
-**C# equivalent:** `dict.Count`
-
 ---
 
 ### map:keys()
@@ -160,8 +151,6 @@ Returns all keys in the map.
 map:keys(map { "name": "Alice", "age": 30 })   => ("name", "age")
 ```
 
-**C# equivalent:** `dict.Keys`
-
 ---
 
 ### map:empty()
@@ -172,7 +161,7 @@ Returns an empty map. New in XPath 4.0.
 
 ## Modification
 
-Maps are immutable — these functions return new maps.
+Maps are immutable. These functions return new maps.
 
 ### map:put()
 
@@ -184,8 +173,6 @@ Returns a new map with an added or updated entry.
 map:put(map { "a": 1 }, "b", 2)        => map { "a": 1, "b": 2 }
 map:put(map { "a": 1 }, "a", 99)       => map { "a": 99 }  (: update :)
 ```
-
-**C# equivalent:** With immutable dictionaries: `dict.SetItem("b", 2)`
 
 ---
 
@@ -199,8 +186,6 @@ Returns a new map without the specified key.
 map:remove(map { "a": 1, "b": 2 }, "a")   => map { "b": 2 }
 ```
 
-**C# equivalent:** `dict.Remove("a")` (immutable version)
-
 ---
 
 ### map:replace()
@@ -213,7 +198,7 @@ Replaces a value by applying a function to the existing value. New in XPath 4.0.
 
 ### map:for-each()
 
-Applies a function to each key-value pair, returning a sequence.
+Applies a function to each key-value pair and returns the results as a sequence.
 
 **Signature:** `map:for-each($map as map(*), $fn as function(xs:anyAtomicType, item()*) as item()*) as item()*`
 
@@ -225,13 +210,11 @@ map:for-each(
 => ("name=Alice", "age=30")
 ```
 
-**C# equivalent:** `dict.Select(kv => $"{kv.Key}={kv.Value}")`
-
 ---
 
 ### map:filter()
 
-Returns a map containing only entries where the predicate is true. New in XPath 4.0.
+Returns a map that contains only the entries where the predicate is true. New in XPath 4.0.
 
 **Signature:** `map:filter($map as map(*), $fn as function(xs:anyAtomicType, item()*) as xs:boolean) as map(*)`
 
@@ -243,8 +226,6 @@ map:filter(
 => map { "name": "Alice", "city": "NYC" }
 ```
 
-**C# equivalent:** `dict.Where(kv => kv.Key != "age").ToDictionary()`
-
 ---
 
 ### map:entries()
@@ -255,7 +236,7 @@ Returns the entries of a map as a sequence of single-entry maps. New in XPath 4.
 
 ### map:group-by()
 
-Groups a sequence into a map using a key function. New in XPath 4.0.
+Groups a sequence into a map, using a key function. New in XPath 4.0.
 
 **Signature:** `map:group-by($seq as item()*, $key as function(item()) as xs:anyAtomicType) as map(*)`
 
@@ -267,9 +248,7 @@ map:group-by(//book, function($b) { $b/@category })
    }
 ```
 
-**C# equivalent:** `books.GroupBy(b => b.Category).ToDictionary(g => g.Key, g => g.ToList())`
-
-This is one of the most powerful XPath 4.0 additions — it turns a common multi-step operation into a single function call.
+This XPath 4.0 addition turns a common multi-step operation into a single function call.
 
 ---
 

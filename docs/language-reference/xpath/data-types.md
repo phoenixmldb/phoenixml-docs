@@ -6,7 +6,9 @@ sort: 4
 
 # Data Types
 
-XPath has a richer type system than JSON or most dynamically-typed languages. Understanding it prevents subtle bugs in comparisons, function calls, and XSLT template matching.
+XPath has a richer type system than JSON or most dynamically typed languages. Understanding this type system prevents subtle bugs in comparisons, function calls, and XSLT template matching.
+
+> For C# developers: XPath's type hierarchy parallels the .NET type hierarchy (`object` to `ValueType` to `int`, `string`, `DateTime`, and so on). XPath treats date and time types as first-class values, not library types. The `castable as` test resembles `int.TryParse`. The `treat as` assertion resembles a cast such as `(int)value`, which raises `InvalidCastException` on failure. The `instance of` test resembles the C# `is` operator. XPath function types resemble `Func<int, int>` and similar delegate types. `map` and `array` types resemble `Dictionary<string, int>` and `List<string>`. The `type()` function resembles `value.GetType().Name`. The `div` operator always returns a decimal or double, unlike C#'s `/`, which returns an integer when both operands are integers. XPath date arithmetic uses standard operators, while C# requires methods such as `DateTime.AddDays` or manual subtraction.
 
 ## Contents
 
@@ -62,8 +64,6 @@ item()
 └── array(*)
 ```
 
-**C# parallel:** This is like the .NET type hierarchy (`object` → `ValueType` → `int`, `string`, `DateTime`, etc.), but with date/time types as first-class citizens rather than library types.
-
 ---
 
 ## Atomic Types in Practice
@@ -79,7 +79,7 @@ XPath has four numeric types with automatic promotion:
 | `xs:float` | ±3.4 × 10³⁸ | ~7 digits | `float` |
 | `xs:double` | ±1.7 × 10³⁰⁸ | ~15 digits | `double` |
 
-**Promotion rules** (automatic, like C#):
+**Promotion rules** (automatic):
 ```
 integer → decimal → float → double
 ```
@@ -90,7 +90,7 @@ integer → decimal → float → double
 5 + 3.0e0       => 8.0e0      (: integer + double = double :)
 ```
 
-**The `xs:untypedAtomic` gotcha:** When you read a value from an XML element or attribute without a schema, it's `xs:untypedAtomic` — not `xs:string`. XPath automatically casts `untypedAtomic` to the required type in comparisons and arithmetic:
+**The `xs:untypedAtomic` behavior:** A value read from an XML element or attribute without a schema has the type `xs:untypedAtomic`, not `xs:string`. XPath automatically casts `xs:untypedAtomic` values to the required type in comparisons and arithmetic:
 
 ```xpath
 <price>39.99</price>
@@ -103,7 +103,7 @@ This is convenient but means type errors surface at runtime, not compile time.
 
 ### String Type
 
-Strings in XPath are sequences of Unicode characters. They're immutable, like C# strings.
+Strings in XPath are sequences of Unicode characters. XPath strings are immutable.
 
 ```xpath
 "hello"                        (: string literal :)
@@ -111,11 +111,11 @@ Strings in XPath are sequences of Unicode characters. They're immutable, like C#
 ""                             (: empty string :)
 ```
 
-**String vs untypedAtomic:** An element's text content is `xs:untypedAtomic`, not `xs:string`. In most contexts this doesn't matter because they convert automatically. But `xs:string` values compare using collation, while `xs:untypedAtomic` values promote to the type of the other operand.
+**String vs untypedAtomic:** An element's text content is `xs:untypedAtomic`, not `xs:string`. In most contexts this does not matter because they convert automatically. However, `xs:string` values compare using collation, while `xs:untypedAtomic` values promote to the type of the other operand.
 
 ### Boolean Type
 
-XPath booleans behave like C# booleans, but XPath has [effective boolean value](functions/boolean.md) rules that automatically convert other types:
+XPath booleans follow [effective boolean value](functions/boolean.md) rules that automatically convert other types to boolean:
 
 ```xpath
 boolean("hello")   => true    (: non-empty string :)
@@ -126,7 +126,7 @@ boolean(0)         => false   (: zero :)
 
 ### Date and Time Types
 
-These are first-class types — not strings:
+These are first-class types, not strings:
 
 ```xpath
 xs:date("2026-03-19")                    (: date :)
@@ -149,7 +149,7 @@ xs:date("2026-03-19") > xs:date("2025-12-25")
 => true                (: date comparison :)
 ```
 
-In C#, you'd need `DateTime.AddDays(7)`, `date2 - date1`, etc. XPath uses standard operators.
+XPath uses standard operators for this arithmetic instead of separate methods.
 
 ---
 
@@ -178,7 +178,7 @@ An alternative syntax for type casting:
 
 ### The `castable as` Test
 
-Tests whether a cast would succeed without actually performing it:
+Tests whether a cast would succeed without performing it:
 
 ```xpath
 "42" castable as xs:integer     => true
@@ -186,9 +186,7 @@ Tests whether a cast would succeed without actually performing it:
 "2026-03-19" castable as xs:date => true
 ```
 
-**C# equivalent:** `int.TryParse("42", out _)`
-
-**Practical pattern — safe type conversion:**
+**Practical pattern — safe type casting:**
 ```xpath
 if ("42" castable as xs:integer)
 then xs:integer("42")
@@ -197,13 +195,11 @@ else 0
 
 ### The `treat as` Assertion
 
-Asserts a type at compile time without converting. Raises an error if the type doesn't match at runtime:
+Asserts a type at compile time without converting the value. Raises an error if the type does not match at runtime:
 
 ```xpath
 $value treat as xs:integer    (: assert $value is an integer :)
 ```
-
-**C# equivalent:** `(int)value` — a cast that throws `InvalidCastException` on failure.
 
 ### The `instance of` Test
 
@@ -216,13 +212,11 @@ Tests whether a value is of a given type:
 (1, 2, 3) instance of xs:integer+ => true  (: sequence of one or more integers :)
 ```
 
-**C# equivalent:** `value is int`
-
 ---
 
 ## Sequence Types
 
-Sequence types describe the structure of sequences. They're used in function signatures, variable declarations, and type tests.
+Sequence types describe the structure of sequences. Function signatures, variable declarations, and type tests all use sequence types.
 
 ### Occurrence Indicators
 
@@ -253,8 +247,6 @@ function(xs:string, xs:string) as xs:boolean (: predicate on two strings :)
 function(*) as item()*                      (: any function :)
 ```
 
-**C# equivalent:** `Func<int, int>`, `Func<string, string, bool>`
-
 ### Map and Array Types
 
 ```xpath
@@ -263,8 +255,6 @@ map(*)                          (: any map :)
 array(xs:string)               (: array of strings :)
 array(*)                        (: any array :)
 ```
-
-**C# equivalent:** `Dictionary<string, int>`, `List<string>`
 
 ---
 
@@ -293,8 +283,6 @@ type(xs:date("2026-03-19")) => "xs:date"
 type(//price)              => type of the price node's value
 ```
 
-**C# equivalent:** `value.GetType().Name`
-
 ---
 
 ## Common Type Pitfalls
@@ -307,7 +295,7 @@ type(//price)              => type of the price node's value
 //item[@price > "10"]        (: WRONG — string comparison! "9" > "10" is true :)
 ```
 
-**Rule:** When comparing with a number literal, XPath casts the untyped value to a number. When comparing with a string literal, it does string comparison. Be explicit about which you want.
+**Rule:** XPath casts the untyped value to a number when the comparison uses a number literal. XPath performs a string comparison when the comparison uses a string literal. Use an explicit cast to control the comparison type.
 
 ### 2. Empty Sequence vs Empty String
 
@@ -326,7 +314,7 @@ string(())                   => ""   (: but converting empty sequence gives empt
 xs:integer("9") > xs:integer("10")  => false  (: explicit numeric :)
 ```
 
-**Rule:** If you want numeric comparison, make sure at least one operand is a number.
+**Rule:** For a numeric comparison, make at least one operand a number.
 
 ### 4. Date String Comparison
 
@@ -344,4 +332,4 @@ ISO 8601 date strings happen to sort correctly as strings, but this is coinciden
 10 idiv 3    => 3           (: use idiv for integer division :)
 ```
 
-**C# difference:** In C#, `10 / 3` returns `3` (integer division when both operands are integers). XPath's `div` always returns a decimal/double result.
+XPath's `div` always returns a decimal or double result, even when both operands are integers.

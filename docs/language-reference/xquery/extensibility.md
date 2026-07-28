@@ -8,36 +8,52 @@ sort: 12
 
 Real projects outgrow the standard library quickly. You need domain-specific functions, integration with external systems, and custom processing logic. XQuery's extensibility model lets you build reusable libraries, declare functions whose implementation lives in the host environment, and integrate deeply with .NET applications.
 
-If you have worked with C# extension methods, MEF/plugin systems, or `IServiceProvider` dependency injection, you already understand the motivation: make the language do what your application needs, not just what the specification committee anticipated.
+> For C# developers: the motivation matches C# extension methods, MEF/plugin systems, and `IServiceProvider` dependency injection. The language does what your application needs, not just what the specification committee anticipated.
 
 ## Contents
 
 - [Why Extensibility Matters](#why-extensibility-matters)
+
+- [Custom Functions in C#: the XQueryFunction Model](#custom-functions-in-c-the-xqueryfunction-model)
+
 - [User-Defined Functions](#user-defined-functions)
+
 - [Library Modules](#library-modules)
+
 - [External Functions](#external-functions)
+
 - [.NET Integration with PhoenixmlDb](#net-integration-with-phoenixmldb)
+
 - [Extension Namespaces](#extension-namespaces)
+
 - [Database Integration](#database-integration)
+
 - [Combining with Other .NET Libraries](#combining-with-other-net-libraries)
+
 - [Practical Patterns](#practical-patterns)
 
 ---
 
 ## Why Extensibility Matters
 
-Standard XQuery gives you powerful data querying and transformation. But consider what a real application needs:
+Standard XQuery gives you rich data querying and transformation. But consider what a real application needs:
 
-- **Send an email** when an order exceeds a threshold
-- **Call a REST API** to enrich customer data with external information
-- **Validate** a document against business rules that change monthly
-- **Format** output using company-specific templates
-- **Log** query activity to an audit trail
-- **Generate** PDF invoices from XML order data
+- **Send an email** when an order exceeds a threshold.
+
+- **Call a REST API** to enrich customer data with external information.
+
+- **Validate** a document against business rules that change monthly.
+
+- **Format** output using company-specific templates.
+
+- **Log** query activity to an audit trail.
+
+- **Generate** PDF invoices from XML order data.
 
 None of these are in the XQuery specification. Extensibility bridges the gap between what XQuery provides and what your application requires.
 
-**C# parallel:**
+> For C# developers: C# solves the same problem with extension methods, DI, and plugins.
+
 ```csharp
 // C# solves the same problem with extension methods, DI, and plugins
 public static class OrderExtensions
@@ -53,6 +69,65 @@ services.AddScoped<IPaymentGateway, StripeGateway>();
 ```
 
 XQuery achieves the same extensibility through user-defined functions, library modules, external functions, and host-environment integration.
+
+---
+
+## Custom Functions in C#: the XQueryFunction Model
+
+PhoenixmlDb's core extension point for custom functions is the abstract class `XQueryFunction`, in the `PhoenixmlDb.XQuery` namespace. Subclass it to add a function the engine can call from any query.
+
+`XQueryFunction` exposes four members you implement:
+
+| Member | Purpose |
+|--------|---------|
+| `QName Name` | The function's qualified name, as it appears in a query |
+| `XdmSequenceType ReturnType` | The static return type of the function |
+| `IReadOnlyList<FunctionParameterDef> Parameters` | The declared parameters, in order |
+| `ValueTask<object?> InvokeAsync(IReadOnlyList<object?> arguments, ExecutionContext context)` | The C# method body where the custom logic runs |
+
+Here is a custom function that looks up an exchange rate:
+
+```csharp
+using PhoenixmlDb.Core;
+using PhoenixmlDb.XQuery;
+
+public sealed class ExchangeRateFunction : XQueryFunction
+{
+    public override QName Name => new(NamespaceId.None, "get-exchange-rate");
+
+    public override XdmSequenceType ReturnType => XdmSequenceType.Decimal;
+
+    public override IReadOnlyList<FunctionParameterDef> Parameters =>
+    [
+        new() { Name = new QName(NamespaceId.None, "from"), Type = XdmSequenceType.String },
+        new() { Name = new QName(NamespaceId.None, "to"), Type = XdmSequenceType.String },
+    ];
+
+    public override ValueTask<object?> InvokeAsync(
+        IReadOnlyList<object?> arguments,
+        ExecutionContext context)
+    {
+        var from = (string)arguments[0]!;
+        var to = (string)arguments[1]!;
+
+        // The custom logic runs here — call an external API, a cache, or a
+        // rate table, then return the result.
+        decimal rate = LookUpExchangeRate(from, to);
+        return ValueTask.FromResult<object?>(rate);
+    }
+}
+```
+
+Register an instance with the engine's `FunctionLibrary` before running a query:
+
+```csharp
+FunctionLibrary library = FunctionLibrary.Standard.Copy();
+library.Register(new ExchangeRateFunction());
+```
+
+`Register` adds the function under its `Name` and arity, so the query resolves calls to `get-exchange-rate($from, $to)` against your `InvokeAsync` implementation. Every custom function you write follows this same shape: subclass `XQueryFunction`, describe its signature through the four members, and register it with `FunctionLibrary.Register`.
+
+> For C# developers: `XQueryFunction` plays the role of a strongly-typed delegate registration. `Name`, `ReturnType`, and `Parameters` are the equivalent of a method signature. `InvokeAsync` is the method body. `FunctionLibrary.Register` is the equivalent of adding a service to an `IServiceCollection`.
 
 ---
 
@@ -291,18 +366,24 @@ PhoenixmlDb provides a .NET API for running XQuery from C# applications. This is
 Pass data from your .NET application into an XQuery query:
 
 ```csharp
-var engine = new XQueryEngine();
+using PhoenixmlDb.XQuery.Execution;
 
-// Simple types
-engine.SetVariable("user-id", "U12345");
-engine.SetVariable("page", 1);
-engine.SetVariable("page-size", 25);
-engine.SetVariable("include-archived", false);
-engine.SetVariable("report-date", DateTime.Now.ToString("yyyy-MM-dd"));
-
-// Execute the query
+var engine = new QueryEngine();
 string xquery = File.ReadAllText("reports/user-orders.xq");
-var result = await engine.ExecuteAsync(xquery);
+var compiled = engine.Compile(xquery);
+
+using var context = engine.CreateContext();
+context.SetExternalVariable("user-id", "U12345");
+context.SetExternalVariable("page", 1);
+context.SetExternalVariable("page-size", 25);
+context.SetExternalVariable("include-archived", false);
+context.SetExternalVariable("report-date", DateTime.Now.ToString("yyyy-MM-dd"));
+
+var results = new List<object?>();
+await foreach (var item in compiled.ExecutionPlan!.ExecuteAsync(context))
+{
+    results.Add(item);
+}
 ```
 
 The XQuery file declares matching external variables:
@@ -322,10 +403,13 @@ return $order
 
 ### Passing XML Documents
 
+`XQueryFacade` binds a single XML input to the context item and to `$input` in one call:
+
 ```csharp
-// Load an XML document and pass it to the query
-var xmlDoc = XDocument.Load("data/customers.xml");
-engine.SetVariable("input", xmlDoc);
+using PhoenixmlDb.XQuery;
+
+var facade = new XQueryFacade();
+string customersXml = File.ReadAllText("data/customers.xml");
 
 string xquery = @"
     declare variable $input external;
@@ -334,61 +418,39 @@ string xquery = @"
     return $c/name/text()
 ";
 
-var result = await engine.ExecuteAsync(xquery);
+string result = await facade.EvaluateAsync(xquery, customersXml);
 ```
 
 ### Registering Extension Functions from .NET
 
-Register C# methods as XQuery functions, making them callable from within queries:
+Register C# methods as XQuery functions by subclassing `XQueryFunction`, the same pattern shown in [Custom Functions in C#: the XQueryFunction Model](#custom-functions-in-c-the-xqueryfunction-model) above. Each class implements `Name`, `ReturnType`, `Parameters`, and `InvokeAsync`; the class body is elided below since it repeats that shape:
 
 ```csharp
-var engine = new XQueryEngine();
+using PhoenixmlDb.XQuery;
+using PhoenixmlDb.XQuery.Execution;
+using PhoenixmlDb.XQuery.Functions;
 
-// Register a simple function
-engine.RegisterFunction(
-    "http://example.com/app",  // namespace URI
-    "get-exchange-rate",       // local name
-    (string fromCurrency, string toCurrency) =>
-    {
-        // Call an external API or database
-        return GetExchangeRate(fromCurrency, toCurrency);
-    }
-);
+// Each follows the XQueryFunction pattern: Name, ReturnType, Parameters, InvokeAsync.
+public sealed class GetExchangeRateFunction : XQueryFunction { /* ... */ }
+public sealed class SendEmailFunction : XQueryFunction { /* ... */ }
+public sealed class GetConfigFunction : XQueryFunction { /* ... */ }
 
-// Register a function that sends email
-engine.RegisterFunction(
-    "http://example.com/app",
-    "send-email",
-    (string to, string subject, string body) =>
-    {
-        var client = new SmtpClient("smtp.example.com");
-        var message = new MailMessage("noreply@example.com", to, subject, body);
-        client.Send(message);
-        return true;
-    }
-);
+var library = FunctionLibrary.Standard.Copy();
+library.Register(new GetExchangeRateFunction());
+library.Register(new SendEmailFunction());
+library.Register(new GetConfigFunction());
 
-// Register a function that accesses configuration
-engine.RegisterFunction(
-    "http://example.com/app",
-    "get-config",
-    (string key) => Configuration[key]
-);
+var engine = new QueryEngine(functions: library);
 ```
 
-Now XQuery can call these functions:
+Because these functions register under `NamespaceId.None`, the query calls them unprefixed, the same way it calls a `local:` function:
 
 ```xquery
-declare namespace app = "http://example.com/app";
-declare function app:get-exchange-rate($from as xs:string, $to as xs:string) as xs:decimal external;
-declare function app:send-email($to as xs:string, $subject as xs:string, $body as xs:string) as xs:boolean external;
-declare function app:get-config($key as xs:string) as xs:string? external;
-
-let $rate := app:get-exchange-rate("USD", "EUR")
-let $threshold := xs:decimal(app:get-config("order-alert-threshold"))
+let $rate := get-exchange-rate("USD", "EUR")
+let $threshold := xs:decimal(get-config("order-alert-threshold"))
 
 for $order in //order[total * $rate > $threshold]
-return app:send-email(
+return send-email(
   $order/customer/email,
   concat("Large order alert: #", $order/@id),
   concat("Total (EUR): ", round($order/total * $rate, 2))
@@ -397,32 +459,34 @@ return app:send-email(
 
 ### Reading Query Results Back into .NET Types
 
+`XQueryFacade` detects `declare option output:method` in the query and serializes accordingly, so a query that produces JSON hands back a JSON string you can deserialize with `System.Text.Json`:
+
 ```csharp
-var engine = new XQueryEngine();
+using PhoenixmlDb.XQuery;
+using System.Text.Json;
+
+var facade = new XQueryFacade();
 
 string xquery = @"
-    for $p in collection('products')/product
-    where $p/price > 100
-    order by $p/price descending
-    return
-      map {
-        'id': string($p/@id),
-        'name': $p/name/text(),
-        'price': number($p/price),
-        'category': $p/category/text()
-      }
+    declare namespace output = ""http://www.w3.org/2010/xslt-xquery-serialization"";
+    declare option output:method ""json"";
+
+    array {
+      for $p in collection('products')/product
+      where $p/price > 100
+      order by $p/price descending
+      return
+        map {
+          'id': string($p/@id),
+          'name': $p/name/text(),
+          'price': number($p/price),
+          'category': $p/category/text()
+        }
+    }
 ";
 
-var results = await engine.ExecuteAsync(xquery);
-
-// Map to C# objects
-var products = results.Select(r => new Product
-{
-    Id = r["id"]?.ToString(),
-    Name = r["name"]?.ToString(),
-    Price = Convert.ToDecimal(r["price"]),
-    Category = r["category"]?.ToString()
-}).ToList();
+string json = await facade.EvaluateAsync(xquery);
+var products = JsonSerializer.Deserialize<List<Product>>(json);
 
 // Or work with XML results directly
 string xmlQuery = @"
@@ -433,8 +497,8 @@ string xmlQuery = @"
     }</products>
 ";
 
-var xmlResult = await engine.ExecuteAsync(xmlQuery);
-var xdoc = XDocument.Parse(xmlResult.ToString());
+string xmlResult = await facade.EvaluateAsync(xmlQuery);
+var xdoc = XDocument.Parse(xmlResult);
 ```
 
 ### Using the XQuery Engine Programmatically
@@ -442,38 +506,46 @@ var xdoc = XDocument.Parse(xmlResult.ToString());
 A complete example showing the engine lifecycle:
 
 ```csharp
+using System.Text;
+using PhoenixmlDb.XQuery.Execution;
+using PhoenixmlDb.XQuery.Functions;
+
 public class OrderReportService
 {
-    private readonly XQueryEngine _engine;
+    private readonly QueryEngine _engine;
     private readonly IConfiguration _config;
 
-    public OrderReportService(XQueryEngine engine, IConfiguration config)
+    public OrderReportService(IConfiguration config)
     {
-        _engine = engine;
         _config = config;
 
-        // Register extension functions once
-        _engine.RegisterFunction("http://example.com/app", "format-currency",
-            (decimal amount, string currency) =>
-                amount.ToString("C", CultureInfo.GetCultureInfo(
-                    currency == "EUR" ? "de-DE" : "en-US")));
-
-        _engine.RegisterFunction("http://example.com/app", "current-user",
-            () => Thread.CurrentPrincipal?.Identity?.Name ?? "anonymous");
+        // Register extension functions once, then build the engine around them.
+        // Each class follows the XQueryFunction pattern shown earlier on this page.
+        var library = FunctionLibrary.Standard.Copy();
+        library.Register(new FormatCurrencyFunction());
+        library.Register(new CurrentUserFunction());
+        _engine = new QueryEngine(functions: library);
     }
 
     public async Task<string> GenerateReportAsync(
         string department, DateTime startDate, DateTime endDate)
     {
-        _engine.SetVariable("department", department);
-        _engine.SetVariable("start-date", startDate.ToString("yyyy-MM-dd"));
-        _engine.SetVariable("end-date", endDate.ToString("yyyy-MM-dd"));
-        _engine.SetVariable("report-title",
+        string query = await File.ReadAllTextAsync("queries/department-report.xq");
+        var compiled = _engine.Compile(query);
+
+        using var context = _engine.CreateContext();
+        context.SetExternalVariable("department", department);
+        context.SetExternalVariable("start-date", startDate.ToString("yyyy-MM-dd"));
+        context.SetExternalVariable("end-date", endDate.ToString("yyyy-MM-dd"));
+        context.SetExternalVariable("report-title",
             $"{department} Report: {startDate:MMM d} - {endDate:MMM d, yyyy}");
 
-        string query = await File.ReadAllTextAsync("queries/department-report.xq");
-        var result = await _engine.ExecuteAsync(query);
-        return result.ToString();
+        var sb = new StringBuilder();
+        await foreach (var item in compiled.ExecutionPlan!.ExecuteAsync(context))
+        {
+            sb.Append(item);
+        }
+        return sb.ToString();
     }
 }
 ```
@@ -498,10 +570,14 @@ declare namespace cache = "http://yourcompany.com/cache";
 ```
 
 **Conventions:**
-- Use your organization's domain in the namespace URI
-- Group related functions under the same namespace
-- Use meaningful prefixes that are short but descriptive
-- Document your extension namespaces for other developers
+
+- Use your organization's domain in the namespace URI.
+
+- Group related functions under the same namespace.
+
+- Use meaningful prefixes that are short but descriptive.
+
+- Document your extension namespaces for other developers.
 
 **C# parallel:**
 ```csharp
@@ -557,7 +633,11 @@ string xquery = @"
     return $c
 ";
 
-var topCustomers = await engine.ExecuteAsync(xquery);
+var topCustomers = new List<object?>();
+await foreach (var item in engine.ExecuteAsync(xquery))
+{
+    topCustomers.Add(item);
+}
 ```
 
 ---
@@ -581,7 +661,11 @@ string xquery = @"
     }
 ";
 
-var result = await engine.ExecuteAsync(xquery);
+var result = new List<object?>();
+await foreach (var item in engine.ExecuteAsync(xquery))
+{
+    result.Add(item);
+}
 
 // Serialize to JSON
 string json = JsonSerializer.Serialize(result, new JsonSerializerOptions
@@ -594,7 +678,7 @@ string json = JsonSerializer.Serialize(result, new JsonSerializerOptions
 
 ```csharp
 // Build an API request payload from XQuery results
-var payload = await engine.ExecuteAsync(@"
+string payloadXquery = @"
     <request>
       <orders>{
         for $o in collection('orders')/order[status = 'pending']
@@ -604,10 +688,16 @@ var payload = await engine.ExecuteAsync(@"
           </order>
       }</orders>
     </request>
-");
+";
+
+string payload = "";
+await foreach (var item in engine.ExecuteAsync(payloadXquery))
+{
+    payload += item;
+}
 
 var httpClient = new HttpClient();
-var content = new StringContent(payload.ToString(), Encoding.UTF8, "application/xml");
+var content = new StringContent(payload, Encoding.UTF8, "application/xml");
 var response = await httpClient.PostAsync("https://api.example.com/process", content);
 ```
 
@@ -629,8 +719,6 @@ var xml = new XElement("orders",
         new XElement("ship-date", o.ShipDate?.ToString("yyyy-MM-dd") ?? "")
     )));
 
-engine.SetVariable("input", xml.ToString());
-
 string xquery = @"
     declare variable $input external;
     let $orders := parse-xml($input)/orders
@@ -647,7 +735,15 @@ string xquery = @"
     </shipping-report>
 ";
 
-var report = await engine.ExecuteAsync(xquery);
+var compiled = engine.Compile(xquery);
+using var context = engine.CreateContext();
+context.SetExternalVariable("input", xml.ToString());
+
+string report = "";
+await foreach (var item in compiled.ExecutionPlan!.ExecuteAsync(context))
+{
+    report += item;
+}
 ```
 
 ---
@@ -768,38 +864,56 @@ declare variable $report-date as xs:date external;
 Combine XQuery transformation with .NET I/O and business logic:
 
 ```csharp
+using System.Text;
+using PhoenixmlDb.XQuery.Execution;
+
 public class EtlPipeline
 {
-    private readonly XQueryEngine _engine;
+    private readonly QueryEngine _engine = new();
+
+    private async Task<string> RunAsync(string queryPath, params (string Name, object? Value)[] variables)
+    {
+        string xquery = await File.ReadAllTextAsync(queryPath);
+        var compiled = _engine.Compile(xquery);
+
+        using var context = _engine.CreateContext();
+        foreach (var (name, value) in variables)
+        {
+            context.SetExternalVariable(name, value);
+        }
+
+        var sb = new StringBuilder();
+        await foreach (var item in compiled.ExecutionPlan!.ExecuteAsync(context))
+        {
+            sb.Append(item);
+        }
+        return sb.ToString();
+    }
 
     public async Task RunDailyImportAsync()
     {
         // 1. Extract — load source data
         string sourceXml = await File.ReadAllTextAsync("/data/daily-feed.xml");
-        _engine.SetVariable("source", sourceXml);
-        _engine.SetVariable("import-date", DateTime.Now.ToString("yyyy-MM-dd"));
 
         // 2. Transform — XQuery handles the heavy lifting
-        string transformQuery = await File.ReadAllTextAsync("etl/transform.xq");
-        var transformed = await _engine.ExecuteAsync(transformQuery);
+        string transformed = await RunAsync("etl/transform.xq",
+            ("source", sourceXml),
+            ("import-date", DateTime.Now.ToString("yyyy-MM-dd")));
 
         // 3. Validate — XQuery validation module
-        _engine.SetVariable("data", transformed.ToString());
-        string validateQuery = await File.ReadAllTextAsync("etl/validate.xq");
-        var validation = await _engine.ExecuteAsync(validateQuery);
+        string validation = await RunAsync("etl/validate.xq", ("data", transformed));
 
-        if (validation.ToString().Contains("<errors>"))
+        if (validation.Contains("<errors>"))
         {
             await File.WriteAllTextAsync(
                 $"/logs/validation-errors-{DateTime.Now:yyyyMMdd}.xml",
-                validation.ToString());
+                validation);
             throw new InvalidDataException("Validation failed. See error log.");
         }
 
         // 4. Load — store in PhoenixmlDb
         var db = new PhoenixmlDatabase("connection-string");
-        var docs = XDocument.Parse(transformed.ToString())
-            .Descendants("record");
+        var docs = XDocument.Parse(transformed).Descendants("record");
 
         foreach (var doc in docs)
         {

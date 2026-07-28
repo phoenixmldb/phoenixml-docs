@@ -6,7 +6,54 @@ sort: 14
 
 # Maps, Arrays, and Records
 
-XSLT 3.0 introduced maps and arrays as first-class data types, bringing key-value pairs and ordered collections into a language that previously only had XML nodes and atomic values. XSLT 4.0 adds records and `xsl:for-each-member`. If you come from C#, think of maps as `Dictionary<string, object>`, arrays as `List<object>`, and records as anonymous types or C# records.
+XSLT 3.0 introduced maps and arrays as data types. Before this, the language had only XML nodes and atomic values. A map holds key-value pairs. An array holds an ordered collection of values. XSLT 4.0 adds records and the `xsl:for-each-member` instruction.
+
+> For C# developers: a map corresponds to a `Dictionary<string, object>` or an anonymous object such as `new { Name = "Alice", Age = 30 }`. An array corresponds to a `List<object>` or an `object[]`. A sequence corresponds to a flattened `IEnumerable<T>`; an array preserves nesting, so it corresponds more closely to a `List<object>` that can hold nested lists. A record corresponds to an anonymous type or a C# `record`. `xsl:for-each-member` corresponds to `foreach (var item in array) { ... }`.
+
+This C# code builds a map conditionally, from a mix of static entries and a loop:
+
+```csharp
+var config = new Dictionary<string, object>
+{
+    ["version"] = "2.1"
+};
+
+if (debugMode)
+    config["debug"] = true;
+
+foreach (var setting in settings)
+    config[setting.Name] = setting.Value;
+```
+
+This C# code serializes a catalog to JSON:
+
+```csharp
+var catalog = new {
+    catalog = products.Select(p => new {
+        name = p.Name,
+        price = p.Price,
+        category = p.Category,
+        inStock = p.Stock > 0,
+        description = p.Description  // null omitted by some serializers
+    })
+};
+string json = JsonSerializer.Serialize(catalog);
+```
+
+A lookup table built from a map corresponds to this C# dictionary:
+
+```csharp
+var countryNames = new Dictionary<string, string>
+{
+    ["US"] = "United States",
+    ["GB"] = "United Kingdom",
+    ["DE"] = "Germany",
+    ["FR"] = "France",
+    ["JP"] = "Japan"
+};
+
+var name = countryNames[countryCode];
+```
 
 ## Contents
 
@@ -21,9 +68,7 @@ XSLT 3.0 introduced maps and arrays as first-class data types, bringing key-valu
 
 ## xsl:map and xsl:map-entry
 
-A map is an unordered collection of key-value pairs. Keys are atomic values (strings, numbers, dates); values can be anything — strings, numbers, nodes, sequences, other maps, or arrays.
-
-**C# parallel:** `Dictionary<string, object>` or an anonymous object `new { Name = "Alice", Age = 30 }`.
+A map is an unordered collection of key-value pairs. Keys are atomic values, such as strings, numbers, or dates. A value can be any XDM item: a string, a number, a node, a sequence, another map, or an array.
 
 ### XPath Literal vs. xsl:map
 
@@ -38,7 +83,7 @@ You can construct maps in pure XPath using the `map{}` literal syntax:
 }"/>
 ```
 
-The `xsl:map` instruction does the same thing, but allows dynamic construction — the entries can be computed with XSLT instructions:
+The `xsl:map` instruction builds the same result, but it allows dynamic construction. The entries can be computed with XSLT instructions:
 
 ```xml
 <!-- xsl:map — dynamic construction -->
@@ -77,21 +122,6 @@ Use `xsl:map` when you need to:
     </xsl:for-each>
   </xsl:map>
 </xsl:variable>
-```
-
-**C# parallel:**
-
-```csharp
-var config = new Dictionary<string, object>
-{
-    ["version"] = "2.1"
-};
-
-if (debugMode)
-    config["debug"] = true;
-
-foreach (var setting in settings)
-    config[setting.Name] = setting.Value;
 ```
 
 ### Accessing Map Values
@@ -133,7 +163,7 @@ Use the XPath `?` lookup operator or the `map:get()` function:
 
 ### Nested Maps
 
-Maps can contain other maps, building hierarchical data structures:
+A map can contain other maps, building hierarchical data structures:
 
 ```xml
 <xsl:variable name="api-response" as="map(*)">
@@ -161,9 +191,7 @@ Maps can contain other maps, building hierarchical data structures:
 
 ## xsl:array and xsl:array-member
 
-An array is an ordered collection of values. Unlike sequences, arrays can contain other arrays and maps as individual members, and members can themselves be sequences.
-
-**C# parallel:** `List<object>` or `object[]`.
+An array is an ordered collection of values. Unlike a sequence, an array can contain other arrays and maps as members. Each member can itself be a sequence.
 
 ### XPath Literal vs. xsl:array
 
@@ -192,7 +220,7 @@ The `xsl:array` instruction allows dynamic construction:
 
 ### Arrays vs. Sequences
 
-This distinction trips up many newcomers. Both hold ordered collections, but they behave differently:
+This distinction matters for newcomers. A sequence and an array both hold ordered collections, but they behave differently:
 
 | | Sequence | Array |
 |---|---|---|
@@ -200,8 +228,6 @@ This distinction trips up many newcomers. Both hold ordered collections, but the
 | **Members** | Atomic values and nodes only | Any XDM value, including arrays, maps, and sequences |
 | **Empty** | `()` is the empty sequence | `[]` is an empty array (an array with zero members) |
 | **Usage** | Default for most XPath operations | Required for JSON arrays and structured data |
-
-**C# parallel:** Sequences are like flattened `IEnumerable<T>`, while arrays are like `List<object>` that can contain nested lists.
 
 ### Accessing Array Members
 
@@ -259,9 +285,7 @@ This distinction trips up many newcomers. Both hold ordered collections, but the
 
 ## xsl:for-each-member (XSLT 4.0)
 
-`xsl:for-each-member` iterates over the members of an array, binding each member to a variable. This is the array counterpart to `xsl:for-each` (which iterates over sequences).
-
-**C# parallel:** `foreach (var item in array) { ... }`
+`xsl:for-each-member` iterates over the members of an array. It binds each member to a variable. This instruction is the array counterpart to `xsl:for-each`, which iterates over sequences.
 
 ### Basic Usage
 
@@ -345,9 +369,7 @@ A common pattern when working with JSON-like data:
 
 ## xsl:record (XSLT 4.0)
 
-`xsl:record` constructs a map with named entries, similar to a C# anonymous type or record. It is syntactic sugar for `xsl:map` with `xsl:map-entry`, but with a cleaner, more readable syntax.
-
-**C# parallel:** Anonymous types `new { Name = "Alice", Age = 30 }` or records `record User(string Name, int Age)`.
+`xsl:record` constructs a map with named entries. It is a shorthand for `xsl:map` with `xsl:map-entry`, using cleaner, more readable syntax.
 
 ### Basic Usage
 
@@ -422,7 +444,7 @@ Use `xsl:record` when all keys are fixed, known string names. Use `xsl:map` when
 
 ## JSON Output Patterns
 
-Maps and arrays are the bridge between XML and JSON in XSLT 3.0+. When you serialize a map or array with `method="json"`, it produces JSON output directly.
+Maps and arrays connect XML and JSON in XSLT 3.0 and later. Serializing a map or array with `method="json"` produces JSON output directly.
 
 ### XML to JSON Conversion
 
@@ -477,21 +499,6 @@ Output:
     }
   ]
 }
-```
-
-**C# parallel:**
-
-```csharp
-var catalog = new {
-    catalog = products.Select(p => new {
-        name = p.Name,
-        price = p.Price,
-        category = p.Category,
-        inStock = p.Stock > 0,
-        description = p.Description  // null omitted by some serializers
-    })
-};
-string json = JsonSerializer.Serialize(catalog);
 ```
 
 ### API Response Construction
@@ -557,7 +564,7 @@ XSLT 3.0 can also read JSON into maps and arrays using `json-doc()` or `parse-js
 
 ### Lookup Tables
 
-Maps make excellent lookup tables, replacing verbose `xsl:choose` chains:
+A map serves as a lookup table, replacing a long `xsl:choose` chain:
 
 ```xml
 <!-- Instead of a 50-line xsl:choose -->
@@ -571,21 +578,6 @@ Maps make excellent lookup tables, replacing verbose `xsl:choose` chains:
 
 <!-- Fast O(1) lookup -->
 <xsl:value-of select="$country-names(@country-code)"/>
-```
-
-**C# parallel:**
-
-```csharp
-var countryNames = new Dictionary<string, string>
-{
-    ["US"] = "United States",
-    ["GB"] = "United Kingdom",
-    ["DE"] = "Germany",
-    ["FR"] = "France",
-    ["JP"] = "Japan"
-};
-
-var name = countryNames[countryCode];
 ```
 
 ### Data Transformation Pipeline

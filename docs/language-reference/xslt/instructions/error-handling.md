@@ -51,7 +51,7 @@ XSLT 3.0 adds structured error handling to the language. Before 3.0, a runtime e
 </xsl:template>
 ```
 
-If `price` contains "TBD" instead of a number, the `number()` conversion fails. Instead of crashing the entire transformation, the catch block produces a fallback message.
+If `price` contains a non-numeric string, the `number()` conversion fails. Instead of crashing the entire transformation, the catch block produces a fallback message.
 
 **C# parallel:**
 
@@ -70,13 +70,13 @@ catch (FormatException)
 
 `xsl:try`/`xsl:catch` handles **dynamic errors** — errors that occur during execution:
 
-- Type conversion failures (`xs:integer("abc")`)
-- Division by zero
-- Invalid function arguments
-- Document loading errors (`doc('missing.xml')`)
-- `xsl:message terminate="yes"` (the termination becomes a catchable error in XSLT 3.0)
-- Errors raised by `error()` function
-- Schema validation failures
+- Type conversion failures, such as `xs:integer("abc")`.
+- Division by zero.
+- Invalid function arguments.
+- Document loading errors, such as `doc('missing.xml')`.
+- `xsl:message terminate="yes"`. In XSLT 3.0, the termination becomes a catchable error.
+- Errors raised by the `error()` function.
+- Schema validation failures.
 
 It does **not** catch:
 
@@ -85,7 +85,7 @@ It does **not** catch:
 
 ### Return Value
 
-`xsl:try` is a sequence constructor — it produces either the result of the try body (if successful) or the result of the catch body (if an error occurred). You can use it anywhere a sequence constructor is allowed, including in variable declarations:
+`xsl:try` is a sequence constructor. On success, it produces the result of the try body. On error, it produces the result of the catch body instead. You can use it anywhere a sequence constructor is allowed, including in variable declarations:
 
 ```xml
 <xsl:variable name="parsed-date" as="xs:string">
@@ -327,7 +327,7 @@ In a catch block:
 
 ### Use in Validation Scenarios
 
-`xsl:assert` is powerful for building validation into your transformation:
+`xsl:assert` builds validation directly into a transformation:
 
 ```xml
 <xsl:template match="order">
@@ -418,10 +418,10 @@ When a 4.0 processor runs this, it executes `xsl:switch` normally. When a 3.0 pr
 
 ### How Forwards Compatibility Works
 
-- If the stylesheet declares a version higher than the processor supports (e.g., `version="4.0"` on a 3.0 processor), the processor enters **forwards-compatible mode**
-- In this mode, unrecognized instructions are not immediately an error — the processor looks for `xsl:fallback` children
-- If `xsl:fallback` is found, it is executed in place of the unrecognized instruction
-- If no `xsl:fallback` is found, a runtime error is raised (which can be caught by `xsl:try`/`xsl:catch`)
+- If the stylesheet declares a version higher than the processor supports (for example, `version="4.0"` on a 3.0 processor), the processor enters **forwards-compatible mode**.
+- In this mode, an unrecognized instruction is not immediately an error. The processor looks for `xsl:fallback` children instead.
+- If `xsl:fallback` exists, the processor executes it in place of the unrecognized instruction.
+- If no `xsl:fallback` exists, the processor raises a runtime error. `xsl:try`/`xsl:catch` can catch this error.
 
 ### Multiple Fallbacks
 

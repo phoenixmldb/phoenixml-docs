@@ -6,7 +6,7 @@ sort: 6
 
 # Copying and Identity Transform
 
-Copying is one of the most common XSLT operations. Whether you are passing through most of a document unchanged, selectively modifying a few elements, or restructuring content, the copy instructions and the identity transform pattern are your primary tools.
+Node copying ranks among the most common operations in XSLT. A stylesheet may pass through most of a document unchanged, modify a few elements, or restructure content. The copy instructions and the identity transform pattern are the primary tools for these tasks.
 
 ## Contents
 
@@ -34,13 +34,13 @@ Creates a shallow copy of the current node — the node itself, but **not** its 
 </xsl:template>
 ```
 
-`xsl:copy` copies:
-- **Element nodes:** Creates the element with the same name and namespace, but no attributes or children
-- **Attribute nodes:** Creates the attribute with the same name, namespace, and value
-- **Text nodes:** Creates a text node with the same content
-- **Comment nodes:** Creates a comment with the same content
-- **Processing instruction nodes:** Creates a PI with the same target and content
-- **Document nodes:** Creates a new document node
+`xsl:copy` copies these node types:
+- **Element nodes:** creates the element with the same name and namespace, but no attributes or children.
+- **Attribute nodes:** creates the attribute with the same name, namespace, and value.
+- **Text nodes:** creates a text node with the same content.
+- **Comment nodes:** creates a comment with the same content.
+- **Processing instruction nodes:** creates a PI with the same target and content.
+- **Document nodes:** creates a new document node.
 
 ### copy-namespaces Attribute
 
@@ -149,7 +149,7 @@ XSLT 3.0 lets you declare the identity transform behavior on a mode, eliminating
 <xsl:mode on-no-match="shallow-copy"/>
 ```
 
-This single declaration says: "For any node that does not match an explicit template, do a shallow copy and process its children." It replaces the entire identity template.
+This single declaration applies to any node with no matching template. The processor makes a shallow copy of the node and processes its children. It replaces the entire identity template.
 
 Your stylesheet then only contains templates for the nodes you want to change:
 

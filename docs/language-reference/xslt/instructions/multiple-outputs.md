@@ -6,7 +6,20 @@ sort: 8
 
 # Multiple Output Documents
 
-A single XSLT transformation can produce multiple output files. This is one of XSLT's most powerful capabilities — from a single source document and stylesheet, you can generate an index page, individual detail pages, a sitemap, and a JSON API response in one pass.
+A single XSLT transformation can produce multiple output files. From one source document and one stylesheet, a single pass can generate an index page, individual detail pages, a sitemap, and a JSON API response.
+
+> For C# developers: `xsl:output` configures serialization the way a `JsonSerializerOptions` or `XmlWriterSettings` object does. It does not change what data is produced, only how the serializer writes it to text. `xsl:result-document` corresponds to calling `File.WriteAllText(path, content)` once for each output file, except the XSLT engine collects the results and hands them to your code. Your code decides where they go.
+
+This C# code configures serialization settings equivalent to `xsl:output`:
+
+```csharp
+var settings = new XmlWriterSettings
+{
+    Indent = true,
+    Encoding = Encoding.UTF8,
+    OmitXmlDeclaration = true
+};
+```
 
 ## Contents
 
@@ -20,7 +33,7 @@ A single XSLT transformation can produce multiple output files. This is one of X
 
 ## xsl:output
 
-Controls how the result tree is serialized into bytes. This is a top-level declaration (child of `xsl:stylesheet`) that configures the serializer.
+`xsl:output` controls how the result tree is serialized into bytes. It is a top-level declaration, a child of `xsl:stylesheet`, that configures the serializer.
 
 ### Basic Usage
 
@@ -55,7 +68,7 @@ Controls how the result tree is serialized into bytes. This is a top-level decla
 <xsl:output method="xml" indent="yes" encoding="utf-8"/>
 ```
 
-**HTML** — produces HTML-compatible output. Self-closing tags are not used for void elements, boolean attributes are minimized, and entity references follow HTML rules:
+**HTML** — produces HTML-compatible output. Self-closing elements are not used for void elements. Boolean attributes are minimized. Entity references follow HTML rules:
 
 ```xml
 <xsl:output method="html" html-version="5" indent="yes"/>
@@ -67,7 +80,7 @@ Key differences from XML method:
 - `checked="checked"` may be minimized to `checked`
 - No XML declaration
 
-**Text** — produces plain text. All markup is stripped; only text content appears:
+**Text** — produces plain text. The serializer strips all markup. Only the text content appears:
 
 ```xml
 <xsl:output method="text" encoding="utf-8"/>
@@ -89,22 +102,11 @@ The result tree must be a map or array (built with `xsl:map`/`xsl:array` or the 
 <xsl:output method="adaptive" indent="yes"/>
 ```
 
-**C# parallel:** `xsl:output` is like configuring a `JsonSerializerOptions` or `XmlWriterSettings` object — you are not changing what data is produced, just how it is written to text.
-
-```csharp
-var settings = new XmlWriterSettings
-{
-    Indent = true,
-    Encoding = Encoding.UTF8,
-    OmitXmlDeclaration = true
-};
-```
-
 ---
 
 ## xsl:result-document
 
-Creates a secondary output document. The primary result goes to the main output destination; each `xsl:result-document` writes to a separate destination identified by an `href`.
+`xsl:result-document` creates a secondary output document. The primary result goes to the main output destination. Each `xsl:result-document` writes to a separate destination identified by an `href`.
 
 ### Basic Usage
 
@@ -157,7 +159,7 @@ If `href` is omitted, the result document replaces the primary output. This is u
 
 ### The format Attribute
 
-References a named `xsl:output` declaration to control serialization for this specific result document:
+The `format` attribute references a named `xsl:output` declaration. It controls serialization for this specific result document:
 
 ```xml
 <xsl:output name="html-output" method="html" html-version="5" indent="yes"/>
@@ -241,7 +243,7 @@ You can define multiple named output formats and reference them by name. The unn
             media-type="application/atom+xml"/>
 ```
 
-Multiple unnamed `xsl:output` declarations are merged — their attributes are combined, with later declarations winning on conflicts:
+The processor merges multiple unnamed `xsl:output` declarations. It combines their attributes, and a later declaration wins on conflicts:
 
 ```xml
 <!-- These are merged into one effective output declaration -->
@@ -416,21 +418,22 @@ Generate the same data in multiple formats — HTML for humans, JSON for APIs, X
 
 ## Secondary Output in the PhoenixmlDb API
 
-When running transformations through the PhoenixmlDb .NET API, secondary output documents are collected in a dictionary rather than written directly to the file system. This gives you programmatic access to all generated outputs.
+When you run a transformation through the PhoenixmlDb .NET API, the API collects secondary output documents in a dictionary. It does not write them directly to the file system. This gives you programmatic access to every generated output.
 
 ```csharp
 using PhoenixmlDb.Xslt;
 
 var transformer = new XsltTransformer();
 await transformer.LoadStylesheetAsync(stylesheet, new Uri("catalog.xslt"));
-var result = await transformer.TransformAsync(sourceXml);
 
 // Primary result
-string indexHtml = result.PrimaryResult;
+string indexHtml = await transformer.TransformAsync(sourceXml);
 File.WriteAllText("output/index.html", indexHtml);
 
-// Secondary result documents (from xsl:result-document)
-foreach (var (href, content) in result.SecondaryResultDocuments)
+// Secondary result documents (from xsl:result-document), read from the
+// transformer AFTER TransformAsync returns — it repopulates this
+// dictionary on every call.
+foreach (var (href, content) in transformer.SecondaryResultDocuments)
 {
     var outputPath = Path.Combine("output", href);
     Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
@@ -440,25 +443,30 @@ foreach (var (href, content) in result.SecondaryResultDocuments)
 
 This design lets you:
 
-- **Write to any storage** — local files, blob storage, database, HTTP endpoints
-- **Post-process** generated documents before writing them
-- **Test** transformations by inspecting secondary outputs in memory
-- **Filter** which documents to actually write
+- **Write to any storage** — local files, blob storage, a database, or HTTP endpoints.
 
-**C# parallel:** `xsl:result-document` is conceptually like calling `File.WriteAllText(path, content)` for each output file, except the XSLT engine collects them and hands them to you. The calling code decides where they actually go.
+- **Post-process** — modify generated documents before writing them.
+
+- **Test** — inspect secondary outputs in memory during a transformation.
+
+- **Filter** — choose which documents to write.
 
 ### Controlling the Base URI
 
-The `href` values in `xsl:result-document` are resolved relative to the base output URI. In the PhoenixmlDb API, you can set this when calling the transform:
+The processor resolves `href` values in `xsl:result-document` relative to the base output URI. `XsltTransformer` exposes no C# property for this. There is no `TransformOptions` type and no base-output-uri setter on the transformer. The base output URI is instead controlled from XQuery's `fn:transform()`, via the `"base-output-uri"` entry in its options map, or implicitly by the stylesheet and its serialization. From C#, the keys in `SecondaryResultDocuments` are the literal `href` values. Resolve or rewrite them yourself if you need a different output root:
 
 ```csharp
-var options = new TransformOptions
+var transformer = new XsltTransformer();
+await transformer.LoadStylesheetAsync(stylesheet, new Uri("catalog.xslt"));
+_ = await transformer.TransformAsync(sourceXml);
+
+// Rewrite hrefs onto a chosen output root in application code
+var outputRoot = new Uri("file:///output/site/");
+foreach (var (href, content) in transformer.SecondaryResultDocuments)
 {
-    BaseOutputUri = new Uri("file:///output/site/")
-};
-
-var result = await transformer.TransformAsync(sourceXml, options);
-
-// result.SecondaryResultDocuments keys are now relative to /output/site/
+    var outputPath = new Uri(outputRoot, href).LocalPath;
+    Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
+    File.WriteAllText(outputPath, content);
+}
 // e.g., "products/WP-001.html", "api/catalog.json"
 ```

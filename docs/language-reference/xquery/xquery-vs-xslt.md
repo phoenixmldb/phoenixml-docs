@@ -48,13 +48,13 @@ return <div class="card">
 </div>
 ```
 
-**C# analogy:** XSLT is like event handlers (you register what should happen when something occurs). XQuery is like LINQ (you write the query that produces the result).
+> For C# developers: XSLT resembles event handlers — you register what should happen when something occurs. XQuery resembles LINQ — you write the query that produces the result.
 
 ## Strengths Comparison
 
 ### Where XSLT Excels
 
-**Document-centric transforms.** When you're converting one XML format to another and the output structure closely mirrors the input structure, XSLT's template matching handles this naturally:
+**Document-centric transforms.** XSLT's template matching handles document-centric transforms naturally. This applies when you transform one XML format to another and the output structure closely mirrors the input structure:
 
 ```xml
 <!-- Copy everything, change just the price format -->
@@ -67,9 +67,9 @@ return <div class="card">
 </xsl:template>
 ```
 
-In XQuery, you'd have to explicitly reconstruct the entire document tree to change one element.
+In XQuery, you must reconstruct the entire document tree to change one element.
 
-**Multiple output documents.** XSLT's `xsl:result-document` can generate many output files from a single input — ideal for static site generation, batch PDF creation, or splitting large documents.
+**Multiple output documents.** XSLT's `xsl:result-document` generates many output files from a single input. This suits static site generation, batch PDF creation, and splitting large documents.
 
 **Reusable template libraries.** XSLT's import/include mechanism with priority-based override is well-suited to building theme systems and customizable document pipelines.
 
@@ -136,9 +136,11 @@ return map {
 
 Both languages use XPath 3.1/4.0 for navigation and expression evaluation. All XPath functions, operators, and data types work identically in both. This means:
 
-- Knowledge of XPath transfers directly to both languages
-- You can use the same navigation expressions in XSLT match patterns and XQuery FLWOR clauses
-- Function libraries (string, numeric, date, sequence) are identical
+- Knowledge of XPath transfers directly to both languages.
+
+- You can use the same navigation expressions in XSLT match patterns and XQuery FLWOR clauses.
+
+- Function libraries (string, numeric, date, sequence) are identical.
 
 ## Using Them Together
 
@@ -159,37 +161,53 @@ This is exactly what PhoenixmlDb enables — XQuery for database operations, XSL
 Ask these questions:
 
 **1. Are you transforming a document or querying data?**
+
 - Transforming → XSLT
+
 - Querying → XQuery
 
 **2. Does the output closely mirror the input structure?**
+
 - Yes (most nodes copied, few changes) → XSLT (identity transform pattern)
+
 - No (different structure, aggregation, joins) → XQuery
 
 **3. Do you need multiple output files?**
+
 - Yes → XSLT (`xsl:result-document`)
+
 - No → Either
 
 **4. Is the input from a database or collection?**
+
 - Database/collection → XQuery
+
 - Single document or known set → Either
 
 **5. Do you need reusable, overridable templates?**
+
 - Yes → XSLT (import/include with priority override)
+
 - No → Either
 
 **6. Are you doing ad-hoc exploration?**
+
 - Yes → XQuery (less boilerplate)
+
 - No → Depends on the task
 
 ## The .NET Developer's Perspective
 
-If you're coming from C#:
+- **XQuery** feels more natural initially. It is expression-based like LINQ, with explicit control flow.
 
-- **XQuery** will feel more natural initially — it's expression-based like LINQ, with explicit control flow
-- **XSLT** requires a paradigm shift to declarative, rule-based thinking — but once it clicks, it's more powerful for document-centric work
-- **Learn XPath first** — it's the foundation for both
-- **Start with XQuery** for data queries and exploration
-- **Move to XSLT** when you need document transformation, multi-output generation, or template-based rendering
+- **XSLT** requires a paradigm shift to declarative, rule-based thinking. Once it clicks, it handles document-centric work well.
 
-Both are valuable tools. The best .NET developers working with XML will use both, choosing the right one for each task.
+- **Learn XPath first.** It is the foundation for both languages.
+
+- **Start with XQuery** for data queries and exploration.
+
+- **Move to XSLT** when you need document transformation, multi-output generation, or template-based rendering.
+
+Both are valuable tools. The best .NET developers working with XML use both, choosing the right one for each task.
+
+> For C# developers: XQuery feels closer to LINQ and is usually the easier starting point.

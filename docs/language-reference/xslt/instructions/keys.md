@@ -6,13 +6,16 @@ sort: 10
 
 # Keys and Cross-References
 
-`xsl:key` defines an index over a document — a precomputed lookup structure that the `key()` function uses for fast retrieval. If you have ever added an index to a database column to speed up queries, you already understand the concept. Keys turn O(n) linear scans into O(1) hash lookups.
+`xsl:key` defines an index over a document: a precomputed lookup structure that the `key()` function uses for fast retrieval. Keys turn a linear scan across the whole document into a direct hash lookup.
+
+> For C# developers: an `xsl:key` declaration resembles building a `Dictionary` from a source collection, such as `products.ToDictionary(p => p.Id)`. Use `.ToLookup(...)` instead when a key maps to several nodes, or a node has several key values. A predicate such as `[@id = $val]` is the linear-scan equivalent of `products.Where(p => p.Id == val)`. `key('k', $value, $doc)` reaches into a different document, similar to a lookup in a separate dictionary. A composite key (`composite="yes"`) is a tuple key, like `Dictionary<(string, string), List<Product>>`.
 
 ## Contents
 
 - [xsl:key](#xslkey)
 - [The key() Function](#the-key-function)
 - [How Keys Work](#how-keys-work)
+
 - [Composite Keys](#composite-keys)
 - [Cross-Document Lookups](#cross-document-lookups)
 - [Common Patterns](#common-patterns)
@@ -28,7 +31,7 @@ A key is a top-level declaration that defines three things: a name, which nodes 
 <xsl:key name="products-by-id" match="product" use="@id"/>
 ```
 
-This says: "For every `product` element, index it by its `@id` attribute. Call this index `products-by-id`."
+This declaration indexes every `product` element by its `@id` attribute, under the name `products-by-id`.
 
 ### Attributes
 
@@ -60,7 +63,7 @@ This says: "For every `product` element, index it by its `@id` attribute. Call t
 
 ## The key() Function
 
-`key()` retrieves nodes from an index. It takes two or three arguments:
+`key()` retrieves nodes from an index. It takes two or three arguments.
 
 ```
 key(key-name, key-value)
@@ -83,7 +86,7 @@ key(key-name, key-value, document)
 
 ### Multiple Values
 
-You can pass a sequence of key values. The function returns all nodes matching any of the values:
+You can pass a sequence of key values. The function returns all nodes that match any of the values.
 
 ```xml
 <!-- Look up multiple products at once -->
@@ -99,7 +102,7 @@ You can pass a sequence of key values. The function returns all nodes matching a
 
 ### Using key() in Templates
 
-A typical use is resolving references — one element references another by ID:
+A typical use resolves references, where one element references another by ID.
 
 ```xml
 <!-- Source data with references -->
@@ -146,7 +149,7 @@ A typical use is resolving references — one element references another by ID:
 </xsl:template>
 ```
 
-**C# parallel:**
+Equivalent C#:
 
 ```csharp
 // Build a lookup
@@ -166,7 +169,7 @@ When you first call `key()` for a given key name and document, the XSLT processo
 2. For each matched node, it evaluates the `use` expression to get the key value(s)
 3. It stores a mapping from each key value to the matching node(s) in a hash table
 
-Subsequent `key()` calls with the same key name and document reuse this index — the lookup is a hash table get, not a document scan.
+Later `key()` calls with the same key name and document reuse this index. The lookup becomes a hash table read, not a document scan.
 
 ### Key Lookup vs. Predicate Filtering
 
@@ -185,9 +188,9 @@ Consider finding all products in the "electronics" category:
 </xsl:for-each>
 ```
 
-For a single lookup, the difference is negligible. But if you perform the same category lookup hundreds of times (once per order line, for example), the key version is dramatically faster.
+For a single lookup, the difference is negligible. But if you perform the same category lookup hundreds of times, once per order line, for example, the key version runs far faster.
 
-**C# parallel:**
+The table below compares the complexity of a predicate scan against a key lookup.
 
 | XSLT | C# | Complexity |
 |------|-----|-----------|
@@ -196,11 +199,11 @@ For a single lookup, the difference is negligible. But if you perform the same c
 
 ### When the Index is Built
 
-The index is built lazily — on the first call to `key()` for that key name and document. It is built once per (key-name, document) pair and cached for the duration of the transformation.
+The index is built lazily, on the first call to `key()` for that key name and document. The processor builds it once per (key-name, document) pair and caches it for the duration of the transformation.
 
 ### Multiple Nodes Per Key Value
 
-A key value can map to multiple nodes. This is the `ILookup<TKey, TValue>` case:
+A key value can map to multiple nodes.
 
 ```xml
 <xsl:key name="products-by-category" match="product" use="@category"/>
@@ -212,7 +215,7 @@ A key value can map to multiple nodes. This is the `ILookup<TKey, TValue>` case:
 
 ### Multiple Key Values Per Node
 
-A single node can have multiple key values — when the `use` expression returns a sequence:
+A single node can have multiple key values, when the `use` expression returns a sequence.
 
 ```xml
 <!-- A product can have multiple tags -->
@@ -230,7 +233,7 @@ A single node can have multiple key values — when the `use` expression returns
 <!-- key('products-by-tag', 'electronics') also returns WP-001 -->
 ```
 
-**C# parallel:** `ILookup<string, Product>` — one product appears under multiple keys:
+Equivalent C#, where one product appears under multiple keys:
 
 ```csharp
 var productsByTag = products
@@ -242,7 +245,7 @@ var productsByTag = products
 
 ## Composite Keys
 
-XSLT 3.0 introduces composite keys with `composite="yes"`. A composite key uses multiple values together as a single compound key — like a multi-column index in a database.
+XSLT 3.0 introduces composite keys with `composite="yes"`. A composite key uses several values together as a single compound key, like a multi-column index in a database.
 
 ```xml
 <!-- Index by both category AND status -->
@@ -256,11 +259,11 @@ XSLT 3.0 introduces composite keys with `composite="yes"`. A composite key uses 
               select="key('products-by-cat-status', ('electronics', 'active'))"/>
 ```
 
-Without `composite="yes"`, passing two values to `use` would create two separate key entries per node. With `composite="yes"`, the two values are treated as a single compound key.
+Without `composite="yes"`, passing two values to `use` creates two separate key entries per node. With `composite="yes"`, the two values form a single compound key.
 
 ### Before XSLT 3.0: Concatenated Keys
 
-In XSLT 2.0, you simulate composite keys by concatenating the values:
+In XSLT 2.0, you simulate composite keys by concatenating the values.
 
 ```xml
 <xsl:key name="products-by-cat-status"
@@ -272,9 +275,9 @@ In XSLT 2.0, you simulate composite keys by concatenating the values:
               select="key('products-by-cat-status', 'electronics|active')"/>
 ```
 
-This works but is fragile — if a value contains the separator character, you get incorrect results. Composite keys are the cleaner XSLT 3.0 solution.
+This works, but it is fragile: if a value contains the separator character, the lookup returns incorrect results. Composite keys are the cleaner XSLT 3.0 solution.
 
-**C# parallel:** Composite keys are like `Dictionary<(string Category, string Status), List<Product>>` — a tuple key:
+A composite key corresponds to a tuple key in C#, such as `Dictionary<(string Category, string Status), List<Product>>`:
 
 ```csharp
 var lookup = products
@@ -287,7 +290,7 @@ var activeElectronics = lookup[("electronics", "active")];
 
 ## Cross-Document Lookups
 
-The third argument to `key()` specifies which document to search. By default, `key()` searches the document containing the context node. You can search a different document by passing a node from that document:
+The third argument to `key()` specifies which document to search. By default, `key()` searches the document that contains the context node. To search a different document, pass a node from that document.
 
 ```xml
 <!-- External lookup table -->
@@ -315,7 +318,7 @@ Where `status-codes.xml` contains:
 
 ### Joining Two Documents
 
-A common pattern is joining data from two XML documents — like a SQL join:
+A common pattern joins data from two XML documents, similar to a SQL join.
 
 ```xml
 <!-- orders.xml (the source document) -->
@@ -354,7 +357,7 @@ A common pattern is joining data from two XML documents — like a SQL join:
 </xsl:template>
 ```
 
-**C# parallel:** This is a classic hash join:
+This is a classic hash join, equivalent to:
 
 ```csharp
 var productsById = products.ToDictionary(p => p.Id);
@@ -371,7 +374,7 @@ var orderDetails = order.Lines.Select(line => new {
 
 ### Lookup Tables
 
-Replace verbose `xsl:choose` blocks with data-driven lookups:
+Replace verbose `xsl:choose` blocks with data-driven lookups.
 
 ```xml
 <!-- Instead of this: -->
@@ -391,7 +394,7 @@ Replace verbose `xsl:choose` blocks with data-driven lookups:
 
 ### Deduplication
 
-Use keys to find unique values — nodes with the same key value are grouped together, and you can select just the first:
+Use keys to find unique values. Nodes with the same key value are grouped together, and you can select just the first one.
 
 ```xml
 <xsl:key name="products-by-category" match="product" use="@category"/>
@@ -403,7 +406,7 @@ Use keys to find unique values — nodes with the same key value are grouped tog
 </xsl:for-each>
 ```
 
-This is the classic "Muenchian method" from XSLT 1.0. In XSLT 2.0+, use `xsl:for-each-group` instead — it is simpler and more readable:
+This is the classic "Muenchian method" from XSLT 1.0. In XSLT 2.0+, use `xsl:for-each-group` instead: it is simpler and more readable.
 
 ```xml
 <!-- Preferred in XSLT 2.0+: -->
@@ -414,7 +417,7 @@ This is the classic "Muenchian method" from XSLT 1.0. In XSLT 2.0+, use `xsl:for
 
 ### Parent-Child Joins
 
-Index child elements by their parent's ID to navigate relationships:
+Index child elements by their parent's ID to navigate relationships.
 
 ```xml
 <xsl:key name="children-by-parent" match="category" use="@parent-id"/>
@@ -429,7 +432,7 @@ Index child elements by their parent's ID to navigate relationships:
 
 ### Existence Check
 
-Keys provide an efficient way to test whether a value exists in a set:
+Keys provide an efficient way to test whether a value exists in a set.
 
 ```xml
 <xsl:key name="valid-codes" match="code" use="."/>
@@ -445,7 +448,7 @@ Keys provide an efficient way to test whether a value exists in a set:
 </xsl:if>
 ```
 
-**C# parallel:** `HashSet<string>.Contains(value)` — O(1) membership test.
+This is the equivalent of `HashSet<string>.Contains(value)`: an O(1) membership test.
 
 ---
 
@@ -463,13 +466,13 @@ Keys provide an efficient way to test whether a value exists in a set:
 
 ### Index Building Cost
 
-Building a key index has a one-time cost proportional to the number of matched nodes. For a document with 10,000 products, the first `key()` call triggers a scan of all 10,000 products. Subsequent calls are near-instant.
+Building a key index has a one-time cost proportional to the number of matched nodes. For a document with 10,000 products, the first `key()` call triggers a scan of all 10,000 products. Later calls run almost instantly.
 
-If you define a key but never call `key()` for it, the index is never built — there is no wasted effort.
+If you define a key but never call `key()` for it, the processor never builds the index, so there is no wasted effort.
 
 ### Memory
 
-Key indexes consume memory proportional to the number of entries. For large documents, this is usually worthwhile — the memory cost of the index is small compared to the document itself. But if you define many keys with broad match patterns (`match="*"`), the combined memory cost can be significant.
+Key indexes consume memory proportional to the number of entries. For large documents, this cost is usually worthwhile: the memory cost of the index is small compared to the document itself. But if you define several keys with broad match patterns (`match="*"`), the combined memory cost can grow significant.
 
 ### Comparison with Predicates
 
@@ -488,9 +491,9 @@ Key indexes consume memory proportional to the number of entries. For large docu
 <!-- For 1000 lines: 10000 setup + 1000 lookups ≈ 11,000 operations -->
 ```
 
-The key version is nearly 1000x faster for this workload.
+For this workload, the key version runs nearly 1000 times faster.
 
-**C# parallel summary:**
+The table below summarizes the C# equivalents used throughout this page.
 
 | XSLT | C# |
 |------|-----|

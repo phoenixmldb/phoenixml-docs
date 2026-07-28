@@ -6,7 +6,9 @@ sort: 4
 
 # Iteration and Sorting
 
-XSLT provides several ways to process sequences of items. The choice between them depends on whether you need ordering, running state, or just simple iteration.
+XSLT provides several ways to process sequences of items. The choice between them depends on whether you need ordering, running state, or simple iteration.
+
+> For C# developers: `xsl:for-each` corresponds to a `foreach` loop. `xsl:sort` corresponds to `OrderBy`/`ThenBy`. `xsl:perform-sort` corresponds to `OrderBy()` used as an intermediate result, rather than for immediate output. `xsl:iterate` corresponds to `Enumerable.Aggregate()`: XSLT variables are immutable, so `xsl:iterate` carries running state through parameters instead of a mutable counter. `xsl:apply-templates` corresponds to calling a virtual method — an imported stylesheet can override the template the way a derived class overrides a method.
 
 ## Contents
 
@@ -36,11 +38,9 @@ Iterates over a sequence, executing the body once for each item. The current ite
 </xsl:template>
 ```
 
-**C# parallel:** `foreach (var product in catalog.Products) { ... }`
-
 ### Context Change
 
-This is the most important thing to understand about `xsl:for-each`: **it changes the context node**. Inside the loop, `.` refers to the current item, not the node that was the context before the loop.
+This is the most important fact about `xsl:for-each`: it changes the context node. Inside the loop, `.` refers to the current item, not the node that was the context before the loop.
 
 ```xml
 <xsl:template match="catalog">
@@ -54,7 +54,7 @@ This is the most important thing to understand about `xsl:for-each`: **it change
 </xsl:template>
 ```
 
-If you need the outer context inside the loop, save it in a variable before entering:
+If you need the outer context inside the loop, save it in a variable before entering the loop.
 
 ```xml
 <xsl:template match="catalog">
@@ -69,7 +69,7 @@ If you need the outer context inside the loop, save it in a variable before ente
 
 ### position() and last()
 
-Inside `xsl:for-each`, the `position()` and `last()` functions reflect the current iteration:
+Inside `xsl:for-each`, the `position()` and `last()` functions reflect the current iteration.
 
 ```xml
 <xsl:for-each select="product">
@@ -85,7 +85,7 @@ Inside `xsl:for-each`, the `position()` and `last()` functions reflect the curre
 </xsl:for-each>
 ```
 
-**C# parallel:**
+Equivalent C#:
 
 ```csharp
 var products = catalog.Products.ToList();
@@ -99,7 +99,7 @@ for (int i = 0; i < products.Count; i++)
 
 ### Iterating Over Non-Node Sequences
 
-`xsl:for-each` works on any sequence, not just nodes:
+`xsl:for-each` works on any sequence, not just nodes.
 
 ```xml
 <!-- Iterate over a sequence of integers -->
@@ -141,8 +141,6 @@ Controls the order in which items are processed. `xsl:sort` appears as a child o
 </xsl:for-each>
 ```
 
-**C# parallel:** `products.OrderBy(p => p.Name)` and `products.OrderByDescending(p => p.Price)`
-
 ### Sort Attributes
 
 | Attribute | Values | Default | Description |
@@ -157,7 +155,7 @@ Controls the order in which items are processed. `xsl:sort` appears as a child o
 
 ### The data-type Gotcha
 
-This is a common mistake. Without `data-type="number"`, prices sort as strings:
+This is a common mistake. Without `data-type="number"`, prices sort as strings.
 
 ```xml
 <!-- WRONG: string sort puts "9.99" after "29.99" because "9" > "2" -->
@@ -169,7 +167,7 @@ This is a common mistake. Without `data-type="number"`, prices sort as strings:
 <!-- Result: 9.99, 29.99, 109.99 -->
 ```
 
-**C# parallel:** This is like sorting strings vs. sorting parsed numbers:
+This is the difference between sorting strings and sorting parsed numbers:
 
 ```csharp
 // Wrong (string sort): "109.99", "29.99", "9.99"
@@ -181,7 +179,7 @@ items.OrderBy(x => x.Price);
 
 ### Multiple Sort Keys
 
-Add multiple `xsl:sort` children for multi-level sorting. They are applied in order — the first is the primary key, the second is the tiebreaker, etc.
+Add several `xsl:sort` children for multi-level sorting. The processor applies them in order: the first is the primary key, the second is the tiebreaker, and so on.
 
 ```xml
 <!-- Sort by category, then by price within each category -->
@@ -195,11 +193,9 @@ Add multiple `xsl:sort` children for multi-level sorting. They are applied in or
 </xsl:for-each>
 ```
 
-**C# parallel:** `products.OrderBy(p => p.Category).ThenBy(p => p.Price)`
-
 ### Sorting with apply-templates
 
-`xsl:sort` also works inside `xsl:apply-templates`:
+`xsl:sort` also works inside `xsl:apply-templates`.
 
 ```xml
 <xsl:apply-templates select="product">
@@ -211,7 +207,7 @@ This applies templates to the products in alphabetical order by name, regardless
 
 ### Collation-Aware Sorting
 
-For locale-sensitive sorting (accented characters, language-specific rules):
+For locale-sensitive sorting of accented characters and language-specific rules, use `collation`.
 
 ```xml
 <xsl:for-each select="product">
@@ -220,13 +216,11 @@ For locale-sensitive sorting (accented characters, language-specific rules):
 </xsl:for-each>
 ```
 
-**C# parallel:** `products.OrderBy(p => p.Name, StringComparer.Create(new CultureInfo("de-DE"), false))`
-
 ---
 
 ## xsl:perform-sort
 
-Sorts a sequence and returns the sorted result — without iterating over it. This is useful when you need a sorted sequence as input to a function or variable, rather than for immediate output.
+Sorts a sequence and returns the sorted result, without iterating over it. Use it when you need a sorted sequence as input to a function or variable, rather than for immediate output.
 
 ```xml
 <!-- Sort products by price and store the sorted sequence -->
@@ -263,7 +257,7 @@ Sorts a sequence and returns the sorted result — without iterating over it. Th
 </xsl:for-each>
 ```
 
-**C# parallel:** `xsl:perform-sort` is like LINQ's `.OrderBy()` returning an `IOrderedEnumerable` that you can pass to other methods:
+Equivalent C#:
 
 ```csharp
 var sorted = products.OrderByDescending(p => p.Price).ToList();
@@ -274,7 +268,7 @@ var topFive = sorted.Take(5);
 
 ## xsl:iterate
 
-`xsl:iterate` (XSLT 3.0) is the functional alternative to `xsl:for-each` when you need **running state** — a value that accumulates across iterations. It replaces the common imperative pattern of a `foreach` loop with a mutable variable.
+`xsl:iterate` (XSLT 3.0) is the functional alternative to `xsl:for-each` when you need running state: a value that accumulates across iterations. It replaces the imperative pattern of a loop over a mutable variable.
 
 ### The Problem xsl:iterate Solves
 
@@ -289,7 +283,7 @@ foreach (var product in products)
 }
 ```
 
-In XSLT, `xsl:for-each` cannot do this because variables are immutable — there is no way to update a counter between iterations.
+XSLT variables are immutable. `xsl:for-each` cannot do this, because it has no way to update a counter between iterations.
 
 ### Basic Structure
 
@@ -315,7 +309,7 @@ In XSLT, `xsl:for-each` cannot do this because variables are immutable — there
 </xsl:iterate>
 ```
 
-**C# parallel:** `Enumerable.Aggregate()`:
+Equivalent C#, using `Enumerable.Aggregate()`:
 
 ```csharp
 products.Aggregate(
@@ -330,7 +324,7 @@ products.Aggregate(
 
 ### xsl:on-completion
 
-Code inside `xsl:on-completion` runs after the last item is processed. The parameters hold their final values:
+Code inside `xsl:on-completion` runs after the last item is processed. The parameters hold their final values.
 
 ```xml
 <xsl:iterate select="//product">
@@ -358,7 +352,7 @@ Code inside `xsl:on-completion` runs after the last item is processed. The param
 
 ### xsl:break
 
-Terminates the iteration early. This is the XSLT equivalent of C#'s `break` statement:
+Terminates the iteration early. This is the XSLT equivalent of the C# `break` statement.
 
 ```xml
 <!-- Find the first product over $100 and stop -->
@@ -377,7 +371,7 @@ Terminates the iteration early. This is the XSLT equivalent of C#'s `break` stat
 </xsl:iterate>
 ```
 
-`xsl:break` can also carry parameter values to `xsl:on-completion`:
+`xsl:break` can also carry parameter values to `xsl:on-completion`.
 
 ```xml
 <xsl:iterate select="//product">
@@ -437,7 +431,7 @@ Terminates the iteration early. This is the XSLT equivalent of C#'s `break` stat
 </xsl:iterate>
 ```
 
-Note: The paginated output example above uses `disable-output-escaping` as a pragmatic workaround. A cleaner approach would be to build the page structure using `xsl:for-each-group` with positional grouping — see the [Grouping](grouping.md) page.
+Note: this paginated output example uses `disable-output-escaping` as a pragmatic workaround. A cleaner approach builds the page structure with `xsl:for-each-group` and positional grouping — see the [Grouping](grouping.md) page.
 
 ---
 
@@ -457,8 +451,9 @@ Note: The paginated output example above uses `disable-output-escaping` as a pra
 
 This is a common design question. The short answer:
 
-- **`xsl:for-each`** — when you control the rendering inline and the processing logic is local to one template
-- **`xsl:apply-templates`** — when you want polymorphic dispatch (different templates for different node types) or when other stylesheets might override the processing
+- **`xsl:for-each`** — use it when you control the rendering inline and the processing logic is local to one template
+
+- **`xsl:apply-templates`** — use it when you want polymorphic dispatch (different templates for different node types), or when other stylesheets might override the processing
 
 ```xml
 <!-- for-each: self-contained, simple -->
@@ -486,5 +481,3 @@ This is a common design question. The short answer:
   <li class="featured"><strong><xsl:value-of select="name"/></strong></li>
 </xsl:template>
 ```
-
-**C# parallel:** `for-each` is like writing logic inline. `apply-templates` is like calling a virtual method — derived classes (imported stylesheets) can override the behavior.

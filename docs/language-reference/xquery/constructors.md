@@ -242,7 +242,7 @@ String constructors are particularly useful for generating code, templates, or a
 
 ### XML to XML Transformation
 
-Convert between XML formats — similar to XSLT but in a query style:
+Transform between XML formats in a query style, similar to XSLT:
 
 ```xquery
 (: Convert a product catalog to an RSS feed :)

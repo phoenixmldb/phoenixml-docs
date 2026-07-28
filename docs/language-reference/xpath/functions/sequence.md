@@ -6,7 +6,9 @@ sort: 4
 
 # Sequence Functions
 
-Sequences are XPath's fundamental collection type — like `IEnumerable<T>` in .NET. These functions are the XPath equivalent of LINQ methods. If you're comfortable with LINQ, you'll find most of these intuitive.
+Sequences are XPath's fundamental collection type. This page lists the functions that test, filter, order, and scan a sequence.
+
+> For C# developers: an XPath sequence resembles `IEnumerable<T>`. Most functions on this page have a direct LINQ equivalent, noted under each function as its C# equivalent.
 
 ## Contents
 
@@ -239,7 +241,7 @@ reverse(("c", "b", "a"))      => ("a", "b", "c")
 
 ### sort()
 
-Sorts a sequence. Can take a custom sort key function.
+Sorts a sequence. It can accept a custom sort key function.
 
 **Signature:** `sort($seq as item()*, $collation as xs:string?, $key as function(item()) as xs:anyAtomicType*) as item()*`
 
@@ -260,7 +262,7 @@ sort(//book, (), function($b) { $b/price })
 
 ### sort-by()
 
-Sorts by a key expression. Simpler than `sort()` for common cases. New in XPath 4.0.
+Sorts by a key expression. It is simpler than `sort()` for common cases. New in XPath 4.0.
 
 **Signature:** `sort-by($seq as item()*, $key as function(item()) as xs:anyAtomicType*) as item()*`
 
@@ -339,7 +341,7 @@ duplicate-values((1, 2, 2, 3, 3, 4))   => (2, 3)
 
 ### deep-equal()
 
-Compares two items or sequences for deep equality — including structure for nodes.
+Compares two items or sequences for deep equality. For nodes, this comparison includes structure.
 
 **Signature:** `deep-equal($a as item()*, $b as item()*, $collation as xs:string?) as xs:boolean`
 
@@ -432,11 +434,11 @@ replicate("x", 5)           => ("x", "x", "x", "x", "x")
 
 ## Scanning and Accumulation
 
-These higher-level sequence operations are new in XPath 4.0 and parallel functional programming patterns.
+These higher-level sequence operations are new in XPath 4.0. They follow common functional-programming patterns.
 
 ### scan-left()
 
-Produces a running accumulation from left to right — like a fold that returns all intermediate results.
+Produces a running accumulation from left to right. It keeps every intermediate result, not just the final one.
 
 **Signature:** `scan-left($seq as item()*, $initial as item()*, $fn as function(item()*, item()) as item()*) as item()**`
 
@@ -454,7 +456,7 @@ items.Select((x, i) => items.Take(i + 1).Sum())
 
 ### scan-right()
 
-Like `scan-left`, but accumulates from right to left.
+Similar to `scan-left`, but it accumulates from right to left.
 
 **Signature:** `scan-right($seq as item()*, $initial as item()*, $fn as function(item(), item()*) as item()*) as item()**`
 
@@ -505,7 +507,7 @@ while (n <= 100) n *= 2;
 
 ### transitive-closure()
 
-Computes the transitive closure of a function — applying it repeatedly and collecting all results until no new items are produced. New in XPath 4.0.
+Computes the transitive closure of a function. It applies the function repeatedly and collects every result until the function produces no new items. New in XPath 4.0.
 
 **Signature:** `transitive-closure($initial as item()*, $fn as function(item()) as item()*) as item()*`
 
