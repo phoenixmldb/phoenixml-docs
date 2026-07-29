@@ -1,6 +1,6 @@
 # Crucible documentation site configuration
 title: PhoenixmlDb Documentation
-base-url: /
+base-url: https://phoenixml.dev/
 source: ./docs
 output: ./dist
-theme: ./themes/modern
+theme: modern
