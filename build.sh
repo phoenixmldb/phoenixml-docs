@@ -30,6 +30,14 @@ EXCLUDE_NS="$EXCLUDE_NS,PhoenixmlDb.Xslt.Engine"
 TOTAL_START=$(date +%s%N)
 echo "=== PhoenixmlDb Documentation Build ==="
 
+# Step 0: Restore local .NET tools (crucible) pinned in dotnet-tools.json
+echo ""
+echo "--- Restoring tools ---"
+STEP_START=$(date +%s%N)
+dotnet tool restore
+STEP_END=$(date +%s%N)
+echo "  $(( (STEP_END - STEP_START) / 1000000 ))ms"
+
 # Step 1: Parse Markdown docs into intermediate XML
 echo ""
 echo "--- Parsing Markdown ---"
