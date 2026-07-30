@@ -38,6 +38,54 @@ dotnet tool restore
 STEP_END=$(date +%s%N)
 echo "  $(( (STEP_END - STEP_START) / 1000000 ))ms"
 
+# Guard: the API-reference step (Step 2) consumes the engine's generated XML
+# docs. Fail clearly here rather than emit an empty or stale /api/ section if
+# they are absent, empty, or older than the engine source.
+# Bypass the staleness check with ALLOW_STALE_API_DOCS=1.
+echo ""
+echo "--- Checking API XML docs ---"
+EXPECTED_DOCS=(PhoenixmlDb.Core.xml PhoenixmlDb.Xdm.xml PhoenixmlDb.XQuery.xml PhoenixmlDb.Xslt.xml)
+
+if [ ! -d "$XMLDOC_DIR" ]; then
+  echo "ERROR: XMLDOC_DIR not found: $XMLDOC_DIR" >&2
+  echo "  Build the engine test host with XML docs enabled (engine projects need" >&2
+  echo "  <GenerateDocumentationFile>true</GenerateDocumentationFile>), or set" >&2
+  echo "  XMLDOC_DIR to the directory containing PhoenixmlDb.*.xml." >&2
+  exit 1
+fi
+
+_missing=()
+for _d in "${EXPECTED_DOCS[@]}"; do
+  [ -s "$XMLDOC_DIR/$_d" ] || _missing+=("$_d")
+done
+if [ ${#_missing[@]} -gt 0 ]; then
+  echo "ERROR: missing or empty API XML docs in $XMLDOC_DIR:" >&2
+  printf '    %s\n' "${_missing[@]}" >&2
+  echo "  Rebuild the engine with <GenerateDocumentationFile>true</GenerateDocumentationFile>." >&2
+  exit 1
+fi
+
+if [ "${ALLOW_STALE_API_DOCS:-0}" != "1" ]; then
+  _newest_doc=$(find "$XMLDOC_DIR" -maxdepth 1 -name 'PhoenixmlDb.*.xml' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)
+  _src_dirs=()
+  for _s in ../phoenixmldb-core/src ../phoenixmldb-xquery/src ../phoenixmldb-xslt/src; do
+    [ -d "$_s" ] && _src_dirs+=("$_s")
+  done
+  if [ ${#_src_dirs[@]} -gt 0 ]; then
+    _newer=$(find "${_src_dirs[@]}" -name '*.cs' -not -path '*/obj/*' -not -path '*/bin/*' -newer "$_newest_doc" -print -quit 2>/dev/null)
+    if [ -n "$_newer" ]; then
+      echo "ERROR: engine source is newer than the generated API XML docs — they are stale." >&2
+      echo "    e.g. $_newer" >&2
+      echo "  Rebuild the engine test host so PhoenixmlDb.*.xml regenerate, then re-run" >&2
+      echo "  (or set ALLOW_STALE_API_DOCS=1 to bypass)." >&2
+      exit 1
+    fi
+    echo "  present and current"
+  else
+    echo "  present; engine source not found alongside docs repo — skipping staleness check"
+  fi
+fi
+
 # Step 1: Parse Markdown docs into intermediate XML
 echo ""
 echo "--- Parsing Markdown ---"
