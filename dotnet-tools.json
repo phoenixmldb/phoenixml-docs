@@ -3,11 +3,11 @@
   "isRoot": true,
   "tools": {
     "crucible.cli": {
-      "version": "1.0.0",
+      "version": "1.1.62",
       "commands": [
         "crucible"
       ],
-      "rollForward": false
+      "rollForward": true
     }
   }
 }
