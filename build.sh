@@ -44,7 +44,8 @@ echo "  $(( (STEP_END - STEP_START) / 1000000 ))ms"
 # Bypass the staleness check with ALLOW_STALE_API_DOCS=1.
 echo ""
 echo "--- Checking API XML docs ---"
-EXPECTED_DOCS=(PhoenixmlDb.Core.xml PhoenixmlDb.Xdm.xml PhoenixmlDb.XQuery.xml PhoenixmlDb.Xslt.xml)
+# Xdm was folded into the Core assembly, so there is no separate PhoenixmlDb.Xdm.xml.
+EXPECTED_DOCS=(PhoenixmlDb.Core.xml PhoenixmlDb.XQuery.xml PhoenixmlDb.Xslt.xml)
 
 if [ ! -d "$XMLDOC_DIR" ]; then
   echo "ERROR: XMLDOC_DIR not found: $XMLDOC_DIR" >&2
@@ -67,8 +68,11 @@ fi
 
 if [ "${ALLOW_STALE_API_DOCS:-0}" != "1" ]; then
   _newest_doc=$(find "$XMLDOC_DIR" -maxdepth 1 -name 'PhoenixmlDb.*.xml' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)
+  # XQuery/Xslt docs are generated from these ProjectReferenced sources in the
+  # phoenixml repo. (Core comes from the pinned PhoenixmlDb.Core NuGet package,
+  # so its freshness is governed by the package version, not a source mtime.)
   _src_dirs=()
-  for _s in ../phoenixmldb-core/src ../phoenixmldb-xquery/src ../phoenixmldb-xslt/src; do
+  for _s in ../phoenixml/src/PhoenixmlDb.XQuery ../phoenixml/src/PhoenixmlDb.Xslt; do
     [ -d "$_s" ] && _src_dirs+=("$_s")
   done
   if [ ${#_src_dirs[@]} -gt 0 ]; then
