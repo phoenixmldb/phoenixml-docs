@@ -1,12 +1,607 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Streaming and Accumulators — PhoenixmlDb Documentation</title><meta name="description" content="xsl:source-document, xsl:accumulator, xsl:fork — processing large documents efficiently"><link rel="canonical" href="/language-reference/xslt/instructions/streaming.html"><meta property="og:title" content="Streaming and Accumulators"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xslt/instructions/streaming.html"><meta property="og:description" content="xsl:source-document, xsl:accumulator, xsl:fork — processing large documents efficiently"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/prism.css"><script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Streaming and Accumulators — PhoenixmlDb Documentation</title>
+          <meta name="description" content="xsl:source-document, xsl:accumulator, xsl:fork — processing large documents efficiently">
+            <link rel="canonical" href="https://phoenixml.dev/language-reference/xslt/instructions/streaming">
+              <meta property="og:title" content="Streaming and Accumulators">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="https://phoenixml.dev/language-reference/xslt/instructions/streaming">
+                    <meta property="og:description" content="xsl:source-document, xsl:accumulator, xsl:fork — processing large documents efficiently">
+                      <link rel="stylesheet" href="https://phoenixml.dev/css/style.css">
+                        <link rel="stylesheet" href="https://phoenixml.dev/css/prism.css">
+                          <script>
+          window.CRUCIBLE_BASE = "https://phoenixml.dev/";
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-FSCPKZ7RES"></script><script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-FSCPKZ7RES');
-        </script></head><body><header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><p class="nav-section-title">Getting Started</p><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><p class="nav-section-title">PhoenixmlDb</p><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><p class="nav-section-title">JSON Support</p><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/metadata.html">Metadata</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><p class="nav-section-title">Deployment</p><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><p class="nav-section-title">API Reference</p><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li><li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><p class="nav-section-title">Language Reference</p><ul class="nav-section-children"><li class="nav-section"><p class="nav-section-title">XInclude</p><ul class="nav-section-children"><li><a href="/language-reference/xinclude/xml-inclusion.html">XML Inclusion</a></li><li><a href="/language-reference/xinclude/text-inclusion.html">Text Inclusion</a></li><li><a href="/language-reference/xinclude/fallback.html">Fallback</a></li><li><a href="/language-reference/xinclude/security-and-limits.html">Security and Limits</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XML Foundations</p><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XPointer</p><ul class="nav-section-children"><li><a href="/language-reference/xpointer/shorthand-and-element.html">Shorthand and element()</a></li><li><a href="/language-reference/xpointer/namespaces-and-xpath1.html">Namespaces and xpath1()</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XPath</p><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><p class="nav-section-title">Functions</p><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section open"><p class="nav-section-title">XSLT</p><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section open"><p class="nav-section-title">Instructions Reference</p><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li class="active"><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XQuery</p><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><p class="nav-section-title">Tools</p><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li><li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a></li><li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><p class="eyebrow">Instructions Reference</p><h1 class="page-title">Streaming and Accumulators</h1><p class="page-subtitle">xsl:source-document, xsl:accumulator, xsl:fork — processing large documents efficiently</p><h1 id="streaming-and-accumulators"><a class="anchor" href="#streaming-and-accumulators">#</a>Streaming and Accumulators</h1><p>Some documents are too large to fit in memory: tens of gigabytes of log data, massive data exports, or continuous feeds. XSLT 3.0's streaming features process a document in a single pass, without building the entire tree.</p><blockquote>
-      <p>For C# developers: if you have worked with <code>IAsyncEnumerable</code>,
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="https://phoenixml.dev/" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="https://phoenixml.dev/">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started</p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="https://phoenixml.dev/getting-started/installation">Installation</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/getting-started/quick-start">Quick Start</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/getting-started/first-application">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb</p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/core-concepts">Core Concepts</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/documents-and-storage">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/json-support/json-storage">JSON Storage</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/json-support/json-queries">JSON Queries</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/json-support/json-indexing">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/xdm-data-model">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/metadata">Metadata</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/indexing">Indexing</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/transactions">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/deployment/embedded-mode">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/deployment/server-mode">Server Mode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/deployment/cluster-mode">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/configuration">Configuration</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/performance-tuning">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/database-extensions">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/containers">Containers API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/documents">Documents API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/indexes">Indexes API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/queries">Queries API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/transactions">Transactions API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/xslt-api">XSLT API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/resource-policy">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/linq-provider">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/mobile-development">Mobile Development</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/migration-guide">Migration Guide</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/troubleshooting">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference</p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XInclude</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/xml-inclusion">XML Inclusion</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/text-inclusion">Text Inclusion</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/fallback">Fallback</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/security-and-limits">Security and Limits</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/xml-vs-json">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/document-structure">Document Structure</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/xdm">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/namespaces">Namespaces</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/working-with-json">Working with JSON</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/unicode-and-dotnet">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPointer</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xpointer/shorthand-and-element">Shorthand and element()</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xpointer/namespaces-and-xpath1">Namespaces and xpath1()</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xpath/path-expressions">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions</p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/string">String Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/numeric">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/date-time">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/sequence">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/boolean">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/node">Node Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/map">Map Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/array">Array Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/math">Math Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/higher-order">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/formatting">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/type-constructors">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xpath/operators">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xpath/data-types">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XSLT</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/first-transform">Your First Transform</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/template-matching">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section open">
+                                          <p class="nav-section-title">Instructions Reference</p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/output">Output Instructions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/control-flow">Control Flow</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/variables-parameters">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/iteration-sorting">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/grouping">Grouping</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/copying-identity">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/node-construction">Node Construction</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/multiple-outputs">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/functions">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/keys">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/analyze-string">String Analysis</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/error-handling">Error Handling</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/merge">Merging</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/maps-arrays">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li class="active"><a href="https://phoenixml.dev/language-reference/xslt/instructions/streaming">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/packages">Packages</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/dynamic-evaluation">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/number-formatting">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/output-methods">Output Methods</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/extensibility">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/flwor">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/flwor-advanced">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/constructors">Constructors</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/conditionals">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/operators">Operators</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/types">Type System</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/update-facility">Update Facility</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/functions-modules">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/xquery-vs-xslt">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/full-text">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/prolog">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/extensibility">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools</p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="https://phoenixml.dev/tools/xslt-cli">xslt CLI</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/xquery-cli">xquery CLI</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/crucible">Crucible</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/xquery-mcp">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/xslt-mcp">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="https://phoenixml.dev/release-notes">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference</p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/api/core/">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containerid">ContainerId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containerinfo">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containernotfoundexception">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containeroptions">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/contenttype">ContentType</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/databasestatistics">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/daytimeduration">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentexistsexception">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentid">DocumentId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentinfo">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentinput">DocumentInput</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentnotfoundexception">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentoptions">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentparseexception">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/fulltextindexdefinition">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/fulltextindexoptions">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/icontainer">IContainer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/idocument">IDocument</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/idocumentdatabase">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/indexconfiguration">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/indexdefinition">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/ireadtransaction">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/iwritetransaction">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/ixdmnode">IXdmNode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/ixmlresourceresolver">IXmlResourceResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/localfileresourceresolver">LocalFileResourceResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/metadataindexdefinition">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/nameindexdefinition">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/namespacebinding">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/namespaceid">NamespaceId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/nodeid">NodeId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/parseresult">ParseResult</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/pathindexdefinition">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/qname">QName</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/textnodeitem">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/transactionexception">TransactionException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/transactiontimeoutexception">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/utf8stringwriter">Utf8StringWriter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/validationmode">ValidationMode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/valueindexdefinition">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmattribute">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmcomment">XdmComment</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmdocument">XdmDocument</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmelement">XdmElement</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmnamespace">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmnode">XdmNode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmnodekind">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmprocessinginstruction">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmqname">XdmQName</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmsequence">XdmSequence</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmtext">XdmText</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmtype">XdmType</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmtypename">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmvalue">XdmValue</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmvaluetype">XdmValueType</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeerrorkind">XIncludeErrorKind</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeexception">XIncludeException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludelimiter">XIncludeLimiter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeoptions">XIncludeOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeprocessor">XIncludeProcessor</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xmldbexception">XmlDbException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xmldocumentparser">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xmlserializer">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xpointerevaluator">XPointerEvaluator</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xqueryexception">XQueryException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsanyuri">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsdate">XsDate</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsdatetime">XsDateTime</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsduration">XsDuration</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgday">XsGDay</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgmonth">XsGMonth</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgmonthday">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgyear">XsGYear</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgyearmonth">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xstime">XsTime</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xstypedinteger">XsTypedInteger</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xstypedstring">XsTypedString</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsuntypedatomic">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/yearmonthduration">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/api/xquery/">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/analyzedterm">AnalyzedTerm</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/delegatemetadataprovider">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/depthguardlistener">DepthGuardListener</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/exacturi">ExactUri</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftisstopwordfunction">FtIsStopWordFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftscorefunction">FtScoreFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftstem2function">FtStem2Function</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftstemfunction">FtStemFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftthesauruslookupfunction">FtThesaurusLookupFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fttokenize2function">FtTokenize2Function</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fttokenizefunction">FtTokenizeFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fulltextanalysisoptions">FullTextAnalysisOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fulltextengine">FullTextEngine</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fulltextindex">FullTextIndex</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/httpdocumentclient">HttpDocumentClient</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/idocumentresolver">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/imetadataprovider">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/inodebuilder">INodeBuilder</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/inodeprovider">INodeProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/inodestore">INodeStore</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/iresourceresolver">IResourceResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ischemaprovider">ISchemaProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/outputmethod">OutputMethod</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/parseerror">ParseError</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/policyenforcingresolver">PolicyEnforcingResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/postingentry">PostingEntry</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourceaccessdeniedexception">ResourceAccessDeniedException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourceaccesskind">ResourceAccessKind</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourcepolicy">ResourcePolicy</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourcepolicybuilder">ResourcePolicyBuilder</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourceresolverbase">ResourceResolverBase</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/schemaexception">SchemaException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/schemavalidationexception">SchemaValidationException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/serializationoptions">SerializationOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/treeordinalallocator">TreeOrdinalAllocator</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/urirule">UriRule</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/utf8stringwriter">Utf8StringWriter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/validationmode">ValidationMode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xdmdocumentstore">XdmDocumentStore</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryastbuilder">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryerrorlistener">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryfacade">XQueryFacade</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xquerylexeradapter">XQueryLexerAdapter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryparseexception">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryparserfacade">XQueryParserFacade</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryresultserializer">XQueryResultSerializer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xsdschemaprovider">XsdSchemaProvider</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/api/xslt/">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/packageversionresolution">PackageVersionResolution</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/preloadedresources">PreloadedResources</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/simpleexecutioncontext">SimpleExecutionContext</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xdminmemorystore">XdmInMemoryStore</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xqueryexpressionparser">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xsltmoduleinitializer">XsltModuleInitializer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xslttransformer">XsltTransformer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xslttransformprovider">XsltTransformProvider</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">Instructions Reference</p>
+                                <h1 class="page-title">Streaming and Accumulators</h1>
+                                <p class="page-subtitle">xsl:source-document, xsl:accumulator, xsl:fork — processing large documents efficiently</p>
+                                <h1 id="streaming-and-accumulators"><a class="anchor" href="#streaming-and-accumulators">#</a>Streaming and Accumulators</h1>
+                                <p>Some documents are too large to fit in memory: tens of gigabytes of log data, massive data exports, or continuous feeds. XSLT 3.0's streaming features process a document in a single pass, without building the entire tree.</p>
+                                <blockquote>
+      
+                                  <p>For C# developers: if you have worked with <code>IAsyncEnumerable</code>,
 <code>Utf8JsonReader</code>, or <code>System.IO.Pipelines</code>, the motivation is the same.
 Process data as it flows through, and never hold more than a small window
 in memory. <code>XmlDocument</code> or <code>XDocument</code> loads everything into memory, like
@@ -19,7 +614,13 @@ resembles <code>Aggregate()</code> over an <code>IAsyncEnumerable</code>, or a c
 registered on a SAX parser that updates shared state. Declaring
 <code>use-accumulators</code> on a mode resembles subscribing to specific events
 instead of receiving all of them.</p>
-    </blockquote><p>The following C# code contrasts a full in-memory load with a streaming read:</p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Non-streaming: full tree in memory
+    
+                                </blockquote>
+                                <p>The following C# code contrasts a full in-memory load with a streaming read:</p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Non-streaming: full tree in memory
 var doc = XDocument.Load("huge-file.xml");
 var items = doc.Descendants("item").Where(x =&gt; ...);
 // Streaming: one node at a time
@@ -30,34 +631,77 @@ while (reader.Read())
     {
         // Process one item at a time
     }
-}</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>Subscribing to specific accumulators works like subscribing to specific events:</p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Only subscribe to the events you need
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <p>Subscribing to specific accumulators works like subscribing to specific events:</p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Only subscribe to the events you need
 stream.OnError += HandleError;
 stream.OnLargeTransaction += TrackMaxAmount;
-// Not subscribing to OnInfo saves processing time</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#the-streaming-concept" title="">The Streaming Concept</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslsource-document" title="">xsl:source-document</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslaccumulator-and-xslaccumulator-rule" title="">xsl:accumulator and xsl:accumulator-rule</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#xslfork" title="">xsl:fork</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#streamability-rules" title="">Streamability Rules</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#use-accumulators-on-modes" title="">use-accumulators on Modes</a>
-        </p>
-      </li></ul><hr><h2 id="primary-source-streaming"><a class="anchor" href="#primary-source-streaming">#</a>Primary Source Streaming</h2><p>The simplest way to enable streaming declares a streamable mode for the primary input document. When the default mode, or a named mode, is streamable, the processor reads the principal source document through an <code>XmlReader</code>. It does not build a full in-memory tree:</p><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+// Not subscribing to OnInfo saves processing time</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#the-streaming-concept">The Streaming Concept</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslsource-document">xsl:source-document</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslaccumulator-and-xslaccumulator-rule">xsl:accumulator and xsl:accumulator-rule</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#xslfork">xsl:fork</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#streamability-rules">Streamability Rules</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#use-accumulators-on-modes">use-accumulators on Modes</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="primary-source-streaming"><a class="anchor" href="#primary-source-streaming">#</a>Primary Source Streaming</h2>
+                                  <p>The simplest way to enable streaming declares a streamable mode for the primary input document. When the default mode, or a named mode, is streamable, the processor reads the principal source document through an <code>XmlReader</code>. It does not build a full in-memory tree:</p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;!-- Stream the primary source document --&gt;
   &lt;xsl:mode streamable="yes"/&gt;
   &lt;xsl:template match="/"&gt;
@@ -68,92 +712,230 @@ stream.OnLargeTransaction += TrackMaxAmount;
   &lt;xsl:template match="product"&gt;
     &lt;item name="{@name}" price="{@price}"/&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>With <code>xsl:mode streamable="yes"</code> on the unnamed (default) mode, the initial <code>apply-templates</code> call reads the input document as a stream. No tree is built for the primary source.</p><h3 id="detecting-streaming-support"><a class="anchor" href="#detecting-streaming-support">#</a>Detecting Streaming Support</h3><p>You can check at compile time whether the processor supports streaming:</p><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;xsl:if test="system-property('xsl:supports-streaming') = 'yes'"&gt;
+&lt;/xsl:stylesheet&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>With <code>xsl:mode streamable="yes"</code> on the unnamed (default) mode, the initial <code>apply-templates</code> call reads the input document as a stream. No tree is built for the primary source.</p>
+                                  <h3 id="detecting-streaming-support"><a class="anchor" href="#detecting-streaming-support">#</a>Detecting Streaming Support</h3>
+                                  <p>You can check at compile time whether the processor supports streaming:</p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xml</span>
+                                    </figcaption>
+                                    <pre><code class="language-xml">&lt;xsl:if test="system-property('xsl:supports-streaming') = 'yes'"&gt;
   &lt;!-- streaming-specific logic --&gt;
-&lt;/xsl:if&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>
-      <code>system-property('xsl:supports-streaming')</code> returns <code>"yes"</code> in PhoenixmlDb.</p><hr><h2 id="the-streaming-concept"><a class="anchor" href="#the-streaming-concept">#</a>The Streaming Concept</h2><p>In conventional (non-streaming) XSLT processing, the processor parses the entire input document into an in-memory tree before any templates execute. This approach works well for documents up to a few hundred megabytes, but it fails for larger documents.</p><p>Streaming changes the execution model. The processor reads the document as a stream of events (start-element, text, end-element) and executes templates as each node passes by. At any point, only the current node and its ancestors are in memory.</p><h3 id="when-you-need-streaming"><a class="anchor" href="#when-you-need-streaming">#</a>When You Need Streaming</h3><ul><li>
-        <p>The document is too large for available memory (multi-gigabyte XML exports).</p>
-      </li><li>
-        <p>You want to start producing output before the processor reads the entire input.</p>
-      </li><li>
-        <p>You are processing a continuous feed that never ends.</p>
-      </li><li>
-        <p>You want to minimize memory footprint even for moderate-sized documents.</p>
-      </li></ul><h3 id="when-you-do-not-need-streaming"><a class="anchor" href="#when-you-do-not-need-streaming">#</a>When You Do Not Need Streaming</h3><ul><li>
-        <p>Documents fit comfortably in memory (most XML files).</p>
-      </li><li>
-        <p>You need random access to the document, looking backward or forward freely.</p>
-      </li><li>
-        <p>The transformation requires multiple passes over the same data.</p>
-      </li></ul><hr><h2 id="xsl-source-document"><a class="anchor" href="#xsl-source-document">#</a>xsl:source-document</h2><p>
-      <code>xsl:source-document</code> (XSLT 3.0) loads an external document, optionally in streaming mode. It replaces the <code>doc()</code> function when you need streaming access.</p><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;!-- Non-streaming (same as doc()) --&gt;
+&lt;/xsl:if&gt;</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <p>
+      <code>system-property('xsl:supports-streaming')</code> returns <code>"yes"</code> in PhoenixmlDb.</p>
+                                  <hr>
+                                    <h2 id="the-streaming-concept"><a class="anchor" href="#the-streaming-concept">#</a>The Streaming Concept</h2>
+                                    <p>In conventional (non-streaming) XSLT processing, the processor parses the entire input document into an in-memory tree before any templates execute. This approach works well for documents up to a few hundred megabytes, but it fails for larger documents.</p>
+                                    <p>Streaming changes the execution model. The processor reads the document as a stream of events (start-element, text, end-element) and executes templates as each node passes by. At any point, only the current node and its ancestors are in memory.</p>
+                                    <h3 id="when-you-need-streaming"><a class="anchor" href="#when-you-need-streaming">#</a>When You Need Streaming</h3>
+                                    <ul>
+                                      <li>
+        
+                                        <p>The document is too large for available memory (multi-gigabyte XML exports).</p>
+      
+                                      </li>
+                                      <li>
+        
+                                        <p>You want to start producing output before the processor reads the entire input.</p>
+      
+                                      </li>
+                                      <li>
+        
+                                        <p>You are processing a continuous feed that never ends.</p>
+      
+                                      </li>
+                                      <li>
+        
+                                        <p>You want to minimize memory footprint even for moderate-sized documents.</p>
+      
+                                      </li>
+                                    </ul>
+                                    <h3 id="when-you-do-not-need-streaming"><a class="anchor" href="#when-you-do-not-need-streaming">#</a>When You Do Not Need Streaming</h3>
+                                    <ul>
+                                      <li>
+        
+                                        <p>Documents fit comfortably in memory (most XML files).</p>
+      
+                                      </li>
+                                      <li>
+        
+                                        <p>You need random access to the document, looking backward or forward freely.</p>
+      
+                                      </li>
+                                      <li>
+        
+                                        <p>The transformation requires multiple passes over the same data.</p>
+      
+                                      </li>
+                                    </ul>
+                                    <hr>
+                                      <h2 id="xsl-source-document"><a class="anchor" href="#xsl-source-document">#</a>xsl:source-document</h2>
+                                      <p>
+      <code>xsl:source-document</code> (XSLT 3.0) loads an external document, optionally in streaming mode. It replaces the <code>doc()</code> function when you need streaming access.</p>
+                                      <h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;!-- Non-streaming (same as doc()) --&gt;
 &lt;xsl:source-document href="data.xml"&gt;
   &lt;xsl:apply-templates select="./catalog/product"/&gt;
 &lt;/xsl:source-document&gt;
 &lt;!-- Streaming mode --&gt;
 &lt;xsl:source-document href="huge-data.xml" streamable="yes"&gt;
   &lt;xsl:apply-templates select="./catalog/product" mode="streaming"/&gt;
-&lt;/xsl:source-document&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="attributes"><a class="anchor" href="#attributes">#</a>Attributes</h3><div class="table-wrap"><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Attribute</p>
-          </th>
-          <th>
-            <p>Values</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>href</code></p>
-          </td>
-          <td>
-            <p>URI</p>
-          </td>
-          <td>
-            <p>The document to load</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>streamable</code></p>
-          </td>
-          <td>
-            <p><code>yes</code>, <code>no</code></p>
-          </td>
-          <td>
-            <p>Whether to process the document as a stream</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>use-accumulators</code></p>
-          </td>
-          <td>
-            <p>Space-separated list of accumulator names</p>
-          </td>
-          <td>
-            <p>Which accumulators to apply to this document</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>validation</code></p>
-          </td>
-          <td>
-            <p><code>strict</code>, <code>lax</code>, <code>preserve</code>, <code>strip</code></p>
-          </td>
-          <td>
-            <p>Schema validation mode</p>
-          </td>
-        </tr>
-      </tbody>
-    </table></div><h3 id="streaming-example-extracting-from-a-large-file"><a class="anchor" href="#streaming-example-extracting-from-a-large-file">#</a>Streaming Example: Extracting from a Large File</h3><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
+&lt;/xsl:source-document&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="attributes"><a class="anchor" href="#attributes">#</a>Attributes</h3>
+                                      <div class="table-wrap">
+                                        <table>
+      
+                                          <thead>
+        
+                                            <tr>
+          
+                                              <th>
+            
+                                                <p>Attribute</p>
+          
+                                              </th>
+          
+                                              <th>
+            
+                                                <p>Values</p>
+          
+                                              </th>
+          
+                                              <th>
+            
+                                                <p>Description</p>
+          
+                                              </th>
+        
+                                            </tr>
+      
+                                          </thead>
+      
+                                          <tbody>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>href</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>URI</p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>The document to load</p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>streamable</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>
+              <code>yes</code>, <code>no</code>
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Whether to process the document as a stream</p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>use-accumulators</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Space-separated list of accumulator names</p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Which accumulators to apply to this document</p>
+          
+                                              </td>
+        
+                                            </tr>
+        
+                                            <tr>
+          
+                                              <td>
+            
+                                                <p>
+              <code>validation</code>
+            
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>
+              <code>strict</code>, <code>lax</code>, <code>preserve</code>, <code>strip</code>
+                                                </p>
+          
+                                              </td>
+          
+                                              <td>
+            
+                                                <p>Schema validation mode</p>
+          
+                                              </td>
+        
+                                            </tr>
+      
+                                          </tbody>
+    
+                                        </table>
+                                      </div>
+                                      <h3 id="streaming-example-extracting-from-a-large-file"><a class="anchor" href="#streaming-example-extracting-from-a-large-file">#</a>Streaming Example: Extracting from a Large File</h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"&gt;
   &lt;xsl:mode name="streaming" streamable="yes"/&gt;
   &lt;xsl:template match="/"&gt;
     &lt;summary&gt;
@@ -167,7 +949,16 @@ stream.OnLargeTransaction += TrackMaxAmount;
   &lt;/xsl:template&gt;
   &lt;!-- Skip transactions under the threshold --&gt;
   &lt;xsl:template match="transaction" mode="streaming"/&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>This stylesheet reads a potentially enormous transactions file. It outputs only the transactions exceeding $10,000, without loading the whole file into memory.</p><h3 id="replacing-doc-with-xsl-source-document"><a class="anchor" href="#replacing-doc-with-xsl-source-document">#</a>Replacing doc() with xsl:source-document</h3><p>The <code>doc()</code> function always builds a full in-memory tree. If you are migrating to streaming, replace <code>doc()</code> calls with <code>xsl:source-document</code>:</p><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;!-- Before: non-streaming --&gt;
+&lt;/xsl:stylesheet&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>This stylesheet reads a potentially enormous transactions file. It outputs only the transactions exceeding $10,000, without loading the whole file into memory.</p>
+                                      <h3 id="replacing-doc-with-xsl-source-document"><a class="anchor" href="#replacing-doc-with-xsl-source-document">#</a>Replacing doc() with xsl:source-document</h3>
+                                      <p>The <code>doc()</code> function always builds a full in-memory tree. If you are migrating to streaming, replace <code>doc()</code> calls with <code>xsl:source-document</code>:</p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xml</span>
+                                        </figcaption>
+                                        <pre><code class="language-xml">&lt;!-- Before: non-streaming --&gt;
 &lt;xsl:variable name="data" select="doc('large-file.xml')"/&gt;
 &lt;xsl:for-each select="$data//record"&gt;
   &lt;!-- ... --&gt;
@@ -177,171 +968,393 @@ stream.OnLargeTransaction += TrackMaxAmount;
   &lt;xsl:for-each select="./records/record"&gt;
     &lt;!-- ... --&gt;
   &lt;/xsl:for-each&gt;
-&lt;/xsl:source-document&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>Note the change from <code>$data//record</code> (using the <code>//</code> descendant axis, which requires random access) to <code>./records/record</code> (a direct child path, which is streamable).</p><hr><h2 id="xsl-accumulator-and-xsl-accumulator-rule"><a class="anchor" href="#xsl-accumulator-and-xsl-accumulator-rule">#</a>xsl:accumulator and xsl:accumulator-rule</h2><p>Accumulators maintain running state as the processor streams through a document. Streaming templates cannot look backward: once a node has passed, it is gone. An accumulator watches the stream and updates a value as each matching node passes by.</p><p>
-      <strong>C# parallel:</strong> Think of accumulators like <code>Aggregate()</code> over an <code>IAsyncEnumerable</code>, or like registering callbacks on a SAX parser that update shared state:</p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">decimal runningTotal = 0;
+&lt;/xsl:source-document&gt;</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>Note the change from <code>$data//record</code> (using the <code>//</code> descendant axis, which requires random access) to <code>./records/record</code> (a direct child path, which is streamable).</p>
+                                      <hr>
+                                        <h2 id="xsl-accumulator-and-xsl-accumulator-rule"><a class="anchor" href="#xsl-accumulator-and-xsl-accumulator-rule">#</a>xsl:accumulator and xsl:accumulator-rule</h2>
+                                        <p>Accumulators maintain running state as the processor streams through a document. Streaming templates cannot look backward: once a node has passed, it is gone. An accumulator watches the stream and updates a value as each matching node passes by.</p>
+                                        <p>
+      <strong>C# parallel:</strong> Think of accumulators like <code>Aggregate()</code> over an <code>IAsyncEnumerable</code>, or like registering callbacks on a SAX parser that update shared state:</p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">decimal runningTotal = 0;
 int count = 0;
 await foreach (var transaction in streamReader.ReadTransactionsAsync())
 {
     runningTotal += transaction.Amount;
     count++;
-}</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="declaring-an-accumulator"><a class="anchor" href="#declaring-an-accumulator">#</a>Declaring an Accumulator</h3><p>Accumulators are top-level declarations (children of <code>xsl:stylesheet</code>):</p><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;xsl:accumulator name="total-amount"
+}</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="declaring-an-accumulator"><a class="anchor" href="#declaring-an-accumulator">#</a>Declaring an Accumulator</h3>
+                                        <p>Accumulators are top-level declarations (children of <code>xsl:stylesheet</code>):</p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:accumulator name="total-amount"
                  as="xs:decimal"
                  initial-value="0"
                  streamable="yes"&gt;
   &lt;xsl:accumulator-rule match="transaction"
                         phase="end"
                         select="$value + xs:decimal(@amount)"/&gt;
-&lt;/xsl:accumulator&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="accumulator-parts"><a class="anchor" href="#accumulator-parts">#</a>Accumulator Parts</h3><div class="table-wrap"><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Part</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>name</code></p>
-          </td>
-          <td>
-            <p>Unique name for the accumulator</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>as</code></p>
-          </td>
-          <td>
-            <p>Data type of the accumulated value</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>initial-value</code></p>
-          </td>
-          <td>
-            <p>Starting value before any nodes are processed</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>streamable</code></p>
-          </td>
-          <td>
-            <p>Whether this accumulator is used in streaming mode</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>xsl:accumulator-rule</code></p>
-          </td>
-          <td>
-            <p>One or more rules that update the value</p>
-          </td>
-        </tr>
-      </tbody>
-    </table></div><h3 id="xsl-accumulator-rule"><a class="anchor" href="#xsl-accumulator-rule">#</a>xsl:accumulator-rule</h3><p>Each rule specifies when and how to update the accumulated value:</p><div class="table-wrap"><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Attribute</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>match</code></p>
-          </td>
-          <td>
-            <p>Pattern — which nodes trigger this rule</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>phase</code></p>
-          </td>
-          <td>
-            <p><code>start</code> or <code>end</code> — fire when the element opens or closes</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>select</code></p>
-          </td>
-          <td>
-            <p>New value expression (can reference <code>$value</code> for current accumulated value)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>new-value</code></p>
-          </td>
-          <td>
-            <p>Alternative to <code>select</code> for complex computation</p>
-          </td>
-        </tr>
-      </tbody>
-    </table></div><h3 id="phase-start-vs-end"><a class="anchor" href="#phase-start-vs-end">#</a>Phase: start vs. end</h3><ul><li>
-        <p>
+&lt;/xsl:accumulator&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="accumulator-parts"><a class="anchor" href="#accumulator-parts">#</a>Accumulator Parts</h3>
+                                        <div class="table-wrap">
+                                          <table>
+      
+                                            <thead>
+        
+                                              <tr>
+          
+                                                <th>
+            
+                                                  <p>Part</p>
+          
+                                                </th>
+          
+                                                <th>
+            
+                                                  <p>Description</p>
+          
+                                                </th>
+        
+                                              </tr>
+      
+                                            </thead>
+      
+                                            <tbody>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>name</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Unique name for the accumulator</p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>as</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Data type of the accumulated value</p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>initial-value</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Starting value before any nodes are processed</p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>streamable</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Whether this accumulator is used in streaming mode</p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>xsl:accumulator-rule</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>One or more rules that update the value</p>
+          
+                                                </td>
+        
+                                              </tr>
+      
+                                            </tbody>
+    
+                                          </table>
+                                        </div>
+                                        <h3 id="xsl-accumulator-rule"><a class="anchor" href="#xsl-accumulator-rule">#</a>xsl:accumulator-rule</h3>
+                                        <p>Each rule specifies when and how to update the accumulated value:</p>
+                                        <div class="table-wrap">
+                                          <table>
+      
+                                            <thead>
+        
+                                              <tr>
+          
+                                                <th>
+            
+                                                  <p>Attribute</p>
+          
+                                                </th>
+          
+                                                <th>
+            
+                                                  <p>Description</p>
+          
+                                                </th>
+        
+                                              </tr>
+      
+                                            </thead>
+      
+                                            <tbody>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>match</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Pattern — which nodes trigger this rule</p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>phase</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>start</code> or <code>end</code> — fire when the element opens or closes</p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>select</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>New value expression (can reference <code>$value</code> for current accumulated value)</p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>new-value</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Alternative to <code>select</code> for complex computation</p>
+          
+                                                </td>
+        
+                                              </tr>
+      
+                                            </tbody>
+    
+                                          </table>
+                                        </div>
+                                        <h3 id="phase-start-vs-end"><a class="anchor" href="#phase-start-vs-end">#</a>Phase: start vs. end</h3>
+                                        <ul>
+                                          <li>
+        
+                                            <p>
           <strong>
             <code>start</code>
           </strong> — fires when the processor reads the opening element. At this point, the element's attributes are available, but child content has not been read yet.</p>
-      </li><li>
-        <p>
+      
+                                          </li>
+                                          <li>
+        
+                                            <p>
           <strong>
             <code>end</code>
           </strong> — fires when the processor reads the closing element. At this point, the element's text content has been read, but not stored in memory.</p>
-      </li></ul><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;!-- Count elements as they open --&gt;
+      
+                                          </li>
+                                        </ul>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;!-- Count elements as they open --&gt;
 &lt;xsl:accumulator name="element-count"
                  as="xs:integer"
                  initial-value="0"
                  streamable="yes"&gt;
   &lt;xsl:accumulator-rule match="transaction" phase="start"
                         select="$value + 1"/&gt;
-&lt;/xsl:accumulator&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="reading-accumulator-values"><a class="anchor" href="#reading-accumulator-values">#</a>Reading Accumulator Values</h3><p>Two functions retrieve the accumulated value at any point during processing:</p><div class="table-wrap"><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Function</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><code>accumulator-before('name')</code></p>
-          </td>
-          <td>
-            <p>Value of the accumulator before the current node was processed</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><code>accumulator-after('name')</code></p>
-          </td>
-          <td>
-            <p>Value of the accumulator after the current node was processed</p>
-          </td>
-        </tr>
-      </tbody>
-    </table></div><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;xsl:template match="transaction" mode="streaming"&gt;
+&lt;/xsl:accumulator&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="reading-accumulator-values"><a class="anchor" href="#reading-accumulator-values">#</a>Reading Accumulator Values</h3>
+                                        <p>Two functions retrieve the accumulated value at any point during processing:</p>
+                                        <div class="table-wrap">
+                                          <table>
+      
+                                            <thead>
+        
+                                              <tr>
+          
+                                                <th>
+            
+                                                  <p>Function</p>
+          
+                                                </th>
+          
+                                                <th>
+            
+                                                  <p>Description</p>
+          
+                                                </th>
+        
+                                              </tr>
+      
+                                            </thead>
+      
+                                            <tbody>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>accumulator-before('name')</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Value of the accumulator before the current node was processed</p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>accumulator-after('name')</code>
+            
+                                                  </p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>Value of the accumulator after the current node was processed</p>
+          
+                                                </td>
+        
+                                              </tr>
+      
+                                            </tbody>
+    
+                                          </table>
+                                        </div>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:template match="transaction" mode="streaming"&gt;
   &lt;row&gt;
     &lt;number&gt;&lt;xsl:value-of select="accumulator-after('element-count')"/&gt;&lt;/number&gt;
     &lt;amount&gt;&lt;xsl:value-of select="@amount"/&gt;&lt;/amount&gt;
     &lt;running-total&gt;&lt;xsl:value-of select="accumulator-after('total-amount')"/&gt;&lt;/running-total&gt;
   &lt;/row&gt;
-&lt;/xsl:template&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="complete-accumulator-example-log-file-statistics"><a class="anchor" href="#complete-accumulator-example-log-file-statistics">#</a>Complete Accumulator Example: Log File Statistics</h3><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+&lt;/xsl:template&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="complete-accumulator-example-log-file-statistics"><a class="anchor" href="#complete-accumulator-example-log-file-statistics">#</a>Complete Accumulator Example: Log File Statistics</h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 version="3.0"&gt;
   &lt;xsl:mode name="streaming" streamable="yes" use-accumulators="entry-count error-count max-response-time"/&gt;
@@ -376,85 +1389,197 @@ await foreach (var transaction in streamReader.ReadTransactionsAsync())
       &lt;max-response-time-ms&gt;&lt;xsl:value-of select="accumulator-after('max-response-time')"/&gt;&lt;/max-response-time-ms&gt;
     &lt;/log-summary&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>Input (<code>access-log.xml</code>, potentially gigabytes):</p><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;log&gt;
+&lt;/xsl:stylesheet&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>Input (<code>access-log.xml</code>, potentially gigabytes):</p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;log&gt;
   &lt;entry timestamp="2025-03-15T08:00:01" level="INFO" response-ms="45"/&gt;
   &lt;entry timestamp="2025-03-15T08:00:02" level="INFO" response-ms="120"/&gt;
   &lt;entry timestamp="2025-03-15T08:00:03" level="ERROR" response-ms="5023"/&gt;
   &lt;!-- ... millions more entries ... --&gt;
-&lt;/log&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>Output:</p><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;log-summary&gt;
+&lt;/log&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>Output:</p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;log-summary&gt;
   &lt;total-entries&gt;3847291&lt;/total-entries&gt;
   &lt;error-entries&gt;12847&lt;/error-entries&gt;
   &lt;max-response-time-ms&gt;15234&lt;/max-response-time-ms&gt;
-&lt;/log-summary&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="use-cases-for-accumulators"><a class="anchor" href="#use-cases-for-accumulators">#</a>Use Cases for Accumulators</h3><div class="table-wrap"><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Use Case</p>
-          </th>
-          <th>
-            <p>Accumulator Pattern</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>Running total</p>
-          </td>
-          <td>
-            <p><code>select="$value + @amount"</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Counting</p>
-          </td>
-          <td>
-            <p><code>select="$value + 1"</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Maximum value</p>
-          </td>
-          <td>
-            <p><code>select="max(($value, @val))"</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Minimum value</p>
-          </td>
-          <td>
-            <p><code>select="if ($value = 0) then @val else min(($value, @val))"</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Context tracking</p>
-          </td>
-          <td>
-            <p><code>select="@category"</code> (track the current section/category)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Last-seen value</p>
-          </td>
-          <td>
-            <p><code>select="@id"</code> (remember the most recent ID)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Collecting distinct values</p>
-          </td>
-          <td>
-            <p><code>select="distinct-values(($value, @type))"</code></p>
-          </td>
-        </tr>
-      </tbody>
-    </table></div><h3 id="context-tracking-accumulator"><a class="anchor" href="#context-tracking-accumulator">#</a>Context Tracking Accumulator</h3><p>This pattern tracks which section you are in while streaming, so inner elements can reference the current section name without looking backward:</p><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;xsl:accumulator name="current-section" as="xs:string"
+&lt;/log-summary&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="use-cases-for-accumulators"><a class="anchor" href="#use-cases-for-accumulators">#</a>Use Cases for Accumulators</h3>
+                                        <div class="table-wrap">
+                                          <table>
+      
+                                            <thead>
+        
+                                              <tr>
+          
+                                                <th>
+            
+                                                  <p>Use Case</p>
+          
+                                                </th>
+          
+                                                <th>
+            
+                                                  <p>Accumulator Pattern</p>
+          
+                                                </th>
+        
+                                              </tr>
+      
+                                            </thead>
+      
+                                            <tbody>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>Running total</p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>select="$value + @amount"</code>
+            
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>Counting</p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>select="$value + 1"</code>
+            
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>Maximum value</p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>select="max(($value, @val))"</code>
+            
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>Minimum value</p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>select="if ($value = 0) then @val else min(($value, @val))"</code>
+            
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>Context tracking</p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>select="@category"</code> (track the current section/category)</p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>Last-seen value</p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>select="@id"</code> (remember the most recent ID)</p>
+          
+                                                </td>
+        
+                                              </tr>
+        
+                                              <tr>
+          
+                                                <td>
+            
+                                                  <p>Collecting distinct values</p>
+          
+                                                </td>
+          
+                                                <td>
+            
+                                                  <p>
+              <code>select="distinct-values(($value, @type))"</code>
+            
+                                                  </p>
+          
+                                                </td>
+        
+                                              </tr>
+      
+                                            </tbody>
+    
+                                          </table>
+                                        </div>
+                                        <h3 id="context-tracking-accumulator"><a class="anchor" href="#context-tracking-accumulator">#</a>Context Tracking Accumulator</h3>
+                                        <p>This pattern tracks which section you are in while streaming, so inner elements can reference the current section name without looking backward:</p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xml</span>
+                                          </figcaption>
+                                          <pre><code class="language-xml">&lt;xsl:accumulator name="current-section" as="xs:string"
                  initial-value="''" streamable="yes"&gt;
   &lt;xsl:accumulator-rule match="section" phase="start"
                         select="string(@name)"/&gt;
@@ -463,15 +1588,32 @@ await foreach (var transaction in streamReader.ReadTransactionsAsync())
   &lt;row section="{accumulator-before('current-section')}"&gt;
     &lt;xsl:value-of select="@message"/&gt;
   &lt;/row&gt;
-&lt;/xsl:template&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><hr><h2 id="xsl-fork"><a class="anchor" href="#xsl-fork">#</a>xsl:fork</h2><p>
-      <code>xsl:fork</code> splits processing into independent branches that each consume the streamed document independently. Without <code>xsl:fork</code>, a streaming template can make only one downward pass through the children. With <code>xsl:fork</code>, you can process the same children in multiple ways simultaneously.</p><p>
-      <strong>C# parallel:</strong> Think of <code>xsl:fork</code> like <code>Channel&lt;T&gt;</code> fan-out, or <code>tee</code> in Unix — one input stream split to multiple consumers:</p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Conceptually similar: multiple consumers of the same stream
+&lt;/xsl:template&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <hr>
+                                          <h2 id="xsl-fork"><a class="anchor" href="#xsl-fork">#</a>xsl:fork</h2>
+                                          <p>
+      <code>xsl:fork</code> splits processing into independent branches that each consume the streamed document independently. Without <code>xsl:fork</code>, a streaming template can make only one downward pass through the children. With <code>xsl:fork</code>, you can process the same children in multiple ways simultaneously.</p>
+                                          <p>
+      <strong>C# parallel:</strong> Think of <code>xsl:fork</code> like <code>Channel&lt;T&gt;</code> fan-out, or <code>tee</code> in Unix — one input stream split to multiple consumers:</p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">// Conceptually similar: multiple consumers of the same stream
 var channel = Channel.CreateUnbounded&lt;XmlNode&gt;();
 Task.WhenAll(
     ProcessErrors(channel.Reader),
     ComputeStats(channel.Reader),
     GenerateReport(channel.Reader)
-);</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;xsl:template match="log" mode="streaming"&gt;
+);</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="basic-usage"><a class="anchor" href="#basic-usage">#</a>Basic Usage</h3>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xml</span>
+                                            </figcaption>
+                                            <pre><code class="language-xml">&lt;xsl:template match="log" mode="streaming"&gt;
   &lt;report&gt;
     &lt;xsl:fork&gt;
       &lt;!-- Branch 1: extract errors --&gt;
@@ -496,65 +1638,168 @@ Task.WhenAll(
       &lt;/xsl:sequence&gt;
     &lt;/xsl:fork&gt;
   &lt;/report&gt;
-&lt;/xsl:template&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>Each <code>xsl:sequence</code> inside <code>xsl:fork</code> is an independent branch. The processor feeds each branch from the same stream of events. The branches cannot communicate with each other, but they can each produce output, which the processor concatenates in order.</p><h3 id="when-to-use-xsl-fork"><a class="anchor" href="#when-to-use-xsl-fork">#</a>When to Use xsl:fork</h3><p>Use <code>xsl:fork</code> when a single streaming pass needs to produce multiple independent outputs from the same data:</p><ul><li>
-        <p>Generating both a summary and detail view in one pass.</p>
-      </li><li>
-        <p>Writing to multiple result documents from the same streamed input.</p>
-      </li><li>
-        <p>Applying different filters to the same stream.</p>
-      </li></ul><p>Without <code>xsl:fork</code>, you would need multiple passes over the document, which defeats the purpose of streaming. Alternatively, you would need to handle everything in a single set of templates.</p><hr><h2 id="streamability-rules"><a class="anchor" href="#streamability-rules">#</a>Streamability Rules</h2><p>Not every XSLT stylesheet can run in streaming mode. The processor enforces streamability rules that ensure the transformation works in a single forward pass.</p><h3 id="core-principle"><a class="anchor" href="#core-principle">#</a>Core Principle</h3><p>In streaming mode, a node is available only while the processor is positioned on it. Once the processor moves past a node, that node is gone. This means:</p><ul><li>
-        <p>You can read <strong>attributes</strong> and <strong>namespace nodes</strong> of the current element (they arrive with the start element).</p>
-      </li><li>
-        <p>You can process <strong>child nodes</strong> in document order, one at a time, as they stream by.</p>
-      </li><li>
-        <p>You <strong>cannot</strong> go backward: no preceding siblings, no ancestor's other children.</p>
-      </li><li>
-        <p>You <strong>cannot</strong> read the same child node twice.</p>
-      </li></ul><h3 id="consuming-vs-non-consuming-operations"><a class="anchor" href="#consuming-vs-non-consuming-operations">#</a>Consuming vs. Non-Consuming Operations</h3><div class="table-wrap"><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Operation Type</p>
-          </th>
-          <th>
-            <p>Description</p>
-          </th>
-          <th>
-            <p>Examples</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><strong>Non-consuming</strong></p>
-          </td>
-          <td>
-            <p>Reads data available without advancing the stream</p>
-          </td>
-          <td>
-            <p><code>@attribute</code>, <code>name()</code>, <code>position()</code>, <code>accumulator-before()</code></p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p><strong>Consuming</strong></p>
-          </td>
-          <td>
-            <p>Reads child content, advancing the stream</p>
-          </td>
-          <td>
-            <p><code>string(.)</code>, <code>xsl:apply-templates</code>, <code>xsl:for-each select="child"</code></p>
-          </td>
-        </tr>
-      </tbody>
-    </table></div><p>The key rule: you can perform at most one consuming operation on any given node. For example, you cannot both apply templates to the children and then evaluate <code>xsl:value-of select="."</code> on the same element — both operations consume the children.</p><h3 id="grounded-vs-free-ranging-expressions"><a class="anchor" href="#grounded-vs-free-ranging-expressions">#</a>Grounded vs. Free-Ranging Expressions</h3><ul><li>
-        <p>
+&lt;/xsl:template&gt;</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>Each <code>xsl:sequence</code> inside <code>xsl:fork</code> is an independent branch. The processor feeds each branch from the same stream of events. The branches cannot communicate with each other, but they can each produce output, which the processor concatenates in order.</p>
+                                          <h3 id="when-to-use-xsl-fork"><a class="anchor" href="#when-to-use-xsl-fork">#</a>When to Use xsl:fork</h3>
+                                          <p>Use <code>xsl:fork</code> when a single streaming pass needs to produce multiple independent outputs from the same data:</p>
+                                          <ul>
+                                            <li>
+        
+                                              <p>Generating both a summary and detail view in one pass.</p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>Writing to multiple result documents from the same streamed input.</p>
+      
+                                            </li>
+                                            <li>
+        
+                                              <p>Applying different filters to the same stream.</p>
+      
+                                            </li>
+                                          </ul>
+                                          <p>Without <code>xsl:fork</code>, you would need multiple passes over the document, which defeats the purpose of streaming. Alternatively, you would need to handle everything in a single set of templates.</p>
+                                          <hr>
+                                            <h2 id="streamability-rules"><a class="anchor" href="#streamability-rules">#</a>Streamability Rules</h2>
+                                            <p>Not every XSLT stylesheet can run in streaming mode. The processor enforces streamability rules that ensure the transformation works in a single forward pass.</p>
+                                            <h3 id="core-principle"><a class="anchor" href="#core-principle">#</a>Core Principle</h3>
+                                            <p>In streaming mode, a node is available only while the processor is positioned on it. Once the processor moves past a node, that node is gone. This means:</p>
+                                            <ul>
+                                              <li>
+        
+                                                <p>You can read <strong>attributes</strong> and <strong>namespace nodes</strong> of the current element (they arrive with the start element).</p>
+      
+                                              </li>
+                                              <li>
+        
+                                                <p>You can process <strong>child nodes</strong> in document order, one at a time, as they stream by.</p>
+      
+                                              </li>
+                                              <li>
+        
+                                                <p>You <strong>cannot</strong> go backward: no preceding siblings, no ancestor's other children.</p>
+      
+                                              </li>
+                                              <li>
+        
+                                                <p>You <strong>cannot</strong> read the same child node twice.</p>
+      
+                                              </li>
+                                            </ul>
+                                            <h3 id="consuming-vs-non-consuming-operations"><a class="anchor" href="#consuming-vs-non-consuming-operations">#</a>Consuming vs. Non-Consuming Operations</h3>
+                                            <div class="table-wrap">
+                                              <table>
+      
+                                                <thead>
+        
+                                                  <tr>
+          
+                                                    <th>
+            
+                                                      <p>Operation Type</p>
+          
+                                                    </th>
+          
+                                                    <th>
+            
+                                                      <p>Description</p>
+          
+                                                    </th>
+          
+                                                    <th>
+            
+                                                      <p>Examples</p>
+          
+                                                    </th>
+        
+                                                  </tr>
+      
+                                                </thead>
+      
+                                                <tbody>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>
+              <strong>Non-consuming</strong>
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Reads data available without advancing the stream</p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>
+              <code>@attribute</code>, <code>name()</code>, <code>position()</code>, <code>accumulator-before()</code>
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+        
+                                                  <tr>
+          
+                                                    <td>
+            
+                                                      <p>
+              <strong>Consuming</strong>
+                                                      </p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>Reads child content, advancing the stream</p>
+          
+                                                    </td>
+          
+                                                    <td>
+            
+                                                      <p>
+              <code>string(.)</code>, <code>xsl:apply-templates</code>, <code>xsl:for-each select="child"</code>
+                                                      </p>
+          
+                                                    </td>
+        
+                                                  </tr>
+      
+                                                </tbody>
+    
+                                              </table>
+                                            </div>
+                                            <p>The key rule: you can perform at most one consuming operation on any given node. For example, you cannot both apply templates to the children and then evaluate <code>xsl:value-of select="."</code> on the same element — both operations consume the children.</p>
+                                            <h3 id="grounded-vs-free-ranging-expressions"><a class="anchor" href="#grounded-vs-free-ranging-expressions">#</a>Grounded vs. Free-Ranging Expressions</h3>
+                                            <ul>
+                                              <li>
+        
+                                                <p>
           <strong>Grounded expression:</strong> evaluates to a value without navigating through streamed content. Examples: <code>@id</code>, <code>$variable</code>, <code>position()</code>, literal values.</p>
-      </li><li>
-        <p>
+      
+                                              </li>
+                                              <li>
+        
+                                                <p>
           <strong>Free-ranging expression:</strong> navigates through descendant content. Examples: <code>.//item</code>, <code>string(.)</code>, <code>sum(item/price)</code>.</p>
-      </li></ul><p>A streamable template can use one free-ranging expression, which consumes the children, but every other expression must be grounded.</p><h3 id="making-templates-streamable"><a class="anchor" href="#making-templates-streamable">#</a>Making Templates Streamable</h3><p>Here are common patterns and their streamable alternatives:</p><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;!-- NOT STREAMABLE: uses descendant axis --&gt;
+      
+                                              </li>
+                                            </ul>
+                                            <p>A streamable template can use one free-ranging expression, which consumes the children, but every other expression must be grounded.</p>
+                                            <h3 id="making-templates-streamable"><a class="anchor" href="#making-templates-streamable">#</a>Making Templates Streamable</h3>
+                                            <p>Here are common patterns and their streamable alternatives:</p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;!-- NOT STREAMABLE: uses descendant axis --&gt;
 &lt;xsl:template match="catalog"&gt;
   &lt;xsl:value-of select="count(.//product)"/&gt;
 &lt;/xsl:template&gt;
@@ -566,7 +1811,13 @@ Task.WhenAll(
 &lt;/xsl:accumulator&gt;
 &lt;xsl:template match="catalog" mode="streaming"&gt;
   &lt;count&gt;&lt;xsl:value-of select="accumulator-after('product-count')"/&gt;&lt;/count&gt;
-&lt;/xsl:template&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;!-- NOT STREAMABLE: reads children twice --&gt;
+&lt;/xsl:template&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xml</span>
+                                              </figcaption>
+                                              <pre><code class="language-xml">&lt;!-- NOT STREAMABLE: reads children twice --&gt;
 &lt;xsl:template match="product"&gt;
   &lt;name&gt;&lt;xsl:value-of select="name"/&gt;&lt;/name&gt;
   &lt;price&gt;&lt;xsl:value-of select="price"/&gt;&lt;/price&gt;
@@ -585,44 +1836,213 @@ Task.WhenAll(
       &lt;price&gt;&lt;xsl:value-of select="price"/&gt;&lt;/price&gt;
     &lt;/xsl:sequence&gt;
   &lt;/xsl:fork&gt;
-&lt;/xsl:template&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="streamability-checklist"><a class="anchor" href="#streamability-checklist">#</a>Streamability Checklist</h3><p>Before making a stylesheet streamable, verify each of the following:</p><ol><li>
-        <p>Templates process children in document order only, with no backward navigation.</p>
-      </li><li>
-        <p>Each template performs at most one consuming operation on the streamed input.</p>
-      </li><li>
-        <p>Conditions and computations use only attributes, accumulators, or variables, not child content read multiple times.</p>
-      </li><li>
-        <p>The <code>xsl:mode</code> declaration includes <code>streamable="yes"</code>.</p>
-      </li><li>
-        <p>Accumulators are declared with <code>streamable="yes"</code>.</p>
-      </li></ol><hr><h2 id="use-accumulators-on-modes"><a class="anchor" href="#use-accumulators-on-modes">#</a>use-accumulators on Modes</h2><p>For accumulators to fire during streaming, the mode must declare which accumulators it uses. This declaration works as an allowlist: the processor skips unlisted accumulators, which saves processing time.</p><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;!-- Declare a streamable mode with specific accumulators --&gt;
+&lt;/xsl:template&gt;</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="streamability-checklist"><a class="anchor" href="#streamability-checklist">#</a>Streamability Checklist</h3>
+                                            <p>Before making a stylesheet streamable, verify each of the following:</p>
+                                            <ol>
+                                              <li>
+        
+                                                <p>Templates process children in document order only, with no backward navigation.</p>
+      
+                                              </li>
+                                              <li>
+        
+                                                <p>Each template performs at most one consuming operation on the streamed input.</p>
+      
+                                              </li>
+                                              <li>
+        
+                                                <p>Conditions and computations use only attributes, accumulators, or variables, not child content read multiple times.</p>
+      
+                                              </li>
+                                              <li>
+        
+                                                <p>The <code>xsl:mode</code> declaration includes <code>streamable="yes"</code>.</p>
+      
+                                              </li>
+                                              <li>
+        
+                                                <p>Accumulators are declared with <code>streamable="yes"</code>.</p>
+      
+                                              </li>
+                                            </ol>
+                                            <hr>
+                                              <h2 id="use-accumulators-on-modes"><a class="anchor" href="#use-accumulators-on-modes">#</a>use-accumulators on Modes</h2>
+                                              <p>For accumulators to fire during streaming, the mode must declare which accumulators it uses. This declaration works as an allowlist: the processor skips unlisted accumulators, which saves processing time.</p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;!-- Declare a streamable mode with specific accumulators --&gt;
 &lt;xsl:mode name="streaming"
           streamable="yes"
-          use-accumulators="entry-count error-count max-response-time"/&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>You can also use the <code>#all</code> token to enable all accumulators:</p><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;xsl:mode name="streaming"
+          use-accumulators="entry-count error-count max-response-time"/&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>You can also use the <code>#all</code> token to enable all accumulators:</p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;xsl:mode name="streaming"
           streamable="yes"
-          use-accumulators="#all"/&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>And on <code>xsl:source-document</code>:</p><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;xsl:source-document href="data.xml"
+          use-accumulators="#all"/&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>And on <code>xsl:source-document</code>:</p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xml</span>
+                                                </figcaption>
+                                                <pre><code class="language-xml">&lt;xsl:source-document href="data.xml"
                      streamable="yes"
                      use-accumulators="record-count running-total"&gt;
   &lt;xsl:apply-templates select="." mode="streaming"/&gt;
-&lt;/xsl:source-document&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="why-the-allowlist"><a class="anchor" href="#why-the-allowlist">#</a>Why the Allowlist?</h3><p>Accumulators carry a real cost: the processor must test each accumulator-rule against every node in the stream. By declaring which accumulators a mode uses, the processor can skip unnecessary evaluations. This distinction matters when streaming millions of nodes per second.</p><hr><h2 id="streaming-limitations"><a class="anchor" href="#streaming-limitations">#</a>Streaming Limitations</h2><p>Streaming enables processing of arbitrarily large documents, but it imposes certain restrictions.</p><h3 id="is-not-available"><a class="anchor" href="#is-not-available">#</a>
-      <code>last()</code> is Not Available</h3><p>In streaming mode, the processor does not know the total size of the sequence it is iterating over. The <code>last()</code> function, which returns the size of the current sequence, is therefore unavailable:</p><figure class="code"><figcaption><span class="lang">xml</span></figcaption><pre><code class="language-xml">&lt;!-- NOT AVAILABLE in streaming mode --&gt;
+&lt;/xsl:source-document&gt;</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="why-the-allowlist"><a class="anchor" href="#why-the-allowlist">#</a>Why the Allowlist?</h3>
+                                              <p>Accumulators carry a real cost: the processor must test each accumulator-rule against every node in the stream. By declaring which accumulators a mode uses, the processor can skip unnecessary evaluations. This distinction matters when streaming millions of nodes per second.</p>
+                                              <hr>
+                                                <h2 id="streaming-limitations"><a class="anchor" href="#streaming-limitations">#</a>Streaming Limitations</h2>
+                                                <p>Streaming enables processing of arbitrarily large documents, but it imposes certain restrictions.</p>
+                                                <h3 id="is-not-available"><a class="anchor" href="#is-not-available">#</a>
+      <code>last()</code> is Not Available</h3>
+                                                <p>In streaming mode, the processor does not know the total size of the sequence it is iterating over. The <code>last()</code> function, which returns the size of the current sequence, is therefore unavailable:</p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xml</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xml">&lt;!-- NOT AVAILABLE in streaming mode --&gt;
 &lt;xsl:template match="item" mode="streaming"&gt;
   &lt;xsl:if test="position() = last()"&gt;  &lt;!-- ERROR: last() not supported --&gt;
     &lt;final-item/&gt;
   &lt;/xsl:if&gt;
 &lt;/xsl:template&gt;
 &lt;!-- WORKAROUND: use an accumulator to detect the last item after the fact,
-     or restructure the logic to not depend on last() --&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>If you need to know when you are processing the final item, use an accumulator to track state, or post-process the output.</p><h3 id="executes-sequentially"><a class="anchor" href="#executes-sequentially">#</a>
-      <code>xsl:fork</code> Executes Sequentially</h3><p>
-      <code>xsl:fork</code> is conceptually a parallel construct: it splits the stream to multiple consumers. In PhoenixmlDb, though, the branches execute <strong>sequentially</strong>, not in parallel. Each branch processes the stream independently, but one at a time. The processor concatenates the output of all branches in document order.</p><p>This means <code>xsl:fork</code> is functionally correct — it produces the right output — but it does not provide a parallelism performance benefit. It remains useful for structuring streaming stylesheets that need multiple independent consuming operations on the same streamed input.</p><h3 id="other-restrictions"><a class="anchor" href="#other-restrictions">#</a>Other Restrictions</h3><ul><li>
-        <p>
+     or restructure the logic to not depend on last() --&gt;</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <p>If you need to know when you are processing the final item, use an accumulator to track state, or post-process the output.</p>
+                                                <h3 id="executes-sequentially"><a class="anchor" href="#executes-sequentially">#</a>
+      <code>xsl:fork</code> Executes Sequentially</h3>
+                                                <p>
+      <code>xsl:fork</code> is conceptually a parallel construct: it splits the stream to multiple consumers. In PhoenixmlDb, though, the branches execute <strong>sequentially</strong>, not in parallel. Each branch processes the stream independently, but one at a time. The processor concatenates the output of all branches in document order.</p>
+                                                <p>This means <code>xsl:fork</code> is functionally correct — it produces the right output — but it does not provide a parallelism performance benefit. It remains useful for structuring streaming stylesheets that need multiple independent consuming operations on the same streamed input.</p>
+                                                <h3 id="other-restrictions"><a class="anchor" href="#other-restrictions">#</a>Other Restrictions</h3>
+                                                <ul>
+                                                  <li>
+        
+                                                    <p>
           <strong>No backward navigation</strong> — axes like <code>preceding-sibling</code>, <code>preceding</code>, and <code>ancestor</code> content are not available (ancestor <em>names</em> and <em>attributes</em> are available through accumulators or <code>ancestor::*/name()</code>).</p>
-      </li><li>
-        <p>
+      
+                                                  </li>
+                                                  <li>
+        
+                                                    <p>
           <strong>Single consuming operation per node</strong> — each template can perform at most one operation that reads child content.</p>
-      </li><li>
-        <p>
+      
+                                                  </li>
+                                                  <li>
+        
+                                                    <p>
           <strong>No <code>xsl:number</code> with <code>level="any"</code></strong> — this level requires counting across the entire document, which is incompatible with streaming.</p>
-      </li></ul></article></main><aside class="toc" aria-label="On this page"><p class="toc-label">On this page</p><ul><li class="toc-h2"><a href="#contents">Contents</a></li><li class="toc-h2"><a href="#primary-source-streaming">Primary Source Streaming</a></li><li class="toc-h3"><a href="#detecting-streaming-support">Detecting Streaming Support</a></li><li class="toc-h2"><a href="#the-streaming-concept">The Streaming Concept</a></li><li class="toc-h3"><a href="#when-you-need-streaming">When You Need Streaming</a></li><li class="toc-h3"><a href="#when-you-do-not-need-streaming">When You Do Not Need Streaming</a></li><li class="toc-h2"><a href="#xsl-source-document">xsl:source-document</a></li><li class="toc-h3"><a href="#basic-usage">Basic Usage</a></li><li class="toc-h3"><a href="#attributes">Attributes</a></li><li class="toc-h3"><a href="#streaming-example-extracting-from-a-large-file">Streaming Example: Extracting from a Large File</a></li><li class="toc-h3"><a href="#replacing-doc-with-xsl-source-document">Replacing doc() with xsl:source-document</a></li><li class="toc-h2"><a href="#xsl-accumulator-and-xsl-accumulator-rule">xsl:accumulator and xsl:accumulator-rule</a></li><li class="toc-h3"><a href="#declaring-an-accumulator">Declaring an Accumulator</a></li><li class="toc-h3"><a href="#accumulator-parts">Accumulator Parts</a></li><li class="toc-h3"><a href="#xsl-accumulator-rule">xsl:accumulator-rule</a></li><li class="toc-h3"><a href="#phase-start-vs-end">Phase: start vs. end</a></li><li class="toc-h3"><a href="#reading-accumulator-values">Reading Accumulator Values</a></li><li class="toc-h3"><a href="#complete-accumulator-example-log-file-statistics">Complete Accumulator Example: Log File Statistics</a></li><li class="toc-h3"><a href="#use-cases-for-accumulators">Use Cases for Accumulators</a></li><li class="toc-h3"><a href="#context-tracking-accumulator">Context Tracking Accumulator</a></li><li class="toc-h2"><a href="#xsl-fork">xsl:fork</a></li><li class="toc-h3"><a href="#basic-usage">Basic Usage</a></li><li class="toc-h3"><a href="#when-to-use-xsl-fork">When to Use xsl:fork</a></li><li class="toc-h2"><a href="#streamability-rules">Streamability Rules</a></li><li class="toc-h3"><a href="#core-principle">Core Principle</a></li><li class="toc-h3"><a href="#consuming-vs-non-consuming-operations">Consuming vs. Non-Consuming Operations</a></li><li class="toc-h3"><a href="#grounded-vs-free-ranging-expressions">Grounded vs. Free-Ranging Expressions</a></li><li class="toc-h3"><a href="#making-templates-streamable">Making Templates Streamable</a></li><li class="toc-h3"><a href="#streamability-checklist">Streamability Checklist</a></li><li class="toc-h2"><a href="#use-accumulators-on-modes">use-accumulators on Modes</a></li><li class="toc-h3"><a href="#why-the-allowlist">Why the Allowlist?</a></li><li class="toc-h2"><a href="#streaming-limitations">Streaming Limitations</a></li><li class="toc-h3"><a href="#is-not-available">
-      last() is Not Available</a></li><li class="toc-h3"><a href="#executes-sequentially">
-      xsl:fork Executes Sequentially</a></li><li class="toc-h3"><a href="#other-restrictions">Other Restrictions</a></li></ul></aside></div><div class="search-overlay" id="search-overlay" hidden="hidden"><div class="search-backdrop"></div><div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off"><div class="search-results" id="search-results"></div></div></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" rel="noopener noreferrer">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" rel="noopener noreferrer">Endpoint Systems</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/prism.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script><script src="/js/toc.js"></script><script src="/js/copy.js"></script></body></html>
+      
+                                                  </li>
+                                                </ul>
+                                              </article>
+                                            </main>
+                                            <aside class="toc" aria-label="On this page">
+                                              <p class="toc-label">On this page</p>
+                                              <ul>
+                                                <li class="toc-h2"><a href="#contents">Contents</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#primary-source-streaming">Primary Source Streaming</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#detecting-streaming-support">Detecting Streaming Support</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#the-streaming-concept">The Streaming Concept</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#when-you-need-streaming">When You Need Streaming</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#when-you-do-not-need-streaming">When You Do Not Need Streaming</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#xsl-source-document">xsl:source-document</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#basic-usage">Basic Usage</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#attributes">Attributes</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#streaming-example-extracting-from-a-large-file">Streaming Example: Extracting from a Large File</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#replacing-doc-with-xsl-source-document">Replacing doc() with xsl:source-document</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#xsl-accumulator-and-xsl-accumulator-rule">xsl:accumulator and xsl:accumulator-rule</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#declaring-an-accumulator">Declaring an Accumulator</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#accumulator-parts">Accumulator Parts</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#xsl-accumulator-rule">xsl:accumulator-rule</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#phase-start-vs-end">Phase: start vs. end</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#reading-accumulator-values">Reading Accumulator Values</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#complete-accumulator-example-log-file-statistics">Complete Accumulator Example: Log File Statistics</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#use-cases-for-accumulators">Use Cases for Accumulators</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#context-tracking-accumulator">Context Tracking Accumulator</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#xsl-fork">xsl:fork</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#basic-usage">Basic Usage</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#when-to-use-xsl-fork">When to Use xsl:fork</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#streamability-rules">Streamability Rules</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#core-principle">Core Principle</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#consuming-vs-non-consuming-operations">Consuming vs. Non-Consuming Operations</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#grounded-vs-free-ranging-expressions">Grounded vs. Free-Ranging Expressions</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#making-templates-streamable">Making Templates Streamable</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#streamability-checklist">Streamability Checklist</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#use-accumulators-on-modes">use-accumulators on Modes</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#why-the-allowlist">Why the Allowlist?</a>
+                                                </li>
+                                                <li class="toc-h2"><a href="#streaming-limitations">Streaming Limitations</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#is-not-available">
+      last() is Not Available</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#executes-sequentially">
+      xsl:fork Executes Sequentially</a>
+                                                </li>
+                                                <li class="toc-h3"><a href="#other-restrictions">Other Restrictions</a>
+                                                </li>
+                                              </ul>
+                                            </aside>
+                                          </div>
+                                          <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                            <div class="search-backdrop"></div>
+                                            <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                              <div class="search-results" id="search-results"></div>
+                                            </div>
+                                          </div>
+                                          <footer class="site-footer">
+                                            <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" rel="noopener noreferrer">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" rel="noopener noreferrer">Endpoint Systems</a>
+                                            </p>
+                                          </footer>
+                                          <script src="https://phoenixml.dev/js/lunr.js"></script>
+                                          <script src="https://phoenixml.dev/js/prism.js"></script>
+                                          <script src="https://phoenixml.dev/js/search.js"></script>
+                                          <script src="https://phoenixml.dev/js/theme.js"></script>
+                                          <script src="https://phoenixml.dev/js/toc.js"></script>
+                                          <script src="https://phoenixml.dev/js/copy.js"></script>
+                                        </body>
+                                      </html>

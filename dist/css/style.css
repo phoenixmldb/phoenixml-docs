@@ -140,6 +140,12 @@ kbd {
   font-size: 11px;
   color: var(--fg-muted);
 }
+/* page.xslt marks the section containing the current page with .open. This
+   sidebar is always expanded by design, so .open only shows you where you are. */
+.nav-section.open > .nav-section-title {
+  color: var(--fg);
+  font-weight: 600;
+}
 .nav-tree li a {
   display: block;
   padding: 4px 8px;
@@ -220,15 +226,24 @@ figure.code pre {
   overflow-x: auto;
   color: var(--code-fg);
   background: var(--code-bg);
+  font-family: var(--font-mono);
   font-size: 14px;
   line-height: 1.6;
+  /* Browser default is 8, which mangles tab-indented sources. Previously
+     supplied by prism.css, which no longer ships base rules. */
+  tab-size: 4;
 }
+/* Prism marks up the inner <code> with language-*; reset the inline-code
+   chrome from the `code` rule above and inherit the block's typography
+   rather than letting the highlighter dictate it. */
 figure.code pre code {
   background: transparent;
   border: 0;
   padding: 0;
   color: inherit;
+  font-family: inherit;
   font-size: inherit;
+  line-height: inherit;
 }
 figure.code button.copy {
   position: absolute; top: 8px; right: 10px;

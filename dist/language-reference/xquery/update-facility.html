@@ -1,139 +1,1031 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Update Facility — PhoenixmlDb Documentation</title><meta name="description" content="XQuery Update — insert, delete, replace, rename, and transform expressions"><link rel="canonical" href="/language-reference/xquery/update-facility.html"><meta property="og:title" content="Update Facility"><meta property="og:type" content="article"><meta property="og:url" content="/language-reference/xquery/update-facility.html"><meta property="og:description" content="XQuery Update — insert, delete, replace, rename, and transform expressions"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/prism.css"><script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Update Facility — PhoenixmlDb Documentation</title>
+          <meta name="description" content="XQuery Update — insert, delete, replace, rename, and transform expressions">
+            <link rel="canonical" href="https://phoenixml.dev/language-reference/xquery/update-facility">
+              <meta property="og:title" content="Update Facility">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="https://phoenixml.dev/language-reference/xquery/update-facility">
+                    <meta property="og:description" content="XQuery Update — insert, delete, replace, rename, and transform expressions">
+                      <link rel="stylesheet" href="https://phoenixml.dev/css/style.css">
+                        <link rel="stylesheet" href="https://phoenixml.dev/css/prism.css">
+                          <script>
+          window.CRUCIBLE_BASE = "https://phoenixml.dev/";
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-FSCPKZ7RES"></script><script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-FSCPKZ7RES');
-        </script></head><body><header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><p class="nav-section-title">Getting Started</p><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section"><p class="nav-section-title">PhoenixmlDb</p><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section"><p class="nav-section-title">JSON Support</p><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/metadata.html">Metadata</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><p class="nav-section-title">Deployment</p><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><p class="nav-section-title">API Reference</p><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li><li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section open"><p class="nav-section-title">Language Reference</p><ul class="nav-section-children"><li class="nav-section"><p class="nav-section-title">XInclude</p><ul class="nav-section-children"><li><a href="/language-reference/xinclude/xml-inclusion.html">XML Inclusion</a></li><li><a href="/language-reference/xinclude/text-inclusion.html">Text Inclusion</a></li><li><a href="/language-reference/xinclude/fallback.html">Fallback</a></li><li><a href="/language-reference/xinclude/security-and-limits.html">Security and Limits</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XML Foundations</p><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XPointer</p><ul class="nav-section-children"><li><a href="/language-reference/xpointer/shorthand-and-element.html">Shorthand and element()</a></li><li><a href="/language-reference/xpointer/namespaces-and-xpath1.html">Namespaces and xpath1()</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XPath</p><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><p class="nav-section-title">Functions</p><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XSLT</p><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><p class="nav-section-title">Instructions Reference</p><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section open"><p class="nav-section-title">XQuery</p><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li class="active"><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><p class="nav-section-title">Tools</p><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li><li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a></li><li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><p class="eyebrow">XQuery</p><h1 class="page-title">Update Facility</h1><p class="page-subtitle">XQuery Update — insert, delete, replace, rename, and transform expressions</p><h1 id="update-facility"><a class="anchor" href="#update-facility">#</a>Update Facility</h1><p>XQuery was originally a read-only language. The Update Facility (XUF) adds the ability to modify XML data while preserving XQuery's functional semantics. Updates don't happen immediately — they're collected into a <strong>Pending Update List</strong> and applied atomically at the end.</p><p>The Update Facility is <strong>fully operational</strong> in PhoenixmlDb. All update expressions — <code>insert</code>, <code>delete</code>, <code>replace</code>, <code>rename</code>, and <code>transform</code> (copy-modify-return) — are fully implemented and execute against the <code>InMemoryUpdatableNodeStore</code>. This means updates are applied in-memory with full Pending Update List semantics, atomic application, and conflict detection.</p><blockquote>
-      <p>For C# developers: the Update Facility combines two familiar ideas. It stages modifications like Entity Framework's change tracking. It applies them with methods like LINQ to XML's <code>Add</code>, <code>Remove</code>, and <code>ReplaceWith</code>.</p>
-    </blockquote><h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2><ul><li>
-        <p>
-          <a href="#why-update-facility-exists" title="">Why Update Facility Exists</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#insert" title="">insert</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#delete" title="">delete</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#replace-node" title="">replace node</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#replace-value-of-node" title="">replace value of node</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#rename" title="">rename</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#transform-expression" title="">Transform Expression</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#pending-update-lists" title="">Pending Update Lists</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#combining-updates" title="">Combining Updates</a>
-        </p>
-      </li><li>
-        <p>
-          <a href="#use-cases" title="">Use Cases</a>
-        </p>
-      </li></ul><hr><h2 id="why-update-facility-exists"><a class="anchor" href="#why-update-facility-exists">#</a>Why Update Facility Exists</h2><p>Standard XQuery expressions are side-effect-free. They read data and produce results without changing anything. This is by design — it enables optimization, parallelism, and predictable behavior.</p><p>But real applications need to modify data. The Update Facility solves this by adding update expressions that look like imperative mutations but behave functionally:</p><ol><li>
-        <p>Update expressions generate <strong>pending update lists</strong> (PULs), not immediate changes</p>
-      </li><li>
-        <p>Multiple updates are collected together</p>
-      </li><li>
-        <p>All updates are applied <strong>atomically</strong> after the expression completes</p>
-      </li><li>
-        <p>If any update conflicts, the entire batch fails</p>
-      </li></ol><p>This is fundamentally different from C#'s immediate mutation model:</p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// C# — immediate mutation
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="https://phoenixml.dev/" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="https://phoenixml.dev/">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started</p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="https://phoenixml.dev/getting-started/installation">Installation</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/getting-started/quick-start">Quick Start</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/getting-started/first-application">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">PhoenixmlDb</p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/core-concepts">Core Concepts</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/documents-and-storage">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">JSON Support</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/json-support/json-storage">JSON Storage</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/json-support/json-queries">JSON Queries</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/json-support/json-indexing">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/xdm-data-model">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/metadata">Metadata</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/indexing">Indexing</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/transactions">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/deployment/embedded-mode">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/deployment/server-mode">Server Mode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/deployment/cluster-mode">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/configuration">Configuration</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/performance-tuning">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/database-extensions">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/containers">Containers API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/documents">Documents API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/indexes">Indexes API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/queries">Queries API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/transactions">Transactions API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/xslt-api">XSLT API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/resource-policy">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/linq-provider">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/mobile-development">Mobile Development</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/migration-guide">Migration Guide</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/troubleshooting">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">Language Reference</p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XInclude</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/xml-inclusion">XML Inclusion</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/text-inclusion">Text Inclusion</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/fallback">Fallback</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/security-and-limits">Security and Limits</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/xml-vs-json">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/document-structure">Document Structure</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/xdm">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/namespaces">Namespaces</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/working-with-json">Working with JSON</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/unicode-and-dotnet">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPointer</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xpointer/shorthand-and-element">Shorthand and element()</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xpointer/namespaces-and-xpath1">Namespaces and xpath1()</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xpath/path-expressions">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions</p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/string">String Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/numeric">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/date-time">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/sequence">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/boolean">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/node">Node Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/map">Map Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/array">Array Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/math">Math Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/higher-order">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/formatting">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/type-constructors">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xpath/operators">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xpath/data-types">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/first-transform">Your First Transform</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/template-matching">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference</p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/output">Output Instructions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/control-flow">Control Flow</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/variables-parameters">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/iteration-sorting">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/grouping">Grouping</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/copying-identity">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/node-construction">Node Construction</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/multiple-outputs">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/functions">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/keys">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/analyze-string">String Analysis</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/error-handling">Error Handling</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/merge">Merging</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/maps-arrays">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/streaming">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/packages">Packages</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/dynamic-evaluation">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/number-formatting">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/output-methods">Output Methods</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/extensibility">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">XQuery</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/flwor">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/flwor-advanced">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/constructors">Constructors</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/conditionals">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/operators">Operators</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/types">Type System</a>
+                                        </li>
+                                        <li class="active"><a href="https://phoenixml.dev/language-reference/xquery/update-facility">Update Facility</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/functions-modules">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/xquery-vs-xslt">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/full-text">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/prolog">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/extensibility">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools</p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="https://phoenixml.dev/tools/xslt-cli">xslt CLI</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/xquery-cli">xquery CLI</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/crucible">Crucible</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/xquery-mcp">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/xslt-mcp">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="https://phoenixml.dev/release-notes">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference</p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/api/core/">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containerid">ContainerId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containerinfo">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containernotfoundexception">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containeroptions">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/contenttype">ContentType</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/databasestatistics">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/daytimeduration">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentexistsexception">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentid">DocumentId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentinfo">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentinput">DocumentInput</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentnotfoundexception">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentoptions">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentparseexception">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/fulltextindexdefinition">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/fulltextindexoptions">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/icontainer">IContainer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/idocument">IDocument</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/idocumentdatabase">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/indexconfiguration">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/indexdefinition">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/ireadtransaction">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/iwritetransaction">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/ixdmnode">IXdmNode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/ixmlresourceresolver">IXmlResourceResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/localfileresourceresolver">LocalFileResourceResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/metadataindexdefinition">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/nameindexdefinition">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/namespacebinding">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/namespaceid">NamespaceId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/nodeid">NodeId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/parseresult">ParseResult</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/pathindexdefinition">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/qname">QName</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/textnodeitem">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/transactionexception">TransactionException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/transactiontimeoutexception">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/utf8stringwriter">Utf8StringWriter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/validationmode">ValidationMode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/valueindexdefinition">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmattribute">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmcomment">XdmComment</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmdocument">XdmDocument</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmelement">XdmElement</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmnamespace">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmnode">XdmNode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmnodekind">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmprocessinginstruction">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmqname">XdmQName</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmsequence">XdmSequence</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmtext">XdmText</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmtype">XdmType</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmtypename">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmvalue">XdmValue</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmvaluetype">XdmValueType</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeerrorkind">XIncludeErrorKind</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeexception">XIncludeException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludelimiter">XIncludeLimiter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeoptions">XIncludeOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeprocessor">XIncludeProcessor</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xmldbexception">XmlDbException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xmldocumentparser">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xmlserializer">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xpointerevaluator">XPointerEvaluator</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xqueryexception">XQueryException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsanyuri">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsdate">XsDate</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsdatetime">XsDateTime</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsduration">XsDuration</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgday">XsGDay</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgmonth">XsGMonth</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgmonthday">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgyear">XsGYear</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgyearmonth">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xstime">XsTime</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xstypedinteger">XsTypedInteger</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xstypedstring">XsTypedString</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsuntypedatomic">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/yearmonthduration">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/api/xquery/">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/analyzedterm">AnalyzedTerm</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/delegatemetadataprovider">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/depthguardlistener">DepthGuardListener</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/exacturi">ExactUri</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftisstopwordfunction">FtIsStopWordFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftscorefunction">FtScoreFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftstem2function">FtStem2Function</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftstemfunction">FtStemFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftthesauruslookupfunction">FtThesaurusLookupFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fttokenize2function">FtTokenize2Function</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fttokenizefunction">FtTokenizeFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fulltextanalysisoptions">FullTextAnalysisOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fulltextengine">FullTextEngine</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fulltextindex">FullTextIndex</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/httpdocumentclient">HttpDocumentClient</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/idocumentresolver">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/imetadataprovider">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/inodebuilder">INodeBuilder</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/inodeprovider">INodeProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/inodestore">INodeStore</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/iresourceresolver">IResourceResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ischemaprovider">ISchemaProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/outputmethod">OutputMethod</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/parseerror">ParseError</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/policyenforcingresolver">PolicyEnforcingResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/postingentry">PostingEntry</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourceaccessdeniedexception">ResourceAccessDeniedException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourceaccesskind">ResourceAccessKind</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourcepolicy">ResourcePolicy</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourcepolicybuilder">ResourcePolicyBuilder</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourceresolverbase">ResourceResolverBase</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/schemaexception">SchemaException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/schemavalidationexception">SchemaValidationException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/serializationoptions">SerializationOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/treeordinalallocator">TreeOrdinalAllocator</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/urirule">UriRule</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/utf8stringwriter">Utf8StringWriter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/validationmode">ValidationMode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xdmdocumentstore">XdmDocumentStore</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryastbuilder">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryerrorlistener">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryfacade">XQueryFacade</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xquerylexeradapter">XQueryLexerAdapter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryparseexception">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryparserfacade">XQueryParserFacade</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryresultserializer">XQueryResultSerializer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xsdschemaprovider">XsdSchemaProvider</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/api/xslt/">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/packageversionresolution">PackageVersionResolution</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/preloadedresources">PreloadedResources</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/simpleexecutioncontext">SimpleExecutionContext</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xdminmemorystore">XdmInMemoryStore</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xqueryexpressionparser">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xsltmoduleinitializer">XsltModuleInitializer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xslttransformer">XsltTransformer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xslttransformprovider">XsltTransformProvider</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">XQuery</p>
+                                <h1 class="page-title">Update Facility</h1>
+                                <p class="page-subtitle">XQuery Update — insert, delete, replace, rename, and transform expressions</p>
+                                <h1 id="update-facility"><a class="anchor" href="#update-facility">#</a>Update Facility</h1>
+                                <p>XQuery was originally a read-only language. The Update Facility (XUF) adds the ability to modify XML data while preserving XQuery's functional semantics. Updates don't happen immediately — they're collected into a <strong>Pending Update List</strong> and applied atomically at the end.</p>
+                                <p>The Update Facility is <strong>fully operational</strong> in PhoenixmlDb. All update expressions — <code>insert</code>, <code>delete</code>, <code>replace</code>, <code>rename</code>, and <code>transform</code> (copy-modify-return) — are fully implemented and execute against the <code>InMemoryUpdatableNodeStore</code>. This means updates are applied in-memory with full Pending Update List semantics, atomic application, and conflict detection.</p>
+                                <blockquote>
+      
+                                  <p>For C# developers: the Update Facility combines two familiar ideas. It stages modifications like Entity Framework's change tracking. It applies them with methods like LINQ to XML's <code>Add</code>, <code>Remove</code>, and <code>ReplaceWith</code>.</p>
+    
+                                </blockquote>
+                                <h2 id="contents"><a class="anchor" href="#contents">#</a>Contents</h2>
+                                <ul>
+                                  <li>
+        
+                                    <p>
+          <a href="#why-update-facility-exists">Why Update Facility Exists</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#insert">insert</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#delete">delete</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#replace-node">replace node</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#replace-value-of-node">replace value of node</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#rename">rename</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#transform-expression">Transform Expression</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#pending-update-lists">Pending Update Lists</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#combining-updates">Combining Updates</a>
+        
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
+          <a href="#use-cases">Use Cases</a>
+        
+                                    </p>
+      
+                                  </li>
+                                </ul>
+                                <hr>
+                                  <h2 id="why-update-facility-exists"><a class="anchor" href="#why-update-facility-exists">#</a>Why Update Facility Exists</h2>
+                                  <p>Standard XQuery expressions are side-effect-free. They read data and produce results without changing anything. This is by design — it enables optimization, parallelism, and predictable behavior.</p>
+                                  <p>But real applications need to modify data. The Update Facility solves this by adding update expressions that look like imperative mutations but behave functionally:</p>
+                                  <ol>
+                                    <li>
+        
+                                      <p>Update expressions generate <strong>pending update lists</strong> (PULs), not immediate changes</p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>Multiple updates are collected together</p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>All updates are applied <strong>atomically</strong> after the expression completes</p>
+      
+                                    </li>
+                                    <li>
+        
+                                      <p>If any update conflicts, the entire batch fails</p>
+      
+                                    </li>
+                                  </ol>
+                                  <p>This is fundamentally different from C#'s immediate mutation model:</p>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">csharp</span>
+                                    </figcaption>
+                                    <pre><code class="language-csharp">// C# — immediate mutation
 element.Add(new XElement("child", "value"));  // document changed NOW
-element.SetValue("new");                       // changed again NOW</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: XQuery Update — deferred mutation :)
+element.SetValue("new");                       // changed again NOW</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <figure class="code">
+                                    <figcaption><span class="lang">xquery</span>
+                                    </figcaption>
+                                    <pre><code class="language-xquery">(: XQuery Update — deferred mutation :)
 insert node &lt;child&gt;value&lt;/child&gt; into $element,  (: staged :)
 replace value of node $element with "new"         (: staged :)
-(: Both applied atomically after expression completes :)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><hr><h2 id="insert"><a class="anchor" href="#insert">#</a>insert</h2><p>Adds new nodes to an existing document.</p><h3 id="insert-into-as-a-child"><a class="anchor" href="#insert-into-as-a-child">#</a>Insert into (as a child)</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">insert node &lt;status&gt;active&lt;/status&gt; into //customer[@id = "C001"]</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>This adds <code>&lt;status&gt;active&lt;/status&gt;</code> as the last child of the matching customer element.</p><p>
+(: Both applied atomically after expression completes :)</code>
+                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                  </figure>
+                                  <hr>
+                                    <h2 id="insert"><a class="anchor" href="#insert">#</a>insert</h2>
+                                    <p>Adds new nodes to an existing document.</p>
+                                    <h3 id="insert-into-as-a-child"><a class="anchor" href="#insert-into-as-a-child">#</a>Insert into (as a child)</h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">insert node &lt;status&gt;active&lt;/status&gt; into //customer[@id = "C001"]</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>This adds <code>&lt;status&gt;active&lt;/status&gt;</code> as the last child of the matching customer element.</p>
+                                    <p>
       <strong>C# parallel:</strong>
-    </p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">customer.Add(new XElement("status", "active"));</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="insert-as-first-or-last-child"><a class="anchor" href="#insert-as-first-or-last-child">#</a>Insert as first or last child</h3><p>Control the position among existing children:</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Add as the first child :)
+    
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">csharp</span>
+                                      </figcaption>
+                                      <pre><code class="language-csharp">customer.Add(new XElement("status", "active"));</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="insert-as-first-or-last-child"><a class="anchor" href="#insert-as-first-or-last-child">#</a>Insert as first or last child</h3>
+                                    <p>Control the position among existing children:</p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">(: Add as the first child :)
 insert node &lt;priority&gt;high&lt;/priority&gt; as first into //order[@id = "O100"]
 (: Add as the last child :)
-insert node &lt;notes&gt;Expedited shipping requested&lt;/notes&gt; as last into //order[@id = "O100"]</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>
+insert node &lt;notes&gt;Expedited shipping requested&lt;/notes&gt; as last into //order[@id = "O100"]</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
       <strong>C# parallel:</strong>
-    </p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">order.AddFirst(new XElement("priority", "high"));   // as first
-order.Add(new XElement("notes", "Expedited"));       // as last</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="insert-before-or-after-a-sibling"><a class="anchor" href="#insert-before-or-after-a-sibling">#</a>Insert before or after a sibling</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Add a new item before the total :)
+    
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">csharp</span>
+                                      </figcaption>
+                                      <pre><code class="language-csharp">order.AddFirst(new XElement("priority", "high"));   // as first
+order.Add(new XElement("notes", "Expedited"));       // as last</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="insert-before-or-after-a-sibling"><a class="anchor" href="#insert-before-or-after-a-sibling">#</a>Insert before or after a sibling</h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">(: Add a new item before the total :)
 insert node &lt;line-item product="WIDGET" qty="2" unit-price="9.99"/&gt;
   before //order[@id = "O100"]/total
 (: Add a note after the shipping address :)
 insert node &lt;delivery-note&gt;Leave at back door&lt;/delivery-note&gt;
-  after //order[@id = "O100"]/shipping-address</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>
+  after //order[@id = "O100"]/shipping-address</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>
       <strong>C# parallel:</strong>
-    </p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">total.AddBeforeSelf(new XElement("line-item", ...));
-shippingAddress.AddAfterSelf(new XElement("delivery-note", "Leave at back door"));</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="insert-multiple-nodes"><a class="anchor" href="#insert-multiple-nodes">#</a>Insert multiple nodes</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">insert nodes (
+    
+                                    </p>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">csharp</span>
+                                      </figcaption>
+                                      <pre><code class="language-csharp">total.AddBeforeSelf(new XElement("line-item", ...));
+shippingAddress.AddAfterSelf(new XElement("delivery-note", "Leave at back door"));</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="insert-multiple-nodes"><a class="anchor" href="#insert-multiple-nodes">#</a>Insert multiple nodes</h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">insert nodes (
   &lt;tag&gt;electronics&lt;/tag&gt;,
   &lt;tag&gt;wireless&lt;/tag&gt;,
   &lt;tag&gt;bluetooth&lt;/tag&gt;
-) into //product[@id = "P200"]</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="insert-attributes"><a class="anchor" href="#insert-attributes">#</a>Insert attributes</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">insert node attribute verified { "true" } into //order[@id = "O100"]</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>After this update, the order element gains a <code>verified="true"</code> attribute.</p><h3 id="practical-example-add-audit-trail"><a class="anchor" href="#practical-example-add-audit-trail">#</a>Practical Example: Add Audit Trail</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">for $order in //orders/order[@status = "pending"]
+) into //product[@id = "P200"]</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <h3 id="insert-attributes"><a class="anchor" href="#insert-attributes">#</a>Insert attributes</h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">insert node attribute verified { "true" } into //order[@id = "O100"]</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <p>After this update, the order element gains a <code>verified="true"</code> attribute.</p>
+                                    <h3 id="practical-example-add-audit-trail"><a class="anchor" href="#practical-example-add-audit-trail">#</a>Practical Example: Add Audit Trail</h3>
+                                    <figure class="code">
+                                      <figcaption><span class="lang">xquery</span>
+                                      </figcaption>
+                                      <pre><code class="language-xquery">for $order in //orders/order[@status = "pending"]
 return insert node
   &lt;audit-entry&gt;
     &lt;action&gt;reviewed&lt;/action&gt;
     &lt;by&gt;system&lt;/by&gt;
     &lt;timestamp&gt;{ current-dateTime() }&lt;/timestamp&gt;
   &lt;/audit-entry&gt;
-  as last into $order</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><hr><h2 id="delete"><a class="anchor" href="#delete">#</a>delete</h2><p>Removes nodes from a document.</p><h3 id="delete-a-single-node"><a class="anchor" href="#delete-a-single-node">#</a>Delete a single node</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">delete node //product[@id = "P999"]</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>
+  as last into $order</code>
+                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                    </figure>
+                                    <hr>
+                                      <h2 id="delete"><a class="anchor" href="#delete">#</a>delete</h2>
+                                      <p>Removes nodes from a document.</p>
+                                      <h3 id="delete-a-single-node"><a class="anchor" href="#delete-a-single-node">#</a>Delete a single node</h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">delete node //product[@id = "P999"]</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <p>
       <strong>C# parallel:</strong>
-    </p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">product.Remove();</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="delete-multiple-nodes"><a class="anchor" href="#delete-multiple-nodes">#</a>Delete multiple nodes</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Delete all discontinued products :)
+    
+                                      </p>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">csharp</span>
+                                        </figcaption>
+                                        <pre><code class="language-csharp">product.Remove();</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="delete-multiple-nodes"><a class="anchor" href="#delete-multiple-nodes">#</a>Delete multiple nodes</h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">(: Delete all discontinued products :)
 delete nodes //product[@discontinued = "true"]
 (: Delete all comments from a document :)
 delete nodes //comment()
 (: Delete all empty elements :)
-delete nodes //*[not(node()) and not(@*)]</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="delete-attributes"><a class="anchor" href="#delete-attributes">#</a>Delete attributes</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Remove the "internal" attribute from all products :)
-delete node //product/@internal</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="practical-example-data-cleanup"><a class="anchor" href="#practical-example-data-cleanup">#</a>Practical Example: Data Cleanup</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Remove all products with no orders in the last year :)
+delete nodes //*[not(node()) and not(@*)]</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="delete-attributes"><a class="anchor" href="#delete-attributes">#</a>Delete attributes</h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">(: Remove the "internal" attribute from all products :)
+delete node //product/@internal</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <h3 id="practical-example-data-cleanup"><a class="anchor" href="#practical-example-data-cleanup">#</a>Practical Example: Data Cleanup</h3>
+                                      <figure class="code">
+                                        <figcaption><span class="lang">xquery</span>
+                                        </figcaption>
+                                        <pre><code class="language-xquery">(: Remove all products with no orders in the last year :)
 let $cutoff := current-date() - xs:yearMonthDuration("P1Y")
 let $active-product-ids := distinct-values(
   //orders/order[xs:date(@date) &gt; $cutoff]/line-item/@product-id
 )
 for $product in //products/product
 where not($product/@id = $active-product-ids)
-return delete node $product</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><hr><h2 id="replace-node"><a class="anchor" href="#replace-node">#</a>replace node</h2><p>Replaces an entire node (element, attribute, text, etc.) with a new node.</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Replace an element with a completely new one :)
+return delete node $product</code>
+                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                      </figure>
+                                      <hr>
+                                        <h2 id="replace-node"><a class="anchor" href="#replace-node">#</a>replace node</h2>
+                                        <p>Replaces an entire node (element, attribute, text, etc.) with a new node.</p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">(: Replace an element with a completely new one :)
 replace node //product[@id = "P100"]/price
-  with &lt;price currency="USD"&gt;29.99&lt;/price&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>The old <code>&lt;price&gt;</code> element is removed and the new one takes its place.</p><p>
+  with &lt;price currency="USD"&gt;29.99&lt;/price&gt;</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <p>The old <code>&lt;price&gt;</code> element is removed and the new one takes its place.</p>
+                                        <p>
       <strong>C# parallel:</strong>
-    </p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">price.ReplaceWith(new XElement("price",
+    
+                                        </p>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">csharp</span>
+                                          </figcaption>
+                                          <pre><code class="language-csharp">price.ReplaceWith(new XElement("price",
     new XAttribute("currency", "USD"),
     "29.99"
-));</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="replace-with-multiple-nodes"><a class="anchor" href="#replace-with-multiple-nodes">#</a>Replace with multiple nodes</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Replace a single summary element with detailed breakdown :)
+));</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="replace-with-multiple-nodes"><a class="anchor" href="#replace-with-multiple-nodes">#</a>Replace with multiple nodes</h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">(: Replace a single summary element with detailed breakdown :)
 replace node //order/summary
   with (
     &lt;subtotal&gt;{ $subtotal }&lt;/subtotal&gt;,
     &lt;tax&gt;{ $tax }&lt;/tax&gt;,
     &lt;shipping&gt;{ $shipping }&lt;/shipping&gt;,
     &lt;total&gt;{ $subtotal + $tax + $shipping }&lt;/total&gt;
-  )</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="replace-an-attribute"><a class="anchor" href="#replace-an-attribute">#</a>Replace an attribute</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">replace node //order[@id = "O100"]/@status
-  with attribute status { "shipped" }</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><hr><h2 id="replace-value-of-node"><a class="anchor" href="#replace-value-of-node">#</a>replace value of node</h2><p>Changes the text content of an element or the value of an attribute <strong>without replacing the node itself</strong>. The node keeps its name, attributes (for elements), and identity — only the value changes.</p><h3 id="replace-element-content"><a class="anchor" href="#replace-element-content">#</a>Replace element content</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">replace value of node //product[@id = "P100"]/price with "34.99"</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>Before: <code>&lt;price currency="USD"&gt;29.99&lt;/price&gt;</code>
-After: <code>&lt;price currency="USD"&gt;34.99&lt;/price&gt;</code></p><p>The element name and attributes are preserved. Only the text content changes.</p><p>
+  )</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <h3 id="replace-an-attribute"><a class="anchor" href="#replace-an-attribute">#</a>Replace an attribute</h3>
+                                        <figure class="code">
+                                          <figcaption><span class="lang">xquery</span>
+                                          </figcaption>
+                                          <pre><code class="language-xquery">replace node //order[@id = "O100"]/@status
+  with attribute status { "shipped" }</code>
+                                          </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                        </figure>
+                                        <hr>
+                                          <h2 id="replace-value-of-node"><a class="anchor" href="#replace-value-of-node">#</a>replace value of node</h2>
+                                          <p>Changes the text content of an element or the value of an attribute <strong>without replacing the node itself</strong>. The node keeps its name, attributes (for elements), and identity — only the value changes.</p>
+                                          <h3 id="replace-element-content"><a class="anchor" href="#replace-element-content">#</a>Replace element content</h3>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">replace value of node //product[@id = "P100"]/price with "34.99"</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>Before: <code>&lt;price currency="USD"&gt;29.99&lt;/price&gt;</code>
+After: <code>&lt;price currency="USD"&gt;34.99&lt;/price&gt;</code>
+                                          </p>
+                                          <p>The element name and attributes are preserved. Only the text content changes.</p>
+                                          <p>
       <strong>C# parallel:</strong>
-    </p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">price.SetValue("34.99");</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="replace-attribute-value"><a class="anchor" href="#replace-attribute-value">#</a>Replace attribute value</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">replace value of node //order[@id = "O100"]/@status with "shipped"</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>Before: <code>&lt;order id="O100" status="pending"&gt;</code>
-After: <code>&lt;order id="O100" status="shipped"&gt;</code></p><h3 id="difference-from-replace-node"><a class="anchor" href="#difference-from-replace-node">#</a>Difference from replace node</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: replace node — swaps the entire element :)
+    
+                                          </p>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">csharp</span>
+                                            </figcaption>
+                                            <pre><code class="language-csharp">price.SetValue("34.99");</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <h3 id="replace-attribute-value"><a class="anchor" href="#replace-attribute-value">#</a>Replace attribute value</h3>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">replace value of node //order[@id = "O100"]/@status with "shipped"</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>Before: <code>&lt;order id="O100" status="pending"&gt;</code>
+After: <code>&lt;order id="O100" status="shipped"&gt;</code>
+                                          </p>
+                                          <h3 id="difference-from-replace-node"><a class="anchor" href="#difference-from-replace-node">#</a>Difference from replace node</h3>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">(: replace node — swaps the entire element :)
 replace node //product/price
   with &lt;price currency="EUR"&gt;34.99&lt;/price&gt;
 (: Old element gone. New element has different attributes. :)
 (: replace value of node — changes only the text :)
 replace value of node //product/price with "34.99"
-(: Same element, same attributes, new text content. :)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>Use <code>replace value of node</code> when you want to update content but keep the node's structure. Use <code>replace node</code> when you need to change the node's name, attributes, or structure.</p><h3 id="practical-example-batch-price-update"><a class="anchor" href="#practical-example-batch-price-update">#</a>Practical Example: Batch Price Update</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">for $product in //products/product
+(: Same element, same attributes, new text content. :)</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <p>Use <code>replace value of node</code> when you want to update content but keep the node's structure. Use <code>replace node</code> when you need to change the node's name, attributes, or structure.</p>
+                                          <h3 id="practical-example-batch-price-update"><a class="anchor" href="#practical-example-batch-price-update">#</a>Practical Example: Batch Price Update</h3>
+                                          <figure class="code">
+                                            <figcaption><span class="lang">xquery</span>
+                                            </figcaption>
+                                            <pre><code class="language-xquery">for $product in //products/product
 let $old-price := xs:decimal($product/price)
 let $new-price := round($old-price * 1.05, 2)  (: 5% increase :)
-return replace value of node $product/price with string($new-price)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><hr><h2 id="rename"><a class="anchor" href="#rename">#</a>rename</h2><p>Changes the name of an element or attribute without affecting its content, children, or attributes.</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Rename an element :)
-rename node //product/desc as "description"</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>Before: <code>&lt;desc&gt;A fine widget&lt;/desc&gt;</code>
-After: <code>&lt;description&gt;A fine widget&lt;/description&gt;</code></p><h3 id="rename-with-a-qname"><a class="anchor" href="#rename-with-a-qname">#</a>Rename with a QName</h3><p>For namespaced names, use <code>QName()</code>:</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">rename node //item as QName("http://example.com/schema", "product")</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="rename-an-attribute"><a class="anchor" href="#rename-an-attribute">#</a>Rename an attribute</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">rename node //product/@cat as "category"</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>Before: <code>&lt;product cat="tools"&gt;</code>
-After: <code>&lt;product category="tools"&gt;</code></p><h3 id="practical-example-schema-migration"><a class="anchor" href="#practical-example-schema-migration">#</a>Practical Example: Schema Migration</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Migrate from old element names to new ones :)
+return replace value of node $product/price with string($new-price)</code>
+                                            </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                          </figure>
+                                          <hr>
+                                            <h2 id="rename"><a class="anchor" href="#rename">#</a>rename</h2>
+                                            <p>Changes the name of an element or attribute without affecting its content, children, or attributes.</p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: Rename an element :)
+rename node //product/desc as "description"</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>Before: <code>&lt;desc&gt;A fine widget&lt;/desc&gt;</code>
+After: <code>&lt;description&gt;A fine widget&lt;/description&gt;</code>
+                                            </p>
+                                            <h3 id="rename-with-a-qname"><a class="anchor" href="#rename-with-a-qname">#</a>Rename with a QName</h3>
+                                            <p>For namespaced names, use <code>QName()</code>:</p>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">rename node //item as QName("http://example.com/schema", "product")</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <h3 id="rename-an-attribute"><a class="anchor" href="#rename-an-attribute">#</a>Rename an attribute</h3>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">rename node //product/@cat as "category"</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <p>Before: <code>&lt;product cat="tools"&gt;</code>
+After: <code>&lt;product category="tools"&gt;</code>
+                                            </p>
+                                            <h3 id="practical-example-schema-migration"><a class="anchor" href="#practical-example-schema-migration">#</a>Practical Example: Schema Migration</h3>
+                                            <figure class="code">
+                                              <figcaption><span class="lang">xquery</span>
+                                              </figcaption>
+                                              <pre><code class="language-xquery">(: Migrate from old element names to new ones :)
 for $node in //customerRecord
 return rename node $node as "customer",
 for $node in //customerRecord/firstName
@@ -141,33 +1033,80 @@ return rename node $node as "first-name",
 for $node in //customerRecord/lastName
 return rename node $node as "last-name",
 for $node in //customerRecord/emailAddr
-return rename node $node as "email"</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><hr><h2 id="transform-expression"><a class="anchor" href="#transform-expression">#</a>Transform Expression</h2><p>The transform expression (also called copy-modify-return) creates a <strong>modified copy</strong> of a node without changing the original. This is XQuery Update's immutable approach — essential when you need to return modified data without side effects.</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">copy $order := //order[@id = "O100"]
+return rename node $node as "email"</code>
+                                              </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                            </figure>
+                                            <hr>
+                                              <h2 id="transform-expression"><a class="anchor" href="#transform-expression">#</a>Transform Expression</h2>
+                                              <p>The transform expression (also called copy-modify-return) creates a <strong>modified copy</strong> of a node without changing the original. This is XQuery Update's immutable approach — essential when you need to return modified data without side effects.</p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">copy $order := //order[@id = "O100"]
 modify (
   replace value of node $order/status with "shipped",
   insert node &lt;shipped-date&gt;{ current-date() }&lt;/shipped-date&gt; as last into $order
 )
-return $order</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>The original order in the database is unchanged. The expression returns a new, modified copy.</p><p>
-      <strong>C# parallel:</strong> Immutable record <code>with</code> expressions:</p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">var updated = order with {
+return $order</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <p>The original order in the database is unchanged. The expression returns a new, modified copy.</p>
+                                              <p>
+      <strong>C# parallel:</strong> Immutable record <code>with</code> expressions:</p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">csharp</span>
+                                                </figcaption>
+                                                <pre><code class="language-csharp">var updated = order with {
     Status = "shipped",
     ShippedDate = DateTime.Now.ToString("yyyy-MM-dd")
-};</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="how-it-works"><a class="anchor" href="#how-it-works">#</a>How It Works</h3><ol><li>
-        <p>
+};</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="how-it-works"><a class="anchor" href="#how-it-works">#</a>How It Works</h3>
+                                              <ol>
+                                                <li>
+        
+                                                  <p>
           <code>copy</code> creates a deep copy of the node and binds it to a variable</p>
-      </li><li>
-        <p>
+      
+                                                </li>
+                                                <li>
+        
+                                                  <p>
           <code>modify</code> applies update expressions to the copy</p>
-      </li><li>
-        <p>
+      
+                                                </li>
+                                                <li>
+        
+                                                  <p>
           <code>return</code> returns the modified copy</p>
-      </li><li>
-        <p>The original is never touched</p>
-      </li></ol><h3 id="multiple-copy-variables"><a class="anchor" href="#multiple-copy-variables">#</a>Multiple Copy Variables</h3><p>You can copy multiple nodes:</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">copy $order := //order[@id = "O100"]
+      
+                                                </li>
+                                                <li>
+        
+                                                  <p>The original is never touched</p>
+      
+                                                </li>
+                                              </ol>
+                                              <h3 id="multiple-copy-variables"><a class="anchor" href="#multiple-copy-variables">#</a>Multiple Copy Variables</h3>
+                                              <p>You can copy multiple nodes:</p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">copy $order := //order[@id = "O100"]
 copy $customer := //customer[@id = $order/@customer-id]
 modify (
   replace value of node $order/status with "confirmed",
   insert node &lt;confirmed-by&gt;{ $customer/name/text() }&lt;/confirmed-by&gt; into $order
 )
-return $order</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="practical-example-document-patching"><a class="anchor" href="#practical-example-document-patching">#</a>Practical Example: Document Patching</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Apply a set of patches to a configuration document :)
+return $order</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="practical-example-document-patching"><a class="anchor" href="#practical-example-document-patching">#</a>Practical Example: Document Patching</h3>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">(: Apply a set of patches to a configuration document :)
 declare function local:apply-patches(
   $config as element(config),
   $patches as element(patch)*
@@ -199,7 +1138,15 @@ local:apply-patches(
     &lt;set target="max-connections"&gt;200&lt;/set&gt;,
     &lt;remove target="deprecated-feature"/&gt;
   )
-)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="transform-for-json-output"><a class="anchor" href="#transform-for-json-output">#</a>Transform for JSON Output</h3><p>Transform is useful for sanitizing XML before transforming it into JSON:</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">for $user in //users/user
+)</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <h3 id="transform-for-json-output"><a class="anchor" href="#transform-for-json-output">#</a>Transform for JSON Output</h3>
+                                              <p>Transform is useful for sanitizing XML before transforming it into JSON:</p>
+                                              <figure class="code">
+                                                <figcaption><span class="lang">xquery</span>
+                                                </figcaption>
+                                                <pre><code class="language-xquery">for $user in //users/user
 return copy $safe := $user
   modify (
     delete node $safe/password-hash,
@@ -211,35 +1158,99 @@ return copy $safe := $user
     "name": string($safe/name),
     "email": string($safe/email),
     "role": string($safe/@role)
-  }</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><hr><h2 id="pending-update-lists"><a class="anchor" href="#pending-update-lists">#</a>Pending Update Lists</h2><p>Understanding Pending Update Lists (PULs) is essential for writing correct update queries.</p><h3 id="how-puls-work"><a class="anchor" href="#how-puls-work">#</a>How PULs Work</h3><ol><li>
-        <p>Each update expression (<code>insert</code>, <code>delete</code>, <code>replace</code>, <code>rename</code>) generates a pending update</p>
-      </li><li>
-        <p>Updates are collected into a PUL — they don't execute immediately</p>
-      </li><li>
-        <p>After the entire query evaluates, the PUL is applied atomically</p>
-      </li><li>
-        <p>If there are conflicts, the entire PUL is rejected</p>
-      </li></ol><h3 id="conflict-rules"><a class="anchor" href="#conflict-rules">#</a>Conflict Rules</h3><p>Certain combinations of updates on the same node conflict:</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: CONFLICT — two replace on the same node :)
+  }</code>
+                                                </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                              </figure>
+                                              <hr>
+                                                <h2 id="pending-update-lists"><a class="anchor" href="#pending-update-lists">#</a>Pending Update Lists</h2>
+                                                <p>Understanding Pending Update Lists (PULs) is essential for writing correct update queries.</p>
+                                                <h3 id="how-puls-work"><a class="anchor" href="#how-puls-work">#</a>How PULs Work</h3>
+                                                <ol>
+                                                  <li>
+        
+                                                    <p>Each update expression (<code>insert</code>, <code>delete</code>, <code>replace</code>, <code>rename</code>) generates a pending update</p>
+      
+                                                  </li>
+                                                  <li>
+        
+                                                    <p>Updates are collected into a PUL — they don't execute immediately</p>
+      
+                                                  </li>
+                                                  <li>
+        
+                                                    <p>After the entire query evaluates, the PUL is applied atomically</p>
+      
+                                                  </li>
+                                                  <li>
+        
+                                                    <p>If there are conflicts, the entire PUL is rejected</p>
+      
+                                                  </li>
+                                                </ol>
+                                                <h3 id="conflict-rules"><a class="anchor" href="#conflict-rules">#</a>Conflict Rules</h3>
+                                                <p>Certain combinations of updates on the same node conflict:</p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">(: CONFLICT — two replace on the same node :)
 replace value of node $order/status with "shipped",
 replace value of node $order/status with "delivered"
-(: Error: conflicting updates on the same node :)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: OK — updates on different nodes :)
+(: Error: conflicting updates on the same node :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">(: OK — updates on different nodes :)
 replace value of node $order/status with "shipped",
 replace value of node $order/total with "150.00"
-(: Fine: different target nodes :)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: OK — insert and replace on the same parent :)
+(: Fine: different target nodes :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">(: OK — insert and replace on the same parent :)
 insert node &lt;note&gt;Updated&lt;/note&gt; into $order,
 replace value of node $order/status with "shipped"
-(: Fine: insert adds a child, replace modifies a different child :)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="ordering"><a class="anchor" href="#ordering">#</a>Ordering</h3><p>Updates in a PUL have no guaranteed order of application. Write updates that don't depend on each other's execution order:</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Don't do this — depends on ordering :)
+(: Fine: insert adds a child, replace modifies a different child :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <h3 id="ordering"><a class="anchor" href="#ordering">#</a>Ordering</h3>
+                                                <p>Updates in a PUL have no guaranteed order of application. Write updates that don't depend on each other's execution order:</p>
+                                                <figure class="code">
+                                                  <figcaption><span class="lang">xquery</span>
+                                                  </figcaption>
+                                                  <pre><code class="language-xquery">(: Don't do this — depends on ordering :)
 insert node &lt;total&gt;0&lt;/total&gt; into $order,
 replace value of node $order/total with string($calculated-total)
 (: The total might not exist yet when replace runs :)
 (: Do this instead :)
 insert node &lt;total&gt;{ $calculated-total }&lt;/total&gt; into $order
-(: Single update, no ordering dependency :)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><hr><h2 id="combining-updates"><a class="anchor" href="#combining-updates">#</a>Combining Updates</h2><h3 id="multiple-updates-in-a-flwor"><a class="anchor" href="#multiple-updates-in-a-flwor">#</a>Multiple Updates in a FLWOR</h3><p>A FLWOR expression can return multiple updates:</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">for $product in //products/product
+(: Single update, no ordering dependency :)</code>
+                                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                </figure>
+                                                <hr>
+                                                  <h2 id="combining-updates"><a class="anchor" href="#combining-updates">#</a>Combining Updates</h2>
+                                                  <h3 id="multiple-updates-in-a-flwor"><a class="anchor" href="#multiple-updates-in-a-flwor">#</a>Multiple Updates in a FLWOR</h3>
+                                                  <p>A FLWOR expression can return multiple updates:</p>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xquery</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xquery">for $product in //products/product
 where xs:decimal($product/price) &gt; 100
 return (
   replace value of node $product/@category with "premium",
   insert node &lt;premium-since&gt;{ current-date() }&lt;/premium-since&gt; into $product
-)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>Each iteration contributes updates to the PUL. All updates across all iterations are applied atomically.</p><h3 id="updates-from-different-sources"><a class="anchor" href="#updates-from-different-sources">#</a>Updates from Different Sources</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Update orders and inventory in one query :)
+)</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <p>Each iteration contributes updates to the PUL. All updates across all iterations are applied atomically.</p>
+                                                  <h3 id="updates-from-different-sources"><a class="anchor" href="#updates-from-different-sources">#</a>Updates from Different Sources</h3>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xquery</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xquery">(: Update orders and inventory in one query :)
 for $order in //orders/order[@status = "approved"]
 let $items := $order/line-item
 return (
@@ -251,7 +1262,14 @@ return (
   let $product := //products/product[@id = $item/@product-id]
   let $new-stock := xs:integer($product/stock) - xs:integer($item/@qty)
   return replace value of node $product/stock with string($new-stock)
-)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="conditional-updates"><a class="anchor" href="#conditional-updates">#</a>Conditional Updates</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">for $customer in //customers/customer
+)</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <h3 id="conditional-updates"><a class="anchor" href="#conditional-updates">#</a>Conditional Updates</h3>
+                                                  <figure class="code">
+                                                    <figcaption><span class="lang">xquery</span>
+                                                    </figcaption>
+                                                    <pre><code class="language-xquery">for $customer in //customers/customer
 return (
   (: Always update last-checked :)
   if (exists($customer/@last-checked)) then
@@ -266,19 +1284,42 @@ return (
     insert node &lt;warning&gt;Negative balance&lt;/warning&gt; into $customer
   else
     ()
-)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><hr><h2 id="inmemoryupdatablenodestore"><a class="anchor" href="#inmemoryupdatablenodestore">#</a>InMemoryUpdatableNodeStore</h2><p>All update operations execute against the <code>InMemoryUpdatableNodeStore</code>, which provides a mutable node store optimized for XQuery Update:</p><ul><li>
-        <p>
+)</code>
+                                                    </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                  </figure>
+                                                  <hr>
+                                                    <h2 id="inmemoryupdatablenodestore"><a class="anchor" href="#inmemoryupdatablenodestore">#</a>InMemoryUpdatableNodeStore</h2>
+                                                    <p>All update operations execute against the <code>InMemoryUpdatableNodeStore</code>, which provides a mutable node store optimized for XQuery Update:</p>
+                                                    <ul>
+                                                      <li>
+        
+                                                        <p>
           <strong>Full PUL support.</strong> The engine collects Pending Update Lists, validates them for conflicts, and applies them atomically.</p>
-      </li><li>
-        <p>
+      
+                                                      </li>
+                                                      <li>
+        
+                                                        <p>
           <strong>Node identity preservation.</strong> Nodes retain their identity across updates. This matters for <code>replace value of node</code>, which modifies content without replacing the node.</p>
-      </li><li>
-        <p>
+      
+                                                      </li>
+                                                      <li>
+        
+                                                        <p>
           <strong>Deep copy semantics.</strong> The <code>transform</code> (copy-modify-return) expression creates true deep copies. The original nodes are never affected.</p>
-      </li><li>
-        <p>
+      
+                                                      </li>
+                                                      <li>
+        
+                                                        <p>
           <strong>Conflict detection.</strong> The engine detects conflicting updates on the same node, for example two <code>replace node</code> on the same target, and reports them as errors.</p>
-      </li></ul><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">using PhoenixmlDb.XQuery.Execution;
+      
+                                                      </li>
+                                                    </ul>
+                                                    <figure class="code">
+                                                      <figcaption><span class="lang">csharp</span>
+                                                      </figcaption>
+                                                      <pre><code class="language-csharp">using PhoenixmlDb.XQuery.Execution;
 // From C#, execute an update query
 var engine = new QueryEngine();
 var compiled = engine.Compile(@"
@@ -294,7 +1335,17 @@ context.SetExternalVariable("new-status", "shipped");
 await foreach (var _ in compiled.ExecutionPlan!.ExecuteAsync(context))
 {
     // Drains the plan so the pending update list is applied; this query returns no items.
-}</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><hr><h2 id="use-cases"><a class="anchor" href="#use-cases">#</a>Use Cases</h2><h3 id="data-migration"><a class="anchor" href="#data-migration">#</a>Data Migration</h3><p>Restructure documents when your schema evolves:</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Migrate from flat address to structured address :)
+}</code>
+                                                      </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                    </figure>
+                                                    <hr>
+                                                      <h2 id="use-cases"><a class="anchor" href="#use-cases">#</a>Use Cases</h2>
+                                                      <h3 id="data-migration"><a class="anchor" href="#data-migration">#</a>Data Migration</h3>
+                                                      <p>Restructure documents when your schema evolves:</p>
+                                                      <figure class="code">
+                                                        <figcaption><span class="lang">xquery</span>
+                                                        </figcaption>
+                                                        <pre><code class="language-xquery">(: Migrate from flat address to structured address :)
 for $customer in //customers/customer[address-line]
 let $parts := tokenize($customer/address-line, ",\s*")
 return (
@@ -305,7 +1356,15 @@ return (
     &lt;zip&gt;{ $parts[4] }&lt;/zip&gt;
   &lt;/address&gt; into $customer,
   delete node $customer/address-line
-)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="document-patching"><a class="anchor" href="#document-patching">#</a>Document Patching</h3><p>Apply partial updates received from an API:</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">declare function local:apply-json-patch(
+)</code>
+                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                      </figure>
+                                                      <h3 id="document-patching"><a class="anchor" href="#document-patching">#</a>Document Patching</h3>
+                                                      <p>Apply partial updates received from an API:</p>
+                                                      <figure class="code">
+                                                        <figcaption><span class="lang">xquery</span>
+                                                        </figcaption>
+                                                        <pre><code class="language-xquery">declare function local:apply-json-patch(
   $target as element(),
   $patch as map(*)
 ) as element() {
@@ -326,7 +1385,15 @@ return (
 local:apply-json-patch(
   //product[@id = "P100"],
   map { "price": "34.99", "stock": "150", "updated": "2026-03-19" }
-)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="batch-processing"><a class="anchor" href="#batch-processing">#</a>Batch Processing</h3><p>Process large collections with updates:</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Normalize all phone numbers in the database :)
+)</code>
+                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                      </figure>
+                                                      <h3 id="batch-processing"><a class="anchor" href="#batch-processing">#</a>Batch Processing</h3>
+                                                      <p>Process large collections with updates:</p>
+                                                      <figure class="code">
+                                                        <figcaption><span class="lang">xquery</span>
+                                                        </figcaption>
+                                                        <pre><code class="language-xquery">(: Normalize all phone numbers in the database :)
 for $phone in //customer/phone
 let $digits := replace($phone/text(), "[^0-9]", "")
 let $formatted := concat(
@@ -335,7 +1402,15 @@ let $formatted := concat(
   substring($digits, 7, 4)
 )
 where $phone/text() ne $formatted
-return replace value of node $phone with $formatted</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="etl-pipeline"><a class="anchor" href="#etl-pipeline">#</a>ETL Pipeline</h3><p>Extract data from one format, transform, and load into another:</p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Read CSV-like XML, validate, and insert into structured collection :)
+return replace value of node $phone with $formatted</code>
+                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                      </figure>
+                                                      <h3 id="etl-pipeline"><a class="anchor" href="#etl-pipeline">#</a>ETL Pipeline</h3>
+                                                      <p>Extract data from one format, transform, and load into another:</p>
+                                                      <figure class="code">
+                                                        <figcaption><span class="lang">xquery</span>
+                                                        </figcaption>
+                                                        <pre><code class="language-xquery">(: Read CSV-like XML, validate, and insert into structured collection :)
 for $row in doc("import.xml")//row
 let $name := normalize-space($row/field[@name = "name"])
 let $email := normalize-space($row/field[@name = "email"])
@@ -348,9 +1423,19 @@ return insert node
     &lt;balance&gt;{ xs:decimal($amount) }&lt;/balance&gt;
     &lt;imported&gt;{ current-dateTime() }&lt;/imported&gt;
   &lt;/customer&gt;
-  into doc("customers.xml")/customers</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="c-comparison-full-update-workflow"><a class="anchor" href="#c-comparison-full-update-workflow">#</a>C# Comparison: Full Update Workflow</h3><p>Here's a side-by-side comparison of a complete update scenario:</p><p>
+  into doc("customers.xml")/customers</code>
+                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                      </figure>
+                                                      <h3 id="c-comparison-full-update-workflow"><a class="anchor" href="#c-comparison-full-update-workflow">#</a>C# Comparison: Full Update Workflow</h3>
+                                                      <p>Here's a side-by-side comparison of a complete update scenario:</p>
+                                                      <p>
       <strong>XQuery Update:</strong>
-    </p><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Find overdue orders and update their status :)
+    
+                                                      </p>
+                                                      <figure class="code">
+                                                        <figcaption><span class="lang">xquery</span>
+                                                        </figcaption>
+                                                        <pre><code class="language-xquery">(: Find overdue orders and update their status :)
 let $today := current-date()
 for $order in //orders/order[@status = "pending"]
 let $due := xs:date($order/@due-date)
@@ -360,9 +1445,17 @@ return (
   insert node &lt;overdue-notice sent="{ $today }"&gt;
     &lt;days-late&gt;{ days-from-duration($today - $due) }&lt;/days-late&gt;
   &lt;/overdue-notice&gt; as last into $order
-)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>
+)</code>
+                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                      </figure>
+                                                      <p>
       <strong>C# with LINQ to XML:</strong>
-    </p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">var today = DateTime.Now;
+    
+                                                      </p>
+                                                      <figure class="code">
+                                                        <figcaption><span class="lang">csharp</span>
+                                                        </figcaption>
+                                                        <pre><code class="language-csharp">var today = DateTime.Now;
 var overdueOrders = doc.Descendants("order")
     .Where(o =&gt; o.Attribute("status")?.Value == "pending"
         &amp;&amp; DateTime.Parse(o.Attribute("due-date")?.Value ?? "") &lt; today);
@@ -375,4 +1468,125 @@ foreach (var order in overdueOrders.ToList())
         new XElement("days-late", daysLate)
     ));
 }
-doc.Save("orders.xml");</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><p>The XQuery version is more concise. The atomic application of the PUL removes the worry about partial failures. Either all overdue orders are updated, or none are.</p></article></main><aside class="toc" aria-label="On this page"><p class="toc-label">On this page</p><ul><li class="toc-h2"><a href="#contents">Contents</a></li><li class="toc-h2"><a href="#why-update-facility-exists">Why Update Facility Exists</a></li><li class="toc-h2"><a href="#insert">insert</a></li><li class="toc-h3"><a href="#insert-into-as-a-child">Insert into (as a child)</a></li><li class="toc-h3"><a href="#insert-as-first-or-last-child">Insert as first or last child</a></li><li class="toc-h3"><a href="#insert-before-or-after-a-sibling">Insert before or after a sibling</a></li><li class="toc-h3"><a href="#insert-multiple-nodes">Insert multiple nodes</a></li><li class="toc-h3"><a href="#insert-attributes">Insert attributes</a></li><li class="toc-h3"><a href="#practical-example-add-audit-trail">Practical Example: Add Audit Trail</a></li><li class="toc-h2"><a href="#delete">delete</a></li><li class="toc-h3"><a href="#delete-a-single-node">Delete a single node</a></li><li class="toc-h3"><a href="#delete-multiple-nodes">Delete multiple nodes</a></li><li class="toc-h3"><a href="#delete-attributes">Delete attributes</a></li><li class="toc-h3"><a href="#practical-example-data-cleanup">Practical Example: Data Cleanup</a></li><li class="toc-h2"><a href="#replace-node">replace node</a></li><li class="toc-h3"><a href="#replace-with-multiple-nodes">Replace with multiple nodes</a></li><li class="toc-h3"><a href="#replace-an-attribute">Replace an attribute</a></li><li class="toc-h2"><a href="#replace-value-of-node">replace value of node</a></li><li class="toc-h3"><a href="#replace-element-content">Replace element content</a></li><li class="toc-h3"><a href="#replace-attribute-value">Replace attribute value</a></li><li class="toc-h3"><a href="#difference-from-replace-node">Difference from replace node</a></li><li class="toc-h3"><a href="#practical-example-batch-price-update">Practical Example: Batch Price Update</a></li><li class="toc-h2"><a href="#rename">rename</a></li><li class="toc-h3"><a href="#rename-with-a-qname">Rename with a QName</a></li><li class="toc-h3"><a href="#rename-an-attribute">Rename an attribute</a></li><li class="toc-h3"><a href="#practical-example-schema-migration">Practical Example: Schema Migration</a></li><li class="toc-h2"><a href="#transform-expression">Transform Expression</a></li><li class="toc-h3"><a href="#how-it-works">How It Works</a></li><li class="toc-h3"><a href="#multiple-copy-variables">Multiple Copy Variables</a></li><li class="toc-h3"><a href="#practical-example-document-patching">Practical Example: Document Patching</a></li><li class="toc-h3"><a href="#transform-for-json-output">Transform for JSON Output</a></li><li class="toc-h2"><a href="#pending-update-lists">Pending Update Lists</a></li><li class="toc-h3"><a href="#how-puls-work">How PULs Work</a></li><li class="toc-h3"><a href="#conflict-rules">Conflict Rules</a></li><li class="toc-h3"><a href="#ordering">Ordering</a></li><li class="toc-h2"><a href="#combining-updates">Combining Updates</a></li><li class="toc-h3"><a href="#multiple-updates-in-a-flwor">Multiple Updates in a FLWOR</a></li><li class="toc-h3"><a href="#updates-from-different-sources">Updates from Different Sources</a></li><li class="toc-h3"><a href="#conditional-updates">Conditional Updates</a></li><li class="toc-h2"><a href="#inmemoryupdatablenodestore">InMemoryUpdatableNodeStore</a></li><li class="toc-h2"><a href="#use-cases">Use Cases</a></li><li class="toc-h3"><a href="#data-migration">Data Migration</a></li><li class="toc-h3"><a href="#document-patching">Document Patching</a></li><li class="toc-h3"><a href="#batch-processing">Batch Processing</a></li><li class="toc-h3"><a href="#etl-pipeline">ETL Pipeline</a></li><li class="toc-h3"><a href="#c-comparison-full-update-workflow">C# Comparison: Full Update Workflow</a></li></ul></aside></div><div class="search-overlay" id="search-overlay" hidden="hidden"><div class="search-backdrop"></div><div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off"><div class="search-results" id="search-results"></div></div></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" rel="noopener noreferrer">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" rel="noopener noreferrer">Endpoint Systems</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/prism.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script><script src="/js/toc.js"></script><script src="/js/copy.js"></script></body></html>
+doc.Save("orders.xml");</code>
+                                                        </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                                      </figure>
+                                                      <p>The XQuery version is more concise. The atomic application of the PUL removes the worry about partial failures. Either all overdue orders are updated, or none are.</p>
+                                                    </article>
+                                                  </main>
+                                                  <aside class="toc" aria-label="On this page">
+                                                    <p class="toc-label">On this page</p>
+                                                    <ul>
+                                                      <li class="toc-h2"><a href="#contents">Contents</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#why-update-facility-exists">Why Update Facility Exists</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#insert">insert</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#insert-into-as-a-child">Insert into (as a child)</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#insert-as-first-or-last-child">Insert as first or last child</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#insert-before-or-after-a-sibling">Insert before or after a sibling</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#insert-multiple-nodes">Insert multiple nodes</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#insert-attributes">Insert attributes</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#practical-example-add-audit-trail">Practical Example: Add Audit Trail</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#delete">delete</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#delete-a-single-node">Delete a single node</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#delete-multiple-nodes">Delete multiple nodes</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#delete-attributes">Delete attributes</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#practical-example-data-cleanup">Practical Example: Data Cleanup</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#replace-node">replace node</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#replace-with-multiple-nodes">Replace with multiple nodes</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#replace-an-attribute">Replace an attribute</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#replace-value-of-node">replace value of node</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#replace-element-content">Replace element content</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#replace-attribute-value">Replace attribute value</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#difference-from-replace-node">Difference from replace node</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#practical-example-batch-price-update">Practical Example: Batch Price Update</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#rename">rename</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#rename-with-a-qname">Rename with a QName</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#rename-an-attribute">Rename an attribute</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#practical-example-schema-migration">Practical Example: Schema Migration</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#transform-expression">Transform Expression</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#how-it-works">How It Works</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#multiple-copy-variables">Multiple Copy Variables</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#practical-example-document-patching">Practical Example: Document Patching</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#transform-for-json-output">Transform for JSON Output</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#pending-update-lists">Pending Update Lists</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#how-puls-work">How PULs Work</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#conflict-rules">Conflict Rules</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#ordering">Ordering</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#combining-updates">Combining Updates</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#multiple-updates-in-a-flwor">Multiple Updates in a FLWOR</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#updates-from-different-sources">Updates from Different Sources</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#conditional-updates">Conditional Updates</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#inmemoryupdatablenodestore">InMemoryUpdatableNodeStore</a>
+                                                      </li>
+                                                      <li class="toc-h2"><a href="#use-cases">Use Cases</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#data-migration">Data Migration</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#document-patching">Document Patching</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#batch-processing">Batch Processing</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#etl-pipeline">ETL Pipeline</a>
+                                                      </li>
+                                                      <li class="toc-h3"><a href="#c-comparison-full-update-workflow">C# Comparison: Full Update Workflow</a>
+                                                      </li>
+                                                    </ul>
+                                                  </aside>
+                                                </div>
+                                                <div class="search-overlay" id="search-overlay" hidden="hidden">
+                                                  <div class="search-backdrop"></div>
+                                                  <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                                                    <div class="search-results" id="search-results"></div>
+                                                  </div>
+                                                </div>
+                                                <footer class="site-footer">
+                                                  <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" rel="noopener noreferrer">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" rel="noopener noreferrer">Endpoint Systems</a>
+                                                  </p>
+                                                </footer>
+                                                <script src="https://phoenixml.dev/js/lunr.js"></script>
+                                                <script src="https://phoenixml.dev/js/prism.js"></script>
+                                                <script src="https://phoenixml.dev/js/search.js"></script>
+                                                <script src="https://phoenixml.dev/js/theme.js"></script>
+                                                <script src="https://phoenixml.dev/js/toc.js"></script>
+                                                <script src="https://phoenixml.dev/js/copy.js"></script>
+                                              </body>
+                                            </html>

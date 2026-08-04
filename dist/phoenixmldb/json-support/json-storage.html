@@ -1,21 +1,635 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>JSON Storage — PhoenixmlDb Documentation</title><meta name="description" content="How JSON documents are stored, the XML mapping, and storage options"><link rel="canonical" href="/phoenixmldb/json-support/json-storage.html"><meta property="og:title" content="JSON Storage"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/json-support/json-storage.html"><meta property="og:description" content="How JSON documents are stored, the XML mapping, and storage options"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/prism.css"><script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>JSON Storage — PhoenixmlDb Documentation</title>
+          <meta name="description" content="How JSON documents are stored, the XML mapping, and storage options">
+            <link rel="canonical" href="https://phoenixml.dev/phoenixmldb/json-support/json-storage">
+              <meta property="og:title" content="JSON Storage">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="https://phoenixml.dev/phoenixmldb/json-support/json-storage">
+                    <meta property="og:description" content="How JSON documents are stored, the XML mapping, and storage options">
+                      <link rel="stylesheet" href="https://phoenixml.dev/css/style.css">
+                        <link rel="stylesheet" href="https://phoenixml.dev/css/prism.css">
+                          <script>
+          window.CRUCIBLE_BASE = "https://phoenixml.dev/";
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-FSCPKZ7RES"></script><script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-FSCPKZ7RES');
-        </script></head><body><header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><p class="nav-section-title">Getting Started</p><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><p class="nav-section-title">PhoenixmlDb</p><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section open"><p class="nav-section-title">JSON Support</p><ul class="nav-section-children"><li class="active"><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/metadata.html">Metadata</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><p class="nav-section-title">Deployment</p><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><p class="nav-section-title">API Reference</p><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li><li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><p class="nav-section-title">Language Reference</p><ul class="nav-section-children"><li class="nav-section"><p class="nav-section-title">XInclude</p><ul class="nav-section-children"><li><a href="/language-reference/xinclude/xml-inclusion.html">XML Inclusion</a></li><li><a href="/language-reference/xinclude/text-inclusion.html">Text Inclusion</a></li><li><a href="/language-reference/xinclude/fallback.html">Fallback</a></li><li><a href="/language-reference/xinclude/security-and-limits.html">Security and Limits</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XML Foundations</p><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XPointer</p><ul class="nav-section-children"><li><a href="/language-reference/xpointer/shorthand-and-element.html">Shorthand and element()</a></li><li><a href="/language-reference/xpointer/namespaces-and-xpath1.html">Namespaces and xpath1()</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XPath</p><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><p class="nav-section-title">Functions</p><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XSLT</p><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><p class="nav-section-title">Instructions Reference</p><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XQuery</p><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><p class="nav-section-title">Tools</p><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li><li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a></li><li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><p class="eyebrow">JSON Support</p><h1 class="page-title">JSON Storage</h1><p class="page-subtitle">How JSON documents are stored, the XML mapping, and storage options</p><h1 id="json-storage"><a class="anchor" href="#json-storage">#</a>JSON Storage</h1><p>This guide covers JSON document storage options, validation, and performance considerations.</p><h2 id="storing-json-documents"><a class="anchor" href="#storing-json-documents">#</a>Storing JSON Documents</h2><h3 id="basic-storage"><a class="anchor" href="#basic-storage">#</a>Basic Storage</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">var container = db.GetContainer("data");
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="https://phoenixml.dev/" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="https://phoenixml.dev/">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started</p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="https://phoenixml.dev/getting-started/installation">Installation</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/getting-started/quick-start">Quick Start</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/getting-started/first-application">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">PhoenixmlDb</p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/core-concepts">Core Concepts</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/documents-and-storage">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">JSON Support</p>
+                                      <ul class="nav-section-children">
+                                        <li class="active"><a href="https://phoenixml.dev/phoenixmldb/json-support/json-storage">JSON Storage</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/json-support/json-queries">JSON Queries</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/json-support/json-indexing">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/xdm-data-model">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/metadata">Metadata</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/indexing">Indexing</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/transactions">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/deployment/embedded-mode">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/deployment/server-mode">Server Mode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/deployment/cluster-mode">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/configuration">Configuration</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/performance-tuning">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/database-extensions">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/containers">Containers API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/documents">Documents API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/indexes">Indexes API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/queries">Queries API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/transactions">Transactions API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/xslt-api">XSLT API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/resource-policy">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/linq-provider">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/mobile-development">Mobile Development</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/migration-guide">Migration Guide</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/troubleshooting">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Language Reference</p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XInclude</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/xml-inclusion">XML Inclusion</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/text-inclusion">Text Inclusion</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/fallback">Fallback</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/security-and-limits">Security and Limits</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/xml-vs-json">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/document-structure">Document Structure</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/xdm">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/namespaces">Namespaces</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/working-with-json">Working with JSON</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/unicode-and-dotnet">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPointer</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xpointer/shorthand-and-element">Shorthand and element()</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xpointer/namespaces-and-xpath1">Namespaces and xpath1()</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xpath/path-expressions">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions</p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/string">String Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/numeric">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/date-time">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/sequence">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/boolean">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/node">Node Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/map">Map Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/array">Array Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/math">Math Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/higher-order">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/formatting">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/type-constructors">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xpath/operators">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xpath/data-types">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/first-transform">Your First Transform</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/template-matching">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference</p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/output">Output Instructions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/control-flow">Control Flow</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/variables-parameters">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/iteration-sorting">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/grouping">Grouping</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/copying-identity">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/node-construction">Node Construction</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/multiple-outputs">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/functions">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/keys">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/analyze-string">String Analysis</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/error-handling">Error Handling</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/merge">Merging</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/maps-arrays">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/streaming">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/packages">Packages</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/dynamic-evaluation">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/number-formatting">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/output-methods">Output Methods</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/extensibility">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/flwor">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/flwor-advanced">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/constructors">Constructors</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/conditionals">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/operators">Operators</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/types">Type System</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/update-facility">Update Facility</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/functions-modules">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/xquery-vs-xslt">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/full-text">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/prolog">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/extensibility">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools</p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="https://phoenixml.dev/tools/xslt-cli">xslt CLI</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/xquery-cli">xquery CLI</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/crucible">Crucible</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/xquery-mcp">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/xslt-mcp">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="https://phoenixml.dev/release-notes">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference</p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/api/core/">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containerid">ContainerId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containerinfo">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containernotfoundexception">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containeroptions">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/contenttype">ContentType</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/databasestatistics">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/daytimeduration">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentexistsexception">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentid">DocumentId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentinfo">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentinput">DocumentInput</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentnotfoundexception">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentoptions">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentparseexception">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/fulltextindexdefinition">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/fulltextindexoptions">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/icontainer">IContainer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/idocument">IDocument</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/idocumentdatabase">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/indexconfiguration">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/indexdefinition">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/ireadtransaction">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/iwritetransaction">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/ixdmnode">IXdmNode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/ixmlresourceresolver">IXmlResourceResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/localfileresourceresolver">LocalFileResourceResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/metadataindexdefinition">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/nameindexdefinition">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/namespacebinding">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/namespaceid">NamespaceId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/nodeid">NodeId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/parseresult">ParseResult</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/pathindexdefinition">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/qname">QName</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/textnodeitem">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/transactionexception">TransactionException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/transactiontimeoutexception">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/utf8stringwriter">Utf8StringWriter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/validationmode">ValidationMode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/valueindexdefinition">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmattribute">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmcomment">XdmComment</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmdocument">XdmDocument</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmelement">XdmElement</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmnamespace">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmnode">XdmNode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmnodekind">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmprocessinginstruction">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmqname">XdmQName</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmsequence">XdmSequence</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmtext">XdmText</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmtype">XdmType</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmtypename">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmvalue">XdmValue</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmvaluetype">XdmValueType</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeerrorkind">XIncludeErrorKind</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeexception">XIncludeException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludelimiter">XIncludeLimiter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeoptions">XIncludeOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeprocessor">XIncludeProcessor</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xmldbexception">XmlDbException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xmldocumentparser">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xmlserializer">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xpointerevaluator">XPointerEvaluator</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xqueryexception">XQueryException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsanyuri">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsdate">XsDate</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsdatetime">XsDateTime</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsduration">XsDuration</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgday">XsGDay</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgmonth">XsGMonth</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgmonthday">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgyear">XsGYear</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgyearmonth">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xstime">XsTime</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xstypedinteger">XsTypedInteger</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xstypedstring">XsTypedString</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsuntypedatomic">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/yearmonthduration">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/api/xquery/">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/analyzedterm">AnalyzedTerm</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/delegatemetadataprovider">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/depthguardlistener">DepthGuardListener</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/exacturi">ExactUri</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftisstopwordfunction">FtIsStopWordFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftscorefunction">FtScoreFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftstem2function">FtStem2Function</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftstemfunction">FtStemFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftthesauruslookupfunction">FtThesaurusLookupFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fttokenize2function">FtTokenize2Function</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fttokenizefunction">FtTokenizeFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fulltextanalysisoptions">FullTextAnalysisOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fulltextengine">FullTextEngine</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fulltextindex">FullTextIndex</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/httpdocumentclient">HttpDocumentClient</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/idocumentresolver">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/imetadataprovider">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/inodebuilder">INodeBuilder</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/inodeprovider">INodeProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/inodestore">INodeStore</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/iresourceresolver">IResourceResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ischemaprovider">ISchemaProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/outputmethod">OutputMethod</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/parseerror">ParseError</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/policyenforcingresolver">PolicyEnforcingResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/postingentry">PostingEntry</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourceaccessdeniedexception">ResourceAccessDeniedException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourceaccesskind">ResourceAccessKind</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourcepolicy">ResourcePolicy</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourcepolicybuilder">ResourcePolicyBuilder</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourceresolverbase">ResourceResolverBase</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/schemaexception">SchemaException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/schemavalidationexception">SchemaValidationException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/serializationoptions">SerializationOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/treeordinalallocator">TreeOrdinalAllocator</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/urirule">UriRule</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/utf8stringwriter">Utf8StringWriter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/validationmode">ValidationMode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xdmdocumentstore">XdmDocumentStore</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryastbuilder">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryerrorlistener">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryfacade">XQueryFacade</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xquerylexeradapter">XQueryLexerAdapter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryparseexception">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryparserfacade">XQueryParserFacade</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryresultserializer">XQueryResultSerializer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xsdschemaprovider">XsdSchemaProvider</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/api/xslt/">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/packageversionresolution">PackageVersionResolution</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/preloadedresources">PreloadedResources</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/simpleexecutioncontext">SimpleExecutionContext</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xdminmemorystore">XdmInMemoryStore</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xqueryexpressionparser">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xsltmoduleinitializer">XsltModuleInitializer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xslttransformer">XsltTransformer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xslttransformprovider">XsltTransformProvider</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">JSON Support</p>
+                                <h1 class="page-title">JSON Storage</h1>
+                                <p class="page-subtitle">How JSON documents are stored, the XML mapping, and storage options</p>
+                                <h1 id="json-storage"><a class="anchor" href="#json-storage">#</a>JSON Storage</h1>
+                                <p>This guide covers JSON document storage options, validation, and performance considerations.</p>
+                                <h2 id="storing-json-documents"><a class="anchor" href="#storing-json-documents">#</a>Storing JSON Documents</h2>
+                                <h3 id="basic-storage"><a class="anchor" href="#basic-storage">#</a>Basic Storage</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">var container = db.GetContainer("data");
 // Store JSON string
 container.PutJsonDocument("doc.json", jsonString);
 // Store from object (with serialization)
 var user = new { Name = "Alice", Age = 30 };
-container.PutJsonDocument("user.json", JsonSerializer.Serialize(user));</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="storage-options"><a class="anchor" href="#storage-options">#</a>Storage Options</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">container.PutJsonDocument("doc.json", json, new JsonStorageOptions
+container.PutJsonDocument("user.json", JsonSerializer.Serialize(user));</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="storage-options"><a class="anchor" href="#storage-options">#</a>Storage Options</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">container.PutJsonDocument("doc.json", json, new JsonStorageOptions
 {
     PreserveOriginal = true,      // Keep original JSON for exact retrieval
     ValidateJson = true,          // Validate JSON syntax
     StoreArraysCompact = false    // Use expanded array format
-});</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="preserve-original"><a class="anchor" href="#preserve-original">#</a>Preserve Original</h3><p>When <code>PreserveOriginal</code> is true, the exact JSON string is stored alongside the XML representation:</p><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Store with preservation
+});</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="preserve-original"><a class="anchor" href="#preserve-original">#</a>Preserve Original</h3>
+                                <p>When <code>PreserveOriginal</code> is true, the exact JSON string is stored alongside the XML representation:</p>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Store with preservation
 container.PutJsonDocument("user.json", """
     {
         "name": "Alice",
@@ -26,11 +640,26 @@ container.PutJsonDocument("user.json", """
 string original = container.GetJsonDocument("user.json");
 // Returns: {"name": "Alice", "score": 95.5}
 // Without preservation, JSON is reconstructed from XML
-// Formatting may differ</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="json-validation"><a class="anchor" href="#json-validation">#</a>JSON Validation</h2><h3 id="syntax-validation"><a class="anchor" href="#syntax-validation">#</a>Syntax Validation</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Validate JSON syntax before storage
+// Formatting may differ</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="json-validation"><a class="anchor" href="#json-validation">#</a>JSON Validation</h2>
+                                <h3 id="syntax-validation"><a class="anchor" href="#syntax-validation">#</a>Syntax Validation</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Validate JSON syntax before storage
 container.PutJsonDocument("doc.json", json, new JsonStorageOptions
 {
     ValidateJson = true  // Throws JsonException on invalid JSON
-});</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="schema-validation"><a class="anchor" href="#schema-validation">#</a>Schema Validation</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Define JSON Schema
+});</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="schema-validation"><a class="anchor" href="#schema-validation">#</a>Schema Validation</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Define JSON Schema
 var schema = """
     {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -51,80 +680,189 @@ var container = db.CreateContainer("users", new ContainerOptions
 // This succeeds
 container.PutJsonDocument("u1.json", """{"id": 1, "name": "Alice"}""");
 // This throws ValidationException
-container.PutJsonDocument("u2.json", """{"id": "not-a-number", "name": ""}""");</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="indexing-json"><a class="anchor" href="#indexing-json">#</a>Indexing JSON</h2><p>Indexes are defined using XPath paths against the XML representation. See <a href="json-indexing.html" title="">JSON Indexing</a> for the full indexing story.</p><h3 id="path-index"><a class="anchor" href="#path-index">#</a>Path Index</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Index specific JSON paths
+container.PutJsonDocument("u2.json", """{"id": "not-a-number", "name": ""}""");</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="indexing-json"><a class="anchor" href="#indexing-json">#</a>Indexing JSON</h2>
+                                <p>Indexes are defined using XPath paths against the XML representation. See <a href="json-indexing.html">JSON Indexing</a> for the full indexing story.</p>
+                                <h3 id="path-index"><a class="anchor" href="#path-index">#</a>Path Index</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Index specific JSON paths
 container.CreateIndex(new PathIndex("user-email-idx",
     "/map/email"));
 container.CreateIndex(new PathIndex("nested-idx",
-    "/map/profile/city"));</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="value-index"><a class="anchor" href="#value-index">#</a>Value Index</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Index for range queries
+    "/map/profile/city"));</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="value-index"><a class="anchor" href="#value-index">#</a>Value Index</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Index for range queries
 container.CreateIndex(new ValueIndex("age-idx",
     "/map/profile/age",
     ValueType.Integer));
 // Date values
 container.CreateIndex(new ValueIndex("created-idx",
     "/map/createdAt",
-    ValueType.DateTime));</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="full-text-index"><a class="anchor" href="#full-text-index">#</a>Full-Text Index</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Index text content for search
+    ValueType.DateTime));</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="full-text-index"><a class="anchor" href="#full-text-index">#</a>Full-Text Index</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Index text content for search
 container.CreateIndex(new FullTextIndex("description-idx",
-    "/map/description"));</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="array-element-index"><a class="anchor" href="#array-element-index">#</a>Array Element Index</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Index array elements
+    "/map/description"));</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="array-element-index"><a class="anchor" href="#array-element-index">#</a>Array Element Index</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Index array elements
 container.CreateIndex(new PathIndex("tags-idx",
-    "/map/tags/_"));</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="bulk-import"><a class="anchor" href="#bulk-import">#</a>Bulk Import</h2><h3 id="streaming-import"><a class="anchor" href="#streaming-import">#</a>Streaming Import</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Import large JSON array file
+    "/map/tags/_"));</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="bulk-import"><a class="anchor" href="#bulk-import">#</a>Bulk Import</h2>
+                                <h3 id="streaming-import"><a class="anchor" href="#streaming-import">#</a>Streaming Import</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Import large JSON array file
 using var stream = File.OpenRead("large-data.json");
 var count = container.ImportJsonArray(stream, new ImportOptions
 {
     BatchSize = 1000,
     DocumentNameTemplate = "item-{index}.json"
 });
-Console.WriteLine($"Imported {count} documents");</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="ndjson-import"><a class="anchor" href="#ndjson-import">#</a>NDJSON Import</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Import newline-delimited JSON
+Console.WriteLine($"Imported {count} documents");</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="ndjson-import"><a class="anchor" href="#ndjson-import">#</a>NDJSON Import</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Import newline-delimited JSON
 using var stream = File.OpenRead("data.ndjson");
 var count = container.ImportNdjson(stream, new ImportOptions
 {
     DocumentNameGenerator = (json, index) =&gt; $"record-{json["id"]}.json"
-});</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="performance-considerations"><a class="anchor" href="#performance-considerations">#</a>Performance Considerations</h2><h3 id="xml-conversion-overhead"><a class="anchor" href="#xml-conversion-overhead">#</a>XML Conversion Overhead</h3><p>JSON is converted to XML for storage, which adds a small overhead on write. Query performance is identical to XML once indexed.</p><div class="table-wrap"><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Operation</p>
-          </th>
-          <th>
-            <p>Overhead</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p>Store JSON</p>
-          </td>
-          <td>
-            <p>~5-10% slower than XML</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Retrieve JSON</p>
-          </td>
-          <td>
-            <p>~5-10% slower (if not preserved)</p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Query</p>
-          </td>
-          <td>
-            <p>Same as XML queries</p>
-          </td>
-        </tr>
-      </tbody>
-    </table></div><h3 id="optimize-for-queries"><a class="anchor" href="#optimize-for-queries">#</a>Optimize for Queries</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// For query-heavy workloads
+});</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="performance-considerations"><a class="anchor" href="#performance-considerations">#</a>Performance Considerations</h2>
+                                <h3 id="xml-conversion-overhead"><a class="anchor" href="#xml-conversion-overhead">#</a>XML Conversion Overhead</h3>
+                                <p>JSON is converted to XML for storage, which adds a small overhead on write. Query performance is identical to XML once indexed.</p>
+                                <div class="table-wrap">
+                                  <table>
+      
+                                    <thead>
+        
+                                      <tr>
+          
+                                        <th>
+            
+                                          <p>Operation</p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Overhead</p>
+          
+                                        </th>
+        
+                                      </tr>
+      
+                                    </thead>
+      
+                                    <tbody>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Store JSON</p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>~5-10% slower than XML</p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Retrieve JSON</p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>~5-10% slower (if not preserved)</p>
+          
+                                        </td>
+        
+                                      </tr>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>Query</p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>Same as XML queries</p>
+          
+                                        </td>
+        
+                                      </tr>
+      
+                                    </tbody>
+    
+                                  </table>
+                                </div>
+                                <h3 id="optimize-for-queries"><a class="anchor" href="#optimize-for-queries">#</a>Optimize for Queries</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// For query-heavy workloads
 var options = new JsonStorageOptions
 {
     PreserveOriginal = false,     // Save storage space
     StoreArraysCompact = true     // Faster array traversal
-};</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="optimize-for-round-trip"><a class="anchor" href="#optimize-for-round-trip">#</a>Optimize for Round-Trip</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// For read-heavy workloads needing exact JSON
+};</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="optimize-for-round-trip"><a class="anchor" href="#optimize-for-round-trip">#</a>Optimize for Round-Trip</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// For read-heavy workloads needing exact JSON
 var options = new JsonStorageOptions
 {
     PreserveOriginal = true       // Fast retrieval, uses more space
-};</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="json-document-metadata"><a class="anchor" href="#json-document-metadata">#</a>JSON Document Metadata</h2><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Store with metadata
+};</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="json-document-metadata"><a class="anchor" href="#json-document-metadata">#</a>JSON Document Metadata</h2>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Store with metadata
 container.PutJsonDocument("user.json", json, metadata: new DocumentMetadata
 {
     ["source"] = "api",
@@ -136,12 +874,27 @@ var apiDocs = db.Query("""
     for $doc in collection('data')/map
     where doc-metadata($doc, 'source') = 'api'
     return $doc
-    """);</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="migration-from-other-formats"><a class="anchor" href="#migration-from-other-formats">#</a>Migration from Other Formats</h2><h3 id="from-mongodb-bson"><a class="anchor" href="#from-mongodb-bson">#</a>From MongoDB BSON</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Convert BSON to JSON and store
+    """);</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="migration-from-other-formats"><a class="anchor" href="#migration-from-other-formats">#</a>Migration from Other Formats</h2>
+                                <h3 id="from-mongodb-bson"><a class="anchor" href="#from-mongodb-bson">#</a>From MongoDB BSON</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Convert BSON to JSON and store
 foreach (var doc in mongoCollection.Find(_ =&gt; true))
 {
     var json = doc.ToJson();
     container.PutJsonDocument($"{doc["_id"]}.json", json);
-}</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="from-csv"><a class="anchor" href="#from-csv">#</a>From CSV</h3><figure class="code"><figcaption><span class="lang">csharp</span></figcaption><pre><code class="language-csharp">// Convert CSV rows to JSON documents
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="from-csv"><a class="anchor" href="#from-csv">#</a>From CSV</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">csharp</span>
+                                  </figcaption>
+                                  <pre><code class="language-csharp">// Convert CSV rows to JSON documents
 using var reader = new StreamReader("data.csv");
 using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 var records = csv.GetRecords&lt;dynamic&gt;();
@@ -150,46 +903,182 @@ foreach (var record in records)
 {
     var json = JsonSerializer.Serialize(record);
     container.PutJsonDocument($"row-{index++}.json", json);
-}</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2><ol><li>
-        <p>
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2>
+                                <ol>
+                                  <li>
+        
+                                    <p>
           <strong>Consistent naming</strong> — Use <code>.json</code> extension for JSON documents</p>
-      </li><li>
-        <p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
           <strong>Index key paths</strong> — Create indexes for frequently queried paths</p>
-      </li><li>
-        <p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
           <strong>Schema validation</strong> — Use JSON Schema for data integrity</p>
-      </li><li>
-        <p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
           <strong>Batch imports</strong> — Use bulk import for large datasets</p>
-      </li><li>
-        <p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
           <strong>Consider preservation</strong> — Enable <code>PreserveOriginal</code> if exact format matters</p>
-      </li></ol><h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps</h2><div class="table-wrap"><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Queries</p>
-          </th>
-          <th>
-            <p>Indexing</p>
-          </th>
-          <th>
-            <p>Performance</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><strong><a href="json-queries.html" title="">JSON Queries</a></strong>Query patterns for JSON</p>
-          </td>
-          <td>
-            <p><strong><a href="json-indexing.html" title="">JSON Indexing</a></strong>Full indexing through XML</p>
-          </td>
-          <td>
-            <p><strong><a href="../performance-tuning.html" title="">Performance Tuning</a></strong>Optimization tips</p>
-          </td>
-        </tr>
-      </tbody>
-    </table></div></article></main><aside class="toc" aria-label="On this page"><p class="toc-label">On this page</p><ul><li class="toc-h2"><a href="#storing-json-documents">Storing JSON Documents</a></li><li class="toc-h3"><a href="#basic-storage">Basic Storage</a></li><li class="toc-h3"><a href="#storage-options">Storage Options</a></li><li class="toc-h3"><a href="#preserve-original">Preserve Original</a></li><li class="toc-h2"><a href="#json-validation">JSON Validation</a></li><li class="toc-h3"><a href="#syntax-validation">Syntax Validation</a></li><li class="toc-h3"><a href="#schema-validation">Schema Validation</a></li><li class="toc-h2"><a href="#indexing-json">Indexing JSON</a></li><li class="toc-h3"><a href="#path-index">Path Index</a></li><li class="toc-h3"><a href="#value-index">Value Index</a></li><li class="toc-h3"><a href="#full-text-index">Full-Text Index</a></li><li class="toc-h3"><a href="#array-element-index">Array Element Index</a></li><li class="toc-h2"><a href="#bulk-import">Bulk Import</a></li><li class="toc-h3"><a href="#streaming-import">Streaming Import</a></li><li class="toc-h3"><a href="#ndjson-import">NDJSON Import</a></li><li class="toc-h2"><a href="#performance-considerations">Performance Considerations</a></li><li class="toc-h3"><a href="#xml-conversion-overhead">XML Conversion Overhead</a></li><li class="toc-h3"><a href="#optimize-for-queries">Optimize for Queries</a></li><li class="toc-h3"><a href="#optimize-for-round-trip">Optimize for Round-Trip</a></li><li class="toc-h2"><a href="#json-document-metadata">JSON Document Metadata</a></li><li class="toc-h2"><a href="#migration-from-other-formats">Migration from Other Formats</a></li><li class="toc-h3"><a href="#from-mongodb-bson">From MongoDB BSON</a></li><li class="toc-h3"><a href="#from-csv">From CSV</a></li><li class="toc-h2"><a href="#best-practices">Best Practices</a></li><li class="toc-h2"><a href="#next-steps">Next Steps</a></li></ul></aside></div><div class="search-overlay" id="search-overlay" hidden="hidden"><div class="search-backdrop"></div><div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off"><div class="search-results" id="search-results"></div></div></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" rel="noopener noreferrer">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" rel="noopener noreferrer">Endpoint Systems</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/prism.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script><script src="/js/toc.js"></script><script src="/js/copy.js"></script></body></html>
+      
+                                  </li>
+                                </ol>
+                                <h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps</h2>
+                                <div class="table-wrap">
+                                  <table>
+      
+                                    <thead>
+        
+                                      <tr>
+          
+                                        <th>
+            
+                                          <p>Queries</p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Indexing</p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Performance</p>
+          
+                                        </th>
+        
+                                      </tr>
+      
+                                    </thead>
+      
+                                    <tbody>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>
+                <a href="json-queries.html">JSON Queries</a>
+              </strong>Query patterns for JSON</p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>
+                <a href="json-indexing.html">JSON Indexing</a>
+              </strong>Full indexing through XML</p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>
+                <a href="../performance-tuning.html">Performance Tuning</a>
+              </strong>Optimization tips</p>
+          
+                                        </td>
+        
+                                      </tr>
+      
+                                    </tbody>
+    
+                                  </table>
+                                </div>
+                              </article>
+                            </main>
+                            <aside class="toc" aria-label="On this page">
+                              <p class="toc-label">On this page</p>
+                              <ul>
+                                <li class="toc-h2"><a href="#storing-json-documents">Storing JSON Documents</a>
+                                </li>
+                                <li class="toc-h3"><a href="#basic-storage">Basic Storage</a>
+                                </li>
+                                <li class="toc-h3"><a href="#storage-options">Storage Options</a>
+                                </li>
+                                <li class="toc-h3"><a href="#preserve-original">Preserve Original</a>
+                                </li>
+                                <li class="toc-h2"><a href="#json-validation">JSON Validation</a>
+                                </li>
+                                <li class="toc-h3"><a href="#syntax-validation">Syntax Validation</a>
+                                </li>
+                                <li class="toc-h3"><a href="#schema-validation">Schema Validation</a>
+                                </li>
+                                <li class="toc-h2"><a href="#indexing-json">Indexing JSON</a>
+                                </li>
+                                <li class="toc-h3"><a href="#path-index">Path Index</a>
+                                </li>
+                                <li class="toc-h3"><a href="#value-index">Value Index</a>
+                                </li>
+                                <li class="toc-h3"><a href="#full-text-index">Full-Text Index</a>
+                                </li>
+                                <li class="toc-h3"><a href="#array-element-index">Array Element Index</a>
+                                </li>
+                                <li class="toc-h2"><a href="#bulk-import">Bulk Import</a>
+                                </li>
+                                <li class="toc-h3"><a href="#streaming-import">Streaming Import</a>
+                                </li>
+                                <li class="toc-h3"><a href="#ndjson-import">NDJSON Import</a>
+                                </li>
+                                <li class="toc-h2"><a href="#performance-considerations">Performance Considerations</a>
+                                </li>
+                                <li class="toc-h3"><a href="#xml-conversion-overhead">XML Conversion Overhead</a>
+                                </li>
+                                <li class="toc-h3"><a href="#optimize-for-queries">Optimize for Queries</a>
+                                </li>
+                                <li class="toc-h3"><a href="#optimize-for-round-trip">Optimize for Round-Trip</a>
+                                </li>
+                                <li class="toc-h2"><a href="#json-document-metadata">JSON Document Metadata</a>
+                                </li>
+                                <li class="toc-h2"><a href="#migration-from-other-formats">Migration from Other Formats</a>
+                                </li>
+                                <li class="toc-h3"><a href="#from-mongodb-bson">From MongoDB BSON</a>
+                                </li>
+                                <li class="toc-h3"><a href="#from-csv">From CSV</a>
+                                </li>
+                                <li class="toc-h2"><a href="#best-practices">Best Practices</a>
+                                </li>
+                                <li class="toc-h2"><a href="#next-steps">Next Steps</a>
+                                </li>
+                              </ul>
+                            </aside>
+                          </div>
+                          <div class="search-overlay" id="search-overlay" hidden="hidden">
+                            <div class="search-backdrop"></div>
+                            <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                              <div class="search-results" id="search-results"></div>
+                            </div>
+                          </div>
+                          <footer class="site-footer">
+                            <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" rel="noopener noreferrer">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" rel="noopener noreferrer">Endpoint Systems</a>
+                            </p>
+                          </footer>
+                          <script src="https://phoenixml.dev/js/lunr.js"></script>
+                          <script src="https://phoenixml.dev/js/prism.js"></script>
+                          <script src="https://phoenixml.dev/js/search.js"></script>
+                          <script src="https://phoenixml.dev/js/theme.js"></script>
+                          <script src="https://phoenixml.dev/js/toc.js"></script>
+                          <script src="https://phoenixml.dev/js/copy.js"></script>
+                        </body>
+                      </html>

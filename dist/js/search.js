@@ -12,21 +12,48 @@
   var loading = false;
   var active = -1;
 
+  // Injected by page.xslt from the site's base-url. Without it, a page at
+  // /guides/install.html would fetch /guides/search-index.json.
+  var BASE = window.CRUCIBLE_BASE || "/";
+  if (BASE.charAt(BASE.length - 1) !== "/") BASE += "/";
+
+  // Mirrors c:page-url in _base/urls.xslt: URLs are extensionless and a
+  // trailing "index" segment collapses to its directory, so a search result,
+  // a nav link and the canonical tag all name the same URL for a page.
+  //   index          -> <base>
+  //   guides/install -> <base>guides/install
+  //   guides/index   -> <base>guides/
+  function pageUrl(path) {
+    return BASE + path.replace(/(^|\/)index$/, "$1");
+  }
+
   function ensureIndex() {
     if (idx || loading) return Promise.resolve();
     loading = true;
-    return fetch("search-index.json").then(function (r) {
+    return fetch(BASE + "search-index.json").then(function (r) {
       if (!r.ok) throw new Error("search-index.json missing");
       return r.json();
     }).then(function (data) {
-      docs = data.documents || [];
+      // search-index.json is a top-level array of
+      // { path, title, description, headings[], body }.
+      docs = Array.isArray(data) ? data : [];
       docs.forEach(function (d) { docsByPath[d.path] = d; });
       idx = lunr(function () {
         this.ref("path");
-        this.field("title", { boost: 5 });
-        this.field("content");
+        this.field("title", { boost: 10 });
+        this.field("description", { boost: 5 });
+        this.field("headings", { boost: 3 });
+        this.field("body");
         var self = this;
-        docs.forEach(function (d) { self.add(d); });
+        docs.forEach(function (d) {
+          self.add({
+            path: d.path,
+            title: d.title || "",
+            description: d.description || "",
+            headings: (d.headings || []).join(" "),
+            body: d.body || ""
+          });
+        });
       });
     }).finally(function () { loading = false; });
   }
@@ -69,7 +96,7 @@
   function makeResult(doc, query, isActive) {
     var a = document.createElement("a");
     a.className = "search-result" + (isActive ? " active" : "");
-    a.href = doc.path + ".html";
+    a.href = pageUrl(doc.path);
 
     var title = document.createElement("div");
     title.className = "search-result-title";
@@ -81,7 +108,7 @@
 
     var snip = document.createElement("div");
     snip.className = "search-result-snippet";
-    snip.textContent = snippet(doc.content, query);
+    snip.textContent = snippet(doc.description || doc.body, query);
 
     a.appendChild(title);
     a.appendChild(path);

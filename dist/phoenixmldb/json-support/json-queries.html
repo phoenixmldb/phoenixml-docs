@@ -1,16 +1,622 @@
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>JSON Queries — PhoenixmlDb Documentation</title><meta name="description" content="XQuery patterns for querying JSON documents stored in PhoenixmlDb"><link rel="canonical" href="/phoenixmldb/json-support/json-queries.html"><meta property="og:title" content="JSON Queries"><meta property="og:type" content="article"><meta property="og:url" content="/phoenixmldb/json-support/json-queries.html"><meta property="og:description" content="XQuery patterns for querying JSON documents stored in PhoenixmlDb"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/prism.css"><script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>JSON Queries — PhoenixmlDb Documentation</title>
+          <meta name="description" content="XQuery patterns for querying JSON documents stored in PhoenixmlDb">
+            <link rel="canonical" href="https://phoenixml.dev/phoenixmldb/json-support/json-queries">
+              <meta property="og:title" content="JSON Queries">
+                <meta property="og:type" content="article">
+                  <meta property="og:url" content="https://phoenixml.dev/phoenixmldb/json-support/json-queries">
+                    <meta property="og:description" content="XQuery patterns for querying JSON documents stored in PhoenixmlDb">
+                      <link rel="stylesheet" href="https://phoenixml.dev/css/style.css">
+                        <link rel="stylesheet" href="https://phoenixml.dev/css/prism.css">
+                          <script>
+          window.CRUCIBLE_BASE = "https://phoenixml.dev/";
           (function(){var t=localStorage.getItem("crucible-theme");if(t)document.documentElement.setAttribute("data-theme",t)})();
-        </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-FSCPKZ7RES"></script><script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-FSCPKZ7RES');
-        </script></head><body><header class="site-header"><a href="/index.html" class="site-logo">PhoenixmlDb Documentation</a><div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button></div></header><div class="layout"><nav class="sidebar" aria-label="Documentation"><ul class="nav-tree"><li><a href="/index.html">Home</a></li><li class="nav-section"><p class="nav-section-title">Getting Started</p><ul class="nav-section-children"><li><a href="/getting-started/installation.html">Installation</a></li><li><a href="/getting-started/quick-start.html">Quick Start</a></li><li><a href="/getting-started/first-application.html">First Application</a></li></ul></li><li class="nav-section open"><p class="nav-section-title">PhoenixmlDb</p><ul class="nav-section-children"><li><a href="/phoenixmldb/core-concepts.html">Core Concepts</a></li><li><a href="/phoenixmldb/documents-and-storage.html">Documents &amp; Storage</a></li><li class="nav-section open"><p class="nav-section-title">JSON Support</p><ul class="nav-section-children"><li><a href="/phoenixmldb/json-support/json-storage.html">JSON Storage</a></li><li class="active"><a href="/phoenixmldb/json-support/json-queries.html">JSON Queries</a></li><li><a href="/phoenixmldb/json-support/json-indexing.html">JSON Indexing</a></li></ul></li><li><a href="/phoenixmldb/xdm-data-model.html">XDM Data Model</a></li><li><a href="/phoenixmldb/metadata.html">Metadata</a></li><li><a href="/phoenixmldb/indexing.html">Indexing</a></li><li><a href="/phoenixmldb/transactions.html">Transactions</a></li><li class="nav-section"><p class="nav-section-title">Deployment</p><ul class="nav-section-children"><li><a href="/phoenixmldb/deployment/embedded-mode.html">Embedded Mode</a></li><li><a href="/phoenixmldb/deployment/server-mode.html">Server Mode</a></li><li><a href="/phoenixmldb/deployment/cluster-mode.html">Cluster Mode</a></li></ul></li><li><a href="/phoenixmldb/configuration.html">Configuration</a></li><li><a href="/phoenixmldb/performance-tuning.html">Performance Tuning</a></li><li><a href="/phoenixmldb/database-extensions.html">Database Extensions</a></li><li class="nav-section"><p class="nav-section-title">API Reference</p><ul class="nav-section-children"><li><a href="/phoenixmldb/api-reference/containers.html">Containers API</a></li><li><a href="/phoenixmldb/api-reference/documents.html">Documents API</a></li><li><a href="/phoenixmldb/api-reference/indexes.html">Indexes API</a></li><li><a href="/phoenixmldb/api-reference/queries.html">Queries API</a></li><li><a href="/phoenixmldb/api-reference/transactions.html">Transactions API</a></li><li><a href="/phoenixmldb/api-reference/xslt-api.html">XSLT API</a></li><li><a href="/phoenixmldb/api-reference/resource-policy.html">Resource Policy</a></li></ul></li><li><a href="/phoenixmldb/linq-provider.html">LINQ Provider</a></li><li><a href="/phoenixmldb/mobile-development.html">Mobile Development</a></li><li><a href="/phoenixmldb/migration-guide.html">Migration Guide</a></li><li><a href="/phoenixmldb/troubleshooting.html">Troubleshooting</a></li></ul></li><li class="nav-section"><p class="nav-section-title">Language Reference</p><ul class="nav-section-children"><li class="nav-section"><p class="nav-section-title">XInclude</p><ul class="nav-section-children"><li><a href="/language-reference/xinclude/xml-inclusion.html">XML Inclusion</a></li><li><a href="/language-reference/xinclude/text-inclusion.html">Text Inclusion</a></li><li><a href="/language-reference/xinclude/fallback.html">Fallback</a></li><li><a href="/language-reference/xinclude/security-and-limits.html">Security and Limits</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XML Foundations</p><ul class="nav-section-children"><li><a href="/language-reference/xml-foundations/xml-vs-json.html">XML vs JSON</a></li><li><a href="/language-reference/xml-foundations/document-structure.html">Document Structure</a></li><li><a href="/language-reference/xml-foundations/xdm.html">The XQuery and XPath Data Model</a></li><li><a href="/language-reference/xml-foundations/namespaces.html">Namespaces</a></li><li><a href="/language-reference/xml-foundations/working-with-json.html">Working with JSON</a></li><li><a href="/language-reference/xml-foundations/unicode-and-dotnet.html">Unicode and .NET Requirements</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XPointer</p><ul class="nav-section-children"><li><a href="/language-reference/xpointer/shorthand-and-element.html">Shorthand and element()</a></li><li><a href="/language-reference/xpointer/namespaces-and-xpath1.html">Namespaces and xpath1()</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XPath</p><ul class="nav-section-children"><li><a href="/language-reference/xpath/path-expressions.html">Path Expressions</a></li><li class="nav-section"><p class="nav-section-title">Functions</p><ul class="nav-section-children"><li><a href="/language-reference/xpath/functions/string.html">String Functions</a></li><li><a href="/language-reference/xpath/functions/numeric.html">Numeric Functions</a></li><li><a href="/language-reference/xpath/functions/date-time.html">Date and Time Functions</a></li><li><a href="/language-reference/xpath/functions/sequence.html">Sequence Functions</a></li><li><a href="/language-reference/xpath/functions/boolean.html">Boolean Functions</a></li><li><a href="/language-reference/xpath/functions/node.html">Node Functions</a></li><li><a href="/language-reference/xpath/functions/map.html">Map Functions</a></li><li><a href="/language-reference/xpath/functions/array.html">Array Functions</a></li><li><a href="/language-reference/xpath/functions/math.html">Math Functions</a></li><li><a href="/language-reference/xpath/functions/higher-order.html">Higher-Order Functions</a></li><li><a href="/language-reference/xpath/functions/formatting.html">Formatting Functions</a></li><li><a href="/language-reference/xpath/functions/type-constructors.html">Type Constructors</a></li></ul></li><li><a href="/language-reference/xpath/operators.html">Operators and Comparisons</a></li><li><a href="/language-reference/xpath/data-types.html">Data Types</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XSLT</p><ul class="nav-section-children"><li><a href="/language-reference/xslt/first-transform.html">Your First Transform</a></li><li><a href="/language-reference/xslt/template-matching.html">Template Matching</a></li><li class="nav-section"><p class="nav-section-title">Instructions Reference</p><ul class="nav-section-children"><li><a href="/language-reference/xslt/instructions/output.html">Output Instructions</a></li><li><a href="/language-reference/xslt/instructions/control-flow.html">Control Flow</a></li><li><a href="/language-reference/xslt/instructions/variables-parameters.html">Variables and Parameters</a></li><li><a href="/language-reference/xslt/instructions/iteration-sorting.html">Iteration and Sorting</a></li><li><a href="/language-reference/xslt/instructions/grouping.html">Grouping</a></li><li><a href="/language-reference/xslt/instructions/copying-identity.html">Copying and Identity Transform</a></li><li><a href="/language-reference/xslt/instructions/node-construction.html">Node Construction</a></li><li><a href="/language-reference/xslt/instructions/multiple-outputs.html">Multiple Output Documents</a></li><li><a href="/language-reference/xslt/instructions/functions.html">User-Defined Functions</a></li><li><a href="/language-reference/xslt/instructions/keys.html">Keys and Cross-References</a></li><li><a href="/language-reference/xslt/instructions/analyze-string.html">String Analysis</a></li><li><a href="/language-reference/xslt/instructions/error-handling.html">Error Handling</a></li><li><a href="/language-reference/xslt/instructions/merge.html">Merging</a></li><li><a href="/language-reference/xslt/instructions/maps-arrays.html">Maps, Arrays, and Records</a></li><li><a href="/language-reference/xslt/instructions/streaming.html">Streaming and Accumulators</a></li><li><a href="/language-reference/xslt/instructions/packages.html">Packages</a></li><li><a href="/language-reference/xslt/instructions/dynamic-evaluation.html">Dynamic Evaluation</a></li><li><a href="/language-reference/xslt/instructions/number-formatting.html">Number Formatting</a></li></ul></li><li><a href="/language-reference/xslt/output-methods.html">Output Methods</a></li><li><a href="/language-reference/xslt/extensibility.html">Extensibility</a></li></ul></li><li class="nav-section"><p class="nav-section-title">XQuery</p><ul class="nav-section-children"><li><a href="/language-reference/xquery/flwor.html">FLWOR Expressions</a></li><li><a href="/language-reference/xquery/flwor-advanced.html">Advanced FLWOR</a></li><li><a href="/language-reference/xquery/constructors.html">Constructors</a></li><li><a href="/language-reference/xquery/conditionals.html">Conditionals and Error Handling</a></li><li><a href="/language-reference/xquery/operators.html">Operators</a></li><li><a href="/language-reference/xquery/types.html">Type System</a></li><li><a href="/language-reference/xquery/update-facility.html">Update Facility</a></li><li><a href="/language-reference/xquery/functions-modules.html">Functions and Modules</a></li><li><a href="/language-reference/xquery/xquery-vs-xslt.html">XQuery vs XSLT</a></li><li><a href="/language-reference/xquery/full-text.html">Full-Text Search</a></li><li><a href="/language-reference/xquery/prolog.html">Prolog and Declarations</a></li><li><a href="/language-reference/xquery/extensibility.html">Extensibility</a></li></ul></li></ul></li><li class="nav-section"><p class="nav-section-title">Tools</p><ul class="nav-section-children"><li><a href="/tools/xslt-cli.html">xslt CLI</a></li><li><a href="/tools/xquery-cli.html">xquery CLI</a></li><li><a href="/tools/crucible.html">Crucible</a></li><li><a href="/tools/xquery-mcp.html">XQuery MCP Server</a></li><li><a href="/tools/xslt-mcp.html">XSLT MCP Server</a></li></ul></li><li><a href="/release-notes.html">Release Notes</a></li></ul></nav><main><article><p class="eyebrow">JSON Support</p><h1 class="page-title">JSON Queries</h1><p class="page-subtitle">XQuery patterns for querying JSON documents stored in PhoenixmlDb</p><h1 id="json-queries"><a class="anchor" href="#json-queries">#</a>JSON Queries</h1><p>This guide covers XQuery patterns optimized for querying JSON documents stored in PhoenixmlDb.</p><h2 id="basic-field-access"><a class="anchor" href="#basic-field-access">#</a>Basic Field Access</h2><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Access top-level field :)
+        
+                          </script>
+                        </head>
+                        <body>
+                          <header class="site-header"><a href="https://phoenixml.dev/" class="site-logo">PhoenixmlDb Documentation</a>
+                            <div class="header-actions"><button class="search-trigger" id="search-trigger" aria-label="Search documentation"><span class="search-icon">🔍</span><span class="search-label">Search…</span><kbd class="search-kbd">⌘ K</kbd></button><button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button><button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                            </div>
+                          </header>
+                          <div class="layout">
+                            <nav class="sidebar" aria-label="Documentation">
+                              <ul class="nav-tree">
+                                <li><a href="https://phoenixml.dev/">Home</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Getting Started</p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="https://phoenixml.dev/getting-started/installation">Installation</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/getting-started/quick-start">Quick Start</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/getting-started/first-application">First Application</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section open">
+                                  <p class="nav-section-title">PhoenixmlDb</p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/core-concepts">Core Concepts</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/documents-and-storage">Documents &amp; Storage</a>
+                                    </li>
+                                    <li class="nav-section open">
+                                      <p class="nav-section-title">JSON Support</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/json-support/json-storage">JSON Storage</a>
+                                        </li>
+                                        <li class="active"><a href="https://phoenixml.dev/phoenixmldb/json-support/json-queries">JSON Queries</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/json-support/json-indexing">JSON Indexing</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/xdm-data-model">XDM Data Model</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/metadata">Metadata</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/indexing">Indexing</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/transactions">Transactions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">Deployment</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/deployment/embedded-mode">Embedded Mode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/deployment/server-mode">Server Mode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/deployment/cluster-mode">Cluster Mode</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/configuration">Configuration</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/performance-tuning">Performance Tuning</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/database-extensions">Database Extensions</a>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">API Reference</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/containers">Containers API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/documents">Documents API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/indexes">Indexes API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/queries">Queries API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/transactions">Transactions API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/xslt-api">XSLT API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/phoenixmldb/api-reference/resource-policy">Resource Policy</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/linq-provider">LINQ Provider</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/mobile-development">Mobile Development</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/migration-guide">Migration Guide</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/phoenixmldb/troubleshooting">Troubleshooting</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Language Reference</p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XInclude</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/xml-inclusion">XML Inclusion</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/text-inclusion">Text Inclusion</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/fallback">Fallback</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xinclude/security-and-limits">Security and Limits</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XML Foundations</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/xml-vs-json">XML vs JSON</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/document-structure">Document Structure</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/xdm">The XQuery and XPath Data Model</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/namespaces">Namespaces</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/working-with-json">Working with JSON</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xml-foundations/unicode-and-dotnet">Unicode and .NET Requirements</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPointer</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xpointer/shorthand-and-element">Shorthand and element()</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xpointer/namespaces-and-xpath1">Namespaces and xpath1()</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XPath</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xpath/path-expressions">Path Expressions</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Functions</p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/string">String Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/numeric">Numeric Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/date-time">Date and Time Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/sequence">Sequence Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/boolean">Boolean Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/node">Node Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/map">Map Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/array">Array Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/math">Math Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/higher-order">Higher-Order Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/formatting">Formatting Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xpath/functions/type-constructors">Type Constructors</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xpath/operators">Operators and Comparisons</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xpath/data-types">Data Types</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XSLT</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/first-transform">Your First Transform</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/template-matching">Template Matching</a>
+                                        </li>
+                                        <li class="nav-section">
+                                          <p class="nav-section-title">Instructions Reference</p>
+                                          <ul class="nav-section-children">
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/output">Output Instructions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/control-flow">Control Flow</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/variables-parameters">Variables and Parameters</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/iteration-sorting">Iteration and Sorting</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/grouping">Grouping</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/copying-identity">Copying and Identity Transform</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/node-construction">Node Construction</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/multiple-outputs">Multiple Output Documents</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/functions">User-Defined Functions</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/keys">Keys and Cross-References</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/analyze-string">String Analysis</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/error-handling">Error Handling</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/merge">Merging</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/maps-arrays">Maps, Arrays, and Records</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/streaming">Streaming and Accumulators</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/packages">Packages</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/dynamic-evaluation">Dynamic Evaluation</a>
+                                            </li>
+                                            <li><a href="https://phoenixml.dev/language-reference/xslt/instructions/number-formatting">Number Formatting</a>
+                                            </li>
+                                          </ul>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/output-methods">Output Methods</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xslt/extensibility">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">XQuery</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/flwor">FLWOR Expressions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/flwor-advanced">Advanced FLWOR</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/constructors">Constructors</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/conditionals">Conditionals and Error Handling</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/operators">Operators</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/types">Type System</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/update-facility">Update Facility</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/functions-modules">Functions and Modules</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/xquery-vs-xslt">XQuery vs XSLT</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/full-text">Full-Text Search</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/prolog">Prolog and Declarations</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/language-reference/xquery/extensibility">Extensibility</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">Tools</p>
+                                  <ul class="nav-section-children">
+                                    <li><a href="https://phoenixml.dev/tools/xslt-cli">xslt CLI</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/xquery-cli">xquery CLI</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/crucible">Crucible</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/xquery-mcp">XQuery MCP Server</a>
+                                    </li>
+                                    <li><a href="https://phoenixml.dev/tools/xslt-mcp">XSLT MCP Server</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li><a href="https://phoenixml.dev/release-notes">Release Notes</a>
+                                </li>
+                                <li class="nav-section">
+                                  <p class="nav-section-title">API Reference</p>
+                                  <ul class="nav-section-children">
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.Core</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/api/core/">PhoenixmlDb.Core API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containerid">ContainerId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containerinfo">ContainerInfo</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containernotfoundexception">ContainerNotFoundException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/containeroptions">ContainerOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/contenttype">ContentType</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/databasestatistics">DatabaseStatistics</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/daytimeduration">DayTimeDuration</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentexistsexception">DocumentExistsException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentid">DocumentId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentinfo">DocumentInfo</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentinput">DocumentInput</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentnotfoundexception">DocumentNotFoundException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentoptions">DocumentOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/documentparseexception">DocumentParseException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/fulltextindexdefinition">FullTextIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/fulltextindexoptions">FullTextIndexOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/icontainer">IContainer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/idocument">IDocument</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/idocumentdatabase">IDocumentDatabase</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/indexconfiguration">IndexConfiguration</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/indexdefinition">IndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/ireadtransaction">IReadTransaction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/iwritetransaction">IWriteTransaction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/ixdmnode">IXdmNode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/ixmlresourceresolver">IXmlResourceResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/localfileresourceresolver">LocalFileResourceResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/metadataindexdefinition">MetadataIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/nameindexdefinition">NameIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/namespacebinding">NamespaceBinding</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/namespaceid">NamespaceId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/nodeid">NodeId</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/parseresult">ParseResult</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/pathindexdefinition">PathIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/qname">QName</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/textnodeitem">TextNodeItem</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/transactionexception">TransactionException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/transactiontimeoutexception">TransactionTimeoutException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/utf8stringwriter">Utf8StringWriter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/validationmode">ValidationMode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/valueindexdefinition">ValueIndexDefinition</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmattribute">XdmAttribute</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmcomment">XdmComment</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmdocument">XdmDocument</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmelement">XdmElement</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmnamespace">XdmNamespace</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmnode">XdmNode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmnodekind">XdmNodeKind</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmprocessinginstruction">XdmProcessingInstruction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmqname">XdmQName</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmsequence">XdmSequence</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmtext">XdmText</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmtype">XdmType</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmtypename">XdmTypeName</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmvalue">XdmValue</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xdmvaluetype">XdmValueType</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeerrorkind">XIncludeErrorKind</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeexception">XIncludeException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludelimiter">XIncludeLimiter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeoptions">XIncludeOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xincludeprocessor">XIncludeProcessor</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xmldbexception">XmlDbException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xmldocumentparser">XmlDocumentParser</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xmlserializer">XmlSerializer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xpointerevaluator">XPointerEvaluator</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xqueryexception">XQueryException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsanyuri">XsAnyUri</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsdate">XsDate</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsdatetime">XsDateTime</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsduration">XsDuration</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgday">XsGDay</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgmonth">XsGMonth</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgmonthday">XsGMonthDay</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgyear">XsGYear</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsgyearmonth">XsGYearMonth</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xstime">XsTime</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xstypedinteger">XsTypedInteger</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xstypedstring">XsTypedString</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/xsuntypedatomic">XsUntypedAtomic</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/core/yearmonthduration">YearMonthDuration</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XQuery</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/api/xquery/">PhoenixmlDb.XQuery API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/analyzedterm">AnalyzedTerm</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/delegatemetadataprovider">DelegateMetadataProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/depthguardlistener">DepthGuardListener</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/exacturi">ExactUri</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftisstopwordfunction">FtIsStopWordFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftscorefunction">FtScoreFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftstem2function">FtStem2Function</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftstemfunction">FtStemFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ftthesauruslookupfunction">FtThesaurusLookupFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fttokenize2function">FtTokenize2Function</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fttokenizefunction">FtTokenizeFunction</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fulltextanalysisoptions">FullTextAnalysisOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fulltextengine">FullTextEngine</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/fulltextindex">FullTextIndex</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/httpdocumentclient">HttpDocumentClient</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/idocumentresolver">IDocumentResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/imetadataprovider">IMetadataProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/inodebuilder">INodeBuilder</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/inodeprovider">INodeProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/inodestore">INodeStore</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/iresourceresolver">IResourceResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/ischemaprovider">ISchemaProvider</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/outputmethod">OutputMethod</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/parseerror">ParseError</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/policyenforcingresolver">PolicyEnforcingResolver</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/postingentry">PostingEntry</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourceaccessdeniedexception">ResourceAccessDeniedException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourceaccesskind">ResourceAccessKind</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourcepolicy">ResourcePolicy</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourcepolicybuilder">ResourcePolicyBuilder</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/resourceresolverbase">ResourceResolverBase</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/schemaexception">SchemaException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/schemavalidationexception">SchemaValidationException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/serializationoptions">SerializationOptions</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/treeordinalallocator">TreeOrdinalAllocator</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/urirule">UriRule</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/utf8stringwriter">Utf8StringWriter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/validationmode">ValidationMode</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xdmdocumentstore">XdmDocumentStore</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryastbuilder">XQueryAstBuilder</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryerrorlistener">XQueryErrorListener</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryfacade">XQueryFacade</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xquerylexeradapter">XQueryLexerAdapter</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryparseexception">XQueryParseException</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryparserfacade">XQueryParserFacade</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xqueryresultserializer">XQueryResultSerializer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xquery/xsdschemaprovider">XsdSchemaProvider</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li class="nav-section">
+                                      <p class="nav-section-title">PhoenixmlDb.XSLT</p>
+                                      <ul class="nav-section-children">
+                                        <li><a href="https://phoenixml.dev/api/xslt/">PhoenixmlDb.XSLT API</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/packageversionresolution">PackageVersionResolution</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/preloadedresources">PreloadedResources</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/simpleexecutioncontext">SimpleExecutionContext</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xdminmemorystore">XdmInMemoryStore</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xqueryexpressionparser">XQueryExpressionParser</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xsltmoduleinitializer">XsltModuleInitializer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xslttransformer">XsltTransformer</a>
+                                        </li>
+                                        <li><a href="https://phoenixml.dev/api/xslt/xslttransformprovider">XsltTransformProvider</a>
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </nav>
+                            <main>
+                              <article>
+                                <p class="eyebrow">JSON Support</p>
+                                <h1 class="page-title">JSON Queries</h1>
+                                <p class="page-subtitle">XQuery patterns for querying JSON documents stored in PhoenixmlDb</p>
+                                <h1 id="json-queries"><a class="anchor" href="#json-queries">#</a>JSON Queries</h1>
+                                <p>This guide covers XQuery patterns optimized for querying JSON documents stored in PhoenixmlDb.</p>
+                                <h2 id="basic-field-access"><a class="anchor" href="#basic-field-access">#</a>Basic Field Access</h2>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: Access top-level field :)
 doc('users/user1.json')/map/name/text()
 (: Access nested field :)
 //map/profile/address/city/text()
 (: Access with default :)
-(//map/nickname/text(), 'Anonymous')[1]</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="filtering-documents"><a class="anchor" href="#filtering-documents">#</a>Filtering Documents</h2><h3 id="simple-filters"><a class="anchor" href="#simple-filters">#</a>Simple Filters</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: String equality :)
+(//map/nickname/text(), 'Anonymous')[1]</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="filtering-documents"><a class="anchor" href="#filtering-documents">#</a>Filtering Documents</h2>
+                                <h3 id="simple-filters"><a class="anchor" href="#simple-filters">#</a>Simple Filters</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: String equality :)
 for $user in collection('users')/map
 where $user/status = 'active'
 return $user
@@ -21,18 +627,40 @@ return $product/name/text()
 (: Boolean check :)
 for $user in collection('users')/map
 where $user/verified = 'true'
-return $user/email/text()</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="combined-filters"><a class="anchor" href="#combined-filters">#</a>Combined Filters</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">for $order in collection('orders')/map
+return $user/email/text()</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="combined-filters"><a class="anchor" href="#combined-filters">#</a>Combined Filters</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $order in collection('orders')/map
 where $order/status = 'pending'
   and xs:decimal($order/total) &gt; 500
   and $order/priority = 'high'
-return $order</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="null-checks"><a class="anchor" href="#null-checks">#</a>Null Checks</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Check for null :)
+return $order</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="null-checks"><a class="anchor" href="#null-checks">#</a>Null Checks</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: Check for null :)
 //map[deletedAt/@type = 'null']
 (: Check for non-null :)
 //map[not(deletedAt/@type = 'null')]
 (: Check field exists :)
 //map[email]
 (: Check field missing :)
-//map[not(phone)]</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="array-queries"><a class="anchor" href="#array-queries">#</a>Array Queries</h2><h3 id="contains-element"><a class="anchor" href="#contains-element">#</a>Contains Element</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Check if array contains value :)
+//map[not(phone)]</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="array-queries"><a class="anchor" href="#array-queries">#</a>Array Queries</h2>
+                                <h3 id="contains-element"><a class="anchor" href="#contains-element">#</a>Contains Element</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: Check if array contains value :)
 for $product in collection('products')/map
 where $product/tags/_ = 'featured'
 return $product
@@ -44,50 +672,115 @@ return $product
 for $product in collection('products')/map
 where $product/tags/_ = 'electronics'
   and $product/tags/_ = 'wireless'
-return $product</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="array-index-access"><a class="anchor" href="#array-index-access">#</a>Array Index Access</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: First element :)
+return $product</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="array-index-access"><a class="anchor" href="#array-index-access">#</a>Array Index Access</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: First element :)
 //map/items/_[1]
 (: Last element :)
 //map/items/_[last()]
 (: Slice :)
-//map/items/_[position() &gt;= 2 and position() &lt;= 5]</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="array-aggregation"><a class="anchor" href="#array-aggregation">#</a>Array Aggregation</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Count array items :)
+//map/items/_[position() &gt;= 2 and position() &lt;= 5]</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="array-aggregation"><a class="anchor" href="#array-aggregation">#</a>Array Aggregation</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: Count array items :)
 for $order in collection('orders')/map
 let $itemCount := count($order/items/_)
 return &lt;order id="{$order/id}"&gt;{$itemCount} items&lt;/order&gt;
 (: Sum array values :)
 for $order in collection('orders')/map
 let $total := sum($order/items/_/price)
-return &lt;order id="{$order/id}"&gt;Total: {$total}&lt;/order&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="nested-array-queries"><a class="anchor" href="#nested-array-queries">#</a>Nested Array Queries</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Find orders containing specific product :)
+return &lt;order id="{$order/id}"&gt;Total: {$total}&lt;/order&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="nested-array-queries"><a class="anchor" href="#nested-array-queries">#</a>Nested Array Queries</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: Find orders containing specific product :)
 for $order in collection('orders')/map
 where $order/items/_/productId = 'P001'
 return $order/id/text()
 (: Find users with specific role :)
 for $user in collection('users')/map
 where $user/roles/_ = 'admin'
-return $user/email/text()</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="nested-object-queries"><a class="anchor" href="#nested-object-queries">#</a>Nested Object Queries</h2><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Query nested objects :)
+return $user/email/text()</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="nested-object-queries"><a class="anchor" href="#nested-object-queries">#</a>Nested Object Queries</h2>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: Query nested objects :)
 for $user in collection('users')/map
 where $user/address/country = 'USA'
   and $user/address/state = 'CA'
 return concat($user/name, ' - ', $user/address/city)
 (: Deep nesting :)
-//map/company/departments/_/employees/_[role = 'manager']/name</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="type-handling"><a class="anchor" href="#type-handling">#</a>Type Handling</h2><h3 id="numeric-fields"><a class="anchor" href="#numeric-fields">#</a>Numeric Fields</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Numbers are stored as strings with type="number" :)
+//map/company/departments/_/employees/_[role = 'manager']/name</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="type-handling"><a class="anchor" href="#type-handling">#</a>Type Handling</h2>
+                                <h3 id="numeric-fields"><a class="anchor" href="#numeric-fields">#</a>Numeric Fields</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: Numbers are stored as strings with type="number" :)
 for $p in collection('products')/map
 let $price := xs:decimal($p/price)
 where $price between 10 and 100
 order by $price
-return $p</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="boolean-fields"><a class="anchor" href="#boolean-fields">#</a>Boolean Fields</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Booleans are stored as 'true'/'false' strings :)
+return $p</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="boolean-fields"><a class="anchor" href="#boolean-fields">#</a>Boolean Fields</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: Booleans are stored as 'true'/'false' strings :)
 //map[active = 'true']
-//map[not(deleted = 'true')]</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="date-fields"><a class="anchor" href="#date-fields">#</a>Date Fields</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Parse date strings :)
+//map[not(deleted = 'true')]</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="date-fields"><a class="anchor" href="#date-fields">#</a>Date Fields</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: Parse date strings :)
 for $event in collection('events')/map
 let $date := xs:dateTime($event/startTime)
 where $date &gt; current-dateTime()
 order by $date
-return $event</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="joins"><a class="anchor" href="#joins">#</a>Joins</h2><h3 id="simple-join"><a class="anchor" href="#simple-join">#</a>Simple Join</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">for $order in collection('orders')/map
+return $event</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="joins"><a class="anchor" href="#joins">#</a>Joins</h2>
+                                <h3 id="simple-join"><a class="anchor" href="#simple-join">#</a>Simple Join</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $order in collection('orders')/map
 let $customer := collection('customers')/map[id = $order/customerId]
 return &lt;result&gt;
     &lt;orderId&gt;{$order/id/text()}&lt;/orderId&gt;
     &lt;customer&gt;{$customer/name/text()}&lt;/customer&gt;
     &lt;total&gt;{$order/total/text()}&lt;/total&gt;
-&lt;/result&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="multiple-joins"><a class="anchor" href="#multiple-joins">#</a>Multiple Joins</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">for $order in collection('orders')/map
+&lt;/result&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="multiple-joins"><a class="anchor" href="#multiple-joins">#</a>Multiple Joins</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $order in collection('orders')/map
 let $customer := collection('customers')/map[id = $order/customerId]
 for $item in $order/items/_
 let $product := collection('products')/map[id = $item/productId]
@@ -96,12 +789,27 @@ return &lt;line&gt;
     &lt;customer&gt;{$customer/name/text()}&lt;/customer&gt;
     &lt;product&gt;{$product/name/text()}&lt;/product&gt;
     &lt;quantity&gt;{$item/quantity/text()}&lt;/quantity&gt;
-&lt;/line&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="grouping-and-aggregation"><a class="anchor" href="#grouping-and-aggregation">#</a>Grouping and Aggregation</h2><h3 id="group-by"><a class="anchor" href="#group-by">#</a>Group By</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">for $order in collection('orders')/map
+&lt;/line&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="grouping-and-aggregation"><a class="anchor" href="#grouping-and-aggregation">#</a>Grouping and Aggregation</h2>
+                                <h3 id="group-by"><a class="anchor" href="#group-by">#</a>Group By</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $order in collection('orders')/map
 group by $status := $order/status/text()
 return &lt;status name="{$status}"&gt;
     &lt;count&gt;{count($order)}&lt;/count&gt;
     &lt;total&gt;{sum(for $o in $order return xs:decimal($o/total))}&lt;/total&gt;
-&lt;/status&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="complex-aggregation"><a class="anchor" href="#complex-aggregation">#</a>Complex Aggregation</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">let $orders := collection('orders')/map
+&lt;/status&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="complex-aggregation"><a class="anchor" href="#complex-aggregation">#</a>Complex Aggregation</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">let $orders := collection('orders')/map
 return &lt;report&gt;
     &lt;summary&gt;
         &lt;totalOrders&gt;{count($orders)}&lt;/totalOrders&gt;
@@ -121,7 +829,14 @@ return &lt;report&gt;
         order by $total descending
         return &lt;customer id="{$customer}" total="{$total}"/&gt;[position() &lt;= 10]
     }&lt;/topCustomers&gt;
-&lt;/report&gt;</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="full-text-search"><a class="anchor" href="#full-text-search">#</a>Full-Text Search</h2><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Search in text fields :)
+&lt;/report&gt;</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="full-text-search"><a class="anchor" href="#full-text-search">#</a>Full-Text Search</h2>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: Search in text fields :)
 for $product in collection('products')/map
 where contains(lower-case($product/description), 'wireless')
 return $product
@@ -129,19 +844,41 @@ return $product
 for $article in collection('articles')/map
 where contains($article/content, 'machine')
   and contains($article/content, 'learning')
-return $article/title/text()</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="pagination"><a class="anchor" href="#pagination">#</a>Pagination</h2><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">(: Skip and limit :)
+return $article/title/text()</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="pagination"><a class="anchor" href="#pagination">#</a>Pagination</h2>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">(: Skip and limit :)
 let $page := 2
 let $pageSize := 10
 for $product in collection('products')/map
 order by $product/name
 return $product
   [position() &gt; ($page - 1) * $pageSize]
-  [position() &lt;= $pageSize]</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="output-as-json"><a class="anchor" href="#output-as-json">#</a>Output as JSON</h2><h3 id="xquery-3-1-maps"><a class="anchor" href="#xquery-3-1-maps">#</a>XQuery 3.1 Maps</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">for $user in collection('users')/map
+  [position() &lt;= $pageSize]</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="output-as-json"><a class="anchor" href="#output-as-json">#</a>Output as JSON</h2>
+                                <h3 id="xquery-3-1-maps"><a class="anchor" href="#xquery-3-1-maps">#</a>XQuery 3.1 Maps</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">for $user in collection('users')/map
 return map {
     "id": string($user/id),
     "name": string($user/name),
     "email": string($user/email)
-}</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h3 id="serialize-to-json"><a class="anchor" href="#serialize-to-json">#</a>Serialize to JSON</h3><figure class="code"><figcaption><span class="lang">xquery</span></figcaption><pre><code class="language-xquery">serialize(
+}</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h3 id="serialize-to-json"><a class="anchor" href="#serialize-to-json">#</a>Serialize to JSON</h3>
+                                <figure class="code">
+                                  <figcaption><span class="lang">xquery</span>
+                                  </figcaption>
+                                  <pre><code class="language-xquery">serialize(
     array {
         for $product in collection('products')/map
         where $product/inStock = 'true'
@@ -151,46 +888,189 @@ return map {
         }
     },
     map { "method": "json" }
-)</code></pre><button class="copy" type="button" aria-label="Copy code">Copy</button></figure><h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2><ol><li>
-        <p>
-          <strong>Index frequently queried paths</strong> — <code>/map/status</code>, <code>/map/customerId</code></p>
-      </li><li>
-        <p>
+)</code>
+                                  </pre><button class="copy" type="button" aria-label="Copy code">Copy</button>
+                                </figure>
+                                <h2 id="best-practices"><a class="anchor" href="#best-practices">#</a>Best Practices</h2>
+                                <ol>
+                                  <li>
+        
+                                    <p>
+          <strong>Index frequently queried paths</strong> — <code>/map/status</code>, <code>/map/customerId</code>
+                                    </p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
           <strong>Use typed comparisons</strong> — Cast to <code>xs:decimal</code> for numeric comparisons</p>
-      </li><li>
-        <p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
           <strong>Avoid <code>//</code> in large collections</strong> — Use specific paths</p>
-      </li><li>
-        <p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
           <strong>Filter before joining</strong> — Reduce join cardinality</p>
-      </li><li>
-        <p>
+      
+                                  </li>
+                                  <li>
+        
+                                    <p>
           <strong>Use <code>let</code> for reused expressions</strong> — Avoid recomputation</p>
-      </li></ol><h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps</h2><div class="table-wrap"><table>
-      <thead>
-        <tr>
-          <th>
-            <p>Storage</p>
-          </th>
-          <th>
-            <p>Indexing</p>
-          </th>
-          <th>
-            <p>Functions</p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <p><strong><a href="json-storage.html" title="">JSON Storage</a></strong>Storage options</p>
-          </td>
-          <td>
-            <p><strong><a href="json-indexing.html" title="">JSON Indexing</a></strong>Optimize query performance</p>
-          </td>
-          <td>
-            <p><strong><a href="../../language-reference/xpath/functions/index.html" title="">Functions and Operators</a></strong>XQuery functions</p>
-          </td>
-        </tr>
-      </tbody>
-    </table></div></article></main><aside class="toc" aria-label="On this page"><p class="toc-label">On this page</p><ul><li class="toc-h2"><a href="#basic-field-access">Basic Field Access</a></li><li class="toc-h2"><a href="#filtering-documents">Filtering Documents</a></li><li class="toc-h3"><a href="#simple-filters">Simple Filters</a></li><li class="toc-h3"><a href="#combined-filters">Combined Filters</a></li><li class="toc-h3"><a href="#null-checks">Null Checks</a></li><li class="toc-h2"><a href="#array-queries">Array Queries</a></li><li class="toc-h3"><a href="#contains-element">Contains Element</a></li><li class="toc-h3"><a href="#array-index-access">Array Index Access</a></li><li class="toc-h3"><a href="#array-aggregation">Array Aggregation</a></li><li class="toc-h3"><a href="#nested-array-queries">Nested Array Queries</a></li><li class="toc-h2"><a href="#nested-object-queries">Nested Object Queries</a></li><li class="toc-h2"><a href="#type-handling">Type Handling</a></li><li class="toc-h3"><a href="#numeric-fields">Numeric Fields</a></li><li class="toc-h3"><a href="#boolean-fields">Boolean Fields</a></li><li class="toc-h3"><a href="#date-fields">Date Fields</a></li><li class="toc-h2"><a href="#joins">Joins</a></li><li class="toc-h3"><a href="#simple-join">Simple Join</a></li><li class="toc-h3"><a href="#multiple-joins">Multiple Joins</a></li><li class="toc-h2"><a href="#grouping-and-aggregation">Grouping and Aggregation</a></li><li class="toc-h3"><a href="#group-by">Group By</a></li><li class="toc-h3"><a href="#complex-aggregation">Complex Aggregation</a></li><li class="toc-h2"><a href="#full-text-search">Full-Text Search</a></li><li class="toc-h2"><a href="#pagination">Pagination</a></li><li class="toc-h2"><a href="#output-as-json">Output as JSON</a></li><li class="toc-h3"><a href="#xquery-3-1-maps">XQuery 3.1 Maps</a></li><li class="toc-h3"><a href="#serialize-to-json">Serialize to JSON</a></li><li class="toc-h2"><a href="#best-practices">Best Practices</a></li><li class="toc-h2"><a href="#next-steps">Next Steps</a></li></ul></aside></div><div class="search-overlay" id="search-overlay" hidden="hidden"><div class="search-backdrop"></div><div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off"><div class="search-results" id="search-results"></div></div></div><footer class="site-footer"><p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" rel="noopener noreferrer">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" rel="noopener noreferrer">Endpoint Systems</a></p></footer><script src="https://unpkg.com/lunr/lunr.js"></script><script src="/js/prism.js"></script><script src="/js/search.js"></script><script src="/js/theme.js"></script><script src="/js/toc.js"></script><script src="/js/copy.js"></script></body></html>
+      
+                                  </li>
+                                </ol>
+                                <h2 id="next-steps"><a class="anchor" href="#next-steps">#</a>Next Steps</h2>
+                                <div class="table-wrap">
+                                  <table>
+      
+                                    <thead>
+        
+                                      <tr>
+          
+                                        <th>
+            
+                                          <p>Storage</p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Indexing</p>
+          
+                                        </th>
+          
+                                        <th>
+            
+                                          <p>Functions</p>
+          
+                                        </th>
+        
+                                      </tr>
+      
+                                    </thead>
+      
+                                    <tbody>
+        
+                                      <tr>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>
+                <a href="json-storage.html">JSON Storage</a>
+              </strong>Storage options</p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>
+                <a href="json-indexing.html">JSON Indexing</a>
+              </strong>Optimize query performance</p>
+          
+                                        </td>
+          
+                                        <td>
+            
+                                          <p>
+              <strong>
+                <a href="../../language-reference/xpath/functions/index.html">Functions and Operators</a>
+              </strong>XQuery functions</p>
+          
+                                        </td>
+        
+                                      </tr>
+      
+                                    </tbody>
+    
+                                  </table>
+                                </div>
+                              </article>
+                            </main>
+                            <aside class="toc" aria-label="On this page">
+                              <p class="toc-label">On this page</p>
+                              <ul>
+                                <li class="toc-h2"><a href="#basic-field-access">Basic Field Access</a>
+                                </li>
+                                <li class="toc-h2"><a href="#filtering-documents">Filtering Documents</a>
+                                </li>
+                                <li class="toc-h3"><a href="#simple-filters">Simple Filters</a>
+                                </li>
+                                <li class="toc-h3"><a href="#combined-filters">Combined Filters</a>
+                                </li>
+                                <li class="toc-h3"><a href="#null-checks">Null Checks</a>
+                                </li>
+                                <li class="toc-h2"><a href="#array-queries">Array Queries</a>
+                                </li>
+                                <li class="toc-h3"><a href="#contains-element">Contains Element</a>
+                                </li>
+                                <li class="toc-h3"><a href="#array-index-access">Array Index Access</a>
+                                </li>
+                                <li class="toc-h3"><a href="#array-aggregation">Array Aggregation</a>
+                                </li>
+                                <li class="toc-h3"><a href="#nested-array-queries">Nested Array Queries</a>
+                                </li>
+                                <li class="toc-h2"><a href="#nested-object-queries">Nested Object Queries</a>
+                                </li>
+                                <li class="toc-h2"><a href="#type-handling">Type Handling</a>
+                                </li>
+                                <li class="toc-h3"><a href="#numeric-fields">Numeric Fields</a>
+                                </li>
+                                <li class="toc-h3"><a href="#boolean-fields">Boolean Fields</a>
+                                </li>
+                                <li class="toc-h3"><a href="#date-fields">Date Fields</a>
+                                </li>
+                                <li class="toc-h2"><a href="#joins">Joins</a>
+                                </li>
+                                <li class="toc-h3"><a href="#simple-join">Simple Join</a>
+                                </li>
+                                <li class="toc-h3"><a href="#multiple-joins">Multiple Joins</a>
+                                </li>
+                                <li class="toc-h2"><a href="#grouping-and-aggregation">Grouping and Aggregation</a>
+                                </li>
+                                <li class="toc-h3"><a href="#group-by">Group By</a>
+                                </li>
+                                <li class="toc-h3"><a href="#complex-aggregation">Complex Aggregation</a>
+                                </li>
+                                <li class="toc-h2"><a href="#full-text-search">Full-Text Search</a>
+                                </li>
+                                <li class="toc-h2"><a href="#pagination">Pagination</a>
+                                </li>
+                                <li class="toc-h2"><a href="#output-as-json">Output as JSON</a>
+                                </li>
+                                <li class="toc-h3"><a href="#xquery-3-1-maps">XQuery 3.1 Maps</a>
+                                </li>
+                                <li class="toc-h3"><a href="#serialize-to-json">Serialize to JSON</a>
+                                </li>
+                                <li class="toc-h2"><a href="#best-practices">Best Practices</a>
+                                </li>
+                                <li class="toc-h2"><a href="#next-steps">Next Steps</a>
+                                </li>
+                              </ul>
+                            </aside>
+                          </div>
+                          <div class="search-overlay" id="search-overlay" hidden="hidden">
+                            <div class="search-backdrop"></div>
+                            <div class="search-panel" role="dialog" aria-label="Search"><input type="search" id="search-input" placeholder="Search documentation…" aria-label="Search documentation" autocomplete="off">
+                              <div class="search-results" id="search-results"></div>
+                            </div>
+                          </div>
+                          <footer class="site-footer">
+                            <p>Built with <a href="https://github.com/phoenixmldb/crucible" target="_blank" rel="noopener noreferrer">Crucible</a> by <a href="https://endpointsystems.com" target="_blank" rel="noopener noreferrer">Endpoint Systems</a>
+                            </p>
+                          </footer>
+                          <script src="https://phoenixml.dev/js/lunr.js"></script>
+                          <script src="https://phoenixml.dev/js/prism.js"></script>
+                          <script src="https://phoenixml.dev/js/search.js"></script>
+                          <script src="https://phoenixml.dev/js/theme.js"></script>
+                          <script src="https://phoenixml.dev/js/toc.js"></script>
+                          <script src="https://phoenixml.dev/js/copy.js"></script>
+                        </body>
+                      </html>
