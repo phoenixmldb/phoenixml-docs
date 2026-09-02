@@ -1,7 +1,7 @@
 ---
 title: Release Notes
 description: PhoenixmlDb version history and changelog
-sort: 5
+sort: 6
 ---
 
 ## Version 1.1.0 (March 2026)

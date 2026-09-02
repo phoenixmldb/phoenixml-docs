@@ -1,7 +1,7 @@
 ---
 title: Tools
 description: PhoenixmlDb command-line tools and MCP servers
-sort: 4
+sort: 5
 ---
 
 # Tools
@@ -13,8 +13,9 @@ sort: 4
 | **[xslt](xslt-cli.md)** | Run XSLT 3.0/4.0 transformations | `dotnet tool install -g PhoenixmlDb.Xslt.Cli` |
 | **[xquery](xquery-cli.md)** | Execute XQuery expressions against XML | `dotnet tool install -g PhoenixmlDb.XQuery.Cli` |
 | **[crucible](crucible.md)** | Generate static documentation sites | `dotnet tool install -g crucible` |
+| **[phxspec](phxspec.md)** | Run XSpec test suites for XSLT | `dotnet tool install -g PhoenixmlDb.XSpec.Cli` |
 
-All three are .NET global tools — install once, use from anywhere on the command line.
+All four are .NET global tools — install once, use from anywhere on the command line.
 
 ## MCP Servers
 
