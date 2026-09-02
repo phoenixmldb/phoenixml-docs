@@ -15,6 +15,12 @@
     <loc>https://phoenixml.dev/getting-started/first-application</loc>
   </url>
   <url>
+    <loc>https://phoenixml.dev/guides/</loc>
+  </url>
+  <url>
+    <loc>https://phoenixml.dev/guides/reporting-an-engine-bug</loc>
+  </url>
+  <url>
     <loc>https://phoenixml.dev/phoenixmldb/</loc>
   </url>
   <url>
@@ -327,6 +333,9 @@
     <loc>https://phoenixml.dev/tools/crucible</loc>
   </url>
   <url>
+    <loc>https://phoenixml.dev/tools/phxspec</loc>
+  </url>
+  <url>
     <loc>https://phoenixml.dev/tools/xquery-mcp</loc>
   </url>
   <url>
@@ -358,6 +367,9 @@
   </url>
   <url>
     <loc>https://phoenixml.dev/api/core/daytimeduration</loc>
+  </url>
+  <url>
+    <loc>https://phoenixml.dev/api/core/dcterms</loc>
   </url>
   <url>
     <loc>https://phoenixml.dev/api/core/documentexistsexception</loc>
@@ -417,7 +429,16 @@
     <loc>https://phoenixml.dev/api/core/localfileresourceresolver</loc>
   </url>
   <url>
+    <loc>https://phoenixml.dev/api/core/metadatacollection</loc>
+  </url>
+  <url>
+    <loc>https://phoenixml.dev/api/core/metadatacollectionextensions</loc>
+  </url>
+  <url>
     <loc>https://phoenixml.dev/api/core/metadataindexdefinition</loc>
+  </url>
+  <url>
+    <loc>https://phoenixml.dev/api/core/metadataproperty-1</loc>
   </url>
   <url>
     <loc>https://phoenixml.dev/api/core/nameindexdefinition</loc>
@@ -429,6 +450,9 @@
     <loc>https://phoenixml.dev/api/core/namespaceid</loc>
   </url>
   <url>
+    <loc>https://phoenixml.dev/api/core/namespaceregistry</loc>
+  </url>
+  <url>
     <loc>https://phoenixml.dev/api/core/nodeid</loc>
   </url>
   <url>
@@ -436,6 +460,9 @@
   </url>
   <url>
     <loc>https://phoenixml.dev/api/core/pathindexdefinition</loc>
+  </url>
+  <url>
+    <loc>https://phoenixml.dev/api/core/phxmeta</loc>
   </url>
   <url>
     <loc>https://phoenixml.dev/api/core/qname</loc>
@@ -696,6 +723,9 @@
     <loc>https://phoenixml.dev/api/xquery/xdmdocumentstore</loc>
   </url>
   <url>
+    <loc>https://phoenixml.dev/api/xquery/xdmshape</loc>
+  </url>
+  <url>
     <loc>https://phoenixml.dev/api/xquery/xqueryastbuilder</loc>
   </url>
   <url>
@@ -729,10 +759,22 @@
     <loc>https://phoenixml.dev/api/xslt/preloadedresources</loc>
   </url>
   <url>
+    <loc>https://phoenixml.dev/api/xslt/qnamenamespaces</loc>
+  </url>
+  <url>
     <loc>https://phoenixml.dev/api/xslt/simpleexecutioncontext</loc>
   </url>
   <url>
+    <loc>https://phoenixml.dev/api/xslt/transformparameteroptions</loc>
+  </url>
+  <url>
+    <loc>https://phoenixml.dev/api/xslt/vendoroptionpackages</loc>
+  </url>
+  <url>
     <loc>https://phoenixml.dev/api/xslt/xdminmemorystore</loc>
+  </url>
+  <url>
+    <loc>https://phoenixml.dev/api/xslt/xmlsourcereader</loc>
   </url>
   <url>
     <loc>https://phoenixml.dev/api/xslt/xqueryexpressionparser</loc>
