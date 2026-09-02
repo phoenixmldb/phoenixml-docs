@@ -310,7 +310,7 @@ The input document follows the Crucible XML schema — see the [design spec](htt
 
 ## Extensions
 
-Crucible supports extensions that hook into the Markdown-to-XML pipeline. The built-in Mermaid extension is an example — it intercepts fenced code blocks with `mermaid` language and emits a `<mermaid>` XML element instead of a `<code-block>`.
+Crucible supports extensions that hook into the Markdown-to-XML pipeline. The built-in Mermaid extension is an example. It intercepts fenced code blocks with the `mermaid` language and emits a `<mermaid>` element instead of a `<code-block>`.
 
 ### Plugin Directory
 

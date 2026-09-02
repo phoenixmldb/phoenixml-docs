@@ -6,9 +6,13 @@ sort: 1
 
 # Contributing: STE-Informed Style Guide
 
-This guide governs prose in `docs/language-reference/`. It applies an
-STE-informed clarity level, not strict ASD-STE100 conformance. Follow it for
-every new or rewritten page.
+This guide governs prose in `docs/language-reference/`, `docs/guides/` and
+`docs/tools/`. It applies an STE-informed clarity level, not strict ASD-STE100
+conformance. Follow it for every new or rewritten page.
+
+Task-focused pages carry one extra obligation, because a reader follows them
+with a terminal open: state a caution before the step it qualifies, and show
+real command output rather than a description of it.
 
 ## Why STE-informed, not strict STE
 

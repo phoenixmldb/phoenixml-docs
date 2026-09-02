@@ -165,7 +165,7 @@ Exits with code 0 if the stylesheet is valid, 2 if there are errors. Useful in C
 
 ## Streaming
 
-For large XML files where memory is a concern, use `--stream` to process input without loading the entire document into memory. This uses `TransformAsync(Stream, Stream)` under the hood — forward-only XmlReader-based processing rather than building a full in-memory tree.
+For large XML files where memory is a concern, use `--stream` to process input without loading the entire document into memory. The option calls `TransformAsync(Stream, Stream)`, which reads forward-only through an XmlReader instead of building a full in-memory tree.
 
 ```bash
 xslt --stream style.xsl large-input.xml
