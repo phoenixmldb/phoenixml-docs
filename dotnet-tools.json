@@ -3,7 +3,7 @@
   "isRoot": true,
   "tools": {
     "crucible.cli": {
-      "version": "1.1.63",
+      "version": "1.1.76",
       "commands": [
         "crucible"
       ],
