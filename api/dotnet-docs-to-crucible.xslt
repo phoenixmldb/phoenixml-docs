@@ -184,7 +184,13 @@
     <xsl:variable name="nonblank" select="$lines[normalize-space(.) != '']"/>
     <xsl:variable name="indent" as="xs:integer" select="
       if (empty($nonblank)) then 0
-      else min(for $l in $nonblank return string-length(replace($l, '^(\s*).*$', '$1')))
+      (: string-length($l) minus the length with leading whitespace stripped. The obvious
+         spelling, replace($l, '^(\s*).*$', '$1'), is an error: XPath F&amp;O requires
+         fn:replace to raise FORX0003 when the pattern CAN match a zero-length string, and
+         ^(\s*).*$ does so on empty input. Xslt 1.5.0 tolerated it; 1.6.13 enforces the rule,
+         and every API page failed to generate. ^\s+ needs at least one character, so it
+         cannot match empty. :)
+      else min(for $l in $nonblank return string-length($l) - string-length(replace($l, '^\s+', '')))
     "/>
     <xsl:variable name="stripped" as="xs:string*" select="
       for $l in $lines return
