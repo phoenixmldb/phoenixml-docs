@@ -1,7 +1,19 @@
 #!/bin/bash
 # Build script for PhoenixML documentation
 # Generates API reference from .NET XML docs, then builds the full site with Crucible.
+#
+# Environment:
+#   XMLDOC_DIR            where the engine's generated PhoenixmlDb.*.xml live
+#   ALLOW_STALE_API_DOCS  set to 1 to skip the "docs older than engine source" check
+#   MIN_API_PAGES         floor for generated /api/ pages (default 50)
+#   MIN_TOTAL_PAGES       floor for total built pages (default 100)
+#
+# The two floors exist because an exit code cannot describe a build that succeeded but
+# produced a fraction of the site. Raise them with the site, or override per-run.
 set -e
+# Without pipefail a failing command feeding a pipe is masked by the exit status of
+# the last stage, which is usually a formatter and always succeeds.
+set -o pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
@@ -116,6 +128,19 @@ dotnet run --no-build --project "$API_GENERATOR" -- \
 STEP_END=$(date +%s%N)
 echo "  $(( (STEP_END - STEP_START) / 1000000 ))ms"
 
+# The generator returns non-zero when an assembly fails, which set -e catches. This second
+# check covers what an exit code cannot: a run that "succeeded" but wrote far less than a
+# real API section. Deploying a site whose /api/ silently shrank is the failure that
+# actually happened here, so assert a floor rather than trusting the exit code alone.
+_api_pages=$(find "$INTERMEDIATE/api" -name '*.xml' 2>/dev/null | wc -l)
+if [ "$_api_pages" -lt "${MIN_API_PAGES:-50}" ]; then
+  echo "ERROR: API reference generated only $_api_pages pages (expected at least ${MIN_API_PAGES:-50})." >&2
+  echo "  The /api/ section would deploy incomplete. Check the generator output above." >&2
+  echo "  Override the floor with MIN_API_PAGES=<n> if the expected size has genuinely changed." >&2
+  exit 1
+fi
+echo "  $_api_pages API pages"
+
 # Step 3: Update site manifest with API pages
 echo ""
 echo "--- Updating manifest ---"
@@ -141,6 +166,11 @@ rm -rf "$INTERMEDIATE"
 
 TOTAL_END=$(date +%s%N)
 page_count=$(find "$OUTPUT" -name "*.html" | wc -l)
+if [ "$page_count" -lt "${MIN_TOTAL_PAGES:-100}" ]; then
+  echo "ERROR: built only $page_count pages (expected at least ${MIN_TOTAL_PAGES:-100})." >&2
+  echo "  Refusing to report success on a site this small — check the steps above." >&2
+  exit 1
+fi
 total_seconds=$(( (TOTAL_END - TOTAL_START) / 1000000000 ))
 echo ""
 echo "=== $page_count pages built in ${total_seconds}s ==="
