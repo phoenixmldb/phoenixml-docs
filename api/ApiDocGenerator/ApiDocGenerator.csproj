@@ -7,6 +7,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../../../crucible/src/Crucible.Core/Crucible.Core.csproj" />
+    <!-- The generator needs an XSLT engine and nothing else. It used to reach
+         PhoenixmlDb.Xslt transitively through a ProjectReference to Crucible.Core
+         in a sibling repo, which made this build unrunnable outside a full
+         workspace checkout. Reference the published package directly. -->
+    <PackageReference Include="PhoenixmlDb.Xslt" Version="1.6.15" />
   </ItemGroup>
 </Project>

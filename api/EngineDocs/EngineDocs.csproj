@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Not a program. This project exists only to put the engines' generated XML
+    documentation in one directory for the API-reference step of build.sh,
+    which reads it as XMLDOC_DIR.
+
+    CopyDocumentationFilesFromPackages is what does the work: with it, restoring
+    a package brings its PhoenixmlDb.*.xml into this project's output alongside
+    the assembly. So the API reference documents the *published* engines, and
+    the versions below are the single place that decides which.
+
+    Bump these to publish API docs for a newer engine. Nothing else to stage.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <CopyDocumentationFilesFromPackages>true</CopyDocumentationFilesFromPackages>
+    <!-- Nothing consumes this as a library, and it has no code of its own. -->
+    <IsPackable>false</IsPackable>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PhoenixmlDb.Core" Version="1.7.0" />
+    <PackageReference Include="PhoenixmlDb.XQuery" Version="1.7.0" />
+    <PackageReference Include="PhoenixmlDb.Xslt" Version="1.6.15" />
+  </ItemGroup>
+
+</Project>
