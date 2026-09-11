@@ -54,3 +54,36 @@ jobs:
           versions pinned in api/EngineDocs; this bumps them to what is on nuget.org
           so phoenixml.dev stops describing an engine nobody can install."
           git push
+
+      # A push made with the default GITHUB_TOKEN does NOT trigger other workflows — GitHub
+      # blocks that to stop recursive loops. So the commit above lands and deploy.yml never
+      # runs: the pin moves, the site does not, and both jobs report success. Caught by
+      # checking that the deploy actually fired rather than that the sync exited 0 — the
+      # distinction this project keeps relearning (BUGS.md #44).
+      #
+      # Dispatching explicitly is the fix that needs no new secret. deploy.yml already accepts
+      # workflow_dispatch.
+      - name: Deploy the site with the new pins
+        if: steps.sync.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run deploy.yml --ref main
+          echo "Dispatched deploy.yml — the API reference will be rebuilt with the new pins."
+
+      - name: Confirm the deploy was queued
+        if: steps.sync.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Assert the dispatch produced a run, rather than trusting that the call exited 0.
+          sleep 15
+          n=$(gh run list --workflow=deploy.yml --limit 5 --json event \
+                --jq '[.[] | select(.event == "workflow_dispatch")] | length')
+          if [ "${n:-0}" -eq 0 ]; then
+            echo "::error::deploy.yml was dispatched but no run appeared — the site will not"
+            echo "::error::pick up the new pins. Run it manually."
+            exit 1
+          fi
+          echo "deploy.yml run present."
+
