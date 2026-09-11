@@ -10,14 +10,14 @@ sort: 1
 
 Point a Word-to-Markdown tool at a folder of real business documents and you have almost
 certainly indexed something incomplete without knowing it. Many, if not most Word documents found in the wild, are 
-incredibly messy. Writing reactive code isnt' going to cut it - imagine having to try and anticipate:
+incredibly messy. Writing reactive code isn't going to cut it - imagine having to try and anticipate:
 - a callout in a text box
 - a customer name inside a content control
 - a table whose rows sit behind a legacy wrapper format. 
 
 The output looks like a document, but how are you going to guarantee you captured it all? 
 
-It's bad enough for a person to read an incomplete file - if they know it's incomplete, they'll be able to pick up on it. But it's a an entirely different problem altogether putting an incomplete output into a retrieval index, quietly degrading answers that got left out.
+It's bad enough for a person to read an incomplete file - if they know it's incomplete, they'll be able to pick up on it. But it's an entirely different problem altogether putting an incomplete output into a retrieval index, quietly degrading answers that got left out.
 
 `docmd` is our Word-to-Markdown converter, and it makes two choices most converters do not.
 
@@ -64,7 +64,7 @@ Think of the recursive code you'd have to write in C# what we built here in just
 </xsl:template>
 ```
 
-Priorities give you an override system for nothing. A user's style map lands at priority 4 and
+Priorities give you an override system for free. A user's style map lands at priority 4 and
 beats every inference below it, so mapping a style to `para` demotes a heading deliberately —
 and that took a number, not dispatch code.
 
