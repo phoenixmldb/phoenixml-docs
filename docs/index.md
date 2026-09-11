@@ -47,8 +47,8 @@ Comprehensive language references for the XML technology stack — written for .
 
 Longer-form engineering writing — what building real products on these engines turns up.
 
-- **[A converter that tells you what it lost](notes/a-converter-that-tells-you-what-it-lost.md)** —
-  a stylesheet as the semantic layer, and measuring whether the words survived
+- **[Introducing docmd](notes/introducing-docmd.md)** — a stylesheet as the semantic layer, and
+  measuring whether the words survived
 
 ## About This Site
 

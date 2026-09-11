@@ -1,10 +1,10 @@
 ---
-title: A converter that tells you what it lost
+title: Introducing docmd
 description: Building a Word-to-Markdown tool where the semantic layer is a stylesheet you can read, and every conversion is measured
 sort: 1
 ---
 
-# A converter that tells you what it lost
+# Introducing docmd
 
 *10 September 2026*
 
