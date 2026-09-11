@@ -9,3 +9,6 @@ obj/
 # Python bytecode caches — build output.
 __pycache__/
 *.py[cod]
+
+# Engine XML docs assembled for the API-reference build (see build.sh XMLDOC_DIR).
+.xmldoc/
