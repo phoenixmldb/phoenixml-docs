@@ -1,0 +1,97 @@
+name: Deploy phoenixml.dev
+
+# A push to main publishes. A pull request builds without publishing, so a
+# broken site is caught on the PR rather than after it is live. The manual run
+# is for redeploying the current main without an empty commit.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# One deploy at a time, and let a newer push cancel a PR build that is now
+# pointless. Production deploys are never cancelled half-way.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      # The engines need ICU for collations, normalize-unicode() and regex
+      # character classes. Invariant mode returns wrong answers rather than
+      # failing, so pin it off explicitly rather than trusting the image.
+      DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # build.sh's manifest step is Python. Named here so a change to the
+      # runner image cannot quietly remove it.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/dotnet-tools.json') }}
+          restore-keys: nuget-${{ runner.os }}-
+
+      # Everything the build needs comes from nuget.org: crucible.cli as a tool,
+      # and the engines' XML documentation via api/EngineDocs. No sibling repo
+      # checkout, so this workflow is a faithful test of a clean clone.
+      - name: Build the site
+        run: ./build.sh
+
+      # build.sh exits 0 having produced very little if the API step degrades,
+      # so assert the shape of what it made instead of trusting its exit code.
+      - name: Verify the build produced a whole site
+        run: |
+          pages=$(find dist -name '*.html' | wc -l)
+          api=$(find dist/api -name '*.html' | wc -l)
+          echo "pages=$pages api=$api"
+          [ "$pages" -ge 250 ] || { echo "::error::only $pages pages built, expected 250+"; exit 1; }
+          [ "$api"   -ge 140 ] || { echo "::error::only $api API pages built, expected 140+"; exit 1; }
+          for p in index.html tools/docmd.html api/xslt/index.html; do
+            [ -s "dist/$p" ] || { echo "::error::missing dist/$p"; exit 1; }
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: dist/
+          retention-days: 7
+
+  deploy:
+    # Only main publishes. A PR has already proved the build above.
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://phoenixml.dev
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: dist
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=phoenixml-dev --branch=main
