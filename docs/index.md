@@ -41,6 +41,14 @@ Comprehensive language references for the XML technology stack — written for .
 - **[xslt CLI](tools/xslt-cli.md)** — Run XSLT transformations from the command line
 - **[xquery CLI](tools/xquery-cli.md)** — Query XML documents with XQuery expressions
 - **[Crucible](tools/crucible.md)** — Build static documentation sites from Markdown
+- **[docmd](tools/docmd.md)** — Convert Word documents to Markdown for retrieval indexes
+
+## Notes
+
+Longer-form engineering writing — what building real products on these engines turns up.
+
+- **[Introducing docmd](notes/introducing-docmd.md)** — a stylesheet as the semantic layer, and
+  measuring whether the words survived
 
 ## About This Site
 
