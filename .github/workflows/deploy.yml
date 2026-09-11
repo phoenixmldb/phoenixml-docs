@@ -102,4 +102,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Left unset, the action installs its own default (3.90.0), which is
+          # two majors behind what we run locally. Pin it so a deploy that works
+          # on a laptop works here, and bump it deliberately.
+          wranglerVersion: '4.131.0'
           command: pages deploy dist --project-name=phoenixml-dev --branch=main
