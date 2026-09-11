@@ -32,6 +32,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Surfaces a stale API-reference pin on any PR or push. sync-engine-docs.yml fixes it
+      # automatically on a schedule; this makes the drift visible in the meantime rather than
+      # letting the site quietly document an older engine. Warn, do not fail: a docs change
+      # should not be blocked by an engine release that landed an hour ago.
+      - name: Check the API reference tracks the published engines
+        continue-on-error: true
+        run: ./scripts/sync-engine-docs.sh --check
+
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'

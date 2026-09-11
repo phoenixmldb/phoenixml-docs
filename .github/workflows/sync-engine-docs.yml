@@ -1,0 +1,56 @@
+# Keeps the API reference pointed at the latest PUBLISHED engine packages.
+#
+# api/EngineDocs pins the engine versions whose XML documentation becomes the API reference.
+# Nothing bumped those pins at release time, so phoenixml.dev's API docs drifted behind the
+# shipped engines silently — a stale pin builds perfectly and says nothing.
+#
+# This closes that loop without any cross-repo secret: rather than the engine repos pushing on
+# release, this repo pulls from nuget.org. It therefore documents what a consumer can actually
+# install, which a git tag is not.
+name: Sync engine API docs
+
+on:
+  schedule:
+    # Hourly. A release should reach the docs the same day it ships, and the job is a few
+    # seconds when nothing has changed.
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-engine-docs
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bump engine pins to latest published
+        id: sync
+        run: |
+          ./scripts/sync-engine-docs.sh | tee /tmp/sync.log
+          if git diff --quiet -- api/EngineDocs; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit
+        if: steps.sync.outputs.changed == 'true'
+        run: |
+          # Pushing to main triggers deploy.yml, which rebuilds and publishes the site. That is
+          # the point: the API reference follows a release without anyone remembering to.
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add api/EngineDocs
+          BUMPED=$(grep -E '^bumped' /tmp/sync.log | sed 's/^bumped *//' | tr '\n' ';' | sed 's/;$//')
+          git commit -m "docs: follow the published engines — $BUMPED
+
+          Automated by sync-engine-docs.yml. The API reference documents the engine
+          versions pinned in api/EngineDocs; this bumps them to what is on nuget.org
+          so phoenixml.dev stops describing an engine nobody can install."
+          git push
