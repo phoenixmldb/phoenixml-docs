@@ -170,7 +170,7 @@ var recentDocs = db.Query("""
 You can also access document metadata directly from XQuery using the `dbxml:metadata()` extension function:
 
 ```xquery
-declare namespace dbxml = "http://phoenixml.endpointsystems.com/dbxml";
+declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
 
 (: Get a specific metadata value :)
 for $doc in collection('products')

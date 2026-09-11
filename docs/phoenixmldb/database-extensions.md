@@ -10,10 +10,10 @@ PhoenixmlDb extends XQuery with database-specific functions in the `dbxml:` name
 
 ## The dbxml: Namespace
 
-The `dbxml:` namespace (`http://phoenixml.endpointsystems.com/dbxml`) follows the Berkeley DB XML convention for database extension functions. Declare it in your XQuery prolog:
+The `dbxml:` namespace (`https://schemas.phoenixml.dev/2026/db`) follows the Berkeley DB XML convention for database extension functions. Declare it in your XQuery prolog:
 
 ```xquery
-declare namespace dbxml = "http://phoenixml.endpointsystems.com/dbxml";
+declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
 ```
 
 ## dbxml:metadata($node, $key)
@@ -53,7 +53,7 @@ PhoenixmlDb provides built-in system metadata keys prefixed with `dbxml:`:
 ### Examples
 
 ```xquery
-declare namespace dbxml = "http://phoenixml.endpointsystems.com/dbxml";
+declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
 
 (: Get the document name :)
 dbxml:metadata(., "dbxml:name")
@@ -98,7 +98,7 @@ dbxml:metadata($node as node()) as map(xs:string, item()?)
 ### Examples
 
 ```xquery
-declare namespace dbxml = "http://phoenixml.endpointsystems.com/dbxml";
+declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
 
 (: Get all metadata as a map :)
 let $meta := dbxml:metadata(.)
@@ -115,7 +115,7 @@ return concat($key, " = ", $meta($key))
 ### Filtering by Metadata
 
 ```xquery
-declare namespace dbxml = "http://phoenixml.endpointsystems.com/dbxml";
+declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
 
 (: Find documents modified after a specific date :)
 for $doc in collection('reports')
@@ -127,7 +127,7 @@ return dbxml:metadata($doc, "dbxml:name")
 ### Combining Content and Metadata Queries
 
 ```xquery
-declare namespace dbxml = "http://phoenixml.endpointsystems.com/dbxml";
+declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
 
 (: Find large orders created by a specific user :)
 for $doc in collection('orders')
@@ -145,7 +145,7 @@ return <result>
 ### Metadata in FLWOR Expressions
 
 ```xquery
-declare namespace dbxml = "http://phoenixml.endpointsystems.com/dbxml";
+declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
 
 (: Group documents by author :)
 for $doc in collection('articles')
@@ -218,7 +218,7 @@ PhoenixmlDb's `dbxml:metadata()` function is inspired by Berkeley DB XML but wit
 
 | Feature | Berkeley DB XML | PhoenixmlDb |
 |---------|----------------|-------------|
-| Namespace URI | `http://www.sleepycat.com/2002/dbxml` | `http://phoenixml.endpointsystems.com/dbxml` |
+| Namespace URI | `http://www.sleepycat.com/2002/dbxml` | `https://schemas.phoenixml.dev/2026/db` |
 | Metadata access | `dbxml:metadata('key')` | `dbxml:metadata($node, 'key')` |
 | All metadata | Not available | `dbxml:metadata($node)` returns map |
 | System keys | `dbxml:name` | `dbxml:name`, `dbxml:size`, etc. |
