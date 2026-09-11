@@ -24,7 +24,7 @@
   <ItemGroup>
     <PackageReference Include="PhoenixmlDb.Core" Version="1.7.0" />
     <PackageReference Include="PhoenixmlDb.XQuery" Version="1.7.0" />
-    <PackageReference Include="PhoenixmlDb.Xslt" Version="1.6.15" />
+    <PackageReference Include="PhoenixmlDb.Xslt" Version="1.7.0" />
   </ItemGroup>
 
 </Project>
