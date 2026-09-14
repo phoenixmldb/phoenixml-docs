@@ -137,7 +137,7 @@ var result = await db.RebuildIndexesAsync("products");
 // result.DocumentsIndexed, result.EntriesRemoved, result.EntriesWritten
 ```
 
-`IndexRebuildResult` is `readonly record struct IndexRebuildResult(long DocumentsIndexed, long EntriesRemoved, long EntriesWritten)`.
+`IndexRebuildResult` is `sealed record IndexRebuildResult(long DocumentsIndexed, long EntriesRemoved, long EntriesWritten)`.
 
 ### `DocumentDatabase.ContainersWithStaleIndexes()`
 
