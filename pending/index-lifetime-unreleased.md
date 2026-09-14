@@ -13,15 +13,40 @@ transcript.
 
 Source: db-engine, 2026-09-14.
 
-## Open question before any of this is published
+## The anchor — settled
 
-**The database is not distributed as a NuGet package** — `phoenixmldb`, `phoenixmldb.server`
-and `phoenixmldb.indexing` all return *not published*. So rule 10's "name the version" has no
-package version to name here.
+**PhoeniXML DB 1.0.0-preview.1.** `<Version>1.0.0-preview.1</Version>`, engine
+`src/Directory.Build.props:26`. Unreleased: nothing has ever been published, and there are no
+`v*` tags. The release path exists — pushing a `v*` tag publishes via NuGet Trusted Publishing,
+and `release.sh --engine` packs Storage, Indexing, Json and Client. See the engine's
+`RELEASING.md`.
 
-Whoever publishes these must first establish **what the anchor is**: an engine release tag, a
-container image tag, a date, or a commit. Writing "in a future release" would be the exact
-failure rule 10 exists to prevent.
+**Until it ships, the honest pre-release form is "the engine at or after commit `ebc80c7`, built
+from source."** Use `ebc80c7`, not `63b3b23` — the first ownership commit alone still had the
+concurrent-disposal holes.
+
+**When the preview ships is Lucas's decision.**
+
+> **Correction to an earlier version of this file.** It claimed the database has no version to
+> anchor to, and that this was a gap in rule 10. **Both were wrong.** The version exists; I had
+> checked three package ids (`phoenixmldb`, `phoenixmldb.server`, `phoenixmldb.indexing`) and
+> generalised from them, when the engine's ids are `PhoenixmlDb.Storage`, `.Indexing`, `.Json`,
+> `.Client` and others. The conclusion *"nothing is published"* happens to be correct — db-engine
+> confirmed it — but it was reached from one relevant data point presented as a survey. Rule 10
+> has no gap.
+
+## These are not changes — they are the behaviour of the first release
+
+**No build has ever shipped, so there is no "before" for a reader to be on.** That settles how
+all ten facts get written:
+
+- **No "changed in" markers.** Nothing changed from a reader's point of view.
+- **No migration notes.** Nobody is migrating from a version that never existed.
+- The correct sentences are simply **published together with the release.**
+
+In particular, item 2 below is **not a transition.** *"A second call would build independent
+state"* never described a shipped build. It is a sentence about a pre-release engine that should
+be replaced, not annotated.
 
 ## Behaviour that changed
 
@@ -30,9 +55,9 @@ failure rule 10 exists to prevent.
    themselves.**
 
 2. **`EnableIndexing()` is idempotent.** A second call returns the **same** `IndexManager`.
-   → This makes the current sentence in `indexing.md` wrong once released: *"Call it once per
-   `DocumentDatabase`; a second call would build independent state rather than reuse the
-   first."* That sentence is **correct today** and becomes wrong on the release.
+   → The current sentence in `indexing.md` — *"Call it once per `DocumentDatabase`; a second
+   call would build independent state rather than reuse the first."* — describes a pre-release
+   engine that no reader has. **Replace it; do not annotate it as a change.**
 
 3. **`EnableIndexing()` throws:**
    - `InvalidOperationException` — a different, non-`IndexManager` `IIndexMaintenance` is already
