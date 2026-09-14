@@ -466,6 +466,16 @@ The table below maps each XSLT visibility value to its closest C# access modifie
 
 XSLT 3.0 introduces the `cache` attribute for memoization. When `cache="yes"`, the processor stores the result of each unique combination of arguments and returns the cached result on later calls with the same arguments.
 
+> **Known defect in releases before 1.8.0. Version 1.8.0 fixes it.**
+> Up to and including 1.7.0, the memo key is built by string concatenation rather than by value
+> identity. Calls with *different* arguments can share a cache entry, so a call can return the
+> result computed for another call. `f((1,2))` and `f((3,4))` collide. So do `f('1')` and
+> `f(1)`. No error is raised. The function returns a well-formed answer for the wrong
+> arguments.
+>
+> The behaviour this section describes is correct for 1.8.0 and later. On an earlier release,
+> omit the attribute. An uncached function is correct, only slower.
+
 ```xml
 <xsl:function name="my:expensive-lookup" as="xs:string" cache="yes">
   <xsl:param name="code" as="xs:string"/>
@@ -508,7 +518,7 @@ This attribute tells the processor whether the function might have side effects,
 </xsl:function>
 ```
 
-**Tip:** If your function depends only on its parameters (no global variables, no `doc()`, no `current-date()`), set `new-each-time="no"` and consider `cache="yes"`. This gives the processor the most freedom to optimize the call.
+**Tip:** If your function depends only on its parameters (no global variables, no `doc()`, no `current-date()`), set `new-each-time="no"`. This gives the processor the most freedom to optimize the call. On 1.8.0 and later you can add `cache="yes"` alongside it; on earlier releases, see the defect noted above. `new-each-time="no"` is unaffected either way.
 
 ---
 
