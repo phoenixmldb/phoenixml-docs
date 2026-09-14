@@ -31,6 +31,34 @@ Apply these rules to every sentence you write in prose:
 7. Avoid idioms, slang, metaphors, and clever phrasing in prose.
 8. State a caution or limitation before the step or feature it qualifies.
 9. Keep list structure parallel and consistent.
+10. State a limitation against a **version**, not against the release ecosystem.
+
+### Before / after: a limitation that expires
+
+Rule 10 exists because a claim about what is *released* stops being true without
+anyone editing it. The page keeps rendering, and nothing marks it as stale.
+
+BEFORE — true when written, false the day a package shipped:
+
+```text
+No installable package contains this fix.
+```
+
+AFTER — states the same fact and stays true:
+
+```text
+Releases before 1.8.0 throw at compile time. Version 1.8.0 fixes it.
+```
+
+The first sentence is a claim about the whole package feed. It expires
+silently. The second is a claim about two versions. It stays correct after a
+release, and it tells the reader which version to move to.
+
+Apply the same rule to any present-tense claim about state you do not control:
+what is released, what is planned, what an upstream project supports. Name the
+version, the date, or the issue. Do not write "currently", "not yet", or "no
+release has".
+
 
 ### Before / after: sentence length and voice
 
