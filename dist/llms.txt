@@ -14,6 +14,7 @@
 - [ContentType](https://phoenixml.dev/api/core/contenttype.html): Specifies the content format of a stored document.
 - [DatabaseStatistics](https://phoenixml.dev/api/core/databasestatistics.html): Aggregate statistics for a PhoenixmlDb database.
 - [DayTimeDuration](https://phoenixml.dev/api/core/daytimeduration.html): Represents an xs:dayTimeDuration value as a total seconds count using precision, supporting arbitrarily large durations.
+- [DcTerms](https://phoenixml.dev/api/core/dcterms.html): Dublin Core Terms (http://purl.org/dc/terms/), the standard document-metadata vocabulary.
 - [DocumentExistsException](https://phoenixml.dev/api/core/documentexistsexception.html): Thrown when attempting to store a document with a name that already exists and is set to false.
 - [DocumentId](https://phoenixml.dev/api/core/documentid.html): A lightweight, strongly-typed identifier for a document within a container.
 - [DocumentInfo](https://phoenixml.dev/api/core/documentinfo.html): Lightweight summary information about a stored document, returned by and .
@@ -34,13 +35,18 @@
 - [IXdmNode](https://phoenixml.dev/api/core/ixdmnode.html): Represents a node in the XQuery Data Model (XDM) tree — the parsed, structured representation of a stored XML or JSON document.
 - [IXmlResourceResolver](https://phoenixml.dev/api/core/ixmlresourceresolver.html): Host-injectable seam for resolving the resources referenced by an XInclude xi:include element (href, optionally combined with parse).
 - [LocalFileResourceResolver](https://phoenixml.dev/api/core/localfileresourceresolver.html): Default implementation: resolves file: (local filesystem) URIs directly and, unless is set, blocks any other scheme (e.g. http:, https:) as a security precaution against server-side-request-forgery via xi:include href.
+- [MetadataCollection](https://phoenixml.dev/api/core/metadatacollection.html): All metadata for one document, keyed by qualified name.
+- [MetadataCollectionExtensions](https://phoenixml.dev/api/core/metadatacollectionextensions.html): Typed access to a .
 - [MetadataIndexDefinition](https://phoenixml.dev/api/core/metadataindexdefinition.html): Defines a metadata index that enables efficient queries by document metadata key-value pairs.
+- [MetadataProperty`1](https://phoenixml.dev/api/core/metadataproperty-1.html): A typed, discoverable handle on one metadata name in one namespace.
 - [NameIndexDefinition](https://phoenixml.dev/api/core/nameindexdefinition.html): Defines a name index that accelerates element and attribute name lookups.
 - [NamespaceBinding](https://phoenixml.dev/api/core/namespacebinding.html): A namespace prefix-to-URI binding, representing a single xmlns:prefix="uri" declaration on an element.
 - [NamespaceId](https://phoenixml.dev/api/core/namespaceid.html): A lightweight, strongly-typed identifier for an interned namespace URI.
+- [NamespaceRegistry](https://phoenixml.dev/api/core/namespaceregistry.html): The single source of truth mapping well-known values to their URIs and conventional prefixes.
 - [NodeId](https://phoenixml.dev/api/core/nodeid.html): A lightweight, strongly-typed identifier for a node within a document's XDM tree.
 - [ParseResult](https://phoenixml.dev/api/core/parseresult.html): The result of parsing an XML document via .
 - [PathIndexDefinition](https://phoenixml.dev/api/core/pathindexdefinition.html): Defines a path index that accelerates evaluation of XPath path expressions.
+- [PhxMeta](https://phoenixml.dev/api/core/phxmeta.html): Engine-reserved document metadata (https://schemas.phoenixml.dev/2026/meta).
 - [QName](https://phoenixml.dev/api/core/qname.html): Represents a qualified name (QName) consisting of a namespace, a local name, and an optional prefix — the XDM representation of element and attribute names.
 - [TextNodeItem](https://phoenixml.dev/api/core/textnodeitem.html): Lightweight text node marker for XSLT sequence accumulators, distinguishing text nodes from atomic string values.
 - [TransactionException](https://phoenixml.dev/api/core/transactionexception.html): Thrown when a transaction operation fails due to an invalid state or internal error.
@@ -58,6 +64,7 @@
 - [XdmProcessingInstruction](https://phoenixml.dev/api/core/xdmprocessinginstruction.html): Represents an XML processing instruction (<?target data?>) in the XDM tree.
 - [XdmQName](https://phoenixml.dev/api/core/xdmqname.html): Represents an expanded QName (namespace URI + local name + optional prefix), as used throughout the XDM for node names, type names, and function names.
 - [XdmSequence](https://phoenixml.dev/api/core/xdmsequence.html): An ordered sequence of XDM items — the public wire-format for passing values between transformations and queries without serializing through XML markup.
+- [XdmStringValueResolver](https://phoenixml.dev/api/core/xdmstringvalueresolver.html): Computes the string value of a node whose value was not known at construction time.
 - [XdmText](https://phoenixml.dev/api/core/xdmtext.html): Represents a text node containing character data content in the XDM tree.
 - [XdmType](https://phoenixml.dev/api/core/xdmtype.html): Enumeration of XDM atomic value types, corresponding to the XML Schema (XSD) type hierarchy.
 - [XdmTypeName](https://phoenixml.dev/api/core/xdmtypename.html): Represents an XSD type name used for type annotations on elements and attributes.
@@ -127,6 +134,7 @@
 - [Utf8StringWriter](https://phoenixml.dev/api/xquery/utf8stringwriter.html): StringWriter that reports the desired encoding instead of UTF-16.
 - [ValidationMode](https://phoenixml.dev/api/xquery/validationmode.html): Validation mode for the validate expression.
 - [XdmDocumentStore](https://phoenixml.dev/api/xquery/xdmdocumentstore.html): An in-memory XDM document store that manages parsed XML documents, node resolution, and namespace interning. Implements both and so it can be passed directly to .
+- [XdmShape](https://phoenixml.dev/api/xquery/xdmshape.html): The one place that states how an XDM sequence and an XDM array are told apart at runtime, and the safe operations over that distinction.
 - [XQueryAstBuilder](https://phoenixml.dev/api/xquery/xqueryastbuilder.html): Converts an ANTLR parse tree into the XQuery AST node types.
 - [XQueryErrorListener](https://phoenixml.dev/api/xquery/xqueryerrorlistener.html): ANTLR error listener that collects parse errors. Implements both lexer and parser error listener interfaces.
 - [XQueryFacade](https://phoenixml.dev/api/xquery/xqueryfacade.html): A simple string-in / string-out API for XQuery evaluation.
@@ -138,8 +146,12 @@
 - [PhoenixmlDb.Xslt API Reference](https://phoenixml.dev/api/xslt/index.html): API documentation for the PhoenixmlDb.Xslt library
 - [PackageVersionResolution](https://phoenixml.dev/api/xslt/packageversionresolution.html): Strategy for choosing among multiple available versions of an XSLT 3.0 package that all satisfy an xsl:use-package/@package-version range. The XSLT 3.0 REC leaves the choice among matching versions implementation-defined; this enum selects the policy.
 - [PreloadedResources](https://phoenixml.dev/api/xslt/preloadedresources.html): Pre-fetched contents for URIs that the engine would otherwise need to fetch over the network synchronously (xsl:import, xsl:include, fn:doc()).
+- [QNameNamespaces](https://phoenixml.dev/api/xslt/qnamenamespaces.html): The one place that answers "what namespace URI does this actually carry", and matches two QNames by URI rather than by interned id.
 - [SimpleExecutionContext](https://phoenixml.dev/api/xslt/simpleexecutioncontext.html): Minimal execution context that exposes a node store for XDM tree construction.
+- [TransformParameterOptions](https://phoenixml.dev/api/xslt/transformparameteroptions.html): Reads the parameter-bearing options of fn:transform — stylesheet-params, template-params and tunnel-params.
+- [VendorOptionPackages](https://phoenixml.dev/api/xslt/vendoroptionpackages.html): Extracts XSLT package declarations from the vendor-options map of fn:transform.
 - [XdmInMemoryStore](https://phoenixml.dev/api/xslt/xdminmemorystore.html): In-memory backing the XSLT engine's XDM tree. Exposed publicly so callers can construct an XDM source tree externally (e.g. via XmlDocumentParser), pass it into overloads that accept an + store, and then chain the typed result back into another transformation without serializing through XML markup.
+- [XmlSourceReader](https://phoenixml.dev/api/xslt/xmlsourcereader.html): Reads an XML file as text, honouring the encoding it declares.
 - [XQueryExpressionParser](https://phoenixml.dev/api/xslt/xqueryexpressionparser.html): Adapts XQueryParserFacade to IExpressionParser for XSLT stylesheet parsing.
 - [XsltModuleInitializer](https://phoenixml.dev/api/xslt/xsltmoduleinitializer.html): Auto-registers with when the assembly is loaded, so any application that references PhoenixmlDb.Xslt gets fn:transform() wired up automatically — no explicit TransformFunction.Provider = new XsltTransformProvider() call needed.
 - [XsltTransformer](https://phoenixml.dev/api/xslt/xslttransformer.html): Primary API for running XSLT transformations in .NET.
@@ -225,6 +237,11 @@
 - [Output Methods](https://phoenixml.dev/language-reference/xslt/output-methods.html): Producing HTML, XML, JSON, CSV, and text from XSLT transforms
 - [Template Matching](https://phoenixml.dev/language-reference/xslt/template-matching.html): How XSLT template rules match nodes and produce output — the declarative paradigm shift
 
+## notes
+
+- [Notes](https://phoenixml.dev/notes/index.html): Engineering notes from building on the PhoenixmlDb engines
+- [Introducing docmd](https://phoenixml.dev/notes/introducing-docmd.html): Building a Word-to-Markdown tool where the semantic layer is a stylesheet you can read, and every conversion is measured
+
 ## phoenixmldb
 
 - [Containers API](https://phoenixml.dev/phoenixmldb/api-reference/containers.html): Container creation, configuration, operations, and management
@@ -261,6 +278,7 @@
 ## tools
 
 - [Crucible](https://phoenixml.dev/tools/crucible.html): Static documentation generator — Markdown to XML to XSLT to HTML
+- [docmd CLI](https://phoenixml.dev/tools/docmd.html): Convert Microsoft Word documents to Markdown for retrieval indexes and human reading
 - [Tools](https://phoenixml.dev/tools/index.html): PhoenixmlDb command-line tools and MCP servers
 - [xquery CLI](https://phoenixml.dev/tools/xquery-cli.html): Command-line XQuery processor — query XML documents from the terminal
 - [XQuery MCP Server](https://phoenixml.dev/tools/xquery-mcp.html)
