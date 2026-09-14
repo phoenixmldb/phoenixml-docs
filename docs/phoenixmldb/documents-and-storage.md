@@ -167,23 +167,23 @@ var recentDocs = db.Query("""
 
 #### Accessing Metadata from XQuery
 
-You can also access document metadata directly from XQuery using the `dbxml:metadata()` extension function:
+You can also access document metadata directly from XQuery using the `phx:metadata()` extension function:
 
 ```xquery
 declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
 
 (: Get a specific metadata value :)
 for $doc in collection('products')
-where dbxml:metadata($doc, "author") = "admin"
-return dbxml:metadata($doc, "dbxml:name")
+where phx:metadata($doc, "author") = "admin"
+return phx:metadata($doc, "dbxml:name")
 
 (: Get all metadata as a map :)
-let $meta := dbxml:metadata($doc)
+let $meta := phx:metadata($doc)
 return map:keys($meta)
 
 (: Access system metadata :)
-dbxml:metadata($doc, "dbxml:created")    (: creation timestamp :)
-dbxml:metadata($doc, "dbxml:size")       (: document size in bytes :)
+phx:metadata($doc, "dbxml:created")    (: creation timestamp :)
+phx:metadata($doc, "dbxml:size")       (: document size in bytes :)
 ```
 
 See [Database Extensions](database-extensions.md) for the full reference.

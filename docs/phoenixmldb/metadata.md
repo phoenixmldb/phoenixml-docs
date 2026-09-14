@@ -132,20 +132,30 @@ Indexed metadata queries use the B+ tree index instead of scanning all documents
 
 ## Accessing Metadata in XQuery
 
-The `dbxml:metadata()` function retrieves metadata from within XQuery expressions:
+The `phx:metadata()` function retrieves metadata from within XQuery expressions. The engine binds
+the `phx` prefix on every query path, so no prolog declaration is needed. **Every form takes the
+node whose document you are asking about** — there is no single-argument key-only form:
 
 ```xquery
 (: Get metadata for the current document :)
-dbxml:metadata('status')
+phx:metadata(., 'status')
 
-(: Get namespaced metadata :)
-dbxml:metadata('biztalk:status')
+(: A system key: dbxml: here is a literal key prefix, not a namespace :)
+phx:metadata(., 'dbxml:name')
+
+(: Any namespace, written in full :)
+phx:metadata(., 'Q{https://example.com/biztalk}status')
 
 (: Filter documents by metadata :)
 for $doc in collection('orders')
-where dbxml:metadata($doc, 'workflow:status') = 'pending'
+where phx:metadata($doc, 'workflow:status') = 'pending'
 return $doc
 ```
+
+A key written as `prefix:local` resolves `prefix` through the container's
+`ContainerOptions.DefaultNamespaces`. **A prefix that is not bound there raises `FONS0004`** — it
+does not quietly return nothing. Use `Q{uri}local` when you do not control the container's
+bindings, and an unprefixed key for the container's default metadata namespace.
 
 ## Use Cases
 
@@ -198,4 +208,4 @@ await container.SetMetadataAsync("article.xml", "audit", "import-date", DateTime
 
 | Storage | Querying | Extensions |
 |---------|----------|------------|
-| **[Documents & Storage](documents-and-storage.md)**<br>Document operations | **[Indexing](indexing.md)**<br>Index optimization | **[Database Extensions](database-extensions.md)**<br>dbxml:metadata() function |
+| **[Documents & Storage](documents-and-storage.md)**<br>Document operations | **[Indexing](indexing.md)**<br>Index optimization | **[Database Extensions](database-extensions.md)**<br>phx:metadata() function |

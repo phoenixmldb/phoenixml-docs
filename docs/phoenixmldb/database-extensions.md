@@ -1,29 +1,42 @@
 ---
 title: Database Extensions
-description: Custom XQuery functions, dbxml:metadata(), and extension development
+description: Custom XQuery functions, phx:metadata(), and extension development
 sort: 10
 ---
 
 # Database Extensions
 
-PhoenixmlDb extends XQuery with database-specific functions in the `dbxml:` namespace. These functions provide access to document metadata and database features directly from XQuery expressions.
+PhoenixmlDb extends XQuery with database-specific functions in the `phx:` namespace. These functions provide access to document metadata and database features directly from XQuery expressions.
 
-## The dbxml: Namespace
+## The phx: Namespace
 
-The `dbxml:` namespace (`https://schemas.phoenixml.dev/2026/db`) follows the Berkeley DB XML convention for database extension functions. Declare it in your XQuery prolog:
+The engine's extension functions live in `https://schemas.phoenixml.dev/2026/db`, and the engine
+binds the prefix **`phx`** to it on every query path. You do not declare it:
 
 ```xquery
-declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
+phx:metadata($node, 'dbxml:name')
 ```
 
-## dbxml:metadata($node, $key)
+A container's `ContainerOptions.DefaultNamespaces` bindings are also in scope, and a query's own
+`declare namespace` overrides either.
+
+> **`dbxml` is not bound, and `dbxml:` means something different here.**
+> The engine binds only `phx` for functions. `dbxml` is reserved for the metadata namespace
+> (`https://schemas.phoenixml.dev/2026/meta`) in Core's namespace registry.
+>
+> The `dbxml:` you see on the metadata **keys** below is a **literal key prefix** matched by the
+> metadata provider — not a namespace prefix. It is a plain part of the key string, so it works
+> whether or not `dbxml` is bound as a prefix. Two different things share the spelling; only one
+> of them is a namespace.
+
+## phx:metadata($node, $key)
 
 Retrieves a specific metadata value for the document containing the given node.
 
 ### Signature
 
 ```xquery
-dbxml:metadata($node as node(), $key as xs:string) as item()?
+phx:metadata($node as node(), $key as xs:string) as item()?
 ```
 
 ### Parameters
@@ -39,7 +52,8 @@ dbxml:metadata($node as node(), $key as xs:string) as item()?
 
 ### System Metadata Keys
 
-PhoenixmlDb provides built-in system metadata keys prefixed with `dbxml:`:
+PhoenixmlDb provides built-in system metadata keys carrying a literal `dbxml:` prefix. These are
+**key strings**, not namespace-qualified names — pass them as ordinary strings:
 
 | Key | Type | Description |
 |-----|------|-------------|
@@ -53,36 +67,34 @@ PhoenixmlDb provides built-in system metadata keys prefixed with `dbxml:`:
 ### Examples
 
 ```xquery
-declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
-
 (: Get the document name :)
-dbxml:metadata(., "dbxml:name")
+phx:metadata(., "dbxml:name")
 
 (: Get a user-defined metadata value :)
-dbxml:metadata(., "author")
+phx:metadata(., "author")
 
 (: Filter documents by metadata :)
 for $doc in collection('products')
-where dbxml:metadata($doc, "author") = "admin"
+where phx:metadata($doc, "author") = "admin"
 return $doc/product/name/text()
 
 (: Use system metadata in results :)
 for $doc in collection('orders')
 return <info>
-    <name>{dbxml:metadata($doc, "dbxml:name")}</name>
-    <size>{dbxml:metadata($doc, "dbxml:size")}</size>
-    <author>{dbxml:metadata($doc, "author")}</author>
+    <name>{phx:metadata($doc, "dbxml:name")}</name>
+    <size>{phx:metadata($doc, "dbxml:size")}</size>
+    <author>{phx:metadata($doc, "author")}</author>
 </info>
 ```
 
-## dbxml:metadata($node)
+## phx:metadata($node)
 
 Retrieves all user metadata for the document containing the given node as an XQuery map.
 
 ### Signature
 
 ```xquery
-dbxml:metadata($node as node()) as map(xs:string, item()?)
+phx:metadata($node as node()) as map(xs:string, item()?)
 ```
 
 ### Parameters
@@ -98,14 +110,12 @@ dbxml:metadata($node as node()) as map(xs:string, item()?)
 ### Examples
 
 ```xquery
-declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
-
 (: Get all metadata as a map :)
-let $meta := dbxml:metadata(.)
+let $meta := phx:metadata(.)
 return map:keys($meta)
 
 (: Iterate over metadata entries :)
-let $meta := dbxml:metadata(.)
+let $meta := phx:metadata(.)
 for $key in map:keys($meta)
 return concat($key, " = ", $meta($key))
 ```
@@ -115,47 +125,41 @@ return concat($key, " = ", $meta($key))
 ### Filtering by Metadata
 
 ```xquery
-declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
-
 (: Find documents modified after a specific date :)
 for $doc in collection('reports')
-let $modified := dbxml:metadata($doc, "dbxml:modified")
+let $modified := phx:metadata($doc, "dbxml:modified")
 where $modified > "2024-01-01T00:00:00Z"
-return dbxml:metadata($doc, "dbxml:name")
+return phx:metadata($doc, "dbxml:name")
 ```
 
 ### Combining Content and Metadata Queries
 
 ```xquery
-declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
-
 (: Find large orders created by a specific user :)
 for $doc in collection('orders')
 let $order := $doc/order
 where $order/total > 1000
-  and dbxml:metadata($doc, "author") = "system"
+  and phx:metadata($doc, "author") = "system"
 order by xs:decimal($order/total) descending
 return <result>
-    <document>{dbxml:metadata($doc, "dbxml:name")}</document>
+    <document>{phx:metadata($doc, "dbxml:name")}</document>
     <total>{$order/total/text()}</total>
-    <created>{dbxml:metadata($doc, "dbxml:created")}</created>
+    <created>{phx:metadata($doc, "dbxml:created")}</created>
 </result>
 ```
 
 ### Metadata in FLWOR Expressions
 
 ```xquery
-declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
-
 (: Group documents by author :)
 for $doc in collection('articles')
-let $author := dbxml:metadata($doc, "author")
+let $author := phx:metadata($doc, "author")
 group by $author
 return <author name="{$author}">
     <count>{count($doc)}</count>
     <documents>{
         for $d in $doc
-        return <doc>{dbxml:metadata($d, "dbxml:name")}</doc>
+        return <doc>{phx:metadata($d, "dbxml:name")}</doc>
     }</documents>
 </author>
 ```
@@ -214,12 +218,17 @@ local:my-function("hello")  (: "HELLO" :)
 
 ## Comparison with Berkeley DB XML
 
-PhoenixmlDb's `dbxml:metadata()` function is inspired by Berkeley DB XML but with some differences:
+PhoenixmlDb's `phx:metadata()` function is inspired by Berkeley DB XML but with some differences:
 
 | Feature | Berkeley DB XML | PhoenixmlDb |
 |---------|----------------|-------------|
 | Namespace URI | `http://www.sleepycat.com/2002/dbxml` | `https://schemas.phoenixml.dev/2026/db` |
-| Metadata access | `dbxml:metadata('key')` | `dbxml:metadata($node, 'key')` |
-| All metadata | Not available | `dbxml:metadata($node)` returns map |
-| System keys | `dbxml:name` | `dbxml:name`, `dbxml:size`, etc. |
+| Function prefix | `dbxml`, declared by the query | **`phx`**, bound by the engine |
+| Metadata access | `dbxml:metadata('key')` | `phx:metadata($node, 'key')` |
+| All metadata | Not available | `phx:metadata($node)` returns map |
+| System keys | `dbxml:name` | `dbxml:name`, `dbxml:size`, etc. — a literal key prefix, not a namespace |
 | Custom functions | Java-based | C#-based with `XQueryFunction` |
+
+The system-key spelling is the one piece of Berkeley DB XML's convention that carries over
+verbatim. The function prefix does not: `dbxml` is reserved for the metadata namespace here, so
+functions are `phx:`.
