@@ -1,7 +1,7 @@
 ---
 title: Database Extensions
 description: Custom XQuery functions, phx:metadata(), and extension development
-sort: 10
+sort: 11
 ---
 
 # Database Extensions

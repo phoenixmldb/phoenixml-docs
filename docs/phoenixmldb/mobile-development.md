@@ -1,7 +1,7 @@
 ---
 title: Mobile Development
 description: PhoenixmlDb on .NET MAUI, iOS, Android, and offline-first patterns
-sort: 13
+sort: 14
 ---
 
 # Mobile Development

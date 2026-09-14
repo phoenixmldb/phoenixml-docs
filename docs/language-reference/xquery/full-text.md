@@ -1,681 +1,233 @@
 ---
 title: Full-Text Search
-description: "XQuery Full-Text — ft:contains, match options, scoring, and search expressions"
+description: "XQuery Full-Text — the contains text clause, match options, and ft: functions"
 sort: 10
 ---
 
 # Full-Text Search
 
-XQuery's built-in `contains()` function does exact substring matching. It finds `"data"` inside `"database"` but cannot search linguistically. Full-Text Search adds the features of a real search engine: stemming, case-insensitive matching, diacritics normalization, stop words, wildcards, proximity search, and relevance scoring.
+XQuery's built-in `contains()` function does exact substring matching. It finds `"data"` inside `"database"` but cannot search linguistically. XQuery Full Text adds language-aware matching: stemming, case-insensitive matching, and relevance scoring, evaluated as part of the query itself.
 
-XQuery Full-Text integrates these features directly into the query language. It needs no separate index API and no raw SQL strings.
+> **Important — verify before relying on this page.** This page was corrected against the engine on `main` as of 2026-09-14. Two things are worth knowing before you use any of it:
+>
+> 1. **The entry point is the `contains text` clause, not a function.** Earlier revisions of this page described a `ft:contains($node, "term")` function call. That function does not exist — compiling a query that calls it fails with `Unknown function: contains#2`. The real syntax is the W3C XQuery Full Text `contains text` clause shown below.
+> 2. **`contains text` currently fails at query-compile time.** Verified by executing several `contains text` queries (with and without match options) through `Container.QueryAsync`: every one throws a `NullReferenceException` from `PhoenixmlDb.XQuery.Analysis.SchemaFeatureChecker.VisitStepExpression`, before the query ever runs. A plain, non-full-text predicate compiles and runs fine, so this is specific to `contains text`. This looks like a real engine defect, not a documentation problem — the syntax below is what the grammar defines, but it has not been possible to confirm it *executes* successfully. If you're relying on this feature, verify against your own build first.
 
-> For C# developers: XQuery Full-Text solves the same problem as Lucene.NET, Elasticsearch, or SQL Server's `CONTAINS` / `FREETEXT` predicates.
+## contains text — The Basic Clause
 
-## Contents
-
-- [Why Full-Text in XQuery](#why-full-text-in-xquery)
-
-- [ft:contains — The Basic Predicate](#ftcontains--the-basic-predicate)
-
-- [Match Options](#match-options)
-
-- [Search Modes](#search-modes)
-
-- [Logical Combinations](#logical-combinations)
-
-- [Positional Filters](#positional-filters)
-
-- [Full-Text Functions](#full-text-functions)
-
-- [Scoring and Relevance](#scoring-and-relevance)
-
-- [Practical Examples](#practical-examples)
-
----
-
-## Why Full-Text in XQuery
-
-Consider a document library with thousands of articles. A user searches for `"running"`. With standard XQuery:
-
-```xquery
-(: Standard contains() — exact substring match :)
-//article[contains(description, "running")]
-```
-
-This misses articles containing `"run"`, `"runs"`, or `"ran"`. It is also case-sensitive, so `"Running"` at the start of a sentence is missed. And there is no way to rank results by relevance.
-
-**C# parallel — the same problem exists:**
-```csharp
-// C# exact match — same limitations
-var results = articles.Where(a => a.Description.Contains("running"));
-// Misses "run", "runs", "ran", case-sensitive
-```
-
-In C#, you solve this by adding a full-text search library (Lucene.NET, SQL Server Full-Text Search, or Elasticsearch). In XQuery, Full-Text Search is a W3C standard extension built into the language itself.
-
-Full-Text Search gives you:
-
-| Feature | Standard `contains()` | Full-Text Search |
-|---------|----------------------|------------------|
-| Substring matching | Yes | Yes |
-| Case insensitive | No (must use `lower-case()`) | Yes (default) |
-| Stemming | No | Yes (`"running"` matches `"run"`) |
-| Diacritics | No | Yes (`"cafe"` matches `"cafe"`) |
-| Wildcards | No | Yes (`"data*"` matches `"database"`) |
-| Stop words | No | Yes (ignore `"the"`, `"a"`, `"an"`) |
-| Proximity | No | Yes (`"xml"` near `"database"`) |
-| Scoring/ranking | No | Yes |
-| Phrase search | No | Yes |
-| Thesaurus | No | Yes |
-
----
-
-## ft:contains — The Basic Predicate
-
-`ft:contains` is the entry point for full-text search. It takes a node (the content to search) and a search expression (what to look for):
+`contains text` is an XQuery expression, not a function: an operand (the node or nodes to search) on the left, the clause, then a full-text selection (what to look for) on the right.
 
 ```xquery
 (: Search the description element for "database" :)
-//book[ft:contains(description, "database")]
+//book[description contains text "database"]
 ```
 
 ```xquery
 (: Search ALL text content of the book element :)
-//book[ft:contains(., "xml query")]
+//book[. contains text "xml query"]
 ```
 
 ```xquery
 (: Search with match options :)
-//book[ft:contains(title, "xml" using stemming using case insensitive)]
-```
-
-The first argument is the node whose text content is searched. Using `.` searches all descendant text. The second argument is a full-text selection — a search expression that can include match options.
-
-**C# parallel:**
-```csharp
-// SQL Server full-text search via Entity Framework
-var books = context.Books
-    .Where(b => EF.Functions.Contains(b.Description, "database"));
-
-// Lucene.NET
-var query = new QueryParser("description", analyzer).Parse("database");
-var results = searcher.Search(query, 100);
+//book[title contains text "xml" using stemming using case insensitive]
 ```
 
 ### Searching Multiple Fields
 
 ```xquery
 (: Search title OR description :)
-//book[ft:contains(title, "xml") or ft:contains(description, "xml")]
-
-(: Search all text content of the entire book element :)
-//book[ft:contains(., "xml")]
+//book[title contains text "xml" or description contains text "xml"]
 ```
 
-### Using ft:contains in FLWOR Expressions
+### Using contains text in FLWOR Expressions
 
 ```xquery
 for $article in //article
-where ft:contains($article/body, "machine learning")
-order by ft:score($article/body, "machine learning") descending
+where $article/body contains text "machine learning"
+order by ft:score($article/body) descending
 return
   <result>
     <title>{ $article/title/text() }</title>
-    <score>{ ft:score($article/body, "machine learning") }</score>
+    <score>{ ft:score($article/body) }</score>
   </result>
 ```
+
+`ft:score` takes the node, not the search term — see [ft:score()](#ftscore), below, for why.
 
 ---
 
 ## Match Options
 
-Match options follow the search term and control how matching is performed. You can combine multiple options with successive `using` clauses.
+Match options follow the search string and control how matching is performed, combined with successive `using` clauses. The grammar accepts more options than the engine currently acts on — each subsection below says which.
 
 ### Language
 
-Specifies the language for stemming and stop word processing:
-
 ```xquery
-//article[ft:contains(., "running" using language "en")]
+//article[. contains text "running" using language "en"]
 ```
 
-Language affects stemming rules (English stemming is different from German stemming), stop word lists, and tokenization. Common language codes: `"en"` (English), `"de"` (German), `"fr"` (French), `"es"` (Spanish).
+Affects stemming rules and tokenization. **Functional.**
 
 ### Stemming
 
-Stemming reduces words to their root form so that morphological variants match:
-
 ```xquery
 (: Without stemming — only matches literal "running" :)
-//article[ft:contains(., "running")]
+//article[. contains text "running"]
 
 (: With stemming — matches "run", "runs", "running", "ran" :)
-//article[ft:contains(., "running" using stemming)]
+//article[. contains text "running" using stemming]
 ```
 
-| Search Term | Matches (with stemming) |
-|-------------|------------------------|
-| `"running"` | run, runs, running, ran |
-| `"databases"` | database, databases |
-| `"better"` | better, good, best (language-dependent) |
-| `"analyzing"` | analyze, analyzes, analyzing, analysis |
-
-**C# parallel:**
-```csharp
-// Lucene.NET with stemming analyzer
-var analyzer = new EnglishAnalyzer(LuceneVersion.LUCENE_48);
-// "running" query now matches "run", "runs", "ran"
-```
+**Functional.**
 
 ### Case Sensitivity
 
-By default, full-text matching is case insensitive. You can override this:
-
 ```xquery
 (: Default: case insensitive — matches "XML", "xml", "Xml" :)
-//doc[ft:contains(title, "xml")]
-
-(: Explicit case insensitive (same as default) :)
-//doc[ft:contains(title, "xml" using case insensitive)]
+//doc[title contains text "xml"]
 
 (: Case sensitive — only matches exact case :)
-//doc[ft:contains(title, "XML" using case sensitive)]
+//doc[title contains text "XML" using case sensitive]
 ```
 
-### Diacritics
+**Functional.**
 
-By default, full-text matching is diacritics insensitive, so accented characters match their unaccented equivalents:
+### Diacritics, Wildcards, Stop Words, and Thesaurus — parsed, not applied
+
+The grammar also accepts `using diacritics sensitive`/`insensitive`, `using wildcards`/`no wildcards`, `using stop words (...)`/`using no stop words`, and `using thesaurus "file"`. All four parse without error and are carried into the query's AST — but none of them currently reach the analyzer that does the actual matching. A query like:
 
 ```xquery
-(: Diacritics insensitive (default) — "cafe" matches "cafe" :)
-//restaurant[ft:contains(name, "cafe")]
-
-(: Diacritics sensitive — "cafe" does NOT match "cafe" :)
-//restaurant[ft:contains(name, "cafe" using diacritics sensitive)]
+//doc[name contains text "cafe" using diacritics sensitive]
+//doc[. contains text "data" using wildcards]
+//doc[. contains text "the art of war" using stop words ("the", "of")]
+//doc[. contains text "fast" using thesaurus "thesaurus.xml"]
 ```
 
-| Search | Diacritics Insensitive (default) | Diacritics Sensitive |
-|--------|----------------------------------|---------------------|
-| `"cafe"` | cafe, cafe, CAFE | cafe, CAFE only |
-| `"resume"` | resume, resume, resume | resume only |
-| `"nino"` | nino, nino | nino only |
+compiles (modulo the `contains text` defect above) but behaves exactly as if the `using` clause were absent: diacritics are always folded, no glob expansion happens, no term is excluded as a stop word, and no synonym is added. Treat these four as accepted-but-inert until the underlying analyzer is wired up.
 
-### Wildcards
+Two syntax forms that look plausible are not supported at all — they fail to parse:
 
-Enables glob-style wildcards within search terms:
-
-```xquery
-(: Matches "database", "datatype", "dataset", "data-driven" :)
-//doc[ft:contains(., "data*" using wildcards)]
-
-(: Matches "analyze", "analyse" (British vs American spelling) :)
-//doc[ft:contains(., "analy?e" using wildcards)]
-```
-
-| Wildcard | Meaning | Example |
-|----------|---------|---------|
-| `*` | Zero or more characters | `"data*"` matches `"database"`, `"datatype"` |
-| `?` | Exactly one character | `"te?t"` matches `"test"`, `"text"` |
-| `\*` | Literal asterisk | `"5\*5"` matches `"5*5"` |
-
-**C# parallel:**
-```csharp
-// SQL Server
-var results = context.Documents
-    .Where(d => EF.Functions.Contains(d.Content, "\"data*\""));
-
-// Lucene.NET
-var query = new WildcardQuery(new Term("content", "data*"));
-```
-
-### Stop Words
-
-Stop words are common words (like "the", "a", "is", "and") that are ignored during search to improve relevance:
-
-```xquery
-(: Use an explicit stop word list :)
-//doc[ft:contains(., "the art of war"
-  using stop words ("the", "a", "an", "of", "is", "and", "or", "in"))]
-(: Actually searches for: "art", "war" :)
-
-(: Use the default stop word list for the language :)
-//doc[ft:contains(., "the art of war"
-  using stop words default
-  using language "en")]
-```
-
-Without stop words, a search for `"the art of war"` might rank documents with many occurrences of `"the"` highly. With stop words, only the meaningful terms `"art"` and `"war"` contribute to matching and scoring.
-
-### Thesaurus
-
-A thesaurus expands search terms to include synonyms:
-
-```xquery
-(: "fast" also matches "quick", "rapid", "speedy" :)
-//doc[ft:contains(., "fast"
-  using thesaurus at "thesaurus.xml")]
-
-(: With a specific relationship type :)
-//doc[ft:contains(., "car"
-  using thesaurus at "thesaurus.xml" relationship "synonym")]
-```
-
-The thesaurus is an XML file mapping terms to their synonyms:
-
-```xml
-<thesaurus xmlns="http://www.w3.org/2007/full-text-thesaurus">
-  <entry>
-    <term>fast</term>
-    <synonym>quick</synonym>
-    <synonym>rapid</synonym>
-    <synonym>speedy</synonym>
-  </entry>
-  <entry>
-    <term>car</term>
-    <synonym>automobile</synonym>
-    <synonym>vehicle</synonym>
-  </entry>
-</thesaurus>
-```
+- **There is no `using stop words default`.** The only stop-word forms the grammar accepts are an explicit list (`using stop words ("the", "a", "an")`) or `using no stop words`. There is no keyword for "use the language's built-in list" — and per above, even the explicit-list and no-stop-words forms don't currently change matching.
+- **There is no `using thesaurus at "file" relationship "type"`.** The grammar accepts exactly one string literal: `using thesaurus "thesaurus.xml"`. `at` and `relationship` are not part of it.
 
 ### Combining Match Options
 
-Options are composable. Combine as many as you need:
+Options are composable at the grammar level:
 
 ```xquery
-//article[ft:contains(body, "running"
+//article[body contains text "running"
   using stemming
   using case insensitive
-  using wildcards
-  using stop words default
-  using language "en")]
-```
-
----
-
-## Search Modes
-
-Search modes control how multi-word search strings are interpreted.
-
-### any word
-
-Matches documents containing **any** of the specified words. This is the most lenient mode — the equivalent of an `OR` search:
-
-```xquery
-(: Matches documents containing "xml" OR "json" OR "yaml" :)
-//doc[ft:contains(., "xml json yaml" using mode any word)]
-```
-
-**C# parallel:**
-```csharp
-// Lucene.NET default behavior with OR operator
-var query = parser.Parse("xml json yaml"); // default: OR between terms
-
-// SQL Server FREETEXT — similar to "any word" + stemming
-var results = context.Documents
-    .Where(d => EF.Functions.FreeText(d.Content, "xml json yaml"));
-```
-
-### all words
-
-Matches documents containing **all** of the specified words, but not necessarily as a phrase or in order:
-
-```xquery
-(: Matches documents containing "xml" AND "database" AND "query" :)
-//doc[ft:contains(., "xml database query" using mode all words)]
-```
-
-The document `"This query language processes XML and stores results in a database"` would match because all three words appear somewhere in the text.
-
-**C# parallel:**
-```csharp
-// SQL Server CONTAINS with AND
-var results = context.Documents
-    .Where(d => EF.Functions.Contains(d.Content, "\"xml\" AND \"database\" AND \"query\""));
-```
-
-### phrase
-
-Matches the exact phrase — all words must appear consecutively in order:
-
-```xquery
-(: Only matches the literal phrase "xml database" :)
-//doc[ft:contains(., "xml database" using mode phrase)]
-```
-
-This is the most restrictive mode. The document must contain the exact sequence `"xml database"` as consecutive words.
-
-**C# parallel:**
-```csharp
-// SQL Server CONTAINS with phrase
-var results = context.Documents
-    .Where(d => EF.Functions.Contains(d.Content, "\"xml database\""));
-```
-
-### Comparison Table
-
-| Mode | Search: `"xml database query"` | Matches |
-|------|-------------------------------|---------|
-| `any word` | Any of: xml, database, query | "This xml file..." |
-| `all words` | All of: xml, database, query | "The xml query uses a database" |
-| `phrase` | Exact phrase | "...xml database query language..." |
-
----
-
-## Logical Combinations
-
-Full-text search expressions support `ftand`, `ftor`, and `ftnot` for combining search conditions. These operate at the full-text level (not the XPath level), so they apply within a single `ft:contains` call.
-
-### ftand — Both Terms Required
-
-```xquery
-(: Document must contain both "xml" and "database" :)
-//doc[ft:contains(., "xml" ftand "database")]
-```
-
-This is different from `all words` mode because each operand can be its own search expression with independent options:
-
-```xquery
-(: "xml" with stemming AND "database" with wildcards :)
-//doc[ft:contains(.,
-  ("xml" using stemming) ftand ("data*" using wildcards)
-)]
-```
-
-### ftor — Either Term Matches
-
-```xquery
-(: Document contains "xml" or "json" (or both) :)
-//doc[ft:contains(., "xml" ftor "json")]
-
-(: Three-way OR :)
-//doc[ft:contains(., "xml" ftor "json" ftor "yaml")]
-```
-
-### ftnot — Exclude Terms
-
-```xquery
-(: Contains "database" but NOT "relational" :)
-//doc[ft:contains(., "database" ftnot "relational")]
-
-(: NoSQL documents: contain "database" but not "sql" or "relational" :)
-//doc[ft:contains(., "database" ftnot ("sql" ftor "relational"))]
-```
-
-### Complex Combinations
-
-```xquery
-(: (xml AND database) OR (json AND nosql), but NOT tutorial :)
-//doc[ft:contains(.,
-  (("xml" ftand "database") ftor ("json" ftand "nosql"))
-  ftnot "tutorial"
-)]
-```
-
-**C# parallel:**
-```csharp
-// SQL Server CONTAINS with complex logic
-var results = context.Documents.Where(d =>
-    EF.Functions.Contains(d.Content,
-        "(\"xml\" AND \"database\") OR (\"json\" AND \"nosql\") AND NOT \"tutorial\""));
-
-// Lucene.NET with BooleanQuery
-var query = new BooleanQuery();
-query.Add(xmlAndDb, Occur.SHOULD);
-query.Add(jsonAndNosql, Occur.SHOULD);
-query.Add(tutorial, Occur.MUST_NOT);
+  using language "en"]
 ```
 
 ---
 
 ## Positional Filters
 
-Positional filters constrain where and how search terms appear relative to each other.
-
-### ordered
-
-Terms must appear in the specified order (but not necessarily consecutively):
+Positional filters constrain where and how search terms appear relative to each other, and follow the full-text selection (not the match options):
 
 ```xquery
 (: "introduction" must appear before "conclusion" :)
-//doc[ft:contains(., "introduction" ftand "conclusion" ordered)]
-```
+//doc[. contains text ("introduction" ftand "conclusion") ordered]
 
-A document with `"Introduction ... several pages ... Conclusion"` matches. A document where `"Conclusion"` appears before `"Introduction"` does not.
-
-### window
-
-Terms must appear within a specified number of tokens (words) of each other:
-
-```xquery
 (: "xml" and "database" within 5 words of each other :)
-//doc[ft:contains(., "xml" ftand "database" window 5 words)]
+//doc[. contains text ("xml" ftand "database") window 5 words]
 ```
 
-The sentence `"XML is a popular database format"` matches (4 words between). The sentence `"XML was designed in the 1990s and is now used by every major database vendor"` does not (too many words between).
+The grammar also defines `distance N words`, `same sentence`, `same paragraph`, `at start`, `at end`, and `entire content`. As with the match options above, this page has not verified which of these actually change matching versus parse-and-ignore — the `contains text` compile failure blocks testing all of them the same way. Confirm behavior against your own build before depending on a specific filter.
 
-### distance
+---
 
-Similar to `window`, but specifies the minimum and maximum distance:
+## Logical Combinations
+
+`ftand`, `ftor`, and `ftnot` combine search conditions inside a single full-text selection — they are not XPath's `and`/`or`, and don't need a repeated `contains text`:
 
 ```xquery
-(: "xml" and "schema" between 1 and 3 words apart :)
-//doc[ft:contains(., "xml" ftand "schema" distance at most 3 words)]
-```
+(: Document must contain both "xml" and "database" :)
+//doc[. contains text ("xml" ftand "database")]
 
-### at start / at end / entire content
+(: Document contains "xml" or "json" :)
+//doc[. contains text ("xml" ftor "json")]
 
-Constrain where in the text the match must occur:
-
-```xquery
-(: Title must START with "Introduction" :)
-//doc[ft:contains(title, "Introduction" at start)]
-
-(: Title must END with "Guide" :)
-//doc[ft:contains(title, "Guide" at end)]
-
-(: Title must be exactly "User Guide" (entire content) :)
-//doc[ft:contains(title, "User Guide" entire content)]
-```
-
-### Combining Positional Filters
-
-```xquery
-(: "xml" then "query" in order, within 3 words :)
-//doc[ft:contains(.,
-  "xml" ftand "query"
-  ordered
-  window 3 words
-)]
-```
-
-**C# parallel:**
-```csharp
-// SQL Server CONTAINS with NEAR
-var results = context.Documents.Where(d =>
-    EF.Functions.Contains(d.Content, "NEAR((xml, query), 3, TRUE)"));
-// TRUE = ordered, 3 = max distance
+(: Contains "database" but NOT "relational" :)
+//doc[. contains text ("database" ftnot "relational")]
 ```
 
 ---
 
 ## Full-Text Functions
 
-Beyond `ft:contains`, the Full-Text specification provides utility functions.
+These are ordinary functions in the `http://www.w3.org/2007/xpath-full-text` namespace (conventionally bound to `ft:`) — unlike `contains text`, they use normal function-call syntax.
 
 ### ft:score()
 
-Returns a relevance score (between 0.0 and 1.0) for how well a node matches a search expression:
-
-```xquery
-for $article in //article
-let $score := ft:score($article/body, "machine learning")
-where $score > 0
-order by $score descending
-return
-  <result score="{ $score }">
-    <title>{ $article/title/text() }</title>
-  </result>
+```
+ft:score($node as node()) as xs:double
 ```
 
-Scoring considers term frequency (how often the term appears), document length, and the specificity of the match.
+Takes **one argument** — the node — not the node and a search term. It returns the relevance score from the *most recent `contains text` evaluation* against that node, so call it after (or within the same FLWOR iteration as) a `contains text` clause that evaluated the same node — as in the FLWOR example above. Calling it with a node that was never evaluated by `contains text` returns `0.0`.
 
 ### ft:tokenize()
 
-Breaks text into tokens (words) according to full-text tokenization rules:
+```
+ft:tokenize($text as xs:string?) as xs:string*
+ft:tokenize($text as xs:string?, $language as xs:string) as xs:string*
+```
+
+Breaks text into tokens using the full-text analyzer — useful for understanding how a string will be indexed or matched.
 
 ```xquery
 ft:tokenize("Hello, world! This is a test.")
-(: Result: ("Hello", "world", "This", "is", "a", "test") :)
-
-ft:tokenize("C# is great", "en")
-(: Result: ("C#", "is", "great") :)
-```
-
-**C# parallel:**
-```csharp
-// Lucene.NET tokenization
-var tokenStream = analyzer.GetTokenStream("field", "Hello, world! This is a test.");
+(: ("Hello", "world", "This", "is", "a", "test") :)
 ```
 
 ### ft:stem()
 
-Returns the stem of a word for a given language:
+```
+ft:stem($term as xs:string) as xs:string
+ft:stem($term as xs:string, $language as xs:string) as xs:string
+```
 
 ```xquery
-ft:stem("running", "en")   (: Result: "run" :)
-ft:stem("databases", "en")  (: Result: "databas" :)
-ft:stem("better", "en")     (: Result: "better" or "good" depending on stemmer :)
+ft:stem("running", "en")   (: "run" :)
 ```
 
 ### ft:is-stop-word()
 
-Tests whether a word is a stop word in a given language:
-
-```xquery
-ft:is-stop-word("the", "en")   (: Result: true() :)
-ft:is-stop-word("xml", "en")   (: Result: false() :)
 ```
+ft:is-stop-word($term as xs:string, $language as xs:string) as xs:boolean
+```
+
+Tests whether a word is a stop word for a given language — implemented independently of the (currently inert) `using stop words` match option above.
 
 ### ft:thesaurus-lookup()
 
-Looks up synonyms in a thesaurus:
-
-```xquery
-ft:thesaurus-lookup("thesaurus.xml", "fast")
-(: Result: ("quick", "rapid", "speedy") :)
 ```
-
----
-
-## Scoring and Relevance
-
-Scoring lets you rank search results by relevance, just like a web search engine returns the most relevant pages first.
-
-### Basic Relevance Ranking
-
-```xquery
-for $doc in collection("articles")
-let $score := ft:score($doc, "xquery full text search")
-where $score > 0
-order by $score descending
-return
-  <result relevance="{ round($score * 100) }%">
-    <title>{ $doc//title/text() }</title>
-    <excerpt>{ substring($doc//body, 1, 200) }</excerpt>
-  </result>
-```
-
-### Boosting Specific Fields
-
-You can weight matches in different fields by combining scores:
-
-```xquery
-for $article in collection("articles")
-let $title-score := ft:score($article/title, "xquery") * 3  (: title matches worth 3x :)
-let $body-score := ft:score($article/body, "xquery")
-let $total-score := $title-score + $body-score
-where $total-score > 0
-order by $total-score descending
-return
-  <result score="{ round($total-score * 100) div 100 }">
-    <title>{ $article/title/text() }</title>
-  </result>
-```
-
-**C# parallel:**
-```csharp
-// Lucene.NET field boosting
-var titleQuery = new TermQuery(new Term("title", "xquery")) { Boost = 3.0f };
-var bodyQuery = new TermQuery(new Term("body", "xquery"));
-var combined = new BooleanQuery();
-combined.Add(titleQuery, Occur.SHOULD);
-combined.Add(bodyQuery, Occur.SHOULD);
-```
-
-### Pagination with Scoring
-
-```xquery
-let $page := 1
-let $page-size := 10
-let $all-results :=
-  for $doc in collection("articles")
-  let $score := ft:score($doc, "xquery tutorial")
-  where $score > 0
-  order by $score descending
-  return
-    <result score="{ $score }">
-      <title>{ $doc//title/text() }</title>
-    </result>
-return
-  <page number="{ $page }" total="{ count($all-results) }">
-    { subsequence($all-results, ($page - 1) * $page-size + 1, $page-size) }
-  </page>
+ft:thesaurus-lookup($thesaurus as xs:string, $term as xs:string) as xs:string*
 ```
 
 ---
 
 ## Practical Examples
 
-### Document Search System
-
-A complete document search with faceted results:
+### Document Search with Scoring
 
 ```xquery
-declare variable $query external;  (: search query from user :)
-declare variable $category external;  (: optional category filter :)
+declare variable $query external;
 
-let $results :=
-  for $doc in collection("documents")
-  let $score := ft:score($doc, $query using stemming using language "en")
-  where $score > 0
-  where if ($category) then $doc/@category = $category else true()
-  order by $score descending
-  return $doc
-
-let $categories :=
-  for $cat in distinct-values($results/@category)
-  let $count := count($results[@category = $cat])
-  order by $count descending
-  return <facet name="{ $cat }" count="{ $count }"/>
-
+for $doc in collection("documents")
+where $doc contains text { $query } using stemming using language "en"
+let $score := ft:score($doc)
+where $score > 0
+order by $score descending
 return
-  <search-results query="{ $query }" total="{ count($results) }">
-    <facets>{ $categories }</facets>
-    <results>
-    {
-      for $doc at $pos in subsequence($results, 1, 20)
-      return
-        <result rank="{ $pos }">
-          <title>{ $doc//title/text() }</title>
-          <category>{ string($doc/@category) }</category>
-          <score>{ ft:score($doc, $query) }</score>
-        </result>
-    }
-    </results>
-  </search-results>
+  <result score="{ $score }">
+    <title>{ $doc//title/text() }</title>
+  </result>
 ```
+
+Note the `{ $query }` form: a full-text selection can be a computed string (`{ expr }`), not only a string literal, so the search term can come from a variable.
 
 ### Content Management — Search and Highlight
 
@@ -686,12 +238,8 @@ declare function local:search-articles(
 ) as element(results) {
   let $matches :=
     for $article in collection("cms")/article
-    where ft:contains($article/body, $terms
-      using stemming
-      using case insensitive
-      using stop words default
-      using language "en")
-    let $score := ft:score($article/body, $terms)
+    where $article/body contains text { $terms } using stemming using case insensitive using language "en"
+    let $score := ft:score($article/body)
     order by $score descending
     return $article
   return
@@ -701,9 +249,6 @@ declare function local:search-articles(
       return
         <article id="{ $m/@id }">
           <title>{ $m/title/text() }</title>
-          <author>{ $m/metadata/author/text() }</author>
-          <date>{ string($m/metadata/date) }</date>
-          <snippet>{ substring(string($m/body), 1, 300) }...</snippet>
         </article>
     }
     </results>
@@ -712,86 +257,31 @@ declare function local:search-articles(
 local:search-articles("machine learning neural networks", 10)
 ```
 
-### Log Analysis
-
-Search application logs for error patterns:
-
-```xquery
-(: Find error log entries mentioning timeout or connection issues :)
-for $entry in collection("logs")/log-entry
-where ft:contains($entry/message,
-  ("timeout" ftor "connection refused" ftor "connection reset")
-  ftnot "expected"
-  using case insensitive)
-where xs:dateTime($entry/@timestamp) > current-dateTime() - xs:dayTimeDuration("P1D")
-order by xs:dateTime($entry/@timestamp) descending
-return
-  <alert>
-    <time>{ string($entry/@timestamp) }</time>
-    <level>{ string($entry/@level) }</level>
-    <message>{ $entry/message/text() }</message>
-    <source>{ $entry/source/text() }</source>
-  </alert>
-```
-
 ### Multi-Language Search
 
 ```xquery
-(: Search with language-appropriate stemming :)
 declare function local:search(
   $collection as xs:string,
   $terms as xs:string,
   $lang as xs:string
 ) as element()* {
   for $doc in collection($collection)
-  where ft:contains($doc, $terms
-    using stemming
-    using language $lang
-    using stop words default)
-  let $score := ft:score($doc, $terms)
+  where $doc contains text { $terms } using stemming using language { $lang }
+  let $score := ft:score($doc)
   order by $score descending
   return $doc
 };
 
 (: English search — "running" matches "run" :)
 local:search("articles-en", "running databases", "en")
-
-(: German search — "Datenbanken" matches "Datenbank" :)
-local:search("articles-de", "Datenbanken", "de")
 ```
 
-### C# Integration — Running Full-Text Queries
+---
 
-```csharp
-using PhoenixmlDb.XQuery.Execution;
+## Full-text index acceleration
 
-// Running full-text XQuery from a .NET application
-var engine = new QueryEngine();
+`contains text` evaluates by scanning; it does not consult PhoenixmlDb's Lucene-backed full-text index. That index exists (see [Full-Text Search](../../phoenixmldb/full-text-search.md) in the PhoenixmlDb section) but is reached through `IndexManager.SearchFullText`, a separate C# entry point — not through this XQuery clause. Accelerating `contains text` with that index is planned but not built, and has a documented prerequisite: the index matches phrases more strictly than `contains text` itself does, so using it as a naive candidate source would silently drop matches the scanning evaluator would otherwise confirm.
 
-string xquery = @"
-    declare variable $query external;
-    declare variable $category external;
+## See also
 
-    for $doc in collection('articles')
-    let $score := ft:score($doc, $query using stemming using language 'en')
-    where $score > 0
-    where if ($category != '') then $doc/@category = $category else true()
-    order by $score descending
-    return
-      <result>
-        <title>{ $doc//title/text() }</title>
-        <score>{ $score }</score>
-      </result>
-";
-
-var compiled = engine.Compile(xquery);
-using var context = engine.CreateContext();
-context.SetExternalVariable("query", userSearchInput);
-context.SetExternalVariable("category", selectedCategory ?? "");
-
-var results = new List<object?>();
-await foreach (var item in compiled.ExecutionPlan!.ExecuteAsync(context))
-{
-    results.Add(item);
-}
-```
+- [PhoenixmlDb Full-Text Search](../../phoenixmldb/full-text-search.md) — the Lucene-backed index this page's `contains text` does not (yet) use

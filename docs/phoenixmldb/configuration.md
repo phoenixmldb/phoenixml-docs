@@ -1,7 +1,7 @@
 ---
 title: Configuration
 description: Database options, environment variables, logging, and connection strings
-sort: 8
+sort: 9
 ---
 
 # Configuration
@@ -128,34 +128,29 @@ var results = db.Query(xquery, parameters, queryOptions);
 
 ## Index Settings
 
-### Default Index Options
+There is no separate "default indexes" setting — indexes are declared directly on `ContainerOptions.Indexes` at container-creation time, and that declaration is the only place they're configured. There is also no per-container `IndexOnStore` toggle: whether *any* indexing happens is controlled once per process by calling `db.EnableIndexing()` (see [Indexing](indexing.md)), not per container.
 
 ```csharp
-var containerOptions = new ContainerOptions
+var container = await db.CreateContainerAsync("products", opts =>
 {
-    IndexOnStore = true,
-    DefaultIndexes =
-    [
-        new PathIndex("id-idx", "/@id"),
-        new PathIndex("name-idx", "/*/name")
-    ]
-};
-
-var container = db.CreateContainer("products", containerOptions);
+    opts.Indexes
+        .AddPathIndex("/@id")
+        .AddPathIndex("/*/name");
+});
 ```
 
 ### Full-Text Defaults
 
+Full-text options are passed directly to `AddFullTextIndex`, not assembled separately and attached afterward:
+
 ```csharp
-var ftOptions = new FullTextOptions
+opts.Indexes.AddFullTextIndex("//description", new FullTextIndexOptions
 {
     Language = "en",
     Stemming = true,
-    StopWords = true,
-    MinTokenLength = 2
-};
-
-container.CreateIndex(new FullTextIndex("search", "//text()", ftOptions));
+    CaseSensitive = false,
+    // StopWords is accepted but currently has no effect — see Full-Text Search.
+});
 ```
 
 ## Connection Strings

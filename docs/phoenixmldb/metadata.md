@@ -116,19 +116,24 @@ await txn.CommitAsync();
 
 ## Metadata Indexing
 
-Metadata keys can be indexed for fast lookups:
+Metadata keys can be indexed for fast lookups. `AddMetadataIndex` takes a qualified `XdmQName` (`PhoenixmlDb.Xdm`), not a bare or colon-separated string — the namespace dimension that keeps two systems' `status` keys apart in storage is the same one the index is keyed on:
 
 ```csharp
+using PhoenixmlDb.Xdm;
+
+var biztalkNs = db.GetOrCreateNamespaceId("urn:example:biztalk");
+var workflowNs = db.GetOrCreateNamespaceId("urn:example:workflow");
+
 var container = await db.OpenOrCreateContainerAsync("orders", opts =>
 {
     opts.Indexes
-        .AddMetadataIndex("status", XdmValueType.XdmString)
-        .AddMetadataIndex("biztalk:status", XdmValueType.XdmString)
-        .AddMetadataIndex("workflow:step", XdmValueType.XdmString);
+        .AddMetadataIndex(new XdmQName(NamespaceId.None, "status"), XdmValueType.XdmString)
+        .AddMetadataIndex(new XdmQName(biztalkNs, "status"), XdmValueType.XdmString)
+        .AddMetadataIndex(new XdmQName(workflowNs, "step"), XdmValueType.XdmString);
 });
 ```
 
-Indexed metadata queries use the B+ tree index instead of scanning all documents.
+Indexed metadata queries use the index instead of scanning all documents.
 
 ## Accessing Metadata in XQuery
 

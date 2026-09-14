@@ -1,320 +1,180 @@
 ---
 title: Indexes API
-description: Index creation, management, statistics, and query optimization
+description: Index configuration, enabling indexing, rebuilding, and the full-text search surface
 sort: 3
 ---
 
 # Index API
 
-The Index API provides methods for creating and managing indexes to optimize query performance.
+Indexes are configured on `ContainerOptions.Indexes` — a fluent `IndexConfiguration` builder (`PhoenixmlDb.Core`) — when a container is created. There is no live API to add, drop, list, or inspect an index against a container that already exists; a container's index set is fixed at creation. See [Indexing](../indexing.md) for a conceptual walkthrough and [Full-Text Search](../full-text-search.md) for the full-text index in depth.
 
-## Creating Indexes
+## `IndexConfiguration`
 
-### Path Index
+Reached via `ContainerOptions.Indexes` inside the `configure` delegate passed to `CreateContainerAsync` / `OpenOrCreateContainerAsync`. Every `Add*Index` method returns `this`, so calls chain.
+
+### AddNameIndex
 
 ```csharp
-// Single path
-container.CreateIndex(new PathIndex("name-idx", "/product/name"));
-
-// Multiple paths
-container.CreateIndex(new PathIndex("product-paths",
-    "/product/name",
-    "/product/category",
-    "/product/brand"));
-
-// Attribute path
-container.CreateIndex(new PathIndex("id-idx", "/product/@id"));
+IndexConfiguration AddNameIndex(string? namespaceUri = null)
+IndexConfiguration AddNameIndex(Uri? namespaceUri = null)
 ```
 
-### Value Index
+Speeds up element/attribute name lookups. Pass a namespace URI to restrict the index to that namespace, or `null` to index names in every namespace. Because both overloads default to `null`, calling `AddNameIndex()` with no argument is ambiguous (`CS0121`) — pass an explicit `(string?)null` / `(Uri?)null`, or a real URI.
 
 ```csharp
-// Numeric index for range queries
-container.CreateIndex(new ValueIndex("price-idx",
-    "/product/price",
-    ValueType.Decimal));
-
-// Date index
-container.CreateIndex(new ValueIndex("date-idx",
-    "/order/orderDate",
-    ValueType.Date));
-
-// String index (for sorting and equality)
-container.CreateIndex(new ValueIndex("name-val-idx",
-    "/product/name",
-    ValueType.String));
+opts.Indexes.AddNameIndex((string?)null);
 ```
 
-### Full-Text Index
+### AddPathIndex
 
 ```csharp
-// Basic full-text
-container.CreateIndex(new FullTextIndex("description-idx",
-    "/product/description"));
-
-// With options
-container.CreateIndex(new FullTextIndex("content-idx",
-    "/article/content",
-    new FullTextOptions
-    {
-        Language = "en",
-        Stemming = true,
-        StopWords = true,
-        CaseSensitive = false,
-        MinTokenLength = 2
-    }));
+IndexConfiguration AddPathIndex(string pathPattern)
 ```
 
-### Structural Index
+Speeds up path expression evaluation. `pathPattern` is an XPath-like pattern: `/` (child), `//` (descendant-or-self), `@` (attribute), `*` (wildcard) — e.g. `"/product/name"`, `"//customer/address"`. Call it once per path; there is no multi-path overload, so index several paths with successive chained calls:
 
 ```csharp
-// Enable structural navigation optimization
-container.CreateIndex(new StructuralIndex("struct-idx"));
+opts.Indexes
+    .AddPathIndex("/product/name")
+    .AddPathIndex("/product/category");
 ```
 
-### Metadata Index
+### AddValueIndex
 
 ```csharp
-// Index document metadata fields
-container.CreateIndex(new MetadataIndex("meta-idx",
-    "author", "created", "category"));
+IndexConfiguration AddValueIndex(string pathPattern, XdmValueType valueType, string? collation = null)
 ```
 
-## Index Definition Classes
+Enables typed range queries and sorting. `valueType` is `PhoenixmlDb.Core.XdmValueType`:
 
-### PathIndex
+```
+XdmString, XdmInteger, XdmLong, XdmDecimal, XdmDouble, XdmFloat,
+Boolean, DateTime, Date, Time, Duration, AnyUri, QName,
+Base64Binary, HexBinary
+```
 
 ```csharp
-var index = new PathIndex
+opts.Indexes.AddValueIndex("/product/price", XdmValueType.XdmDecimal);
+```
+
+`collation` is `null` (binary/codepoint comparison) unless you need locale-aware string ordering.
+
+### AddFullTextIndex
+
+```csharp
+IndexConfiguration AddFullTextIndex(string? pathPattern = null, FullTextIndexOptions? options = null)
+```
+
+Declares a Lucene-backed full-text index — see [Full-Text Search](../full-text-search.md) for the write path, staleness guarantee, and operational detail this page doesn't repeat. `pathPattern` of `null` indexes **every element**, not the document as a whole.
+
+```csharp
+opts.Indexes.AddFullTextIndex("/product/description", new FullTextIndexOptions
 {
-    Name = "product-paths",
-    Paths = ["/product/name", "/product/category"],
-    IncludeNamespaces = false  // Ignore namespaces in matching
-};
-```
-
-### ValueIndex
-
-```csharp
-var index = new ValueIndex
-{
-    Name = "price-idx",
-    Path = "/product/price",
-    ValueType = ValueType.Decimal,
-    Collation = null  // Use default collation
-};
-```
-
-### FullTextIndex
-
-```csharp
-var index = new FullTextIndex
-{
-    Name = "content-idx",
-    Path = "/article/content",
-    Options = new FullTextOptions
-    {
-        Language = "en",
-        Stemming = true,
-        StopWords = true,
-        CustomStopWords = ["the", "a", "an"],
-        CaseSensitive = false,
-        MinTokenLength = 2,
-        MaxTokenLength = 50
-    }
-};
-```
-
-## Index Options
-
-### Create If Not Exists
-
-```csharp
-container.CreateIndexIfNotExists(new PathIndex("name-idx", "/product/name"));
-```
-
-### Recreate Index
-
-```csharp
-container.CreateIndex(index, recreateIfExists: true);
-```
-
-### Deferred Indexing
-
-```csharp
-container.CreateIndex(index, new IndexOptions
-{
-    BuildImmediately = false  // Create definition only, build later
-});
-
-// Later: build the index
-container.RebuildIndex("price-idx");
-```
-
-## Managing Indexes
-
-### List Indexes
-
-```csharp
-foreach (var info in container.ListIndexes())
-{
-    Console.WriteLine($"Name: {info.Name}");
-    Console.WriteLine($"Type: {info.Type}");
-    Console.WriteLine($"Paths: {string.Join(", ", info.Paths)}");
-    Console.WriteLine($"Size: {info.SizeBytes} bytes");
-    Console.WriteLine($"Entries: {info.EntryCount}");
-    Console.WriteLine();
-}
-```
-
-### Get Index Info
-
-```csharp
-var info = container.GetIndexInfo("price-idx");
-
-Console.WriteLine($"Name: {info.Name}");
-Console.WriteLine($"Type: {info.Type}");
-Console.WriteLine($"Created: {info.CreatedAt}");
-Console.WriteLine($"Last rebuilt: {info.LastRebuiltAt}");
-Console.WriteLine($"Size: {info.SizeBytes}");
-Console.WriteLine($"Entry count: {info.EntryCount}");
-```
-
-### Drop Index
-
-```csharp
-container.DropIndex("old-idx");
-
-// Safe drop
-if (container.IndexExists("old-idx"))
-{
-    container.DropIndex("old-idx");
-}
-```
-
-### Rebuild Index
-
-```csharp
-// Rebuild specific index
-container.RebuildIndex("price-idx");
-
-// Rebuild all indexes
-container.RebuildIndexes();
-
-// Rebuild with progress
-container.RebuildIndex("price-idx", new RebuildOptions
-{
-    Progress = new Progress<IndexRebuildProgress>(p =>
-    {
-        Console.WriteLine($"Progress: {p.DocumentsProcessed}/{p.TotalDocuments}");
-    })
+    Language = "en",
+    Stemming = true,
+    CaseSensitive = false,
 });
 ```
 
-## Index Statistics
+`FullTextIndexOptions` (`PhoenixmlDb.Core`):
+
+| Property | Type | Default | Notes |
+|----------|------|---------|-------|
+| `Language` | `string` | `"en"` | |
+| `CaseSensitive` | `bool` | `false` | |
+| `Stemming` | `bool` | `true` | |
+| `StopWords` | `IReadOnlySet<string>?` | `null` | **Accepted but has no effect** — nothing reads it yet. |
+
+### AddMetadataIndex
 
 ```csharp
-var stats = container.GetIndexStats("price-idx");
-
-Console.WriteLine($"Entry count: {stats.EntryCount}");
-Console.WriteLine($"Unique values: {stats.UniqueValueCount}");
-Console.WriteLine($"Size: {stats.SizeBytes} bytes");
-Console.WriteLine($"Tree depth: {stats.TreeDepth}");
-Console.WriteLine($"Fragmentation: {stats.Fragmentation:P}");
-Console.WriteLine($"Avg entry size: {stats.AverageEntrySize} bytes");
+IndexConfiguration AddMetadataIndex(XdmQName metadataName, XdmValueType valueType = XdmValueType.XdmString)
+IndexConfiguration AddMetadataIndex<T>(MetadataProperty<T> descriptor, XdmValueType valueType = XdmValueType.XdmString)
 ```
 
-## Query Optimization
-
-### Explain Index Usage
+Enables efficient queries by document metadata key/value. The name is a qualified `XdmQName` (`PhoenixmlDb.Xdm`), not a bare string — metadata itself is namespaced (see [Metadata](../metadata.md)), and an index declared for one namespace's key does not answer for another's.
 
 ```csharp
-var plan = db.Explain("""
-    for $p in collection('products')//product
-    where $p/price > 100
-    order by $p/name
-    return $p
-    """);
+using PhoenixmlDb.Xdm;
 
-foreach (var index in plan.IndexesUsed)
-{
-    Console.WriteLine($"Using index: {index.Name}");
-    Console.WriteLine($"  Type: {index.Type}");
-    Console.WriteLine($"  Estimated selectivity: {index.Selectivity:P}");
-}
+opts.Indexes.AddMetadataIndex(new XdmQName(NamespaceId.None, "status"), XdmValueType.XdmString);
 ```
 
-### Force Index Usage
+### EnableStructuralIndex
 
 ```csharp
-var results = db.Query("""
-    (: pragma use-index=price-idx :)
-    for $p in collection('products')//product
-    where $p/price > 100
-    return $p
-    """);
+IndexConfiguration EnableStructuralIndex(bool enabled = true)
 ```
 
-### Disable Index Usage
+Controls the parent-child/sibling index that accelerates axis navigation (`parent::`, `ancestor::`, `following-sibling::`, ...). Enabled by default; disable only for containers that are never navigated with XQuery axis steps.
+
+## Enabling and running indexing
+
+### `DocumentDatabase.EnableIndexing()`
 
 ```csharp
-var results = db.Query("""
-    (: pragma no-index :)
-    for $p in collection('products')//product
-    return $p
-    """);
+// PhoenixmlDb.Indexing
+public static IndexManager EnableIndexing(this DocumentDatabase db)
 ```
 
-## Index Selection Guidelines
+Declaring indexes in `ContainerOptions.Indexes` only records configuration; nothing is maintained until the owning process calls this once per `DocumentDatabase`. Returns the `IndexManager` used for rebuilds and for every full-text operation below.
 
-| Query Pattern | Recommended Index |
-|---------------|-------------------|
-| `/product/name` | Path Index |
-| `//product[@id='123']` | Path Index on `/@id` |
-| `price > 100` | Value Index (Decimal) |
-| `order by date` | Value Index (Date) |
-| `contains(description, 'keyword')` | Full-Text Index |
-| `parent::*`, `ancestor::*` | Structural Index |
-| `doc-metadata($doc, 'author')` | Metadata Index |
+```csharp
+using var db = DocumentDatabase.Open(dbPath);
+var manager = db.EnableIndexing();
+```
+
+### `DocumentDatabase.RebuildIndexesAsync`
+
+```csharp
+ValueTask<IndexRebuildResult> RebuildIndexesAsync(string containerName, CancellationToken cancellationToken = default)
+```
+
+Requires `EnableIndexing()` to have been called first. Clears the container's previous index entries, walks every stored document, and re-indexes each one — clearing the container's stale flag as part of the same commit.
+
+```csharp
+var result = await db.RebuildIndexesAsync("products");
+// result.DocumentsIndexed, result.EntriesRemoved, result.EntriesWritten
+```
+
+`IndexRebuildResult` is `readonly record struct IndexRebuildResult(long DocumentsIndexed, long EntriesRemoved, long EntriesWritten)`.
+
+### `DocumentDatabase.ContainersWithStaleIndexes()`
+
+```csharp
+IReadOnlyList<string> ContainersWithStaleIndexes()
+```
+
+Names every container whose indexes need a rebuild: written to while indexing was disabled, or last touched by an engine version that predates one of its declared indexes.
+
+## Full-text search (`IndexManager`)
+
+These members live on the `IndexManager` returned by `EnableIndexing()`. Full detail, including the exactness guarantee while the background worker lags, is on the [Full-Text Search](../full-text-search.md) page — this is the member-by-member reference.
+
+| Member | Signature | Purpose |
+|--------|-----------|---------|
+| `SearchFullText` | `IReadOnlyList<FullTextSearchHit> SearchFullText(ContainerId container, string text, int limit = 100)` | Search; throws `InvalidOperationException` if the container's indexes are stale. |
+| `PendingFullTextDocuments` | `IReadOnlyCollection<DocumentId> PendingFullTextDocuments(ContainerId container)` | Documents the Lucene index does not yet (or no longer) correctly reflect. |
+| `CountFullTextIndexEntries` | `long CountFullTextIndexEntries(ContainerId container)` | Diagnostic: entries currently held in the Lucene index. |
+| `DrainFullTextQueueAsync` | `Task<int> DrainFullTextQueueAsync(DocumentDatabase db, int batchSize = 500, CancellationToken ct = default)` | Applies up to `batchSize` queued documents in one LMDB write transaction; returns the count indexed. |
+| `StartFullTextIndexing` | `IAsyncDisposable StartFullTextIndexing(DocumentDatabase db, FullTextIndexingOptions? options = null)` | Starts a background drain loop; disposing stops it and awaits completion. |
+
+`FullTextSearchHit` is `readonly record struct FullTextSearchHit(DocumentId Document, NodeId Node, double Score)`.
+
+`FullTextIndexingOptions` (`PhoenixmlDb.Indexing`) controls the background loop:
+
+| Property | Type | Default | Notes |
+|----------|------|---------|-------|
+| `BatchSize` | `int` | `500` | Maximum queued documents applied per drain. |
+| `Budget` | `TimeSpan` | `2s` | Per-batch time budget; bounds worst-case shutdown latency. |
+| `IdleDelay` | `TimeSpan` | `500ms` | How long the loop waits after a batch drains nothing. |
 
 ## Error Handling
 
-```csharp
-try
-{
-    container.CreateIndex(index);
-}
-catch (IndexExistsException ex)
-{
-    Console.WriteLine($"Index already exists: {ex.IndexName}");
-}
-catch (InvalidIndexDefinitionException ex)
-{
-    Console.WriteLine($"Invalid index: {ex.Message}");
-}
-
-try
-{
-    container.DropIndex("nonexistent");
-}
-catch (IndexNotFoundException ex)
-{
-    Console.WriteLine($"Index not found: {ex.IndexName}");
-}
-```
-
-## Best Practices
-
-1. **Index selectively** - Only index frequently queried paths
-2. **Match query patterns** - Design indexes for your actual queries
-3. **Use value indexes for ranges** - Path indexes only help with existence
-4. **Monitor index size** - Large indexes slow writes
-5. **Rebuild periodically** - After bulk deletes
-6. **Test with explain** - Verify indexes are being used
-7. **Consider composite indexes** - Multiple paths in one index
+`SearchFullText` throws `InvalidOperationException` when the container's indexes are stale — call `RebuildIndexesAsync` first (see [Rebuilding](../full-text-search.md#rebuilding)). `RebuildIndexesAsync` throws `InvalidOperationException` if `EnableIndexing()` was never called. Beyond those two, index configuration errors surface as ordinary argument validation on `IndexConfiguration`'s `Add*Index` methods (e.g. a `null` required path pattern) — there is no dedicated `IndexExistsException` / `InvalidIndexDefinitionException` family, because there is no live create/drop to raise them against.
 
 ## Next Steps
 
 | Concepts | Execution | Optimization |
 |----------|-----------|--------------|
-| **[Indexing](../indexing.md)**<br>Indexing concepts | **[Query API](queries.md)**<br>Query execution | **[Performance Tuning](../performance-tuning.md)**<br>Optimization tips |
+| **[Indexing](../indexing.md)**<br>Indexing concepts | **[Queries API](queries.md)**<br>Query execution | **[Full-Text Search](../full-text-search.md)**<br>The full-text index in depth |
