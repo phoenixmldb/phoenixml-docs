@@ -179,6 +179,12 @@ as above.
 These are ordinary functions in `http://www.w3.org/2007/xpath-full-text` — unlike `contains text`,
 they use normal function-call syntax.
 
+> **These are PhoenixmlDb's own functions, not standard ones.** The W3C Full Text specification
+> defines the `contains text` *clause*; it does not define any functions in that namespace. The
+> URI and the `ft` prefix are this library's choice (`FunctionNamespaces.Ft`), so do not expect
+> another XQuery processor to provide `ft:score` or `ft:stem`, and do not read the `w3.org` URI as
+> a portability guarantee. The namespace they live in may change.
+
 > **You must declare the prefix. The engine does not bind `ft`.**
 > It binds `phx` and the container's `DefaultNamespaces`, and nothing else. Without a prolog every
 > call below fails at compile time with `XPST0081: Unbound namespace prefix: ft`:
