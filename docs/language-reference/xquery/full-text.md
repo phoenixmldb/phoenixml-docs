@@ -179,11 +179,20 @@ as above.
 These are ordinary functions in `http://www.w3.org/2007/xpath-full-text` — unlike `contains text`,
 they use normal function-call syntax.
 
-> **These are PhoenixmlDb's own functions, not standard ones.** The W3C Full Text specification
-> defines the `contains text` *clause*; it does not define any functions in that namespace. The
-> URI and the `ft` prefix are this library's choice (`FunctionNamespaces.Ft`), so do not expect
-> another XQuery processor to provide `ft:score` or `ft:stem`, and do not read the `w3.org` URI as
-> a portability guarantee. The namespace they live in may change.
+> **These are PhoenixmlDb's own functions, not standard ones — inside a namespace the W3C does
+> use.** That combination is the trap, so it is worth being exact.
+>
+> The W3C Full Text specification **does** use `http://www.w3.org/2007/xpath-full-text`: it is the
+> target namespace of the specification's schemas, bound there to `fts` and `xqxft`, and the spec
+> describes its own semantics with 66 `fts:`-prefixed functions that §1.3 says need not be
+> implemented. What it defines in that namespace is **no callable functions**, and it never uses
+> the prefix `ft` at all.
+>
+> So the URI is the W3C's. The **`ft` prefix, and the decision to put callable functions in that
+> namespace, are this library's** (`FunctionNamespaces.Ft`). Do not expect another XQuery
+> processor to provide `ft:score` or `ft:stem`, and **do not read the `w3.org` URI as a
+> portability guarantee** — it is a stronger false signal here than an unfamiliar URI would be.
+> The namespace these functions live in may change.
 
 > **You must declare the prefix. The engine does not bind `ft`.**
 > It binds `phx` and the container's `DefaultNamespaces`, and nothing else. Without a prolog every
