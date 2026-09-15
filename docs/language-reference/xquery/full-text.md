@@ -54,6 +54,10 @@ return
 
 `ft:score` takes the node, not the search term — see [ft:score()](#ftscore), below, for why.
 
+> **This example does not produce useful output on 1.8.0.** `ft:score` returns `0.0` for every
+> node on this release, so the ordering is arbitrary and every `<score>` is `0`. The shape is
+> correct; the scores are not yet.
+
 ---
 
 ## Match Options
@@ -161,36 +165,35 @@ The grammar also defines `distance N words`, `same sentence`, `same paragraph`, 
 //doc[. contains text ("xml" ftor "json")]
 
 (: Contains "database" but NOT "relational" :)
-//doc[. contains text ("database" ftnot "relational")]
+//doc[. contains text ("database" ftand ftnot "relational")]
 ```
+
+**`ftnot` is a unary prefix, not a binary infix.** Writing `("database" ftnot "relational")`
+is a parse error — `XPST0003: mismatched input 'ftnot' expecting ')'`. Combine it with `ftand`
+as above.
 
 ---
 
 ## Full-Text Functions
 
-These are ordinary functions in the `http://www.w3.org/2007/xpath-full-text` namespace (conventionally bound to `ft:`) — unlike `contains text`, they use normal function-call syntax.
+These are ordinary functions in `http://www.w3.org/2007/xpath-full-text` — unlike `contains text`,
+they use normal function-call syntax.
 
-### ft:score()
+> **You must declare the prefix. The engine does not bind `ft`.**
+> It binds `phx` and the container's `DefaultNamespaces`, and nothing else. Without a prolog every
+> call below fails at compile time with `XPST0081: Unbound namespace prefix: ft`:
+>
+> ```xquery
+> declare namespace ft = "http://www.w3.org/2007/xpath-full-text";
+> ```
+>
+> Every example in this section assumes that declaration. Whether the engine should bind `ft` by
+> default, as it does `phx`, is an open question — design 07 D6 settles `phx` and `dbxml`, not
+> `ft`.
 
-```
-ft:score($node as node()) as xs:double
-```
-
-Takes **one argument** — the node — not the node and a search term. It returns the relevance score from the *most recent `contains text` evaluation* against that node, so call it after (or within the same FLWOR iteration as) a `contains text` clause that evaluated the same node — as in the FLWOR example above. Calling it with a node that was never evaluated by `contains text` returns `0.0`.
-
-### ft:tokenize()
-
-```
-ft:tokenize($text as xs:string?) as xs:string*
-ft:tokenize($text as xs:string?, $language as xs:string) as xs:string*
-```
-
-Breaks text into tokens using the full-text analyzer — useful for understanding how a string will be indexed or matched.
-
-```xquery
-ft:tokenize("Hello, world! This is a test.")
-(: ("Hello", "world", "This", "is", "a", "test") :)
-```
+**Provenance.** The examples in this section were **not** covered by this page's original sample
+verification. They were re-verified against engine `4231a6b` with `PhoenixmlDb.XQuery` 1.8.0 on
+2026-09-14, and the signatures and outputs below are what that run produced.
 
 ### ft:stem()
 
@@ -203,23 +206,71 @@ ft:stem($term as xs:string, $language as xs:string) as xs:string
 ft:stem("running", "en")   (: "run" :)
 ```
 
+### ft:tokenize()
+
+```
+ft:tokenize($text as xs:string?) as xs:string*
+ft:tokenize($text as xs:string?, $language as xs:string) as xs:string*
+```
+
+Breaks text into tokens **using the same analyzer `contains text` uses** — which is what makes it
+useful: it shows you the stream your phrase queries are actually matched against.
+
+```xquery
+ft:tokenize("Hello, world! This is a test.")
+(: ("hello", "world", "test") :)
+```
+
+**Tokens are lower-cased, and stop words are dropped.** `This`, `is` and `a` do not survive. If a
+phrase query is matching more than you expect, running the text through `ft:tokenize` will usually
+show you why — see
+[why the two phrase matchers differ](../../phoenixmldb/full-text-search.md#why-the-two-disagree-about-a-phrase).
+
 ### ft:is-stop-word()
 
 ```
-ft:is-stop-word($term as xs:string, $language as xs:string) as xs:boolean
+ft:is-stop-word($word as xs:string) as xs:boolean
 ```
 
-Tests whether a word is a stop word for a given language — implemented independently of the (currently inert) `using stop words` match option above.
+**One argument, not two.** A two-argument call fails with `XPST0017: Unknown function:
+is-stop-word#2`.
+
+Observed on 1.8.0: it returns `false` for every input tried, including `"the"`, `"a"` and `"of"` —
+words the analyzer demonstrably *does* remove. **This function and the analyzer do not currently
+agree**, so do not use it to predict what `ft:tokenize` or `contains text` will do.
+
+### ft:score()
+
+```
+ft:score($node as node()) as xs:double
+```
+
+Takes **one argument** — the node — not the node and a search term.
+
+> **Scores are `0.0` on 1.8.0.** `ft:score` returns `0.0` even immediately after a matching
+> `contains text` on the same node, so a `where $score > 0` filter returns nothing at all. Treat
+> scoring as not working on this release. Raised for triage; not a documentation defect.
 
 ### ft:thesaurus-lookup()
 
 ```
-ft:thesaurus-lookup($thesaurus as xs:string, $term as xs:string) as xs:string*
+ft:thesaurus-lookup($term as xs:string) as xs:string*
+ft:thesaurus-lookup($term as xs:string, $relationship as xs:string) as xs:string*
 ```
+
+**The term comes first.** An earlier revision of this page documented
+`ft:thesaurus-lookup($thesaurus, $term)`, taking a thesaurus file as the first argument. Called
+that way it returns an empty sequence.
 
 ---
 
 ## Practical Examples
+
+> **Every example in this section that uses `ft:score` is shape-correct and does not work on
+> 1.8.0.** Scores come back `0.0` for every node, so an `order by` on them is arbitrary and a
+> `where $score > 0` filter returns **nothing at all**. They are kept because the query shape is
+> right and will start working when scoring does. Each also needs the
+> `declare namespace ft = "http://www.w3.org/2007/xpath-full-text";` prolog shown above.
 
 ### Document Search with Scoring
 
