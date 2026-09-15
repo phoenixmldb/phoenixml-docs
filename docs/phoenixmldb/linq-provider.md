@@ -1,7 +1,7 @@
 ---
 title: LINQ Provider
 description: Query PhoenixmlDb with LINQ — XML navigation, fluent API, and type mapping
-sort: 12
+sort: 13
 ---
 
 # LINQ Provider
