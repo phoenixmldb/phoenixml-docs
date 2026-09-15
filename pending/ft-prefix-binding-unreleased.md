@@ -1,4 +1,24 @@
-# Pending: the engine binds `ft` (UNRELEASED)
+# SUPERSEDED — do not implement this file
+
+> **Superseded 2026-09-15 by the namespace-consolidation design**, `endpointsystems/phoenixml`
+> @ `c05d3fb`, `docs/superpowers/specs/2026-09-15-namespace-consolidation-design.md`.
+>
+> **`ft` is being retired, not bound.** All six extension functions move to `phx` →
+> `https://schemas.phoenixml.dev/2026/functions`, predeclared by the XQuery library:
+> `phx:metadata`, `phx:stem`, `phx:tokenize`, `phx:score`, `phx:is-stop-word`,
+> `phx:thesaurus-lookup`. The W3C URI goes with it.
+>
+> **Everything below is therefore dead**, including the `//ft:x` warning — there will be no `ft`
+> binding to collide with a document prefix. Kept only so that anyone who finds the branch sees
+> why it is not to be acted on.
+>
+> Retained from below and still true: the **W3C facts**. The portability warning now published on
+> `full-text.md` remains correct about the old URI and simply stops applying to ours once the
+> functions move.
+
+---
+
+# Pending: the engine binds `ft` (UNRELEASED — SUPERSEDED)
 
 **Not published.** Outside `docs/`, the only tree `build.sh` reads, so nothing here reaches
 phoenixml.dev.

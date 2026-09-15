@@ -13,6 +13,10 @@ transcript.
 
 Source: db-engine, 2026-09-14.
 
+> **Still current as of 2026-09-15.** The namespace-consolidation design (`c05d3fb`) supersedes
+> `ft-prefix-binding-unreleased.md` in this directory but does **not** touch anything here —
+> index lifetime and namespace binding are independent.
+
 ## The anchor — settled
 
 **PhoeniXML DB 1.0.0-preview.1.** `<Version>1.0.0-preview.1</Version>`, engine
