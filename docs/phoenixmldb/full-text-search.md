@@ -133,7 +133,34 @@ The benchmark harness is committed at `benchmarks/PhoenixmlDb.Benchmarks.FullTex
 
 Several things a full-text search page would normally cover are deliberately **not here**, because they belong to later phases of the design that introduced this index (`docs/design/07-query-extensibility-and-full-text.md` in the engine repository):
 
-- **XQuery's `contains text` does not use this index — and on every currently published package it does not run at all.** On the pinned XQuery build, `contains text` throws a `NullReferenceException` at query-compile time, before evaluation begins. That defect is fixed upstream ([`phoenixmldb-xquery#15`](https://github.com/phoenixmldb/phoenixmldb-xquery/issues/15), fixed 2026-09-11) but the fix has not been released, so no package you can install today contains it. See [XQuery Full-Text](../language-reference/xquery/full-text.md) for details. Once that fix ships, `contains text` evaluates by scanning — correct, just not accelerated by this index. Accelerating it is a later phase with a documented prerequisite: this index matches phrases more strictly than `contains text` itself does, so using it as a candidate source naively would silently drop matches the evaluator would otherwise confirm.
+- **XQuery's `contains text` does not use this index.** It evaluates by scanning — correct, just not accelerated. (Before `PhoenixmlDb.XQuery` 1.8.0 it did not run at all: it threw a `NullReferenceException` at query-compile time, [`phoenixmldb-xquery#15`](https://github.com/phoenixmldb/phoenixmldb-xquery/issues/15). The engine now pins 1.8.0. See [XQuery Full-Text](../language-reference/xquery/full-text.md).) Accelerating it is a later phase with a documented prerequisite: this index matches phrases more strictly than `contains text` itself does, so using it as a candidate source naively would silently drop matches the evaluator would otherwise confirm.
+
+### Why the two disagree about a phrase
+
+Both are exact. **They differ in whether stop-word removal closes the gap**, and that is the whole
+of it:
+
+| | matches on |
+|---|---|
+| `contains text` | adjacency over the **stop-word-compacted** token stream |
+| this index | a slop-0 phrase query over **absolute** token positions, so a removed stop word leaves a gap |
+
+Measured on `PhoenixmlDb.XQuery` 1.8.0, with `<p>the walrus and the carpenter</p>`:
+
+```xquery
+. contains text 'walrus carpenter'   (: true  — "and the" are removed, so the terms are adjacent :)
+. contains text 'carpenter walrus'   (: false — order still matters :)
+```
+
+Order is respected and adjacency is required; it is the *analyzed* stream that adjacency is
+measured over. A gap of ordinary words does **not** match: `<p>aa xx yy bb</p>` does not satisfy
+`contains text 'aa bb'`, while `<p>aa and the bb</p>` does.
+
+> **The consequence for you:** `IndexManager.SearchFullText` can **miss** a document that
+> `contains text` matches, whenever the phrase spans removed stop words. The two are not
+> interchangeable, and the index is the stricter of the two.
+
+Which words are treated as stop words is engine configuration and is not documented here yet.
 - **`phx:search` does not exist yet.** A native, non-portable search surface is planned as a later phase.
 - **Analysis, resource providers and scoring are not pluggable yet.** Language, stemming and case-sensitivity are configurable per index (`FullTextIndexOptions`), but the analyzer itself, stop-word/thesaurus resources, and the scorer are fixed.
 - **`FullTextIndexOptions.StopWords` is accepted but has no effect.** You can set it; nothing reads it — no error, no behavior change. This is a real, pre-existing gap (the mapping from the container-facing options to the engine's internal analysis options simply does not carry `StopWords` across), not something this page is glossing over.
