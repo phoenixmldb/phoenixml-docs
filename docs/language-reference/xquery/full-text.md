@@ -1,6 +1,6 @@
 ---
 title: Full-Text Search
-description: "XQuery Full-Text — the contains text clause, match options, and ft: functions"
+description: "XQuery Full-Text — the contains text clause, match options, and phx: functions"
 sort: 10
 ---
 
@@ -10,7 +10,7 @@ XQuery's built-in `contains()` function does exact substring matching. It finds 
 
 > **Important — verify before relying on this page.** This page was corrected against the engine on `main` as of 2026-09-14. Two things are worth knowing before you use any of it:
 >
-> 1. **The entry point is the `contains text` clause, not a function.** Earlier revisions of this page described a `ft:contains($node, "term")` function call. That function does not exist — compiling a query that calls it fails with `Unknown function: contains#2`. The real syntax is the W3C XQuery Full Text `contains text` clause shown below.
+> 1. **The entry point is the `contains text` clause, not a function.** Earlier revisions of this page described an `ft:contains($node, "term")` function call. No such function has ever existed — compiling a query that calls it fails with `Unknown function: contains#2`. The real syntax is the W3C XQuery Full Text `contains text` clause shown below.
 > 2. **`contains text` fails at query-compile time before `PhoenixmlDb.XQuery` 1.8.0.** On earlier releases every `contains text` query — with or without match options — throws a `NullReferenceException` from `PhoenixmlDb.XQuery.Analysis.SchemaFeatureChecker.VisitStepExpression`, before the query runs. A plain, non-full-text predicate compiles and runs fine, so the failure is specific to `contains text`. Tracked as [`phoenixmldb-xquery#15`](https://github.com/phoenixmldb/phoenixmldb-xquery/issues/15) and fixed in **1.8.0**, which the engine now pins. On 1.8.0 and later the clause compiles and evaluates; verified by running the examples on this page through the published `xquery4` 1.8.0 tool.
 
 ## contains text — The Basic Clause
@@ -44,17 +44,17 @@ XQuery's built-in `contains()` function does exact substring matching. It finds 
 ```xquery
 for $article in //article
 where $article/body contains text "machine learning"
-order by ft:score($article/body) descending
+order by phx:score($article/body) descending
 return
   <result>
     <title>{ $article/title/text() }</title>
-    <score>{ ft:score($article/body) }</score>
+    <score>{ phx:score($article/body) }</score>
   </result>
 ```
 
-`ft:score` takes the node, not the search term — see [ft:score()](#ftscore), below, for why.
+`phx:score` takes the node, not the search term — see [phx:score()](#ftscore), below, for why.
 
-> **This example does not produce useful output on 1.8.0.** `ft:score` returns `0.0` for every
+> **This example does not produce useful output on 1.8.0.** `phx:score` returns `0.0` for every
 > node on this release, so the ordering is arbitrary and every `<score>` is `0`. The shape is
 > correct; the scores are not yet.
 
@@ -176,75 +176,73 @@ as above.
 
 ## Full-Text Functions
 
-These are ordinary functions in `http://www.w3.org/2007/xpath-full-text` — unlike `contains text`,
-they use normal function-call syntax.
+These are ordinary functions in `https://schemas.phoenixml.dev/2026/functions` — unlike
+`contains text`, they use normal function-call syntax.
 
-> **These are PhoenixmlDb's own functions, not standard ones — inside a namespace the W3C does
-> use.** That combination is the trap, so it is worth being exact.
->
-> The W3C Full Text specification **does** use `http://www.w3.org/2007/xpath-full-text`: it is the
-> target namespace of the specification's schemas, bound there to `fts` and `xqxft`, and the spec
-> describes its own semantics with 66 `fts:`-prefixed functions that §1.3 says need not be
-> implemented. What it defines in that namespace is **no callable functions**, and it never uses
-> the prefix `ft` at all.
->
-> So the URI is the W3C's. The **`ft` prefix, and the decision to put callable functions in that
-> namespace, are this library's** (`FunctionNamespaces.Ft`). Do not expect another XQuery
-> processor to provide `ft:score` or `ft:stem`, and **do not read the `w3.org` URI as a
-> portability guarantee** — it is a stronger false signal here than an unfamiliar URI would be.
-> The namespace these functions live in may change.
+> **`phx` is predeclared. You do not declare it.**
+> From `PhoenixmlDb.XQuery` 2.0.0 the engine binds `phx` on every query path, so the calls below
+> work with no prolog. A container's `DefaultNamespaces` and a query's own `declare namespace`
+> still take precedence, but a host can no longer rebind `phx` to a different URI — that is a
+> compile error.
 
-> **You must declare the prefix. The engine does not bind `ft`.**
-> It binds `phx` and the container's `DefaultNamespaces`, and nothing else. Without a prolog every
-> call below fails at compile time with `XPST0081: Unbound namespace prefix: ft`:
+> **Renamed in 2.0.0 — the old names no longer compile.** Releases before 2.0.0 put these
+> functions in `http://www.w3.org/2007/xpath-full-text` with the prefix `ft`, which had to be
+> declared. That namespace is retired and there are no aliases, so a query using it fails at
+> compile time rather than behaving differently.
 >
-> ```xquery
-> declare namespace ft = "http://www.w3.org/2007/xpath-full-text";
-> ```
+> | before 2.0.0 | 2.0.0 and later |
+> |---|---|
+> | `phx:stem` | `phx:stem` |
+> | `phx:tokenize` | `phx:tokenize` |
+> | `phx:score` | `phx:score` |
+> | `phx:is-stop-word` | `phx:is-stop-word` |
+> | `phx:thesaurus-lookup` | `phx:thesaurus-lookup` |
+> | `dbxml:metadata` | `phx:metadata` |
 >
-> Every example in this section assumes that declaration. Whether the engine should bind `ft` by
-> default, as it does `phx`, is an open question — design 07 D6 settles `phx` and `dbxml`, not
-> `ft`.
+> The old namespace was the W3C's own — used by the Full Text specification for its schemas — so
+> it carried a false suggestion that these were standard, portable functions. They never were,
+> and they are not now: **no other XQuery processor provides them.**
 
 **Provenance.** The examples in this section were **not** covered by this page's original sample
 verification. They were re-verified against engine `4231a6b` with `PhoenixmlDb.XQuery` 1.8.0 on
-2026-09-14, and the signatures and outputs below are what that run produced.
+2026-09-14, and re-run under the `phx` names against the **published `xquery4` 2.0.0** on
+2026-09-15. The signatures and outputs below are what those runs produced.
 
-### ft:stem()
+### phx:stem()
 
 ```
-ft:stem($term as xs:string) as xs:string
-ft:stem($term as xs:string, $language as xs:string) as xs:string
+phx:stem($term as xs:string) as xs:string
+phx:stem($term as xs:string, $language as xs:string) as xs:string
 ```
 
 ```xquery
-ft:stem("running", "en")   (: "run" :)
+phx:stem("running", "en")   (: "run" :)
 ```
 
-### ft:tokenize()
+### phx:tokenize()
 
 ```
-ft:tokenize($text as xs:string?) as xs:string*
-ft:tokenize($text as xs:string?, $language as xs:string) as xs:string*
+phx:tokenize($text as xs:string?) as xs:string*
+phx:tokenize($text as xs:string?, $language as xs:string) as xs:string*
 ```
 
 Breaks text into tokens **using the same analyzer `contains text` uses** — which is what makes it
 useful: it shows you the stream your phrase queries are actually matched against.
 
 ```xquery
-ft:tokenize("Hello, world! This is a test.")
+phx:tokenize("Hello, world! This is a test.")
 (: ("hello", "world", "test") :)
 ```
 
 **Tokens are lower-cased, and stop words are dropped.** `This`, `is` and `a` do not survive. If a
-phrase query is matching more than you expect, running the text through `ft:tokenize` will usually
+phrase query is matching more than you expect, running the text through `phx:tokenize` will usually
 show you why — see
 [why the two phrase matchers differ](../../phoenixmldb/full-text-search.md#why-the-two-disagree-about-a-phrase).
 
-### ft:is-stop-word()
+### phx:is-stop-word()
 
 ```
-ft:is-stop-word($word as xs:string) as xs:boolean
+phx:is-stop-word($word as xs:string) as xs:boolean
 ```
 
 **One argument, not two.** A two-argument call fails with `XPST0017: Unknown function:
@@ -252,46 +250,45 @@ is-stop-word#2`.
 
 Observed on 1.8.0: it returns `false` for every input tried, including `"the"`, `"a"` and `"of"` —
 words the analyzer demonstrably *does* remove. **This function and the analyzer do not currently
-agree**, so do not use it to predict what `ft:tokenize` or `contains text` will do.
+agree**, so do not use it to predict what `phx:tokenize` or `contains text` will do.
 
 **On 1.8.0 this is a wiring bug, not a difference of configuration.** The two paths select
-different built-in analyzers by accident: `ft:is-stop-word` analyzes with stemming off, which
+different built-in analyzers by accident: `phx:is-stop-word` analyzes with stemming off, which
 picks an analyzer that has no stop-word filter at all, so every word produces a token and the
-answer is always `false`. `contains text` and `ft:tokenize` run with stemming on, which picks the
+answer is always `false`. `contains text` and `phx:tokenize` run with stemming on, which picks the
 English analyzer, and that one does remove stop words.
 
-### ft:score()
+### phx:score()
 
 ```
-ft:score($node as node()) as xs:double
+phx:score($node as node()) as xs:double
 ```
 
 Takes **one argument** — the node — not the node and a search term.
 
-> **Scores are `0.0` on 1.8.0.** `ft:score` returns `0.0` even immediately after a matching
+> **Scores are `0.0` on 1.8.0.** `phx:score` returns `0.0` even immediately after a matching
 > `contains text` on the same node, so a `where $score > 0` filter returns nothing at all. Treat
 > scoring as not working on this release. Raised for triage; not a documentation defect.
 
-### ft:thesaurus-lookup()
+### phx:thesaurus-lookup()
 
 ```
-ft:thesaurus-lookup($term as xs:string) as xs:string*
-ft:thesaurus-lookup($term as xs:string, $relationship as xs:string) as xs:string*
+phx:thesaurus-lookup($term as xs:string) as xs:string*
+phx:thesaurus-lookup($term as xs:string, $relationship as xs:string) as xs:string*
 ```
 
 **The term comes first.** An earlier revision of this page documented
-`ft:thesaurus-lookup($thesaurus, $term)`, taking a thesaurus file as the first argument. Called
+`phx:thesaurus-lookup($thesaurus, $term)`, taking a thesaurus file as the first argument. Called
 that way it returns an empty sequence.
 
 ---
 
 ## Practical Examples
 
-> **Every example in this section that uses `ft:score` is shape-correct and does not work on
+> **Every example in this section that uses `phx:score` is shape-correct and does not work on
 > 1.8.0.** Scores come back `0.0` for every node, so an `order by` on them is arbitrary and a
 > `where $score > 0` filter returns **nothing at all**. They are kept because the query shape is
-> right and will start working when scoring does. Each also needs the
-> `declare namespace ft = "http://www.w3.org/2007/xpath-full-text";` prolog shown above.
+> right and will start working when scoring does. No prolog declaration is needed: `phx` is predeclared.
 
 ### Document Search with Scoring
 
@@ -300,7 +297,7 @@ declare variable $query external;
 
 for $doc in collection("documents")
 where $doc contains text { $query } using stemming using language "en"
-let $score := ft:score($doc)
+let $score := phx:score($doc)
 where $score > 0
 order by $score descending
 return
@@ -321,7 +318,7 @@ declare function local:search-articles(
   let $matches :=
     for $article in collection("cms")/article
     where $article/body contains text { $terms } using stemming using case insensitive using language "en"
-    let $score := ft:score($article/body)
+    let $score := phx:score($article/body)
     order by $score descending
     return $article
   return
@@ -349,7 +346,7 @@ declare function local:search(
 ) as element()* {
   for $doc in collection($collection)
   where $doc contains text { $terms } using stemming using language { $lang }
-  let $score := ft:score($doc)
+  let $score := phx:score($doc)
   order by $score descending
   return $doc
 };
