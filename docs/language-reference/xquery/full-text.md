@@ -239,9 +239,11 @@ Observed on 1.8.0: it returns `false` for every input tried, including `"the"`, 
 words the analyzer demonstrably *does* remove. **This function and the analyzer do not currently
 agree**, so do not use it to predict what `ft:tokenize` or `contains text` will do.
 
-Stop-word handling is pluggable by design, so a function and an analyzer consulting different
-providers is possible rather than necessarily a defect — but on 1.8.0 they disagree, and nothing
-in the query surface lets you tell which one you are asking.
+**On 1.8.0 this is a wiring bug, not a difference of configuration.** The two paths select
+different built-in analyzers by accident: `ft:is-stop-word` analyzes with stemming off, which
+picks an analyzer that has no stop-word filter at all, so every word produces a token and the
+answer is always `false`. `contains text` and `ft:tokenize` run with stemming on, which picks the
+English analyzer, and that one does remove stop words.
 
 ### ft:score()
 
