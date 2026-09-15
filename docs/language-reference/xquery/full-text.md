@@ -103,7 +103,17 @@ The grammar also accepts `using diacritics sensitive`/`insensitive`, `using wild
 //doc[. contains text "fast" using thesaurus "thesaurus.xml"]
 ```
 
-compiles (modulo the `contains text` defect above) but behaves exactly as if the `using` clause were absent: diacritics are always folded, no glob expansion happens, no term is excluded as a stop word, and no synonym is added. Treat these four as accepted-but-inert until the underlying analyzer is wired up.
+compiles but behaves exactly as if the `using` clause were absent: diacritics are always folded,
+no glob expansion happens, no synonym is added, and **the analyzer's own stop-word handling is
+unaffected by what you wrote**. Treat these four as accepted-but-inert until the underlying
+analyzer is wired up.
+
+> **`using no stop words` does not give you exact phrase matching.** The analyzer removes stop
+> words regardless, and the option does not stop it. Measured on 1.8.0, `. contains text 'walrus
+> carpenter'` matches `<p>the walrus and the carpenter</p>` **with and without**
+> `using no stop words` — identical results. If you reach for this option to make a phrase
+> position-exact against the source text, it will silently not do that. See
+> [why the two phrase matchers differ](../../phoenixmldb/full-text-search.md#why-the-two-disagree-about-a-phrase).
 
 Two syntax forms that look plausible are not supported at all — they fail to parse:
 

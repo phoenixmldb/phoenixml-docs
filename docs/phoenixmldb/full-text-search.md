@@ -153,8 +153,17 @@ Measured on `PhoenixmlDb.XQuery` 1.8.0, with `<p>the walrus and the carpenter</p
 ```
 
 Order is respected and adjacency is required; it is the *analyzed* stream that adjacency is
-measured over. A gap of ordinary words does **not** match: `<p>aa xx yy bb</p>` does not satisfy
-`contains text 'aa bb'`, while `<p>aa and the bb</p>` does.
+measured over. **The gap must be entirely stop words** — a single ordinary word in it blocks the
+match:
+
+| document | `contains text 'aa bb'` |
+|---|---|
+| `<p>aa and the bb</p>` | matches — gap is all stop words |
+| `<p>aa the w1 bb</p>` | **no match** — one ordinary word in the gap |
+| `<p>aa xx yy bb</p>` | no match |
+
+**`using no stop words` does not change any of this.** The option parses and is inert on 1.8.0,
+so it cannot be used to make a phrase position-exact against the source text.
 
 > **The consequence for you:** `IndexManager.SearchFullText` can **miss** a document that
 > `contains text` matches, whenever the phrase spans removed stop words. The two are not
