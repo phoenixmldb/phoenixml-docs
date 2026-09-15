@@ -169,7 +169,10 @@ so it cannot be used to make a phrase position-exact against the source text.
 > `contains text` matches, whenever the phrase spans removed stop words. The two are not
 > interchangeable, and the index is the stricter of the two.
 
-Which words are treated as stop words is engine configuration and is not documented here yet.
+**Stop-word handling is a pluggable part of the engine's design**, so which words are removed is
+not a fixed property of PhoenixmlDb. The plug point and its default list are not documented here
+yet; until they are, treat the behaviour above as what the engine does today rather than as a
+guarantee about every deployment.
 - **`phx:search` does not exist yet.** A native, non-portable search surface is planned as a later phase.
 - **Analysis, resource providers and scoring are not pluggable yet.** Language, stemming and case-sensitivity are configurable per index (`FullTextIndexOptions`), but the analyzer itself, stop-word/thesaurus resources, and the scorer are fixed.
 - **`FullTextIndexOptions.StopWords` is accepted but has no effect.** You can set it; nothing reads it — no error, no behavior change. This is a real, pre-existing gap (the mapping from the container-facing options to the engine's internal analysis options simply does not carry `StopWords` across), not something this page is glossing over.

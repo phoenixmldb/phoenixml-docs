@@ -239,6 +239,10 @@ Observed on 1.8.0: it returns `false` for every input tried, including `"the"`, 
 words the analyzer demonstrably *does* remove. **This function and the analyzer do not currently
 agree**, so do not use it to predict what `ft:tokenize` or `contains text` will do.
 
+Stop-word handling is pluggable by design, so a function and an analyzer consulting different
+providers is possible rather than necessarily a defect — but on 1.8.0 they disagree, and nothing
+in the query surface lets you tell which one you are asking.
+
 ### ft:score()
 
 ```
