@@ -52,10 +52,11 @@ return
   </result>
 ```
 
-`phx:score` takes the node, not the search term — see [phx:score()](#ftscore), below, for why.
+`phx:score` takes the node, not the search term — see [phx:score()](#phxscore), below, for why.
 
-> **This example does not produce useful output on 1.8.0.** `phx:score` returns `0.0` for every
-> node on this release, so the ordering is arbitrary and every `<score>` is `0`. The shape is
+> **This example does not produce useful output on 2.0.0.** `phx:score` returns `0.0` for every
+> node on this release, so the ordering is arbitrary and every `<score>` is `0`. Re-measured on the
+> published `xquery4` 2.0.0 tool: a `contains text` match that succeeds still scores `0`. The shape is
 > correct; the scores are not yet.
 
 ---
@@ -113,7 +114,7 @@ unaffected by what you wrote**. Treat these four as accepted-but-inert until the
 analyzer is wired up.
 
 > **`using no stop words` does not give you exact phrase matching.** The analyzer removes stop
-> words regardless, and the option does not stop it. Measured on 1.8.0, `. contains text 'walrus
+> words regardless, and the option does not stop it. Re-measured on 2.0.0, `. contains text 'walrus
 > carpenter'` matches `<p>the walrus and the carpenter</p>` **with and without**
 > `using no stop words` — identical results. If you reach for this option to make a phrase
 > position-exact against the source text, it will silently not do that. See
@@ -248,11 +249,22 @@ phx:is-stop-word($word as xs:string) as xs:boolean
 **One argument, not two.** A two-argument call fails with `XPST0017: Unknown function:
 is-stop-word#2`.
 
-Observed on 1.8.0: it returns `false` for every input tried, including `"the"`, `"a"` and `"of"` —
-words the analyzer demonstrably *does* remove. **This function and the analyzer do not currently
-agree**, so do not use it to predict what `phx:tokenize` or `contains text` will do.
+Re-measured on the published `xquery4` **2.0.0** tool, the result is sharper than "inaccurate":
+the function returns `false` for every stop word and `true` only for input containing no letters.
 
-**On 1.8.0 this is a wiring bug, not a difference of configuration.** The two paths select
+| call | result | | call | result |
+|---|---|---|---|---|
+| `phx:is-stop-word("the")` | `false` | | `phx:is-stop-word("123")` | `true` |
+| `phx:is-stop-word("a")` | `false` | | `phx:is-stop-word("!!!")` | `true` |
+| `phx:is-stop-word("of")` | `false` | | `phx:is-stop-word("")` | `true` |
+
+Meanwhile `phx:tokenize("the quick brown fox jumps over the lazy dog")` returns
+`quick|brown|fox|jumps|over|lazy|dog` — both instances of `the` removed. **This function and the
+analyzer do not agree**, so do not use it to predict what `phx:tokenize` or `contains text` will
+do. In effect it tests "produced no letters", not "is a stop word". Tracked as
+[`phoenixmldb-xquery#70`](https://github.com/phoenixmldb/phoenixmldb-xquery/issues/70).
+
+**On 2.0.0 this is a wiring bug, not a difference of configuration.** The two paths select
 different built-in analyzers by accident: `phx:is-stop-word` analyzes with stemming off, which
 picks an analyzer that has no stop-word filter at all, so every word produces a token and the
 answer is always `false`. `contains text` and `phx:tokenize` run with stemming on, which picks the
@@ -266,9 +278,11 @@ phx:score($node as node()) as xs:double
 
 Takes **one argument** — the node — not the node and a search term.
 
-> **Scores are `0.0` on 1.8.0.** `phx:score` returns `0.0` even immediately after a matching
+> **Scores are `0.0` on 2.0.0.** `phx:score` returns `0.0` even immediately after a matching
 > `contains text` on the same node, so a `where $score > 0` filter returns nothing at all. Treat
-> scoring as not working on this release. Raised for triage; not a documentation defect.
+> scoring as not working on this release. Tracked as
+> [`phoenixmldb-xquery#71`](https://github.com/phoenixmldb/phoenixmldb-xquery/issues/71); not a
+> documentation defect.
 
 ### phx:thesaurus-lookup()
 
@@ -286,7 +300,7 @@ that way it returns an empty sequence.
 ## Practical Examples
 
 > **Every example in this section that uses `phx:score` is shape-correct and does not work on
-> 1.8.0.** Scores come back `0.0` for every node, so an `order by` on them is arbitrary and a
+> 2.0.0.** Scores come back `0.0` for every node, so an `order by` on them is arbitrary and a
 > `where $score > 0` filter returns **nothing at all**. They are kept because the query shape is
 > right and will start working when scoring does. No prolog declaration is needed: `phx` is predeclared.
 
