@@ -114,13 +114,75 @@ Torque to **40 Nm** before sealing.
 Notice `slug="vent-inspection"` and `ordered="false"` — the stylesheet has already decided the
 hard things, and the serialiser only has to write them down.
 
+## The serialiser is where the hard problems live
+
+The stylesheet has the interesting ideas. The serialiser has the difficult ones, and they are
+difficult because Markdown is context-sensitive: almost every decision depends on something
+outside the thing being written.
+
+**Escaping runs in two passes.** Characters that can start markup anywhere get escaped as each
+text node is written:
+
+```csharp
+SearchValues.Create(['\\', '`', '*', '_', '[', ']', '<', '>', '|', '~'])
+```
+
+That set is deliberately narrower than CommonMark's full punctuation list. Escaping everything
+is legal and produces backslash-strewn output nobody wants to read. But `#`, `-`, `>` and `1.`
+only mean anything at the *start of a line*, and a single text node has no idea where it will
+land — so line-leading escaping runs afterwards, over the assembled line.
+
+**Code spans are deliberately not escaped.** That is the entire point of a code span. The fence
+widens instead when the content contains a backtick.
+
+**Adjacent markup is merged before anything is written**, which is the `**Safety****Review**`
+case above.
+
+And then there is the rule that is the best argument for the whole split:
+
+```csharp
+if (!trimmed.Any(char.IsLetterOrDigit)) { builder.Append(text); return; }
+```
+
+Word italicises a trailing full stop constantly, because of how a sentence gets selected rather
+than anything the author meant. The md-XML records that faithfully. But `*.*` is valid in
+isolation and breaks the instant it touches another character, leaving the asterisks visible as
+text. Rendered faithfully, one document in our corpus would have lost 3,440 of its 4,664 words
+to the pattern — and we know that number because the coverage check reported it, which is the
+only reason it never shipped.
+
+So a span containing no letters or digits gets no delimiters at all. The formatting loses and
+the words survive, which is the right way round.
+
+That one line is why the serialiser is C# and not more XSLT. It requires looking at the
+*content* of a span, judging that an author's formatting cannot be expressed, and dropping it.
+XSLT could express it. You would be writing character-class predicates in a language built for
+tree dispatch, inside the file where you are trying to say what a document means — and Markdown
+has a dozen rules of this shape.
+
 ## Every conversion is measured
 
 `docmd` compares the words a reader can see in the `.docx` against the words recovered from its
-own finished Markdown — recovered with a Markdown parser. That detail is the
-design - if our escaping is wrong, an asterisk we failed to escape reads back as markup and the
-word beside it goes missing. Our own code does not get a vote on whether our own output is
-correct.
+own finished Markdown — recovered with **Markdig**, which we did not write. That detail is the
+design, and it is worth being precise about why.
+
+After writing the Markdown we need to know which words are in it, and that is itself a parsing
+problem: `**bold**` contains the word *bold*, not the asterisks. If we answered that question
+with our own reader, it would share our assumptions. Where the serialiser forgot to escape
+something, the reader would forget to interpret it, and both halves would agree the document was
+fine. Markdig has no idea what we meant. It knows CommonMark, which is what a reader's renderer
+knows too.
+
+Here is that difference on a real bug. Word splits one bold phrase across several runs, and a
+serialiser that joins them carelessly emits the second line:
+
+```
+**Safety** **Review**     Markdig reads:  [Safety | Review]     correct
+**Safety****Review**      Markdig reads:  [Safety****Review]    one token, two words lost
+```
+
+The source had two words. The output has one. Coverage reports both as missing — and it reports
+them because the checker is not us.
 
 When words go missing, `docmd` prints this to stderr and carries on converting:
 
@@ -154,6 +216,52 @@ comes with it.
 
 The full account lives in [docmd's limitations page](https://github.com/phoenixmldb/docmd/blob/main/docs/limitations.md), and it is a dated measurement against a fixed
 corpus rather than a claim.
+
+## Telling us, without sending us the document
+
+Measuring every conversion makes `docmd` the only instrument we have for documents we will never
+be allowed to see. For a while none of that could reach us, and the reason was our own doing:
+the warning printed on stderr welds the diagnostic to the content.
+
+```
+! 2 of 3754 words did not survive conversion (99.9 % kept).
+!   missing 'Here' near "the Discount List Click Here Click 'Add' to use"
+!   one of them sits inside <drawing>.
+```
+
+The middle line is the user's document. Anyone willing to help had to redact it by hand or say
+nothing, and documents that convert badly are disproportionately contracts, invoices and
+internal procedures. So people said nothing.
+
+The half we actually need was always the safe half. `<drawing>` is the entire actionable fact;
+that the word was "Here" tells us nothing. `--report` prints that half:
+
+```console
+$ docmd report.docx --report
+docmd coverage report
+  docmd 0.2.3 · PhoenixmlDb.Xslt 2.0.0 · .NET 10.0.12 · linux-x64
+
+  1 document(s), 3,754 words
+  0 intact · 1 with losses · 2 lost (0.053 %)
+
+  causes, by occurrences
+    drawing                1
+    txbxContent            1
+```
+
+No filename, no path, no document property, no word of the text. It aggregates across a folder,
+so an organisation can audit its whole estate and send a single page.
+
+The renderer is never handed the text in the first place — it takes a type with no field capable
+of holding it. "We strip the sensitive parts" is a claim that decays with every future edit;
+"the sensitive parts are not in scope" is a property of the code's shape, and one a test can
+check.
+
+One place it deliberately says less than it could. An element name from a published schema is
+printed as itself, but a wrapper from a custom XML part reports only as `foreign` — because a
+template author names those elements, and `AcmeCorpContractValue` is an ordinary thing to find
+in a real document. You still learn that an unrecognised construct cost someone a word, which is
+enough to start the conversation.
 
 ## What a stylesheet gets wrong, and why we chose it anyway
 
@@ -204,15 +312,37 @@ something nobody has heard of. The point is that it now says so.
 
 `docmd` runs on our own [PhoenixmlDb.Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt) engine, bringing the most recent standards to a long-neglected parsing engine, which gives us some interesting tradeoffs.
 
-For example, one Word document took 124 seconds to parse, where comparable ones took merely two. The cause was a single match
-pattern with two chained predicates:
+For example, one Word document took 124 seconds to convert where comparable ones took two. The
+cause was a single match pattern carrying two chained predicates:
 
 ```xml
 <xsl:template match="w:p[A][B]"/>      <!-- 54.1 ms per paragraph -->
 <xsl:template match="w:p[A and B]"/>   <!--  0.32 ms per paragraph -->
 ```
 
-This may require some performance tweaking on our part, so we've filed a bug with ourselves to pore over for an upcoming release - hopefully, by the time you read this, we've already handled it. As we stretch into the long-tail of bugfixes in the parser, however, you can expect more solutions like this to come into the .NET Core ecosystem, though hopefully not just from us. 
+Identical output, 169 times apart. Rewriting that one pattern took the document to 19 seconds,
+and no correctness test could have caught it, because the answer never changed.
+
+Chasing it further turned up something larger, and it is the more useful finding. **Any**
+predicate in a match pattern is expensive on this engine, and the predicate's *content* turns
+out to be irrelevant:
+
+```
+no predicate       51 ms      on a 3,000-node document
+w:p[@zzz]        2836 ms      tests one attribute, matches nothing
+w:p[A and B]     3065 ms      walks every descendant twice
+```
+
+A predicate that touches a single attribute and matches nothing costs as much as one that walks
+every descendant twice. That says the expense is in dispatch rather than evaluation, which is a
+different bug from the one we started with and is
+[filed accordingly](https://github.com/phoenixmldb/phoenixmldb-xslt/issues/95). The conjunctive
+form is still the right thing to write — it buys a much smaller constant — it simply does not
+buy linearity, which the original report implied and we have since corrected.
+
+Both are open against the engine. Building a product on your own parser is how you find the
+defects a conformance suite cannot: conformance measures whether the answer is right, never what
+it cost. 
 
 Take a look at what we've put together, and feel free to reach out. If you're new to XSLT, we've built MCP servers for [XSLT](https://www.nuget.org/packages/xslt-mcp) and [XQuery](https://www.nuget.org/packages/xquery-mcp) on NuGet that can help you familiarize yourself (and your agent) with what we're putting together over here.
 
