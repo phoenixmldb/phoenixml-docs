@@ -37,7 +37,7 @@ command | xquery [options] <expression>
 | Option | Short | Description |
 |--------|-------|-------------|
 | `--file <path>` | `-f` | Read XQuery from a file instead of inline |
-| `--output <method>` | `-o` | Output method: `adaptive` (default), `xml`, `text`, `json` |
+| `--output <method>` | `-o` | Output method: `adaptive` (default), `xml`, `html`, `xhtml`, `text`, `json`. An unrecognised name is an error (exit code 1). |
 | `--stdin` | | Read XML input from stdin (waits indefinitely) |
 | `--timeout <ms>` | | Stdin auto-detection timeout in ms (default: 200) |
 | `--timing` | | Show parse/compile/execute timing breakdown |
@@ -166,6 +166,11 @@ xquery -f query-with-json-option.xq data.xml
 ```
 
 The second form works because `--output json` is also auto-detected from a `declare option output:method "json"` declaration in the query file. When that option is present, the CLI picks up the serialization method without requiring an explicit flag.
+
+An unrecognised method is an error, on the command line or in the prolog: `-o htm` exits with
+code 1, and `declare option output:method "htm"` raises `SEPM0016`. Before 2.4.0, both silently
+fell back to adaptive output and exited 0, so a typo produced wrong output that looked like
+success. Scripts that relied on that fallback now fail visibly.
 
 For more complex results:
 
@@ -309,6 +314,16 @@ xquery 'array { //product ! map { "name": string(name), "price": number(price) }
 # Watch for changes
 watch -n 5 'xquery "count(//error)" /var/log/app/*.xml'
 ```
+
+## Output Encoding
+
+Output is written as **UTF-8, with no byte-order mark**, on every platform, whether it goes to
+the terminal or is redirected to a file.
+
+Before 2.4.0, Windows consoles used their legacy code page (typically 1252 or 437). Characters
+outside that page were replaced, both in the terminal and in redirected output, so
+`xquery -f q.xq > out.xml` could write a file whose bytes didn't match its UTF-8 declaration. If
+you have files produced that way, regenerate them.
 
 ## Comparison with Other Tools
 

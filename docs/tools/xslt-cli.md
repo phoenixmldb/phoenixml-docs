@@ -163,6 +163,17 @@ xslt --dry-run style.xsl
 
 Exits with code 0 if the stylesheet is valid, 2 if there are errors. Useful in CI/CD pipelines.
 
+## Output Encoding
+
+Output is written as **UTF-8, with no byte-order mark**, on every platform. This covers the
+transformation result on stdout and the `--trace` and `xsl:message` output on stderr.
+
+Before 2.4.0, Windows consoles used their legacy code page (typically 1252 or 437). The visible
+symptom was `--trace` printing `␦` where it emits `→`. The more serious one was
+`xslt style.xsl data.xml > out.xml` writing non-ASCII result characters in the code page under a
+UTF-8 declaration. `--output <path>` was never affected. If you have redirected output produced
+that way, regenerate it.
+
 ## Streaming
 
 For large XML files where memory is a concern, use `--stream` to process input without loading the entire document into memory. This uses `TransformAsync(Stream, Stream)` under the hood — forward-only XmlReader-based processing rather than building a full in-memory tree.
