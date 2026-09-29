@@ -24,6 +24,122 @@ setting and startup check.
 
 **The gRPC server has no authentication yet.** Don't expose it outside a trusted network.
 
+## Engines: PhoenixmlDb.Xslt and PhoenixmlDb.XQuery
+
+Since 2.0.0 the two engines release together as one **train**: the Xslt and XQuery versions
+match, and each release pins the other at the same version. The full per-version notes live in
+each repo: [Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt/blob/main/RELEASES.md) · [XQuery](https://github.com/phoenixmldb/phoenixmldb-xquery/blob/main/RELEASES.md). The summaries below lead with each release's
+**measured** W3C figures, as recorded when it shipped.
+
+> **On comparing figures across releases.** The test harness was corrected more than once. On
+> 2026-09-04, expected-error tests had been scored as passes on *any* error, so earlier XSLT
+> figures are overstated. Later corrections changed the case count (denominator). A figure is
+> exact for its own release; subtracting across a harness change compares different
+> measurements.
+
+### 2.4.1 (2026-09-28): patch
+
+- **Fixed a 2.4.0 regression that broke XSpec compilation.** A string subtype such as `xs:NCName`
+  had no effective boolean value, and 2.4.0 had made `prefix-from-QName` return one. Fixed in
+  both engines, along with string-subtype map keys, `fn:translate` and `fn:collation-key`.
+- **New release gate:** every release is now checked against real-world stylesheets (the XSpec
+  compiler, DocBook xslTNG, reported repros) on the previous version and the candidate before it
+  ships.
+
+### 2.4.0 (2026-09-28)
+
+**W3C XSLT 3.0: 10,397 / 10,839 (95.92%)** · **W3C QT3: 29,895 / 31,379 (95.27%)**
+
+Behaviour changes, read before upgrading:
+
+- `fn:namespace-uri` returns `xs:anyURI`, `fn:prefix-from-QName` returns `xs:NCName`, and
+  `fn:default-language` returns `xs:language`, as the spec requires. They previously returned
+  plain strings.
+- `fn:distinct-values` treats an `xs:anyURI` and an equal `xs:string` as one value.
+- The `xquery` CLI rejects an unknown output method (exit code 1, or `SEPM0016` in the prolog)
+  instead of silently producing adaptive output. It gains `html` and `xhtml`.
+
+Fixed:
+
+- **Streaming**: `xsl:message` content, templates below unmatched elements, subtree ancestors,
+  `has-children()`, `xsl:strip-space` / `xml:space`, early-closing parent tags, and unrequested
+  child processing. Closes the three streaming sets that had fallen below their 1.6.10 scores.
+- **`fn:transform`** honours `source-location`, and raw delivery from XQuery returns the nodes a
+  template constructs instead of nothing.
+- **CLI output is UTF-8 on every platform.** On Windows it followed the console code page, which
+  corrupted non-ASCII characters in redirected output.
+
+There is no Xslt 2.3.0. XQuery 2.3.0 (below) was published and then superseded, and both
+engines moved to 2.4.0 together.
+
+### 2.3.0 (2026-09-28): XQuery only, superseded
+
+A lockstep version bump; the library is byte-identical to 2.2.0. Moving from 2.2.0 straight to
+2.4.0 is the intended upgrade path.
+
+### 2.2.0 (2026-09-24/25)
+
+**W3C XSLT 3.0: 10,384 / 10,839 (95.80%)** · **W3C QT3: 29,803 / 31,379 (94.98%)**
+
+- **`xs:IDREFS`, `xs:NMTOKENS` and `xs:ENTITIES`** are valid cast and castable targets (+63 QT3).
+- **`xsl:expose`** selects components correctly.
+- **A match pattern with any predicate was O(n²)** in sibling count: 12.6× faster at 4,000
+  siblings.
+- Streamed `group-adjacent` key checks, `xsl:sort`/`xsl:key` temporary output state,
+  `regex-group()` in patterns, text nodes returned by `xsl:function`, and static declarations
+  coming into scope in declaration order.
+
+### 2.1.0 (2026-09-17)
+
+**W3C XSLT 3.0: 10,347 / 10,839 (95.46%)** · **W3C QT3: 29,822 / 31,379 (95.0%)**, as recorded in
+the XQuery 2.1.0 notes.
+
+Breaking: a typed variable whose body produces the wrong number of items raises `XTTE0570`.
+`xsl:strip-space` / `xsl:preserve-space` in imported modules are applied, with conflicts resolved
+by import precedence. `xsl:map-entry` keys are atomized.
+
+### 2.0.0 (2026-09-15)
+
+**W3C QT3: 29,813**
+
+Major because the train is: `PhoenixmlDb.Core`, `PhoenixmlDb.XQuery` and `PhoenixmlDb.Xslt`
+moved to 2.0.0 together.
+
+- **Breaking:** built-in functions apply argument cardinality, and their signatures match F&O 3.1,
+  so some existing queries stop compiling. The extension functions moved.
+- In-scope namespaces survive copies and serialization. Serialization parameters are read
+  properly. The XSLT-side `fn:serialize` override is retired.
+
+### 1.8.0 (2026-09-13)
+
+**W3C XSLT 3.0: 10,292 / 10,630 (96.82%)** · **W3C QT3: 29,534 / 31,414 (94.02%)**. This is a
+different denominator from 2.x.
+
+Silent wrong answers fixed: `xsl:function cache="yes"` returning other calls' results;
+accumulators reading a later-declared accumulator one node late; `as="item()*"` functions losing
+element nodes; `xsl:merge` merging only one of two sources; and `xsl:try` running its body in the
+caller's scope.
+
+### 1.7.0 (2026-09-10)
+
+**W3C XSLT 3.0: 10,082 / 10,630 (94.8%)**
+
+- `fn:sum` returned 0 for `xs:integer` values cast from text.
+- Aggregates over storage-backed elements atomized to `""`.
+- `map:put` / `map:remove` / `map:replace` copied the whole map on every update (O(n²)).
+- A caller's timeout could not stop recursion, callbacks or a slow `every`.
+- Several `contains text` defects.
+
+### 1.2 – 1.6 (April – September 2026)
+
+A long run of frequent, often daily, releases: over a hundred versions across both engines. That
+cadence has since been replaced by releases that each carry a complete batch. Highlights:
+serialization conformance (character maps, HTML/XHTML output methods), streaming, QT3 production
+sweeps, and input hardening (parser recursion bounds, `XQST0090` on invalid character references,
+concurrent namespace interning).
+Figures in this period predate the 2026-09-04 harness correction. Each version's notes are in
+the [Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt/blob/main/RELEASES.md) and [XQuery](https://github.com/phoenixmldb/phoenixmldb-xquery/blob/main/RELEASES.md) repos.
+
 ## Version 1.1.0 (March 2026)
 
 Major update focused on standards compliance, streaming, and API completeness.
