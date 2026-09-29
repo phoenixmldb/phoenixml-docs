@@ -4,6 +4,26 @@ description: PhoenixmlDb version history and changelog
 sort: 5
 ---
 
+## Unreleased: database server
+
+### Breaking: the REST server requires authentication
+
+Since phoenixml `main` 0d46e91 (issue #45), the REST server is **secure by default**:
+
+- Every endpoint requires an API key (`X-Api-Key` header) or a JWT (`Authorization: Bearer`).
+  Anonymous requests get `401`. Only `/health`, `/health/live` and `/health/ready` stay open,
+  plus the Swagger UI in Development.
+- A production host running the shipped `appsettings.json` **refuses to start until an operator
+  configures a key**.
+- Settings moved to the **`Auth`** section. A configuration that still has an `Authentication`
+  section fails at startup, with a message saying what to rename.
+- Outside Development, API keys must be at least 32 characters, and development keys are refused.
+
+See [Server Mode: Authentication](phoenixmldb/deployment/server-mode.md#authentication) for every
+setting and startup check.
+
+**The gRPC server has no authentication yet.** Don't expose it outside a trusted network.
+
 ## Version 1.1.0 (March 2026)
 
 Major update focused on standards compliance, streaming, and API completeness.

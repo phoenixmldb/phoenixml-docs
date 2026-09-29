@@ -1,6 +1,6 @@
 ---
 title: Server Mode
-description: Standalone server with gRPC API, authentication, TLS, and Docker deployment
+description: Standalone server with REST and gRPC APIs, authentication, TLS, and Docker deployment
 sort: 2
 ---
 
@@ -113,13 +113,6 @@ sudo systemctl start phoenixmldb
         "mapSize": "10GB",
         "maxContainers": 100
     },
-    "authentication": {
-        "enabled": true,
-        "type": "basic",
-        "users": {
-            "admin": "hashed-password"
-        }
-    },
     "tls": {
         "enabled": true,
         "certificate": "/etc/phoenixmldb/cert.pem",
@@ -162,16 +155,11 @@ var results = await client.QueryAsync("collection('products')//product");
 
 ### With Authentication
 
-```csharp
-var options = new ClientOptions
-{
-    Host = "localhost",
-    Port = 5432,
-    Username = "admin",
-    Password = "secret"
-};
+The REST server authenticates by API key or JWT; see [Authentication](#authentication).
 
-var client = new PhoenixmlClient(options);
+```csharp
+using var http = new HttpClient { BaseAddress = new Uri("https://localhost:5001") };
+http.DefaultRequestHeaders.Add("X-Api-Key", Environment.GetEnvironmentVariable("PHOENIXML_API_KEY"));
 ```
 
 ### With TLS
@@ -192,59 +180,84 @@ var client = new PhoenixmlClient(options);
 
 ```csharp
 var client = new PhoenixmlClient(
-    "Host=localhost;Port=5432;Username=admin;Password=secret;UseTls=true");
+    "Host=localhost;Port=5432;UseTls=true");
 ```
 
 ## Authentication
 
-### Basic Authentication
+> **Breaking change** (phoenixml `main`, 0d46e91): the REST server is now **secure by default**.
+> Every endpoint requires credentials, and a production host refuses to start until an operator
+> configures a key. The settings section is **`Auth`**. The older `authentication` section shown
+> in earlier versions of this page **makes the server refuse to start**.
 
-```json
-{
-    "authentication": {
-        "enabled": true,
-        "type": "basic",
-        "users": {
-            "admin": "$2a$10$...",  // bcrypt hash
-            "reader": "$2a$10$..."
-        }
-    }
-}
+> **The gRPC server has no authentication today.** It will get the same model as the REST server
+> described here. Until then, don't expose the gRPC port outside a trusted network.
+
+Every REST endpoint requires either an **API key** in the `X-Api-Key` header or a **JWT** in
+`Authorization: Bearer <token>`. Anonymous requests get `401`. Only these are open:
+
+- `/health`, `/health/live`, `/health/ready`
+- the Swagger UI, and only in the Development environment
+
+```bash
+curl -H "X-Api-Key: $PHOENIXML_API_KEY" https://localhost:5001/api/containers
+curl -H "Authorization: Bearer $TOKEN"  https://localhost:5001/api/containers
 ```
 
-### API Keys
+### Settings
 
-```json
-{
-    "authentication": {
-        "enabled": true,
-        "type": "apikey",
-        "keys": {
-            "app1": "key-hash-1",
-            "app2": "key-hash-2"
-        }
-    }
-}
+Settings live in the `Auth` section. As environment variables, use `__` between levels, for
+example `Auth__Jwt__SecretKey`. Supply secrets through `dotnet user-secrets` or the environment,
+never in a committed `appsettings.json`.
+
+| Setting | Default | Notes |
+|---|---|---|
+| `Auth:RequireAuthentication` | `true` | Set `false` only to run an open server on purpose, and leave `Auth:ApiKey:Enabled` true. Startup logs a warning. |
+| `Auth:ApiKey:Enabled` | `true` | |
+| `Auth:ApiKey:HeaderName` | `X-Api-Key` | Case-insensitive. Must not be `Authorization`. |
+| `Auth:ApiKey:QueryParameterName` | *(empty)* | Empty disables query-string keys, which leak into request logs. |
+| `Auth:ApiKey:Keys:<key>:Permission` | *(required)* | `read`, `write`, `admin` or `full` |
+| `Auth:ApiKey:Keys:<key>:Name` | | Identifies the key in errors; the key itself is never logged. |
+| `Auth:ApiKey:Keys:<key>:Enabled` | `true` | |
+| `Auth:ApiKey:Keys:<key>:ContainerPermissions` | *(empty)* | Must be empty: per-container permissions aren't implemented yet, and startup fails if it's set. |
+| `Auth:Jwt:Enabled` | `false` | |
+| `Auth:Jwt:SecretKey` | | Secret. At least 32 bytes UTF-8, and not the placeholder that older builds shipped. |
+| `Auth:Jwt:Issuer` | | Required when JWT is enabled. |
+| `Auth:Jwt:Audience` | | Required when JWT is enabled. |
+| `Auth:Jwt:Authority` | | Not supported yet (no OpenID Connect): setting it fails startup. |
+
+An API key is the setting's own name (`<key>` above). For example:
+
+```bash
+KEY=$(openssl rand -hex 24)            # 48 characters; keys under 32 are refused outside Development
+export "Auth__ApiKey__Keys__${KEY}__Permission=read"
 ```
 
-### Role-Based Access
+### Startup checks
 
-```json
-{
-    "authorization": {
-        "roles": {
-            "admin": ["*"],
-            "reader": ["query", "get"],
-            "writer": ["query", "get", "put", "delete"]
-        },
-        "userRoles": {
-            "admin": "admin",
-            "app1": "writer",
-            "app2": "reader"
-        }
-    }
-}
-```
+The server validates its configuration at startup and refuses to start, with a message naming
+the setting, when:
+
+- `Auth:RequireAuthentication` is true and nothing could authenticate: no enabled API key and no JWT;
+- outside Development, an API key is shorter than **32 characters**, or is a development key;
+- a key has no `Permission`, or has `ContainerPermissions`;
+- JWT is enabled with a missing, placeholder or too-short `SecretKey`, or without `Issuer`/`Audience`;
+- `Auth:Jwt:Authority` is set;
+- an `Authentication` section exists. The section is `Auth`.
+
+### JWTs
+
+Tokens must be **HS256**-signed with `Auth:Jwt:SecretKey`, carry `exp`, and match the configured
+issuer and audience. They're validated with a 30-second clock skew. The caller's permission comes
+from the token's `permission` claim.
+
+### Permissions
+
+| Policy | Accepts permission |
+|---|---|
+| `RequireRead` | `read`, `write`, `admin`, `full` |
+| `RequireWrite` | `write`, `admin`, `full` |
+| `RequireAdmin` | `admin`, `full` |
 
 ## TLS Configuration
 
