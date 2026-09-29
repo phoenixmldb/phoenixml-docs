@@ -196,7 +196,7 @@ var client = new PhoenixmlClient(
 Every REST endpoint requires either an **API key** in the `X-Api-Key` header or a **JWT** in
 `Authorization: Bearer <token>`. Anonymous requests get `401`. Only these are open:
 
-- `/health`, `/health/live`, `/health/ready`
+- `/health`, `/health/live`, `/health/ready`: status only; the detailed `/health/details` needs an admin credential (see [Health Endpoints](#health-endpoints))
 - the Swagger UI, and only in the Development environment
 
 ```bash
@@ -319,12 +319,36 @@ var results = await client.QueryAsync(...);
 
 ## Monitoring
 
-### Health Endpoint
+### Health Endpoints
+
+The REST server exposes four health endpoints. The three public ones return **status only**: a
+plain-text body of `Healthy`, `Degraded` or `Unhealthy`, with no check names, data or error text.
+
+| Endpoint | Auth | Checks | HTTP status |
+|---|---|---|---|
+| `/health/live` | anonymous | none: liveness only | `200` while the process is up |
+| `/health/ready` | anonymous | database, query engine, transform engine | `200` Healthy or Degraded, `503` Unhealthy |
+| `/health` | anonymous | the same as `/health/ready` | as `/health/ready` |
+| `/health/details` | **admin** (`RequireAdmin`) | every registered check | detailed JSON report |
 
 ```bash
-curl http://localhost:5432/health
-# {"status":"healthy","version":"1.0.0","uptime":"3d 4h"}
+curl -i https://localhost:5001/health/ready
+# HTTP/1.1 200 OK
+# Healthy
+
+curl -H "X-Api-Key: $ADMIN_KEY" https://localhost:5001/health/details   # names, status, durations, data
 ```
+
+`/health/details` returns `401` without a credential and `403` for a key without admin
+permission.
+
+**Probes.** Point a liveness probe at `/health/live`, and a readiness probe or load balancer at
+`/health/ready`. `/health/ready` actually runs the checks; before phoenixml `main` 170adf3 it
+checked nothing and always returned `200`.
+
+**No health response contains exception text.** Failures are logged on the server. The detailed
+report carries a fixed code instead: `database_unavailable`, `query_engine_unavailable` or
+`transform_engine_unavailable`.
 
 ### Metrics Endpoint
 
