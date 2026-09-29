@@ -203,10 +203,6 @@ For server mode, additional settings are available:
         "host": "0.0.0.0",
         "port": 5432,
         "maxConnections": 100,
-        "authentication": {
-            "enabled": true,
-            "type": "basic"
-        },
         "tls": {
             "enabled": true,
             "certificate": "/path/to/cert.pem",
