@@ -24,6 +24,15 @@ setting and startup check.
 
 **The gRPC server has no authentication yet.** Don't expose it outside a trusted network.
 
+### Breaking for monitoring: health endpoints are status-only
+
+Since phoenixml `main` 170adf3 (issue #51), `/health`, `/health/live` and `/health/ready` return
+only `Healthy` / `Degraded` / `Unhealthy` as plain text: `200`, or `503` when unhealthy. The
+detailed JSON report moved to **`/health/details`**, which requires an admin credential. Anything
+that parsed JSON from `/health` must call `/health/details` instead. `/health/ready` now runs the
+database and engine checks; it used to always return `200`. See
+[Server Mode: Health Endpoints](phoenixmldb/deployment/server-mode.md#health-endpoints).
+
 ## Engines: PhoenixmlDb.Xslt and PhoenixmlDb.XQuery
 
 Since 2.0.0 the two engines release together as one **train**: the Xslt and XQuery versions
