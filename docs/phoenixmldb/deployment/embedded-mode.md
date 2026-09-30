@@ -68,6 +68,13 @@ var options = new DatabaseOptions
 using var db = new XmlDatabase("./data", options);
 ```
 
+### Resource access
+
+`DocumentDatabase.ResourceAccessPolicy` defaults to `ResourceAccessPolicy.DenyAll`: queries and
+stylesheets read stored documents only, with no local files or network requests. Allow specific
+directories and HTTP origins with `ResourceAccessPolicy.Create(...)`. See
+[Resource Access](../resource-access.md).
+
 ## Lifecycle Management
 
 ### Application Startup
