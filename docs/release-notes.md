@@ -33,6 +33,18 @@ that parsed JSON from `/health` must call `/health/details` instead. `/health/re
 database and engine checks; it used to always return `200`. See
 [Server Mode: Health Endpoints](phoenixmldb/deployment/server-mode.md#health-endpoints).
 
+### Upgrade: full-text indexes are rebuilt once
+
+Since phoenixml `main` 8d23b02, the database uses **PhoenixmlDb.XQuery and PhoenixmlDb.Xslt
+2.4.1** (Core stays at 2.0.0), and a full-text index records which text analysis built it.
+Existing indexes carry no such record, so the first time a database is opened with indexing
+enabled, **every full-text index is marked stale and rebuilt once**. The gRPC server does this in
+the background at startup. Embedded applications must call `RebuildIndexesAsync` for each
+container in `ContainersWithStaleIndexes()`; until then `SearchFullText` throws on that container
+and other index-backed reads scan. Full-text query behaviour itself is unchanged by this bump;
+stemming and position-based phrases are not in 2.4.1. See
+[Full-Text Search: After an engine upgrade](phoenixmldb/full-text-search.md#after-an-engine-upgrade).
+
 ## Engines: PhoenixmlDb.Xslt and PhoenixmlDb.XQuery
 
 Since 2.0.0 the two engines release together as one **train**: the Xslt and XQuery versions
