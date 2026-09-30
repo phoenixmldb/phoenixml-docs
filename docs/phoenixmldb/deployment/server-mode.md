@@ -259,6 +259,13 @@ from the token's `permission` claim.
 | `RequireWrite` | `write`, `admin`, `full` |
 | `RequireAdmin` | `admin`, `full` |
 
+## Resource Access
+
+Queries and stylesheets sent to either server can read only the stored documents, unless you list
+directories in `PhoenixmlDb:ResourceAccess:AllowedFileRoots` or origins in
+`PhoenixmlDb:ResourceAccess:AllowedHttpOrigins`. Both are empty by default and validated at
+startup. See [Resource Access](../resource-access.md).
+
 ## TLS Configuration
 
 ### Generate Certificates

@@ -24,6 +24,17 @@ setting and startup check.
 
 **The gRPC server has no authentication yet.** Don't expose it outside a trusted network.
 
+### Breaking: queries and stylesheets can't read files or URLs by default
+
+Since phoenixml `main` a2b9963 (issue #59), XQuery and XSLT supplied by callers can read only the
+stored documents, in the embedded engine and in both servers. Local files, HTTP requests, module
+and stylesheet imports by location, `xsl:evaluate`, and external DTDs and entities are denied
+until the operator allows specific directories or origins
+(`PhoenixmlDb:ResourceAccess:AllowedFileRoots` / `AllowedHttpOrigins` on the servers,
+`DocumentDatabase.ResourceAccessPolicy` embedded). `doc()` and `collection()` of stored documents
+work as before. An embedded application that relied on the old behaviour for trusted code can set
+`ResourceAccessPolicy.Unrestricted`. See [Resource Access](phoenixmldb/resource-access.md).
+
 ### Breaking for monitoring: health endpoints are status-only
 
 Since phoenixml `main` 170adf3 (issue #51), `/health`, `/health/live` and `/health/ready` return
