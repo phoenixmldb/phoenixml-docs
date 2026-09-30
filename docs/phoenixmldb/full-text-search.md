@@ -99,7 +99,7 @@ Disposing the handle `StartFullTextIndexing` returns cancels the loop and awaits
 
 ## Rebuilding
 
-A container's full-text index (like its other indexes) can become **stale**: written to while indexing was not enabled, or last touched by an engine version that predates it. A stale container's full-text index has no entries for whatever was written during that gap — and critically, those documents were **never queued either**, so nothing short of a rebuild can find them. Every other index-backed read path handles this by degrading to a scan; `SearchFullText` refuses instead — **it throws `InvalidOperationException` rather than return an answer that looks complete and is not**:
+A container's full-text index (like its other indexes) can become **stale**: written to while indexing was not enabled, last touched by an engine version that predates stale-tracking, or built with a different text analysis than the running engine uses (see [After an engine upgrade](#after-an-engine-upgrade)). A stale container's full-text index has no entries for whatever was written during that gap — and critically, those documents were **never queued either**, so nothing short of a rebuild can find them. Every other index-backed read path handles this by degrading to a scan; `SearchFullText` refuses instead — **it throws `InvalidOperationException` rather than return an answer that looks complete and is not**:
 
 ```csharp
 db.ContainersWithStaleIndexes()          // ["docs"] — this container needs a rebuild
@@ -118,6 +118,23 @@ manager.SearchFullText(docs.Id, "walrus").Count   // 1 — same answer, now serv
 ```
 
 A rebuild clears the container's previous Lucene entries and its full-text queue, then walks every document and re-enqueues it exactly as a live write would, and clears the stale flag as part of the same commit — so `SearchFullText` stops throwing the moment `RebuildIndexesAsync` returns. **You do not need a drain for that.** What the rebuild leaves behind is fresh queue entries, not a fresh Lucene index — but every one of those entries is now pending, and the `SearchFullText` guarantee above already covers a pending document: it is evaluated directly against its current stored content, so the answer is exact whether or not the worker has caught up. A drain afterward moves that work from direct evaluation into the index; it does not change what `SearchFullText` can answer, only how it answers it.
+
+### After an engine upgrade
+
+A full-text index records which text analysis built it. `EnableIndexing()` compares that record with the analysis the running engine uses, and marks every container that doesn't match as stale. It does this before anything else can write through the new manager. Indexes built before this record existed carry none, so **the first time you open an existing database with indexing enabled after upgrading, every full-text index is marked stale and must be rebuilt once**. The same happens whenever a later PhoenixmlDb.XQuery release changes full-text analysis. The next one is expected to add stemming and case sensitivity.
+
+- **gRPC server:** nothing to do. `StaleIndexRebuildService` rebuilds stale containers in the background at startup.
+- **Embedded applications:** rebuild after enabling indexing:
+
+```csharp
+var manager = db.EnableIndexing();
+foreach (var name in db.ContainersWithStaleIndexes())
+    await db.RebuildIndexesAsync(name);
+```
+
+Until a container is rebuilt, `SearchFullText` on it throws `InvalidOperationException`, and its other index-backed reads (path, value, metadata) scan instead of using their indexes. Those answers stay correct, just slower.
+
+**Don't call `EnableIndexing()` while holding a transaction from `BeginWriteAsync`.** If it has to mark a container stale, it takes the write lock, and it can't tell your transaction from another writer's, so it waits forever.
 
 ## Where the index lives
 
