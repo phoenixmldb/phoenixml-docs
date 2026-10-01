@@ -212,7 +212,7 @@ never in a committed `appsettings.json`.
 
 | Setting | Default | Notes |
 |---|---|---|
-| `Auth:RequireAuthentication` | `true` | Set `false` only to run an open server on purpose, and leave `Auth:ApiKey:Enabled` true. Startup logs a warning. |
+| `Auth:RequireAuthentication` | `true` | Set `false` only to run an open server on purpose, and leave `Auth:ApiKey:Enabled` true. Startup logs a warning. Anonymous callers then get **read** routes only; write and admin routes still need a credential. |
 | `Auth:ApiKey:Enabled` | `true` | |
 | `Auth:ApiKey:HeaderName` | `X-Api-Key` | Case-insensitive. Must not be `Authorization`. |
 | `Auth:ApiKey:QueryParameterName` | *(empty)* | Empty disables query-string keys, which leak into request logs. |
@@ -309,11 +309,22 @@ from the token's `permission` claim.
 
 ### Permissions
 
-| Policy | Accepts permission |
+Every REST route requires a permission level. A key's `Permission`, or a JWT's `permission`
+claim, is `read`, `write`, `admin` or `full`; `full` is the same as `admin`, and each level
+includes the ones below it.
+
+| Level | Routes |
 |---|---|
-| `RequireRead` | `read`, `write`, `admin`, `full` |
-| `RequireWrite` | `write`, `admin`, `full` |
-| `RequireAdmin` | `admin`, `full` |
+| none | `/health`, `/health/live`, `/health/ready` |
+| `read` | Containers: list, get, statistics. Documents: list, get, content, metadata, versions. Every `/api/query` call (execute, explain, validate, compile, stream). `/api/transform` and stylesheet list, get, content and validate. Schema list, get, content, versions and validation, and every `/api/v1/validate` call. |
+| `write` | Containers: create, update, delete. Indexes: add, remove, rebuild. Documents: create, update, content, delete, metadata update, version restore. Stylesheets: register, update, delete, and clearing the transform cache. Schemas: register, update, delete, activate, and `POST /api/v1/schemas`. |
+| `admin` | `/health/details`, `DELETE /api/v1/schemas/{name}`, and loading or unloading schema bundles. |
+
+A credential without the level a route needs gets `403`. When `Auth:RequireAuthentication` is
+`false`, an anonymous caller gets `401` on any write or admin route.
+
+Queries and transformations are `read` routes: updating XQuery expressions aren't applied to
+stored documents, and XSLT has no path that writes to the database.
 
 ## Resource Access
 
