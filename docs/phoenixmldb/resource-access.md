@@ -65,9 +65,12 @@ export PhoenixmlDb__ResourceAccess__AllowedHttpOrigins__0=https://schemas.exampl
 }
 ```
 
-- **Paths are canonicalised.** A `..` that climbs out of a root, or a symbolic link that points
-  outside it, is denied.
-- **The port is part of the origin.** `https://example.com` doesn't allow `https://example.com:8443`.
+- **Paths are canonicalised and match whole segments.** `/data/a` doesn't admit `/data/ab`. A
+  `..` that climbs out of a root, or a symbolic link that points outside it, is denied. Roots
+  containing spaces or non-ASCII characters work.
+- **The port is part of the origin.** An origin without a port means the scheme's default port
+  (443 for `https`, 80 for `http`) only, so `https://example.com` doesn't allow
+  `https://example.com:8443`.
 - **HTTP fetches don't follow redirects.** A redirect is a failed read, never a request to the
   redirect target.
 - **Invalid values stop the server from starting**, with a message naming the setting (for example
