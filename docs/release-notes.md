@@ -87,6 +87,13 @@ that parsed JSON from `/health` must call `/health/details` instead. `/health/re
 database and engine checks; it used to always return `200`. See
 [Server Mode: Health Endpoints](phoenixmldb/deployment/server-mode.md#health-endpoints).
 
+### The database runs on the 2.5.1 engines
+
+Since phoenixml `main` 53274a6, the database uses **PhoenixmlDb.XQuery and PhoenixmlDb.Xslt 2.5.1**,
+which include the resource-policy security fixes. Allowed HTTP origins now match on their exact
+port, and allowed file roots match whole path segments; see
+[Resource Access](phoenixmldb/resource-access.md).
+
 ### Upgrade: full-text indexes are rebuilt once
 
 Since phoenixml `main` 8d23b02, the database uses **PhoenixmlDb.XQuery and PhoenixmlDb.Xslt
