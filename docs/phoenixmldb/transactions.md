@@ -241,37 +241,11 @@ private void ProcessBatch(List<string> documents)
 }
 ```
 
-## Distributed Transactions
+## Transactions in a cluster
 
-For cluster deployments, PhoenixmlDb supports distributed transactions with two-phase commit (2PC):
-
-```csharp
-// Distributed transaction across shards
-using var txn = cluster.BeginDistributedTransaction();
-
-// Operations may span multiple nodes
-txn.Execute("insert node <item/> into doc('shard1/data.xml')/root");
-txn.Execute("insert node <item/> into doc('shard2/data.xml')/root");
-
-// Two-phase commit ensures atomicity across nodes
-await txn.CommitAsync();
-```
-
-### 2PC Protocol
-
-```
-Phase 1 (Prepare):
-    Coordinator → Participant 1: PREPARE
-    Coordinator → Participant 2: PREPARE
-    Participant 1 → Coordinator: VOTE_COMMIT
-    Participant 2 → Coordinator: VOTE_COMMIT
-
-Phase 2 (Commit):
-    Coordinator → Participant 1: COMMIT
-    Coordinator → Participant 2: COMMIT
-    Participant 1 → Coordinator: ACK
-    Participant 2 → Coordinator: ACK
-```
+In [Cluster Mode](deployment/cluster-mode.md), every node holds the whole database. A write is
+committed and applied through the Raft log on every node, so there are no cross-node
+transactions to coordinate. Reads are served from the local node and aren't linearizable.
 
 ## Transaction Options
 
