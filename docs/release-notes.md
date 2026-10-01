@@ -102,6 +102,52 @@ each repo: [Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt/blob/main/RELE
 > exact for its own release; subtracting across a harness change compares different
 > measurements.
 
+### 2.5.1 (2026-10-01): XQuery 2.5.0 and 2.5.1, Xslt 2.5.1
+
+**W3C XSLT 3.0: 216 failing** (442 at 2.4.0) · **W3C QT3: 708 failing** (1484 at 2.4.0). Much of
+the QT3 drop comes from correcting the test harness, which had scored some correct results as
+failures, so the 2.4.0 figures were measured before those corrections (see the note on comparing
+figures above).
+
+> **Security fixes in 2.5.** PhoenixmlDb.XQuery 2.5.0 and PhoenixmlDb.Xslt 2.5.1 fix advisories
+> [GHSA-wjxc-7p24-xf7w](https://github.com/phoenixmldb/phoenixmldb-xquery/security/advisories/GHSA-wjxc-7p24-xf7w)
+> (XQuery) and [GHSA-86rg-wxgp-9p5j](https://github.com/phoenixmldb/phoenixmldb-xslt/security/advisories/GHSA-86rg-wxgp-9p5j)
+> (XSLT). In earlier versions, a configured `ResourcePolicy`, `ServerDefault` included, was
+> enforced only when loading documents, so queries and stylesheets could read files or fetch URLs
+> the policy forbade, through functions like `unparsed-text`, `json-doc`, module and schema
+> imports, `xsl:source-document`, `fn:transform` and HTTP redirects. In 2.5.x every read, fetch
+> and dynamic evaluation is checked against the policy, at load time as well as at run time. With
+> no policy configured, nothing changes. Hosts that run untrusted queries or stylesheets should
+> upgrade XQuery and Xslt together to 2.5.1.
+
+There is no Xslt 2.5.0. Xslt's version follows the XQuery it's built on, and XQuery needed a 2.5.1
+patch, found by this release's own testing, before Xslt could ship. The `xquery` CLI ships as
+`cli-v2.5.1`.
+
+Behaviour changes, read before upgrading:
+
+- **Resource policy rules are stricter** when a policy is set: read access no longer implies
+  import access, an empty rule list denies, a host rule admits only the default port unless one
+  is given, and path prefixes match whole segments. See
+  [Resource Policy](phoenixmldb/api-reference/resource-policy.md).
+- An accumulator that isn't applicable to the principal source document raises `XTDE3362`, as in
+  Saxon (#213). Add it to the initial mode's `use-accumulators`.
+- The `unparsed-text` family resolves relative URIs against the calling module and raises
+  `FOUT1170` (#195).
+
+Fixed and added:
+
+- **Streaming:** grouping over attributes and text, streamable functions, attribute-only
+  `current-group()`, and accumulator rules.
+- **Grouping focus** inside `apply-templates` follows XSLT 3.0 §14.2: kept, except within a
+  declared-streamable construct.
+- **`system-property()` and `element-available()`** resolve prefixes where the function item was
+  created (+22 W3C cases).
+- **Schemas:** schema-defined simple types as item types and constructors, `json-to-xml`
+  validation, XSD 1.1 conditional inclusion, and reliable `xml:id` on every runtime.
+- **Deep documents** no longer crash the process.
+- Many errors that surfaced as raw .NET exceptions now raise the codes the specifications assign.
+
 ### 2.4.1 (2026-09-28): patch
 
 - **Fixed a 2.4.0 regression that broke XSpec compilation.** A string subtype such as `xs:NCName`
