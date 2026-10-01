@@ -10,4 +10,4 @@ PhoenixmlDb supports three deployment modes, from single-process embedded to mul
 
 - **[Embedded Mode](embedded-mode.md)** — Run as an in-process library, no separate server
 - **[Server Mode](server-mode.md)** — Standalone server with gRPC API, authentication, and TLS
-- **[Cluster Mode](cluster-mode.md)** — Multi-node deployment with Raft consensus and sharding
+- **[Cluster Mode](cluster-mode.md)** — Multi-node replication with Raft consensus

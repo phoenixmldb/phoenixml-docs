@@ -214,25 +214,6 @@ For server mode, additional settings are available:
 
 ## Cluster Configuration
 
-For cluster mode:
+Clustering is configured under `PhoenixmlDb:Raft` on each server. See
+[Cluster Mode](deployment/cluster-mode.md) for the settings and the security they require.
 
-```json
-{
-    "cluster": {
-        "nodeId": "node-1",
-        "peers": [
-            "node-2:5433",
-            "node-3:5433"
-        ],
-        "raft": {
-            "electionTimeout": "150ms",
-            "heartbeatInterval": "50ms"
-        },
-        "sharding": {
-            "enabled": true,
-            "shardCount": 16,
-            "replicationFactor": 3
-        }
-    }
-}
-```
