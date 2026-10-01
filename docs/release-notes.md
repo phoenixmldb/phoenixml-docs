@@ -22,7 +22,23 @@ Since phoenixml `main` 0d46e91 (issue #45), the REST server is **secure by defau
 See [Server Mode: Authentication](phoenixmldb/deployment/server-mode.md#authentication) for every
 setting and startup check.
 
-**The gRPC server has no authentication yet.** Don't expose it outside a trusted network.
+The gRPC server authenticates with API keys too, and refuses to start on a network address
+without one; see [Server Mode: gRPC server](phoenixmldb/deployment/server-mode.md#grpc-server).
+
+### API keys are stored as hashes and can be rotated
+
+Since phoenixml `main` 58e4b5b (issue #50), both servers take a **list** of key entries, each with
+an `Id`, an optional `Expires`, and either the key's SHA-256 or the key supplied as a secret value:
+`Auth:ApiKey:Clients` on the REST server, `PhoenixmlDb:Auth:ApiKeys` on the gRPC server. Several
+entries can share a `Name`, which is how a key is rotated.
+
+- **Deprecated:** the REST server's `Auth:ApiKey:Keys:<key>` shape still works for one release,
+  with a startup warning. gRPC entries without an `Id` use their `Name`, with a warning.
+- **Breaking for operators:** `"Key": ""` (for example a missing optional secret) now stops the
+  server from starting; it used to be treated as unset. Duplicate `Id`s and two entries holding the
+  same key also stop startup.
+
+See [Server Mode: API keys](phoenixmldb/deployment/server-mode.md#api-keys).
 
 ### Breaking: queries and stylesheets can't read files or URLs by default
 
