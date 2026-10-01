@@ -1,366 +1,140 @@
 ---
 title: Cluster Mode
-description: Multi-node deployment with Raft consensus, sharding, and distributed transactions
+description: Raft replication across server nodes — configuration, port separation, securing the Raft and client ports, and current limits
 sort: 3
 ---
 
 # Cluster Mode
 
-Cluster mode provides high availability, fault tolerance, and horizontal scaling through distributed deployment.
+PhoenixmlDb servers replicate with **Raft**. That's worth stating plainly, because it isn't what
+people usually expect from a database's replication settings:
 
-## Overview
+- There is **no primary to designate**. The nodes elect a leader from the configured peer set.
+- **Failover is automatic.** A follower that stops hearing heartbeats starts an election.
+- A write needs a **majority**, so a cluster should have an **odd** number of nodes. Three
+  tolerate one failure, five tolerate two. A two-node cluster is worse than one node: it needs both
+  members for a majority, so either failure stops writes.
 
-```
-              ┌───────────────────────────────────────┐
-              │              Cluster                   │
-              │                                        │
-┌─────────┐   │   ┌───────┐   ┌───────┐   ┌───────┐   │
-│ Client  │──▶│   │Node 1 │◀─▶│Node 2 │◀─▶│Node 3 │   │
-└─────────┘   │   │Leader │   │Follower│  │Follower│  │
-              │   └───────┘   └───────┘   └───────┘   │
-              │       │           │           │        │
-              │       ▼           ▼           ▼        │
-              │   ┌───────┐   ┌───────┐   ┌───────┐   │
-              │   │ Data  │   │ Data  │   │ Data  │   │
-              │   │Shard 1│   │Shard 2│   │Shard 3│   │
-              │   └───────┘   └───────┘   └───────┘   │
-              └───────────────────────────────────────┘
-```
+Replication is **logical**. The leader ships database commands (create container, put document,
+delete, …) through the replicated log, and every node applies the same sequence to its own store.
+Storage pages are not shipped.
 
-## Key Features
+> **Fixed in phoenixml `main` 1023078 (issue #63):** before this, every incoming Raft call over
+> gRPC was refused, even with the correct cluster secret, so a multi-node cluster could never elect
+> a leader. A two-node cluster over TLS now elects a leader and replicates writes.
 
-| Feature | Description |
-|---------|-------------|
-| **Raft Consensus** | Leader election and log replication |
-| **Sharding** | Distribute data across nodes |
-| **Replication** | Multiple copies for fault tolerance |
-| **Auto-failover** | Automatic leader election |
-| **Distributed Transactions** | 2PC across shards |
+## Configuring a three-node cluster
 
-## Installation
-
-```bash
-dotnet add package PhoenixmlDb.Cluster
-```
-
-## Cluster Setup
-
-### Initialize Cluster
-
-```bash
-# On first node
-phoenixmldb-cluster init \
-    --node-id node1 \
-    --cluster-id my-cluster \
-    --peers node2:5433,node3:5433
-
-# On other nodes
-phoenixmldb-cluster join \
-    --node-id node2 \
-    --cluster-id my-cluster \
-    --bootstrap-peer node1:5433
-```
-
-### Start Nodes
-
-```bash
-# Node 1
-phoenixmldb-server \
-    --cluster \
-    --node-id node1 \
-    --data /data/node1 \
-    --port 5432 \
-    --raft-port 5433
-
-# Node 2
-phoenixmldb-server \
-    --cluster \
-    --node-id node2 \
-    --data /data/node2 \
-    --port 5432 \
-    --raft-port 5433
-
-# Node 3
-phoenixmldb-server \
-    --cluster \
-    --node-id node3 \
-    --data /data/node3 \
-    --port 5432 \
-    --raft-port 5433
-```
-
-## Configuration
-
-### Cluster Configuration
+Each node names itself and lists the *other* nodes. On `node-1`:
 
 ```json
 {
-    "cluster": {
-        "enabled": true,
-        "nodeId": "node1",
-        "clusterId": "my-cluster",
-        "peers": [
-            {"id": "node2", "address": "10.0.0.2:5433"},
-            {"id": "node3", "address": "10.0.0.3:5433"}
-        ]
+  "PhoenixmlDb": {
+    "DataPath": "/var/lib/phoenixml",
+    "Raft": {
+      "Enabled": true,
+      "NodeId": "node-1",
+      "ListenPort": 5002,
+      "ClusterSecret": "<32+ characters, the same on every node>",
+      "CertificatePath": "/etc/phoenixml/raft.pfx",
+      "Peers": [
+        { "Id": "node-2", "Address": "https://10.0.0.2:5002" },
+        { "Id": "node-3", "Address": "https://10.0.0.3:5002" }
+      ]
     },
-    "raft": {
-        "electionTimeout": "150-300ms",
-        "heartbeatInterval": "50ms",
-        "snapshotThreshold": 10000,
-        "maxLogEntries": 100000
-    },
-    "sharding": {
-        "enabled": true,
-        "shardCount": 16,
-        "replicationFactor": 3
+    "Auth": {
+      "ApiKeys": [
+        { "Id": "app-2026", "Name": "app", "Sha256": "<64 hex>" }
+      ]
     }
+  }
 }
 ```
 
-### Raft Settings
+`node-2` and `node-3` get the same file with their own `NodeId` and the other two as `Peers`.
+Every setting can also come from the environment, which is often easier per node, for example
+`PhoenixmlDb__Raft__NodeId=node-1`.
 
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `electionTimeout` | 150-300ms | Random timeout for elections |
-| `heartbeatInterval` | 50ms | Leader heartbeat frequency |
-| `snapshotThreshold` | 10000 | Log entries before snapshot |
-| `maxLogEntries` | 100000 | Max log entries to keep |
+| Setting | Default | Notes |
+|---|---|---|
+| `Raft:Enabled` | `false` | An embedded database never starts electing leaders by accident. |
+| `Raft:NodeId` | | Required when enabled. Must stay the **same across restarts**: the node's persisted vote is recorded against it. |
+| `Raft:Peers` | `[]` | The **other** members, each with `Id`, an `https://` `Address`, and an optional `Thumbprint`. Listing this node is rejected. |
+| `Raft:ListenPort` | `5002` | Raft's own port. See [Ports](#ports). |
+| `Raft:ClusterSecret` | | Required. At least 32 characters, the same on every node. |
+| `Raft:CertificatePath` / `CertificatePassword` | | Required. The TLS certificate this node presents to its peers. |
+| `Raft:LogPath` | `<DataPath>/raft` | The Raft log's own storage environment. |
+| `Raft:ElectionTimeoutMinMs` / `MaxMs` | `150` / `300` | Randomised between the two, so they must differ. |
+| `Raft:HeartbeatIntervalMs` | `50` | Must be well under the election timeout. |
 
-### Sharding Settings
+Configuration is validated at **startup**, and bad values stop the server rather than degrading
+it. Rejected: a missing `NodeId`, a node listing itself as a peer, duplicate peer ids or
+addresses, a heartbeat interval at or above the election timeout, and identical minimum and
+maximum election timeouts. Raft relies on that randomisation to break ties; in lockstep, nodes
+can split the vote for a long time.
 
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `shardCount` | 16 | Number of shards |
-| `replicationFactor` | 3 | Copies per shard |
-| `rebalanceThreshold` | 10% | Imbalance threshold |
+## Ports
 
-## Client Connection
+Raft gets its own port. Sharing a listener with client traffic would let a large query response
+delay a heartbeat queued behind it, and a heartbeat that is late enough looks like a dead leader.
 
-### Connect to Cluster
+The server tells the two kinds of traffic apart **by the port a connection arrives on**, never by
+the `Host` header:
 
-```csharp
-var options = new ClusterClientOptions
-{
-    Nodes = [
-        "node1.example.com:5432",
-        "node2.example.com:5432",
-        "node3.example.com:5432"
-    ],
-    LoadBalancing = LoadBalanceStrategy.RoundRobin
-};
+- The **Raft port** (`PhoenixmlDb:Raft:ListenPort`) serves only Raft. A client call there gets
+  `PermissionDenied`, and `/health` or any other HTTP request gets `404`.
+- The **client ports** (`PhoenixmlDb:Endpoints:Port` and `HttpsPort`) refuse Raft calls with
+  `PermissionDenied`.
 
-var client = new PhoenixmlClusterClient(options);
-```
+The server **refuses to start** when `Raft:ListenPort` equals `Endpoints:Port` or
+`Endpoints:HttpsPort`, and the message names both settings.
 
-### Automatic Failover
+## Securing the Raft port
 
-```csharp
-var options = new ClusterClientOptions
-{
-    Nodes = ["node1:5432", "node2:5432", "node3:5432"],
-    RetryPolicy = new RetryPolicy
-    {
-        MaxRetries = 3,
-        RetryDelay = TimeSpan.FromMilliseconds(100),
-        ExponentialBackoff = true
-    }
-};
+The Raft listener binds every interface, because peers are on other machines. An unauthenticated
+Raft port would let anyone who reaches it claim leadership and have their entries applied, or
+replace the database with a snapshot. So both of these are **required**, and the server refuses
+to start without them:
 
-// Client automatically retries on node failure
-var client = new PhoenixmlClusterClient(options);
-```
+- **`ClusterSecret`**: at least 32 characters, identical on every node. A wrong or missing secret
+  gets `Unauthenticated`.
+- **A TLS certificate** (`CertificatePath`), with `https://` peer addresses. Set a peer's
+  `Thumbprint` to pin its exact certificate, which suits self-signed certificates. Omit it to
+  validate against the system trust store, which suits an internal PKI.
 
-## Sharding
+This is weaker than mutual TLS, and the trade-off is deliberate. One leaked secret compromises the
+cluster, and there is no per-node revocation. Mutual TLS would give each peer its own identity,
+but it needs a PKI to generate, distribute and rotate certificates.
 
-### Shard Key
+## Securing the client API
 
-```csharp
-// Documents are sharded by container + document name
-// Customize shard key:
-var options = new ContainerOptions
-{
-    ShardKeyPath = "/order/customerId"  // Shard by customer
-};
+API keys never authenticate Raft, and the cluster secret never authenticates the client API.
 
-var container = await client.CreateContainerAsync("orders", options);
-```
+**A Raft-enabled server must have at least one API key** (`PhoenixmlDb:Auth:ApiKeys`), or it
+refuses to start. The Raft listener is on every interface, so a Raft-enabled server counts as
+reachable from the network whatever `Endpoints:ListenAddress` says. Before #63, the client API was
+also served on the Raft port, so a cluster with no keys exposed it to the network without
+authentication.
 
-### Cross-Shard Queries
+Keys, scopes, rotation and the other startup checks are described in
+[Server Mode: gRPC server](server-mode.md#grpc-server).
 
-```csharp
-// Queries across shards are automatic
-var results = await client.QueryAsync("""
-    for $order in collection('orders')//order
-    where $order/total > 1000
-    return $order
-    """);
-```
+## What this does not do yet
 
-### Shard-Local Queries
+"It replicates" is easily mistaken for more than it is:
 
-```csharp
-// Force query to specific shard for efficiency
-var results = await client.QueryAsync("""
-    for $order in collection('orders')//order
-    where $order/customerId = 'C123'
-    return $order
-    """,
-    new QueryOptions { ShardKey = "C123" });
-```
-
-## Distributed Transactions
-
-### Basic Transaction
-
-```csharp
-await using var txn = await client.BeginDistributedTransactionAsync();
-
-// Operations may span multiple shards
-await txn.PutDocumentAsync("orders", "o1.xml", order1Xml);
-await txn.PutDocumentAsync("inventory", "i1.xml", inventory1Xml);
-
-// Two-phase commit ensures atomicity
-await txn.CommitAsync();
-```
-
-### Transaction Isolation
-
-```csharp
-var options = new TransactionOptions
-{
-    IsolationLevel = IsolationLevel.Serializable,
-    Timeout = TimeSpan.FromSeconds(30)
-};
-
-await using var txn = await client.BeginDistributedTransactionAsync(options);
-```
-
-## Monitoring
-
-### Cluster Status
-
-```bash
-phoenixmldb-cluster status
-# Cluster: my-cluster
-# Leader: node1
-# Nodes:
-#   node1: healthy (leader)
-#   node2: healthy (follower)
-#   node3: healthy (follower)
-# Shards: 16 (balanced)
-```
-
-### Node Metrics
-
-```bash
-curl http://node1:5432/cluster/metrics
-```
-
-## Operations
-
-### Add Node
-
-```bash
-# On new node
-phoenixmldb-cluster join \
-    --node-id node4 \
-    --bootstrap-peer node1:5433
-
-# Cluster will rebalance automatically
-```
-
-### Remove Node
-
-```bash
-phoenixmldb-cluster remove-node node4
-# Data is migrated before removal
-```
-
-### Force Leader Election
-
-```bash
-phoenixmldb-cluster transfer-leadership --to node2
-```
-
-### Rebalance Shards
-
-```bash
-phoenixmldb-cluster rebalance
-# Redistributes shards for even load
-```
-
-## Failure Handling
-
-### Node Failure
-
-1. Raft detects missing heartbeats
-2. Election timeout triggers
-3. New leader elected
-4. Clients automatically reconnect
-
-### Network Partition
-
-- Majority partition continues operating
-- Minority partition becomes read-only
-- Automatic recovery when healed
-
-### Data Recovery
-
-```bash
-# Restore node from backup
-phoenixmldb-cluster restore-node node3 --from backup.tar
-
-# Or rebuild from other nodes
-phoenixmldb-cluster rebuild-node node3
-```
-
-## Best Practices
-
-1. **Odd number of nodes** - 3 or 5 for proper quorum
-2. **Geographic distribution** - Across availability zones
-3. **Dedicated network** - Low-latency for Raft
-4. **Monitor cluster health** - Set up alerts
-5. **Test failover** - Regular disaster recovery drills
-6. **Backup strategy** - Despite replication
-
-## Docker Compose Example
-
-```yaml
-version: '3'
-services:
-  node1:
-    image: phoenixmldb/server:latest
-    command: ["--cluster", "--node-id", "node1", "--peers", "node2:5433,node3:5433"]
-    ports:
-      - "5432:5432"
-    volumes:
-      - node1-data:/data
-
-  node2:
-    image: phoenixmldb/server:latest
-    command: ["--cluster", "--node-id", "node2", "--peers", "node1:5433,node3:5433"]
-    ports:
-      - "5433:5432"
-    volumes:
-      - node2-data:/data
-
-  node3:
-    image: phoenixmldb/server:latest
-    command: ["--cluster", "--node-id", "node3", "--peers", "node1:5433,node2:5433"]
-    ports:
-      - "5434:5432"
-    volumes:
-      - node3-data:/data
-
-volumes:
-  node1-data:
-  node2-data:
-  node3-data:
-```
+- **Reads are not linearizable.** A node answers from whatever it has applied locally, so a
+  follower can return stale data, and even the leader can answer a read that races a write it
+  hasn't applied yet.
+- **Writes are not forwarded.** A write sent to a follower is refused with the leader's id, and
+  the client is expected to retry against the leader.
+- **Snapshot install is limited.** A follower that falls far enough behind to need a snapshot
+  needs operator help.
+- **Membership is fixed at startup.** Nodes can't be added or removed from a running cluster; the
+  cluster is what the configuration says when the nodes start.
 
 ## Next Steps
 
-| Deployment | Configuration | Support |
-|------------|---------------|---------|
-| **[Server Mode](server-mode.md)**<br>Single server setup | **[Configuration](../configuration.md)**<br>Cluster settings | **[Troubleshooting](../troubleshooting.md)**<br>Cluster issues |
+- [Server Mode](server-mode.md): API keys, endpoints and the other server settings
+- [Configuration](../configuration.md)
+- [Troubleshooting](../troubleshooting.md)

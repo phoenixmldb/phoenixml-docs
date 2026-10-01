@@ -25,6 +25,23 @@ setting and startup check.
 The gRPC server authenticates with API keys too, and refuses to start on a network address
 without one; see [Server Mode: gRPC server](phoenixmldb/deployment/server-mode.md#grpc-server).
 
+### Clusters work over gRPC, and the Raft port serves only Raft
+
+Since phoenixml `main` 1023078 (issue #63):
+
+- **Fixed:** multi-node clusters over gRPC couldn't elect a leader, because every incoming Raft
+  call was refused, even with the correct cluster secret. A wrong or missing secret now gets
+  `Unauthenticated`.
+- **Security:** the client API was also served on the Raft port, which binds every interface, so
+  with Raft enabled and no API keys it was reachable from the network without authentication. The
+  Raft port now serves only Raft, the client ports refuse Raft calls, and the server decides by the
+  port a connection arrives on, not by the `Host` header.
+- **Breaking:** the server refuses to start when Raft is enabled with no
+  `PhoenixmlDb:Auth:ApiKeys`, or when `PhoenixmlDb:Raft:ListenPort` equals `Endpoints:Port` or
+  `Endpoints:HttpsPort`.
+
+See [Cluster Mode](phoenixmldb/deployment/cluster-mode.md).
+
 ### API keys are stored as hashes and can be rotated
 
 Since phoenixml `main` 58e4b5b (issue #50), both servers take a **list** of key entries, each with
