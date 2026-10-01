@@ -25,6 +25,16 @@ setting and startup check.
 The gRPC server authenticates with API keys too, and refuses to start on a network address
 without one; see [Server Mode: gRPC server](phoenixmldb/deployment/server-mode.md#grpc-server).
 
+### Security: REST permissions are enforced on every route
+
+Since phoenixml `main` f47df75 (issue #66), the REST server checks the caller's permission on
+every route. Before this, a key with `read` permission could create, overwrite and delete
+documents, and with `Auth:RequireAuthentication` set to `false`, anonymous callers reached every
+write route. Now `read`, `write` and `admin` routes each require that level, insufficient
+permission gets `403`, and anonymous callers get read routes only. **Upgrade any server that
+issues read-only keys or runs with authentication off.** See
+[Server Mode: Permissions](phoenixmldb/deployment/server-mode.md#permissions).
+
 ### Clusters work over gRPC, and the Raft port serves only Raft
 
 Since phoenixml `main` 1023078 (issue #63):
