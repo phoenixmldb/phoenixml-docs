@@ -109,6 +109,28 @@ transformer.ResourcePolicy = ResourcePolicy.CreateBuilder()
 - `ResourcePolicy.Authorize(uri, access)` (or `TryAuthorize`) applies the same check from your own
   code and returns the URI to open.
 
+### Upgrading rules built before 2.5
+
+Two mistakes deny access that a pre-2.5 rule allowed. Both fail closed:
+
+- **Name the port for an origin on a non-default port.** A rule for `https://api.example.com:8443`
+  built without a port admits only port 443:
+
+  ```csharp
+  var origin = new Uri("https://api.example.com:8443");
+  builder.AllowReadFrom(origin.Scheme, origin.Host, pathPrefix: null, port: origin.Port);
+  ```
+
+  Pass `UriRule.AnyPort` only if any port really is acceptable.
+- **Build file prefixes from a local path, not from `Uri.AbsolutePath`.** File rules are compared
+  with the canonical local path. `AbsolutePath` is percent-escaped, so a root containing a space
+  or a non-ASCII character (`/srv/my%20data/`) never matches. Use `Uri.LocalPath` or
+  `Path.GetFullPath(...)`:
+
+  ```csharp
+  builder.AllowReadFrom("file", pathPrefix: Path.GetFullPath("/srv/my data/"));
+  ```
+
 ## Custom Resource Resolver
 
 The `IResourceResolver` interface lets you plug in any storage backend. XSLT/XQuery code uses standard functions (`doc()`, `unparsed-text()`, `collection()`) and your resolver handles the URI.
