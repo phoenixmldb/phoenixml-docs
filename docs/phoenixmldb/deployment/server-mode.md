@@ -155,7 +155,7 @@ var results = await client.QueryAsync("collection('products')//product");
 
 ### With Authentication
 
-The REST server authenticates by API key or JWT; see [Authentication](#authentication).
+Both servers require an API key; the REST server also accepts a JWT. See [Authentication](#authentication).
 
 ```csharp
 using var http = new HttpClient { BaseAddress = new Uri("https://localhost:5001") };
@@ -190,8 +190,8 @@ var client = new PhoenixmlClient(
 > configures a key. The settings section is **`Auth`**. The older `authentication` section shown
 > in earlier versions of this page **makes the server refuse to start**.
 
-> **The gRPC server has no authentication today.** It will get the same model as the REST server
-> described here. Until then, don't expose the gRPC port outside a trusted network.
+Both servers authenticate with **API keys that you issue and store as hashes** (issue #50). The
+REST server also accepts JWTs. The gRPC server is covered in [gRPC server](#grpc-server) below.
 
 Every REST endpoint requires either an **API key** in the `X-Api-Key` header or a **JWT** in
 `Authorization: Bearer <token>`. Anonymous requests get `401`. Only these are open:
@@ -216,22 +216,72 @@ never in a committed `appsettings.json`.
 | `Auth:ApiKey:Enabled` | `true` | |
 | `Auth:ApiKey:HeaderName` | `X-Api-Key` | Case-insensitive. Must not be `Authorization`. |
 | `Auth:ApiKey:QueryParameterName` | *(empty)* | Empty disables query-string keys, which leak into request logs. |
-| `Auth:ApiKey:Keys:<key>:Permission` | *(required)* | `read`, `write`, `admin` or `full` |
-| `Auth:ApiKey:Keys:<key>:Name` | | Identifies the key in errors; the key itself is never logged. |
-| `Auth:ApiKey:Keys:<key>:Enabled` | `true` | |
-| `Auth:ApiKey:Keys:<key>:ContainerPermissions` | *(empty)* | Must be empty: per-container permissions aren't implemented yet, and startup fails if it's set. |
+| `Auth:ApiKey:Clients` | *(empty)* | The accepted keys, one list entry per key. See [API keys](#api-keys). |
 | `Auth:Jwt:Enabled` | `false` | |
 | `Auth:Jwt:SecretKey` | | Secret. At least 32 bytes UTF-8, and not the placeholder that older builds shipped. |
 | `Auth:Jwt:Issuer` | | Required when JWT is enabled. |
 | `Auth:Jwt:Audience` | | Required when JWT is enabled. |
 | `Auth:Jwt:Authority` | | Not supported yet (no OpenID Connect): setting it fails startup. |
 
-An API key is the setting's own name (`<key>` above). For example:
+### API keys
+
+Each entry in `Auth:ApiKey:Clients` describes one key:
+
+| Field | Notes |
+|---|---|
+| `Id` | Required and unique. Logs and revocation refer to the entry by its `Id`, never by the key. |
+| `Name` | Who holds the key. Several entries may share a `Name`; that is how you rotate. |
+| `Sha256` | The hex SHA-256 of the key, in either letter case. Set exactly one of `Sha256` and `Key`. |
+| `Key` | The key itself, supplied as a configuration **value** (a Kubernetes `secretKeyRef`, a Docker secret). Hashed once at startup. |
+| `Permission` | `read`, `write`, `admin` or `full` |
+| `Enabled` | Default `true`. |
+| `Expires` | Optional date and time, e.g. `2027-01-01T00:00:00Z`. |
+| `ContainerPermissions` | Must be empty: per-container permissions aren't implemented yet, and startup fails if it's set. |
+
+Store the hash, not the key, wherever configuration gets committed or backed up:
 
 ```bash
-KEY=$(openssl rand -hex 24)            # 48 characters; keys under 32 are refused outside Development
-export "Auth__ApiKey__Keys__${KEY}__Permission=read"
+# Linux
+KEY="phx_$(openssl rand -hex 24)"; printf '%s' "$KEY" | sha256sum | cut -d' ' -f1
+# macOS
+KEY="phx_$(openssl rand -hex 24)"; printf '%s' "$KEY" | shasum -a 256 | cut -d' ' -f1
 ```
+
+```powershell
+$k = "phx_" + [Convert]::ToHexString([Security.Cryptography.RandomNumberGenerator]::GetBytes(24)).ToLower()
+[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($k)))
+```
+
+Use `printf '%s'`, not `echo`: a trailing newline changes the hash. Give `$KEY` to the caller and
+put the hash in configuration:
+
+```json
+{
+  "Auth": {
+    "ApiKey": {
+      "Clients": [
+        { "Id": "reporting-2026-10", "Name": "reporting", "Sha256": "<hex sha-256>", "Permission": "read" }
+      ]
+    }
+  }
+}
+```
+
+As environment variables, index the list: `Auth__ApiKey__Clients__0__Id`,
+`Auth__ApiKey__Clients__0__Sha256` (or `__Key`), `Auth__ApiKey__Clients__0__Permission`. Entries
+from different configuration sources merge **by list index**, so give each source its own indexes.
+
+Send the key in the `X-Api-Key` header (`Auth:ApiKey:HeaderName`). An unknown, disabled or
+expired key gets `401` with the same message; the server logs the real reason against the entry's
+`Id`.
+
+**Rotating a key:** add an entry with the same `Name` and a new `Id` and key, move callers over,
+then disable or remove the old entry. Setting `Expires` on the old entry retires it on schedule.
+
+> **Deprecated:** the older `Auth:ApiKey:Keys:<key>` shape, where the key itself was the setting
+> name, is still accepted for one release, with a startup warning naming the entries. It put the
+> key in configuration paths and environment-variable names, which tooling prints. Move each entry
+> to `Clients`.
 
 ### Startup checks
 
@@ -241,9 +291,15 @@ the setting, when:
 - `Auth:RequireAuthentication` is true and nothing could authenticate: no enabled API key and no JWT;
 - outside Development, an API key is shorter than **32 characters**, or is a development key;
 - a key has no `Permission`, or has `ContainerPermissions`;
+- two entries share an `Id`, or two entries hold the same key (compared by hash, so a `Key` entry and a `Sha256` entry can collide);
+- a `Key` is empty or whitespace, or a `Sha256` is the hash of the empty string. **`"Key": ""` fails startup**: an optional secret that's missing is no longer treated as unset;
+- an entry sets both or neither of `Sha256` and `Key`;
 - JWT is enabled with a missing, placeholder or too-short `SecretKey`, or without `Issuer`/`Audience`;
 - `Auth:Jwt:Authority` is set;
 - an `Authentication` section exists. The section is `Auth`.
+
+An entry that has already expired at startup only logs a warning. Startup errors never contain a
+key or a hash.
 
 ### JWTs
 
@@ -265,6 +321,33 @@ Queries and stylesheets sent to either server can read only the stored documents
 directories in `PhoenixmlDb:ResourceAccess:AllowedFileRoots` or origins in
 `PhoenixmlDb:ResourceAccess:AllowedHttpOrigins`. Both are empty by default and validated at
 startup. See [Resource Access](../resource-access.md).
+
+### gRPC server
+
+The gRPC server reads its keys from **`PhoenixmlDb:Auth:ApiKeys`**, a list with the same fields
+and rules as above: `Id`, `Name`, `Sha256` or `Key`, `Enabled`, `Expires`, plus `Scopes` in place
+of `Permission`:
+
+| Scope | Allows |
+|---|---|
+| `read` | reading documents, containers, indexes and server status |
+| `write` | everything in `read`, plus changing data and indexes |
+| `admin` | everything in `write`, plus backup, restore and shutdown |
+
+An entry with no `Scopes` gets `read` and `write`. Clients send the key as gRPC metadata,
+`authorization: Bearer <key>`. A wrong key gets `Unauthenticated`. A valid key without the scope a
+call needs gets `PermissionDenied`.
+
+An entry without an `Id` still works for one release: it uses its `Name` as its `Id`, with a
+startup warning. A `Key` must be at least 32 characters.
+
+**Where it listens:** `PhoenixmlDb:Endpoints:ListenAddress` (default `127.0.0.1`), `Port` (default
+`5000`) and `HttpsPort` (default `5001`). With no keys configured, the server accepts every call,
+and so it **refuses to start on a non-loopback address unless at least one key is configured**.
+A hostname counts as non-loopback.
+
+The cluster's Raft traffic is authenticated separately, by the cluster secret and a TLS
+certificate, and needs no API key.
 
 ## TLS Configuration
 
