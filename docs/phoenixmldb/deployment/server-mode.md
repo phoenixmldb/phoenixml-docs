@@ -334,7 +334,9 @@ of `Permission`:
 | `write` | everything in `read`, plus changing data and indexes |
 | `admin` | everything in `write`, plus backup, restore and shutdown |
 
-An entry with no `Scopes` gets `read` and `write`. Clients send the key as gRPC metadata,
+An entry with no `Scopes` gets `read` and `write`. Queries run with the `read` scope.
+Updating expressions (XQuery Update Facility) are not applied to stored documents; use the
+document APIs to write. Clients send the key as gRPC metadata,
 `authorization: Bearer <key>`. A wrong key gets `Unauthenticated`. A valid key without the scope a
 call needs gets `PermissionDenied`.
 
