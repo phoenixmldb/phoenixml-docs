@@ -98,41 +98,23 @@ sudo systemctl start phoenixmldb
 
 ## Server Configuration
 
-### Configuration File
+Settings come from `appsettings.json`, environment variables (`__` between levels) and the command
+line, and are validated at startup. For example:
 
 ```json
 {
-    "server": {
-        "host": "0.0.0.0",
-        "port": 5432,
-        "maxConnections": 100,
-        "connectionTimeout": "30s"
-    },
-    "storage": {
-        "path": "/var/lib/phoenixmldb",
-        "mapSize": "10GB",
-        "maxContainers": 100
-    },
-    "tls": {
-        "enabled": true,
-        "certificate": "/etc/phoenixmldb/cert.pem",
-        "key": "/etc/phoenixmldb/key.pem"
-    },
-    "logging": {
-        "level": "Information",
-        "file": "/var/log/phoenixmldb/server.log"
-    }
+  "PhoenixmlDb": {
+    "Storage": { "DataPath": "/var/lib/phoenixml", "MapSizeMb": 102400 }
+  }
 }
 ```
 
-### Environment Variables
-
 ```bash
-export PHOENIXMLDB_HOST=0.0.0.0
-export PHOENIXMLDB_PORT=5432
-export PHOENIXMLDB_DATA=/var/lib/phoenixmldb
-export PHOENIXMLDB_TLS_CERT=/etc/phoenixmldb/cert.pem
+export PhoenixmlDb__Storage__DataPath=/var/lib/phoenixml
 ```
+
+Every setting, its default and its startup check is in the
+[Server Configuration reference](server-configuration.md).
 
 ## Client Connection
 
@@ -494,7 +476,9 @@ services:
     volumes:
       - phoenixmldb-data:/data
     environment:
-      - PHOENIXMLDB_MAP_SIZE=10GB
+      - PhoenixmlDb__Storage__DataPath=/data
+      - PhoenixmlDb__Storage__MapSizeMb=10240
+      # A server reachable from the network needs an API key; see Authentication.
 
 volumes:
   phoenixmldb-data:

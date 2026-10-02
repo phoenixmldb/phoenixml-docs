@@ -1,7 +1,7 @@
 ---
 title: Cluster Mode
 description: Raft replication across server nodes — configuration, port separation, securing the Raft and client ports, and current limits
-sort: 3
+sort: 4
 ---
 
 # Cluster Mode

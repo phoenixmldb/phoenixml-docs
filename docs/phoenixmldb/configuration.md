@@ -36,56 +36,11 @@ using var db = new XmlDatabase("./data", options);
 | `WriteMap` | `bool` | `false` | Use writable memory map |
 | `NoLock` | `bool` | `false` | Don't use file locking |
 
-## Environment Variables
+## Servers
 
-```bash
-# Override default map size
-export PHOENIXMLDB_MAP_SIZE=10737418240
-
-# Set maximum readers
-export PHOENIXMLDB_MAX_READERS=256
-
-# Enable debug logging
-export PHOENIXMLDB_LOG_LEVEL=Debug
-```
-
-## Configuration File
-
-Create `phoenixmldb.json` in the database directory:
-
-```json
-{
-    "storage": {
-        "mapSize": "10GB",
-        "maxContainers": 100,
-        "maxReaders": 126,
-        "syncMode": "normal"
-    },
-    "query": {
-        "defaultTimeout": "30s",
-        "maxResults": 10000,
-        "enableOptimizer": true
-    },
-    "indexing": {
-        "autoIndex": true,
-        "defaultIndexOptions": {
-            "pathIndex": true,
-            "valueIndex": false
-        }
-    },
-    "logging": {
-        "level": "Information",
-        "file": "logs/phoenixmldb.log"
-    }
-}
-```
-
-### Load Configuration
-
-```csharp
-var config = PhoenixmlDbConfiguration.Load("./data/phoenixmldb.json");
-using var db = new XmlDatabase("./data", config.ToOptions());
-```
+The servers read their settings from `appsettings.json`, environment variables
+(`PhoenixmlDb__Storage__MapSizeMb`) and the command line. See the
+[Server Configuration reference](deployment/server-configuration.md).
 
 ## Logging
 
@@ -195,22 +150,9 @@ var maxReaders = db.GetOption<int>("MaxReaders");
 
 ## Server Configuration
 
-For server mode, additional settings are available:
-
-```json
-{
-    "server": {
-        "host": "0.0.0.0",
-        "port": 5432,
-        "maxConnections": 100,
-        "tls": {
-            "enabled": true,
-            "certificate": "/path/to/cert.pem",
-            "key": "/path/to/key.pem"
-        }
-    }
-}
-```
+See the [Server Configuration reference](deployment/server-configuration.md) for storage,
+full-text indexing and validation settings, and [Server Mode](deployment/server-mode.md) for
+authentication and endpoints.
 
 ## Cluster Configuration
 
