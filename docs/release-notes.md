@@ -87,6 +87,31 @@ that parsed JSON from `/health` must call `/health/details` instead. `/health/re
 database and engine checks; it used to always return `200`. See
 [Server Mode: Health Endpoints](phoenixmldb/deployment/server-mode.md#health-endpoints).
 
+### Configuration: storage, indexing and validation settings move under `PhoenixmlDb`
+
+Since phoenixml `main` ad3569b, both servers read storage settings from `PhoenixmlDb:Storage`
+(`DataPath`, `MapSizeMb`, `MaxReaders`, `CreateIfMissing`). The gRPC server reads
+`PhoenixmlDb:Indexing:FullText`, and the REST server reads `PhoenixmlDb:Validation`. All are
+validated at startup, and each server logs an `EffectiveConfiguration` summary (event 3001) with
+secrets masked. See the [Server Configuration reference](phoenixmldb/deployment/server-configuration.md).
+
+- **Old keys work for one release**, with a warning naming the new key: `PhoenixmlDb:DataPath`
+  (gRPC); `Phoenixml:DataPath`, `Phoenixml:MaxVersionsPerDocument` and `Validation:*` (REST).
+- **`XrxServer:*` keys were never read**, and are now ignored with a warning, so upgrading changes
+  nothing for them. `Validation:EnableXsd11` and `Validation:DefaultSchematronBinding` were never
+  implemented and are ignored.
+- **The REST server opens its database at startup**, not on the first request.
+- **gRPC server data path:** with no setting, it's now `{ContentRoot}/data` instead of `./data`
+  relative to the working directory. The two differ only when the content root is set explicitly or
+  the server runs as a Windows service. If an old `./data` database is left behind, startup logs a
+  warning naming both paths.
+- **Stricter values:** a blank validation `BasePath` or `BundlePath`, or a map size smaller than the
+  data already stored, now stops startup.
+- **Embedded:** `DocumentDatabase` validates `LmdbStorageOptions`, which gains `CreateIfMissing`.
+  Invalid full-text indexing options throw `ArgumentException` listing every problem (they were
+  `ArgumentOutOfRangeException`). A `MaxDatabases` below the engine's named-database count is
+  rejected.
+
 ### Stylesheets: more of the allowlist applies on the REST server
 
 Since phoenixml `main` 1eee618, the REST server relies on the 2.5.1 engine to enforce resource
