@@ -87,6 +87,16 @@ that parsed JSON from `/health` must call `/health/details` instead. `/health/re
 database and engine checks; it used to always return `200`. See
 [Server Mode: Health Endpoints](phoenixmldb/deployment/server-mode.md#health-endpoints).
 
+### Stylesheets: more of the allowlist applies on the REST server
+
+Since phoenixml `main` 1eee618, the REST server relies on the 2.5.1 engine to enforce resource
+access in stylesheets. `json-doc`, `load-xquery-module`, literal shadow attributes, schema imports
+and HTTP stylesheet imports from allowed origins, and computed `xsl:source-document` hrefs are
+now governed by `PhoenixmlDb:ResourceAccess` instead of being refused outright. A stylesheet that
+reads a denied resource is now refused when it runs (`400`), not when it's registered.
+`fn:transform`, `fn:function-lookup`, `xsl:evaluate` and `xsl:result-document` are still refused.
+See [Resource Access](phoenixmldb/resource-access.md#stylesheets-on-the-rest-server).
+
 ### The database runs on the 2.5.1 engines
 
 Since phoenixml `main` 53274a6, the database uses **PhoenixmlDb.XQuery and PhoenixmlDb.Xslt 2.5.1**,
