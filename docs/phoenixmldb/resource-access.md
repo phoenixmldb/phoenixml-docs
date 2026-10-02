@@ -112,19 +112,46 @@ A denied access raises an error in the query or transformation:
 The REST server answers a denied query or transformation with `400`. The response doesn't include
 the denied content or a stack trace.
 
-## Currently refused by the REST server
+## Stylesheets on the REST server
 
-The REST server refuses stylesheets that use the following with `400`, **even when an allowlist is
-configured**:
+Since phoenixml `main` 1eee618, the REST server relies on the 2.5.1 engine to enforce the
+resource-access policy inside stylesheets. These are now governed by
+`PhoenixmlDb:ResourceAccess`, so they're denied by default and allowed for listed directories
+and origins:
 
-- `xsl:evaluate`
-- calls or function references to `fn:transform`, `fn:json-doc`, `fn:load-xquery-module` and
-  `fn:function-lookup`
-- shadow attributes (`_name="…"`) on XSL elements
-- `http:` and `https:` `xsl:import-schema` locations; use a schema file in an allowed directory
+- `fn:json-doc` on files. The engine doesn't read `json-doc` over HTTP.
+- `fn:load-xquery-module`.
+- Shadow attributes (`_href`, `_schema-location`, `_select`, …) with a literal value.
+- `xsl:import-schema` over `http`/`https` from an allowed origin, on its exact port.
+- `xsl:source-document` and `xsl:stream` with a computed href. The URI is checked when the
+  transformation runs.
+- `xsl:import` and `xsl:include` of an HTTP module from an allowed origin. Every redirect is
+  checked again, and a redirect to an origin that isn't allowed is denied.
 
-Allowed HTTP documents and imported stylesheets are fetched by the server itself, without
-following redirects.
+Modules imported from allowed directories and origins are trusted, and anything they run is still
+subject to the same policy.
+
+**A stylesheet that reads a denied resource can be registered.** It fails with `400` when it
+runs, not when it's registered.
+
+### Still refused
+
+The REST server refuses stylesheets that use the following with `400` ("Stylesheet refused by the
+resource access policy"), whatever the allowlist says:
+
+- `fn:transform`, called directly or by named function reference, and `fn:function-lookup`
+- a shadow attribute whose value is computed (contains `{`)
+- `xsl:evaluate`, which is disabled; the engine raises `XTDE3175`
+- `xsl:result-document` writes
+- DTDs and external entities
+
+### Known limitations
+
+- An attribute value template whose literal text contains `transform(` or `function-lookup(` is
+  refused. Build the text instead, for example `{concat('trans','form(')}`.
+- In a stylesheet that turns on `expand-text`, text containing a lone `{` or `}` is refused, even
+  inside a part where `xsl:expand-text="no"` turns it off again. Emit that text with `xsl:text`
+  or `xsl:value-of`.
 
 ## Next Steps
 
