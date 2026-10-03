@@ -105,7 +105,7 @@ limit that has since been lowered.
 | Setting | Default | Notes |
 |---|---|---|
 | `MaxExecutionTimeSeconds` | `60` | Over it returns `504`. |
-| `MaxConcurrentTransforms` | `16` | When reached, new transforms get `503`. |
+| `MaxConcurrentTransforms` | by processor count | When reached, new transforms get `503`. Unset, it's min(16, max(4, 2 × processor count)): 4 on 1–2 cores, 8 on 4 cores, 16 on 8 or more. A configured value wins, may exceed 16, and must be at least 1. |
 | `MaxAbandonedTransforms` | `4` | Transforms still running after their time limit; when reached, new transforms get `503`. |
 | `MaxStylesheets` | `1000` | Registering beyond it returns `409`. |
 | `AllowedOutputMethods` | `xml`, `html`, `xhtml`, `text`, `json` | A stylesheet whose `xsl:output` method isn't listed returns `400`, at registration and when it runs. A configured list replaces the default. |
@@ -113,7 +113,8 @@ limit that has since been lowered.
 | `StylesheetCacheSize` | `50` | |
 
 The response content type follows the stylesheet's output method: `method="text"` returns
-`text/plain`.
+`text/plain`. Each transformation runs on its own thread, so a long-running or abandoned
+transformation doesn't delay other requests.
 
 ### New containers: `PhoenixmlDb:Containers:Defaults`
 
@@ -183,6 +184,7 @@ server won't start.
 | 3004 | a transformation was abandoned at its time limit |
 | 3005 | versioning is off but a version limit is configured |
 | 3006 | `RegexMatchTimeoutMs` is higher than a time limit it should fit inside |
+| 3007 | `TransformConcurrencyLimit`: the transform concurrency limit in force, and whether it was configured or derived from the processor count |
 
 Client errors (`4xx`) are logged at Information. Deliberate refusals, such as a schema type that
 isn't supported for validation, return `501`.

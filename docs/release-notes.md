@@ -116,7 +116,9 @@ startup: `PhoenixmlDb:Query`, `PhoenixmlDb:Documents`, `PhoenixmlDb:Transform` a
   `maxResults`, `skip` and `timeout` parameters now take effect. Per-request `Namespaces` on a query
   or explain return `400`; declare them in the query prolog.
 - **Transformations:** the response content type follows the stylesheet's output method, and output
-  methods outside `AllowedOutputMethods` are refused with `400`.
+  methods outside `AllowedOutputMethods` are refused with `400`. Since phoenixml `main` e897c06, each
+  transformation runs on its own thread, so long-running or abandoned transformations no longer delay
+  other requests, and `MaxConcurrentTransforms` defaults to a value based on the processor count (4 to 16).
 - **Errors:** deliberate refusals return `501` (they returned `500`), and `4xx` errors are logged at
   Information.
 - **Regular expressions** are time-bounded in both servers (`PhoenixmlDb:Query:RegexMatchTimeoutMs`,
