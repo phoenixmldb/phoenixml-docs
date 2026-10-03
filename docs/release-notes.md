@@ -87,6 +87,41 @@ that parsed JSON from `/health` must call `/health/details` instead. `/health/re
 database and engine checks; it used to always return `200`. See
 [Server Mode: Health Endpoints](phoenixmldb/deployment/server-mode.md#health-endpoints).
 
+### REST server: resource limits, container defaults, and versioning off by default
+
+Since phoenixml `main` b622b1c, the REST server's resource limits are configurable and validated at
+startup: `PhoenixmlDb:Query`, `PhoenixmlDb:Documents`, `PhoenixmlDb:Transform` and
+`PhoenixmlDb:Containers:Defaults`. See the
+[Server Configuration reference](phoenixmldb/deployment/server-configuration.md#rest-server-resource-limits).
+
+**Behaviour changes, read before upgrading:**
+
+- **Versioning is off by default.** It used to be always on. Turn it on per container, or with
+  `PhoenixmlDb:Containers:Defaults:VersioningEnabled=true`. Existing history stays readable and
+  restorable; restoring with versioning off keeps no copy of the replaced content. A `MaxVersions`
+  (or the old `Phoenixml:MaxVersionsPerDocument`) below 1 now stops startup instead of being raised
+  to 1.
+- **Container `PUT` merges settings:** a field left out keeps its stored value. Container settings
+  that aren't set appear as `null` ("use the server default"). Changing `DefaultNamespaces` returns
+  `400`, since namespaces are fixed at creation.
+- **Document content is classified from the content itself** (XML or JSON; a leading BOM and
+  whitespace are stripped). Content that is neither, or that contradicts a declared `Format`, returns
+  `400`. Top-level JSON scalars are accepted. JSON is refused with `400` when the container's
+  `AllowJson` is false.
+- **Write-time validation** runs when the container requires it (`ValidateOnWrite`) or the request
+  asks for it. It supports XSD; other schema types return `501`. A failure returns
+  `400 SCHEMA_VALIDATION_ERROR` with the validator's errors, and nothing is stored. Restore applies the
+  current size, JSON and validation rules.
+- **Queries:** timeouts return `504 QUERY_TIMEOUT` with the limit that applied. `/api/query/execute`'s
+  `maxResults`, `skip` and `timeout` parameters now take effect. Per-request `Namespaces` on a query
+  or explain return `400`; declare them in the query prolog.
+- **Transformations:** the response content type follows the stylesheet's output method, and output
+  methods outside `AllowedOutputMethods` are refused with `400`.
+- **Errors:** deliberate refusals return `501` (they returned `500`), and `4xx` errors are logged at
+  Information.
+- **Regular expressions** are time-bounded in both servers (`PhoenixmlDb:Query:RegexMatchTimeoutMs`,
+  default 2 s).
+
 ### Configuration: storage, indexing and validation settings move under `PhoenixmlDb`
 
 Since phoenixml `main` ad3569b, both servers read storage settings from `PhoenixmlDb:Storage`
