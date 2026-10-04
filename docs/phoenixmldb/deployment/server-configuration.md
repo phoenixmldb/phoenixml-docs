@@ -135,6 +135,31 @@ are fixed when the container is created, and changing them on a `PUT` returns `4
 created before this release keep their stored 10 MB document limit and 30 s query limit until you
 `PUT` new settings.
 
+## Telemetry export
+
+`PhoenixmlDb:Telemetry` applies to **both** servers. With no `OtlpEndpoint`, nothing is exported and
+no telemetry providers are created.
+
+| Setting | Default | Notes |
+|---|---|---|
+| `OtlpEndpoint` | (none) | An absolute `http` or `https` URI. An invalid value stops startup (the error doesn't repeat the value); it's masked in the startup summary. |
+| `RecordQueryText` | `false` | See [query text](../logging.md#query-text) before turning it on. |
+| `ServiceName` | `phoenixmldb-server` (gRPC) or `phoenixmldb-eps` (REST) | |
+
+The protocol is OTLP over gRPC (port 4317) by default. For HTTP, set the **environment variable**
+`OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf`; traces then go to `<endpoint>/v1/traces` and metrics to
+`<endpoint>/v1/metrics`. The protocol is read from environment variables only, not from
+`appsettings.json` or the command line, and the per-signal `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` /
+`_METRICS_PROTOCOL` variables take precedence. Headers, such as authentication, come from
+`OTEL_EXPORTER_OTLP_HEADERS`.
+
+Each HTTP and gRPC request gets a server span, with the database spans as its children. An incoming
+`traceparent` marked not sampled is honoured. Health endpoints (`/health*`, `/healthz`,
+`grpc.health.v1`) and the Raft port are never traced.
+
+> **Known issue (phoenixml #88):** an idle server emits a steady stream of `phoenixmldb.transaction`
+> spans (about two a second), from the full-text worker's background loop.
+
 ## Legacy keys
 
 Settings that moved are still accepted for **one release**. Each old key used logs a startup warning
@@ -185,6 +210,8 @@ server won't start.
 | 3005 | versioning is off but a version limit is configured |
 | 3006 | `RegexMatchTimeoutMs` is higher than a time limit it should fit inside |
 | 3007 | `TransformConcurrencyLimit`: the transform concurrency limit in force, and whether it was configured or derived from the processor count |
+| 3008 | `HealthCheckFailed` (Error): a health check failed; the details are logged, not returned to the probe |
+| 3009 | `TelemetryExportEnabled`: OTLP export is on; logs the endpoint's scheme, host and port only |
 
 Client errors (`4xx`) are logged at Information. Deliberate refusals, such as a schema type that
 isn't supported for validation, return `501`.

@@ -95,6 +95,23 @@ that parsed JSON from `/health` must call `/health/details` instead. `/health/re
 database and engine checks; it used to always return `200`. See
 [Server Mode: Health Endpoints](phoenixmldb/deployment/server-mode.md#health-endpoints).
 
+### OpenTelemetry export
+
+Since phoenixml `main` 1e071af:
+
+- **Servers:** set `PhoenixmlDb:Telemetry:OtlpEndpoint` to export traces and metrics over OTLP
+  (gRPC by default; `OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf` for HTTP). Unset, nothing changes.
+  Requests get server spans with the database spans beneath them; health endpoints and the Raft
+  port aren't traced. Event 3009 logs that export is on. See
+  [Server Configuration](phoenixmldb/deployment/server-configuration.md#telemetry-export).
+- **Embedded:** a new optional `PhoenixmlDb.OpenTelemetry` package (1.0.0-preview.1, not yet
+  published) with `AddPhoenixmlDbInstrumentation` and a storage health check.
+- **Query text** is off by default (`RecordQueryText`). It's exported only when every instrumented
+  tracer provider in the process opted in, and a listener that subscribes without the package's
+  instrumentation receives it whenever another provider opted in. See
+  [Logging and Telemetry](phoenixmldb/logging.md#query-text).
+- **Known issue (#88):** an idle server emits about two `phoenixmldb.transaction` spans a second.
+
 ### Telemetry and health
 
 Since phoenixml `main` 0cd95b1, the engine publishes metrics and traces through `System.Diagnostics`
