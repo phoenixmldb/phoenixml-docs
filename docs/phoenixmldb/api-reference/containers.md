@@ -6,69 +6,71 @@ sort: 1
 
 # Container API
 
-Containers organize documents into logical groups within a database.
+Containers organize documents into logical groups within a database. Container methods live on `DocumentDatabase` (`PhoenixmlDb.Storage`) and return `IContainer` (`PhoenixmlDb.Core`).
 
 ## Creating Containers
 
 ### Basic Creation
 
 ```csharp
-var container = db.CreateContainer("products");
+IContainer container = await db.CreateContainerAsync("products");
 ```
+
+Creating a container whose name is already taken throws `DocumentExistsException`.
 
 ### With Options
 
+Options are set through a configuration delegate that receives a fresh `ContainerOptions`:
+
 ```csharp
-var container = db.CreateContainer("orders", new ContainerOptions
+var container = await db.CreateContainerAsync("orders", opts =>
 {
-    ValidationMode = ValidationMode.WellFormed,
-    PreserveWhitespace = false,
-    DefaultNamespaces = new Dictionary<string, string>
-    {
-        [""] = "http://example.com/orders",
-        ["xsi"] = "http://www.w3.org/2001/XMLSchema-instance"
-    },
-    IndexOnStore = true
+    opts.PreserveWhitespace = false;
+    opts.DefaultNamespaces["o"] = "http://example.com/orders";
+    opts.DefaultMetadataNamespace = "http://example.com/meta";
+    opts.Indexes.AddPathIndex("/o:order/o:id");
 });
 ```
 
 ### Open or Create
 
 ```csharp
-// Creates if doesn't exist, opens if exists
-var container = db.OpenOrCreateContainer("products");
+// Creates if it doesn't exist, opens if it does
+var container = await db.OpenOrCreateContainerAsync("products");
 ```
+
+When the container already exists, the `configure` delegate is not applied; the container keeps the options it was created with.
 
 ## ContainerOptions
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `ValidationMode` | `ValidationMode` | `WellFormed` | Document validation level |
-| `PreserveWhitespace` | `bool` | `true` | Keep whitespace-only text nodes |
-| `DefaultNamespaces` | `Dictionary<string, string>` | Empty | Default namespace bindings |
-| `IndexOnStore` | `bool` | `true` | Auto-index documents when stored |
-| `JsonSchema` | `string` | `null` | JSON Schema for validation |
+| `ValidationMode` | `ValidationMode` | `None` | Stored with the container; not enforced on write today (every stored document must be well-formed XML or valid JSON regardless) |
+| `PreserveWhitespace` | `bool` | `false` | Keep whitespace-only text nodes |
+| `DefaultNamespaces` | `Dictionary<string, string>` | Empty | Prefix → namespace URI bindings available to every query on the container |
+| `DefaultMetadataNamespace` | `string?` | `null` | Namespace for unqualified metadata names; `null` uses the engine's application default |
+| `Indexes` | `IndexConfiguration` | Structural index only | Index declarations — see [Index API](indexes.md) |
+
+`DefaultNamespaces` is validated when the container is created: a binding the XQuery compiler would refuse (rebinding a predeclared prefix such as `fn` or `xs`, `xmlns`, an empty URI, or a prefix that is not an NCName) throws `ArgumentException` from `CreateContainerAsync`.
 
 ### ValidationMode
 
 ```csharp
-enum ValidationMode
+public enum ValidationMode
 {
-    None,        // No validation
-    WellFormed,  // XML well-formedness only
-    DTD,         // Validate against DTD
-    Schema       // Validate against XML Schema
+    None,
+    Schema,
+    WellFormed
 }
 ```
 
 ## Getting Containers
 
 ```csharp
-// Get existing container (throws if not found)
-var container = db.GetContainer("products");
+// Returns null if the container does not exist
+IContainer? container = await db.OpenContainerAsync("products");
 
-// Try get pattern
-if (db.TryGetContainer("products", out var container))
+if (container is not null)
 {
     // Use container
 }
@@ -77,93 +79,65 @@ if (db.TryGetContainer("products", out var container))
 ## Listing Containers
 
 ```csharp
-foreach (var name in db.ListContainers())
+await foreach (ContainerInfo info in db.ListContainersAsync())
 {
-    Console.WriteLine(name);
-}
-
-// With info
-foreach (var name in db.ListContainers())
-{
-    var info = db.GetContainerInfo(name);
-    Console.WriteLine($"{name}: {info.DocumentCount} documents, {info.SizeBytes} bytes");
+    Console.WriteLine($"{info.Name}: {info.DocumentCount} documents");
 }
 ```
 
 ## Container Information
 
-```csharp
-var info = db.GetContainerInfo("products");
+`ContainerInfo` (`PhoenixmlDb.Core`) is returned by `ListContainersAsync`:
 
-Console.WriteLine($"Name: {info.Name}");
-Console.WriteLine($"Documents: {info.DocumentCount}");
-Console.WriteLine($"Size: {info.SizeBytes} bytes");
-Console.WriteLine($"Created: {info.CreatedAt}");
-Console.WriteLine($"Modified: {info.ModifiedAt}");
-Console.WriteLine($"Indexes: {info.IndexCount}");
-```
+| Property | Type |
+|----------|------|
+| `Id` | `ContainerId` |
+| `Name` | `string` |
+| `Created` | `DateTimeOffset` |
+| `Modified` | `DateTimeOffset` |
+| `DocumentCount` | `long` |
+
+An open `IContainer` exposes `Id`, `Name` and `Options`.
 
 ## Deleting Containers
 
 ```csharp
-// Delete container and all its documents
-db.DeleteContainer("temp-data");
-
-// Safe delete
-if (db.ContainerExists("temp-data"))
-{
-    db.DeleteContainer("temp-data");
-}
+// Returns false if no container has that name
+bool deleted = await db.DeleteContainerAsync("temp-data");
 ```
 
-> **Warning:** Deleting a container removes all documents and indexes. This operation cannot be undone.
-
-## Container Settings
-
-### Get/Set Options
-
-```csharp
-// Get current option
-var preserveWs = container.GetOption<bool>("PreserveWhitespace");
-
-// Set option
-container.SetOption("IndexOnStore", false);
-```
-
-### Available Options
-
-```csharp
-container.SetOption("PreserveWhitespace", true);
-container.SetOption("IndexOnStore", true);
-container.SetOption("ValidationMode", "WellFormed");
-```
+> **Warning:** Deleting a container removes it from the database's catalogue; its documents are no longer reachable through any API. This operation cannot be undone.
 
 ## Statistics
 
-```csharp
-var stats = container.GetStatistics();
+Database-wide statistics are available from `DocumentDatabase.Statistics` (`DatabaseStatistics`, `PhoenixmlDb.Core`):
 
-Console.WriteLine($"Document count: {stats.DocumentCount}");
-Console.WriteLine($"Total nodes: {stats.TotalNodeCount}");
-Console.WriteLine($"Storage size: {stats.StorageSizeBytes}");
-Console.WriteLine($"Index size: {stats.IndexSizeBytes}");
-Console.WriteLine($"Average doc size: {stats.AverageDocumentSize}");
+```csharp
+var stats = db.Statistics;
+
+Console.WriteLine($"Containers: {stats.ContainerCount}");
+Console.WriteLine($"Documents: {stats.TotalDocumentCount}");
+Console.WriteLine($"Nodes: {stats.TotalNodeCount}");
+Console.WriteLine($"Database size: {stats.DatabaseSizeBytes}");
+Console.WriteLine($"Used size: {stats.UsedSizeBytes}");
 ```
+
+There is no per-container statistics API beyond `ContainerInfo.DocumentCount`.
 
 ## In Transactions
 
+Write transactions address a container by its `ContainerId`:
+
 ```csharp
-using (var txn = db.BeginTransaction())
+var products = await db.OpenOrCreateContainerAsync("products");
+
+await using (var txn = await db.BeginWriteAsync())
 {
-    // Get container in transaction context
-    var container = txn.GetContainer("products");
+    await txn.PutDocumentAsync(products.Id, "p1.xml", xml1);
+    await txn.PutDocumentAsync(products.Id, "p2.xml", xml2);
 
-    // Operations are isolated
-    container.PutDocument("p1.xml", xml1);
-    container.PutDocument("p2.xml", xml2);
-
-    // Commit or rollback
-    txn.Commit();
+    // Commit, or dispose without committing to discard
+    await txn.CommitAsync();
 }
 ```
 
@@ -172,30 +146,33 @@ using (var txn = db.BeginTransaction())
 ```csharp
 try
 {
-    var container = db.GetContainer("nonexistent");
+    await db.CreateContainerAsync("existing");
 }
-catch (ContainerNotFoundException ex)
+catch (DocumentExistsException ex)
 {
-    Console.WriteLine($"Container '{ex.ContainerName}' not found");
+    Console.WriteLine(ex.Message);   // "Container 'existing' already exists."
 }
 
 try
 {
-    db.CreateContainer("existing");
+    // With indexing enabled; without it, RebuildIndexesAsync throws InvalidOperationException
+    await db.RebuildIndexesAsync("nonexistent");
 }
-catch (ContainerExistsException ex)
+catch (ContainerNotFoundException ex)
 {
-    Console.WriteLine($"Container '{ex.ContainerName}' already exists");
+    Console.WriteLine(ex.Message);
 }
 ```
+
+`OpenContainerAsync` and `DeleteContainerAsync` report a missing container through their return values (`null` / `false`) rather than an exception.
 
 ## Best Practices
 
 1. **Meaningful names** - Use descriptive container names
 2. **Group related documents** - Keep related data together
-3. **Consider query patterns** - Documents queried together should be in the same container
+3. **Consider query patterns** - A query runs against one container; documents queried together should be in the same container
 4. **Use transactions** - For multi-document operations
-5. **Monitor size** - Large containers may benefit from partitioning
+5. **Declare indexes at creation** - A container's index set is fixed when it is created
 
 ## Next Steps
 

@@ -15,222 +15,256 @@ A container is a logical grouping of related documents, similar to a table in a 
 ### Creating Containers
 
 ```csharp
+using PhoenixmlDb.Core;
+using PhoenixmlDb.Storage;
+
+await using var db = new DocumentDatabase("./data");
+
 // Simple creation
-var products = db.CreateContainer("products");
+var products = await db.CreateContainerAsync("products");
 
 // With options
-var orders = db.CreateContainer("orders", new ContainerOptions
+var orders = await db.CreateContainerAsync("orders", opts =>
 {
-    ValidationMode = ValidationMode.WellFormed,  // or Schema, DTD, None
-    PreserveWhitespace = false,
-    DefaultNamespaces = new Dictionary<string, string>
-    {
-        [""] = "http://example.com/orders",
-        ["xsi"] = "http://www.w3.org/2001/XMLSchema-instance"
-    }
+    opts.PreserveWhitespace = false;
+    opts.DefaultNamespaces.Add("o", "http://example.com/orders");
 });
 
 // Open existing or create new
-var customers = db.OpenOrCreateContainer("customers");
+var customers = await db.OpenOrCreateContainerAsync("customers");
+
+// Open existing only (null if it does not exist)
+IContainer? archive = await db.OpenContainerAsync("archive");
 ```
 
 ### Container Options
 
 | Option | Description | Default |
 |--------|-------------|---------|
-| `ValidationMode` | Document validation level | `WellFormed` |
-| `PreserveWhitespace` | Keep whitespace-only text nodes | `true` |
-| `DefaultNamespaces` | Default namespace bindings | Empty |
-| `IndexOnStore` | Auto-index documents on store | `true` |
+| `Indexes` | Index definitions for the container (see [Indexing](indexing.md)) | None |
+| `PreserveWhitespace` | Keep whitespace-only text nodes in XML documents. When `false`, they are dropped on store | `false` |
+| `DefaultNamespaces` | Prefix-to-URI bindings available to every query on the container. A query's own `declare namespace` overrides them | Empty |
+| `DefaultMetadataNamespace` | Namespace URI that unqualified metadata names resolve to (see [Metadata](metadata.md)) | `null` |
+| `ValidationMode` | `None`, `WellFormed` or `Schema`. Stored with the container, but storage does not currently act on it: every document is parsed when it is stored, whatever the mode | `None` |
+
+`DefaultNamespaces` are checked when the container is created: a binding the XQuery compiler would
+reject (an empty prefix, a non-NCName prefix, or one that rebinds a predeclared prefix such as `fn`,
+`xs` or `phx`) makes `CreateContainerAsync` throw `ArgumentException`.
 
 ### Container Operations
 
 ```csharp
 // List all containers
-foreach (var name in db.ListContainers())
+await foreach (var info in db.ListContainersAsync())
 {
-    Console.WriteLine(name);
+    Console.WriteLine($"{info.Name}: {info.DocumentCount} documents (created {info.Created})");
 }
 
-// Get container info
-var info = db.GetContainerInfo("products");
-Console.WriteLine($"Documents: {info.DocumentCount}");
-Console.WriteLine($"Size: {info.SizeBytes} bytes");
-
-// Delete container (removes all documents and indexes)
-db.DeleteContainer("temp-data");
+// Delete a container
+bool deleted = await db.DeleteContainerAsync("temp-data");
 ```
+
+`DeleteContainerAsync` removes the container's record and returns `false` if there was no such
+container. It does not reclaim the space the container's documents occupy in `data.mdb`.
 
 ## Documents
 
-Documents are individual XML or JSON files stored within containers.
+Documents are individual XML or JSON documents stored within containers.
 
 ### Document Names
 
-Document names are unique identifiers within a container:
+Document names are unique, case-sensitive identifiers within a container:
 
 ```csharp
 // Simple names
-container.PutDocument("product.xml", xml);
+await container.PutDocumentAsync("product.xml", xml);
 
 // Hierarchical names (virtual paths)
-container.PutDocument("2024/01/order-001.xml", xml);
-container.PutDocument("2024/01/order-002.xml", xml);
-container.PutDocument("2024/02/order-003.xml", xml);
+await container.PutDocumentAsync("2024/01/order-001.xml", xml);
+await container.PutDocumentAsync("2024/01/order-002.xml", xml);
+await container.PutDocumentAsync("2024/02/order-003.xml", xml);
 
 // List with prefix
-var januaryOrders = container.ListDocuments(prefix: "2024/01/");
+await foreach (var doc in container.ListDocumentsAsync("2024/01/"))
+{
+    Console.WriteLine($"{doc.Name} ({doc.SizeBytes} bytes, {doc.ContentType})");
+}
 ```
 
 ### Storing Documents
 
+Each put runs in its own write transaction: the document is parsed into nodes, stored and (when
+indexing is enabled) indexed atomically.
+
 ```csharp
 // From string
-container.PutDocument("doc.xml", """
+await container.PutDocumentAsync("doc.xml", """
     <root>
         <item>Content</item>
     </root>
     """);
 
-// From stream (for large documents)
-using var stream = File.OpenRead("large-file.xml");
-container.PutDocument("large.xml", stream);
+// From stream (read in full, as UTF-8 unless a byte-order mark says otherwise;
+// the stream is not disposed)
+await using var stream = File.OpenRead("large-file.xml");
+await container.PutDocumentAsync("large.xml", stream);
 
 // From XDocument
 var xdoc = new XDocument(
     new XElement("root",
         new XElement("item", "Content")));
-container.PutDocument("from-xdoc.xml", xdoc);
+await container.PutDocumentAsync("from-xdoc.xml", xdoc.ToString());
 
-// With metadata
-container.PutDocument("tracked.xml", xml, new DocumentMetadata
-{
-    ["author"] = "system",
-    ["created"] = DateTime.UtcNow.ToString("O"),
-    ["version"] = "1.0",
-    ["tags"] = "important,reviewed"
-});
+// Insert-only: throws DocumentExistsException if the name is taken
+await container.PutDocumentAsync("tracked.xml", xml, new DocumentOptions { Overwrite = false });
+
+// Many documents: committed in batches of up to 1,000 per write transaction
+int stored = await container.PutDocumentsAsync(
+[
+    new DocumentInput("a.xml", "<a/>"),
+    new DocumentInput("b.xml", "<b/>"),
+]);
 ```
+
+`DocumentOptions` has three properties: `ContentType` (`Xml` or `Json`; when `null`, content starting
+with `{` or `[` is treated as JSON and everything else as XML), `Overwrite` (default `true`), and
+`Metadata`, an initial set of metadata values stored atomically with the document.
 
 ### Retrieving Documents
 
 ```csharp
-// Get as string
-string xml = container.GetDocument("product.xml");
+// Get the document (null if it does not exist)
+IDocument? doc = await container.GetDocumentAsync("product.xml");
+if (doc is not null)
+{
+    string xml = await doc.GetContentAsync();
+    Console.WriteLine($"{doc.Name}: {doc.SizeBytes} bytes, modified {doc.Modified}");
 
-// Get as XDocument
-XDocument xdoc = container.GetDocumentAsXDocument("product.xml");
+    // As XDocument
+    XDocument xdoc = XDocument.Parse(xml);
 
-// Get as stream (for large documents)
-using var stream = container.GetDocumentAsStream("large.xml");
+    // As a stream
+    await using var content = await doc.GetContentStreamAsync();
+}
 
 // Check existence
-if (container.DocumentExists("product.xml"))
+if (await container.DocumentExistsAsync("product.xml"))
 {
     // ...
 }
-
-// Try get pattern
-if (container.TryGetDocument("product.xml", out var doc))
-{
-    Console.WriteLine(doc);
-}
 ```
+
+`GetContentAsync` reassembles the document from its stored nodes, so the text that comes back is a
+fresh serialization, not the original bytes. `GetContentStreamAsync` serializes the whole document
+into memory and returns a read-only stream over it.
 
 ### Document Metadata
 
 Metadata provides additional information about documents without modifying the document content:
 
 ```csharp
-// Set metadata
-container.SetMetadata("product.xml", new DocumentMetadata
-{
-    ["lastModified"] = DateTime.UtcNow.ToString("O"),
-    ["modifiedBy"] = "admin"
-});
+// Set metadata (in the container's default metadata namespace)
+await container.SetMetadataAsync("product.xml", "modifiedBy", "admin");
+await container.SetMetadataAsync("product.xml", "lastModified", DateTime.UtcNow.ToString("O"));
 
-// Get metadata
-var metadata = container.GetMetadata("product.xml");
-Console.WriteLine($"Author: {metadata["author"]}");
-Console.WriteLine($"Created: {metadata["created"]}");
+// Get one value (null if not set)
+string? author = await container.GetMetadataAsync("product.xml", "modifiedBy");
 
-// Update single metadata value
-container.SetMetadataValue("product.xml", "version", "2.0");
-
-// Query by metadata (C# API)
-var recentDocs = db.Query("""
-    for $doc in collection('products')
-    where doc-metadata($doc, 'author') = 'admin'
-    return document-uri($doc)
-    """);
+// Get everything
+var all = await container.GetAllMetadataAsync("product.xml");
 ```
+
+The metadata calls throw `DocumentNotFoundException` when the document does not exist. Typed values,
+qualified names, multi-value metadata and metadata queries are covered in [Metadata](metadata.md).
 
 #### Accessing Metadata from XQuery
 
-You can also access document metadata directly from XQuery using the `phx:metadata()` extension function:
+You can also read document metadata from XQuery with the `phx:metadata()` extension function. The
+`phx` prefix is predeclared, and a `dbxml:` key names a system value from the document header
+(`name`, `content-type`, `created`, `modified`, `size`, `node-count`):
 
 ```xquery
-declare namespace dbxml = "https://schemas.phoenixml.dev/2026/db";
+(: Run with container.QueryAsync, which evaluates it once per document
+   with the document as the context item :)
+if (phx:metadata(., 'author') = 'admin')
+then phx:metadata(., 'dbxml:name')
+else ()
+```
 
-(: Get a specific metadata value :)
-for $doc in collection('products')
-where phx:metadata($doc, "author") = "admin"
-return phx:metadata($doc, "dbxml:name")
+```xquery
+(: All metadata as a map :)
+map:keys(phx:metadata(.))
 
-(: Get all metadata as a map :)
-let $meta := phx:metadata($doc)
-return map:keys($meta)
-
-(: Access system metadata :)
-phx:metadata($doc, "dbxml:created")    (: creation timestamp :)
-phx:metadata($doc, "dbxml:size")       (: document size in bytes :)
+(: System values :)
+phx:metadata(., 'dbxml:created')   (: creation timestamp :)
+phx:metadata(., 'dbxml:size')      (: document size in bytes, as xs:integer :)
 ```
 
 See [Database Extensions](database-extensions.md) for the full reference.
 
+### Querying Documents
+
+`QueryAsync` runs an XQuery over the container's documents. A query that does not use
+`fn:collection()` runs once per document with that document as the context item, and the results
+are concatenated. Queries that fold across documents through `collection()` (aggregates,
+`order by`, `group by`, `distinct-values` and similar) run once over the whole container.
+
+```csharp
+await foreach (var item in container.QueryAsync("//product[price > 20]/name/string()"))
+{
+    Console.WriteLine(item);
+}
+
+// Variables are bound as external variables
+var vars = new Dictionary<string, object> { ["min"] = 20 };
+await foreach (var item in container.QueryAsync(
+    "declare variable $min external; count(collection()//product[price > $min])", vars))
+{
+    Console.WriteLine(item);
+}
+```
+
+Inside a container query, `doc('name.xml')` resolves a document of the same container by name.
+
 ### Updating Documents
+
+There is no partial update: storing a document under an existing name replaces it. The previous
+version's nodes, index entries and metadata index rows are reclaimed in the same transaction, and
+metadata the new put does not mention is kept.
 
 ```csharp
 // Full replacement
-container.PutDocument("product.xml", newXml);
-
-// Partial update with XQuery Update
-db.Execute("""
-    let $product := doc('products/product.xml')/product
-    return (
-        replace value of node $product/price with 29.99,
-        insert node <discount>10%</discount> after $product/price
-    )
-    """);
+await container.PutDocumentAsync("product.xml", newXml);
 ```
 
 ### Deleting Documents
 
 ```csharp
-// Delete single document
-container.DeleteDocument("old-product.xml");
+// Delete single document (false if it did not exist)
+bool deleted = await container.DeleteDocumentAsync("old-product.xml");
 
 // Delete multiple documents
-foreach (var name in container.ListDocuments(prefix: "temp/"))
+var names = new List<string>();
+await foreach (var info in container.ListDocumentsAsync("temp/"))
 {
-    container.DeleteDocument(name);
+    names.Add(info.Name);
 }
-
-// Delete with XQuery
-db.Execute("""
-    for $doc in collection('products')
-    where $doc/product/discontinued = 'true'
-    return delete node $doc
-    """);
+foreach (var name in names)
+{
+    await container.DeleteDocumentAsync(name);
+}
 ```
+
+Deleting a document removes its header, metadata, nodes and index entries.
 
 ## JSON Documents
 
-PhoenixmlDb stores JSON documents by converting them to an XML representation internally:
+PhoenixmlDb stores JSON documents by converting them to the XML representation defined for
+`fn:json-to-xml` (elements in the `http://www.w3.org/2005/xpath-functions` namespace):
 
 ```csharp
-// Store JSON
-container.PutJsonDocument("user.json", """
+// Store JSON (detected from the leading '{'; or set ContentType = ContentType.Json)
+await container.PutDocumentAsync("user.json", """
     {
         "id": 1,
         "name": "Alice",
@@ -243,90 +277,73 @@ container.PutJsonDocument("user.json", """
     }
     """);
 
-// Retrieve as JSON
-string json = container.GetJsonDocument("user.json");
-
 // Query JSON documents with XQuery
-var admins = db.Query("""
-    for $user in collection('users')/json
-    where $user/roles/item = 'admin'
-    return $user/name/text()
-    """);
+await foreach (var name in container.QueryAsync("""
+    declare namespace j = "http://www.w3.org/2005/xpath-functions";
+    /j:map[j:array[@key = 'roles']/j:string = 'admin']/j:string[@key = 'name']/string()
+    """))
+{
+    Console.WriteLine(name);
+}
 ```
+
+The document keeps `ContentType.Json`, but `GetContentAsync` returns the stored XML representation,
+not the original JSON.
 
 ### JSON to XML Mapping
 
-| JSON | XML |
+| JSON | XML (prefix `j` = `http://www.w3.org/2005/xpath-functions`) |
 |------|-----|
-| `{"key": "value"}` | `<json><key>value</key></json>` |
-| `[1, 2, 3]` | `<array><item>1</item><item>2</item><item>3</item></array>` |
-| `true` / `false` | `<value type="boolean">true</value>` |
-| `null` | `<value type="null"/>` |
-| `123` | `<value type="number">123</value>` |
+| `{"key": "value"}` | `<j:map><j:string key="key">value</j:string></j:map>` |
+| `[1, 2, 3]` | `<j:array><j:number>1</j:number><j:number>2</j:number><j:number>3</j:number></j:array>` |
+| `true` / `false` | `<j:boolean>true</j:boolean>` |
+| `null` | `<j:null/>` |
+| `123` | `<j:number>123</j:number>` |
+
+A member of an object carries its name in the `key` attribute.
 
 ## Storage Options
 
-The storage layer is backed by LMDB. The following options control how PhoenixmlDb uses it.
+The storage layer is backed by LMDB. `LmdbStorageOptions` (namespace `PhoenixmlDb.Storage.Lmdb`)
+controls how PhoenixmlDb uses it; pass it to the `DocumentDatabase` constructor. The full list is in
+[Configuration](configuration.md#all-options).
 
 ### Map Size
 
-The map size determines the maximum database size. LMDB uses memory-mapped files, so this should be set larger than your expected data size.
+The map size is the virtual address space LMDB reserves for the memory-mapped file, and so the
+maximum database size. It reserves address space, not memory or disk: `data.mdb` grows only as data
+is written.
 
 ```csharp
-var options = new DatabaseOptions
+var options = new LmdbStorageOptions
 {
-    // 10 GB maximum
+    // 10 GiB maximum
     MapSize = 10L * 1024 * 1024 * 1024
 };
 ```
 
-| Data Size | Recommended MapSize |
-|-----------|---------------------|
-| < 100 MB | 256 MB |
-| 100 MB – 1 GB | 2 GB |
-| 1 GB – 10 GB | 20 GB |
-| 10 GB – 100 GB | 200 GB |
-| > 100 GB | 2× expected size |
-
-> **Note:** MapSize can be increased later, but cannot be decreased.
+The default is 50 GiB in a 64-bit process and 1 GiB in a 32-bit process. The engine never grows the
+map at runtime; when it is full, writes throw `PhoenixmlDbStorageException`. To change it, dispose
+the database and reopen it with a different `MapSize`. Reopening a writable database with a
+`MapSize` at or below the space its data already uses throws `LmdbMapSizeTooSmallException`.
 
 ### Sync Modes
 
-**Normal (Default)** — full durability, all data synced to disk on commit:
+**Normal (Default)** — committed data is synced to disk on commit.
+
+**NoSync** — fastest writes, but committed data may be lost on a system crash:
 
 ```csharp
-var options = new DatabaseOptions
-{
-    NoSync = false,
-    NoMetaSync = false
-};
+var options = new LmdbStorageOptions { NoSync = true };
 ```
 
-**NoMetaSync** — metadata not synced; slightly faster, data still durable:
-
-```csharp
-var options = new DatabaseOptions { NoMetaSync = true };
-```
-
-**NoSync** — fastest writes, but data may be lost on crash:
-
-```csharp
-var options = new DatabaseOptions { NoSync = true };
-```
-
-> **Warning:** `NoSync = true` may result in data loss on process crash. Use only for temporary or recoverable data.
-
-| Mode | Durability | Performance |
-|------|------------|-------------|
-| Normal | Full | Baseline |
-| NoMetaSync | High | ~10% faster |
-| NoSync | Low | ~50% faster |
+> **Warning:** Use `NoSync = true` only for temporary or recoverable data.
 
 ### Read-Only Mode
 
 ```csharp
-var options = new DatabaseOptions { ReadOnly = true };
-using var db = new XmlDatabase("./data", options);
+var options = new LmdbStorageOptions { ReadOnly = true };
+await using var db = new DocumentDatabase("./data", options);
 ```
 
 Read-only mode opens the database without write capability. The on-disk
@@ -336,45 +353,41 @@ disallowed.
 **When to use:**
 
 - Analytics or reporting workloads against a production database
-- Read replicas that consume snapshots from a primary
 - Multi-process scenarios where one writer and many readers share a directory
 - Browsing a backup or snapshot without risk of accidental modification
 - Embedding a fixed dataset (e.g. shipped reference data) in an application
 
 **What works:**
 
-- All query operations (XPath, XQuery, XSLT, LINQ)
-- Reading documents, attributes, metadata, and indexes
+- Queries
+- Reading documents, metadata and container listings
 - Multiple concurrent read transactions across threads and processes
-- `db.GetStatistics()`, `db.SnapshotAsync(...)`
+- `db.Statistics`, `db.GetStorageUsage()`
 
 **What does not work — and why:**
 
-Read-only mode cannot create new structures on disk. Any operation that
-would allocate a new container, document, index, or namespace ID raises
-an exception. Specifically, **the named databases (containers and indexes)
-that the application uses must already exist in the on-disk environment** —
-read-only mode cannot allocate them.
+Read-only mode cannot create new structures on disk. **The environment and
+the named databases the engine uses must already exist** — LMDB cannot
+allocate them read-only.
 
 This means you cannot open a brand-new empty directory in read-only mode
 and then "fill it in" lazily. The directory must have been initialized by
 a writer first.
 
 ```csharp
-// ❌ This fails: directory has no data yet
+// ❌ This fails: the directory has no data yet, so opening throws
 Directory.CreateDirectory("./fresh");
-using var db = new XmlDatabase("./fresh", new DatabaseOptions { ReadOnly = true });
-db.GetContainer("my_container");  // Throws — container database doesn't exist
+await using var db = new DocumentDatabase("./fresh", new LmdbStorageOptions { ReadOnly = true });
 
-// ✅ This works: writer initializes first, then reader attaches
-using (var writer = new XmlDatabase("./fresh"))
+// ✅ This works: a writer initializes first, then a reader attaches
+await using (var writer = new DocumentDatabase("./fresh"))
 {
-    writer.CreateContainer("my_container");
+    await writer.CreateContainerAsync("my_container");
     // (writer disposes, data is on disk)
 }
 
-using var reader = new XmlDatabase("./fresh", new DatabaseOptions { ReadOnly = true });
-reader.GetContainer("my_container");  // Works — container exists
+await using var reader = new DocumentDatabase("./fresh", new LmdbStorageOptions { ReadOnly = true });
+var container = await reader.OpenContainerAsync("my_container");  // Works — container exists
 ```
 
 **Multiple readers:**
@@ -383,7 +396,7 @@ PhoenixmlDb supports many concurrent readers per process and across
 processes. Each reader gets a consistent snapshot at the moment its
 transaction begins (see [MVCC](transactions.md#mvcc-multi-version-concurrency-control)).
 
-A reader transaction can be held open while sub-queries spin up additional
+A reader transaction can be held open while sub-queries open additional
 short-lived read transactions on the same thread — the engine does not bind
 reader slots to the calling thread, so there is no per-thread reader limit
 beyond `MaxReaders` (default 126).
@@ -392,11 +405,14 @@ beyond `MaxReaders` (default 126).
 
 ```csharp
 // Process A — writer (long-running service)
-using var writer = new XmlDatabase("./shared");
+await using var writer = new DocumentDatabase("./shared");
 
 // Process B, C, D — readers (CLI tools, dashboards, etc.)
-using var reader = new XmlDatabase("./shared", new DatabaseOptions { ReadOnly = true });
+await using var reader = new DocumentDatabase("./shared", new LmdbStorageOptions { ReadOnly = true });
 ```
+
+Within one process, a directory can be open in only one `DocumentDatabase` at a time, read-only or
+not; a second open throws `LmdbEnvironmentAlreadyOpenException`.
 
 Readers see a consistent snapshot per transaction; the writer's commits
 become visible to readers that begin a transaction after the commit.
@@ -404,28 +420,24 @@ become visible to readers that begin a transaction after the commit.
 ### Write Map Mode
 
 ```csharp
-var options = new DatabaseOptions { WriteMap = true };
+var options = new LmdbStorageOptions { WriteMap = true };
 ```
 
-Uses a writable memory map for writes. Can improve performance but may corrupt the database if the process crashes during a write.
+Uses a writable memory map (`MDB_WRITEMAP`) for writes. Can improve write performance but has
+different crash characteristics.
 
-### Maximum Readers and Containers
+### Maximum Readers and Named Databases
 
 ```csharp
-var options = new DatabaseOptions
+var options = new LmdbStorageOptions
 {
     MaxReaders = 256,    // Default: 126
-    MaxContainers = 100  // Each index also uses a slot
+    MaxDatabases = 64    // Default: 64; must be at least 16
 };
 ```
 
-### File Locking
-
-```csharp
-var options = new DatabaseOptions { NoLock = true };
-```
-
-> **Warning:** Only use when you can guarantee single-process access.
+`MaxDatabases` limits LMDB named databases, not containers: every container lives in the same
+named databases, and the engine opens 16 of them (7 for storage, 9 more when indexing is enabled).
 
 ## Storage Layout
 
@@ -434,74 +446,63 @@ PhoenixmlDb creates these files in the database directory:
 ```
 ./data/
 ├── data.mdb          # Main data file
-├── lock.mdb          # Lock file
-├── phoenixmldb.json  # Configuration (optional)
-└── logs/             # Log files (optional)
+└── lock.mdb          # Lock file
 ```
 
 ## Backup and Recovery
 
-PhoenixmlDb offers three backup approaches; pick the one that matches your
-operational constraints.
+### File Backup (`BackupAsync`)
 
-### File-based Backup (`Backup`)
-
-The simplest option — writes the entire environment to a target directory.
-Safe to run while the database is active; the LMDB MVCC snapshot guarantees
-the backup reflects a single consistent moment in time.
+Writes a copy of the database to a single file. The database stays open while it runs.
 
 ```csharp
-// Active database — backup runs without quiescing writers
-db.Backup("./backup");
-
-// Optional: compact during backup (smaller output, slower)
-db.Backup("./backup", compact: true);
+await db.BackupAsync("./backups/db-2026-01-01.mdb");
 ```
 
-The output directory contains a complete `data.mdb` ready to be opened by a
-new `XmlDatabase("./backup")`.
+It flushes committed data to disk and copies `data.mdb` to the destination, creating the
+destination's directory if needed. It does not take the write lock, so a write that commits while
+the file is being copied can land in the copy. The `compact` parameter is accepted but not
+currently applied.
 
-**Use when:** you can afford a target directory on the same machine
-(local backups, disk-to-disk replication, periodic snapshots to a SAN
-mount).
+`PhoenixmlDb.Storage.Backup.BackupService` (a hosted `BackgroundService` configured with `BackupOptions`) runs
+`BackupAsync` on an interval and prunes old backups.
 
-### Stream-based Snapshot (`SnapshotAsync`)
+### Stream Backup (`BackupToStreamAsync`)
 
-Writes the snapshot bytes to any `Stream` — local file, network socket,
-S3 multipart upload, gRPC response, etc. Same MVCC consistency
-guarantees as `Backup`. Recommended for large databases or when the
-backup target is remote.
+Writes the same backup to any `Stream` — a local file, a network socket, a cloud upload stream:
 
 ```csharp
-// Snapshot to a local file
 await using var fs = File.Create("./backup.mdb");
-var bytes = await db.SnapshotAsync(fs);
-Console.WriteLine($"Wrote {bytes} bytes");
-
-// Snapshot to S3 via the AWS SDK
-await using var s3Stream = new S3UploadStream(s3Client, "my-bucket", "backups/db-2026-01-01.mdb");
-await db.SnapshotAsync(s3Stream);
+await db.BackupToStreamAsync(fs);
 ```
 
-**Why streams instead of `byte[]`:** XML databases routinely grow to multiple
-gigabytes. A `byte[]` API caps the snapshot at 2 GB and forces full
-in-memory materialization; the stream API has neither limit.
+It backs up to a temporary file first, then copies that file to the stream.
 
-### Restore from Snapshot
+### Restore
+
+Restore into a directory that no `DocumentDatabase` has open:
 
 ```csharp
-// Restore a stream-based snapshot to a target directory.
-// The target must not contain a live LMDB environment.
+// From a backup file. Throws if ./restored already holds a database, unless overwrite is true.
+await DocumentDatabase.RestoreAsync("./restored", "./backups/db-2026-01-01.mdb", overwrite: false);
+
+// From a stream
 await using var snap = File.OpenRead("./backup.mdb");
-await LmdbStorageEngine.RestoreFromSnapshotAsync(snap, "./restored");
+await DocumentDatabase.RestoreFromStreamAsync("./restored", snap);
 
 // Open the restored database
-using var db = new XmlDatabase("./restored");
+await using var db = new DocumentDatabase("./restored");
 ```
 
-The restore writes to a temporary file inside the target directory and
-atomic-renames into place, so an interrupted stream cannot leave a
-half-written `data.mdb`.
+Both write `data.mdb` into the target directory and delete any stale `lock.mdb`.
+`LmdbStorageEngine.RestoreFromSnapshotAsync(stream, targetDir)` does the same from a stream but
+writes to a temporary file in the target directory and renames it into place, so an interrupted
+stream cannot leave a half-written `data.mdb`.
+
+A database can also restore itself when it opens: set `RestoreFromPath`, `RestoreFromDirectory` or
+`RestoreFromStream` in `LmdbStorageOptions`, and the backup is restored when `data.mdb` is missing or
+empty (or always, with `RestoreOverwrite = true`). `DocumentDatabase.ListBackups(directory)` lists the
+`*.mdb` files in a directory, newest first.
 
 ### Offline Backup
 
@@ -514,69 +515,23 @@ cp -r ./data ./backup
 systemctl start my-app
 ```
 
-Copying a live database directory with `cp` (without using `Backup` or
-`SnapshotAsync`) risks an inconsistent snapshot if writes happen during
-the copy. Use one of the engine APIs above for live databases.
-
-### Recovery
-
-For file-based backups:
-
-```csharp
-// Restore from backup
-if (Directory.Exists("./backup"))
-{
-    Directory.Delete("./data", true);
-    Directory.Move("./backup", "./data");
-}
-
-using var db = new XmlDatabase("./data");
-```
-
-For stream-based snapshots, see `RestoreFromSnapshotAsync` above.
+Copying a live database directory with `cp` risks an inconsistent copy if writes happen during it.
 
 ## Disk Space Management
 
 ### Monitor Usage
 
 ```csharp
-var stats = db.GetStatistics();
-Console.WriteLine($"Used: {stats.UsedBytes / 1024 / 1024} MB");
-Console.WriteLine($"Free: {stats.FreeBytes / 1024 / 1024} MB");
-Console.WriteLine($"Total: {stats.MapSize / 1024 / 1024} MB");
+var usage = db.GetStorageUsage();
+Console.WriteLine($"Used: {usage.UsedBytes / 1024 / 1024} MB");
+Console.WriteLine($"Free: {usage.FreeBytes / 1024 / 1024} MB");
+Console.WriteLine($"Total: {usage.MapSize / 1024 / 1024} MB ({usage.PercentUsed:F1}% used)");
+
+var stats = db.Statistics;
+Console.WriteLine($"{stats.ContainerCount} containers, {stats.TotalDocumentCount} documents, {stats.TotalNodeCount} nodes");
 ```
 
-### Compact and Resize
-
-```csharp
-// Reclaim unused space
-db.Compact();
-
-// Increase map size (must be larger than current)
-db.Resize(20L * 1024 * 1024 * 1024);
-```
-
-## Platform-Specific Settings
-
-**Linux:**
-
-```csharp
-var options = new DatabaseOptions
-{
-    // Use direct I/O for better performance
-    Flags = LmdbFlags.NoReadAhead
-};
-```
-
-**macOS:**
-
-```csharp
-var options = new DatabaseOptions
-{
-    // macOS has limited mmap - set appropriate MapSize
-    MapSize = 2L * 1024 * 1024 * 1024
-};
-```
+`FreeBytes` is the space left before the map is full, not free space on the disk.
 
 ## Best Practices
 
@@ -584,31 +539,27 @@ var options = new DatabaseOptions
 
 1. **Group related documents** — Put documents that are often queried together in the same container
 2. **Separate by access patterns** — Different containers for read-heavy vs write-heavy data
-3. **Consider index scope** — Indexes are container-specific
+3. **Consider index scope** — Indexes are configured per container
 
 ### Document Design
 
 1. **Use meaningful names** — Names should identify the document content
-2. **Leverage virtual paths** — Use `/` in names for logical organization
+2. **Leverage virtual paths** — Use `/` in names for logical organization and prefix listing
 3. **Keep documents focused** — Don't store unrelated data in one document
 4. **Use metadata** — Store non-content information as metadata
 
 ### Storage
 
-1. **Set appropriate MapSize** — Larger than expected data, but not excessive
-2. **Use NoMetaSync for performance** — If slight crash risk is acceptable
-3. **Monitor disk space** — Ensure sufficient free space
-4. **Regular backups** — Use online backup for consistency
-5. **SSD recommended** — For production workloads
+1. **Set an appropriate MapSize** — Larger than the data you expect to hold
+2. **Monitor usage** — Watch `GetStorageUsage().PercentUsed`
+3. **Regular backups** — Use `BackupAsync` or `BackupToStreamAsync`
+4. **SSD recommended** — For production workloads
 
 ### Storage Troubleshooting
 
-**"Map full" error** — Increase MapSize:
+**Map full (`PhoenixmlDbStorageException`)** — Dispose the database and reopen it with a larger `MapSize`.
 
-```csharp
-db.Resize(currentMapSize * 2);
-```
+**Max readers reached** — Increase `MaxReaders` or ensure read transactions are being disposed.
 
-**"Max readers reached"** — Increase `MaxReaders` or ensure read transactions are being disposed.
-
-**Slow writes** — Check disk I/O, consider `NoMetaSync`, or batch multiple writes in a single transaction.
+**Slow writes** — Check disk I/O, and store many documents with `PutDocumentsAsync` (batched
+transactions) rather than one put per document.

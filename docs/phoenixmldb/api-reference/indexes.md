@@ -94,10 +94,21 @@ IndexConfiguration AddMetadataIndex<T>(MetadataProperty<T> descriptor, XdmValueT
 
 Enables efficient queries by document metadata key/value. The name is a qualified `XdmQName` (`PhoenixmlDb.Xdm`), not a bare string — metadata itself is namespaced (see [Metadata](../metadata.md)), and an index declared for one namespace's key does not answer for another's.
 
+The string-name metadata methods (`SetMetadataAsync(documentName, "status", ...)`) place the name in the container's default metadata namespace, so index that qualified name. Setting `DefaultMetadataNamespace` explicitly makes the name easy to build before the container exists:
+
 ```csharp
 using PhoenixmlDb.Xdm;
 
-opts.Indexes.AddMetadataIndex(new XdmQName(NamespaceId.None, "status"), XdmValueType.XdmString);
+const string meta = "https://example.com/meta";
+var status = new XdmQName(db.GetOrCreateNamespaceId(meta), "status");
+
+var docs = await db.CreateContainerAsync("docs", opts =>
+{
+    opts.DefaultMetadataNamespace = meta;
+    opts.Indexes.AddMetadataIndex(status, XdmValueType.XdmString);
+});
+
+await docs.SetMetadataAsync("d1.xml", "status", "draft");   // indexed under {meta}status
 ```
 
 ### EnableStructuralIndex
@@ -117,7 +128,7 @@ Controls the parent-child/sibling index that accelerates axis navigation (`paren
 public static IndexManager EnableIndexing(this DocumentDatabase db)
 ```
 
-Declaring indexes in `ContainerOptions.Indexes` only records configuration; nothing is maintained until the owning process calls this once per `DocumentDatabase`. Returns the `IndexManager` used for rebuilds and for every full-text operation below.
+Declaring indexes in `ContainerOptions.Indexes` only records configuration; nothing is maintained until the owning process calls this once per `DocumentDatabase`. Returns the `IndexManager` used for every full-text operation below. Calling it again returns the manager already attached. The database owns the manager and disposes it when the database is disposed. Do not call it while holding a transaction from `BeginWriteAsync`: it may need the database write lock, which is not reentrant.
 
 ```csharp
 using var db = DocumentDatabase.Open(dbPath);
@@ -130,7 +141,7 @@ var manager = db.EnableIndexing();
 ValueTask<IndexRebuildResult> RebuildIndexesAsync(string containerName, CancellationToken cancellationToken = default)
 ```
 
-Requires `EnableIndexing()` to have been called first. Clears the container's previous index entries, walks every stored document, and re-indexes each one — clearing the container's stale flag as part of the same commit.
+Requires `EnableIndexing()` to have been called first. Clears the container's previous index entries, walks every stored document, and re-indexes each one — clearing the container's stale flag as part of the same commit. It runs as one write transaction under the database write lock, so writes to every container wait for it; do not call it while holding a transaction from `BeginWriteAsync`. Throws `ContainerNotFoundException` for an unknown container name.
 
 ```csharp
 var result = await db.RebuildIndexesAsync("products");
@@ -145,7 +156,15 @@ var result = await db.RebuildIndexesAsync("products");
 IReadOnlyList<string> ContainersWithStaleIndexes()
 ```
 
-Names every container whose indexes need a rebuild: written to while indexing was disabled, or last touched by an engine version that predates one of its declared indexes.
+Names every container whose indexes may be missing entries, so queries against it scan instead of using the indexes until it is rebuilt: a container written to while indexing was not enabled, a container last written by an engine that predates stale-tracking, or one whose persisted full-text index was analyzed differently from how the current process analyzes (`EnableIndexing()` marks those).
+
+### `DocumentDatabase.RebuildStaleIndexesAsync`
+
+```csharp
+ValueTask<IReadOnlyDictionary<string, IndexRebuildResult>> RebuildStaleIndexesAsync(CancellationToken cancellationToken = default)
+```
+
+Rebuilds every container listed by `ContainersWithStaleIndexes()`, one at a time, and returns each result by container name. Meant for startup, after `EnableIndexing()`.
 
 ## Full-text search (`IndexManager`)
 

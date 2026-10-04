@@ -12,83 +12,82 @@ Common issues and their solutions when working with PhoenixmlDb.
 
 ### "Map full" Error
 
-**Symptom:** `MDB_MAP_FULL: Environment mapsize limit reached`
+**Symptom:** a write throws `PhoenixmlDbStorageException` with the message "Database map size exceeded", naming the current `MapSize` and the bytes used.
 
-**Cause:** Database size exceeded configured MapSize.
+**Cause:** the data reached the configured `LmdbStorageOptions.MapSize`. The map is a fixed reservation set when the database is opened; the engine never grows it at runtime.
 
-**Solution:**
+**Solution:** dispose the database and reopen it with a larger `MapSize`:
+
 ```csharp
-// Increase MapSize
-db.Resize(currentMapSize * 2);
+using PhoenixmlDb.Storage;
+using PhoenixmlDb.Storage.Lmdb;
 
-// Or set larger initial size
-var options = new DatabaseOptions
+using var db = new DocumentDatabase("./data", new LmdbStorageOptions
 {
-    MapSize = 20L * 1024 * 1024 * 1024  // 20 GB
-};
+    MapSize = 200L * 1024 * 1024 * 1024  // 200 GiB
+});
 ```
+
+The default is 50 GiB in a 64-bit process and 1 GiB in a 32-bit one. `MapSize` reserves address space, not disk; the data file grows only as data is written. `db.GetStorageUsage()` reports `UsedBytes`, `MapSize` and `PercentUsed`, and the `phoenixmldb.storage.map.usage` and `phoenixmldb.storage.map.limit` metrics track the same figures (see [Logging and Telemetry](logging.md#storage-metrics)).
+
+### "MapSize is ... bytes" on open
+
+**Symptom:** `LmdbMapSizeTooSmallException` when opening an existing database.
+
+**Cause:** the configured `MapSize` is at or below the size the existing data already uses, so every write would fail.
+
+**Solution:** open with a `MapSize` above the `UsedBytes` the exception reports.
+
+### Database already open
+
+**Symptom:** `LmdbEnvironmentAlreadyOpenException` from the `DocumentDatabase` constructor.
+
+**Cause:** something in the same process already has that directory open, possibly under a different-looking path (relative vs absolute, a trailing separator, a symlink).
+
+**Solution:** share one `DocumentDatabase` per directory per process, or dispose the existing one before opening another.
 
 ### "Max readers reached"
 
-**Symptom:** `MDB_READERS_FULL: Environment maxreaders limit reached`
+**Symptom:** LMDB's `MDB_READERS_FULL`.
 
-**Cause:** Too many concurrent read transactions.
+**Cause:** more concurrent LMDB read transactions than `LmdbStorageOptions.MaxReaders` (default 126).
 
-**Solution:**
+**Solution:** raise `MaxReaders` when opening the database:
+
 ```csharp
-// Increase max readers
-var options = new DatabaseOptions
+using var db = new DocumentDatabase("./data", new LmdbStorageOptions
 {
     MaxReaders = 256
-};
-
-// Or ensure transactions are being disposed
-using (var txn = db.BeginTransaction(readOnly: true))
-{
-    // Always dispose transactions
-}
+});
 ```
+
+`IReadTransaction` itself holds no LMDB reader; reader slots are used by individual operations while they run.
 
 ### Database Corruption
 
-**Symptom:** Errors on startup, data inconsistency
+**Symptom:** errors on startup, data inconsistency
 
-**Cause:** Unclean shutdown, disk failure
+**Cause:** disk failure, or a database used in ways LMDB does not support (for example two environments over one directory in one process, which `DocumentDatabase` now refuses)
 
-**Solution:**
-```bash
-# Check database integrity
-phoenixmldb-admin check ./data
-
-# If corruption detected, restore from backup
-phoenixmldb-admin restore ./data --from backup.tar
-```
-
-### "Permission denied" opening a read-only database
-
-**Symptom:** `LightningException: Permission denied` on the first call to
-`GetContainer`, `Query`, or any operation that touches a named structure,
-when the engine was opened with `ReadOnly = true`.
-
-**Cause:** Read-only mode cannot allocate new named databases on disk. If
-the directory is brand-new (or was never written to with the same set of
-containers/indexes the application expects), the structures don't exist
-and read-only mode can't create them.
-
-**Solution:** Initialize the database with a writer first, then attach
-read-only:
+**Solution:** there is no built-in integrity checker. Restore from a backup taken with `BackupAsync`; the database must not be open while it is restored:
 
 ```csharp
-using (var writer = new XmlDatabase("./data"))
-{
-    writer.CreateContainer("my_container");
-}
+// Taking backups (safe while the database is in use)
+await db.BackupAsync("/backups/data-2026-10-04.mdb");
 
-using var reader = new XmlDatabase("./data", new DatabaseOptions { ReadOnly = true });
+// Restoring, with no DocumentDatabase open on ./data
+await DocumentDatabase.RestoreAsync("./data", "/backups/data-2026-10-04.mdb", overwrite: true);
 ```
 
-See [Read-Only Mode](documents-and-storage.md#read-only-mode) for the full
-lifecycle.
+`LmdbStorageOptions.RestoreFromPath` and `RestoreFromDirectory` restore automatically on open when the database is missing.
+
+### Read-only mode fails to open
+
+**Symptom:** `LightningException: Permission denied` from the `DocumentDatabase` constructor when `LmdbStorageOptions.ReadOnly = true`.
+
+**Cause:** a `DocumentDatabase` cannot currently be opened read-only at all: opening it writes the well-known namespace table, which needs a write transaction.
+
+**Solution:** open the database read-write. There is no supported read-only mode today.
 
 ### "MDB_BAD_VALSIZE" on long namespace URIs
 
@@ -108,253 +107,214 @@ databases are migrated automatically on first open with the new build.
 
 **Symptom:** Queries take longer than expected
 
-**Diagnosis:**
+**Diagnosis:** most XQuery against a container scans every document in it. Indexes speed up only specific readers; check [What uses each index today](indexing.md#what-uses-each-index-today). Confirm indexing is enabled (`db.EnableIndexing()`) and the container isn't stale:
+
 ```csharp
-var plan = db.Explain(query);
-Console.WriteLine(plan);
-// Check if indexes are being used
+IReadOnlyList<string> stale = db.ContainersWithStaleIndexes();
 ```
 
 **Solutions:**
-1. Add appropriate indexes
-2. Rewrite query to filter early
-3. Limit result size
-4. Use parameters instead of string concatenation
+1. Rebuild stale containers with `RebuildIndexesAsync`
+2. For attribute lookups, declare a value index on the attribute path and query in the shape it supports (`/a/b[@attr = $v]`)
+3. Keep unrelated documents in separate containers
+4. Use `QueryMetadataAsync` with a metadata index for metadata filters instead of `phx:metadata()` in a scan
+
+See [Performance Tuning](performance-tuning.md).
 
 ### Query Parse Errors
 
-**Symptom:** `XQueryParseException`
+**Symptom:** `PhoenixmlDb.XQuery.Functions.XQueryException` with `ErrorCode` `XPST0003`, thrown before any document is read
 
 **Common causes:**
-- Missing quotes around strings
+- Unterminated string literals or comments
 - Invalid XPath syntax
 - Mismatched brackets
-- Reserved word used as variable
 
-**Example fixes:**
+**A related mistake that is not a parse error:**
 ```xquery
-(: Wrong :)
+(: Compares name with a child element called test — usually not what was meant :)
 for $x in //item where name = test return $x
 
-(: Correct - quote the string :)
+(: Compares with the string 'test' :)
 for $x in //item where name = 'test' return $x
-
-(: Wrong :)
-for $for in //item return $for
-
-(: Correct - don't use reserved words :)
-for $item in //item return $item
 ```
 
 ### Type Errors
 
-**Symptom:** `XPTY0004: Type error`
+**Symptom:** a dynamic error such as `XPTY0004` propagating while the results are enumerated
 
 **Solution:**
 ```xquery
-(: Wrong - comparing string to number :)
-//product[price > '100']
+(: Wrong - comparing xs:decimal to xs:string raises XPTY0004 :)
+//product[xs:decimal(price) > '100']
 
-(: Correct - use number :)
+(: Correct - compare numbers :)
 //product[xs:decimal(price) > 100]
 ```
 
+On untyped data, `price > '100'` raises nothing: it compares as strings, so `'9' > '100'` is true. Cast or compare against a number when you mean a numeric comparison.
+
 ## Transaction Issues
 
-### Deadlock
+### Write Blocked
 
-**Symptom:** Transaction hangs or times out
+**Symptom:** `BeginWriteAsync`, `CreateContainerAsync`, `DeleteContainerAsync` or `RebuildIndexesAsync` never returns
 
-**Cause:** Multiple transactions waiting on each other
+**Cause:** another write transaction on the same database is still open, or the calling code itself holds one. The write lock allows one write transaction at a time and is not reentrant, so a call that needs it while the same caller holds a write transaction waits forever. `EnableIndexing()` can need it too.
 
 **Solution:**
+- Commit, roll back or dispose every write transaction promptly (`await using`)
+- Don't call `CreateContainerAsync`, `DeleteContainerAsync`, `RebuildIndexesAsync`, `EnableIndexing()` or a second `BeginWriteAsync` while holding a write transaction
+- Pass a timeout so a stuck writer surfaces as an exception:
+
 ```csharp
-// Use retry pattern
-public T ExecuteWithRetry<T>(Func<ITransaction, T> operation)
-{
-    for (int i = 0; i < 3; i++)
-    {
-        try
-        {
-            using var txn = db.BeginTransaction();
-            var result = operation(txn);
-            txn.Commit();
-            return result;
-        }
-        catch (TransactionConflictException)
-        {
-            Thread.Sleep(100 * (i + 1));
-        }
-    }
-    throw new Exception("Max retries exceeded");
-}
+await using var txn = await db.BeginWriteAsync(TimeSpan.FromSeconds(10));
 ```
 
 ### Transaction Timeout
 
-**Symptom:** `TransactionTimeoutException`
+**Symptom:** `TransactionTimeoutException` ("Timed out waiting for write lock")
 
-**Solution:**
-```csharp
-// Increase timeout
-var options = new TransactionOptions
-{
-    Timeout = TimeSpan.FromMinutes(5)
-};
+**Cause:** `BeginWriteAsync(timeout)` could not get the write lock in time because another write transaction held it.
 
-// Or break into smaller transactions
-```
+**Solution:** find and shorten the long-running write transaction, or pass a longer timeout. Once a transaction has begun there is no timeout on its duration.
 
-### Write Blocked
+### Commit Fails With DocumentNotFoundException
 
-**Symptom:** Write operations hang
+**Symptom:** `CommitAsync` throws `DocumentNotFoundException`, and nothing the transaction buffered was written
 
-**Cause:** Long-running read transaction blocking writes
+**Cause:** a buffered metadata write names a document that no longer exists at commit; another writer deleted it after the call was buffered. Direct container writes don't wait for an open write transaction.
 
-**Solution:**
-- Ensure read transactions are disposed promptly
-- Use shorter transactions
-- Don't hold transactions across async operations
+**Solution:** start a new transaction. A failed commit ends the transaction and can't be retried.
+
+### Reads Don't See Buffered Writes
+
+**Symptom:** inside a write transaction, `GetDocumentAsync` returns the old document
+
+**Cause:** writes are buffered until `CommitAsync`; reads through the transaction see committed state. See [Transactions](transactions.md#write-transactions).
 
 ## Connection Issues
 
+The .NET client (`PhoenixmlClient`) talks gRPC, so connection and authentication failures surface as `Grpc.Core.RpcException`; check its `StatusCode`.
+
 ### Cannot Connect to Server
 
-**Symptom:** `ConnectionRefusedException`
+**Symptom:** `RpcException` with `StatusCode.Unavailable`
 
 **Checklist:**
-1. Server is running: `phoenixmldb-server status`
-2. Port is correct
-3. Firewall allows connection
-4. TLS certificate is valid
+1. The server is running: its `/health` endpoint answers (see [Server Mode](deployment/server-mode.md#health-endpoints))
+2. The address includes the scheme and the right port (`http://` for the plaintext port, which is bound on loopback; `https://` for the TLS port)
+3. A firewall allows the connection
+4. The TLS certificate is valid for the address
 
 ### Authentication Failed
 
-**Symptom:** `AuthenticationException`
+**Symptom:** `RpcException` with `StatusCode.Unauthenticated` (gRPC) or `401` (REST)
 
 **Checklist:**
-1. Username and password correct
-2. User exists in server config
-3. API key is valid (if using)
+1. The gRPC server expects `authorization: Bearer <key>` metadata; the REST server expects the key in the `X-Api-Key` header
+2. The key exists in the server's configuration, is enabled and has not expired
+3. `StatusCode.PermissionDenied` instead means the key lacks the scope for the call, or, in a cluster, that the call reached the Raft port
+
+See [Server Mode: Client connection](deployment/server-mode.md#client-connection) for supplying the key.
 
 ### TLS Errors
 
 **Symptom:** SSL/TLS handshake failed
 
-**Solutions:**
-```csharp
-// Trust self-signed certificate
-var options = new ClientOptions
-{
-    TlsSkipVerify = true  // Only for development
-};
-
-// Or specify certificate
-var options = new ClientOptions
-{
-    TlsCaCertificate = "/path/to/ca.crt"
-};
-```
+**Solution:** TLS is configured through the gRPC channel credentials in `PhoenixmlClientOptions.Credentials`; the server's certificate comes from Kestrel's certificate settings. See [Server Mode: TLS](deployment/server-mode.md#tls).
 
 ## Cluster Issues
 
-### Split Brain
+See [Cluster Mode](deployment/cluster-mode.md) for how replication works and what it does not do yet.
 
-**Symptom:** Multiple nodes claim to be leader
+### No Leader Elected / Node Won't Join
 
-**Cause:** Network partition with nodes unable to communicate
-
-**Solution:**
-1. Restore network connectivity
-2. If persistent, restart minority partition
-3. Check firewall rules between nodes
-
-### Node Won't Join
-
-**Symptom:** New node cannot join cluster
+**Symptom:** nodes stay followers or candidates, or one node never takes part
 
 **Checklist:**
-1. Cluster ID matches
-2. Network connectivity to peers
-3. Raft ports open
-4. Configuration correct
+1. `Raft:ClusterSecret` is identical on every node; a wrong secret gets `Unauthenticated`
+2. Every node has a Raft certificate (`CertificatePath`) and the peer addresses use `https://`
+3. The Raft port (`Raft:ListenPort`) is reachable between nodes
+4. The node is in every other node's `Peers` list. Membership is fixed at startup: a node can't be added to a running cluster
+5. The cluster has a majority up: three nodes tolerate one failure
+
+### Writes Refused on a Follower
+
+**Symptom:** a write sent to a follower is refused with the leader's id
+
+**Cause:** writes are not forwarded. Send writes to the leader.
 
 ### Replication Lag
 
-**Symptom:** Followers behind leader
+**Symptom:** a follower returns stale data
 
-**Diagnosis:**
-```bash
-phoenixmldb-cluster status
-# Shows replication status for each node
-```
+**Diagnosis:** the `phoenixmldb.raft.apply_lag` metric, or `RaftNode.GetHealth()` (`CommitIndex`, `AppliedIndex`, `ApplyLag`). Reads are served from the local node and are not linearizable, so some staleness is expected.
 
 **Solutions:**
-1. Check network bandwidth
+1. Check network connectivity and bandwidth between nodes
 2. Reduce write load
-3. Increase snapshot frequency
+3. A follower far enough behind to need a snapshot install needs operator help
 
 ## Performance Issues
 
 ### High Memory Usage
 
 **Causes and solutions:**
-1. **Large transactions** — Use smaller batches
-2. **Unclosed transactions** — Ensure disposal
-3. **Large documents in memory** — Use streaming
-4. **Many readers** — Reduce max readers
+1. **Large write transactions** — every buffered operation is held in memory until `CommitAsync`; use smaller batches
+2. **Fetching whole large documents** — `GetContentAsync` and `GetContentStreamAsync` both serialize the whole document; query for the parts you need
+3. **Cross-document queries** — `order by`, `group by` and collection-wide aggregates evaluate over every document in the container at once
 
 ### High CPU Usage
 
 **Causes and solutions:**
-1. **Complex queries** — Optimize or add indexes
-2. **Full scans** — Add path/value indexes
-3. **XPath compilation** — Use prepared queries
+1. **Full scans** — see [Slow Queries](#slow-queries)
+2. **Index maintenance** — every declared index is maintained on every write; a name, path or structural index isn't read by XQuery
 
 ### High Disk I/O
 
 **Causes and solutions:**
-1. **Frequent syncs** — Consider NoMetaSync
-2. **Large writes** — Batch in transactions
-3. **No SSD** — Upgrade to SSD storage
+1. **One commit per document** — batch with `PutDocumentsAsync` or one write transaction
+2. **Frequent syncs** — `NoSync` removes them, at the cost of durability; use it only for data you can regenerate
 
 ## Logging and Diagnostics
 
 ### Enable Debug Logging
 
 ```csharp
-var options = new DatabaseOptions
+using Microsoft.Extensions.Logging;
+using PhoenixmlDb.Storage;
+using PhoenixmlDb.Storage.Lmdb;
+
+using var loggerFactory = LoggerFactory.Create(builder =>
 {
-    Logger = LoggerFactory.Create(builder =>
-    {
-        builder.AddConsole();
-        builder.SetMinimumLevel(LogLevel.Debug);
-    }).CreateLogger<XmlDatabase>()
-};
+    builder.AddConsole();
+    builder.SetMinimumLevel(LogLevel.Debug);
+});
+
+using var db = new DocumentDatabase("./data", new LmdbStorageOptions
+{
+    LoggerFactory = loggerFactory
+});
 ```
+
+Without a logger factory, warnings and errors go to `System.Diagnostics.Trace`. Categories and event ids are listed in [Logging and Telemetry](logging.md).
 
 ### Query Metrics
 
-```csharp
-var options = new QueryOptions
-{
-    CollectMetrics = true
-};
-
-var result = db.Query(xquery, options);
-Console.WriteLine($"Parse: {result.Metrics.ParseTime}");
-Console.WriteLine($"Execute: {result.Metrics.ExecuteTime}");
-Console.WriteLine($"Rows scanned: {result.Metrics.RowsScanned}");
-```
+Queries are timed by the `db.client.operation.duration` histogram (`db.operation.name` = `query`, per container) and traced as `query {container}` spans. See [Logging and Telemetry](logging.md#metrics-and-traces).
 
 ### Database Statistics
 
 ```csharp
-var stats = db.GetStatistics();
+DatabaseStatistics stats = db.Statistics;
 Console.WriteLine($"Containers: {stats.ContainerCount}");
-Console.WriteLine($"Documents: {stats.DocumentCount}");
-Console.WriteLine($"Size: {stats.UsedBytes / 1024 / 1024} MB");
-Console.WriteLine($"Readers: {stats.ActiveReaders}");
+Console.WriteLine($"Documents: {stats.TotalDocumentCount}");
+
+StorageUsage usage = db.GetStorageUsage();
+Console.WriteLine($"Map: {usage.UsedBytes / 1024 / 1024} MB used of {usage.MapSize / 1024 / 1024} MB");
+
+var health = db.GetHealth(); // StorageHealth; never throws
 ```
 
 ## Getting Help

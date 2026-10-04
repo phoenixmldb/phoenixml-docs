@@ -10,17 +10,23 @@ In this tutorial, we'll build a complete library management application using Ph
 
 ## Project Setup
 
+> **Note:** The PhoenixmlDb database packages are not yet published on NuGet, so the
+> `dotnet add package` lines below will not resolve until they are.
+
 Create a new .NET console application:
 
 ```bash
 dotnet new console -n LibraryApp
 cd LibraryApp
-dotnet add package PhoenixmlDb
+dotnet add package PhoenixmlDb.Storage
+dotnet add package PhoenixmlDb.Indexing
 ```
 
 ## Document Design
 
-Our library will manage books, members, and loans. Here are the document schemas:
+Our library will manage books, members, and loans. All three kinds of document live in one
+container, `library`, because a query's `collection()` spans only the container it runs
+against; that lets a single XQuery join books, members and loans. Here are the document schemas:
 
 ### Book Document
 
@@ -77,58 +83,74 @@ Our library will manage books, members, and loans. Here are the document schemas
 
 ```csharp
 // LibraryDatabase.cs
-using PhoenixmlDb;
+using PhoenixmlDb.Core;
+using PhoenixmlDb.Indexing;
+using PhoenixmlDb.Storage;
+using PhoenixmlDb.Storage.Lmdb;
 
-public class LibraryDatabase : IDisposable
+public sealed class LibraryDatabase : IDisposable
 {
-    private readonly XmlDatabase _db;
+    private readonly DocumentDatabase _db;
 
-    public IContainer Books { get; }
-    public IContainer Members { get; }
-    public IContainer Loans { get; }
-
-    public LibraryDatabase(string path)
+    private LibraryDatabase(DocumentDatabase db, IContainer library)
     {
-        _db = new XmlDatabase(path, new DatabaseOptions
+        _db = db;
+        Library = library;
+    }
+
+    public IContainer Library { get; }
+
+    public static async Task<LibraryDatabase> OpenAsync(string path)
+    {
+        var db = new DocumentDatabase(path, new LmdbStorageOptions
         {
             MapSize = 1L * 1024 * 1024 * 1024 // 1 GB
         });
 
-        // Create containers
-        Books = _db.OpenOrCreateContainer("books");
-        Members = _db.OpenOrCreateContainer("members");
-        Loans = _db.OpenOrCreateContainer("loans");
+        try
+        {
+            // Index maintenance is opt-in
+            db.EnableIndexing();
 
-        // Create indexes
-        CreateIndexes();
+            // Indexes are declared when the container is created; on later runs the
+            // existing container is opened and this callback is not invoked.
+            var library = await db.OpenOrCreateContainerAsync("library", opts =>
+            {
+                // Book indexes
+                opts.Indexes.AddValueIndex("/book/@isbn", XdmValueType.XdmString);
+                opts.Indexes.AddValueIndex("/book/year", XdmValueType.XdmInteger);
+                opts.Indexes.AddFullTextIndex("/book/title");
+                opts.Indexes.AddPathIndex("/book/categories/category");
+
+                // Member indexes
+                opts.Indexes.AddValueIndex("/member/@id", XdmValueType.XdmString);
+                opts.Indexes.AddPathIndex("/member/email");
+
+                // Loan indexes
+                opts.Indexes.AddValueIndex("/loan/bookIsbn", XdmValueType.XdmString);
+                opts.Indexes.AddValueIndex("/loan/memberId", XdmValueType.XdmString);
+                opts.Indexes.AddValueIndex("/loan/dueDate", XdmValueType.Date);
+            });
+
+            return new LibraryDatabase(db, library);
+        }
+        catch
+        {
+            db.Dispose();
+            throw;
+        }
     }
 
-    private void CreateIndexes()
+    public ValueTask<IWriteTransaction> BeginWriteAsync() => _db.BeginWriteAsync();
+
+    public async Task<List<string>> QueryAsync(
+        string xquery, IReadOnlyDictionary<string, object>? variables = null)
     {
-        // Book indexes
-        Books.CreateIndexIfNotExists(new PathIndex("isbn-idx", "/book/@isbn"));
-        Books.CreateIndexIfNotExists(new ValueIndex("year-idx", "/book/year", ValueType.Integer));
-        Books.CreateIndexIfNotExists(new FullTextIndex("title-idx", "/book/title"));
-        Books.CreateIndexIfNotExists(new PathIndex("category-idx", "/book/categories/category"));
-
-        // Member indexes
-        Members.CreateIndexIfNotExists(new PathIndex("member-id-idx", "/member/@id"));
-        Members.CreateIndexIfNotExists(new PathIndex("email-idx", "/member/email"));
-
-        // Loan indexes
-        Loans.CreateIndexIfNotExists(new PathIndex("loan-book-idx", "/loan/bookIsbn"));
-        Loans.CreateIndexIfNotExists(new PathIndex("loan-member-idx", "/loan/memberId"));
-        Loans.CreateIndexIfNotExists(new ValueIndex("due-date-idx", "/loan/dueDate", ValueType.Date));
+        var results = new List<string>();
+        await foreach (var item in Library.QueryAsync(xquery, variables))
+            results.Add(item.ToString()!);
+        return results;
     }
-
-    public ITransaction BeginTransaction(bool readOnly = false)
-        => _db.BeginTransaction(readOnly);
-
-    public IQueryResult Query(string xquery, QueryParameters? parameters = null)
-        => _db.Query(xquery, parameters);
-
-    public T QuerySingle<T>(string xquery, QueryParameters? parameters = null)
-        => _db.QuerySingle<T>(xquery, parameters);
 
     public void Dispose() => _db.Dispose();
 }
@@ -138,79 +160,81 @@ public class LibraryDatabase : IDisposable
 
 ```csharp
 // BookService.cs
+using System.Xml.Linq;
+
 public class BookService
 {
     private readonly LibraryDatabase _db;
 
     public BookService(LibraryDatabase db) => _db = db;
 
-    public void AddBook(Book book)
-    {
-        var xml = $"""
-            <book isbn="{book.Isbn}">
-                <title>{book.Title}</title>
-                <authors>
-                    {string.Join("\n", book.Authors.Select(a => $"<author>{a}</author>"))}
-                </authors>
-                <publisher>{book.Publisher}</publisher>
-                <year>{book.Year}</year>
-                <categories>
-                    {string.Join("\n", book.Categories.Select(c => $"<category>{c}</category>"))}
-                </categories>
-                <copies>
-                    {string.Join("\n", book.CopyIds.Select(id => $"<copy id=\"{id}\" status=\"available\"/>"))}
-                </copies>
-            </book>
-            """;
+    public static string DocumentName(string isbn) => $"book-{isbn}.xml";
 
-        _db.Books.PutDocument($"{book.Isbn}.xml", xml);
+    public async Task AddBookAsync(Book book)
+    {
+        var xml = new XElement("book",
+            new XAttribute("isbn", book.Isbn),
+            new XElement("title", book.Title),
+            new XElement("authors", book.Authors.Select(a => new XElement("author", a))),
+            new XElement("publisher", book.Publisher),
+            new XElement("year", book.Year),
+            new XElement("categories", book.Categories.Select(c => new XElement("category", c))),
+            new XElement("copies", book.CopyIds.Select(id =>
+                new XElement("copy", new XAttribute("id", id), new XAttribute("status", "available")))));
+
+        await _db.Library.PutDocumentAsync(DocumentName(book.Isbn), xml.ToString());
     }
 
-    public Book? GetBook(string isbn)
+    public async Task<Book?> GetBookAsync(string isbn)
     {
-        var results = _db.Query($"""
-            collection('books')/book[@isbn='{isbn}']
-            """);
+        var results = await _db.QueryAsync("""
+            declare variable $isbn external;
+            collection()/book[@isbn = $isbn]
+            """,
+            new Dictionary<string, object> { ["isbn"] = isbn });
 
-        var xml = results.FirstOrDefault();
-        return xml != null ? ParseBook(xml) : null;
+        return results.Count > 0 ? ParseBook(results[0]) : null;
     }
 
-    public IEnumerable<Book> SearchBooks(string titleSearch)
+    public async Task<IEnumerable<Book>> SearchBooksAsync(string titleSearch)
     {
-        var results = _db.Query("""
-            for $b in collection('books')//book
+        var results = await _db.QueryAsync("""
+            declare variable $search external;
+            for $b in collection()/book
             where contains(lower-case($b/title), lower-case($search))
             order by $b/title
             return $b
             """,
-            new QueryParameters { ["search"] = titleSearch });
+            new Dictionary<string, object> { ["search"] = titleSearch });
 
         return results.Select(ParseBook);
     }
 
-    public IEnumerable<Book> GetBooksByCategory(string category)
+    public async Task<IEnumerable<Book>> GetBooksByCategoryAsync(string category)
     {
-        var results = _db.Query("""
-            for $b in collection('books')//book
+        var results = await _db.QueryAsync("""
+            declare variable $category external;
+            for $b in collection()/book
             where $b/categories/category = $category
             order by $b/title
             return $b
             """,
-            new QueryParameters { ["category"] = category });
+            new Dictionary<string, object> { ["category"] = category });
 
         return results.Select(ParseBook);
     }
 
-    public IEnumerable<Book> GetBooksByYearRange(int fromYear, int toYear)
+    public async Task<IEnumerable<Book>> GetBooksByYearRangeAsync(int fromYear, int toYear)
     {
-        var results = _db.Query("""
-            for $b in collection('books')//book
-            where $b/year >= $from and $b/year <= $to
-            order by $b/year descending, $b/title
+        var results = await _db.QueryAsync("""
+            declare variable $from external;
+            declare variable $to external;
+            for $b in collection()/book
+            where xs:integer($b/year) >= $from and xs:integer($b/year) <= $to
+            order by xs:integer($b/year) descending, $b/title
             return $b
             """,
-            new QueryParameters
+            new Dictionary<string, object>
             {
                 ["from"] = fromYear,
                 ["to"] = toYear
@@ -219,24 +243,31 @@ public class BookService
         return results.Select(ParseBook);
     }
 
-    public void UpdateCopyStatus(string isbn, string copyId, string status)
+    public async Task UpdateCopyStatusAsync(string isbn, string copyId, string status)
     {
-        using var txn = _db.BeginTransaction();
+        await using var txn = await _db.BeginWriteAsync();
+        var containerId = _db.Library.Id;
 
-        // Use XQuery Update to modify the document
-        txn.Execute($"""
-            let $book := collection('books')/book[@isbn='{isbn}']
-            let $copy := $book/copies/copy[@id='{copyId}']
-            return replace value of node $copy/@status with '{status}'
-            """);
+        // Read the current document, change it, and write it back under the same name
+        var doc = await txn.GetDocumentAsync(containerId, DocumentName(isbn))
+            ?? throw new InvalidOperationException("Book not found");
+        var book = XDocument.Parse(await doc.GetContentAsync());
 
-        txn.Commit();
+        var copy = FindCopy(book, copyId)
+            ?? throw new InvalidOperationException("Copy not found");
+        copy.SetAttributeValue("status", status);
+
+        await txn.PutDocumentAsync(containerId, DocumentName(isbn), book.Root!.ToString());
+        await txn.CommitAsync();
     }
+
+    public static XElement? FindCopy(XDocument book, string copyId) =>
+        book.Root!.Element("copies")!.Elements("copy")
+            .FirstOrDefault(c => (string?)c.Attribute("id") == copyId);
 
     private static Book ParseBook(string xml)
     {
-        var doc = XDocument.Parse(xml);
-        var book = doc.Root!;
+        var book = XElement.Parse(xml);
 
         return new Book
         {
@@ -267,28 +298,30 @@ public record Book
 
 ```csharp
 // LoanService.cs
+using System.Xml.Linq;
+
 public class LoanService
 {
     private readonly LibraryDatabase _db;
-    private readonly BookService _bookService;
 
-    public LoanService(LibraryDatabase db, BookService bookService)
-    {
-        _db = db;
-        _bookService = bookService;
-    }
+    public LoanService(LibraryDatabase db) => _db = db;
 
-    public string CheckoutBook(string isbn, string copyId, string memberId, int loanDays = 14)
+    public static string DocumentName(string loanId) => $"loan-{loanId}.xml";
+
+    public async Task<string> CheckoutBookAsync(
+        string isbn, string copyId, string memberId, int loanDays = 14)
     {
-        using var txn = _db.BeginTransaction();
+        await using var txn = await _db.BeginWriteAsync();
+        var containerId = _db.Library.Id;
+        var bookName = BookService.DocumentName(isbn);
 
         // Verify book and copy exist and are available
-        var available = txn.QuerySingle<bool>($"""
-            exists(collection('books')/book[@isbn='{isbn}']
-                /copies/copy[@id='{copyId}'][@status='available'])
-            """);
+        var bookDoc = await txn.GetDocumentAsync(containerId, bookName)
+            ?? throw new InvalidOperationException("Book not found");
+        var book = XDocument.Parse(await bookDoc.GetContentAsync());
+        var copy = BookService.FindCopy(book, copyId);
 
-        if (!available)
+        if (copy is null || (string?)copy.Attribute("status") != "available")
             throw new InvalidOperationException("Book copy not available");
 
         // Create loan
@@ -296,97 +329,91 @@ public class LoanService
         var loanDate = DateTime.UtcNow.Date;
         var dueDate = loanDate.AddDays(loanDays);
 
-        var loanXml = $"""
-            <loan id="{loanId}">
-                <bookIsbn>{isbn}</bookIsbn>
-                <copyId>{copyId}</copyId>
-                <memberId>{memberId}</memberId>
-                <loanDate>{loanDate:yyyy-MM-dd}</loanDate>
-                <dueDate>{dueDate:yyyy-MM-dd}</dueDate>
-                <returnDate/>
-            </loan>
-            """;
+        var loan = new XElement("loan",
+            new XAttribute("id", loanId),
+            new XElement("bookIsbn", isbn),
+            new XElement("copyId", copyId),
+            new XElement("memberId", memberId),
+            new XElement("loanDate", loanDate.ToString("yyyy-MM-dd")),
+            new XElement("dueDate", dueDate.ToString("yyyy-MM-dd")),
+            new XElement("returnDate"));
 
-        txn.GetContainer("loans").PutDocument($"{loanId}.xml", loanXml);
+        await txn.PutDocumentAsync(containerId, DocumentName(loanId), loan.ToString());
 
         // Update copy status
-        txn.Execute($"""
-            let $copy := collection('books')/book[@isbn='{isbn}']
-                /copies/copy[@id='{copyId}']
-            return replace value of node $copy/@status with 'loaned'
-            """);
+        copy.SetAttributeValue("status", "loaned");
+        await txn.PutDocumentAsync(containerId, bookName, book.Root!.ToString());
 
-        txn.Commit();
+        // Both writes are applied atomically
+        await txn.CommitAsync();
         return loanId;
     }
 
-    public void ReturnBook(string loanId)
+    public async Task ReturnBookAsync(string loanId)
     {
-        using var txn = _db.BeginTransaction();
+        await using var txn = await _db.BeginWriteAsync();
+        var containerId = _db.Library.Id;
 
         // Get loan details
-        var loan = txn.Query($"collection('loans')/loan[@id='{loanId}']").FirstOrDefault()
+        var loanDoc = await txn.GetDocumentAsync(containerId, DocumentName(loanId))
             ?? throw new InvalidOperationException("Loan not found");
-
-        var loanDoc = XDocument.Parse(loan);
-        var isbn = loanDoc.Root!.Element("bookIsbn")!.Value;
-        var copyId = loanDoc.Root!.Element("copyId")!.Value;
+        var loan = XDocument.Parse(await loanDoc.GetContentAsync());
+        var isbn = loan.Root!.Element("bookIsbn")!.Value;
+        var copyId = loan.Root!.Element("copyId")!.Value;
 
         // Update loan with return date
-        txn.Execute($"""
-            let $loan := collection('loans')/loan[@id='{loanId}']
-            return replace value of node $loan/returnDate with '{DateTime.UtcNow:yyyy-MM-dd}'
-            """);
+        loan.Root!.Element("returnDate")!.Value = DateTime.UtcNow.ToString("yyyy-MM-dd");
+        await txn.PutDocumentAsync(containerId, DocumentName(loanId), loan.Root!.ToString());
 
         // Update copy status
-        txn.Execute($"""
-            let $copy := collection('books')/book[@isbn='{isbn}']
-                /copies/copy[@id='{copyId}']
-            return replace value of node $copy/@status with 'available'
-            """);
+        var bookName = BookService.DocumentName(isbn);
+        var bookDoc = await txn.GetDocumentAsync(containerId, bookName)
+            ?? throw new InvalidOperationException("Book not found");
+        var book = XDocument.Parse(await bookDoc.GetContentAsync());
+        BookService.FindCopy(book, copyId)?.SetAttributeValue("status", "available");
+        await txn.PutDocumentAsync(containerId, bookName, book.Root!.ToString());
 
-        txn.Commit();
+        await txn.CommitAsync();
     }
 
-    public IEnumerable<LoanInfo> GetOverdueLoans()
+    public async Task<IEnumerable<LoanInfo>> GetOverdueLoansAsync()
     {
-        var today = DateTime.UtcNow.Date.ToString("yyyy-MM-dd");
-
-        var results = _db.Query($"""
-            for $loan in collection('loans')//loan
-            where $loan/returnDate = '' and $loan/dueDate < '{today}'
-            let $book := collection('books')/book[@isbn = $loan/bookIsbn]
-            let $member := collection('members')/member[@id = $loan/memberId]
+        var results = await _db.QueryAsync("""
+            for $loan in collection()/loan
+            where $loan/returnDate = '' and xs:date($loan/dueDate) < current-date()
+            let $book := collection()/book[@isbn = $loan/bookIsbn]
+            let $member := collection()/member[@id = $loan/memberId]
             order by $loan/dueDate
             return <overdue>
-                <loanId>{{$loan/@id/string()}}</loanId>
-                <bookTitle>{{$book/title/text()}}</bookTitle>
-                <memberName>{{concat($member/name/first, ' ', $member/name/last)}}</memberName>
-                <dueDate>{{$loan/dueDate/text()}}</dueDate>
-                <daysOverdue>{{days-from-duration(current-date() - xs:date($loan/dueDate))}}</daysOverdue>
+                <loanId>{$loan/@id/string()}</loanId>
+                <bookTitle>{$book/title/text()}</bookTitle>
+                <memberName>{concat($member/name/first, ' ', $member/name/last)}</memberName>
+                <dueDate>{$loan/dueDate/text()}</dueDate>
+                <daysOverdue>{days-from-duration(current-date() - xs:date($loan/dueDate))}</daysOverdue>
             </overdue>
             """);
 
         return results.Select(xml =>
         {
-            var doc = XDocument.Parse(xml);
+            var overdue = XElement.Parse(xml);
             return new LoanInfo
             {
-                LoanId = doc.Root!.Element("loanId")!.Value,
-                BookTitle = doc.Root!.Element("bookTitle")!.Value,
-                MemberName = doc.Root!.Element("memberName")!.Value,
-                DueDate = DateTime.Parse(doc.Root!.Element("dueDate")!.Value),
-                DaysOverdue = int.Parse(doc.Root!.Element("daysOverdue")!.Value)
+                LoanId = overdue.Element("loanId")!.Value,
+                BookTitle = overdue.Element("bookTitle")!.Value,
+                MemberName = overdue.Element("memberName")!.Value,
+                DueDate = DateTime.Parse(overdue.Element("dueDate")!.Value),
+                DaysOverdue = int.Parse(overdue.Element("daysOverdue")!.Value)
             };
         });
     }
 
-    public IEnumerable<LoanInfo> GetMemberLoans(string memberId)
+    public async Task<IEnumerable<LoanInfo>> GetMemberLoansAsync(string memberId)
     {
-        var results = _db.Query("""
-            for $loan in collection('loans')//loan
+        var results = await _db.QueryAsync("""
+            declare variable $memberId external;
+            for $loan in collection()/loan
             where $loan/memberId = $memberId and $loan/returnDate = ''
-            let $book := collection('books')/book[@isbn = $loan/bookIsbn]
+            let $book := collection()/book[@isbn = $loan/bookIsbn]
             order by $loan/dueDate
             return <loan>
                 <loanId>{$loan/@id/string()}</loanId>
@@ -394,16 +421,16 @@ public class LoanService
                 <dueDate>{$loan/dueDate/text()}</dueDate>
             </loan>
             """,
-            new QueryParameters { ["memberId"] = memberId });
+            new Dictionary<string, object> { ["memberId"] = memberId });
 
         return results.Select(xml =>
         {
-            var doc = XDocument.Parse(xml);
+            var loan = XElement.Parse(xml);
             return new LoanInfo
             {
-                LoanId = doc.Root!.Element("loanId")!.Value,
-                BookTitle = doc.Root!.Element("bookTitle")!.Value,
-                DueDate = DateTime.Parse(doc.Root!.Element("dueDate")!.Value)
+                LoanId = loan.Element("loanId")!.Value,
+                BookTitle = loan.Element("bookTitle")!.Value,
+                DueDate = DateTime.Parse(loan.Element("dueDate")!.Value)
             };
         });
     }
@@ -423,12 +450,12 @@ public record LoanInfo
 
 ```csharp
 // Program.cs
-using var db = new LibraryDatabase("./library-data");
+using var db = await LibraryDatabase.OpenAsync("./library-data");
 var bookService = new BookService(db);
-var loanService = new LoanService(db, bookService);
+var loanService = new LoanService(db);
 
 // Add some books
-bookService.AddBook(new Book
+await bookService.AddBookAsync(new Book
 {
     Isbn = "978-0-13-468599-1",
     Title = "The Pragmatic Programmer",
@@ -439,7 +466,7 @@ bookService.AddBook(new Book
     CopyIds = ["C001", "C002"]
 });
 
-bookService.AddBook(new Book
+await bookService.AddBookAsync(new Book
 {
     Isbn = "978-0-596-51774-8",
     Title = "JavaScript: The Good Parts",
@@ -450,15 +477,25 @@ bookService.AddBook(new Book
     CopyIds = ["C003"]
 });
 
+// Add a member
+await db.Library.PutDocumentAsync("member-M001.xml", """
+    <member id="M001">
+        <name><first>Jane</first><last>Smith</last></name>
+        <email>jane.smith@email.com</email>
+        <memberSince>2023-01-15</memberSince>
+        <memberType>premium</memberType>
+    </member>
+    """);
+
 // Search for books
 Console.WriteLine("=== Search Results ===");
-foreach (var book in bookService.SearchBooks("pragmatic"))
+foreach (var book in await bookService.SearchBooksAsync("pragmatic"))
 {
     Console.WriteLine($"{book.Title} ({book.Year})");
 }
 
 // Checkout a book
-var loanId = loanService.CheckoutBook(
+var loanId = await loanService.CheckoutBookAsync(
     isbn: "978-0-13-468599-1",
     copyId: "C001",
     memberId: "M001");
@@ -466,7 +503,7 @@ Console.WriteLine($"\nBook checked out. Loan ID: {loanId}");
 
 // Check overdue loans
 Console.WriteLine("\n=== Overdue Loans ===");
-foreach (var loan in loanService.GetOverdueLoans())
+foreach (var loan in await loanService.GetOverdueLoansAsync())
 {
     Console.WriteLine($"{loan.BookTitle} - {loan.DaysOverdue} days overdue");
 }
@@ -482,7 +519,7 @@ dotnet run
 
 1. **Document Design**: Design documents that capture entity relationships naturally in XML
 2. **Indexes**: Create indexes on frequently queried paths for performance
-3. **Transactions**: Use transactions for multi-document operations
+3. **Transactions**: Use a write transaction to apply multi-document changes atomically
 4. **XQuery**: Leverage XQuery's power for complex queries and joins
 5. **Parameterized Queries**: Always use parameters to prevent injection
 

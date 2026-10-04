@@ -13,49 +13,58 @@ This guide provides hands-on examples to get you productive with PhoenixmlDb qui
 A database is a directory containing all your containers, documents, and indexes:
 
 ```csharp
-using PhoenixmlDb;
+using PhoenixmlDb.Core;
+using PhoenixmlDb.Storage;
+using PhoenixmlDb.Storage.Lmdb;
 
-// Create database in specified directory
-using var db = new XmlDatabase("./data/myapp");
+// Create (or open) a database in the specified directory
+using var db = new DocumentDatabase("./data/myapp");
 
-// Or with custom options
-var options = new DatabaseOptions
+// Or with custom storage options
+var options = new LmdbStorageOptions
 {
     MapSize = 10L * 1024 * 1024 * 1024, // 10 GB
-    MaxContainers = 100,
     MaxReaders = 126
 };
-using var db2 = new XmlDatabase("./data/myapp", options);
+using var db2 = new DocumentDatabase("./data/otherapp", options);
 ```
 
-> **Note:** Always dispose the database when done. Using the `using` statement ensures proper cleanup.
+`DocumentDatabase.Open(path, options)` is equivalent to the constructor. A given directory can
+be open only once per process; opening it a second time throws
+`LmdbEnvironmentAlreadyOpenException`.
+
+> **Note:** Always dispose the database when done. `DocumentDatabase` implements both
+> `IDisposable` and `IAsyncDisposable`, so `using` or `await using` ensures proper cleanup.
 
 ## Working with Containers
 
-Containers organize your documents into logical groups:
+Containers organize your documents into logical groups. Container operations are asynchronous:
 
 ```csharp
 // Create a container
-var customers = db.CreateContainer("customers");
+var customers = await db.CreateContainerAsync("customers");
 
 // Create with options
-var orders = db.CreateContainer("orders", new ContainerOptions
+var orders = await db.CreateContainerAsync("orders", opts =>
 {
-    ValidationMode = ValidationMode.WellFormed,
-    PreserveWhitespace = false
+    opts.ValidationMode = ValidationMode.WellFormed;
+    opts.PreserveWhitespace = false;
 });
 
-// Get existing container
-var existing = db.GetContainer("customers");
+// Get an existing container (null if it does not exist)
+var existing = await db.OpenContainerAsync("customers");
+
+// Open if it exists, create it otherwise
+var products = await db.OpenOrCreateContainerAsync("products");
 
 // List all containers
-foreach (var name in db.ListContainers())
+await foreach (var info in db.ListContainersAsync())
 {
-    Console.WriteLine(name);
+    Console.WriteLine($"{info.Name}: {info.DocumentCount} documents");
 }
 
 // Delete a container (and all its documents)
-db.DeleteContainer("temp");
+await db.DeleteContainerAsync("temp");
 ```
 
 ## Storing Documents
@@ -63,10 +72,10 @@ db.DeleteContainer("temp");
 ### XML Documents
 
 ```csharp
-var container = db.GetContainer("products");
+var container = await db.OpenOrCreateContainerAsync("products");
 
 // Store from string
-container.PutDocument("product1.xml", """
+await container.PutDocumentAsync("product1.xml", """
     <product>
         <name>Widget</name>
         <price>19.99</price>
@@ -74,28 +83,29 @@ container.PutDocument("product1.xml", """
     """);
 
 // Store from file
-container.PutDocument("product2.xml", File.ReadAllText("product.xml"));
+await container.PutDocumentAsync("product2.xml", File.ReadAllText("product.xml"));
 
-// Store from stream
-using var stream = File.OpenRead("large-product.xml");
-container.PutDocument("product3.xml", stream);
-
-// Store with metadata
-container.PutDocument("product4.xml", xmlContent, new DocumentMetadata
+// Store from stream (the caller keeps ownership of the stream)
+using (var stream = File.OpenRead("large-product.xml"))
 {
-    ["author"] = "john.doe",
-    ["created"] = DateTime.UtcNow.ToString("O"),
-    ["version"] = "1.0"
-});
+    await container.PutDocumentAsync("product3.xml", stream);
+}
+
+// Attach metadata to a stored document
+await container.SetMetadataAsync("product1.xml", "author", "john.doe");
+await container.SetMetadataAsync("product1.xml", "version", "1.0");
 ```
+
+Putting a document under an existing name replaces it (`DocumentOptions.Overwrite` defaults
+to `true`).
 
 ### JSON Documents
 
 ```csharp
-var container = db.GetContainer("api-data");
+var container = await db.OpenOrCreateContainerAsync("api-data");
 
-// Store JSON document
-container.PutJsonDocument("user1.json", """
+// Content starting with '{' or '[' is detected as JSON
+await container.PutDocumentAsync("user1.json", """
     {
         "id": 1,
         "name": "Alice",
@@ -104,59 +114,78 @@ container.PutJsonDocument("user1.json", """
     }
     """);
 
-// JSON is automatically converted to XML internally
-// but can be queried and retrieved as JSON
+// Or state the content type explicitly
+await container.PutDocumentAsync("user2.json", """{ "id": 2, "name": "Bob" }""",
+    new DocumentOptions { ContentType = ContentType.Json });
 ```
+
+JSON is converted to XML on the way in, using the XQuery 3.1 `fn:json-to-xml` representation
+(elements such as `map`, `array`, `string` and `number` in the
+`http://www.w3.org/2005/xpath-functions` namespace). It is queried, and returned by
+`GetContentAsync()`, in that XML form.
 
 ## Retrieving Documents
 
 ```csharp
-var container = db.GetContainer("products");
+var container = await db.OpenOrCreateContainerAsync("products");
 
-// Get document as string
-string xml = container.GetDocument("product1.xml");
+// Get a document (null if it does not exist)
+var doc = await container.GetDocumentAsync("product1.xml");
+if (doc is not null)
+{
+    string xml = await doc.GetContentAsync();
+    Console.WriteLine($"{doc.Name} ({doc.SizeBytes} bytes): {xml}");
+}
 
-// Check if document exists
-if (container.DocumentExists("product1.xml"))
+// Check if a document exists
+if (await container.DocumentExistsAsync("product1.xml"))
 {
     // ...
 }
 
 // Get document metadata
-var metadata = container.GetMetadata("product1.xml");
-Console.WriteLine($"Author: {metadata["author"]}");
+var author = await container.GetMetadataAsync("product1.xml", "author");
+Console.WriteLine($"Author: {author}");
 
 // List documents
-foreach (var docName in container.ListDocuments())
+await foreach (var info in container.ListDocumentsAsync())
 {
-    Console.WriteLine(docName);
+    Console.WriteLine(info.Name);
 }
 
 // List with prefix filter
-foreach (var docName in container.ListDocuments(prefix: "product"))
+await foreach (var info in container.ListDocumentsAsync("product"))
 {
-    Console.WriteLine(docName);
+    Console.WriteLine(info.Name);
 }
 ```
 
 ## Querying with XQuery
 
+Queries run against a container with `IContainer.QueryAsync`. Inside the query,
+`fn:collection()` spans every document in that container. Each result item is returned
+serialized as a string.
+
 ### Basic Queries
 
 ```csharp
+var books = await db.OpenOrCreateContainerAsync("books");
+
 // Simple path query
-var titles = db.Query("collection('books')//title/text()");
+await foreach (var title in books.QueryAsync("collection()//title/text()"))
+{
+    Console.WriteLine(title);
+}
 
 // Query with FLWOR expression
-var results = db.Query("""
-    for $book in collection('books')//book
-    where $book/year > 2020
+var query = """
+    for $book in collection()//book
+    where xs:integer($book/year) > 2020
     order by $book/title
     return $book/title/text()
-    """);
+    """;
 
-// Iterate results
-foreach (var result in results)
+await foreach (var result in books.QueryAsync(query))
 {
     Console.WriteLine(result);
 }
@@ -164,99 +193,135 @@ foreach (var result in results)
 
 ### Parameterized Queries
 
+Pass variables in a dictionary and declare them as external variables in the query:
+
 ```csharp
-// Bind parameters to avoid injection
-var results = db.Query("""
-    for $p in collection('products')//product
-    where $p/price <= $maxPrice
+var products = await db.OpenOrCreateContainerAsync("products");
+
+var query = """
+    declare variable $maxPrice external;
+    declare variable $category external;
+    for $p in collection()//product
+    where xs:decimal($p/price) <= $maxPrice
       and $p/category = $category
     return $p
-    """,
-    new QueryParameters
-    {
-        ["maxPrice"] = 100.0,
-        ["category"] = "Electronics"
-    });
+    """;
+
+var variables = new Dictionary<string, object>
+{
+    ["maxPrice"] = 100.0m,
+    ["category"] = "Electronics"
+};
+
+await foreach (var product in products.QueryAsync(query, variables))
+{
+    Console.WriteLine(product);
+}
 ```
 
 ### Aggregate Queries
 
+Aggregates over `collection()` are evaluated across the whole container and return a single
+item:
+
 ```csharp
+var orders = await db.OpenOrCreateContainerAsync("orders");
+
+static async Task<string?> QuerySingleAsync(IContainer container, string query)
+{
+    await foreach (var item in container.QueryAsync(query))
+        return item.ToString();
+    return null;
+}
+
 // Count
-var count = db.QuerySingle<int>("count(collection('orders')//order)");
+var count = int.Parse(await QuerySingleAsync(orders, "count(collection()//order)") ?? "0");
 
 // Sum
-var total = db.QuerySingle<decimal>("""
-    sum(collection('orders')//order/total)
-    """);
+var total = decimal.Parse(
+    await QuerySingleAsync(orders, "sum(collection()//order/xs:decimal(total))") ?? "0",
+    CultureInfo.InvariantCulture);
 
 // Average
-var avgPrice = db.QuerySingle<decimal>("""
-    avg(collection('products')//product/price)
-    """);
+var avgTotal = await QuerySingleAsync(orders, "avg(collection()//order/xs:decimal(total))");
 ```
+
+(`CultureInfo` is in `System.Globalization`.)
 
 ## Using Transactions
 
 ```csharp
-// Read-only transaction (snapshot isolation)
-using (var txn = db.BeginTransaction(readOnly: true))
+var inventory = await db.OpenOrCreateContainerAsync("inventory");
+
+// Read transaction
+using (var read = db.BeginRead())
 {
-    var results = txn.Query("collection('data')//item");
-    // Results reflect consistent snapshot
+    await foreach (var item in read.QueryAsync(inventory.Id, "collection()//item"))
+    {
+        Console.WriteLine(item);
+    }
 }
 
-// Read-write transaction
-using (var txn = db.BeginTransaction())
+// Write transaction
+await using (var txn = await db.BeginWriteAsync())
 {
-    var container = txn.GetContainer("inventory");
-
-    // Multiple operations in single transaction
-    container.PutDocument("item1.xml", newXml1);
-    container.PutDocument("item2.xml", newXml2);
-    container.DeleteDocument("old-item.xml");
+    // Multiple operations in a single transaction
+    await txn.PutDocumentAsync(inventory.Id, "item1.xml", "<item id='1'/>");
+    await txn.PutDocumentAsync(inventory.Id, "item2.xml", "<item id='2'/>");
+    await txn.DeleteDocumentAsync(inventory.Id, "old-item.xml");
 
     // Commit all changes atomically
-    txn.Commit();
+    await txn.CommitAsync();
 }
-// If Commit() not called, transaction is rolled back on dispose
+// Write operations are buffered until CommitAsync(). If the transaction is disposed
+// without committing (or RollbackAsync() is called), nothing is written.
 ```
 
 ## Creating Indexes
 
+Indexes are declared on a container when it is created, through `ContainerOptions.Indexes`.
+Index maintenance is opt-in: call `EnableIndexing()` (from the `PhoenixmlDb.Indexing` package)
+on the database, otherwise the declarations are not maintained and queries are answered by
+scanning.
+
 ```csharp
-var container = db.GetContainer("products");
+using PhoenixmlDb.Indexing;
 
-// Path index for fast element lookup
-container.CreateIndex(new PathIndex("price-idx", "/product/price"));
+db.EnableIndexing();
 
-// Value index for range queries
-container.CreateIndex(new ValueIndex("price-val-idx", "/product/price",
-    ValueType.Decimal));
+var products = await db.CreateContainerAsync("indexed-products", opts =>
+{
+    // Path index for fast element lookup
+    opts.Indexes.AddPathIndex("/product/price");
 
-// Full-text index for search
-container.CreateIndex(new FullTextIndex("desc-ft-idx", "/product/description"));
+    // Value index for comparisons and range queries
+    opts.Indexes.AddValueIndex("/product/price", XdmValueType.XdmDecimal);
 
-// Composite index
-container.CreateIndex(new PathIndex("cat-name-idx",
-    "/product/category", "/product/name"));
+    // Full-text index
+    opts.Indexes.AddFullTextIndex("/product/description");
+});
 ```
 
 ## Complete Example
 
 ```csharp
-using PhoenixmlDb;
+using PhoenixmlDb.Core;
+using PhoenixmlDb.Indexing;
+using PhoenixmlDb.Storage;
 
 // Setup
-using var db = new XmlDatabase("./bookstore");
-var books = db.CreateContainer("books");
+using var db = new DocumentDatabase("./bookstore");
+db.EnableIndexing();
 
-// Create indexes for better query performance
-books.CreateIndex(new ValueIndex("year-idx", "/book/year", ValueType.Integer));
-books.CreateIndex(new FullTextIndex("title-idx", "/book/title"));
+// Declare indexes when the container is created
+var books = await db.OpenOrCreateContainerAsync("books", opts =>
+{
+    opts.Indexes.AddValueIndex("/book/year", XdmValueType.XdmInteger);
+    opts.Indexes.AddFullTextIndex("/book/title");
+});
 
 // Add sample data
-books.PutDocument("book1.xml", """
+await books.PutDocumentAsync("book1.xml", """
     <book isbn="978-0-13-468599-1">
         <title>The Pragmatic Programmer</title>
         <author>David Thomas</author>
@@ -266,7 +331,7 @@ books.PutDocument("book1.xml", """
     </book>
     """);
 
-books.PutDocument("book2.xml", """
+await books.PutDocumentAsync("book2.xml", """
     <book isbn="978-0-596-51774-8">
         <title>JavaScript: The Good Parts</title>
         <author>Douglas Crockford</author>
@@ -276,10 +341,10 @@ books.PutDocument("book2.xml", """
     """);
 
 // Query: Find books by year range
-var recentBooks = db.Query("""
-    for $b in collection('books')//book
-    where $b/year >= 2015
-    order by $b/year descending
+var recentBooks = books.QueryAsync("""
+    for $b in collection()//book
+    where xs:integer($b/year) >= 2015
+    order by xs:integer($b/year) descending
     return <result>
         <title>{$b/title/text()}</title>
         <year>{$b/year/text()}</year>
@@ -287,20 +352,20 @@ var recentBooks = db.Query("""
     """);
 
 Console.WriteLine("Recent books:");
-foreach (var book in recentBooks)
+await foreach (var book in recentBooks)
 {
     Console.WriteLine(book);
 }
 
-// Full-text search
-var searchResults = db.Query("""
-    for $b in collection('books')//book
+// Substring search
+var searchResults = books.QueryAsync("""
+    for $b in collection()//book
     where contains($b/title, 'Pragmatic')
     return $b/title/text()
     """);
 
 Console.WriteLine("\nSearch results:");
-foreach (var title in searchResults)
+await foreach (var title in searchResults)
 {
     Console.WriteLine(title);
 }

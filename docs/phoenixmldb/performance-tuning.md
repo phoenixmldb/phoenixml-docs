@@ -6,223 +6,191 @@ sort: 10
 
 # Performance Tuning
 
-Optimize PhoenixmlDb for your specific workload with these tuning guidelines.
+What the engine actually does on the paths that matter for performance, and the settings that change it. There are no published benchmark figures here: measure your own workload (see [Benchmarking](#benchmarking)).
 
 ## Query Optimization
 
-### Use Indexes
+### Use Indexes Where the Query Path Reads Them
 
-The most important optimization is proper indexing:
-
-```csharp
-// Create indexes for frequently queried paths
-container.CreateIndex(new PathIndex("product-idx",
-    "/product/name", "/product/category"));
-
-container.CreateIndex(new ValueIndex("price-idx",
-    "/product/price", ValueType.Decimal));
-```
-
-### Check Query Plans
+Indexes are declared when a container is created and maintained once the process calls `db.EnableIndexing()`:
 
 ```csharp
-var plan = db.Explain(query);
-Console.WriteLine(plan);
+using PhoenixmlDb.Core;
+using PhoenixmlDb.Indexing;
+using PhoenixmlDb.Storage;
 
-// Verify indexes are used
-if (!plan.IndexesUsed.Any())
+using var db = new DocumentDatabase("./data");
+db.EnableIndexing();
+
+var products = await db.CreateContainerAsync("products", opts =>
+    opts.Indexes.AddValueIndex("/catalog/product/@price", XdmValueType.XdmDecimal));
+
+// Answered from the value index
+await foreach (var p in products.QueryAsync("/catalog/product[@price > 100]"))
 {
-    Console.WriteLine("Warning: Full scan, consider adding indexes");
+    Console.WriteLine(p);
 }
 ```
 
-### Optimize XQuery
+Today XQuery reads only value indexes, and only for one shape: an absolute path of child steps whose last step has a single predicate comparing an attribute to a literal or variable, against a value index on exactly that attribute path. Every other query scans the container's documents. Metadata indexes speed up `QueryMetadataAsync`/`QueryMetadataRangeAsync`, and full-text indexes back `IndexManager.SearchFullText`. See [Indexing](indexing.md#what-uses-each-index-today) for the full list before adding an index for speed.
 
-```xquery
-(: Good - filter early :)
-for $p in collection('products')//product[category = 'Electronics']
-where $p/price > 100
-return $p
+### Know How a Container Query Runs
 
-(: Less efficient - filter late :)
-for $p in collection('products')//product
-where $p/category = 'Electronics' and $p/price > 100
-return $p
-```
+`IContainer.QueryAsync` classifies each query when it compiles it:
 
-### Limit Results
+- **Row-wise** queries (a per-document filter, map or projection) are compiled once and run against each document in turn, with that document as the context item. Results are concatenated in document order.
+- **Cross-document** queries (`sum`/`avg`/`min`/`max` over the collection, `count(collection())`, `distinct-values` across documents, a FLWOR `order by` or `group by`) run as one evaluation in which `fn:collection()` is every document in the container.
 
-```xquery
-(: Always limit when you don't need all results :)
-(for $p in collection('products')//product
- order by $p/date descending
- return $p)[position() <= 100]
-```
+Either way, without a usable index every document in the container is visited. Keeping unrelated documents in separate containers reduces what a scan has to touch.
 
-### Use Parameters
+### Use Variables
+
+Bind values as external variables instead of concatenating them into the query text:
 
 ```csharp
-// Good - compiled once, parameters bound
-var prepared = db.Prepare("""
-    for $p in //product where $p/category = $cat return $p
-    """);
-var results = prepared.Execute(new QueryParameters { ["cat"] = "Electronics" });
+var variables = new Dictionary<string, object> { ["cat"] = "Electronics" };
 
-// Bad - recompiled every time
-var results = db.Query($"for $p in //product where $p/category = '{category}' return $p");
+await foreach (var p in products.QueryAsync("""
+    declare variable $cat external;
+    //product[category = $cat]
+    """, variables))
+{
+    Console.WriteLine(p);
+}
 ```
+
+This also avoids XQuery injection. The value-index shape above accepts a variable as the comparand (`/catalog/product[@price > $min]`).
 
 ## Storage Optimization
 
-### Appropriate Map Size
+### Map Size
+
+`LmdbStorageOptions.MapSize` is the fixed virtual address-space reservation for the memory map. The default is 50 GiB in a 64-bit process and 1 GiB in a 32-bit one. It reserves address space, not memory or disk: the data file grows only as data is written. The engine never grows the map at runtime, so when it fills, writes fail with a `PhoenixmlDbStorageException` (MDB_MAP_FULL) until the database is reopened with a larger `MapSize`:
 
 ```csharp
-// Too small causes "map full" errors
-// Too large wastes address space
-var options = new DatabaseOptions
+using PhoenixmlDb.Storage.Lmdb;
+
+using var db = new DocumentDatabase("./data", new LmdbStorageOptions
 {
-    MapSize = dataSize * 2  // 2x expected data size
-};
+    MapSize = 200L * 1024 * 1024 * 1024 // 200 GiB
+});
 ```
+
+Opening an existing database with a `MapSize` at or below the size its data already uses throws `LmdbMapSizeTooSmallException`.
 
 ### Sync Mode
 
 ```csharp
-// For highest performance (reduced durability)
-var options = new DatabaseOptions
+// For bulk loads of data you can regenerate
+using var db = new DocumentDatabase("./data", new LmdbStorageOptions
 {
-    NoMetaSync = true  // ~10% faster commits
-};
-
-// For bulk imports (recoverable data)
-var options = new DatabaseOptions
-{
-    NoSync = true  // ~50% faster, but data at risk
-};
+    NoSync = true // LMDB MDB_NOSYNC: no fsync on commit
+});
 ```
+
+`NoSync` skips flushing to disk on commit, at the cost of durability: committed data can be lost in a system crash. `DocumentDatabase.FlushAsync()` forces a flush. There is no separate metadata-only sync setting.
 
 ### Batch Writes
 
+Every direct container write is its own LMDB commit. For many documents, use `PutDocumentsAsync`, which commits in chunks of up to 1,000, or one write transaction when they must commit together:
+
 ```csharp
-// Good - single transaction for multiple writes
-using (var txn = db.BeginTransaction())
+// Good - one commit per 1,000 documents
+await container.PutDocumentsAsync(
+    documents.Select(d => new DocumentInput(d.Name, d.Content)));
+
+// Good - one commit for the whole group, all or nothing
+await using (var txn = await db.BeginWriteAsync())
 {
-    foreach (var doc in documents)
+    foreach (var d in documents)
     {
-        container.PutDocument(doc.Name, doc.Content);
+        await txn.PutDocumentAsync(container.Id, d.Name, d.Content);
     }
-    txn.Commit();
+    await txn.CommitAsync();
 }
 
-// Bad - separate transaction for each write
-foreach (var doc in documents)
+// Slower - one commit per document
+foreach (var d in documents)
 {
-    container.PutDocument(doc.Name, doc.Content);
+    await container.PutDocumentAsync(d.Name, d.Content);
 }
 ```
+
+A write transaction buffers every operation in memory until `CommitAsync`, so very large groups cost memory.
 
 ## Memory Management
 
-### Read-Only Transactions
+### Keep Write Transactions Short
+
+Only one `IWriteTransaction` can be open per database. While it is open, other `BeginWriteAsync` calls, `CreateContainerAsync`, `DeleteContainerAsync` and `RebuildIndexesAsync` wait for it. Commit or dispose promptly:
 
 ```csharp
-// Prefer read-only - no write locks, concurrent access
-using (var txn = db.BeginTransaction(readOnly: true))
+// Good - prepare first, then open, buffer and commit
+var xml = BuildDocument();
+await using (var txn = await db.BeginWriteAsync())
 {
-    // Multiple concurrent readers allowed
+    await txn.PutDocumentAsync(container.Id, "doc.xml", xml);
+    await txn.CommitAsync();
 }
 ```
 
-### Dispose Promptly
+`IReadTransaction` holds no LMDB transaction or lock, so keeping one open costs nothing; it also provides no snapshot across calls (see [Transactions](transactions.md#read-transactions)).
+
+### Large Documents
+
+`IDocument.GetContentAsync` and `GetContentStreamAsync` both serialize the whole document from its stored node tree; the stream is an in-memory buffer over that result, not a streaming read. Query a document for the parts you need rather than fetching it whole:
 
 ```csharp
-// Good - dispose immediately
-using (var txn = db.BeginTransaction(readOnly: true))
+await foreach (var title in container.QueryAsync("/book/chapter/title/string()"))
 {
-    var result = txn.Query(xquery);
-    ProcessResults(result.ToList());
+    Console.WriteLine(title);
 }
-
-// Bad - holding transaction open
-var txn = db.BeginTransaction(readOnly: true);
-var result = txn.Query(xquery);
-// ... long processing ...
-txn.Dispose();  // Blocks other writers
-```
-
-### Stream Large Documents
-
-```csharp
-// Good - streaming for large documents
-using var stream = container.GetDocumentAsStream("large.xml");
-ProcessStream(stream);
-
-// Bad - loads entire document into memory
-var xml = container.GetDocument("large.xml");
 ```
 
 ## Index Tuning
 
-### Index Selectivity
+### Choose Indexes the Engine Reads
 
-High-selectivity indexes are more effective:
-
-```csharp
-// Good - unique or high cardinality
-container.CreateIndex(new PathIndex("id-idx", "/@id"));
-container.CreateIndex(new ValueIndex("email-idx", "/user/email", ValueType.String));
-
-// Less effective - low cardinality
-container.CreateIndex(new PathIndex("status-idx", "/order/status"));  // Only few values
-```
-
-### Composite Indexes
+Each declared index adds write work and storage. A name, path or structural index is maintained on every write but not read by XQuery today, and the structural index is enabled by default. A container that never uses `IndexManager`'s structural lookups can turn it off at creation:
 
 ```csharp
-// Single index for common query pattern
-container.CreateIndex(new PathIndex("order-lookup",
-    "/order/customerId", "/order/date", "/order/status"));
+var container = await db.CreateContainerAsync("events", opts =>
+    opts.Indexes.EnableStructuralIndex(enabled: false));
 ```
 
 ### Index Maintenance
 
+Indexes can't be added to, or dropped from, an existing container. A container written while indexing was not enabled becomes stale, and reads against it scan until it is rebuilt:
+
 ```csharp
-// Rebuild fragmented indexes
-var stats = container.GetIndexStats("price-idx");
-if (stats.Fragmentation > 0.3)  // > 30% fragmented
+foreach (var name in db.ContainersWithStaleIndexes())
 {
-    container.RebuildIndex("price-idx");
+    var result = await db.RebuildIndexesAsync(name);
+    Console.WriteLine($"{name}: {result.DocumentsIndexed} documents, {result.EntriesWritten} entries");
 }
 ```
+
+`RebuildStaleIndexesAsync()` does the same for every stale container. A rebuild holds the database write lock and re-reads every document in the container, so schedule it for large containers. See [Indexing](indexing.md#rebuilding-and-stale-indexes).
 
 ## Monitoring
 
 ### Database Statistics
 
 ```csharp
-var stats = db.GetStatistics();
+DatabaseStatistics stats = db.Statistics;
 Console.WriteLine($"Containers: {stats.ContainerCount}");
-Console.WriteLine($"Documents: {stats.DocumentCount}");
-Console.WriteLine($"Size: {stats.UsedBytes / 1024 / 1024} MB");
-Console.WriteLine($"Readers: {stats.ActiveReaders}");
+Console.WriteLine($"Documents: {stats.TotalDocumentCount}");
+Console.WriteLine($"Nodes: {stats.TotalNodeCount}");
+
+StorageUsage usage = db.GetStorageUsage();
+Console.WriteLine($"Map: {usage.UsedBytes / 1024 / 1024} MB of {usage.MapSize / 1024 / 1024} MB ({usage.PercentUsed:F1}%)");
 ```
 
-### Query Metrics
+`db.GetHealth()` returns the same map figures as a `StorageHealth` and never throws.
 
-```csharp
-var options = new QueryOptions
-{
-    CollectMetrics = true
-};
+### Metrics and Traces
 
-var results = db.Query(xquery, options);
-
-Console.WriteLine($"Parse time: {results.Metrics.ParseTime}");
-Console.WriteLine($"Optimize time: {results.Metrics.OptimizeTime}");
-Console.WriteLine($"Execute time: {results.Metrics.ExecuteTime}");
-Console.WriteLine($"Rows scanned: {results.Metrics.RowsScanned}");
-Console.WriteLine($"Index hits: {results.Metrics.IndexHits}");
-```
+The engine publishes `System.Diagnostics.Metrics` instruments and `ActivitySource` traces, including a per-container `db.client.operation.duration` histogram for queries, puts, gets and deletes, and map usage against the map limit. Read them with any `MeterListener`, `dotnet-counters` or OpenTelemetry. The names and tags are listed in [Logging and Telemetry](logging.md#metrics-and-traces).
 
 ## Benchmarking
 
@@ -233,70 +201,54 @@ var sw = Stopwatch.StartNew();
 
 for (int i = 0; i < iterations; i++)
 {
-    db.Query(xquery);
+    await foreach (var _ in container.QueryAsync(xquery))
+    {
+    }
 }
 
 sw.Stop();
-Console.WriteLine($"Avg: {sw.ElapsedMilliseconds / iterations} ms/query");
+Console.WriteLine($"Avg: {sw.Elapsed.TotalMilliseconds / iterations:F2} ms/query");
 ```
+
+Enumerate the results: `QueryAsync` does its work as the sequence is consumed.
 
 ### Compare Approaches
 
+Indexes are fixed at container creation, so compare configurations by creating one container per configuration and loading the same documents into each:
+
 ```csharp
-// Test different index configurations
-var configs = new[]
+var configs = new (string Name, Action<ContainerOptions> Configure)[]
 {
-    () => container.CreateIndex(new PathIndex("p1", "/a/b")),
-    () => container.CreateIndex(new ValueIndex("v1", "/a/b", ValueType.String)),
-    () => { /* no index */ }
+    ("no-index", _ => { }),
+    ("value-index", o => o.Indexes.AddValueIndex("/a/b/@id", XdmValueType.XdmString)),
 };
 
-foreach (var config in configs)
+foreach (var (name, configure) in configs)
 {
-    ResetDatabase();
-    config();
-    var time = BenchmarkQuery(query);
-    Console.WriteLine($"Time: {time}");
+    var c = await db.CreateContainerAsync($"bench-{name}", configure);
+    await c.PutDocumentsAsync(testDocuments);
+    var time = await BenchmarkQueryAsync(c, query);
+    Console.WriteLine($"{name}: {time}");
 }
 ```
+
+Call `db.EnableIndexing()` before loading, or the indexed container is stale and scans like the other.
 
 ## Common Bottlenecks
 
 | Symptom | Likely Cause | Solution |
 |---------|--------------|----------|
-| Slow queries | Missing index | Add appropriate index |
-| High memory | Large transactions | Use smaller batches |
-| Slow writes | Sync overhead | Use NoMetaSync or batch |
-| Lock contention | Long transactions | Keep transactions short |
-| "Map full" | Insufficient size | Increase MapSize |
-
-## Platform Tuning
-
-### Linux
-
-```bash
-# Increase max open files
-ulimit -n 65536
-
-# Disable transparent huge pages (can hurt LMDB)
-echo never > /sys/kernel/mm/transparent_hugepage/enabled
-```
-
-### Windows
-
-```powershell
-# Increase working set
-# Use SSD storage
-# Disable antivirus scanning on data directory
-```
+| Slow queries | Full scan of the container | Check whether an index the query path reads applies; split containers |
+| High memory | Large write transactions | Use smaller batches, or `PutDocumentsAsync` |
+| Slow writes | One commit per document | Batch writes; `NoSync` only for recoverable data |
+| Writes waiting | Long-lived write transaction | Keep write transactions short |
+| `MDB_MAP_FULL` | Map reservation exhausted | Reopen with a larger `MapSize` |
 
 ## Best Practices Summary
 
-1. **Index first** — Create indexes for query patterns
-2. **Batch writes** — Group writes in transactions
-3. **Use read-only** — When only reading
-4. **Check plans** — Verify index usage
-5. **Monitor metrics** — Track performance over time
-6. **Keep transactions short** — Minimize lock duration
-7. **Stream large data** — Avoid loading into memory
-8. **SSD storage** — For production workloads
+1. **Index for the readers that use indexes** — see [Indexing](indexing.md#what-uses-each-index-today)
+2. **Enable indexing** at startup, and rebuild stale containers
+3. **Batch writes** — `PutDocumentsAsync` or one write transaction
+4. **Keep write transactions short**
+5. **Bind variables** instead of building query text
+6. **Monitor** the storage metrics and map usage
