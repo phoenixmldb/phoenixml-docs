@@ -87,6 +87,23 @@ that parsed JSON from `/health` must call `/health/details` instead. `/health/re
 database and engine checks; it used to always return `200`. See
 [Server Mode: Health Endpoints](phoenixmldb/deployment/server-mode.md#health-endpoints).
 
+### Logging: a logger factory, stable event ids, and server logging
+
+Since phoenixml `main` 25fccbe, the database logs through `Microsoft.Extensions.Logging` with
+**stable event ids**: Storage 1000–1009, Indexing 1100–1102, Cluster 2000–2094. Ids, names and levels
+won't change once released. See [Logging](phoenixmldb/logging.md).
+
+- **Embedded:** supply a factory with `LmdbStorageOptions.LoggerFactory`. Without one, Warning and
+  above go to `System.Diagnostics.Trace` as before. `BackupFailed` (1008) is now always logged, and
+  `IndexConfigurationUnreadable` (1007) includes the full exception.
+- **Servers:** engine events now reach the host's logging. The gRPC server no longer logs a
+  full-text indexing failure twice.
+- **Changed category:** cluster events log under `PhoenixmlDb.Cluster.Raft` (previously
+  `PhoenixmlDb.Cluster.Raft.RaftNode`); update filters that use the old name.
+- **API:** `DocumentDatabase.LoggerFactory`, `ContainerManager(IStorageEngine, ILogger?)` and
+  `ContainerRecord.Deserialize(ReadOnlySpan<byte>, ILogger?)`. The Storage package now references
+  `Microsoft.Extensions.Logging.Abstractions` 10.0.9.
+
 ### REST server: resource limits, container defaults, and versioning off by default
 
 Since phoenixml `main` b622b1c, the REST server's resource limits are configurable and validated at
