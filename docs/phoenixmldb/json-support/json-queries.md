@@ -6,19 +6,36 @@ sort: 2
 
 # JSON Queries
 
-This guide covers XQuery patterns optimized for querying JSON documents stored in PhoenixmlDb.
+This guide covers XQuery patterns for JSON documents stored in PhoenixmlDb. JSON is stored in its `fn:json-to-xml` representation (see [JSON Support](index.md#json-to-xml-mapping)): every element is in the `http://www.w3.org/2005/xpath-functions` namespace, bound to the predeclared `fn` prefix, and object members are selected by their `key` attribute.
+
+Run the queries with `IContainer.QueryAsync`. A query that does not aggregate across documents runs once per document, with that document as the context item; one that uses `collection()` with an aggregate, `order by` or `group by` runs once over the whole container. See [Query API](../api-reference/queries.md#how-a-query-is-evaluated).
+
+```csharp
+await foreach (var name in users.QueryAsync("/fn:map/fn:string[@key='name']/string()"))
+    Console.WriteLine(name);
+```
+
+To write paths without the prefix, declare the default element namespace:
+
+```xquery
+declare default element namespace 'http://www.w3.org/2005/xpath-functions';
+/map/string[@key='name']/string()
+```
 
 ## Basic Field Access
 
 ```xquery
-(: Access top-level field :)
-doc('users/user1.json')/map/name/text()
+(: Top-level field :)
+/fn:map/fn:string[@key='name']/string()
 
-(: Access nested field :)
-//map/profile/address/city/text()
+(: Nested field :)
+/fn:map/fn:map[@key='profile']/fn:map[@key='address']/fn:string[@key='city']/string()
 
-(: Access with default :)
-(//map/nickname/text(), 'Anonymous')[1]
+(: With a default :)
+(/fn:map/fn:string[@key='nickname']/string(), 'Anonymous')[1]
+
+(: Any member by key, whatever its type :)
+/fn:map/fn:*[@key='status']/string()
 ```
 
 ## Filtering Documents
@@ -27,45 +44,37 @@ doc('users/user1.json')/map/name/text()
 
 ```xquery
 (: String equality :)
-for $user in collection('users')/map
-where $user/status = 'active'
-return $user
+/fn:map[fn:string[@key='status'] = 'active']
 
 (: Numeric comparison :)
-for $product in collection('products')/map
-where $product/price > 100
-return $product/name/text()
+/fn:map[fn:number[@key='price'] > 100]/fn:string[@key='name']/string()
 
 (: Boolean check :)
-for $user in collection('users')/map
-where $user/verified = 'true'
-return $user/email/text()
+/fn:map[fn:boolean[@key='verified'] = 'true']/fn:string[@key='email']/string()
 ```
 
 ### Combined Filters
 
 ```xquery
-for $order in collection('orders')/map
-where $order/status = 'pending'
-  and xs:decimal($order/total) > 500
-  and $order/priority = 'high'
-return $order
+/fn:map[fn:string[@key='status'] = 'pending']
+       [xs:decimal(fn:number[@key='total']) > 500]
+       [fn:string[@key='priority'] = 'high']
 ```
 
 ### Null Checks
 
 ```xquery
-(: Check for null :)
-//map[deletedAt/@type = 'null']
+(: Member present with value null :)
+/fn:map[fn:null[@key='deletedAt']]
 
-(: Check for non-null :)
-//map[not(deletedAt/@type = 'null')]
+(: Member present and not null :)
+/fn:map[fn:*[@key='deletedAt'][not(self::fn:null)]]
 
-(: Check field exists :)
-//map[email]
+(: Member exists :)
+/fn:map[fn:*[@key='email']]
 
-(: Check field missing :)
-//map[not(phone)]
+(: Member missing :)
+/fn:map[not(fn:*[@key='phone'])]
 ```
 
 ## Array Queries
@@ -73,136 +82,107 @@ return $order
 ### Contains Element
 
 ```xquery
-(: Check if array contains value :)
-for $product in collection('products')/map
-where $product/tags/_ = 'featured'
-return $product
+(: Array contains a value :)
+/fn:map[fn:array[@key='tags']/fn:string = 'featured']
 
-(: Multiple values (OR) :)
-for $product in collection('products')/map
-where $product/tags/_ = ('sale', 'new', 'popular')
-return $product
+(: Any of several values (OR) :)
+/fn:map[fn:array[@key='tags']/fn:string = ('sale', 'new', 'popular')]
 
-(: Multiple values (AND) :)
-for $product in collection('products')/map
-where $product/tags/_ = 'electronics'
-  and $product/tags/_ = 'wireless'
-return $product
+(: All of several values (AND) :)
+/fn:map[fn:array[@key='tags']/fn:string = 'electronics']
+       [fn:array[@key='tags']/fn:string = 'wireless']
 ```
 
 ### Array Index Access
 
 ```xquery
 (: First element :)
-//map/items/_[1]
+/fn:map/fn:array[@key='items']/*[1]
 
 (: Last element :)
-//map/items/_[last()]
+/fn:map/fn:array[@key='items']/*[last()]
 
 (: Slice :)
-//map/items/_[position() >= 2 and position() <= 5]
+/fn:map/fn:array[@key='items']/*[position() = 2 to 5]
 ```
 
 ### Array Aggregation
 
 ```xquery
-(: Count array items :)
-for $order in collection('orders')/map
-let $itemCount := count($order/items/_)
-return <order id="{$order/id}">{$itemCount} items</order>
+(: Count array items, per document :)
+count(/fn:map/fn:array[@key='items']/*)
 
-(: Sum array values :)
-for $order in collection('orders')/map
-let $total := sum($order/items/_/price)
-return <order id="{$order/id}">Total: {$total}</order>
+(: Sum a field across the objects in an array, per document :)
+sum(/fn:map/fn:array[@key='items']/fn:map/fn:number[@key='price'])
 ```
 
 ### Nested Array Queries
 
 ```xquery
-(: Find orders containing specific product :)
-for $order in collection('orders')/map
-where $order/items/_/productId = 'P001'
-return $order/id/text()
+(: Orders containing a specific product :)
+/fn:map[fn:array[@key='items']/fn:map/fn:string[@key='productId'] = 'P001']
+  /fn:string[@key='id']/string()
 
-(: Find users with specific role :)
-for $user in collection('users')/map
-where $user/roles/_ = 'admin'
-return $user/email/text()
+(: Users with a specific role :)
+/fn:map[fn:array[@key='roles']/fn:string = 'admin']/fn:string[@key='email']/string()
 ```
 
 ## Nested Object Queries
 
 ```xquery
-(: Query nested objects :)
-for $user in collection('users')/map
-where $user/address/country = 'USA'
-  and $user/address/state = 'CA'
-return concat($user/name, ' - ', $user/address/city)
-
-(: Deep nesting :)
-//map/company/departments/_/employees/_[role = 'manager']/name
+/fn:map[fn:map[@key='address']/fn:string[@key='country'] = 'USA']
+       [fn:map[@key='address']/fn:string[@key='state'] = 'CA']
+  ! concat(fn:string[@key='name'], ' - ', fn:map[@key='address']/fn:string[@key='city'])
 ```
 
 ## Type Handling
 
 ### Numeric Fields
 
+`number` elements hold the number's text; it compares as untyped, so cast when you need a specific type:
+
 ```xquery
-(: Numbers are stored as strings with type="number" :)
-for $p in collection('products')/map
-let $price := xs:decimal($p/price)
-where $price between 10 and 100
+for $p in collection()/fn:map
+let $price := xs:decimal($p/fn:number[@key='price'])
+where $price ge 10 and $price le 100
 order by $price
-return $p
+return $p/fn:string[@key='name']/string()
 ```
 
 ### Boolean Fields
 
 ```xquery
-(: Booleans are stored as 'true'/'false' strings :)
-//map[active = 'true']
-//map[not(deleted = 'true')]
+(: boolean elements contain 'true' or 'false' :)
+/fn:map[fn:boolean[@key='active'] = 'true']
+/fn:map[not(fn:boolean[@key='deleted'] = 'true')]
 ```
 
 ### Date Fields
 
+JSON has no date type; dates are strings:
+
 ```xquery
-(: Parse date strings :)
-for $event in collection('events')/map
-let $date := xs:dateTime($event/startTime)
+for $event in collection()/fn:map
+let $date := xs:dateTime($event/fn:string[@key='startTime'])
 where $date > current-dateTime()
 order by $date
-return $event
+return $event/fn:string[@key='title']/string()
 ```
 
 ## Joins
 
-### Simple Join
+A query sees one container. Documents to be joined must be in the same container; distinguish them by name or content:
 
 ```xquery
-for $order in collection('orders')/map
-let $customer := collection('customers')/map[id = $order/customerId]
+for $order in collection()/fn:map[fn:string[@key='type'] = 'order']
+let $customer := collection()/fn:map[fn:string[@key='type'] = 'customer']
+                   [fn:string[@key='id'] = $order/fn:string[@key='customerId']]
+order by $order/fn:string[@key='id']
 return <result>
-    <orderId>{$order/id/text()}</orderId>
-    <customer>{$customer/name/text()}</customer>
-    <total>{$order/total/text()}</total>
+    <orderId>{ $order/fn:string[@key='id']/string() }</orderId>
+    <customer>{ $customer/fn:string[@key='name']/string() }</customer>
+    <total>{ $order/fn:number[@key='total']/string() }</total>
 </result>
-```
-
-### Multiple Joins
-
-```xquery
-for $order in collection('orders')/map
-let $customer := collection('customers')/map[id = $order/customerId]
-for $item in $order/items/_
-let $product := collection('products')/map[id = $item/productId]
-return <line>
-    <order>{$order/id/text()}</order>
-    <customer>{$customer/name/text()}</customer>
-    <product>{$product/name/text()}</product>
-    <quantity>{$item/quantity/text()}</quantity>
-</line>
 ```
 
 ## Grouping and Aggregation
@@ -210,92 +190,85 @@ return <line>
 ### Group By
 
 ```xquery
-for $order in collection('orders')/map
-group by $status := $order/status/text()
-return <status name="{$status}">
-    <count>{count($order)}</count>
-    <total>{sum(for $o in $order return xs:decimal($o/total))}</total>
+for $order in collection()/fn:map
+group by $status := string($order/fn:string[@key='status'])
+return <status name="{ $status }">
+    <count>{ count($order) }</count>
+    <total>{ sum($order/fn:number[@key='total'] ! xs:decimal(.)) }</total>
 </status>
 ```
 
-### Complex Aggregation
+### Container-wide Totals
 
 ```xquery
-let $orders := collection('orders')/map
-
-return <report>
-    <summary>
-        <totalOrders>{count($orders)}</totalOrders>
-        <totalRevenue>{sum(for $o in $orders return xs:decimal($o/total))}</totalRevenue>
-        <averageOrder>{avg(for $o in $orders return xs:decimal($o/total))}</averageOrder>
-    </summary>
-    <byStatus>{
-        for $order in $orders
-        group by $status := $order/status/text()
-        order by count($order) descending
-        return <status name="{$status}" count="{count($order)}"/>
-    }</byStatus>
-    <topCustomers>{
-        for $order in $orders
-        group by $customer := $order/customerId/text()
-        let $total := sum(for $o in $order return xs:decimal($o/total))
-        order by $total descending
-        return <customer id="{$customer}" total="{$total}"/>[position() <= 10]
-    }</topCustomers>
-</report>
+let $orders := collection()/fn:map
+return <summary>
+    <totalOrders>{ count($orders) }</totalOrders>
+    <totalRevenue>{ sum($orders/fn:number[@key='total'] ! xs:decimal(.)) }</totalRevenue>
+    <averageOrder>{ avg($orders/fn:number[@key='total'] ! xs:decimal(.)) }</averageOrder>
+</summary>
 ```
 
-## Full-Text Search
+## Text Search
 
 ```xquery
-(: Search in text fields :)
-for $product in collection('products')/map
-where contains(lower-case($product/description), 'wireless')
-return $product
+(: Substring match on a text field :)
+/fn:map[contains(lower-case(fn:string[@key='description']), 'wireless')]
 
 (: Multiple terms :)
-for $article in collection('articles')/map
-where contains($article/content, 'machine')
-  and contains($article/content, 'learning')
-return $article/title/text()
+/fn:map[contains(fn:string[@key='content'], 'machine')]
+       [contains(fn:string[@key='content'], 'learning')]
+  /fn:string[@key='title']/string()
 ```
+
+`contains()` is evaluated against each document's text. For indexed keyword search, declare a full-text index and use the full-text API; see [Full-Text Search](../full-text-search.md).
 
 ## Pagination
 
 ```xquery
-(: Skip and limit :)
 let $page := 2
 let $pageSize := 10
-for $product in collection('products')/map
-order by $product/name
-return $product
-  [position() > ($page - 1) * $pageSize]
-  [position() <= $pageSize]
+let $sorted := for $product in collection()/fn:map
+               order by $product/fn:string[@key='name']
+               return $product
+return subsequence($sorted, ($page - 1) * $pageSize + 1, $pageSize)
 ```
 
 ## Output as JSON
 
-### XQuery 3.1 Maps
+### Back to the original shape
+
+`xml-to-json()` converts the stored representation back to JSON text:
 
 ```xquery
-for $user in collection('users')/map
-return map {
-    "id": string($user/id),
-    "name": string($user/name),
-    "email": string($user/email)
-}
+xml-to-json(/fn:map)
 ```
 
-### Serialize to JSON
+### XQuery Maps
+
+A query that returns a map yields its adaptive serialization (`map{"id":"u1",...}`), not JSON. Serialize explicitly for JSON text:
+
+```xquery
+serialize(
+    map {
+        "id": string(/fn:map/fn:string[@key='id']),
+        "name": string(/fn:map/fn:string[@key='name'])
+    },
+    map { "method": "json" }
+)
+```
+
+### One JSON Array for the Container
 
 ```xquery
 serialize(
     array {
-        for $product in collection('products')/map
-        where $product/inStock = 'true'
+        for $product in collection()/fn:map
+        where $product/fn:boolean[@key='inStock'] = 'true'
+        order by $product/fn:string[@key='name']
         return map {
-            "name": string($product/name),
-            "price": number($product/price)
+            "name": string($product/fn:string[@key='name']),
+            "price": number($product/fn:number[@key='price'])
         }
     },
     map { "method": "json" }
@@ -304,9 +277,9 @@ serialize(
 
 ## Best Practices
 
-1. **Index frequently queried paths** — `/map/status`, `/map/customerId`
-2. **Use typed comparisons** — Cast to `xs:decimal` for numeric comparisons
-3. **Avoid `//` in large collections** — Use specific paths
+1. **Select members by key** — `fn:string[@key='status']`, or `fn:*[@key='status']` when the type varies
+2. **Use typed comparisons** — Cast `number` values to `xs:decimal` or `xs:double` where precision or ordering matters
+3. **Mind the evaluation shape** — Use `collection()` with an aggregate, `order by` or `group by` for one container-wide answer
 4. **Filter before joining** — Reduce join cardinality
 5. **Use `let` for reused expressions** — Avoid recomputation
 

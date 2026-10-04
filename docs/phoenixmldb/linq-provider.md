@@ -6,132 +6,202 @@ sort: 13
 
 # LINQ Provider
 
-PhoenixmlDb provides a comprehensive LINQ provider that enables querying XML documents using familiar C# syntax. The LINQ queries are translated directly to XQuery AST for optimal performance.
+`PhoenixmlDb.Linq` translates LINQ queries into an XQuery AST and runs them against a single
+container, so the same query path that runs hand-written XQuery runs the LINQ query. A query
+roots to one container.
+
+> **Availability.** `PhoenixmlDb.Linq` and the database packages it builds on
+> (`PhoenixmlDb.Storage` and the rest) are not yet published on NuGet. Only `PhoenixmlDb.Core`,
+> `PhoenixmlDb.XQuery` and `PhoenixmlDb.Xslt` are.
 
 ## Overview
 
-The LINQ provider offers two approaches:
+There are two entry points. Both use the same translator and the same operators.
 
-1. **Direct AST Generation** (Recommended) — Generates XQuery AST directly for better optimization
-2. **String-based Translation** (Legacy) — Generates XQuery strings
+1. **Container-rooted** (`container.AsQueryable()`) — the translated AST is serialized to XQuery
+   source and run through `IContainer.QueryAsync`, the same public API any caller uses.
+2. **Engine-rooted** (`XmlQuery.FromContainer(containerId, queryEngine)`) — the AST is handed
+   directly to a `PhoenixmlDb.XQuery.Execution.QueryEngine` for a container id. This is the only
+   path on which `Compile` and `Explain` work.
+
+Each row of a query is the root element of one document in the container (the query's source is
+`collection()/*`).
 
 ## Getting Started
 
 ### Basic Usage
 
+Rows map onto a class with a parameterless constructor and settable properties:
+
 ```csharp
 using PhoenixmlDb.Linq;
-using PhoenixmlDb.Query.Execution;
+using PhoenixmlDb.Storage;
 
-// Create query engine and provider
-var queryEngine = new QueryEngine(indexConfig);
-var containerId = await database.OpenContainerAsync("books");
+public sealed class Book
+{
+    public string Title { get; set; } = "";
+    public string Author { get; set; } = "";
+    public string Genre { get; set; } = "";
+    public decimal Price { get; set; }
+    public int Year { get; set; }
+}
 
-// Create a queryable source
-var books = XmlQuery.FromContainer(containerId, queryEngine);
+await using var db = new DocumentDatabase("./data");
+var books = await db.OpenOrCreateContainerAsync("books");
 
-// Execute LINQ queries
-var results = await books
-    .Where(e => e.LocalName == "book")
-    .OrderBy(e => e.Element("title").Value())
+await books.PutDocumentAsync("b1.xml",
+    "<book><title>XQuery Guide</title><author>Jane Doe</author>" +
+    "<genre>Fiction</genre><price>45.00</price><year>2024</year></book>");
+
+var cheap = await books.AsQueryable<Book>()
+    .Where(b => b.Price < 50m)
+    .OrderBy(b => b.Title)
     .ToListAsync();
 ```
 
+In a query, a property access becomes a child-element step named after the property in **lower
+case**: `b.Price` is `price`. A property called `ReleaseDate` therefore addresses
+`<releasedate>`, not `<releaseDate>`; use the untyped form (below) for mixed-case element names.
+
+When results are materialized, each writable property is filled from the child element or
+attribute whose local name matches the property name, ignoring case.
+
+Without a class, `container.AsQueryable()` returns `XmlElement` rows and you navigate with the
+[XML navigation extensions](#xml-navigation-extensions).
+
 ### Async Operations
 
-All queries support async execution:
+The async terminals are extension methods on `IQueryable<T>` in `AsyncQueryableExtensions`:
 
 ```csharp
+var query = books.AsQueryable<Book>();
+
 // Async enumeration
-await foreach (var book in books.Where(e => e.LocalName == "book"))
+await foreach (var book in query.Where(b => b.Genre == "Fiction").AsAsyncEnumerable())
 {
-    Console.WriteLine(book.StringValue);
+    Console.WriteLine(book.Title);
 }
 
 // Async methods
-var firstBook = await books.FirstAsync();
-var count = await books.CountAsync();
-var exists = await books.AnyAsync(e => e.LocalName == "bestseller");
+var firstBook = await query.FirstAsync();
+var count = await query.CountAsync();
+var exists = await query.AnyAsync(b => b.Year == 2024);
 ```
 
+Also available: `FirstOrDefaultAsync`, `SingleAsync`, `SingleOrDefaultAsync`, `LastAsync`,
+`LastOrDefaultAsync`, `AllAsync`, `SumAsync`, `AverageAsync`, `MinAsync`, `MaxAsync`,
+`ToArrayAsync`, `ToDictionaryAsync`, `ToLookupAsync` and `ForEachAsync`.
+
 ## Supported LINQ Operations
+
+- Filtering: `Where`
+- Projection: `Select` (including projection to new shapes), `SelectMany`
+- Ordering: `OrderBy`, `OrderByDescending`, `ThenBy`, `ThenByDescending`
+- Element selection: `First`, `FirstOrDefault`, `Single`, `SingleOrDefault`, `ElementAt`,
+  `ElementAtOrDefault`
+- Quantifiers and counts: `Count`, `Any`, `All`, `Contains`
+- Paging: `Take`, `Skip`, `TakeWhile`, `SkipWhile`
+- Set and sequence operators (within one container): `Distinct`, `DistinctBy`, `Union`,
+  `Intersect`, `Except`, `Concat`, `Reverse`, `Order`, `OrderDescending`, `Last`,
+  `LastOrDefault`, `DefaultIfEmpty`
+- Aggregation: `Min`, `Max`, `Sum`, `Average`
+- Grouping: `GroupBy`, including `GroupBy(...).Select(g => ...)` with `g.Key` and the group
+  aggregates `g.Count()`, `g.Sum(sel)`, `g.Min(sel)`, `g.Max(sel)`, `g.Average(sel)` and `g.Any()`
+- Join: `Join`, when both sources are the same container
 
 ### Filtering
 
 ```csharp
+var query = books.AsQueryable<Book>();
+
 // Where clause
-var fiction = books.Where(e => e.Element("genre").Value() == "Fiction");
+var fiction = query.Where(b => b.Genre == "Fiction");
 
 // Multiple conditions
-var recent = books.Where(e =>
-    e.Element("year").Value() == "2024" &&
-    e.Element("price").Value() < "50");
+var recent = query.Where(b => b.Year == 2024 && b.Price < 50m);
 ```
 
 ### Projection
 
 ```csharp
 // Select specific data
-var titles = books.Select(e => e.Element("title").Value());
+var titles = query.Select(b => b.Title);
 
 // Project to anonymous types
-var summary = books.Select(e => new {
-    Title = e.Element("title").Value(),
-    Author = e.Element("author").Value()
-});
+var summary = query.Select(b => new { b.Title, b.Author });
 ```
+
+A `Select` that creates an anonymous type or an object initializer projects to an element
+constructor: one child element per member, named after the member. The conditional operator
+`cond ? a : b` maps to `if`/`then`/`else`, and `??` yields the left operand when it produces a
+value, otherwise the right.
 
 ### Ordering
 
 ```csharp
 // Single key ordering
-var byTitle = books.OrderBy(e => e.Element("title").Value());
+var byTitle = query.OrderBy(b => b.Title);
 
 // Descending order
-var byDateDesc = books.OrderByDescending(e => e.Element("date").Value());
+var byYearDesc = query.OrderByDescending(b => b.Year);
 
 // Multiple keys
-var sorted = books
-    .OrderBy(e => e.Element("author").Value())
-    .ThenByDescending(e => e.Element("year").Value());
+var sorted = query
+    .OrderBy(b => b.Author)
+    .ThenByDescending(b => b.Year);
 ```
 
 ### Aggregation
 
 ```csharp
 // Count
-var totalBooks = await books.CountAsync();
-var fictionCount = await books.CountAsync(e => e.Element("genre").Value() == "Fiction");
+var totalBooks = await query.CountAsync();
+var fictionCount = await query.CountAsync(b => b.Genre == "Fiction");
 
 // Any/All
-var hasExpensive = await books.AnyAsync(e => e.Element("price").Value() > "100");
-var allInStock = await books.AllAsync(e => e.Element("stock").Value() != "0");
+var hasExpensive = await query.AnyAsync(b => b.Price > 100m);
+var allRecent = await query.AllAsync(b => b.Year >= 2000);
 
 // First/Single
-var firstBook = await books.FirstAsync();
-var singleBestseller = await books.SingleAsync(e => e.Element("bestseller").Value() == "true");
+var firstBook = await query.FirstAsync();
+var single = await query.SingleAsync(b => b.Title == "XQuery Guide");
 ```
 
 ### Pagination
 
 ```csharp
 // Take and Skip
-var firstTen = await books.Take(10).ToListAsync();
-var page2 = await books.Skip(10).Take(10).ToListAsync();
+var firstTen = await query.Take(10).ToListAsync();
+var page2 = await query.Skip(10).Take(10).ToListAsync();
 ```
 
 ### Distinct
 
 ```csharp
-var uniqueAuthors = await books
-    .Select(e => e.Element("author").Value())
+var uniqueAuthors = await query
+    .Select(b => b.Author)
     .Distinct()
     .ToListAsync();
 ```
 
+### Not supported
+
+The provider refuses what it cannot translate rather than returning a wrong result. These throw
+`NotSupportedException`, with the workaround in the message:
+
+- Cross-container joins: the `Join` inner source must be the same container as the outer one.
+- `GroupJoin` (`join ... into ...`).
+- `Aggregate` and `Zip`. Materialize with `ToListAsync()` and apply them in memory.
+- `Chunk`. Use `(await query.ToListAsync()).Chunk(size)`.
+- `SequenceEqual`.
+- `DefaultIfEmpty()` with no argument on a reference type. Pass an explicit default.
+- `OfType`, `Cast`, and other operators not listed above.
+- Any other CLR method or expression with no XQuery translation.
+
 ## XML Navigation Extensions
 
-The LINQ provider includes extension methods for XML navigation:
+For `XmlElement` rows, `XmlExtensions` provides navigation methods that translate to XPath steps
+inside a query:
 
 ### Child Elements
 
@@ -189,22 +259,29 @@ var text = element.Value();
 var attrValue = attr.Value();
 ```
 
+`Value()` returns a `string`, so in an untyped query compare it with `==`, `!=` or the string
+methods; C# has no `<` or `>` on strings. For numeric or date comparisons, use a typed row class.
+
+```csharp
+var fiction = books.AsQueryable()
+    .Where(e => e.Element("genre").Value() == "Fiction")
+    .OrderBy(e => e.Element("title").Value());
+```
+
 ## Fluent Query API
 
-For complex queries, use the fluent API:
+`FluentQuery<T>` builds the FLWOR expression clause by clause. Create one with
+`container.Fluent<T>()` (container-rooted) or `XmlQuery.Fluent<T>(containerId, queryEngine)`
+(engine-rooted):
 
 ```csharp
 using PhoenixmlDb.Linq;
 
-var query = FluentXmlQuery
-    .From(containerId, queryEngine)
-    .Where(e => e.Element("genre").Value() == "Fiction")
-    .Let("totalPrice", e => e.Element("price").Value())
-    .OrderBy(e => e.Element("title").Value())
-    .Select(e => new {
-        Title = e.Element("title").Value(),
-        Price = e.Element("price").Value()
-    });
+var query = books.Fluent<Book>()
+    .Where(b => b.Genre == "Fiction")
+    .Let("price", b => b.Price)
+    .OrderBy(b => b.Title)
+    .Select(b => new { b.Title, b.Price });
 
 var results = await query.ExecuteAsync();
 ```
@@ -212,161 +289,158 @@ var results = await query.ExecuteAsync();
 ### Fluent Query Features
 
 ```csharp
-// Position tracking
-var withPosition = FluentXmlQuery
-    .From(containerId, queryEngine)
-    .WithPosition()
-    .Select(x => new { Position = x.position, Item = x.item });
+// Position tracking (an XQuery count clause)
+var withPosition = books.Fluent<Book>()
+    .WithPosition();
 
 // Group by
-var grouped = FluentXmlQuery
-    .From(containerId, queryEngine)
-    .GroupBy(e => e.Element("author").Value());
+var grouped = books.Fluent<Book>()
+    .GroupBy(b => b.Author);
 
-// Query explanation
-var explanation = query.Explain();
-Console.WriteLine(explanation.AstString);
-Console.WriteLine(explanation.ExecutionPlan);
+// The generated FLWOR expression
+var ast = books.Fluent<Book>().Where(b => b.Price < 50m).ToAst();
+Console.WriteLine(ast);
 ```
+
+`FluentQuery<T>` also has `Select`, `SelectMany`, `OrderByDescending`, `Take`, `Skip`,
+`Distinct`, and the terminals `ExecuteAsync`, `FirstAsync`, `FirstOrDefaultAsync`, `AnyAsync`,
+`CountAsync` and `AsAsyncEnumerable`. `OrderBy` returns an `OrderedFluentQuery<T>` with
+`ThenBy` and `ThenByDescending`. A `DirectXmlQueryable<T>` converts with `AsFluent()`.
 
 ## Query Debugging
 
 ### View XQuery AST
 
-```csharp
-var query = books.Where(e => e.LocalName == "book");
+`GetAst()` works on either entry point:
 
-// Get the AST
+```csharp
+var query = books.AsQueryable<Book>().Where(b => b.Price < 50m);
+
 var ast = query.GetAst();
 Console.WriteLine(ast?.ToString());
+```
 
-// Get full explanation
-var explanation = query.Explain();
+### Explain and Compile
+
+`Explain()` and `GetDirectProvider().Compile(...)` compile the query with a `QueryEngine`, so they
+work only on an engine-rooted query (`XmlQuery.FromContainer` or `XmlQuery.Fluent`). On a
+container-rooted query they throw `NotSupportedException`.
+
+```csharp
+var engineQuery = XmlQuery.FromContainer<Book>(containerId, queryEngine)
+    .Where(b => b.Price < 50m);
+
+var explanation = engineQuery.Explain();
 Console.WriteLine($"AST: {explanation?.AstString}");
 Console.WriteLine($"Plan: {explanation?.ExecutionPlan}");
 Console.WriteLine($"Compiled: {explanation?.CompilationSucceeded}");
-```
 
-### Provider Access
-
-```csharp
-// Access the underlying provider
-var provider = books.GetDirectProvider();
-if (provider != null)
-{
-    var compilationResult = provider.Compile(books.Expression);
-    // Inspect compilation result
-}
-```
-
-## Type Mapping
-
-The LINQ provider automatically maps .NET types to XDM types:
-
-| .NET Type | XDM Type |
-|-----------|----------|
-| `string` | `xs:string` |
-| `int`, `long` | `xs:integer` |
-| `decimal` | `xs:decimal` |
-| `double`, `float` | `xs:double` |
-| `bool` | `xs:boolean` |
-| `DateTime` | `xs:dateTime` |
-| `XmlElement` | `element()` |
-| `XmlAttribute` | `attribute()` |
-
-### Custom Type Mapping
-
-```csharp
-// Create entity mapping for POCOs
-var mapping = new EntityMapping<Book>()
-    .Property(b => b.Title, "title")
-    .Property(b => b.Author, "author")
-    .Property(b => b.Price, "price");
-```
-
-## String Functions
-
-String methods are translated to XQuery functions:
-
-```csharp
-// Contains
-books.Where(e => e.Element("title").Value().Contains("Guide"))
-
-// StartsWith
-books.Where(e => e.Element("author").Value().StartsWith("J"))
-
-// EndsWith
-books.Where(e => e.Element("title").Value().EndsWith("Edition"))
-
-// ToLower/ToUpper
-books.Select(e => e.Element("title").Value().ToLower())
-
-// Substring
-books.Select(e => e.Element("title").Value().Substring(0, 10))
-
-// Trim
-books.Select(e => e.Element("title").Value().Trim())
-```
-
-## Best Practices
-
-### 1. Use Direct Provider
-
-```csharp
-// Recommended: Direct AST generation
-var books = XmlQuery.FromContainer(containerId, queryEngine);
-
-// Legacy: String-based translation
-var books = XmlQuery.FromContainer(containerId, legacyExecutor);
-```
-
-### 2. Use Async Operations
-
-```csharp
-// Preferred: Async execution
-var results = await books.ToListAsync();
-
-// Avoid: Blocking calls on async code
-var results = books.ToList(); // May block thread pool
-```
-
-### 3. Filter Early
-
-```csharp
-// Good: Filter before projection
-var result = books
-    .Where(e => e.Element("price").Value() < "50")
-    .Select(e => e.Element("title").Value());
-
-// Less efficient: Filter after projection
-var result = books
-    .Select(e => new { e, price = e.Element("price").Value() })
-    .Where(x => x.price < "50");
-```
-
-### 4. Use Pagination
-
-```csharp
-// Good: Limit results
-var page = await books.Skip(100).Take(10).ToListAsync();
-
-// Avoid: Loading everything
-var all = await books.ToListAsync();
-var page = all.Skip(100).Take(10);
-```
-
-### 5. Inspect Query Plans
-
-```csharp
-// Check query efficiency
-var explanation = query.Explain();
-if (!explanation.CompilationSucceeded)
+if (explanation is { CompilationSucceeded: false })
 {
     foreach (var error in explanation.Errors)
     {
         Console.WriteLine($"Error: {error}");
     }
 }
+```
+
+## Type Mapping
+
+Element content in a stored document is untyped. When a comparison has a node path on one side,
+the provider casts that side to the type implied by the C# comparison:
+
+| C# comparand type | XQuery cast |
+|-------------------|-------------|
+| `decimal` | `xs:decimal` |
+| `int`, `long`, `short`, `byte` | `xs:integer` |
+| `double`, `float` | `xs:double` |
+| `DateTime`, `DateTimeOffset` | `xs:dateTime` |
+| `DateOnly` | `xs:date` |
+| `bool` | `xs:boolean` |
+| `string` | no cast; compared as the node's string value |
+
+Nullable types use their underlying type. A `bool` property used on its own (for example
+`Where(b => b.InStock)`) is read as `xs:boolean(string(path))`, so `<instock>false</instock>`
+tests false.
+
+## String Functions
+
+String methods are translated to XQuery functions:
+
+```csharp
+var query = books.AsQueryable<Book>();
+
+// Contains
+query.Where(b => b.Title.Contains("Guide"));
+
+// StartsWith
+query.Where(b => b.Author.StartsWith("J"));
+
+// EndsWith
+query.Where(b => b.Title.EndsWith("Edition"));
+
+// ToLower/ToUpper (and the Invariant forms)
+query.Select(b => b.Title.ToLower());
+
+// Substring
+query.Select(b => b.Title.Substring(0, 10));
+
+// Trim
+query.Select(b => b.Title.Trim());
+```
+
+`Replace`, `Split`, `IndexOf` and the `Length` property are also translated, as are
+`Math.Abs`, `Math.Floor`, `Math.Ceiling`, `Math.Round`, `Math.Pow`, and the `Year`, `Month`,
+`Day`, `Hour`, `Minute` and `Second` components of `DateTime`.
+
+## JSON Results
+
+Rows can come back as JSON instead of CLR objects:
+
+```csharp
+List<string> rows = await books.AsQueryable<Book>()
+    .Where(b => b.Genre == "Fiction")
+    .ToJsonListAsync();            // one JSON object per row
+
+string document = await books.AsQueryable<Book>()
+    .ToJsonAsync(indented: true);  // the whole result set as one JSON array
+```
+
+The conversion reads the stored markup, not the materialized `Book`, so elements and attributes
+the class does not declare are kept. Attributes and child elements both become properties,
+repeated sibling elements become an array, and leaf text becomes a JSON number or boolean only
+when that round-trips exactly (`<price>10</price>` becomes `10`; `"0123"` stays a string).
+
+## Best Practices
+
+### 1. Prefer the container-rooted entry point
+
+```csharp
+var query = books.AsQueryable<Book>();
+```
+
+It runs through `IContainer.QueryAsync`, the same path as hand-written XQuery. Use
+`XmlQuery.FromContainer` when you need `Explain` or `Compile`.
+
+### 2. Use Async Operations
+
+```csharp
+// Preferred: Async execution
+var results = await query.ToListAsync();
+
+// Avoid: synchronous enumeration blocks on the async query
+var blocking = query.ToList();
+```
+
+### 3. Use Pagination
+
+```csharp
+// Good: Take/Skip become subsequence() in the query
+var page = await query.Skip(100).Take(10).ToListAsync();
+
+// Avoid: loading everything and paging in memory
+var all = await query.ToListAsync();
+var inMemoryPage = all.Skip(100).Take(10);
 ```
 
 ## LINQ to FLWOR Mapping
@@ -386,9 +460,9 @@ if (!explanation.CompilationSucceeded)
 | `All(predicate)` | `empty(... where not(predicate))` |
 | `Distinct()` | `distinct-values(...)` |
 
-## Performance Considerations
+## Execution
 
-1. **Index Usage** — The query optimizer will use available indexes when possible
-2. **Streaming** — Large result sets are streamed rather than loaded into memory
-3. **Lazy Evaluation** — Queries are only executed when results are enumerated
-4. **AST Optimization** — Direct AST generation enables better query optimization
+1. **Deferred execution** — a query runs when it is enumerated or a terminal such as
+   `ToListAsync` is awaited, not when it is built.
+2. **Same query path** — a container-rooted LINQ query is executed by `IContainer.QueryAsync`,
+   exactly like the equivalent hand-written XQuery.

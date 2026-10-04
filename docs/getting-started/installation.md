@@ -1,141 +1,84 @@
 ---
 title: Installation
-description: Platform requirements, NuGet packages, and building from source
+description: Platform requirements and NuGet packages
 sort: 1
 ---
 
 # Installation
 
-PhoenixmlDb is distributed as NuGet packages. Choose the packages that match your deployment scenario.
+## Package Availability
 
-## Package Options
+> **Note:** The PhoenixmlDb database packages are not yet published on NuGet. The commands
+> below will not resolve until they are.
+
+The database is split into the following packages. Each package ID is the project name.
 
 | Package | Description | Use Case |
 |---------|-------------|----------|
-| `PhoenixmlDb` | Core embedded database | Single-application embedded use |
-| `PhoenixmlDb.Server` | gRPC server | Multi-client server deployment |
-| `PhoenixmlDb.Client` | Client SDK | Connect to PhoenixmlDb server |
-| `PhoenixmlDb.Cluster` | Clustering support | Distributed high-availability |
+| `PhoenixmlDb.Storage` | LMDB storage core: `DocumentDatabase`, containers, documents, metadata, XQuery over a container | Embedded use (base package) |
+| `PhoenixmlDb.Indexing` | Index maintenance, enabled with `db.EnableIndexing()` | Embedded use with indexes |
+| `PhoenixmlDb.Client` | gRPC client SDK | Connect to a PhoenixmlDb server |
+
+`PhoenixmlDb.Storage` depends on the published `PhoenixmlDb.Core` and `PhoenixmlDb.XQuery`
+packages.
 
 ## Embedded Installation
 
-For embedded use in a single application:
-
-**.NET CLI**
+For embedded use in a single application, once the packages are published:
 
 ```bash
-dotnet add package PhoenixmlDb
+dotnet add package PhoenixmlDb.Storage
+
+# Optional: index maintenance
+dotnet add package PhoenixmlDb.Indexing
 ```
 
-**Package Manager**
+## Engine Packages
 
-```powershell
-Install-Package PhoenixmlDb
-```
-
-**PackageReference**
-
-```xml
-<PackageReference Include="PhoenixmlDb" Version="1.0.0" />
-```
-
-## Server Installation
-
-For multi-client server deployment:
+The XQuery and XSLT engines the database is built on are published on NuGet and can be used
+on their own, without the database:
 
 ```bash
-# Server package
-dotnet add package PhoenixmlDb.Server
-
-# Client SDK (for client applications)
-dotnet add package PhoenixmlDb.Client
+dotnet add package PhoenixmlDb.XQuery
+dotnet add package PhoenixmlDb.Xslt
 ```
 
-## Cluster Installation
-
-For distributed deployment with high availability:
-
-```bash
-dotnet add package PhoenixmlDb.Cluster
-```
+The engine packages target `net8.0` and `net10.0`.
 
 ## Platform Requirements
 
-### Windows
-
-- Windows 10 version 1607 or later
-- Windows Server 2016 or later
-- .NET 10.0 runtime
-
-### Linux
-
-- Ubuntu 20.04, 22.04, or 24.04
-- Debian 11 or 12
-- RHEL 8 or 9
-- .NET 10.0 runtime
-- `liblmdb` (usually included, or install via package manager)
-
-```bash
-# Ubuntu/Debian
-sudo apt-get install liblmdb-dev
-
-# RHEL/CentOS
-sudo dnf install lmdb-devel
-```
-
-### macOS
-
-- macOS 12 (Monterey) or later
-- .NET 10.0 runtime
-- `lmdb` via Homebrew (optional, native library included)
-
-```bash
-brew install lmdb
-```
+- The database projects target **.NET 10** (`net10.0`).
+- LMDB native binaries are supplied by the `LightningDB` package dependency for Windows, Linux
+  and macOS (x64 and arm64), so no separate `liblmdb` install is needed.
+- ICU globalization must be available. Do not set `DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1`:
+  the query engines depend on ICU for `normalize-unicode()`, collations, and regex character
+  classes.
 
 ## Verifying Installation
 
 Create a simple test to verify the installation:
 
 ```csharp
-using PhoenixmlDb;
+using PhoenixmlDb.Storage;
 
-// Create a temporary database
+// Create a temporary database (the directory is created if missing)
 var tempPath = Path.Combine(Path.GetTempPath(), "phoenixml-test");
-using var db = new XmlDatabase(tempPath);
 
-// Create a container
-var test = db.CreateContainer("test");
+await using (var db = new DocumentDatabase(tempPath))
+{
+    // Create a container
+    var test = await db.CreateContainerAsync("test");
 
-// Store and retrieve a document
-test.PutDocument("hello.xml", "<greeting>Hello, PhoenixmlDb!</greeting>");
-var doc = test.GetDocument("hello.xml");
+    // Store and retrieve a document
+    await test.PutDocumentAsync("hello.xml", "<greeting>Hello, PhoenixmlDb!</greeting>");
+    var doc = await test.GetDocumentAsync("hello.xml");
 
-Console.WriteLine(doc);
-// Output: <greeting>Hello, PhoenixmlDb!</greeting>
+    Console.WriteLine(await doc!.GetContentAsync());
+}
 
 // Cleanup
 Directory.Delete(tempPath, recursive: true);
 Console.WriteLine("Installation verified successfully!");
-```
-
-## Build from Source
-
-To build PhoenixmlDb from source:
-
-```bash
-# Clone the repository
-git clone https://github.com/endpointsystems/phoenixml.git
-cd phoenixml
-
-# Build
-dotnet build
-
-# Run tests
-dotnet test
-
-# Create packages
-dotnet pack -c Release
 ```
 
 ## Next Steps

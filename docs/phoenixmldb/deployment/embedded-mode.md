@@ -6,7 +6,8 @@ sort: 1
 
 # Embedded Mode
 
-Embedded mode runs PhoenixmlDb directly within your application process, providing the simplest deployment option with the best performance for single-application scenarios.
+Embedded mode runs PhoenixmlDb directly within your application process: no separate server, no
+network hop. It suits a single application that owns its data.
 
 ## Overview
 
@@ -33,40 +34,62 @@ Embedded mode runs PhoenixmlDb directly within your application process, providi
 
 ## Installation
 
-```bash
-dotnet add package PhoenixmlDb
-```
+The embedded database is the `PhoenixmlDb.Storage` package (with `PhoenixmlDb.Indexing` for index
+maintenance and `PhoenixmlDb.Json` for JSON support). These packages are **not yet published on
+NuGet**. Only `PhoenixmlDb.Core`, `PhoenixmlDb.XQuery` and `PhoenixmlDb.Xslt` are published.
 
 ## Basic Usage
 
 ```csharp
-using PhoenixmlDb;
+using PhoenixmlDb.Core;
+using PhoenixmlDb.Storage;
 
 // Open or create database
-using var db = new XmlDatabase("./data");
+await using var db = new DocumentDatabase("./data");
 
 // Create container
-var products = db.CreateContainer("products");
+var products = await db.CreateContainerAsync("products");
 
 // Store document
-products.PutDocument("p1.xml", "<product><name>Widget</name></product>");
+await products.PutDocumentAsync("p1.xml", "<product><name>Widget</name></product>");
 
 // Query
-var results = db.Query("collection('products')//name/text()");
+await foreach (var item in products.QueryAsync("collection()//name/text()"))
+{
+    Console.WriteLine(item);
+}
 ```
+
+A query runs against one container; inside it, `collection()` is every document in that
+container.
 
 ## Configuration
 
+Storage settings are an `LmdbStorageOptions` record, passed to the constructor:
+
 ```csharp
-var options = new DatabaseOptions
+var options = new LmdbStorageOptions
 {
-    MapSize = 1L * 1024 * 1024 * 1024,  // 1 GB
-    MaxContainers = 50,
+    MapSize = 1L * 1024 * 1024 * 1024,  // 1 GiB
     MaxReaders = 126
 };
 
-using var db = new XmlDatabase("./data", options);
+await using var db = new DocumentDatabase("./data", options);
 ```
+
+| Option | Default | Meaning |
+|--------|---------|---------|
+| `MapSize` | 50 GiB (64-bit), 1 GiB (32-bit) | Fixed virtual address reservation for the memory map, set at open. `data.mdb` grows sparsely up to it. When it is exhausted, writes throw `PhoenixmlDbStorageException`; the map never grows at runtime. |
+| `MaxReaders` | 126 | Maximum concurrent readers. |
+| `MaxDatabases` | 64 | Maximum LMDB named databases. Must cover the ones the engine opens. |
+| `NoSync` | `false` | Skip filesystem syncs: faster, but data may be lost on a system crash. |
+| `WriteMap` | `false` | Use LMDB's `MDB_WRITEMAP` mode. |
+| `CreateIfMissing` | `true` | When `false`, a missing directory throws `DirectoryNotFoundException` instead of being created. |
+| `RestoreFromPath`, `RestoreFromDirectory`, `RestoreFromStream`, `RestoreOverwrite` | none | Restore from a backup on open; see [Restore](#restore). |
+| `LoggerFactory` | none | `ILoggerFactory` to log through. Without one, warnings and errors go to `System.Diagnostics.Trace`. |
+
+Invalid options (for example a `MapSize` of zero) make the constructor throw an
+`ArgumentException` that names every problem.
 
 ### Resource access
 
@@ -75,134 +98,131 @@ stylesheets read stored documents only, with no local files or network requests.
 directories and HTTP origins with `ResourceAccessPolicy.Create(...)`. See
 [Resource Access](../resource-access.md).
 
+### Indexing
+
+`ContainerOptions.Indexes` is only a declaration until index maintenance is attached:
+
+```csharp
+using PhoenixmlDb.Indexing;
+
+db.EnableIndexing();  // the database owns the returned IndexManager and disposes it
+```
+
 ## Lifecycle Management
 
 ### Application Startup
 
 ```csharp
-public class Startup
+builder.Services.AddSingleton(sp =>
 {
-    public void ConfigureServices(IServiceCollection services)
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    var path = configuration["Database:Path"] ?? "./data";
+    var options = new LmdbStorageOptions
     {
-        services.AddSingleton<XmlDatabase>(sp =>
-        {
-            var path = Configuration["Database:Path"];
-            var options = new DatabaseOptions
-            {
-                MapSize = Configuration.GetValue<long>("Database:MapSize")
-            };
-            return new XmlDatabase(path, options);
-        });
-    }
-}
+        MapSize = configuration.GetValue<long>("Database:MapSize", LmdbStorageOptions.Default.MapSize)
+    };
+    return new DocumentDatabase(path, options);
+});
 ```
+
+The DI container disposes the singleton when the host shuts down.
 
 ### Application Shutdown
 
 ```csharp
-public class Shutdown
-{
-    private readonly XmlDatabase _db;
+// Flush pending writes to disk
+await db.FlushAsync();
 
-    public async Task StopAsync(CancellationToken cancellationToken)
-    {
-        // Flush pending writes
-        _db.Flush();
-
-        // Dispose (closes all handles)
-        _db.Dispose();
-    }
-}
+// Dispose (closes all handles)
+await db.DisposeAsync();
 ```
+
+`DocumentDatabase` also registers a process-exit handler that disposes it, with a bounded wait, if
+the application exits without doing so.
 
 ## Multi-Threading
 
 ### Thread Safety
 
-| Operation | Thread Safe |
-|-----------|-------------|
-| Read queries | Yes |
-| Write operations | Single writer |
-| Read transactions | Multiple concurrent |
-| Write transactions | Serialized |
+| Operation | Behaviour |
+|-----------|-----------|
+| Queries and read transactions (`BeginRead`) | Concurrent. A read transaction sees a snapshot taken when it began. |
+| Write transactions (`BeginWriteAsync`) | One at a time per database. `BeginWriteAsync` waits for the write lock; the `BeginWriteAsync(TimeSpan timeout)` overload throws `TransactionTimeoutException` if it cannot get it in time. |
+| Opening | One `DocumentDatabase` per directory per process. Opening a second one on the same path throws `LmdbEnvironmentAlreadyOpenException`. |
+
+A write transaction buffers its operations and applies them in one LMDB transaction on
+`CommitAsync`. Disposing it without committing discards them.
 
 ### Recommended Pattern
 
 ```csharp
-public class ProductRepository
+public sealed class ProductRepository(DocumentDatabase db)
 {
-    private readonly XmlDatabase _db;
-
-    public ProductRepository(XmlDatabase db)
+    public async Task<List<object>> GetAllProductsAsync(CancellationToken ct = default)
     {
-        _db = db;
+        var products = await db.OpenContainerAsync("products", ct)
+            ?? throw new InvalidOperationException("Container 'products' does not exist.");
+
+        // Read transaction: a consistent snapshot, concurrent with other readers
+        using var txn = db.BeginRead();
+        var results = new List<object>();
+        await foreach (var item in txn.QueryAsync(products.Id, "collection()//product", cancellationToken: ct))
+        {
+            results.Add(item);
+        }
+        return results;
     }
 
-    public IEnumerable<string> GetAllProducts()
+    public async Task AddProductAsync(string xml, CancellationToken ct = default)
     {
-        // Read-only transaction allows concurrent access
-        using var txn = _db.BeginTransaction(readOnly: true);
-        return txn.Query("collection('products')//product").ToList();
-    }
+        var products = await db.OpenOrCreateContainerAsync("products", cancellationToken: ct);
 
-    public void AddProduct(string xml)
-    {
-        // Write transaction - serialized
-        using var txn = _db.BeginTransaction();
-        txn.GetContainer("products").PutDocument($"p-{Guid.NewGuid()}.xml", xml);
-        txn.Commit();
+        // Write transaction: serialized with other writers
+        await using var txn = await db.BeginWriteAsync(ct);
+        await txn.PutDocumentAsync(products.Id, $"p-{Guid.NewGuid()}.xml", xml, cancellationToken: ct);
+        await txn.CommitAsync(ct);
     }
 }
 ```
 
 ## Multiple Processes
 
-> **Warning:** LMDB supports only one writer process at a time.
-
-### Read-Only Access
-
-Multiple processes can open the same database read-only:
-
-```csharp
-// Process 1 - read/write
-using var db = new XmlDatabase("./shared-data");
-
-// Process 2 - read-only
-using var db = new XmlDatabase("./shared-data", new DatabaseOptions
-{
-    ReadOnly = true
-});
-```
-
-### File Locking
-
-By default, LMDB uses file locking. For single-process scenarios:
-
-```csharp
-var options = new DatabaseOptions
-{
-    NoLock = true  // Only if guaranteed single-process access
-};
-```
+Opening a database read-only is not currently supported: `LmdbStorageOptions.ReadOnly` exists,
+but opening a `DocumentDatabase` with it set fails. To share one database between applications,
+run it in [Server Mode](server-mode.md) and connect the applications as clients.
 
 ## Backup and Recovery
 
-### Online Backup
+### Backup
 
 ```csharp
-// Backup while application is running
-db.Backup("./backup");
+// Flushes, then copies data.mdb to the destination file (parent directories are created)
+await db.BackupAsync("./backups/data-2026-10-04.mdb");
+
+// Or write the backup to a stream, for example an upload
+await using var stream = File.Create("./backups/latest.mdb");
+await db.BackupToStreamAsync(stream);
 ```
+
+The `compact` parameter is accepted but currently has no effect. `DocumentDatabase.ListBackups(directory)`
+lists the `.mdb` files in a directory, newest first.
 
 ### Restore
 
+Restore while the database is closed:
+
 ```csharp
-// Stop application
-// Copy backup to data directory
-// Restart application
-Directory.Delete("./data", true);
-Directory.Move("./backup", "./data");
+// Stop using the database (dispose it) first
+await DocumentDatabase.RestoreAsync("./data", "./backups/data-2026-10-04.mdb", overwrite: true);
+
+await using var db = new DocumentDatabase("./data");
 ```
+
+Without `overwrite: true`, `RestoreAsync` throws if `./data` already holds a database.
+Alternatively, set `RestoreFromPath`, `RestoreFromDirectory` (the `.mdb` file in it whose name
+sorts last) or `RestoreFromStream` in `LmdbStorageOptions`; the restore then happens on open when
+the database is missing or empty, or always when `RestoreOverwrite` is `true`. Name backup files so
+that they sort by date, as in the example above.
 
 ## Desktop Applications
 
@@ -211,15 +231,14 @@ Directory.Move("./backup", "./data");
 ```csharp
 public partial class App : Application
 {
-    public static XmlDatabase Database { get; private set; }
+    public static DocumentDatabase? Database { get; private set; }
 
     protected override void OnStartup(StartupEventArgs e)
     {
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var dbPath = Path.Combine(appData, "MyApp", "data");
-        Directory.CreateDirectory(dbPath);
 
-        Database = new XmlDatabase(dbPath);
+        Database = new DocumentDatabase(dbPath);  // creates the directory if missing
         base.OnStartup(e);
     }
 
@@ -231,65 +250,48 @@ public partial class App : Application
 }
 ```
 
-### Avalonia/MAUI Example
-
-```csharp
-public static class MauiProgram
-{
-    public static XmlDatabase Database { get; private set; }
-
-    public static MauiApp CreateMauiApp()
-    {
-        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "data");
-        Database = new XmlDatabase(dbPath);
-
-        var builder = MauiApp.CreateBuilder();
-        builder.Services.AddSingleton(Database);
-
-        return builder.Build();
-    }
-}
-```
-
 ## ASP.NET Core
 
 ### Registration
 
 ```csharp
-builder.Services.AddSingleton<XmlDatabase>(sp =>
+builder.Services.AddSingleton(sp =>
 {
     var env = sp.GetRequiredService<IWebHostEnvironment>();
     var path = Path.Combine(env.ContentRootPath, "data");
-    return new XmlDatabase(path);
+    return new DocumentDatabase(path);
 });
 ```
 
 ### Health Check
 
+`GetHealth()` never throws; it reports whether the database is open and how much of the map is in
+use.
+
 ```csharp
-builder.Services.AddHealthChecks()
-    .AddCheck("database", () =>
+public sealed class DocumentDatabaseHealthCheck(DocumentDatabase db) : IHealthCheck
+{
+    public Task<HealthCheckResult> CheckHealthAsync(
+        HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var db = serviceProvider.GetRequiredService<XmlDatabase>();
-            var count = db.QuerySingle<int>("count(collection('health')//*)");
-            return HealthCheckResult.Healthy();
-        }
-        catch (Exception ex)
-        {
-            return HealthCheckResult.Unhealthy(ex.Message);
-        }
-    });
+        var health = db.GetHealth();
+        return Task.FromResult(health.IsOpen
+            ? HealthCheckResult.Healthy($"Map {health.MapUsedFraction:P0} used")
+            : HealthCheckResult.Unhealthy("Database is not open"));
+    }
+}
+
+builder.Services.AddHealthChecks()
+    .AddCheck<DocumentDatabaseHealthCheck>("database");
 ```
 
 ## Best Practices
 
-1. **Single instance** - Create one XmlDatabase per application
+1. **Single instance** - Create one `DocumentDatabase` per database directory per application
 2. **Dispose properly** - Always dispose on shutdown
-3. **Use transactions** - For consistent operations
-4. **Prefer read-only** - When only reading
-5. **Configure MapSize** - Based on expected data size
+3. **Use transactions** - For consistent multi-document operations
+4. **Use read transactions** - `BeginRead` for consistent multi-query reads
+5. **Configure MapSize** - Based on expected data size; it cannot grow at runtime
 6. **Regular backups** - Implement backup strategy
 
 ## When to Upgrade
@@ -297,8 +299,6 @@ builder.Services.AddHealthChecks()
 Consider Server or Cluster mode when:
 - Multiple applications need access
 - High availability is required
-- Data exceeds single machine capacity
-- Geographic distribution needed
 
 ## Next Steps
 

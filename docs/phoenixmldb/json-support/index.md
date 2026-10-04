@@ -6,26 +6,22 @@ sort: 3
 
 # JSON Support
 
-PhoenixmlDb provides first-class JSON document storage and querying through a well-defined XML-backed path. When you call `PutJsonDocument()`, the document is converted to XML, shredded into XDM nodes, and stored with full ACID transaction support — giving every JSON document access to the complete indexing and query infrastructure at no extra cost.
+PhoenixmlDb stores JSON documents through its XML storage path. When `PutDocumentAsync` receives JSON, the document is converted to the XML representation defined for `fn:json-to-xml`, shredded into XDM nodes, and stored like any XML document — with the same transactions, metadata, indexing and XQuery access.
 
 ## How JSON Storage Works
 
-The primary storage path for JSON in PhoenixmlDb is **XML-backed**:
-
-1. Your JSON document is converted to an XML representation using a standard mapping (`{}` becomes `<map>`, arrays become `<array>`, and so on).
-2. The XML is shredded into individual XDM nodes and written to LMDB under ACID semantics.
-3. The `IndexOrchestrator` walks the node tree and feeds every element, attribute, and text node into the full indexing suite — identically to a native XML document.
-4. Queries run against the indexed XML; results can be returned as JSON using `xml-to-json()` or XQuery 3.1 map/array constructors.
-
-This means JSON documents get path indexes, value indexes, full-text indexes, structural indexes, and metadata indexes for free, with query performance identical to XML once indexed.
+1. `PutDocumentAsync` treats content as JSON when its first non-whitespace character is `{` or `[`, or when `DocumentOptions.ContentType` is `ContentType.Json`.
+2. The JSON is converted to XML in the `http://www.w3.org/2005/xpath-functions` namespace: objects become `map`, arrays `array`, and scalars `string`, `number`, `boolean` or `null` elements, with each object member's name in a `key` attribute.
+3. The XML is shredded into XDM nodes and written to LMDB in one write transaction. If indexing is enabled, the container's declared indexes are updated in the same transaction.
+4. Queries run against the XML representation; `xml-to-json()` turns it back into JSON text.
 
 ## Storing and Retrieving JSON
 
 ```csharp
-var container = db.GetContainer("api-data");
+var container = await db.OpenOrCreateContainerAsync("api-data");
 
-// Store — converts to XML, shreds, indexes
-container.PutJsonDocument("user.json", """
+// Store — detected as JSON, converted to XML, shredded, indexed
+await container.PutDocumentAsync("user.json", """
     {
         "id": 1,
         "name": "Alice",
@@ -39,25 +35,30 @@ container.PutJsonDocument("user.json", """
     }
     """);
 
-// Retrieve as JSON string (reconstructed from XML, or from preserved original)
-string json = container.GetJsonDocument("user.json");
+// Retrieve as JSON text, via XQuery
+await foreach (var json in container.QueryAsync(
+    "xml-to-json(/fn:map)", variables: null, documentNameFilter: n => n == "user.json"))
+    Console.WriteLine(json);   // {"id":1,"name":"Alice",...}
 
-// Retrieve as XML (the internal representation)
-string xml = container.GetDocument("user.json");
+// Retrieve the stored XML representation
+var doc = await container.GetDocumentAsync("user.json");
+string xml = await doc!.GetContentAsync();
+Console.WriteLine(doc.ContentType);   // Json
 ```
+
+The original JSON text is not kept: `GetContentAsync` returns the XML representation, and `xml-to-json()` produces compact JSON with members in their original order.
 
 ## JSON-to-XML Mapping
 
-PhoenixmlDb uses a deterministic JSON-to-XML mapping:
-
-| JSON | XML |
+| JSON | XML (namespace `http://www.w3.org/2005/xpath-functions`) |
 |------|-----|
-| Object `{}` | `<map>` with child elements |
-| Array `[]` | `<array>` with `<_>` items |
-| String | Element with text content |
-| Number | Element with `type="number"` |
-| Boolean | Element with `type="boolean"` |
-| Null | Empty element with `type="null"` |
+| Object `{}` | `<map>`, one child per member |
+| Array `[]` | `<array>`, one child per item |
+| String | `<string>` |
+| Number | `<number>`, with the number's text as written |
+| Boolean | `<boolean>true</boolean>` / `<boolean>false</boolean>` |
+| Null | `<null/>` |
+| Object member name | `key` attribute on the member's element |
 
 **Example:**
 
@@ -74,48 +75,45 @@ PhoenixmlDb uses a deterministic JSON-to-XML mapping:
 becomes:
 
 ```xml
-<map>
-    <name>Widget</name>
-    <price type="number">29.99</price>
-    <tags>
-        <_ >sale</_>
-        <_>featured</_>
-    </tags>
-    <inStock type="boolean">true</inStock>
-    <metadata type="null"/>
+<map xmlns="http://www.w3.org/2005/xpath-functions">
+    <string key="name">Widget</string>
+    <number key="price">29.99</number>
+    <array key="tags">
+        <string>sale</string>
+        <string>featured</string>
+    </array>
+    <boolean key="inStock">true</boolean>
+    <null key="metadata"/>
 </map>
 ```
 
-XPath paths against this structure are what you use in index definitions and XQuery expressions.
-
 ## Querying JSON with XQuery
 
-Because JSON is stored as XML, you query it with standard XPath/XQuery expressions against the mapped structure:
+The `fn` prefix is predeclared for this namespace, so paths use `fn:` element names and select members by `@key`:
 
 ```xquery
 (: Access a top-level field :)
-doc('users/user.json')/map/name/text()
+/fn:map/fn:string[@key='name']/string()
 
 (: Navigate nested objects :)
-//map/profile/city/text()
+/fn:map/fn:map[@key='profile']/fn:string[@key='city']/string()
 
-(: Filter a collection :)
-for $user in collection('users')/map
-where $user/active = 'true'
-  and $user/profile/age > 25
-return $user/name/text()
+(: Filter documents :)
+/fn:map[fn:boolean[@key='active'] = 'true']
+       [fn:map[@key='profile']/fn:number[@key='age'] > 25]
+  /fn:string[@key='name']/string()
 
 (: Check array membership :)
-for $product in collection('products')/map
-where $product/tags/_ = 'featured'
-return $product
+/fn:map[fn:array[@key='tags']/fn:string = 'featured']
 ```
+
+A query runs per document unless it aggregates across the container; see [JSON Queries](json-queries.md).
 
 ## Native JsonDocumentStore (Convenience Layer)
 
-PhoenixmlDb also ships a `JsonDocumentStore` for lightweight in-memory JSON work. It supports JSONPath queries and path-value indexes but is **not backed by LMDB** — all data and indexes are volatile and are lost on process restart. It has no ACID transaction support.
+The `PhoenixmlDb.Json` assembly also contains `JsonDocumentStore`, an in-memory store of `System.Text.Json.Nodes.JsonNode` documents with a simple JSONPath-style `Query`. It is **not backed by LMDB** and is not connected to `DocumentDatabase`: data is lost when the process exits, there are no transactions, and the class does no locking.
 
-Use `JsonDocumentStore` for scratch data, intermediate processing, or tests. Use `PutJsonDocument()` with a container for any data that needs persistence, transactions, or production-grade indexing.
+Use it for scratch data or tests. Use `PutDocumentAsync` on a container for anything that needs persistence, transactions, metadata or indexing.
 
 ## In This Section
 

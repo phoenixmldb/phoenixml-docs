@@ -1,100 +1,34 @@
 ---
 title: Server Mode
-description: Standalone server with REST and gRPC APIs, authentication, TLS, and Docker deployment
+description: The gRPC and REST servers — starting them, connecting, authentication, TLS and health
 sort: 2
 ---
 
 # Server Mode
 
-Server mode runs PhoenixmlDb as a standalone service, allowing multiple clients to connect via gRPC.
+PhoenixmlDb has two servers built on ASP.NET Core:
 
-## Overview
+- the **gRPC server** (`PhoenixmlDb.Server`), with a .NET client library (`PhoenixmlDb.Client`);
+- the **REST server**, an HTTP API.
 
-```
-┌─────────┐     ┌──────────────────────────────┐
-│ Client  │────▶│     PhoenixmlDb Server       │
-│  App 1  │     │  ┌────────────────────────┐  │
-└─────────┘     │  │    gRPC Service        │  │
-                │  └────────────────────────┘  │
-┌─────────┐     │  ┌────────────────────────┐  │
-│ Client  │────▶│  │    Query Engine        │  │
-│  App 2  │     │  └────────────────────────┘  │
-└─────────┘     │  ┌────────────────────────┐  │
-                │  │    Storage (LMDB)      │  │
-┌─────────┐     │  └────────────────────────┘  │
-│ Client  │────▶│                              │
-│  App 3  │     └──────────────────────────────┘
-└─────────┘
-```
+Both store data with the same engine, read the same `PhoenixmlDb:*` settings, and are configured
+through standard ASP.NET Core configuration.
 
-## Installation
+> **Availability.** The servers and the client library are not yet published as NuGet packages,
+> .NET tools or container images.
 
-### Server Package
+## Starting the server
+
+Each server is an ASP.NET Core application. Settings come from `appsettings.json`, environment
+variables (`__` between levels) and the command line, for example:
 
 ```bash
-# Install as global tool
-dotnet tool install -g PhoenixmlDb.Server
-
-# Or as project dependency
-dotnet add package PhoenixmlDb.Server
+dotnet PhoenixmlDb.Server.dll --PhoenixmlDb:Storage:DataPath=/var/lib/phoenixml
 ```
 
-### Client SDK
-
-```bash
-dotnet add package PhoenixmlDb.Client
-```
-
-## Starting the Server
-
-### Command Line
-
-```bash
-# Basic start
-phoenixmldb-server --data ./data --port 5432
-
-# With options
-phoenixmldb-server \
-    --data ./data \
-    --port 5432 \
-    --host 0.0.0.0 \
-    --max-connections 100 \
-    --tls-cert ./cert.pem \
-    --tls-key ./key.pem
-```
-
-### As Windows Service
-
-```bash
-# Install as service
-phoenixmldb-server install --service-name PhoenixmlDb
-
-# Start service
-net start PhoenixmlDb
-```
-
-### As systemd Service
-
-```ini
-# /etc/systemd/system/phoenixmldb.service
-[Unit]
-Description=PhoenixmlDb Server
-After=network.target
-
-[Service]
-Type=simple
-User=phoenixmldb
-ExecStart=/usr/local/bin/phoenixmldb-server --data /var/lib/phoenixmldb --port 5432
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-
-```bash
-sudo systemctl enable phoenixmldb
-sudo systemctl start phoenixmldb
-```
+The gRPC server listens on `127.0.0.1` by default: a plaintext HTTP/2 port (`5000`) on loopback
+only, and a TLS port (`5001`). See [gRPC server](#grpc-server) for the endpoint settings and the
+rules for listening on a network address.
 
 ## Server Configuration
 
@@ -116,53 +50,51 @@ export PhoenixmlDb__Storage__DataPath=/var/lib/phoenixml
 Every setting, its default and its startup check is in the
 [Server Configuration reference](server-configuration.md).
 
-## Client Connection
+## Client connection
 
-### Basic Connection
+The .NET client connects to the gRPC server by address, including the scheme:
 
 ```csharp
 using PhoenixmlDb.Client;
 
-var client = new PhoenixmlClient("localhost:5432");
+await using var client = new PhoenixmlClient("http://localhost:5000");
 
-// Create container
-await client.CreateContainerAsync("products");
+var products = await client.CreateContainerAsync("products");
+await products.PutDocumentAsync("p1.xml", "<product/>");
 
-// Store document
-await client.PutDocumentAsync("products", "p1.xml", "<product/>");
-
-// Query
-var results = await client.QueryAsync("collection('products')//product");
+var result = await products.QueryAsync("collection()//product");
 ```
 
-### With Authentication
+`PhoenixmlClientOptions` sets `MaxMessageSize`, `TimeoutMs`, retries (`EnableRetry`,
+`MaxRetries`) and the gRPC `Credentials`.
 
-Both servers require an API key; the REST server also accepts a JWT. See [Authentication](#authentication).
+### With an API key
+
+The gRPC server expects `authorization: Bearer <key>` metadata (see [gRPC server](#grpc-server)).
+Supply it as call credentials over TLS:
+
+```csharp
+using Grpc.Core;
+using PhoenixmlDb.Client;
+
+var apiKey = Environment.GetEnvironmentVariable("PHOENIXML_API_KEY");
+var callCredentials = CallCredentials.FromInterceptor((context, metadata) =>
+{
+    metadata.Add("authorization", $"Bearer {apiKey}");
+    return Task.CompletedTask;
+});
+
+await using var client = new PhoenixmlClient("https://db.example.com:5001", new PhoenixmlClientOptions
+{
+    Credentials = ChannelCredentials.Create(new SslCredentials(), callCredentials),
+});
+```
+
+The REST server takes the key in the `X-Api-Key` header (see [Authentication](#authentication)):
 
 ```csharp
 using var http = new HttpClient { BaseAddress = new Uri("https://localhost:5001") };
 http.DefaultRequestHeaders.Add("X-Api-Key", Environment.GetEnvironmentVariable("PHOENIXML_API_KEY"));
-```
-
-### With TLS
-
-```csharp
-var options = new ClientOptions
-{
-    Host = "db.example.com",
-    Port = 5432,
-    UseTls = true,
-    TlsServerName = "db.example.com"  // For certificate validation
-};
-
-var client = new PhoenixmlClient(options);
-```
-
-### Connection String
-
-```csharp
-var client = new PhoenixmlClient(
-    "Host=localhost;Port=5432;UseTls=true");
 ```
 
 ## Authentication
@@ -344,154 +276,85 @@ A hostname counts as non-loopback.
 The cluster's Raft traffic is authenticated separately, by the cluster secret and a TLS
 certificate, and needs no API key.
 
-## TLS Configuration
+## TLS
 
-### Generate Certificates
+The gRPC server's TLS port uses Kestrel's standard certificate configuration, for example
+`Kestrel:Certificates:Default:Path` and `Kestrel:Certificates:Default:Password`. The TLS port accepts
+HTTP/1.1 as well as HTTP/2, so HTTPS health probes work against it. The plaintext port is HTTP/2
+only and is bound on loopback. The cluster's Raft port has its own certificate settings; see
+[Cluster Mode](cluster-mode.md#securing-the-raft-port).
 
-```bash
-# Generate self-signed certificate
-openssl req -x509 -newkey rsa:4096 \
-    -keyout key.pem -out cert.pem \
-    -days 365 -nodes \
-    -subj "/CN=phoenixmldb"
-```
+## Load balancing
 
-### Configure Server
-
-```json
-{
-    "tls": {
-        "enabled": true,
-        "certificate": "./cert.pem",
-        "key": "./key.pem",
-        "clientCertificates": false  // Require client certs
-    }
-}
-```
-
-## Load Balancing
-
-### HAProxy Configuration
-
-```
-frontend phoenixmldb
-    bind *:5432
-    default_backend phoenixmldb_servers
-
-backend phoenixmldb_servers
-    balance roundrobin
-    server server1 10.0.0.1:5432 check
-    server server2 10.0.0.2:5432 check
-```
-
-### Read Replicas
-
-```csharp
-var options = new ClientOptions
-{
-    WriteHost = "primary.db.local:5432",
-    ReadHosts = ["replica1.db.local:5432", "replica2.db.local:5432"]
-};
-
-var client = new PhoenixmlClient(options);
-
-// Writes go to primary
-await client.PutDocumentAsync(...);
-
-// Reads distributed to replicas
-var results = await client.QueryAsync(...);
-```
+A single server needs no special handling behind a TCP or HTTP/2 load balancer. In a cluster, only
+the leader accepts writes: a write sent to a follower is refused with the leader's id, and reads are
+served from the node that receives them. See [Cluster Mode](cluster-mode.md#what-this-does-not-do-yet).
 
 ## Monitoring
 
-### Health Endpoints
+### Health endpoints
 
-The REST server exposes four health endpoints. The three public ones return **status only**: a
-plain-text body of `Healthy`, `Degraded` or `Unhealthy`, with no check names, data or error text.
+Both servers expose the same endpoints. The public ones return **status only**: a plain-text body
+of `Healthy`, `Degraded` or `Unhealthy`, with `200` for Healthy or Degraded and `503` for
+Unhealthy.
 
-| Endpoint | Auth | Checks | HTTP status |
-|---|---|---|---|
-| `/health/live` | anonymous | none: liveness only | `200` while the process is up |
-| `/health/ready` | anonymous | database, query engine, transform engine | `200` Healthy or Degraded, `503` Unhealthy |
-| `/health` | anonymous | the same as `/health/ready` | as `/health/ready` |
-| `/health/details` | **admin** (`RequireAdmin`) | every registered check | detailed JSON report |
+| Endpoint | Auth | Checks |
+|---|---|---|
+| `/health/live` | anonymous | none: liveness only |
+| `/health/ready` | anonymous | REST server: database, query engine, transform engine. gRPC server: storage, plus Raft when enabled. |
+| `/health` | anonymous | the same as `/health/ready` |
+| `/health/details` | **admin** | a JSON report with a fixed code and data per check, never exception text |
 
 ```bash
 curl -i https://localhost:5001/health/ready
 # HTTP/1.1 200 OK
 # Healthy
 
-curl -H "X-Api-Key: $ADMIN_KEY" https://localhost:5001/health/details   # names, status, durations, data
+curl -H "X-Api-Key: $ADMIN_KEY" https://localhost:5001/health/details
 ```
 
-`/health/details` returns `401` without a credential and `403` for a key without admin
-permission.
+`/health/details` returns `401` without a credential and `403` for a key without admin permission.
+Point a liveness probe at `/health/live`, and a readiness probe or load balancer at
+`/health/ready`. On the gRPC server, `/healthz` is a deprecated alias of `/health` for one release,
+and the standard `grpc.health.v1` service is available anonymously (overall service `""`; Degraded
+maps to `SERVING`, Unhealthy to `NOT_SERVING`). The Raft port refuses health requests.
 
-**Probes.** Point a liveness probe at `/health/live`, and a readiness probe or load balancer at
-`/health/ready`. `/health/ready` actually runs the checks; before phoenixml `main` 170adf3 it
-checked nothing and always returned `200`.
+**Health codes** in the detailed report:
 
-**No health response contains exception text.** Failures are logged on the server. The detailed
-report carries a fixed code instead: `database_unavailable`, `query_engine_unavailable` or
-`transform_engine_unavailable`.
+| Code | Status |
+|---|---|
+| `database_unavailable` | Unhealthy |
+| `storage_map_nearly_full` | Degraded, when storage map usage reaches `PhoenixmlDb:Health:MapUsageDegradedPercent` (default 90, 1–100) |
+| `raft_no_leader` | Degraded: a candidate, or a follower with no known leader |
+| `raft_unavailable` | |
+| `query_engine_unavailable`, `transform_engine_unavailable` | Unhealthy (REST server) |
 
-### Metrics Endpoint
+A failed health check also logs event 3008 `HealthCheckFailed` (Error).
 
-```bash
-curl http://localhost:5432/metrics
-# Prometheus format metrics
-```
+### Metrics and traces
 
-### Grafana Dashboard
+The engine publishes metrics and traces through `System.Diagnostics`, under the names
+`PhoenixmlDb.Storage`, `PhoenixmlDb.Indexing` and `PhoenixmlDb.Cluster`. See
+[Logging: metrics and traces](../logging.md#metrics-and-traces).
 
-Import the PhoenixmlDb dashboard for visualization of:
-- Query throughput
-- Response times
-- Connection count
-- Error rates
-- Storage metrics
+## Containers
 
-## Docker Deployment
-
-### Dockerfile
-
-```dockerfile
-FROM mcr.microsoft.com/dotnet/runtime:10.0
-COPY phoenixmldb-server /app/
-WORKDIR /app
-EXPOSE 5432
-VOLUME /data
-CMD ["./phoenixmldb-server", "--data", "/data"]
-```
-
-### Docker Compose
+No container image is published. When you build one, configure the server through environment
+variables:
 
 ```yaml
-version: '3'
-services:
-  phoenixmldb:
-    image: phoenixmldb/server:latest
-    ports:
-      - "5432:5432"
-    volumes:
-      - phoenixmldb-data:/data
     environment:
       - PhoenixmlDb__Storage__DataPath=/data
-      - PhoenixmlDb__Storage__MapSizeMb=10240
-      # A server reachable from the network needs an API key; see Authentication.
-
-volumes:
-  phoenixmldb-data:
+      - PhoenixmlDb__Endpoints__ListenAddress=0.0.0.0
+      # A non-loopback address needs at least one API key (PhoenixmlDb__Auth__ApiKeys__0__…).
 ```
 
-## Best Practices
+## Best practices
 
-1. **Enable TLS** - Always use TLS in production
-2. **Use authentication** - Secure access to your data
-3. **Monitor health** - Set up health checks and alerts
-4. **Regular backups** - Implement backup strategy
-5. **Limit connections** - Set appropriate max connections
-6. **Use connection pooling** - In client applications
+1. **Use TLS** for anything that leaves the machine.
+2. **Configure API keys** with the narrowest permission or scope each caller needs.
+3. **Probe `/health/ready`** and alert on `Degraded` as well as `Unhealthy`.
+4. **Back up** the data directory; replication is not a backup.
 
 ## Next Steps
 

@@ -8,6 +8,6 @@ sort: 1
 
 Get up and running with PhoenixmlDb — from installation to your first query.
 
-- **[Installation](installation.md)** — Platform requirements, NuGet packages, building from source
+- **[Installation](installation.md)** — Platform requirements and NuGet packages
 - **[Quick Start](quick-start.md)** — Your first query in 5 minutes
 - **[First Application](first-application.md)** — Build a complete application with PhoenixmlDb

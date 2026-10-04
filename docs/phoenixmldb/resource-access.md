@@ -9,7 +9,7 @@ sort: 8
 > **Breaking change** (phoenixml `main`, a2b9963, issue #59): queries and stylesheets supplied by
 > callers are **deny-by-default**. They can read the documents stored in the database, and nothing
 > else, until the operator allows specific directories or HTTP origins. This applies to the
-> embedded engine, the gRPC server (including its REST query endpoint) and the REST server.
+> embedded engine, the gRPC server and the REST server.
 
 PhoenixmlDb can't know what data goes into a database, or what an application built on it is
 meant to expose. So nothing outside the stored documents is reachable by default, and each

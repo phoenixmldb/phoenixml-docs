@@ -6,7 +6,7 @@ sort: 5
 
 # Indexing
 
-Indexes dramatically improve query performance by providing fast access paths to your data. PhoenixmlDb supports multiple index types optimized for different query patterns.
+Indexes give PhoenixmlDb access paths into stored documents and their metadata. Six kinds can be declared on a container; how much each one is used today differs a lot, and [What uses each index today](#what-uses-each-index-today) says exactly which reads consult which index.
 
 > **Note:** Indexes are declared once, at container-creation time, via `ContainerOptions.Indexes`. There is no API to add or drop an index against a container that already exists — see [Indexes are declared at creation time only](#indexes-are-declared-at-creation-time-only), below.
 
@@ -14,7 +14,7 @@ Indexes dramatically improve query performance by providing fast access paths to
 
 ### Name Index
 
-Name indexes accelerate queries that look up elements or attributes by name, such as `//product`.
+A name index records elements and attributes by name.
 
 ```csharp
 var container = await db.CreateContainerAsync("products", opts =>
@@ -25,16 +25,11 @@ Pass a namespace URI to restrict the index to names in that namespace, or `null`
 
 ### Path Index
 
-Path indexes accelerate queries that navigate to specific elements or attributes by path.
+A path index records the nodes that match a path pattern.
 
 ```csharp
 var container = await db.CreateContainerAsync("products", opts =>
     opts.Indexes.AddPathIndex("/product/price"));
-
-// Queries that benefit:
-// - collection('products')/product/price
-// - collection('products')//product/price
-// - $doc/product/price
 ```
 
 **Multiple path patterns** are added with successive calls, chained fluently:
@@ -48,11 +43,11 @@ opts.Indexes
 
 ### Value Index
 
-Value indexes enable efficient range queries and sorting on typed values.
+A value index records the typed values found at a path, so equality and range lookups compare them as numbers, dates and so on rather than as text.
 
 ```csharp
-// Numeric value index
-opts.Indexes.AddValueIndex("/product/price", XdmValueType.XdmDecimal);
+// Numeric value index on an attribute
+opts.Indexes.AddValueIndex("/catalog/product/@price", XdmValueType.XdmDecimal);
 
 // Date value index
 opts.Indexes.AddValueIndex("/order/orderDate", XdmValueType.Date);
@@ -60,6 +55,8 @@ opts.Indexes.AddValueIndex("/order/orderDate", XdmValueType.Date);
 // String value index
 opts.Indexes.AddValueIndex("/customer/name", XdmValueType.XdmString);
 ```
+
+`AddValueIndex` also takes an optional `collation` argument.
 
 **Supported value types** (`PhoenixmlDb.Core.XdmValueType`):
 
@@ -74,18 +71,18 @@ opts.Indexes.AddValueIndex("/customer/name", XdmValueType.XdmString);
 | `Boolean` | True/false filtering |
 | `Duration`, `AnyUri`, `QName`, `Base64Binary`, `HexBinary` | Typed equality and ordering for the corresponding XSD type |
 
-**Queries that benefit:**
-```xquery
-(: Range queries :)
-//product[price > 10 and price < 100]
+**Queries that use it:** only one shape, today. The index must be declared on an attribute at the end of a path of plain child steps (`/catalog/product/@price`, not `//product/@price` or `/catalog/*/@price`), and the query must be an absolute path to those same elements with a single predicate comparing that attribute to a literal or a variable, using `=`, `eq`, `<`, `<=`, `>`, `>=`, `lt`, `le`, `gt` or `ge`:
 
-(: Sorting :)
-for $p in //product order by $p/price return $p
+```xquery
+/catalog/product[@price > 100]
+/catalog/product[@price = $price]
 ```
+
+Anything else, including a value index on element content such as `/order/orderDate`, a `//` step, a second predicate, `order by`, or a path that starts from `collection()`, is evaluated by scanning. A value index on element content is still maintained, and `IndexManager.QueryByValue` can read it directly; XQuery does not use it yet.
 
 ### Full-Text Index
 
-Full-text indexes tokenize text content into a Lucene index stored inside LMDB, so it can be searched without a full document scan. This is a large enough topic to have [its own page](full-text-search.md), covering the write path, the query-time staleness guarantee, and how to run and rebuild it.
+Full-text indexes tokenize text content into a Lucene index stored inside LMDB, searched through `IndexManager.SearchFullText`. This is a large enough topic to have [its own page](full-text-search.md), covering the write path, the query-time staleness guarantee, and how to run and rebuild it.
 
 ```csharp
 // Basic full-text index — every element in every document
@@ -104,46 +101,47 @@ opts.Indexes.AddFullTextIndex("/product/description", new FullTextIndexOptions
 
 ### Structural Index
 
-Structural indexes maintain parent-child and sibling relationships between nodes, accelerating navigation queries (parent, child, sibling, ancestor, descendant). They are enabled by default for every container.
+A structural index records parent-child relationships between nodes. It is enabled by default for every container.
 
 ```csharp
-// Structural indexing is on by default — disable it only for append-only
-// containers that are never navigated with XQuery axis steps.
+// On by default; turn it off for a container that doesn't need it.
 opts.Indexes.EnableStructuralIndex(enabled: false);
 ```
 
-**Queries that benefit:**
-```xquery
-(: Parent/child navigation :)
-$element/parent::*
-$element/child::item
-
-(: Ancestor/descendant :)
-$element/ancestor::section
-$element//nested-item
-
-(: Sibling navigation :)
-$element/following-sibling::*
-$element/preceding-sibling::*
-```
+XQuery axis navigation does not read the structural index; it walks the stored node tree. The index is reachable through `IndexManager` (`GetChildren`, `GetParent`, `GetDescendants`, `GetAncestors`).
 
 ### Metadata Index
 
-Metadata indexes allow efficient queries on document metadata. Because metadata keys are qualified names (`XdmQName`), not bare strings, the index is declared against a qualified name too — see [Metadata](metadata.md) for how metadata itself is namespaced.
+A metadata index records document metadata values. Because metadata names are qualified names (`XdmQName`), not bare strings, the index is declared against a qualified name too. See [Metadata](metadata.md) for how metadata is namespaced.
 
 ```csharp
+using PhoenixmlDb.Core;
 using PhoenixmlDb.Xdm;
 
-opts.Indexes.AddMetadataIndex(new XdmQName(NamespaceId.None, "author"), XdmValueType.XdmString);
-opts.Indexes.AddMetadataIndex(new XdmQName(NamespaceId.None, "created"), XdmValueType.DateTime);
+const string appNs = "urn:example:app";
+var ns = db.GetOrCreateNamespaceId(appNs);
+
+var container = await db.CreateContainerAsync("products", opts =>
+{
+    // Unqualified names passed to SetMetadataAsync(doc, "author", ...) land in this namespace,
+    // so the index below covers them.
+    opts.DefaultMetadataNamespace = appNs;
+    opts.Indexes
+        .AddMetadataIndex(new XdmQName(ns, "author"), XdmValueType.XdmString)
+        .AddMetadataIndex(new XdmQName(ns, "created"), XdmValueType.DateTime);
+});
 ```
 
-**Queries that benefit:**
-```xquery
-(: Filter by metadata :)
-for $doc in collection('products')
-where doc-metadata($doc, 'author') = 'admin'
-return $doc
+The name must match the stored name exactly, namespace included. A container that sets no `DefaultMetadataNamespace` stores unqualified names in `https://schemas.phoenixml.dev/2026/app` (`Container.DefaultApplicationMetadataNamespace`), not in no namespace, so an index on `new XdmQName(NamespaceId.None, "author")` would not cover them.
+
+**Reads that use it:** `IContainer.QueryMetadataAsync` and `QueryMetadataRangeAsync`. `phx:metadata()` in XQuery does not consult it.
+
+```csharp
+await foreach (var info in container.QueryMetadataAsync(
+    new XdmQName(ns, "author"), XdmValue.From("admin")))
+{
+    Console.WriteLine(info.Name);
+}
 ```
 
 ## Creating Indexes
@@ -174,9 +172,9 @@ Declaring `opts.Indexes` only records what *should* be indexed. Nothing is actua
 var manager = db.EnableIndexing();
 ```
 
-`EnableIndexing()` is an extension method on `DocumentDatabase` (`PhoenixmlDb.Indexing`). It returns an `IndexManager`, which is also where the full-text-specific operations live (searching, draining the queue, and so on — see [Full-Text Search](full-text-search.md)). Call it once per `DocumentDatabase`; a second call would build independent state rather than reuse the first.
+`EnableIndexing()` is an extension method on `DocumentDatabase` (`PhoenixmlDb.Indexing`). It returns an `IndexManager`, which is also where the full-text-specific operations live (searching, draining the queue, and so on — see [Full-Text Search](full-text-search.md)). It is idempotent: a second call on the same database returns the manager already attached. The database owns the manager and disposes it. Don't call it while holding a transaction from `BeginWriteAsync`: it may need the database's write lock, which is not reentrant, and would block forever.
 
-Without `EnableIndexing()`, queries still return correct results — `ContainerOptions.Indexes` is declarative-only until indexing is turned on, and every query falls back to a scan.
+Without `EnableIndexing()`, queries still return correct results: `ContainerOptions.Indexes` is declarative-only until indexing is turned on, and every read falls back to a scan.
 
 ## Managing Indexes
 
@@ -195,29 +193,30 @@ var result = await db.RebuildIndexesAsync("products");
 // result.DocumentsIndexed, result.EntriesRemoved, result.EntriesWritten
 ```
 
-`RebuildIndexesAsync` requires `EnableIndexing()` to have been called first. It clears the container's previous index entries, walks every stored document, and re-indexes (or, for full-text, re-enqueues) each one — see [Rebuilding](full-text-search.md#rebuilding) for the full-text-specific guarantees this gives you immediately, before any drain.
+`RebuildStaleIndexesAsync()` rebuilds every container `ContainersWithStaleIndexes()` lists and returns the results by container name. Until a stale container is rebuilt, reads against it scan instead of using its indexes.
 
-## Query Optimization
+`RebuildIndexesAsync` requires `EnableIndexing()` to have been called first (it throws `InvalidOperationException` otherwise). It runs in one write transaction holding the database's write lock, so writes to every container wait for it; don't call it while holding a transaction from `BeginWriteAsync`. It clears the container's previous index entries, walks every stored document, and re-indexes (or, for full-text, re-enqueues) each one — see [Rebuilding](full-text-search.md#rebuilding) for the full-text-specific guarantees this gives you immediately, before any drain.
 
-The query optimizer chooses among the declared indexes automatically based on the shape of each query — there is no manual index hint or `pragma` syntax. `//product[price > 100]` uses a value index on `price` if one is declared; without one, it scans. This is why declaring the right indexes for your actual query patterns, rather than indexing everything, matters: an index changes how fast a query answers, never what it answers, so over-indexing only costs storage and write throughput.
+## What uses each index today
 
-## Index Selection Guidelines
+Index use is automatic: there is no index hint or `pragma` syntax. An index changes how fast a read answers, never what it answers. Every index kind is maintained on write once indexing is enabled, but the readers that consult them are fewer:
 
-| Query Pattern | Recommended Index |
-|---------------|-------------------|
-| Look up by element/attribute name | Name Index |
-| Navigate to a specific path | Path Index |
-| Range comparison (`<`, `>`, `between`) | Value Index |
-| Sorting (`order by`) | Value Index |
-| Full-text search via `IndexManager.SearchFullText` | Full-Text Index |
-| Tree navigation (parent, ancestor, sibling) | Structural Index (on by default) |
-| Metadata filtering | Metadata Index |
+| Index | Consulted by |
+|-------|--------------|
+| Value | XQuery, only for `/a/b[@attr op value]` against an index on `/a/b/@attr` (see [Value Index](#value-index)); `IndexManager.QueryByValue` |
+| Full-text | `IndexManager.SearchFullText` |
+| Metadata | `IContainer.QueryMetadataAsync`, `QueryMetadataRangeAsync` |
+| Name | `IndexManager.QueryElements`, `QueryAttributes` only; not XQuery |
+| Path | `IndexManager.QueryByPath` only; not XQuery |
+| Structural | `IndexManager.GetChildren`, `GetParent`, `GetDescendants`, `GetAncestors` only; not XQuery |
+
+A name, path or structural index therefore costs write time and storage without speeding up any XQuery today.
 
 ## Best Practices
 
 **Do:**
 
-1. **Index frequently queried paths** — start with your most common queries.
+1. **Index for the reads that consult the index** — see [What uses each index today](#what-uses-each-index-today).
 2. **Use appropriate value types** — match `XdmValueType` to your data so range comparisons are typed correctly, not lexicographic.
 3. **Declare all the indexes a container needs up front** — there is no way to add one later without recreating the container.
 4. **Rebuild after enabling indexing on documents written before it was on** — otherwise those documents are correct but silently unindexed until you do.
@@ -225,7 +224,7 @@ The query optimizer chooses among the declared indexes automatically based on th
 **Don't:**
 
 1. **Over-index** — each index adds storage and write overhead, and full-text indexing in particular moves work onto a background queue that still has to drain.
-2. **Index rarely queried paths** — unused indexes waste resources without ever paying for themselves.
+2. **Expect a name, path or structural index to speed up XQuery** — none of them is read by the query path yet.
 3. **Assume `AddFullTextIndex()` with no path pattern means "the document as a whole"** — it means every element; see [the warning on that page](full-text-search.md#declaring-a-full-text-index).
 
 ## Next Steps

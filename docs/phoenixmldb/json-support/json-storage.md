@@ -6,232 +6,131 @@ sort: 1
 
 # JSON Storage
 
-This guide covers JSON document storage options, validation, and performance considerations.
+This guide covers how JSON documents are stored, the options that apply, and what is and is not available.
 
 ## Storing JSON Documents
 
 ### Basic Storage
 
+JSON goes through the same `PutDocumentAsync` as XML:
+
 ```csharp
-var container = db.GetContainer("data");
+var container = await db.OpenOrCreateContainerAsync("data");
 
-// Store JSON string
-container.PutJsonDocument("doc.json", jsonString);
+// Store a JSON string (detected from the leading '{' or '[')
+await container.PutDocumentAsync("doc.json", jsonString);
 
-// Store from object (with serialization)
+// Store from an object
 var user = new { Name = "Alice", Age = 30 };
-container.PutJsonDocument("user.json", JsonSerializer.Serialize(user));
+await container.PutDocumentAsync("user.json", JsonSerializer.Serialize(user));
+
+// Force JSON handling regardless of content
+await container.PutDocumentAsync("doc.json", jsonString,
+    new DocumentOptions { ContentType = ContentType.Json });
 ```
+
+The document name's extension plays no part in detection.
 
 ### Storage Options
 
+The options are the ordinary `DocumentOptions`:
+
+| Property | Effect for JSON |
+|----------|-----------------|
+| `ContentType` | `ContentType.Json` forces JSON parsing; `null` (default) detects from the content |
+| `Overwrite` | `false` throws `DocumentExistsException` if the name exists (default `true`) |
+| `Metadata` | Metadata written with the document |
+
+There are no JSON-specific storage options.
+
+### What Is Stored
+
+The JSON is converted to its `fn:json-to-xml` XML representation (namespace `http://www.w3.org/2005/xpath-functions`) and only that is stored:
+
 ```csharp
-container.PutJsonDocument("doc.json", json, new JsonStorageOptions
-{
-    PreserveOriginal = true,      // Keep original JSON for exact retrieval
-    ValidateJson = true,          // Validate JSON syntax
-    StoreArraysCompact = false    // Use expanded array format
-});
-```
-
-### Preserve Original
-
-When `PreserveOriginal` is true, the exact JSON string is stored alongside the XML representation:
-
-```csharp
-// Store with preservation
-container.PutJsonDocument("user.json", """
+await container.PutDocumentAsync("user.json", """
     {
         "name": "Alice",
         "score": 95.5
     }
-    """, new JsonStorageOptions { PreserveOriginal = true });
+    """);
 
-// Retrieve exact original
-string original = container.GetJsonDocument("user.json");
-// Returns: {"name": "Alice", "score": 95.5}
+var doc = await container.GetDocumentAsync("user.json");
+Console.WriteLine(doc!.ContentType);            // Json
+Console.WriteLine(await doc.GetContentAsync());
+// <?xml version="1.0" encoding="utf-8"?><map xmlns="http://www.w3.org/2005/xpath-functions"><string key="name">Alice</string><number key="score">95.5</number></map>
 
-// Without preservation, JSON is reconstructed from XML
-// Formatting may differ
+// Back to JSON text
+await foreach (var json in container.QueryAsync(
+    "xml-to-json(/fn:map)", variables: null, documentNameFilter: n => n == "user.json"))
+    Console.WriteLine(json);                     // {"name":"Alice","score":95.5}
 ```
+
+The original text, including its whitespace, is not preserved. `SizeBytes` reports the UTF-8 length of the JSON as submitted. See [JSON Support](index.md#json-to-xml-mapping) for the full mapping.
 
 ## JSON Validation
 
-### Syntax Validation
+### Syntax
+
+Content handled as JSON is parsed with `System.Text.Json`. Malformed JSON throws `System.Text.Json.JsonException` and nothing is written:
 
 ```csharp
-// Validate JSON syntax before storage
-container.PutJsonDocument("doc.json", json, new JsonStorageOptions
+try
 {
-    ValidateJson = true  // Throws JsonException on invalid JSON
-});
+    await container.PutDocumentAsync("bad.json", """{"id": 1,""");
+}
+catch (JsonException ex)
+{
+    Console.WriteLine(ex.Message);
+}
 ```
 
 ### Schema Validation
 
-```csharp
-// Define JSON Schema
-var schema = """
-    {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "type": "object",
-        "required": ["id", "name"],
-        "properties": {
-            "id": { "type": "integer" },
-            "name": { "type": "string", "minLength": 1 },
-            "email": { "type": "string", "format": "email" }
-        }
-    }
-    """;
-
-// Create container with schema validation
-var container = db.CreateContainer("users", new ContainerOptions
-{
-    JsonSchema = schema
-});
-
-// This succeeds
-container.PutJsonDocument("u1.json", """{"id": 1, "name": "Alice"}""");
-
-// This throws ValidationException
-container.PutJsonDocument("u2.json", """{"id": "not-a-number", "name": ""}""");
-```
+There is no JSON Schema validation. Validate in your application before calling `PutDocumentAsync` if you need it.
 
 ## Indexing JSON
 
-Indexes are defined using XPath paths against the XML representation. See [JSON Indexing](json-indexing.md) for the full indexing story.
-
-### Path Index
+Indexes are declared on `ContainerOptions.Indexes` when the container is created and apply to the XML representation. See [JSON Indexing](json-indexing.md) for what path patterns can and cannot address in JSON documents.
 
 ```csharp
-// Index specific JSON paths
-container.CreateIndex(new PathIndex("user-email-idx",
-    "/map/email"));
+db.EnableIndexing();
 
-container.CreateIndex(new PathIndex("nested-idx",
-    "/map/profile/city"));
-```
-
-### Value Index
-
-```csharp
-// Index for range queries
-container.CreateIndex(new ValueIndex("age-idx",
-    "/map/profile/age",
-    ValueType.Integer));
-
-// Date values
-container.CreateIndex(new ValueIndex("created-idx",
-    "/map/createdAt",
-    ValueType.DateTime));
-```
-
-### Full-Text Index
-
-```csharp
-// Index text content for search
-container.CreateIndex(new FullTextIndex("description-idx",
-    "/map/description"));
-```
-
-### Array Element Index
-
-```csharp
-// Index array elements
-container.CreateIndex(new PathIndex("tags-idx",
-    "/map/tags/_"));
+var data = await db.CreateContainerAsync("data", opts =>
+    opts.Indexes.AddFullTextIndex());   // every element's text
 ```
 
 ## Bulk Import
 
-### Streaming Import
+There are no JSON import helpers. Store many documents with `PutDocumentsAsync`, which commits up to 1,000 documents per LMDB write transaction:
 
 ```csharp
-// Import large JSON array file
-using var stream = File.OpenRead("large-data.json");
-var count = container.ImportJsonArray(stream, new ImportOptions
-{
-    BatchSize = 1000,
-    DocumentNameTemplate = "item-{index}.json"
-});
+// One document per line of an NDJSON file
+var inputs = File.ReadLines("data.ndjson")
+    .Where(line => line.Length > 0)
+    .Select((line, i) => new DocumentInput($"record-{i}.json", line));
+
+int count = await container.PutDocumentsAsync(inputs);
 Console.WriteLine($"Imported {count} documents");
-```
-
-### NDJSON Import
-
-```csharp
-// Import newline-delimited JSON
-using var stream = File.OpenRead("data.ndjson");
-var count = container.ImportNdjson(stream, new ImportOptions
-{
-    DocumentNameGenerator = (json, index) => $"record-{json["id"]}.json"
-});
-```
-
-## Performance Considerations
-
-### XML Conversion Overhead
-
-JSON is converted to XML for storage, which adds a small overhead on write. Query performance is identical to XML once indexed.
-
-| Operation | Overhead |
-|-----------|----------|
-| Store JSON | ~5-10% slower than XML |
-| Retrieve JSON | ~5-10% slower (if not preserved) |
-| Query | Same as XML queries |
-
-### Optimize for Queries
-
-```csharp
-// For query-heavy workloads
-var options = new JsonStorageOptions
-{
-    PreserveOriginal = false,     // Save storage space
-    StoreArraysCompact = true     // Faster array traversal
-};
-```
-
-### Optimize for Round-Trip
-
-```csharp
-// For read-heavy workloads needing exact JSON
-var options = new JsonStorageOptions
-{
-    PreserveOriginal = true       // Fast retrieval, uses more space
-};
 ```
 
 ## JSON Document Metadata
 
-```csharp
-// Store with metadata
-container.PutJsonDocument("user.json", json, metadata: new DocumentMetadata
-{
-    ["source"] = "api",
-    ["version"] = "1.0",
-    ["imported"] = DateTime.UtcNow.ToString("O")
-});
+Metadata works exactly as for XML documents:
 
-// Query by metadata
-var apiDocs = db.Query("""
-    for $doc in collection('data')/map
-    where doc-metadata($doc, 'source') = 'api'
-    return $doc
-    """);
+```csharp
+await container.PutDocumentAsync("user.json", json);
+await container.SetMetadataAsync("user.json", "source", "api");
+
+// Query by metadata (phx prefix is predeclared)
+await foreach (var name in container.QueryAsync(
+    "/fn:map[phx:metadata(., 'source') = 'api']/fn:string[@key='name']/string()"))
+{
+    Console.WriteLine(name);
+}
 ```
 
 ## Migration from Other Formats
-
-### From MongoDB BSON
-
-```csharp
-// Convert BSON to JSON and store
-foreach (var doc in mongoCollection.Find(_ => true))
-{
-    var json = doc.ToJson();
-    container.PutJsonDocument($"{doc["_id"]}.json", json);
-}
-```
 
 ### From CSV
 
@@ -240,22 +139,25 @@ foreach (var doc in mongoCollection.Find(_ => true))
 using var reader = new StreamReader("data.csv");
 using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
-var records = csv.GetRecords<dynamic>();
 int index = 0;
-foreach (var record in records)
+var inputs = new List<DocumentInput>();
+foreach (var record in csv.GetRecords<dynamic>())
 {
-    var json = JsonSerializer.Serialize(record);
-    container.PutJsonDocument($"row-{index++}.json", json);
+    inputs.Add(new DocumentInput($"row-{index++}.json", JsonSerializer.Serialize(record)));
 }
+
+await container.PutDocumentsAsync(inputs);
 ```
+
+(`CsvReader` is from the third-party CsvHelper library.)
 
 ## Best Practices
 
-1. **Consistent naming** — Use `.json` extension for JSON documents
-2. **Index key paths** — Create indexes for frequently queried paths
-3. **Schema validation** — Use JSON Schema for data integrity
-4. **Batch imports** — Use bulk import for large datasets
-5. **Consider preservation** — Enable `PreserveOriginal` if exact format matters
+1. **Consistent naming** — Use a `.json` extension so documents are recognisable in listings
+2. **Index deliberately** — Path patterns address element names, not JSON keys; see [JSON Indexing](json-indexing.md)
+3. **Validate before storing** — There is no schema validation on write
+4. **Batch imports** — Use `PutDocumentsAsync` for large datasets
+5. **Convert on the way out** — Use `xml-to-json()` when callers need JSON text
 
 ## Next Steps
 

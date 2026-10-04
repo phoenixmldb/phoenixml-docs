@@ -6,7 +6,7 @@ sort: 6
 
 # XSLT API
 
-The `XsltTransformer` class is the primary .NET API for executing XSLT transformations. It provides a string-in/string-out interface for simple cases, plus stream-based overloads for large documents and advanced control over result documents, source selection, and initial modes.
+The `XsltTransformer` class (`PhoenixmlDb.Xslt`, in the published `PhoenixmlDb.Xslt` package; this page describes version 2.5.1) is the primary .NET API for executing XSLT transformations. It provides a string-in/string-out interface for simple cases, plus `TextReader`, `Stream` and `TextWriter` overloads, a callback for secondary result documents, and control over the initial context, mode and match selection.
 
 ## Contents
 
@@ -24,8 +24,10 @@ The `XsltTransformer` class is the primary .NET API for executing XSLT transform
 The simplest usage: load a stylesheet, transform a string, get a string back.
 
 ```csharp
+using PhoenixmlDb.Xslt;
+
 var transformer = new XsltTransformer();
-await transformer.LoadStylesheetAsync(stylesheetXml, baseUri);
+await transformer.LoadStylesheetAsync(stylesheetXml, new Uri("file:///path/to/stylesheets/"));
 
 // Set parameters
 transformer.SetParameter("title", "My Report");
@@ -35,13 +37,15 @@ transformer.SetParameter("date", DateTime.Now.ToString("yyyy-MM-dd"));
 string result = await transformer.TransformAsync(inputXml);
 ```
 
-For extension functions, secondary result documents, and parameter passing, see **[Extensibility](../../language-reference/xslt/extensibility.md)**.
+`baseUri` resolves relative references in `xsl:import`, `xsl:include`, `doc()` and `document()`; when it is `null`, relative references cannot be resolved. A `string` parameter value is bound as `xs:untypedAtomic`; `SetParameter(string, object?)` with an `int`, `long`, `double`, `decimal` or `bool` binds the corresponding XDM type, and `null` binds the empty sequence.
+
+For secondary result documents and parameter passing, see **[Extensibility](../../language-reference/xslt/extensibility.md)**.
 
 ---
 
 ## Stream API Overloads
 
-For large documents or when working with streams directly (avoiding string allocations), `XsltTransformer` provides overloads that accept `TextReader`, `Stream`, and `TextWriter`:
+For large documents or when working with streams directly, `XsltTransformer` provides overloads that accept a `TextReader` or `Stream` source and write to a `TextWriter` or `Stream`:
 
 ### TextReader / TextWriter
 
@@ -51,9 +55,11 @@ await transformer.LoadStylesheetAsync(stylesheetXml, baseUri);
 
 // Transform from TextReader to TextWriter
 using var input = new StreamReader("input.xml");
-using var output = new StreamWriter("output.html");
+await using var output = new StreamWriter("output.html");
 await transformer.TransformAsync(input, output);
 ```
+
+This overload reads the whole input into a string, transforms it, and writes the result.
 
 ### Stream-based
 
@@ -62,73 +68,72 @@ var transformer = new XsltTransformer();
 await transformer.LoadStylesheetAsync(stylesheetXml, baseUri);
 
 // Transform from Stream to Stream
-using var inputStream = File.OpenRead("input.xml");
-using var outputStream = File.Create("output.html");
+await using var inputStream = File.OpenRead("input.xml");
+await using var outputStream = File.Create("output.html");
 await transformer.TransformAsync(inputStream, outputStream);
 ```
 
-### Mixed overloads
+When the stylesheet's initial mode is streamable (`<xsl:mode streamable="yes"/>`), the input stream is fed directly to the streaming engine and peak memory is bounded. Otherwise the input is buffered as with the string overloads.
+
+### Other overloads
 
 ```csharp
-// Read from a Stream, write to a TextWriter
-using var inputStream = File.OpenRead("input.xml");
-using var output = new StringWriter();
-await transformer.TransformAsync(inputStream, output);
-string result = output.ToString();
+// Read from a Stream or TextReader, return the result as a string
+await using var inputStream = File.OpenRead("input.xml");
+string result = await transformer.TransformAsync(inputStream);
 
-// Read from a TextReader, write to a Stream
-using var input = new StringReader(inputXml);
-using var outputStream = File.Create("output.html");
-await transformer.TransformAsync(input, outputStream);
+// Read from a string, write to a TextWriter
+await using var writer = new StreamWriter("output.html");
+await transformer.TransformAsync(inputXml, writer);
 ```
 
-The stream overloads are particularly useful for:
-- Avoiding large string allocations for multi-megabyte documents
+`TransformAsync(Stream, TextWriter)` is the streaming overload: it writes the primary result incrementally and requires the stylesheet's initial mode to be streamable; with a non-streamable mode the engine throws `XsltException`. There is no `TextReader`-to-`Stream` overload.
+
+Every overload takes an optional `CancellationToken`. Cancellation is not transactional — output already written to a writer or stream is not retracted.
+
+The stream overloads are useful for:
 - Piping XSLT output directly to HTTP responses, file streams, or other consumers
+- Bounding memory with streamable stylesheets
 - Integration with ASP.NET Core middleware that works with streams
 
 ---
 
 ## ResultDocumentHandler
 
-When a stylesheet uses `xsl:result-document` to produce multiple output files, you can provide a `ResultDocumentHandler` delegate to control how each secondary result is handled. This replaces the default behavior of collecting results into `SecondaryResultDocuments`.
+When a stylesheet uses `xsl:result-document` to produce multiple outputs, the secondary results are collected into `SecondaryResultDocuments` (keyed by `href`) after each transform:
 
 ```csharp
-var transformer = new XsltTransformer();
-await transformer.LoadStylesheetAsync(stylesheetXml, baseUri);
+string primary = await transformer.TransformAsync(inputXml);
+await File.WriteAllTextAsync(Path.Combine(outputDir, "index.html"), primary);
 
-// Custom handler: write each result document to disk as it is produced
-transformer.ResultDocumentHandler = async (href, content) =>
+foreach (var (href, content) in transformer.SecondaryResultDocuments)
+{
+    await File.WriteAllTextAsync(Path.Combine(outputDir, href), content);
+}
+```
+
+To write each secondary result as it is produced instead, set `ResultDocumentHandler`. It is a `Func<string, TextWriter>`: it receives the `href` from `xsl:result-document` and returns the writer the document is written to. When a handler is set, `SecondaryResultDocuments` stays empty.
+
+```csharp
+var writers = new List<TextWriter>();
+
+transformer.ResultDocumentHandler = href =>
 {
     string outputPath = Path.Combine(outputDir, href);
     Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
-    await File.WriteAllTextAsync(outputPath, content);
-    Console.WriteLine($"  Written: {outputPath}");
+    var writer = new StreamWriter(File.Create(outputPath));
+    writers.Add(writer);
+    return writer;
 };
 
 string primaryResult = await transformer.TransformAsync(inputXml);
-await File.WriteAllTextAsync(Path.Combine(outputDir, "index.html"), primaryResult);
+
+// The caller owns the writers: dispose them once the transform completes
+foreach (var w in writers)
+    await w.DisposeAsync();
 ```
 
-The handler receives:
-- `href` — the URI from the `xsl:result-document` `href` attribute (resolved relative to the base output URI)
-- `content` — the serialized content of that result document
-
-### Stream-based ResultDocumentHandler
-
-For large secondary results, use the stream-based overload:
-
-```csharp
-transformer.ResultDocumentHandler = async (href, contentStream) =>
-{
-    string outputPath = Path.Combine(outputDir, href);
-    Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
-    using var fileStream = File.Create(outputPath);
-    await contentStream.CopyToAsync(fileStream);
-};
-```
-
-This avoids materializing the entire secondary result as a string, which matters for transforms that produce many or large secondary documents.
+`MaxResultDocuments` (default `1000`; `0` for unlimited) caps the number of secondary results per transformation.
 
 ---
 
@@ -136,44 +141,52 @@ This avoids materializing the entire secondary result as a string, which matters
 
 ### SetSourceSelect
 
-`SetSourceSelect` specifies which nodes from the source document to use as the initial context. By default, the entire document node is the initial context. With `SetSourceSelect`, you can narrow to a specific subtree:
+`SetSourceSelect` takes an XPath expression evaluated against the source document; its result becomes the initial context item. By default, the document node is the initial context:
 
 ```csharp
 var transformer = new XsltTransformer();
 await transformer.LoadStylesheetAsync(stylesheetXml, baseUri);
 
-// Only transform the "orders" subtree
+// Start from the "orders" element rather than the document node
 transformer.SetSourceSelect("/root/orders");
 
 string result = await transformer.TransformAsync(inputXml);
 ```
 
-The XPath expression is evaluated against the source document, and the resulting node(s) become the initial context for the transformation.
+### SetInitialMode
 
-### SetInitialModeSelect
-
-`SetInitialModeSelect` sets the initial mode for the transformation. This determines which set of template rules is active when processing begins:
+`SetInitialMode` sets the mode whose template rules are applied when processing begins:
 
 ```csharp
-var transformer = new XsltTransformer();
-await transformer.LoadStylesheetAsync(stylesheetXml, baseUri);
-
 // Start the transform in "summary" mode
-transformer.SetInitialModeSelect("summary");
+transformer.SetInitialMode("summary");
 
 string result = await transformer.TransformAsync(inputXml);
 ```
 
-This is equivalent to having the initial `apply-templates` use `mode="summary"`. It is useful when a single stylesheet contains multiple named modes for different output formats (e.g., `detail`, `summary`, `toc`).
+The optional second argument is the mode's namespace URI. Pass `"#unnamed"` to select the unnamed mode explicitly. It is useful when a single stylesheet contains multiple modes for different output formats (e.g., `detail`, `summary`, `toc`):
 
 ```csharp
 // Generate different outputs from the same stylesheet and input
-transformer.SetInitialModeSelect("detail");
+transformer.SetInitialMode("detail");
 string detailHtml = await transformer.TransformAsync(inputXml);
 
-transformer.SetInitialModeSelect("summary");
+transformer.SetInitialMode("summary");
 string summaryHtml = await transformer.TransformAsync(inputXml);
 ```
+
+### SetInitialModeSelect
+
+`SetInitialModeSelect` is not a mode name: it takes an XPath expression, evaluated with the source document as context, that sets the initial match selection (XSLT 3.0 `initial-match-selection`). Templates of the initial mode are applied to each item it selects instead of to the document node:
+
+```csharp
+// Apply templates to every chapter element
+transformer.SetInitialModeSelect("//chapter");
+```
+
+### Named templates and functions
+
+`SetInitialTemplate(name, namespaceUri)` starts with a named template (pass `null` as the source to `TransformAsync` when no source document is needed); `SetInitialFunction(name, namespaceUri)` with `AddInitialFunctionArgument(value)` starts with a public stylesheet function.
 
 ---
 
@@ -181,18 +194,18 @@ string summaryHtml = await transformer.TransformAsync(inputXml);
 
 ### SetCollection
 
-`SetCollection` binds a named collection to a set of XML documents, making them available to the `collection()` function in the stylesheet:
+`SetCollection` registers a collection URI with a list of XML file paths, making them available to the `collection()` function in the stylesheet:
 
 ```csharp
 var transformer = new XsltTransformer();
 await transformer.LoadStylesheetAsync(stylesheetXml, baseUri);
 
 // Bind a collection of product documents
-transformer.SetCollection("products", new[]
+transformer.SetCollection("products", new List<string>
 {
-    File.ReadAllText("data/product-001.xml"),
-    File.ReadAllText("data/product-002.xml"),
-    File.ReadAllText("data/product-003.xml")
+    "data/product-001.xml",
+    "data/product-002.xml",
+    "data/product-003.xml"
 });
 
 // The stylesheet can now use: collection('products')
@@ -211,10 +224,10 @@ The stylesheet accesses the collection:
 </xsl:template>
 ```
 
-You can also bind the default collection (used when `collection()` is called with no argument):
+Use an empty string for the default collection (used when `collection()` is called with no argument):
 
 ```csharp
-transformer.SetCollection(null, documents);  // default collection
+transformer.SetCollection("", documentPaths);  // default collection
 ```
 
 ---
@@ -224,39 +237,73 @@ transformer.SetCollection(null, documents);  // default collection
 ### XsltTransformer Class
 
 ```csharp
-public class XsltTransformer
+public sealed class XsltTransformer
 {
     // Stylesheet loading
-    Task LoadStylesheetAsync(string stylesheet, string baseUri);
+    Task LoadStylesheetAsync(string stylesheetXml, Uri? baseUri = null,
+        Dictionary<string, string>? staticParams = null,
+        Dictionary<string, List<(string? Version, string FilePath)>>? packageCatalog = null,
+        PackageVersionResolution packageVersionResolution = PackageVersionResolution.Highest);
 
-    // String-based transform
-    Task<string> TransformAsync(string inputXml);
+    // String- and sequence-based transforms
+    Task<string> TransformAsync(string? inputXml, CancellationToken ct = default);
+    Task<object?> TransformToValueAsync(string? inputXml, CancellationToken ct = default);
+    Task<string> TransformAsync(XdmSequence? source, CancellationToken ct = default);
+    Task<XdmSequence> TransformToSequenceAsync(XdmSequence? source, CancellationToken ct = default);
 
-    // Stream-based transforms
-    Task TransformAsync(TextReader input, TextWriter output);
-    Task TransformAsync(Stream input, Stream output);
-    Task TransformAsync(Stream input, TextWriter output);
-    Task TransformAsync(TextReader input, Stream output);
+    // Reader/stream transforms
+    Task<string> TransformAsync(TextReader inputXml, CancellationToken ct = default);
+    Task<string> TransformAsync(Stream inputXml, CancellationToken ct = default);
+    Task TransformAsync(string? inputXml, TextWriter output, CancellationToken ct = default);
+    Task TransformAsync(TextReader inputXml, TextWriter output, CancellationToken ct = default);
+    Task TransformAsync(Stream inputXml, TextWriter output, CancellationToken ct = default);
+    Task TransformAsync(Stream inputXml, Stream output, CancellationToken ct = default);
 
     // Parameters
-    void SetParameter(string name, object value);
+    void SetParameter(string name, string value);
+    void SetParameter(string name, object? value);
+    void SetParameter(QName name, object? value);
+    void SetInitialTemplateParameter(QName name, object? value);
+    void SetInitialTunnelParameter(QName name, object? value);
 
-    // Source and mode selection
-    void SetSourceSelect(string xpathExpression);
-    void SetInitialModeSelect(string modeName);
+    // Invocation
+    void SetInitialTemplate(string name, string? namespaceUri = null);
+    void SetInitialMode(string mode, string? namespaceUri = null);
+    void SetInitialFunction(string name, string? namespaceUri = null);
+    void AddInitialFunctionArgument(object? value);
+    void SetSourceSelect(string select);
+    void SetInitialModeSelect(string select);
 
-    // Collections
-    void SetCollection(string? name, IEnumerable<string> documents);
+    // URIs and input
+    void SetSourceDocumentUri(Uri uri);
+    void SetBaseOutputUri(Uri uri);
+    void EnableXInclude(bool allowRemote = false, IXmlResourceResolver? resolver = null);
+    void SetCollection(string uri, List<string> documentPaths);
 
-    // Extension functions
-    void RegisterFunction(string namespaceUri, string localName, Delegate function);
-
-    // Result document handling
-    ResultDocumentHandler? ResultDocumentHandler { get; set; }
+    // Result documents
+    Func<string, TextWriter>? ResultDocumentHandler { get; set; }
     IReadOnlyDictionary<string, string> SecondaryResultDocuments { get; }
+    int MaxResultDocuments { get; set; }              // default 1000; 0 = unlimited
+
+    // Listeners
+    Action<string, bool>? MessageListener { get; set; }
+    Action<string, bool, int, int>? MessageListenerWithLocation { get; set; }
+    Action<string>? WarningListener { get; set; }
+    Action<int, string, string>? TraceListener { get; set; }
+
+    // Security and resources
+    bool AllowDtdProcessing { get; set; }             // default false
+    ResourcePolicy? ResourcePolicy { get; set; }      // see resource-policy.md
+    PreloadedResources? PreloadedResources { get; set; }
+    ISchemaProvider? SchemaProvider { get; set; }
+
+    // Inspection
+    bool HasStreamableMode { get; }
 }
 ```
 
+`TransformAsync` throws `InvalidOperationException` if no stylesheet has been loaded, and `XsltException` (`PhoenixmlDb.Xslt.Engine`) for errors in the stylesheet or during the transformation. There is no API for registering extension functions on `XsltTransformer`.
+
 ### Thread Safety
 
-`XsltTransformer` instances are **not** thread-safe. Create a new instance per thread or per request. The compiled stylesheet can be shared (loaded once, used many times), but the transformer state (parameters, collections, result documents) is per-instance.
+`XsltTransformer` instances are **not** thread-safe. The loaded stylesheet, parameters, collections and result documents all belong to the instance; create a new `XsltTransformer` for each transformation rather than sharing one across threads.

@@ -6,7 +6,7 @@ sort: 2
 
 # Document API
 
-The Document API provides operations for storing, retrieving, and managing XML and JSON documents.
+The Document API provides operations for storing, retrieving, and managing XML and JSON documents. Document methods live on `IContainer` (`PhoenixmlDb.Core`); retrieved documents are `IDocument`.
 
 ## Storing Documents
 
@@ -14,7 +14,7 @@ The Document API provides operations for storing, retrieving, and managing XML a
 
 ```csharp
 // From string
-container.PutDocument("product.xml", """
+await container.PutDocumentAsync("product.xml", """
     <product id="1">
         <name>Widget</name>
         <price>29.99</price>
@@ -22,138 +22,168 @@ container.PutDocument("product.xml", """
     """);
 
 // From file
-container.PutDocument("data.xml", File.ReadAllText("data.xml"));
+await container.PutDocumentAsync("data.xml", await File.ReadAllTextAsync("data.xml"));
 
-// From stream (for large documents)
-using var stream = File.OpenRead("large-document.xml");
-container.PutDocument("large.xml", stream);
-
-// From XDocument
-var xdoc = new XDocument(new XElement("root", new XElement("item", "value")));
-container.PutDocument("from-xdoc.xml", xdoc);
+// From stream
+await using var stream = File.OpenRead("large-document.xml");
+await container.PutDocumentAsync("large.xml", stream);
 ```
+
+The `Stream` overload reads the whole stream as UTF-8 text (honouring a byte-order mark) and then stores it like the string overload. The caller keeps ownership of the stream; it is not disposed.
+
+Storing a document under an existing name replaces it (see `Overwrite` below). Content that does not parse is rejected and nothing is written: malformed XML throws `System.Xml.XmlException`, malformed JSON throws `System.Text.Json.JsonException`.
 
 ### JSON Documents
 
+There is no separate JSON method. `PutDocumentAsync` stores JSON when the content's first non-whitespace character is `{` or `[`, or when `DocumentOptions.ContentType` is `ContentType.Json`:
+
 ```csharp
-// JSON string
-container.PutJsonDocument("user.json", """
+// Detected as JSON from its content
+await container.PutDocumentAsync("user.json", """
     {"id": 1, "name": "Alice", "roles": ["admin"]}
     """);
 
-// From object
+// From an object
 var user = new { Id = 1, Name = "Alice", Roles = new[] { "admin" } };
-container.PutJsonDocument("user.json", JsonSerializer.Serialize(user));
+await container.PutDocumentAsync("user.json", JsonSerializer.Serialize(user));
 ```
+
+JSON is stored as its XML representation; see [JSON Storage](../json-support/json-storage.md).
 
 ### With Metadata
 
+`DocumentOptions.Metadata` writes metadata in the same transaction as the document. Its keys are qualified `XdmQName` names:
+
 ```csharp
-container.PutDocument("doc.xml", content, new DocumentMetadata
+using PhoenixmlDb.Xdm;
+
+var author = db.MetadataName(container, null, "author");   // container's default metadata namespace
+
+await container.PutDocumentAsync("doc.xml", content, new DocumentOptions
 {
-    ["author"] = "john.doe",
-    ["created"] = DateTime.UtcNow.ToString("O"),
-    ["version"] = "1.0",
-    ["category"] = "products"
+    Metadata = new Dictionary<XdmQName, XdmValue>
+    {
+        [author] = XdmValue.From("john.doe")
+    }
 });
 ```
 
 ### Storage Options
 
 ```csharp
-container.PutDocument("doc.xml", content, new DocumentStorageOptions
+await container.PutDocumentAsync("doc.xml", content, new DocumentOptions
 {
-    Overwrite = true,           // Overwrite if exists (default: true)
-    IndexImmediately = true,    // Index after store (default: true)
-    ValidateContent = true      // Validate XML (default: follows container setting)
+    Overwrite = false,             // Throw if the document exists (default: true)
+    ContentType = ContentType.Xml  // Skip content sniffing (default: null = detect)
 });
 ```
+
+`DocumentOptions` (`PhoenixmlDb.Core`) is a record with three properties:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `ContentType` | `ContentType?` | `null` | `Xml` or `Json`; `null` detects from the content |
+| `Metadata` | `IReadOnlyDictionary<XdmQName, XdmValue>?` | `null` | Metadata to write with the document |
+| `Overwrite` | `bool` | `true` | When `false`, storing over an existing name throws `DocumentExistsException` |
+
+If indexing is enabled on the database (`db.EnableIndexing()`), the container's declared indexes are updated in the same write transaction as the document.
 
 ## Retrieving Documents
 
 ### As String
 
 ```csharp
-// Get XML
-string xml = container.GetDocument("product.xml");
-
-// Get JSON
-string json = container.GetJsonDocument("user.json");
+IDocument? doc = await container.GetDocumentAsync("product.xml");
+if (doc is not null)
+{
+    string xml = await doc.GetContentAsync();
+}
 ```
 
-### As XDocument
-
-```csharp
-XDocument xdoc = container.GetDocumentAsXDocument("product.xml");
-```
+`GetDocumentAsync` returns `null` when the document does not exist. `GetContentAsync` serializes the stored node tree back to XML, with an XML declaration; it does not return the original bytes. A JSON document returns its XML representation.
 
 ### As Stream
 
 ```csharp
-using var stream = container.GetDocumentAsStream("large.xml");
-// Process stream without loading entire document into memory
+await using Stream stream = await doc.GetContentStreamAsync();
+```
+
+`GetContentStreamAsync` serializes the whole document and wraps the result in a read-only `MemoryStream`; it is a convenience for stream-based consumers, not a streaming read.
+
+### As a Node
+
+```csharp
+IXdmNode root = await doc.GetRootNodeAsync();
+Console.WriteLine(root.NodeKind);    // Document
 ```
 
 ### Check Existence
 
 ```csharp
-if (container.DocumentExists("product.xml"))
+if (await container.DocumentExistsAsync("product.xml"))
 {
-    var doc = container.GetDocument("product.xml");
-}
-
-// Or use TryGet
-if (container.TryGetDocument("product.xml", out var doc))
-{
-    Console.WriteLine(doc);
+    var doc = await container.GetDocumentAsync("product.xml");
 }
 ```
 
 ## Document Metadata
 
+Metadata names are qualified. The `string`-name overloads place the name in the container's default metadata namespace (`ContainerOptions.DefaultMetadataNamespace`, or the engine's application namespace when that is not set). Every metadata method throws `DocumentNotFoundException` when the document does not exist. See [Metadata](../metadata.md) for the model.
+
 ### Get Metadata
 
 ```csharp
-var metadata = container.GetMetadata("product.xml");
+using PhoenixmlDb.Core.Metadata;   // MetadataCollection
+using PhoenixmlDb.Xdm;             // XdmQName, XdmValue
 
-Console.WriteLine($"Author: {metadata["author"]}");
-Console.WriteLine($"Created: {metadata["created"]}");
-Console.WriteLine($"Version: {metadata["version"]}");
+string? author = await container.GetMetadataAsync("product.xml", "author");
 
-// Check if key exists
-if (metadata.ContainsKey("category"))
+// All entries, keyed by XdmQName
+MetadataCollection all = await container.GetAllMetadataAsync("product.xml");
+foreach (var (name, value) in all)
 {
-    Console.WriteLine($"Category: {metadata["category"]}");
+    Console.WriteLine($"{name}: {value}");
 }
+
+// Also available from a retrieved document
+MetadataCollection fromDoc = await doc.GetAllMetadataAsync();
 ```
 
 ### Set Metadata
 
 ```csharp
-// Replace all metadata
-container.SetMetadata("product.xml", new DocumentMetadata
-{
-    ["author"] = "jane.doe",
-    ["modified"] = DateTime.UtcNow.ToString("O"),
-    ["version"] = "2.0"
-});
+// Set a single value (replaces any previous value under that name)
+await container.SetMetadataAsync("product.xml", "author", "jane.doe");
 
-// Set single value
-container.SetMetadataValue("product.xml", "lastAccessed", DateTime.UtcNow.ToString("O"));
+// Set a multi-value set (PhoenixmlDb.Storage extension method)
+await container.SetMetadataValuesAsync("product.xml", "tags", new[] { "sale", "featured" });
 
-// Remove metadata key
-container.RemoveMetadataValue("product.xml", "temporary");
+// Remove a name (PhoenixmlDb.Storage extension method; returns false if it was not set)
+bool removed = await container.DeleteMetadataAsync("product.xml",
+    db.MetadataName(container, null, "temporary"));
 ```
+
+`SetMetadataAsync` also has `MetadataProperty<T>` and `XdmQName`/`XdmValue` overloads. The multi-value and delete methods (`SetMetadataValuesAsync`, `GetMetadataValuesAsync`, `DeleteMetadataAsync`, `GetAllMetadataEntriesAsync`, `PutDocumentWithMetadataValuesAsync`) are extension methods on `IContainer` in `ContainerMetadataExtensions` (`PhoenixmlDb.Storage`).
 
 ### Query by Metadata
 
 ```csharp
-// Using XQuery
-var authorDocs = db.Query("""
-    for $doc in collection('products')
-    where doc-metadata($doc, 'author') = 'john.doe'
-    return document-uri($doc)
-    """);
+// Exact match
+var author = db.MetadataName(container, null, "author");
+await foreach (DocumentInfo info in container.QueryMetadataAsync(author, XdmValue.From("john.doe")))
+{
+    Console.WriteLine(info.Name);
+}
+```
+
+`QueryMetadataRangeAsync` answers range queries. From XQuery, `phx:metadata($node, $key)` returns a metadata value of the document containing `$node` (the `phx` prefix is predeclared):
+
+```csharp
+await foreach (var name in container.QueryAsync(
+    "/product[phx:metadata(., 'author') = 'john.doe']/name/string()"))
+{
+    Console.WriteLine(name);
+}
 ```
 
 ## Listing Documents
@@ -161,9 +191,9 @@ var authorDocs = db.Query("""
 ### All Documents
 
 ```csharp
-foreach (var name in container.ListDocuments())
+await foreach (DocumentInfo info in container.ListDocumentsAsync())
 {
-    Console.WriteLine(name);
+    Console.WriteLine(info.Name);
 }
 ```
 
@@ -171,112 +201,108 @@ foreach (var name in container.ListDocuments())
 
 ```csharp
 // Virtual directory structure
-foreach (var name in container.ListDocuments(prefix: "2024/01/"))
+await foreach (var info in container.ListDocumentsAsync("2024/01/"))
 {
-    Console.WriteLine(name);  // 2024/01/order-001.xml, 2024/01/order-002.xml
+    Console.WriteLine(info.Name);  // 2024/01/order-001.xml, 2024/01/order-002.xml
 }
 ```
 
-### With Pagination
-
-```csharp
-var documents = container.ListDocuments(
-    prefix: null,
-    skip: 100,
-    take: 50
-);
-```
+There is no skip/take overload; page with LINQ over the async sequence if needed.
 
 ## Deleting Documents
 
 ### Single Document
 
 ```csharp
-container.DeleteDocument("old-product.xml");
+// Returns false if the document did not exist
+bool deleted = await container.DeleteDocumentAsync("old-product.xml");
 ```
+
+Deleting a document also removes its metadata and its index entries.
 
 ### Multiple Documents
 
 ```csharp
-foreach (var name in container.ListDocuments(prefix: "temp/"))
-{
-    container.DeleteDocument(name);
-}
+var names = new List<string>();
+await foreach (var info in container.ListDocumentsAsync("temp/"))
+    names.Add(info.Name);
+
+foreach (var name in names)
+    await container.DeleteDocumentAsync(name);
 ```
 
 ### In Transaction
 
 ```csharp
-using (var txn = db.BeginTransaction())
+await using (var txn = await db.BeginWriteAsync())
 {
-    var container = txn.GetContainer("products");
+    await txn.DeleteDocumentAsync(container.Id, "product1.xml");
+    await txn.DeleteDocumentAsync(container.Id, "product2.xml");
 
-    container.DeleteDocument("product1.xml");
-    container.DeleteDocument("product2.xml");
-
-    txn.Commit();
+    await txn.CommitAsync();
 }
 ```
 
 ## Document Information
 
-```csharp
-var info = container.GetDocumentInfo("product.xml");
+`ListDocumentsAsync` yields `DocumentInfo` records; `IDocument` exposes the same fields:
 
-Console.WriteLine($"Name: {info.Name}");
-Console.WriteLine($"Size: {info.SizeBytes} bytes");
-Console.WriteLine($"Node count: {info.NodeCount}");
-Console.WriteLine($"Created: {info.CreatedAt}");
-Console.WriteLine($"Modified: {info.ModifiedAt}");
-Console.WriteLine($"Content hash: {info.ContentHash}");
+```csharp
+IDocument? doc = await container.GetDocumentAsync("product.xml");
+
+Console.WriteLine($"Id: {doc!.Id}");
+Console.WriteLine($"Name: {doc.Name}");
+Console.WriteLine($"Size: {doc.SizeBytes} bytes");
+Console.WriteLine($"Content type: {doc.ContentType}");
+Console.WriteLine($"Created: {doc.Created}");
+Console.WriteLine($"Modified: {doc.Modified}");
 ```
+
+`SizeBytes` is the UTF-8 length of the content as it was submitted.
 
 ## Bulk Operations
 
-### Import Multiple Documents
+### Store Many Documents
 
 ```csharp
-// From directory
-container.ImportFromDirectory("./xml-files", "*.xml", new ImportOptions
-{
-    Recursive = true,
-    PreserveSubdirectories = true  // Keep folder structure in names
-});
+var inputs = Directory.EnumerateFiles("./xml-files", "*.xml")
+    .Select(path => new DocumentInput(Path.GetFileName(path), File.ReadAllText(path)));
+
+int stored = await container.PutDocumentsAsync(inputs);
 ```
 
-### Export Documents
+`PutDocumentsAsync` writes up to 1,000 documents per LMDB write transaction and returns the number stored. A failure aborts only the batch in progress; batches already committed stay committed.
 
-```csharp
-// Export to directory
-container.ExportToDirectory("./backup", new ExportOptions
-{
-    IncludeMetadata = true
-});
-```
+There are no built-in directory import or export methods.
 
 ## Error Handling
 
 ```csharp
 try
 {
-    var doc = container.GetDocument("nonexistent.xml");
+    await container.SetMetadataAsync("nonexistent.xml", "author", "jdoe");
 }
 catch (DocumentNotFoundException ex)
 {
     Console.WriteLine($"Document not found: {ex.DocumentName}");
-    Console.WriteLine($"Container: {ex.ContainerName}");
 }
 
 try
 {
-    container.PutDocument("doc.xml", invalidXml);
+    await container.PutDocumentAsync("doc.xml", content, new DocumentOptions { Overwrite = false });
 }
-catch (XmlValidationException ex)
+catch (DocumentExistsException ex)
 {
-    Console.WriteLine($"Validation failed: {ex.Message}");
-    Console.WriteLine($"Line: {ex.LineNumber}, Position: {ex.LinePosition}");
+    Console.WriteLine(ex.Message);
+}
+catch (System.Xml.XmlException ex)
+{
+    // Content is not well-formed XML
+    Console.WriteLine($"Line {ex.LineNumber}, position {ex.LinePosition}: {ex.Message}");
 }
 ```
+
+`GetDocumentAsync` and `DeleteDocumentAsync` report a missing document through their return values (`null` / `false`).
 
 ## Document Names
 
@@ -287,32 +313,22 @@ catch (XmlValidationException ex)
 "product.xml"
 "user.json"
 
-// Virtual paths (for organization)
+// Virtual paths (for organization; listable by prefix)
 "products/electronics/laptop.xml"
 "2024/01/15/order-001.xml"
-
-// With metadata in name
-"order_12345_pending.xml"
 ```
 
 ### Name Validation
 
-```csharp
-// Valid characters: alphanumeric, dash, underscore, dot, slash
-container.PutDocument("valid-name_123.xml", content);  // OK
-container.PutDocument("path/to/doc.xml", content);     // OK
-
-// Invalid characters will throw ArgumentException
-```
+A name must not be `null`, empty, or whitespace (`ArgumentException`). The name is not otherwise restricted, and the extension does not determine the content type.
 
 ## Best Practices
 
 1. **Use meaningful names** - Names should identify content
-2. **Organize with virtual paths** - Use `/` for logical grouping
+2. **Organize with virtual paths** - Use `/` for logical grouping and list with a prefix
 3. **Add metadata** - Store non-content information as metadata
 4. **Use transactions** - For related document operations
-5. **Stream large documents** - Use stream APIs for documents > 1MB
-6. **Validate on store** - Enable validation for data integrity
+5. **Batch bulk loads** - `PutDocumentsAsync` amortizes commits across up to 1,000 documents
 
 ## Next Steps
 

@@ -15,13 +15,13 @@ PhoenixmlDb is built on a layered architecture:
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    Application Layer                     │
-│         (Your C# Application / gRPC Clients)            │
+│     (Your C# Application / gRPC and REST clients)        │
 ├─────────────────────────────────────────────────────────┤
 │                      Query Layer                         │
-│   XQuery Engine │ XSLT Processor │ LINQ Provider        │
+│   XQuery Engine │ LINQ Provider │ XSLT (EPS server)      │
 ├─────────────────────────────────────────────────────────┤
-│                    Indexing Layer                        │
-│   Path │ Value │ Full-Text │ Structural Indexes         │
+│               Indexing Layer (optional)                  │
+│   Name │ Path │ Value │ Full-Text │ Metadata │ Structural │
 ├─────────────────────────────────────────────────────────┤
 │                  Data Model Layer                        │
 │              XQuery Data Model (XDM)                     │
@@ -31,23 +31,32 @@ PhoenixmlDb is built on a layered architecture:
 └─────────────────────────────────────────────────────────┘
 ```
 
+The indexing layer lives in `PhoenixmlDb.Indexing` and does nothing until you call
+`db.EnableIndexing()` (see [Indexing](indexing.md)).
+
 ## Key Components
 
 ### Database
 
-The top-level container that manages all data. A database maps to a directory on disk containing LMDB data files.
+The top-level object that manages all data. A database maps to a directory on disk containing the
+LMDB data files. The embedded entry point is `DocumentDatabase`:
 
 ```csharp
-using var db = new XmlDatabase("./mydata");
+using PhoenixmlDb.Storage;
+
+await using var db = new DocumentDatabase("./mydata");
 ```
+
+A directory can be open in only one `DocumentDatabase` at a time per process; a second open of the
+same path throws `LmdbEnvironmentAlreadyOpenException`.
 
 ### Containers
 
 Logical groupings of related documents within a database. Similar to tables in relational databases or collections in document databases.
 
 ```csharp
-var orders = db.CreateContainer("orders");
-var customers = db.CreateContainer("customers");
+var orders = await db.CreateContainerAsync("orders");
+var customers = await db.OpenOrCreateContainerAsync("customers");
 ```
 
 ### Documents
@@ -55,54 +64,51 @@ var customers = db.CreateContainer("customers");
 Individual XML or JSON documents stored within containers. Each document has a unique name within its container.
 
 ```csharp
-container.PutDocument("order-001.xml", xmlContent);
+await container.PutDocumentAsync("order-001.xml", xmlContent);
 ```
 
 ### Nodes
 
-The atomic units of the XQuery Data Model. Documents are decomposed into nodes for efficient storage and querying.
+The atomic units of the XQuery Data Model. Documents are decomposed into nodes for storage and querying.
 
 ## Shredded Node Storage
 
-PhoenixmlDb stores XML and JSON documents using a technique called **node shredding**: each XDM node (element, attribute, text node, comment, etc.) is serialized into its own LMDB key-value entry rather than storing the document as a serialized string. This design enables:
+PhoenixmlDb stores XML and JSON documents using a technique called **node shredding**: each XDM node (element, attribute, text node, comment, processing instruction, document node) is serialized into its own LMDB key-value entry rather than storing the document as a serialized string. Each node record carries the IDs of its parent, attributes and children, so a document can be walked from its root node without parsing text. Index entries (when indexing is enabled) refer to node IDs.
 
-- **Fine-grained access** — queries can retrieve individual nodes without deserializing entire documents
-- **Partial updates** — XQuery Update expressions (e.g., `replace value of node`) modify only the affected node entries, not the whole document
-- **Efficient indexing** — index entries point directly to node-level keys, so the engine fetches only matching nodes
+Storing a document under an existing name replaces the whole document: the previous version's nodes and index entries are reclaimed in the same write transaction.
 
 ## The Identifier Hierarchy
 
-Every object in PhoenixmlDb is identified by a strongly-typed integer value:
+Every object in PhoenixmlDb is identified by a strongly-typed integer value (all in `PhoenixmlDb.Core`):
 
-| Type | .NET type | Scope |
-|------|-----------|-------|
-| `ContainerId` | `uint` | Unique within a database |
-| `DocumentId` | `ulong` | Unique within a container |
-| `NodeId` | `ulong` | Unique within a document |
+| Type | .NET type | Allocated from |
+|------|-----------|----------------|
+| `ContainerId` | `uint` | A database-wide counter |
+| `DocumentId` | `ulong` | A database-wide counter |
+| `NodeId` | `ulong` | A database-wide counter; each document gets a contiguous range |
+| `NamespaceId` | `uint` | A database-wide counter |
 
-A node is fully addressed by the triple `(ContainerId, DocumentId, NodeId)`. LMDB keys are constructed from this triple, giving O(log n) lookup for any node in the database.
+The value 0 (`None`) is never assigned. Document headers are keyed by container ID and document name; node entries are keyed by `NodeId` alone.
 
 ## Document Reassembly
 
-When a document is retrieved in full, PhoenixmlDb performs a **tree traversal** over the structural index:
+When a document is retrieved in full (`IDocument.GetContentAsync`), PhoenixmlDb:
 
-1. Resolve the `DocumentId` from the document name.
-2. Fetch the document root node.
-3. Walk the parent-child index recursively to emit child nodes in document order.
-4. Serialize the resulting node sequence back to XML or JSON.
-
-For query results that return only a subtree, the engine stops traversal at the requested root, so only the required nodes are read from LMDB.
+1. Looks up the document header by container and document name.
+2. Loads the root node named in the header.
+3. Follows the child and attribute IDs stored in each node record, in document order.
+4. Serializes the resulting tree back to XML. JSON documents are stored as XML and come back as XML.
 
 ## Namespace Interning
 
-Namespace URIs are **interned**: each unique URI is stored once and assigned a `NamespaceId` (`uint`). Node entries reference the `NamespaceId` rather than the full URI string. This keeps node records compact and makes namespace-aware comparisons a fast integer equality check rather than a string comparison.
+Namespace URIs are **interned**: each unique URI is stored once and assigned a `NamespaceId` (`uint`). Node entries reference the `NamespaceId` rather than the full URI string. This keeps node records compact and makes namespace comparison an integer equality check rather than a string comparison.
 
 ## Data Flow
 
 ```
-XML Document → Parser → XDM Nodes → Storage
-                           ↓
-                       Indexing
-                           ↓
+XML/JSON Document → Parser → XDM Nodes → Storage
+                                  ↓
+                     Indexing (when enabled)
+                                  ↓
 Query → Parser → AST → Optimizer → Executor → Results
 ```

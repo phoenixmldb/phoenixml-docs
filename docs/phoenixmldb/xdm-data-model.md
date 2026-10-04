@@ -28,9 +28,9 @@ The root of an XML document tree.
 </root>
 ```
 
-```csharp
-// Access in XQuery
-let $doc := doc('container/document.xml')
+```xquery
+(: In a container query, doc() resolves a document of the same container by name :)
+let $doc := doc('document.xml')
 return $doc  (: Returns document node :)
 ```
 
@@ -61,7 +61,7 @@ Represents an XML attribute.
 (: Access attributes :)
 $product/@id           (: Returns attribute node :)
 $product/@id/string()  (: Returns "123" :)
-data($product/@id)     (: Returns typed value :)
+data($product/@id)     (: Returns the typed value: xs:untypedAtomic without a schema :)
 ```
 
 ### Text Node
@@ -72,7 +72,9 @@ Contains character data between elements.
 <message>Hello, World!</message>
 ```
 
-> **Note:** Adjacent text nodes are always merged. CDATA sections become text nodes.
+> **Note:** Adjacent text nodes are always merged. CDATA sections become text nodes. Unless the
+> container sets `PreserveWhitespace = true`, whitespace-only text nodes are dropped when a
+> document is stored.
 
 ### Comment Node
 
@@ -107,6 +109,9 @@ Represents namespace declarations (inherited by descendants).
 <root xmlns="http://default.ns" xmlns:custom="http://custom.ns">
 ```
 
+PhoenixmlDb stores namespace declarations on the element's own record rather than as separate
+node entries.
+
 ## Node Identity and Equality
 
 ### Node Identity
@@ -117,7 +122,9 @@ Every node has a unique identity. Two nodes are identical only if they are the e
 let $x := <item>1</item>
 let $y := $x
 return $x is $y  (: true - same node :)
+```
 
+```xquery
 let $a := <item>1</item>
 let $b := <item>1</item>
 return $a is $b  (: false - different nodes :)
@@ -130,8 +137,10 @@ Nodes can have equal values without being identical.
 ```xquery
 let $a := <item>1</item>
 let $b := <item>1</item>
-return $a = $b   (: true - equal values :)
-return $a eq $b  (: true - equal values :)
+return (
+  $a = $b,   (: true - equal values :)
+  $a eq $b   (: true - equal values :)
+)
 ```
 
 ## Node Relationships
@@ -180,10 +189,9 @@ Nodes are ordered in **document order**:
 4. Children in order of appearance
 
 ```xquery
-(: Sort nodes in document order :)
-for $node in ($c, $a, $b)
-order by $node
-return $node
+(: Path and union operators return nodes in document order, without duplicates :)
+$c | $a | $b
+($c, $a, $b)/.
 ```
 
 ## Atomic Values
@@ -199,7 +207,7 @@ XDM also includes atomic values (not nodes):
 | `xs:boolean` | true | `true()` |
 | `xs:date` | 2024-01-15 | `xs:date("2024-01-15")` |
 | `xs:dateTime` | 2024-01-15T10:30:00 | `xs:dateTime("2024-01-15T10:30:00")` |
-| `xs:QName` | prefix:local | `xs:QName("prefix:local")` |
+| `xs:QName` | ex:local | `QName("http://example.com/ns", "ex:local")` |
 
 ## Sequences
 
@@ -256,37 +264,27 @@ $node treat as element()
 
 ## Storage in PhoenixmlDb
 
-PhoenixmlDb stores XDM nodes efficiently:
+PhoenixmlDb stores XDM nodes as follows:
 
-1. **Node Shredding**: Documents are decomposed into individual nodes
+1. **Node Shredding**: Documents are decomposed into individual nodes, one LMDB entry per node, keyed by node ID
 2. **Namespace Interning**: Namespace URIs are stored once and referenced by ID
-3. **Structural Indexes**: Parent-child relationships are indexed for fast navigation
-4. **Typed Storage**: Atomic values are stored in their native types
+3. **Linked Node Records**: Each record holds its parent's ID and its attributes' and children's IDs, so navigation follows IDs instead of reparsing text
+4. **String Values**: Attribute and text values are stored as strings; typed values are derived from them when queried
+
+A separate structural (parent-child) index, along with the other indexes, is maintained only when
+indexing is enabled with `db.EnableIndexing()` (see [Indexing](indexing.md)).
 
 ```
-Document Storage:
-┌─────────────────────────────────────┐
-│ Node Store (one entry per node)     │
-│ ┌─────┬─────┬─────────┬──────────┐  │
-│ │ ID  │Type │ Name    │ Value    │  │
-│ ├─────┼─────┼─────────┼──────────┤  │
-│ │ 1   │ Doc │ -       │ -        │  │
-│ │ 2   │ Elem│ "root"  │ -        │  │
-│ │ 3   │ Attr│ "id"    │ "123"    │  │
-│ │ 4   │ Elem│ "item"  │ -        │  │
-│ │ 5   │ Text│ -       │ "Hello"  │  │
-│ └─────┴─────┴─────────┴──────────┘  │
-└─────────────────────────────────────┘
-
-Structural Index:
-┌──────────┬──────────┬──────────┐
-│ Parent   │ Child    │ Position │
-├──────────┼──────────┼──────────┤
-│ 1        │ 2        │ 1        │
-│ 2        │ 3        │ 1        │
-│ 2        │ 4        │ 2        │
-│ 4        │ 5        │ 1        │
-└──────────┴──────────┴──────────┘
+Node Store (one entry per node, keyed by NodeId):
+┌──────┬──────┬─────────┬────────┬─────────────┬──────────┐
+│ ID   │ Kind │ Name    │ Parent │ Children    │ Value    │
+├──────┼──────┼─────────┼────────┼─────────────┼──────────┤
+│ 1    │ Doc  │ -       │ -      │ 2           │ -        │
+│ 2    │ Elem │ "root"  │ 1      │ 4 (attr: 3) │ -        │
+│ 3    │ Attr │ "id"    │ 2      │ -           │ "123"    │
+│ 4    │ Elem │ "item"  │ 2      │ 5           │ -        │
+│ 5    │ Text │ -       │ 4      │ -           │ "Hello"  │
+└──────┴──────┴─────────┴────────┴─────────────┴──────────┘
 ```
 
 ## Best Practices

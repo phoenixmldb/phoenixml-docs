@@ -6,22 +6,42 @@ sort: 15
 
 # Migration Guide
 
-This guide helps you migrate to PhoenixmlDb from other XML databases or document stores.
+This guide maps concepts from other XML databases and document stores onto the PhoenixmlDb
+embedded API, and shows how to load data exported with the source system's own tools.
+
+> **Availability.** The embedded database package (`PhoenixmlDb.Storage`) is not yet published on
+> NuGet.
+
+The C# samples assume these namespaces and an open database:
+
+```csharp
+using PhoenixmlDb.Core;
+using PhoenixmlDb.Storage;
+
+await using var db = new DocumentDatabase("./data");
+```
+
+Two differences matter for every migration:
+
+- **A query runs against one container.** You query through `IContainer.QueryAsync`; inside the
+  query, `collection()` is every document in that container. `collection('name')` with an argument
+  resolves a single *document* called `name`, not a container, and `doc()` will not reach into
+  another container.
+- **The API is asynchronous.** Container and document operations return `ValueTask`, and query
+  results are an `IAsyncEnumerable<object>`.
 
 ## From Berkeley DB XML
-
-PhoenixmlDb is designed as a modern replacement for Oracle Berkeley DB XML.
 
 ### Conceptual Mapping
 
 | Berkeley DB XML | PhoenixmlDb |
 |-----------------|-------------|
-| Environment | XmlDatabase |
-| Container | Container |
-| Document | Document |
-| XmlManager | XmlDatabase |
-| XmlQueryContext | QueryParameters |
-| XmlResults | IQueryResult |
+| Environment / XmlManager | `DocumentDatabase` |
+| XmlContainer | `IContainer` |
+| XmlDocument | `IDocument` |
+| XmlQueryContext variables | `IReadOnlyDictionary<string, object>` passed to `QueryAsync` |
+| XmlResults | `IAsyncEnumerable<object>` returned by `QueryAsync` |
+| XmlTransaction | `IWriteTransaction` from `BeginWriteAsync` |
 
 ### Code Migration
 
@@ -39,20 +59,35 @@ XmlResults results = mgr.query("collection('products')//name", qc);
 
 **PhoenixmlDb:**
 ```csharp
-using var db = new XmlDatabase("./data");
-var container = db.CreateContainer("products");
-container.PutDocument("p1.xml", "<product><name>Widget</name></product>");
+var container = await db.CreateContainerAsync("products");
+await container.PutDocumentAsync("p1.xml", "<product><name>Widget</name></product>");
 
-var results = db.Query("collection('products')//name");
+await foreach (var item in container.QueryAsync("collection()//name"))
+{
+    Console.WriteLine(item);
+}
 ```
 
 ### Index Migration
 
+Indexes are declared when the container is created. Documents written before an index is
+declared are not indexed retroactively. Index maintenance runs only once the
+`PhoenixmlDb.Indexing` package is attached with `db.EnableIndexing()`; without it,
+`ContainerOptions.Indexes` is declarative only.
+
 ```csharp
-// Berkeley DB XML index specification: "node-element-equality-string"
-// PhoenixmlDb equivalent:
-container.CreateIndex(new PathIndex("name-idx", "/product/name"));
-container.CreateIndex(new ValueIndex("name-val-idx", "/product/name", ValueType.String));
+using PhoenixmlDb.Indexing;
+
+db.EnableIndexing();
+
+// Berkeley DB XML index specification: "node-element-equality-string" on name
+// Nearest PhoenixmlDb equivalent: a path index plus a typed value index
+var container = await db.CreateContainerAsync("products", options =>
+{
+    options.Indexes
+        .AddPathIndex("//product/name")
+        .AddValueIndex("//product/name", XdmValueType.XdmString);
+});
 ```
 
 ### Data Migration
@@ -60,11 +95,13 @@ container.CreateIndex(new ValueIndex("name-val-idx", "/product/name", ValueType.
 ```csharp
 // Export from Berkeley DB XML (using their tools)
 // Import to PhoenixmlDb:
+var container = await db.OpenOrCreateContainerAsync("products");
+
 foreach (var file in Directory.GetFiles("./export", "*.xml"))
 {
     var name = Path.GetFileName(file);
-    var content = File.ReadAllText(file);
-    container.PutDocument(name, content);
+    var content = await File.ReadAllTextAsync(file);
+    await container.PutDocumentAsync(name, content);
 }
 ```
 
@@ -74,8 +111,8 @@ foreach (var file in Directory.GetFiles("./export", "*.xml"))
 
 | eXist-db | PhoenixmlDb |
 |----------|-------------|
-| Database | XmlDatabase |
-| Collection | Container |
+| Database | `DocumentDatabase` |
+| Collection | Container (flat; use path-style document names such as `orders/2024/o1.xml` and `ListDocumentsAsync(prefix)` in place of sub-collections) |
 | Resource | Document |
 | XQuery | XQuery |
 
@@ -94,11 +131,13 @@ ResourceSet result = service.query("//product");
 
 **PhoenixmlDb:**
 ```csharp
-using var db = new XmlDatabase("./data");
-var container = db.CreateContainer("products");
-container.PutDocument("p1.xml", "<product/>");
+var container = await db.CreateContainerAsync("products");
+await container.PutDocumentAsync("p1.xml", "<product/>");
 
-var results = db.Query("collection('products')//product");
+await foreach (var item in container.QueryAsync("collection()//product"))
+{
+    Console.WriteLine(item);
+}
 ```
 
 ## From MarkLogic
@@ -107,11 +146,11 @@ var results = db.Query("collection('products')//product");
 
 | MarkLogic | PhoenixmlDb |
 |-----------|-------------|
-| Database | XmlDatabase |
-| Collection | Container (via metadata) |
+| Database | `DocumentDatabase` |
+| Collection | Container, or document metadata for tag-style grouping |
 | Document | Document |
-| Range Index | Value Index |
-| Element Index | Path Index |
+| Range Index | Value index (`AddValueIndex`) |
+| Element Index | Name or path index (`AddNameIndex`, `AddPathIndex`) |
 
 ### Code Migration
 
@@ -126,9 +165,13 @@ return $p
 
 **PhoenixmlDb:**
 ```csharp
-container.PutDocument("products/p1.xml", "<product/>");
+var container = await db.OpenOrCreateContainerAsync("products");
+await container.PutDocumentAsync("products/p1.xml", "<product/>");
 
-var results = db.Query("collection('products')//product");
+await foreach (var item in container.QueryAsync("collection()//product"))
+{
+    Console.WriteLine(item);
+}
 ```
 
 ## From MongoDB
@@ -137,22 +180,28 @@ var results = db.Query("collection('products')//product");
 
 | MongoDB | PhoenixmlDb |
 |---------|-------------|
-| Database | XmlDatabase |
+| Database | `DocumentDatabase` |
 | Collection | Container |
 | Document (BSON) | Document (XML/JSON) |
 | Find query | XQuery/XPath |
 
 ### Data Migration
 
+`PutDocumentAsync` detects JSON content. A JSON document is stored in the XQuery 3.1
+`fn:json-to-xml` representation: elements named `map`, `array`, `string`, `number`, `boolean`
+and `null` in the `http://www.w3.org/2005/xpath-functions` namespace, with object members
+identified by a `key` attribute.
+
 ```csharp
 // Export from MongoDB as JSON
 // Import to PhoenixmlDb:
-var container = db.CreateContainer("products");
+var container = await db.CreateContainerAsync("products");
 
-foreach (var doc in mongoCollection.Find(_ => true))
+foreach (var doc in mongoCollection.Find(_ => true).ToEnumerable())
 {
     var json = doc.ToJson();
-    container.PutJsonDocument($"{doc["_id"]}.json", json);
+    await container.PutDocumentAsync($"{doc["_id"]}.json", json,
+        new DocumentOptions { ContentType = ContentType.Json });
 }
 ```
 
@@ -165,8 +214,11 @@ db.products.find({ category: "Electronics", price: { $lt: 100 } })
 
 **PhoenixmlDb:**
 ```xquery
-for $p in collection('products')/map
-where $p/category = 'Electronics' and $p/price < 100
+declare namespace j = "http://www.w3.org/2005/xpath-functions";
+
+for $p in collection()/j:map
+where $p/j:string[@key = 'category'] = 'Electronics'
+  and xs:decimal($p/j:number[@key = 'price']) < 100
 return $p
 ```
 
@@ -183,11 +235,13 @@ FOR XML PATH('product'), ROOT('products')
 ### Import to PhoenixmlDb
 
 ```csharp
+var container = await db.OpenOrCreateContainerAsync("products");
+
 // Store entire export
-container.PutDocument("products.xml", exportedXml);
+await container.PutDocumentAsync("products.xml", exportedXml);
 
 // Or individual documents
-foreach (var row in table.Rows)
+foreach (DataRow row in table.Rows)
 {
     var xml = $"""
         <product id="{row["Id"]}">
@@ -195,9 +249,12 @@ foreach (var row in table.Rows)
             <price>{row["Price"]}</price>
         </product>
         """;
-    container.PutDocument($"p{row["Id"]}.xml", xml);
+    await container.PutDocumentAsync($"p{row["Id"]}.xml", xml);
 }
 ```
+
+Values interpolated into XML this way must be escaped (for example with
+`System.Security.SecurityElement.Escape`) if they can contain `<`, `&` or quotes.
 
 ### Query Migration
 
@@ -210,9 +267,9 @@ ORDER BY Price DESC
 
 **XQuery:**
 ```xquery
-for $p in collection('products')//product
+for $p in collection()//product
 where $p/category = 'Electronics'
-order by $p/price descending
+order by xs:decimal($p/price) descending
 return <result>
     <name>{$p/name/text()}</name>
     <price>{$p/price/text()}</price>
@@ -232,11 +289,10 @@ return <result>
 ### Execution
 
 - [ ] Set up PhoenixmlDb environment
-- [ ] Create containers
+- [ ] Create containers, with their indexes
 - [ ] Export source data
 - [ ] Transform if needed
 - [ ] Import data
-- [ ] Create indexes
 - [ ] Verify data integrity
 - [ ] Update application code
 - [ ] Test thoroughly
@@ -252,7 +308,9 @@ return <result>
 
 1. **Test in staging** — Always test migration first
 2. **Validate data** — Compare counts and samples
-3. **Plan indexes** — Create before importing large datasets
-4. **Batch imports** — Use transactions for bulk loading
-5. **Keep backups** — Of both source and destination
+3. **Plan indexes** — Declare them when you create the container, before importing; documents
+   already stored are not indexed retroactively
+4. **Batch imports** — Group writes in one transaction (`BeginWriteAsync`, `PutDocumentAsync`,
+   `CommitAsync`) or use `IContainer.PutDocumentsAsync`
+5. **Keep backups** — Of both source and destination (`DocumentDatabase.BackupAsync`)
 6. **Monitor performance** — After migration

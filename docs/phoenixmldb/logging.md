@@ -1,10 +1,10 @@
 ---
-title: Logging
-description: Supplying a logger to the embedded database, what is logged without one, the log categories, and the stable event ids
+title: Logging and Telemetry
+description: Supplying a logger, the log categories and stable event ids, and the metrics, traces and health the engine publishes
 sort: 12
 ---
 
-# Logging
+# Logging and Telemetry
 
 The database logs through `Microsoft.Extensions.Logging`. Both servers route these events into
 the host's logging, so they reach the console, structured logs and any other configured provider.
@@ -109,3 +109,65 @@ the peer. A node that is shutting down doesn't report its own shutdown as a peer
 
 The server startup events 3001–3007 are listed in the
 [Server Configuration reference](deployment/server-configuration.md#startup-events).
+
+## Metrics and traces
+
+The engine publishes metrics (`System.Diagnostics.Metrics`) and traces (`ActivitySource`) with no
+OpenTelemetry dependency. Each area has one meter and one activity source:
+
+| Name | Constant |
+|---|---|
+| `PhoenixmlDb.Storage` | `TelemetryNames.Storage` |
+| `PhoenixmlDb.Indexing` | `TelemetryNames.Indexing` |
+| `PhoenixmlDb.Cluster` | `TelemetryNames.Cluster` |
+
+(`PhoenixmlDb.Storage.Diagnostics.TelemetryNames`.) Nothing is recorded when nothing is listening,
+and a failing listener can't affect the database. Any `MeterListener`/`ActivityListener`,
+`dotnet-counters` or `dotnet-trace` can read them, for example
+`dotnet-counters monitor --counters PhoenixmlDb.Storage -p <pid>`.
+
+### Storage metrics
+
+| Metric | Type | Notes |
+|---|---|---|
+| `db.client.operation.duration` | histogram, seconds | Buckets 0.001–10 s. Tags: `db.system.name` = `phoenixmldb`, `db.operation.name` (`query`, `put`, `get`, `delete`), `db.collection.name` (the container), and `error.type` on failure. One series per container. |
+| `phoenixmldb.storage.transactions` | counter | Tag `phoenixmldb.transaction.mode` (`read` or `write`); includes the engine's own transactions. |
+| `phoenixmldb.storage.map.usage` | bytes | Tag `db.namespace` (the data directory's last path segment). A high-water mark: it doesn't shrink after deletes. |
+| `phoenixmldb.storage.map.limit` | bytes | Tag `db.namespace`. |
+
+### Indexing metrics
+
+| Metric | Notes |
+|---|---|
+| `phoenixmldb.indexing.fulltext.documents` | Tag `phoenixmldb.outcome` (`indexed` or `dropped`; dropped includes a container whose full-text index was removed). Counted after the batch commits. |
+| `phoenixmldb.indexing.fulltext.batch.failures` | |
+
+### Cluster metrics
+
+All tagged `phoenixmldb.raft.node.id`; a node that has shut down drops out of the gauges.
+
+| Metric | Notes |
+|---|---|
+| `phoenixmldb.raft.state` | 0 follower, 1 candidate, 2 leader (3 is reserved for a faulted node) |
+| `phoenixmldb.raft.term`, `.commit_index`, `.applied_index` | |
+| `phoenixmldb.raft.apply_lag` | never negative |
+| `phoenixmldb.raft.elections` | |
+| `phoenixmldb.raft.peer.request.failures` | Tag `rpc.method` (`RequestVote`, `AppendEntries`, `TimeoutNow`). A node's own shutdown isn't counted. |
+| `phoenixmldb.raft.apply.metadata_skipped` | |
+| `phoenixmldb.raft.snapshots` | Tag `phoenixmldb.snapshot.operation` (`create` or `restore`) |
+
+### Traces
+
+| Span | Notes |
+|---|---|
+| `{operation} {container}`, e.g. `query orders` | Kind Client, with the `db.*` tags above. The query text is never a tag. A query span doesn't include the query's internal work. |
+| `phoenixmldb.transaction` | Write transactions only, tagged `phoenixmldb.transaction.outcome` (`commit` or `abort`). |
+| `raft propose`, `raft snapshot create`, `raft snapshot restore`, `fulltext drain` | |
+
+## Health (embedded)
+
+`DocumentDatabase.GetHealth()` returns a `StorageHealth` (`IsOpen`, `ReadOnly`, `MapUsedBytes`,
+`MapSizeBytes`, `MapUsedFraction`), and `RaftNode.GetHealth()` returns a `RaftHealth` (`State`,
+`NodeId`, `LeaderId`, `Term`, `CommitIndex`, `AppliedIndex`, `ApplyLag`). Neither throws; a node that
+has shut down reports Follower with no leader. The servers' health endpoints are described in
+[Server Mode](deployment/server-mode.md#health-endpoints).

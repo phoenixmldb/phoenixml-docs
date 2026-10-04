@@ -87,6 +87,25 @@ that parsed JSON from `/health` must call `/health/details` instead. `/health/re
 database and engine checks; it used to always return `200`. See
 [Server Mode: Health Endpoints](phoenixmldb/deployment/server-mode.md#health-endpoints).
 
+### Telemetry and health
+
+Since phoenixml `main` 0cd95b1, the engine publishes metrics and traces through `System.Diagnostics`
+(`PhoenixmlDb.Storage`, `PhoenixmlDb.Indexing`, `PhoenixmlDb.Cluster`), and
+`DocumentDatabase.GetHealth()` / `RaftNode.GetHealth()` report storage and cluster health. See
+[Logging and Telemetry](phoenixmldb/logging.md#metrics-and-traces).
+
+- **gRPC server health:** `/health` reports real status: it used to always answer Healthy.
+  `/health/ready` checks storage (and Raft when enabled), `/health/details` needs admin scope, and
+  `grpc.health.v1` is available. `/healthz` is a deprecated alias for one release. The TLS port now
+  accepts HTTP/1.1, so HTTPS probes work. See [Server Mode](phoenixmldb/deployment/server-mode.md#health-endpoints).
+- **New health codes:** `storage_map_nearly_full` (Degraded at
+  `PhoenixmlDb:Health:MapUsageDegradedPercent`, default 90), `raft_no_leader`, `raft_unavailable`.
+  The REST server's database check can now report Degraded.
+- **`AdminService.HealthCheck`** returns the components `storage` and `raft`, instead of a fixed
+  healthy set.
+- **Event 3008** `HealthCheckFailed` in both servers. API-key rejection logs now come from the
+  `ApiKeyAuthenticator` category.
+
 ### Logging: a logger factory, stable event ids, and server logging
 
 Since phoenixml `main` 25fccbe, the database logs through `Microsoft.Extensions.Logging` with
