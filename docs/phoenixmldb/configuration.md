@@ -44,27 +44,8 @@ The servers read their settings from `appsettings.json`, environment variables
 
 ## Logging
 
-### Configure Logging
-
-```csharp
-var options = new DatabaseOptions
-{
-    Logger = LoggerFactory.Create(builder =>
-    {
-        builder.AddConsole();
-        builder.SetMinimumLevel(LogLevel.Information);
-    }).CreateLogger<XmlDatabase>()
-};
-```
-
-### Log Categories
-
-| Category | Description |
-|----------|-------------|
-| `PhoenixmlDb.Storage` | Storage operations |
-| `PhoenixmlDb.Query` | Query execution |
-| `PhoenixmlDb.Index` | Index operations |
-| `PhoenixmlDb.Transaction` | Transaction lifecycle |
+Pass a logger factory with `LmdbStorageOptions.LoggerFactory`. The categories and stable event ids
+are on the [Logging](logging.md) page.
 
 ## Query Settings
 
