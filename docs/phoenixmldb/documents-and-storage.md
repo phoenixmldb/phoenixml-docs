@@ -451,6 +451,12 @@ PhoenixmlDb creates these files in the database directory:
 
 ## Backup and Recovery
 
+> **Warning: back up only when no writes are in progress.** A backup taken while the database is
+> being written can contain torn, inconsistent data: in testing, 11 of 15 backups taken during writes
+> were affected, and 0 of 15 with no writer (phoenixml #87). This applies to `BackupAsync`,
+> `BackupToStreamAsync`, `BackupService`, the gRPC admin backup and cluster snapshots. Pause writes
+> while a backup runs until #87 is fixed.
+
 ### File Backup (`BackupAsync`)
 
 Writes a copy of the database to a single file. The database stays open while it runs.
@@ -465,7 +471,8 @@ the file is being copied can land in the copy. The `compact` parameter is accept
 currently applied.
 
 `PhoenixmlDb.Storage.Backup.BackupService` (a hosted `BackgroundService` configured with `BackupOptions`) runs
-`BackupAsync` on an interval and prunes old backups.
+`BackupAsync` on an interval and prunes old backups. It doesn't pause writes, so schedule it for a
+time when nothing writes (see the warning above).
 
 ### Stream Backup (`BackupToStreamAsync`)
 
@@ -552,7 +559,7 @@ Console.WriteLine($"{stats.ContainerCount} containers, {stats.TotalDocumentCount
 
 1. **Set an appropriate MapSize** — Larger than the data you expect to hold
 2. **Monitor usage** — Watch `GetStorageUsage().PercentUsed`
-3. **Regular backups** — Use `BackupAsync` or `BackupToStreamAsync`
+3. **Regular backups** — Use `BackupAsync` or `BackupToStreamAsync`, while no writes are in progress
 4. **SSD recommended** — For production workloads
 
 ### Storage Troubleshooting

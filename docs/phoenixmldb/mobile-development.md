@@ -1,13 +1,16 @@
 ---
 title: Mobile Development
-description: PhoenixmlDb on .NET MAUI, iOS, Android, and offline-first patterns
+description: Mobile SDKs are not available yet; what exists in the source tree, and what a mobile app can use today
 sort: 14
 ---
 
 # Mobile Development
 
-PhoenixmlDb does not currently ship a usable mobile SDK. This page describes what exists in the
-source tree and what a mobile app can use today.
+> **Not available yet.** There is no usable mobile SDK. The .NET project (`PhoenixmlDb.Mobile`)
+> doesn't currently build and isn't packaged, `dotnet add package PhoenixmlDb.Mobile` finds nothing,
+> and the native SDKs are scaffolds (phoenixml #78). Use the REST API below from a mobile app.
+
+This page describes what exists in the source tree and what a mobile app can use today.
 
 ## SDK Status
 

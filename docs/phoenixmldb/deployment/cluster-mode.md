@@ -128,6 +128,8 @@ Keys, scopes, rotation and the other startup checks are described in
   hasn't applied yet.
 - **Writes are not forwarded.** A write sent to a follower is refused with the leader's id, and
   the client is expected to retry against the leader.
+- **Snapshots aren't consistent under concurrent writes.** A snapshot taken while writes are in
+  progress can contain torn data, the same issue as backups (phoenixml #87).
 - **Snapshot install is limited.** A follower that falls far enough behind to need a snapshot
   needs operator help.
 - **Membership is fixed at startup.** Nodes can't be added or removed from a running cluster; the
