@@ -164,6 +164,46 @@ All tagged `phoenixmldb.raft.node.id`; a node that has shut down drops out of th
 | `phoenixmldb.transaction` | Write transactions only, tagged `phoenixmldb.transaction.outcome` (`commit` or `abort`). |
 | `raft propose`, `raft snapshot create`, `raft snapshot restore`, `fulltext drain` | |
 
+## OpenTelemetry (embedded)
+
+The optional `PhoenixmlDb.OpenTelemetry` package (1.0.0-preview.1, not yet published on NuGet)
+registers the engine's sources and meters with OpenTelemetry, and adds a storage health check:
+
+```csharp
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
+
+services.AddOpenTelemetry()
+    .WithTracing(tracing => tracing
+        .AddPhoenixmlDbInstrumentation(o => o.RecordQueryText = false)   // first
+        .AddOtlpExporter())                                             // then exporters
+    .WithMetrics(metrics => metrics
+        .AddPhoenixmlDbInstrumentation()
+        .AddOtlpExporter());
+
+services.AddHealthChecks().AddPhoenixmlDbStorage(sp => db, mapUsageDegradedPercent: 90);
+```
+
+- **Call `AddPhoenixmlDbInstrumentation` before adding any exporter.** With a simple exporter added
+  first, the query text is lost; with a batching exporter it's a race.
+- OTLP export needs the separate `OpenTelemetry.Exporter.OpenTelemetryProtocol` package.
+- `AddPhoenixmlDbStorage` reports `database_unavailable` and `storage_map_nearly_full`; the threshold
+  must be 1–100, and an overload resolves it from the service provider.
+
+### Query text
+
+Query text is recorded as `db.query.text` **only if you opt in** with `RecordQueryText = true`. It's
+off by default.
+
+**It is exported only when every tracer provider in the process that called
+`AddPhoenixmlDbInstrumentation` has opted in.** While any provider that didn't opt in is alive, no
+provider gets the query text; once that provider is disposed, the opted-in ones get it again.
+
+**A listener that subscribes to the PhoenixmlDb sources without `AddPhoenixmlDbInstrumentation`**
+(a raw `AddSource`, a wildcard source, or a bare `ActivityListener`) **is not counted, and it
+receives the query text whenever another provider has opted in.** If query text must not reach a
+listener, don't opt in anywhere in that process.
+
 ## Health (embedded)
 
 `DocumentDatabase.GetHealth()` returns a `StorageHealth` (`IsOpen`, `ReadOnly`, `MapUsedBytes`,
