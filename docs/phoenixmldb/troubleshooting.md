@@ -72,7 +72,7 @@ using var db = new DocumentDatabase("./data", new LmdbStorageOptions
 **Solution:** there is no built-in integrity checker. Restore from a backup taken with `BackupAsync`; the database must not be open while it is restored:
 
 ```csharp
-// Taking backups (safe while the database is in use)
+// Taking backups: only while no writes are in progress (phoenixml #87)
 await db.BackupAsync("/backups/data-2026-10-04.mdb");
 
 // Restoring, with no DocumentDatabase open on ./data

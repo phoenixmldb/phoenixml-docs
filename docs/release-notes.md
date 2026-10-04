@@ -6,6 +6,14 @@ sort: 5
 
 ## Unreleased: database server
 
+### Known issue: backups taken during writes can be inconsistent
+
+A backup taken while the database is being written can contain torn data (phoenixml #87): in
+testing, 11 of 15 backups taken during writes were affected, and none taken with no writer. This
+applies to `BackupAsync`, `BackupToStreamAsync`, `BackupService`, the gRPC admin backup and cluster
+snapshots. Until it is fixed, back up only while no writes are in progress. See
+[Backup and Recovery](phoenixmldb/documents-and-storage.md#backup-and-recovery).
+
 ### Breaking: the REST server requires authentication
 
 Since phoenixml `main` 0d46e91 (issue #45), the REST server is **secure by default**:

@@ -193,6 +193,12 @@ run it in [Server Mode](server-mode.md) and connect the applications as clients.
 
 ## Backup and Recovery
 
+> **Warning: back up only when no writes are in progress.** A backup taken while the database is
+> being written can contain torn, inconsistent data: in testing, 11 of 15 backups taken during writes
+> were affected, and 0 of 15 with no writer (phoenixml #87). This applies to `BackupAsync`,
+> `BackupToStreamAsync`, `BackupService`, the gRPC admin backup and cluster snapshots. Pause writes
+> while a backup runs until #87 is fixed.
+
 ### Backup
 
 ```csharp
