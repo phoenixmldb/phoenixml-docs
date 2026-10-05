@@ -65,6 +65,11 @@ alert on the id or name, not the message.
 | 1007 | IndexConfigurationUnreadable | Warning |
 | 1008 | BackupFailed | Error |
 | 1009 | BackupCompleted | Information |
+| 1010 | BackupCompactFallback | Warning |
+| 1011 | BackupStagingCleanupFailed | Warning |
+| 1012 | BackupDirectorySyncFailed | Warning |
+| 1013 | BackupStaleStagingRemoved | Information |
+| 1014 | BackupStagingSweepFailed | Warning |
 
 ### Indexing (1100–1199)
 

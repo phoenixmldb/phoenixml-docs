@@ -6,13 +6,20 @@ sort: 5
 
 ## Unreleased: database server
 
-### Known issue: backups taken during writes can be inconsistent
+### Backups and snapshots are consistent during writes; `compact` works
 
-A backup taken while the database is being written can contain torn data (phoenixml #87): in
-testing, 11 of 15 backups taken during writes were affected, and none taken with no writer. This
-applies to `BackupAsync`, `BackupToStreamAsync`, `BackupService`, the gRPC admin backup and cluster
-snapshots. Until it is fixed, back up only while no writes are in progress. See
-[Backup and Recovery](phoenixmldb/documents-and-storage.md#backup-and-recovery).
+Since phoenixml `main` dce9c56 (issues #87 and #79), backups (`BackupAsync`, `BackupToStreamAsync`,
+`BackupService`, the gRPC admin backup) and cluster snapshots use LMDB's native consistent copy, so
+they're safe while the database is being written to. Before this fix, 251 of 300 copies taken under
+concurrent writes were torn; after it, 0 of 2,400. **Any backup taken during writes before this fix
+may be inconsistent.**
+
+- `compact: true` now leaves out free pages (it was ignored before). A compact copy that finds a
+  page leak falls back to a plain copy and logs event 1010.
+- Backups are staged beside the destination and renamed into place; size `MapSize` with headroom,
+  because a long backup holds a read transaction while writes continue.
+- New storage events 1010–1014. See
+  [Backup and Recovery](phoenixmldb/documents-and-storage.md#backup-and-recovery).
 
 ### Breaking: the REST server requires authentication
 

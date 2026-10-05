@@ -193,16 +193,24 @@ run it in [Server Mode](server-mode.md) and connect the applications as clients.
 
 ## Backup and Recovery
 
-> **Warning: back up only when no writes are in progress.** A backup taken while the database is
-> being written can contain torn, inconsistent data: in testing, 11 of 15 backups taken during writes
-> were affected, and 0 of 15 with no writer (phoenixml #87). This applies to `BackupAsync`,
-> `BackupToStreamAsync`, `BackupService`, the gRPC admin backup and cluster snapshots. Pause writes
-> while a backup runs until #87 is fixed.
+Backups are **consistent while the database is being written to**: they use LMDB's native
+consistent copy, inside its own read transaction. Measured: 0 of 2,400 copies taken under
+concurrent writes were torn (before phoenixml #87 was fixed, 251 of 300 were). This applies to
+`BackupAsync`, `BackupToStreamAsync`, `BackupService`, the gRPC admin backup and cluster snapshots.
+
+- **Map size headroom.** A backup holds a read transaction for its whole duration, so under heavy
+  writes the data file can grow while it runs. Size `MapSize` with room for write volume × backup
+  duration, or a write can fail with a map-full error.
+- **Disk space.** The backup is written to a staging directory (`.phoenixml-backup-*.tmp`) beside
+  the destination, flushed to disk, then renamed into place, so overwriting an existing backup briefly
+  needs room for both. `BackupService` removes staging directories older than an hour when it starts.
+- **Write transactions.** A non-compact backup called on a thread that holds an open write
+  transaction throws `InvalidOperationException`.
 
 ### Backup
 
 ```csharp
-// Flushes, then copies data.mdb to the destination file (parent directories are created)
+// A consistent copy, safe while writes continue (parent directories are created)
 await db.BackupAsync("./backups/data-2026-10-04.mdb");
 
 // Or write the backup to a stream, for example an upload
@@ -210,7 +218,7 @@ await using var stream = File.Create("./backups/latest.mdb");
 await db.BackupToStreamAsync(stream);
 ```
 
-The `compact` parameter is accepted but currently has no effect. `DocumentDatabase.ListBackups(directory)`
+`compact: true` (the default) leaves out free pages. `DocumentDatabase.ListBackups(directory)`
 lists the `.mdb` files in a directory, newest first.
 
 ### Restore

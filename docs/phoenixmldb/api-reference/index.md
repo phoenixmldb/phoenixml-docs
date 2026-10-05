@@ -83,7 +83,7 @@ ValueTask DisposeAsync();
 
 Opening a path that is already open in the same process (by any `DocumentDatabase`, including through an equivalent spelling of the path) throws `LmdbEnvironmentAlreadyOpenException`. Dispose the existing instance first.
 
-Back up only while no writes are in progress (phoenixml #87). See [Backup and Recovery](../documents-and-storage.md#backup-and-recovery)
+Backups are consistent while the database is in use. See [Backup and Recovery](../documents-and-storage.md#backup-and-recovery)
 for guidance on which API to use; see
 [Read-Only Mode](../documents-and-storage.md#read-only-mode) for the
 constraints on `ReadOnly = true`.
