@@ -117,7 +117,10 @@ Since phoenixml `main` 1e071af:
   tracer provider in the process opted in, and a listener that subscribes without the package's
   instrumentation receives it whenever another provider opted in. See
   [Logging and Telemetry](phoenixmldb/logging.md#query-text).
-- **Known issue (#88):** an idle server emits about two `phoenixmldb.transaction` spans a second.
+- **Fixed (#88, since `main` 449c09c):** an idle server emitted about two `phoenixmldb.transaction` spans a
+  second. The full-text worker now checks its queue in a read transaction and opens a write
+  transaction only when work is queued: 155 spans in 75 s before, none after, and an idle server no
+  longer takes the writer lock on every check.
 
 ### Telemetry and health
 

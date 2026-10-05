@@ -157,9 +157,6 @@ Each HTTP and gRPC request gets a server span, with the database spans as its ch
 `traceparent` marked not sampled is honoured. Health endpoints (`/health*`, `/healthz`,
 `grpc.health.v1`) and the Raft port are never traced.
 
-> **Known issue (phoenixml #88):** an idle server emits a steady stream of `phoenixmldb.transaction`
-> spans (about two a second), from the full-text worker's background loop.
-
 ## Legacy keys
 
 Settings that moved are still accepted for **one release**. Each old key used logs a startup warning
