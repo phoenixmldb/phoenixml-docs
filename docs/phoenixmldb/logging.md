@@ -136,7 +136,7 @@ and a failing listener can't affect the database. Any `MeterListener`/`ActivityL
 | Metric | Type | Notes |
 |---|---|---|
 | `db.client.operation.duration` | histogram, seconds | Buckets 0.001–10 s. Tags: `db.system.name` = `phoenixmldb`, `db.operation.name` (`query`, `put`, `get`, `delete`), `db.collection.name` (the container), and `error.type` on failure. One series per container. |
-| `phoenixmldb.storage.transactions` | counter | Tag `phoenixmldb.transaction.mode` (`read` or `write`); includes the engine's own transactions. |
+| `phoenixmldb.storage.transactions` | counter | Tag `phoenixmldb.transaction.mode` (`read` or `write`); includes the engine's own transactions. On the gRPC server, the full-text worker's idle check adds about two read transactions a second (at the default 500 ms idle delay); they produce no spans. |
 | `phoenixmldb.storage.map.usage` | bytes | Tag `db.namespace` (the data directory's last path segment). A high-water mark: it doesn't shrink after deletes. |
 | `phoenixmldb.storage.map.limit` | bytes | Tag `db.namespace`. |
 
