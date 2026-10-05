@@ -451,11 +451,19 @@ PhoenixmlDb creates these files in the database directory:
 
 ## Backup and Recovery
 
-> **Warning: back up only when no writes are in progress.** A backup taken while the database is
-> being written can contain torn, inconsistent data: in testing, 11 of 15 backups taken during writes
-> were affected, and 0 of 15 with no writer (phoenixml #87). This applies to `BackupAsync`,
-> `BackupToStreamAsync`, `BackupService`, the gRPC admin backup and cluster snapshots. Pause writes
-> while a backup runs until #87 is fixed.
+Backups are **consistent while the database is being written to**: they use LMDB's native
+consistent copy, inside its own read transaction. Measured: 0 of 2,400 copies taken under
+concurrent writes were torn (before phoenixml #87 was fixed, 251 of 300 were). This applies to
+`BackupAsync`, `BackupToStreamAsync`, `BackupService`, the gRPC admin backup and cluster snapshots.
+
+- **Map size headroom.** A backup holds a read transaction for its whole duration, so under heavy
+  writes the data file can grow while it runs. Size `MapSize` with room for write volume × backup
+  duration, or a write can fail with a map-full error.
+- **Disk space.** The backup is written to a staging directory (`.phoenixml-backup-*.tmp`) beside
+  the destination, flushed to disk, then renamed into place, so overwriting an existing backup briefly
+  needs room for both. `BackupService` removes staging directories older than an hour when it starts.
+- **Write transactions.** A non-compact backup called on a thread that holds an open write
+  transaction throws `InvalidOperationException`.
 
 ### File Backup (`BackupAsync`)
 
@@ -465,14 +473,13 @@ Writes a copy of the database to a single file. The database stays open while it
 await db.BackupAsync("./backups/db-2026-01-01.mdb");
 ```
 
-It flushes committed data to disk and copies `data.mdb` to the destination, creating the
-destination's directory if needed. It does not take the write lock, so a write that commits while
-the file is being copied can land in the copy. The `compact` parameter is accepted but not
-currently applied.
+The destination's directory is created if needed. With `compact: true` (the default), free pages are
+left out, so a database that has had many deletes produces a much smaller file (2.1 MB instead of
+8.3 MB in one measurement after deleting three quarters of the data). If a compact copy finds a page
+leak, it falls back to a plain copy, which is also consistent, and logs event 1010.
 
 `PhoenixmlDb.Storage.Backup.BackupService` (a hosted `BackgroundService` configured with `BackupOptions`) runs
-`BackupAsync` on an interval and prunes old backups. It doesn't pause writes, so schedule it for a
-time when nothing writes (see the warning above).
+`BackupAsync` on an interval and prunes old backups.
 
 ### Stream Backup (`BackupToStreamAsync`)
 
@@ -559,7 +566,7 @@ Console.WriteLine($"{stats.ContainerCount} containers, {stats.TotalDocumentCount
 
 1. **Set an appropriate MapSize** — Larger than the data you expect to hold
 2. **Monitor usage** — Watch `GetStorageUsage().PercentUsed`
-3. **Regular backups** — Use `BackupAsync` or `BackupToStreamAsync`, while no writes are in progress
+3. **Regular backups** — Use `BackupAsync`, `BackupToStreamAsync` or `BackupService`
 4. **SSD recommended** — For production workloads
 
 ### Storage Troubleshooting
