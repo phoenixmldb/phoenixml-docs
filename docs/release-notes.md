@@ -314,6 +314,12 @@ Fixed:
   whitespace-only text; a template that reads outside the matched element was streamed with wrong
   results instead of being evaluated on a tree (Martin Honnen's #295 and #301; #298).
 - **`--no-stream`** really evaluates against a tree, via the new `XsltTransformer.DisableStreaming`.
+
+Also changed: **`LoadStylesheetAsync` now completes on a thread-pool thread**, as `TransformAsync`
+already did, because compilation moved onto the engine's large-stack thread. Hosts with a UI
+context are unaffected. A host with no `SynchronizationContext`, such as an editor plugin, now
+continues off its UI thread after that `await`. See
+[Hosting the Engines](phoenixmldb/api-reference/hosting.md).
 - **Browser WebAssembly:** XSLT runs again in Blazor WebAssembly (#237, a 2.5.1 regression), and deep
   recursion there no longer exhausts the stack.
 - **Schematron performance:** applying compiled ISO Schematron validators allocates about 8× less
