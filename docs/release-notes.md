@@ -266,6 +266,28 @@ each repo: [Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt/blob/main/RELE
 
 **W3C XSLT 3.0: 131 failing** (216 at 2.5.1) · **W3C QT3: 427 failing** (708 at 2.5.1).
 
+> **Security fixes in 2.6.0.** A cancelled query or transformation now stops inside regex matching,
+> sorting and XPath evaluation
+> ([GHSA-2wrh-863w-x2m9](https://github.com/phoenixmldb/phoenixmldb-xquery/security/advisories/GHSA-2wrh-863w-x2m9),
+> [GHSA-h2xc-4m53-6j8r](https://github.com/phoenixmldb/phoenixmldb-xslt/security/advisories/GHSA-h2xc-4m53-6j8r)).
+> A .NET regex match can't observe a `CancellationToken`, and the engines built every regex with no
+> match timeout, so a pattern with catastrophic backtracking kept running after cancellation, for a
+> time exponential in the input; sorts ran to completion first; and `XsltTransformer` didn't pass
+> its token into XPath evaluation at all. A host enforcing a time limit by cancelling was not
+> protected.
+>
+> - New: `QueryExecutionLimits.RegexMatchTimeout` (XQuery), and `XsltTransformer.RegexMatchTimeout`
+>   / `XsltTransformOptions.RegexMatchTimeout` (XSLT). **They are opt-in**: the default is `null`, so
+>   behaviour is unchanged until a host sets one. A match that runs past the timeout fails with
+>   `FOER0000`, or with `OperationCanceledException` when the query was cancelled meanwhile.
+> - Sorts (`fn:sort`, `order by`, `array:sort`, `xsl:sort`) check the token as they run, and the
+>   token and query limits reach every XPath evaluation in a transformation.
+> - A match already running still can't be interrupted before its timeout; choose a timeout no
+>   longer than the latency you can accept after a cancel.
+>
+> **Hosts that run untrusted queries or stylesheets under a time limit should set
+> `RegexMatchTimeout`.**
+
 Behaviour changes, read before upgrading:
 
 - **`fn:format-number` rounds half to even**, as the specification requires: `format-number(2.5, '0')`

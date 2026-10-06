@@ -295,6 +295,7 @@ public sealed class XsltTransformer
     bool AllowDtdProcessing { get; set; }             // default false
     ResourcePolicy? ResourcePolicy { get; set; }      // see resource-policy.md
     bool DisableStreaming { get; set; }               // evaluate on a tree even for a streamable initial mode
+    TimeSpan? RegexMatchTimeout { get; set; }         // null = .NET's process-wide default
     IReadOnlySet<OutputMethod>? AllowedOutputMethods { get; set; }   // null = any method
     IReadOnlyDictionary<string, IReadOnlyList<string>>? XQueryModules { get; set; }
     PreloadedResources? PreloadedResources { get; set; }
@@ -318,6 +319,9 @@ public sealed class XsltTransformer
   including a run-time `method` on `xsl:result-document`.
 - **`OutputDeclarations`**: the stylesheet's `xsl:output` declarations, including imported and
   included modules, after `LoadStylesheetAsync`.
+- **`RegexMatchTimeout`** (default `null`): a time limit for XPath regex functions and
+  `xsl:analyze-string`. Opt-in; set it when running untrusted stylesheets under a time limit, since
+  a running match can't otherwise be interrupted by cancellation (GHSA-h2xc-4m53-6j8r).
 - **`XQueryModules`**: XQuery library modules for `fn:load-xquery-module`, by module namespace URI.
   These are the host's choice and aren't checked against `ResourcePolicy`.
 
