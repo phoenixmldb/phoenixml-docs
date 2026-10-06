@@ -53,7 +53,7 @@ string? received = bt is { } v ? XdmValue.To<string>(v) : null;
 
 ### Typed values
 
-`XdmValue.From` keeps the CLR type: `string`, `bool`, `long`, `int`, `short`, `byte`, `decimal`, `double`, `float`, `DateTimeOffset`, `DateOnly`, `TimeOnly`, `TimeSpan`, `Uri`, `XdmQName` and `byte[]`. Any other type, `DateTime` included, throws `NotSupportedException`. `XdmValue.To<T>` reads a value back and throws `InvalidCastException` when the stored type doesn't match `T`.
+`XdmValue.From` keeps the CLR type: `string`, `bool`, `long`, `int`, `short`, `byte`, `decimal`, `double`, `float`, `DateTimeOffset`, `DateTime`, `DateOnly`, `TimeOnly`, `TimeSpan`, `Uri`, `XdmQName` and `byte[]`. Any other type throws `NotSupportedException`. A `DateTime` (from Core 2.1.0) must have `Kind` `Utc` or `Local`; `Unspecified` throws `ArgumentException`, because it names no instant. `To<DateTime>` returns the stored instant as UTC. `XdmValue.To<T>` reads a value back and throws `InvalidCastException` when the stored type doesn't match `T`.
 
 For names you use repeatedly, a `MetadataProperty<T>` (`PhoenixmlDb.Core.Metadata`) carries the namespace, the local name and the CLR type together:
 

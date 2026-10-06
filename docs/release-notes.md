@@ -262,6 +262,37 @@ each repo: [Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt/blob/main/RELE
 > exact for its own release; subtracting across a harness change compares different
 > measurements.
 
+### 2.6.0 (2026-10-05): XQuery and Xslt 2.6.0, Core 2.1.0
+
+**W3C XSLT 3.0: 131 failing** (216 at 2.5.1) · **W3C QT3: 427 failing** (708 at 2.5.1).
+
+Behaviour changes, read before upgrading:
+
+- **`fn:format-number` rounds half to even**, as the specification requires: `format-number(2.5, '0')`
+  is now `2`.
+- Errors that previously surfaced with the wrong code now use the specified ones, for example
+  `XPTY0019` for a path step whose left operand isn't a node, and the specified cast error codes.
+- **Indented output is LF on every OS** (engines and Core); it was CRLF on Windows.
+- Opt-in **static typing** (`StrictTypeChecking`) is now implemented.
+
+Fixed:
+
+- **Streaming:** a streamed template that read its children as a value (`{foo}`) lost them, and
+  `xsl:copy` with such content produced malformed output; a buffered streamed subtree dropped
+  whitespace-only text; a template that reads outside the matched element was streamed with wrong
+  results instead of being evaluated on a tree (Martin Honnen's #295 and #301; #298).
+- **`--no-stream`** really evaluates against a tree, via the new `XsltTransformer.DisableStreaming`.
+- **Browser WebAssembly:** XSLT runs again in Blazor WebAssembly (#237, a 2.5.1 regression), and deep
+  recursion there no longer exhausts the stack.
+- **Schematron performance:** applying compiled ISO Schematron validators allocates about 5× less
+  and runs 2–3× faster than 2.5.1.
+- DocBook xslTNG: cross-references, annotations and tables of contents that 2.5.1 rendered
+  incompletely.
+
+New API: `XsltTransformer.DisableStreaming`, `AllowedOutputMethods`, `OutputDeclarations` and
+`XQueryModules`; Core `XdmValue.From(DateTime)`. See the
+[XSLT API](phoenixmldb/api-reference/xslt-api.md#new-in-260).
+
 ### 2.5.1 (2026-10-01): XQuery 2.5.0 and 2.5.1, Xslt 2.5.1
 
 **W3C XSLT 3.0: 216 failing** (442 at 2.4.0) · **W3C QT3: 708 failing** (1484 at 2.4.0). Much of
