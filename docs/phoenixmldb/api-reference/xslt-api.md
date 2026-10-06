@@ -6,7 +6,7 @@ sort: 6
 
 # XSLT API
 
-The `XsltTransformer` class (`PhoenixmlDb.Xslt`, in the published `PhoenixmlDb.Xslt` package; this page describes version 2.5.1) is the primary .NET API for executing XSLT transformations. It provides a string-in/string-out interface for simple cases, plus `TextReader`, `Stream` and `TextWriter` overloads, a callback for secondary result documents, and control over the initial context, mode and match selection.
+The `XsltTransformer` class (`PhoenixmlDb.Xslt`, in the published `PhoenixmlDb.Xslt` package; this page describes version 2.6.0) is the primary .NET API for executing XSLT transformations. It provides a string-in/string-out interface for simple cases, plus `TextReader`, `Stream` and `TextWriter` overloads, a callback for secondary result documents, and control over the initial context, mode and match selection.
 
 ## Contents
 
@@ -294,15 +294,32 @@ public sealed class XsltTransformer
     // Security and resources
     bool AllowDtdProcessing { get; set; }             // default false
     ResourcePolicy? ResourcePolicy { get; set; }      // see resource-policy.md
+    bool DisableStreaming { get; set; }               // evaluate on a tree even for a streamable initial mode
+    IReadOnlySet<OutputMethod>? AllowedOutputMethods { get; set; }   // null = any method
+    IReadOnlyDictionary<string, IReadOnlyList<string>>? XQueryModules { get; set; }
     PreloadedResources? PreloadedResources { get; set; }
     ISchemaProvider? SchemaProvider { get; set; }
 
     // Inspection
+    IReadOnlyList<XsltOutputDeclaration> OutputDeclarations { get; }  // xsl:output declarations, after LoadStylesheetAsync
     bool HasStreamableMode { get; }
 }
 ```
 
 `TransformAsync` throws `InvalidOperationException` if no stylesheet has been loaded, and `XsltException` (`PhoenixmlDb.Xslt.Engine`) for errors in the stylesheet or during the transformation. There is no API for registering extension functions on `XsltTransformer`.
+
+### New in 2.6.0
+
+- **`DisableStreaming`** (default `false`): the string and node transform overloads evaluate against
+  an in-memory tree even when the stylesheet's initial mode is streamable. The `Stream` and
+  `XmlReader` overloads for a streamable mode still stream. The CLI's `--no-stream` sets it.
+- **`AllowedOutputMethods`** (default `null`, any): the serialization methods a transformation may
+  deliver results in. It's checked against the method each result is actually serialized with,
+  including a run-time `method` on `xsl:result-document`.
+- **`OutputDeclarations`**: the stylesheet's `xsl:output` declarations, including imported and
+  included modules, after `LoadStylesheetAsync`.
+- **`XQueryModules`**: XQuery library modules for `fn:load-xquery-module`, by module namespace URI.
+  These are the host's choice and aren't checked against `ResourcePolicy`.
 
 ### Thread Safety
 

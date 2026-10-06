@@ -44,6 +44,7 @@ command | xslt [options] <stylesheet>
 | `--trace` | | Log template matching, function calls, built-in rules |
 | `--dry-run` | | Parse and compile only — validate without executing |
 | `--stream` | | Use streaming for large files (lower memory usage) |
+| `--no-stream` | | Evaluate against an in-memory tree even when the stylesheet's initial mode is streamable |
 | `--verbose` | `-v` | Show detailed error information (stack traces) |
 | `--help` | `-h` | Show help message |
 | `--version` | | Show version information |
