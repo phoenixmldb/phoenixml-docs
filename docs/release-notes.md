@@ -316,8 +316,9 @@ Fixed:
 - **`--no-stream`** really evaluates against a tree, via the new `XsltTransformer.DisableStreaming`.
 - **Browser WebAssembly:** XSLT runs again in Blazor WebAssembly (#237, a 2.5.1 regression), and deep
   recursion there no longer exhausts the stack.
-- **Schematron performance:** applying compiled ISO Schematron validators allocates about 5× less
-  and runs 2–3× faster than 2.5.1.
+- **Schematron performance:** applying compiled ISO Schematron validators allocates about 8× less
+  and runs 2–3× faster than 2.5.1, measured on the published 2.6.0 packages against real EMS
+  validators and payloads, with output identical to Saxon's.
 - DocBook xslTNG: cross-references, annotations and tables of contents that 2.5.1 rendered
   incompletely.
 
