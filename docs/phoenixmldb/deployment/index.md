@@ -11,3 +11,4 @@ PhoenixmlDb supports three deployment modes, from single-process embedded to mul
 - **[Embedded Mode](embedded-mode.md)** — Run as an in-process library, no separate server
 - **[Server Mode](server-mode.md)** — Standalone server with gRPC API, authentication, and TLS
 - **[Cluster Mode](cluster-mode.md)** — Multi-node replication with Raft consensus
+- **[Upgrading to LMDB 1.0](lmdb-upgrade.md)** — Migrating databases created on LMDB 0.9; the glibc 2.38 floor

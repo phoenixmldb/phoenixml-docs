@@ -508,10 +508,11 @@ await DocumentDatabase.RestoreFromStreamAsync("./restored", snap);
 await using var db = new DocumentDatabase("./restored");
 ```
 
-Both write `data.mdb` into the target directory and delete any stale `lock.mdb`.
-`LmdbStorageEngine.RestoreFromSnapshotAsync(stream, targetDir)` does the same from a stream but
-writes to a temporary file in the target directory and renames it into place, so an interrupted
-stream cannot leave a half-written `data.mdb`.
+Every restore path writes `data.mdb.restore.tmp` in the target directory, flushes it and checks its
+format before replacing `data.mdb`, so an interrupted restore can't leave a half-written file. A
+restore needs a stopped database: it throws `InvalidOperationException` if the database is open in
+this or another process. A backup or stream in the old LMDB 0.9 format is refused with
+`LmdbMigrationRequiredException`; see [Upgrading to LMDB 1.0](deployment/lmdb-upgrade.md).
 
 A database can also restore itself when it opens: set `RestoreFromPath`, `RestoreFromDirectory` or
 `RestoreFromStream` in `LmdbStorageOptions`, and the backup is restored when `data.mdb` is missing or

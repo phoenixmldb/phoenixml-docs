@@ -6,6 +6,16 @@ sort: 5
 
 ## Unreleased: database server
 
+### Storage engine on LMDB 1.0
+
+Since phoenixml `main` ee0c056, the storage engine uses LightningDB 0.23.1 (LMDB 1.0.1). LMDB 0.9
+files (databases, Raft logs, backups, snapshots) are detected and refused with
+`LmdbMigrationRequiredException`; the `PhoenixmlDb.Migrate` tool converts them. **Linux now needs
+glibc 2.38 or later.** Restores are staged and checked before they replace anything, and need a
+stopped database. Cluster nodes can be upgraded one at a time. Fixed: a failed open no longer
+reports a false handle leak (#71). New storage events 1015–1021. See
+[Upgrading to LMDB 1.0](phoenixmldb/deployment/lmdb-upgrade.md).
+
 ### Backups and snapshots are consistent during writes; `compact` works
 
 Since phoenixml `main` dce9c56 (issues #87 and #79), backups (`BackupAsync`, `BackupToStreamAsync`,

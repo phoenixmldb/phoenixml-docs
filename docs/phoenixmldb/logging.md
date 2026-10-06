@@ -70,6 +70,13 @@ alert on the id or name, not the message.
 | 1012 | BackupDirectorySyncFailed | Warning |
 | 1013 | BackupStaleStagingRemoved | Information |
 | 1014 | BackupStagingSweepFailed | Warning |
+| 1015 | RestoreDirectorySyncFailed | Warning |
+| 1016 | MigrationStarted | Information |
+| 1017 | MigrationCompleted | Information |
+| 1018 | MigrationFailed | Error |
+| 1019 | MigrationInterruptedRunRecovered | Warning |
+| 1020 | MigrationCleanupFailed | Warning |
+| 1021 | MigrationDirectorySyncFailed | Warning |
 
 ### Indexing (1100–1199)
 
