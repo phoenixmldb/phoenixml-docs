@@ -4,3 +4,5 @@ base-url: https://phoenixml.dev/
 source: ./docs
 output: ./dist
 theme: modern
+analytics:
+  ga4: G-FSCPKZ7RES
