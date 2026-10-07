@@ -6,3 +6,8 @@ output: ./dist
 theme: modern
 analytics:
   ga4: G-FSCPKZ7RES
+social:
+  image: img/icon-256.png
+  card: summary
+  image-alt: Phoenixml logo
+favicon: favicon.png

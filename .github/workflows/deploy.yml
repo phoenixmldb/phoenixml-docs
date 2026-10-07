@@ -72,7 +72,7 @@ jobs:
           echo "pages=$pages api=$api"
           [ "$pages" -ge 250 ] || { echo "::error::only $pages pages built, expected 250+"; exit 1; }
           [ "$api"   -ge 140 ] || { echo "::error::only $api API pages built, expected 140+"; exit 1; }
-          for p in index.html tools/docmd.html api/xslt/index.html; do
+          for p in index.html tools/docmd.html api/xslt/index.html favicon.png img/icon-256.png; do
             [ -s "dist/$p" ] || { echo "::error::missing dist/$p"; exit 1; }
           done
 
