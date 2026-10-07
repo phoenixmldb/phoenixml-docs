@@ -186,6 +186,22 @@ Now XSLT code can do:
 
 Use `ResourceResolverBase` as a base class — it returns `null` for all methods, so you only override what you need.
 
+### Supplying the content yourself (2.7.0)
+
+Normally the engine checks a location against the policy and then opens it by name. Those are two
+steps, so a file replaced between them, for example swapped for a link out of the allowed folder,
+is read. Since 2.7.0 a resolver can close that gap by handing the engine the content itself:
+
+| Member | Purpose |
+|--------|---------|
+| `ResolveContent(ResourceRequest request)` | Return a `ResourceContent` (text or a stream, plus the base URI it is known by) for a module, schema (including its includes and imports), DTD or entity, document, JSON or text resource, or a stylesheet or document named to `fn:transform`. Return `null` to decline. |
+| `SuppliesAllContent` | `true` makes the resolver the only source: a declined request fails instead of falling back to opening the location. |
+
+Relative references inside supplied content resolve against its base URI and come back to the
+resolver. Supplied content is the host's own decision and is not checked against the policy's URI
+rules. Hosts that run untrusted queries or stylesheets should supply content this way and set
+`SuppliesAllContent`.
+
 ## What Gets Controlled
 
 | Access point | Checked as |

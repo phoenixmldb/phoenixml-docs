@@ -64,8 +64,19 @@ string result = await transformer.TransformAsync(File.ReadAllText(inputPath));
 uiControl.Invoke(() => ShowResult(result));
 ```
 
-Synchronous `LoadStylesheet` and `Transform` methods, which keep the caller on its own thread, are
-planned for a later release
+**Since 2.7.0, the simpler route is the synchronous methods.** `LoadStylesheet` and `Transform`
+block the calling thread and return on it, so a plugin never leaves its UI thread:
+
+```csharp
+var transformer = new XsltTransformer();
+transformer.LoadStylesheet(File.ReadAllText(xslPath), new Uri(xslPath));
+transformer.SetSourceDocumentUri(new Uri(inputPath));
+string result = transformer.Transform(File.ReadAllText(inputPath));
+ShowResult(result);   // still on the UI thread
+```
+
+The work still runs on the engine's large-stack thread, so deep recursion is as safe as with the
+async methods. They are not available on browser WebAssembly, which cannot block
 ([phoenixmldb-xslt #309](https://github.com/phoenixmldb/phoenixmldb-xslt/issues/309)).
 
 ## Browser WebAssembly
