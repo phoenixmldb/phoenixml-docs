@@ -324,8 +324,9 @@ Behaviour changes, read before upgrading:
 
 Fixed:
 
-- **An element parsed with `xmlns=""` keeps its undeclared default namespace** in output and in
-  `in-scope-prefixes()`, so a round trip no longer moves it into its parent's namespace (#105).
+- **An element parsed with `xmlns=""` keeps its undeclared default namespace** in `fn:serialize`
+  output and in `in-scope-prefixes()` (#105). Known issue: the `xquery4` CLI's own output still
+  drops `xmlns=""` in that case; use `fn:serialize` until it is fixed.
 - **A string returned through `fn:transform` is no longer parsed as XML** with raw delivery, a
   regression since 2.4.0 that XSpec suites run with `run-as="external"` hit (#314).
 - `$err:code` and other qualified local variables work in library modules; a map constructor entry
