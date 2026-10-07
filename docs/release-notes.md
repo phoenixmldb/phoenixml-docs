@@ -272,6 +272,70 @@ each repo: [Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt/blob/main/RELE
 > exact for its own release; subtracting across a harness change compares different
 > measurements.
 
+### 2.7.0 (2026-10-07): XQuery and Xslt 2.7.0, Core 2.2.0
+
+**W3C QT3: 257 failing of 31,331** (427 at 2.6.0) · **W3C XSLT 3.0: 131 failing** (unchanged).
+
+> **Security fixes in 2.7.0**
+> ([GHSA-6whf-hvfp-757r](https://github.com/phoenixmldb/phoenixmldb-xquery/security/advisories/GHSA-6whf-hvfp-757r),
+> [GHSA-xxjq-rwpx-m5ww](https://github.com/phoenixmldb/phoenixmldb-xslt/security/advisories/GHSA-xxjq-rwpx-m5ww)).
+> Only hosts that run queries or stylesheets from untrusted parties are affected.
+>
+> - A module loaded with `fn:load-xquery-module` now runs inside the caller's limits,
+>   cancellation token and host function replacements. Module import chains and nested
+>   `load-xquery-module` calls are capped at 64 (`XQST0059`, `FOQM0003`); schema nesting at 512.
+> - `RegexMatchTimeout` and cancellation now reach XSLT static expressions, nested `fn:transform`
+>   and `fn:transform` from a query, and bound XSD `pattern` facets in casts, validation and schema
+>   loading. New `CompilationOptions.RegexMatchTimeout` and `XsdSchemaProvider.PatternMatchTimeout`
+>   for schemas imported at compile time.
+> - `fn:parse-xml` is linear in nesting depth, can be cancelled, and no longer overflows the stack
+>   on deeply nested input, including on Windows.
+> - A schema's own includes and imports can be checked against a resource policy
+>   (`XsdSchemaProvider.Add` / `AddFromString` overloads), and a text load the policy refuses ends
+>   with `FOUT1170` instead of being read anyway.
+> - New `IResourceResolver.ResolveContent` and `SuppliesAllContent`: a host can supply the content
+>   of everything the engines load, which removes the gap between checking a location and opening
+>   it. See [Resource Policy](phoenixmldb/api-reference/resource-policy.md).
+>
+> Not fixed: when the host neither refuses a location nor supplies its content, a file can still be
+> replaced between the check and the open.
+
+**Schema-aware typing.** A validated node now carries its schema type through atomization, type
+tests, casts and `fn:idref`:
+
+- `data()` of a validated node gives values of its schema type (including restrictions, lists and
+  unions); a node with element-only content has no typed value (`FOTY0012`).
+- Validated nodes match `element(*, p:T)`, `schema-element(p:e)` and `schema-attribute(p:a)`,
+  substitution groups included.
+- Casts to schema-defined list and union types work; `fn:idref` finds schema-typed `IDREF` nodes.
+- Nodes that were not validated are unaffected.
+
+Behaviour changes, read before upgrading:
+
+- `validate strict` of an element with no declaration is `XQDY0084`.
+- A date or dateTime out of range is `FODT0001` (was `FORG0001`); a reserved name in a named
+  function reference such as `attribute#0` is `XPST0003` (was `XPST0017`).
+- `fn:unparsed-text` with a named encoding reports `FOUT1190` for content that is not valid in it,
+  and `fn:unparsed-text-available` answers false for an encoding the runtime refuses.
+- A schema import's static rules are checked first: `XQST0070`, `XQST0057` and `XQST0058` where
+  each used to be `XQST0059`.
+- An imported module file must declare the namespace it was imported for (`XQST0059`), and an
+  external variable with no value is `XPDY0002`.
+
+Fixed:
+
+- **An element parsed with `xmlns=""` keeps its undeclared default namespace** in output and in
+  `in-scope-prefixes()`, so a round trip no longer moves it into its parent's namespace (#105).
+- **A string returned through `fn:transform` is no longer parsed as XML** with raw delivery, a
+  regression since 2.4.0 that XSpec suites run with `run-as="external"` hit (#314).
+- `$err:code` and other qualified local variables work in library modules; a map constructor entry
+  whose key begins with a prefixed name keeps its whole value.
+
+New API: synchronous `XsltTransformer.LoadStylesheet` / `Transform` for desktop and plugin hosts
+(see [Hosting the Engines](phoenixmldb/api-reference/hosting.md)), `IResourceResolver.ResolveContent`
+/ `SuppliesAllContent`, and `ISchemaProvider.HasIdrefTypedValue` (default `false`; custom providers
+compile unchanged).
+
 ### 2.6.0 (2026-10-05): XQuery and Xslt 2.6.0, Core 2.1.0
 
 **W3C XSLT 3.0: 131 failing** (216 at 2.5.1) · **W3C QT3: 427 failing** (708 at 2.5.1).

@@ -6,7 +6,7 @@ sort: 6
 
 # XSLT API
 
-The `XsltTransformer` class (`PhoenixmlDb.Xslt`, in the published `PhoenixmlDb.Xslt` package; this page describes version 2.6.0) is the primary .NET API for executing XSLT transformations. It provides a string-in/string-out interface for simple cases, plus `TextReader`, `Stream` and `TextWriter` overloads, a callback for secondary result documents, and control over the initial context, mode and match selection.
+The `XsltTransformer` class (`PhoenixmlDb.Xslt`, in the published `PhoenixmlDb.Xslt` package; this page describes version 2.7.0) is the primary .NET API for executing XSLT transformations. It provides a string-in/string-out interface for simple cases, plus `TextReader`, `Stream` and `TextWriter` overloads, a callback for secondary result documents, and control over the initial context, mode and match selection.
 
 ## Contents
 
@@ -308,6 +308,16 @@ public sealed class XsltTransformer
 ```
 
 `TransformAsync` throws `InvalidOperationException` if no stylesheet has been loaded, and `XsltException` (`PhoenixmlDb.Xslt.Engine`) for errors in the stylesheet or during the transformation. There is no API for registering extension functions on `XsltTransformer`.
+
+### New in 2.7.0
+
+- **Synchronous `LoadStylesheet` and `Transform`** overloads (`string`, `XdmSequence`, and
+  `TextReader` to `TextWriter`): they block the calling thread and return on it, for desktop and
+  plugin hosts without a `SynchronizationContext`. The work runs on the engine's large-stack
+  thread. Not available on browser WebAssembly. See [Hosting the Engines](hosting.md).
+- **Host-supplied content.** An `IResourceResolver` can implement `ResolveContent` to hand the
+  engine the content of imports, includes, source documents and text itself, and
+  `SuppliesAllContent` to make it the only source. See [Resource Policy](resource-policy.md).
 
 ### New in 2.6.0
 
