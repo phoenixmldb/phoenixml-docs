@@ -127,6 +127,10 @@ dotnet crucible \
 STEP_END=$(date +%s%N)
 echo "  $(( (STEP_END - STEP_START) / 1000000 ))ms"
 
+# Static files Crucible does not generate: the site icon and the link-preview image that
+# crucible.yaml's favicon and social.image point at.
+cp -r "$SCRIPT_DIR/static/." "$OUTPUT/"
+
 # Cleanup
 rm -rf "$INTERMEDIATE"
 
