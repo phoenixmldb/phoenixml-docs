@@ -272,6 +272,47 @@ each repo: [Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt/blob/main/RELE
 > exact for its own release; subtracting across a harness change compares different
 > measurements.
 
+### 2.8.0 (2026-10-09): XQuery and Xslt 2.8.0, Core 2.4.0
+
+**W3C QT3: 251 failing of 31,331** (257 at 2.7.0) · **W3C XSLT 3.0: 131 failing**.
+
+> **Security fixes in 2.8.0.** Only hosts that run queries or stylesheets from untrusted parties
+> are affected. XQuery: [GHSA-g2xr-r7jg-2v33](https://github.com/phoenixmldb/phoenixmldb-xquery/security/advisories/GHSA-g2xr-r7jg-2v33):
+> every HTTP redirect is authorized against the resource policy, XInclude reads under the policy,
+> and refusals no longer disclose host paths. The XSLT advisory will be linked here when it is
+> published. Upgrade to 2.8.0.
+
+**Core 2.4.0 is a breaking release** for code that builds `NodeReader` or reads stored nodes
+directly: `new NodeReader(buffer)` is removed, and reading the string value of a node with
+children but no resolver now throws instead of returning `""` (switch
+`PhoenixmlDb.Xdm.StrictStringValue` to `false` for the old behaviour). The XQuery and XSLT engines
+are unaffected.
+
+**The shared schema layer.** Core 2.3.0 added `PhoenixmlDb.Core.Schema` (sources, an access gate,
+a compiler, a cache, a validator, XML Catalogs), and in 2.8.0 the engines read every schema
+through it:
+
+- Schemas imported with `import schema` / `xsl:import-schema` are **compiled once and shared**
+  across queries and transformations; a changed schema file or included file is picked up on the
+  next use. Importing a 705 KB schema: 39.7 ms per query before, 1.6 ms now.
+- **Stricter loading, check on upgrade:** a schema include or import that cannot be read fails the
+  load (`XQST0059`) instead of being skipped; a schema document with a DOCTYPE is refused; schema
+  text without a base URI no longer resolves relative locations against the current directory.
+- A schema that requires XSD 1.1 now says so, naming the document and the constructs. The
+  processor implements XSD 1.0.
+- An atomic value keeps its schema type (`t:size('8') instance of t:size` is true), and in XSLT
+  the constructor functions of imported schema types can be called.
+
+Other changes:
+
+- XSLT: an inline `xs:schema` in `xsl:import-schema` and `xsl:validation` on literal result
+  elements are applied; `StrictStreamability` (opt-in, `--strict-streaming`) reports `XTSE3430`, and
+  two wrong results in streamed rules are fixed.
+- A cancelled query no longer starts a regex or pattern match.
+- The `xquery4` CLI writes `xmlns=""` correctly (#105).
+- New API: `JsonXmlConverter`, `XsdSchemaProvider(CompiledSchema)`, `XsdSchemaProvider.Catalog`,
+  `ISchemaProvider.AddSchemaText`.
+
 ### 2.7.0 (2026-10-07): XQuery and Xslt 2.7.0, Core 2.2.0
 
 **W3C QT3: 257 failing of 31,331** (427 at 2.6.0) · **W3C XSLT 3.0: 131 failing** (unchanged).
