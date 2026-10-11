@@ -15,7 +15,8 @@ arguments, later sources winning. As environment variables, write `__` between l
 
 Other sections are documented with their features:
 [Authentication](server-mode.md#authentication) (`Auth`, `PhoenixmlDb:Auth`),
-[Resource Access](../resource-access.md) (`PhoenixmlDb:ResourceAccess`),
+[Resource Access](../resource-access.md) and [XQuery Library Modules](../xquery-modules.md#settings)
+(`PhoenixmlDb:ResourceAccess`),
 [gRPC endpoints](server-mode.md#grpc-server) (`PhoenixmlDb:Endpoints`) and
 [Cluster Mode](cluster-mode.md) (`PhoenixmlDb:Raft`).
 
@@ -44,11 +45,11 @@ Other sections are documented with their features:
 that applies queued full-text entries (see [Full-Text Search](../full-text-search.md)). The REST
 server runs no background full-text worker, so it ignores this section with a warning.
 
-| Setting | Rule |
-|---|---|
-| `BatchSize` | at least 1 |
-| `BudgetMs` | at least 1 |
-| `IdleDelayMs` | at least 0 |
+| Setting | Default | Rule |
+|---|---|---|
+| `BatchSize` | `500` | at least 1 |
+| `BudgetMs` | `2000` | at least 1 |
+| `IdleDelayMs` | `500` | at least 0 |
 
 ## Schema validation
 
@@ -58,9 +59,14 @@ server runs no background full-text worker, so it ignores this section with a wa
 |---|---|---|
 | `BasePath` | `./schemas` | A blank value fails startup. |
 | `BundlePath` | `./bundles` | A blank value fails startup. |
-| `AllowHttpResolution` | | |
+| `AllowHttpResolution` | `false` | Whether http(s) schema locations are fetched. An http(s) location also needs its origin in `PhoenixmlDb:ResourceAccess:AllowedHttpOrigins`. |
 | `CacheExpirationMinutes` | `60` | How long compiled schemas stay cached. At least 1. |
 | `MaxCacheSize` | | Has no effect; a startup warning says so. |
+
+`BasePath` is relative to the server's working directory. Which schema locations the validators
+serve (registered schemas, files in `BasePath`, and locations allowed by
+`PhoenixmlDb:ResourceAccess`) is described in
+[Resource Access: Schema locations in the REST server validators](../resource-access.md#schema-locations-in-the-rest-server-validators).
 
 ## REST server resource limits
 

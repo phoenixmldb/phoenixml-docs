@@ -230,9 +230,9 @@ includes the ones below it.
 | Level | Routes |
 |---|---|
 | none | `/health`, `/health/live`, `/health/ready` |
-| `read` | Containers: list, get, statistics. Documents: list, get, content, metadata, versions. Every `/api/query` call (execute, explain, validate, compile, stream). `/api/transform` and stylesheet list, get, content and validate. Schema list, get, content, versions and validation, and every `/api/v1/validate` call. |
-| `write` | Containers: create, update, delete. Indexes: add, remove, rebuild. Documents: create, update, content, delete, metadata update, version restore. Stylesheets: register, update, delete, and clearing the transform cache. Schemas: register, update, delete, activate, and `POST /api/v1/schemas`. |
-| `admin` | `/health/details`, `DELETE /api/v1/schemas/{name}`, and loading or unloading schema bundles. |
+| `read` | Containers: list, get, statistics. Documents: list, get, content, metadata, versions. Every `/api/query` call (execute, explain, validate, compile, compiled execute, stream). `/api/transform` and stylesheet list, get, content and validate. Schema list, get, content, versions and the three validate endpoints, every `/api/v1/validate` call, and `/api/v1/schemas` list, get and bundles. |
+| `write` | Containers: create, update, delete. Indexes: add, remove, rebuild. Documents: create, update, content, delete, metadata update, version restore. Stylesheets: register, update, delete, and clearing the transform cache. Schema registration: `POST /api/schemas` and `POST /api/v1/schemas`. |
+| `admin` | `/health/details`. On `/api/schemas`: update (`PUT /api/schemas/{id}`), delete (`DELETE /api/schemas/{id}`) and activate (`POST /api/schemas/{id}/versions/{v}/activate`). `DELETE /api/v1/schemas/{name}`, and loading or unloading schema bundles. |
 
 A credential without the level a route needs gets `403`. When `Auth:RequireAuthentication` is
 `false`, an anonymous caller gets `401` on any write or admin route.
@@ -245,7 +245,9 @@ stored documents, and XSLT has no path that writes to the database.
 Queries and stylesheets sent to either server can read only the stored documents, unless you list
 directories in `PhoenixmlDb:ResourceAccess:AllowedFileRoots` or origins in
 `PhoenixmlDb:ResourceAccess:AllowedHttpOrigins`. Both are empty by default and validated at
-startup. See [Resource Access](../resource-access.md).
+startup. See [Resource Access](../resource-access.md) and, for `import module` and
+`fn:load-xquery-module`, [XQuery Library Modules](../xquery-modules.md). The gRPC server has no
+transform service, so the stylesheet rules apply to the REST server only.
 
 ### gRPC server
 
@@ -275,6 +277,68 @@ A hostname counts as non-loopback.
 
 The cluster's Raft traffic is authenticated separately, by the cluster secret and a TLS
 certificate, and needs no API key.
+
+## Requests and errors
+
+### REST server: queries
+
+- **Query variables.** `"variables": { … }` in `POST /api/query` binds external variables. A JSON
+  string binds as `xs:string`, a whole number as `xs:integer`, another number as `xs:decimal`,
+  `true`/`false` as `xs:boolean`, an array as a sequence, and `null` as no binding. A JSON object
+  is a `400` that names the variable.
+- **Query errors** are HTTP `400` with a problem body that carries `xqueryErrorCode` and `detail`.
+  `POST /api/query/validate` reports each static error with its own code, including errors in
+  imported modules; `POST /api/query/compile` answers `400` with `xqueryErrorCode`.
+
+### REST server: transformations
+
+This applies to `/api/transform`, `/api/transform/raw`, `/api/transform/pipeline`, and stylesheet
+registration, update and validation.
+
+| Situation | Answer |
+|---|---|
+| Error in the stylesheet or in its run | HTTP `400`, `title: "Transformation Error"`, `errorCode: "TRANSFORM_ERROR"`, `detail` beginning with the XSLT/XPath error code |
+| XPath syntax error (`select`, `test`, value templates, variables, functions), in the stylesheet sent, in a file module or in an http(s) module | HTTP `400`, `detail` beginning `XPST0003: ` |
+| Invalid `match` pattern | HTTP `400`, `detail` beginning `XTSE0340: ` |
+| Registration or update of such a stylesheet | HTTP `400`, `detail` beginning `Invalid stylesheet: XPST0003: ` |
+| `POST /api/transform/stylesheets/validate` | HTTP `200`, the error listed in `errors` |
+| Pipeline with `ContinueOnError` | HTTP `200`, the step's `error` begins with the code |
+| Past `PhoenixmlDb:Transform:MaxExecutionTimeSeconds` | HTTP `504`, `errorCode: "TRANSFORM_TIMEOUT"` |
+| Past the concurrency limits (`MaxConcurrentTransforms`, `MaxAbandonedTransforms`) | HTTP `503`, `errorCode: "TRANSFORMS_UNAVAILABLE"` |
+
+The detail leads with the error code:
+
+- Standard codes: `FORG0001: [line 1, col 132] Cannot cast …`, `FOER0000: Error raised by fn:error`.
+- A code in no namespace: `MYCODE: …`.
+- A code given with `fn:error(QName(ns, 'p:local'), …)`: `p:local: …`; with no prefix, `Q{ns}local: …`.
+- The XPath parser's list of expected tokens is left out of its message. Text a stylesheet writes
+  in `fn:error` or `xsl:message terminate="yes"` arrives unchanged.
+
+A `match` pattern with a syntax error inside a predicate (`a[`, `a[1 +]`) is accepted by the
+library.
+
+### REST server: validation
+
+- An unknown schema `type` on `/api/v1/validate`, `/upload`, `/xml` (`X-Schema-Type`) and `/batch`
+  is HTTP `400`: `Unknown schema type '<value>'. Accepted: xsd, schematron, relaxng, dtd.`
+- `/api/v1/validate/batch`: a schema reference that is not registered fails every document with
+  `SCHEMA_NOT_FOUND`. A schema that does not compile fails every document with `VALIDATION_ERROR`.
+  A schema `Uri` that is not served is a `400` for the whole request.
+- `xs:include`, `xs:import` and `xs:redefine` of a registered schema name or a schema-directory
+  file resolve; see
+  [Schema locations in the REST server validators](../resource-access.md#schema-locations-in-the-rest-server-validators).
+- `POST /api/v1/schemas` answers `201` with the schema info.
+- A document nested more than 1024 elements deep is a validation error.
+
+### gRPC server
+
+- For a coded query error, `error` begins with the code (`XQST0059: …`). Unary calls answer
+  `success = false`. The streaming query answers status `InvalidArgument` with the same text.
+- A regular-expression match that runs past `PhoenixmlDb:Query:RegexMatchTimeoutMs` is answered
+  `DeadlineExceeded`.
+- `PutDocument` and `UpdateDocument` answer a refused document name with `success = false` and
+  `error` beginning `INVALID_DOCUMENT_NAME: `. `BulkPutDocuments` lists it in the per-document
+  `errors`. See [the name rule](../documents-and-storage.md#the-name-rule).
 
 ## TLS
 

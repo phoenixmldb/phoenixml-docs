@@ -20,7 +20,19 @@ The database is split into the following packages. Each package ID is the projec
 | `PhoenixmlDb.Client` | gRPC client SDK | Connect to a PhoenixmlDb server |
 
 `PhoenixmlDb.Storage` depends on the published `PhoenixmlDb.Core` and `PhoenixmlDb.XQuery`
-packages.
+packages. The database is built against these versions:
+
+| Package | Version |
+|---|---|
+| `PhoenixmlDb.Core` | 2.4.0 |
+| `PhoenixmlDb.XQuery` | 2.8.0 |
+| `PhoenixmlDb.Xslt` | 2.8.0 |
+| `LightningDB` (LMDB 1.0.1) | 0.23.1 |
+
+For code that uses `PhoenixmlDb.Core` directly, `NodeReader` takes a string-value resolver:
+`new NodeReader(buffer, resolver)`, or `NodeReader.WithoutStringValueResolver(buffer)`. Reading the
+string value of a node that has children, no computed value and no resolver throws unless the
+switch `PhoenixmlDb.Xdm.StrictStringValue` is set to `false`.
 
 ## Embedded Installation
 
