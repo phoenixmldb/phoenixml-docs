@@ -17,9 +17,9 @@ affects only databases created with earlier internal builds.
   `PhoenixmlDb.Storage.Lmdb.LmdbMigrationRequiredException` (properties `Path` and `Found`), whose
   message names the command to run and ends "The file was not opened or changed."
   `LmdbFileFormatDetector.Detect(path)` reports a file's format (`LmdbFileFormatKind`).
-- **Linux needs glibc 2.38 or later.** Debian 12, Ubuntu 22.04, RHEL 9 and Amazon Linux 2023 are not
-  supported; Ubuntu 24.04 and the `mcr.microsoft.com/dotnet/aspnet:10.0` image are.
-- LightningDB 0.23.1 no longer includes native libraries for browser WebAssembly or iOS (arm).
+- **Linux needs glibc 2.38 or later.** Debian 12 (glibc 2.36) does not meet it. Ubuntu 22.04, RHEL 9
+  and Amazon Linux 2023 ship older glibc versions than 2.38 and do not meet it either.
+- LightningDB 0.23.1 includes no native libraries for browser WebAssembly or iOS (arm).
 - **Restores are staged.** Every restore path writes `data.mdb.restore.tmp`, flushes it and checks
   its format before replacing anything. A restore needs a stopped database and throws
   `InvalidOperationException` if the database is open in this or another process.
@@ -95,11 +95,11 @@ to run the tool again.
 
 ### A Raft cluster, one node at a time
 
-The bytes of replicated commands and log entries are the same before and after the upgrade, so
-nodes can be upgraded one at a time: stop the node, migrate its database directory and its Raft log
-directory, then start it on the new version. A snapshot sent by a node still on LMDB 0.9 is refused,
-so finish the rolling upgrade before a lagging node needs a snapshot. A real mixed-version cluster
-hasn't been run.
+Cluster nodes are designed to be upgraded one at a time: the bytes the nodes exchange are the same
+in both versions. A cluster with nodes on both versions has not been tested. For each node: stop it,
+migrate its database directory and its Raft log directory, then start it on the new version. A
+snapshot sent by a node still on LMDB 0.9 is refused, so finish the upgrade before a lagging node
+needs a snapshot.
 
 The Raft log format carries no version number. A command type added by a newer build is not known
 to an older build.
@@ -113,8 +113,8 @@ migration is not in `data.mdb.v09`. A migrated directory also keeps
 
 ## Known limits
 
-- Windows hasn't been measured, and on Windows LMDB preallocates `data.mdb` to the full map size,
-  so choose `--map-size` deliberately there.
+- Windows is not tested. On Windows LMDB sets the size of `data.mdb` to the map size when it creates
+  the file; use `--map-size` with the migration tool to choose it.
 - Only the linux-x64 build of the tool has been run.
 - There's no up-front disk-space check. The export needs a little over twice the data, plus the new
   file; running out of space fails with the original untouched.

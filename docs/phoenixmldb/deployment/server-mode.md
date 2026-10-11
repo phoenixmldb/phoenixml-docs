@@ -99,10 +99,9 @@ http.DefaultRequestHeaders.Add("X-Api-Key", Environment.GetEnvironmentVariable("
 
 ## Authentication
 
-> **Breaking change** (phoenixml `main`, 0d46e91): the REST server is now **secure by default**.
-> Every endpoint requires credentials, and a production host refuses to start until an operator
-> configures a key. The settings section is **`Auth`**. The older `authentication` section shown
-> in earlier versions of this page **makes the server refuse to start**.
+The REST server is **secure by default**: every endpoint requires credentials, and a production
+host refuses to start until an operator configures a key. The settings section is **`Auth`**; a
+section named `Authentication` makes the server refuse to start.
 
 Both servers authenticate with **API keys that you issue and store as hashes** (issue #50). The
 REST server also accepts JWTs. The gRPC server is covered in [gRPC server](#grpc-server) below.
@@ -132,7 +131,7 @@ never in a committed `appsettings.json`.
 | `Auth:ApiKey:QueryParameterName` | *(empty)* | Empty disables query-string keys, which leak into request logs. |
 | `Auth:ApiKey:Clients` | *(empty)* | The accepted keys, one list entry per key. See [API keys](#api-keys). |
 | `Auth:Jwt:Enabled` | `false` | |
-| `Auth:Jwt:SecretKey` | | Secret. At least 32 bytes UTF-8, and not the placeholder that older builds shipped. |
+| `Auth:Jwt:SecretKey` | | Secret. At least 32 bytes UTF-8, and not a placeholder value. |
 | `Auth:Jwt:Issuer` | | Required when JWT is enabled. |
 | `Auth:Jwt:Audience` | | Required when JWT is enabled. |
 | `Auth:Jwt:Authority` | | Not supported yet (no OpenID Connect): setting it fails startup. |
@@ -206,7 +205,7 @@ the setting, when:
 - outside Development, an API key is shorter than **32 characters**, or is a development key;
 - a key has no `Permission`, or has `ContainerPermissions`;
 - two entries share an `Id`, or two entries hold the same key (compared by hash, so a `Key` entry and a `Sha256` entry can collide);
-- a `Key` is empty or whitespace, or a `Sha256` is the hash of the empty string. **`"Key": ""` fails startup**: an optional secret that's missing is no longer treated as unset;
+- a `Key` is empty or whitespace, or a `Sha256` is the hash of the empty string. **`"Key": ""` fails startup**;
 - an entry sets both or neither of `Sha256` and `Key`;
 - JWT is enabled with a missing, placeholder or too-short `SecretKey`, or without `Issuer`/`Audience`;
 - `Auth:Jwt:Authority` is set;

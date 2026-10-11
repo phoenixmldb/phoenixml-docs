@@ -62,8 +62,8 @@ The engine packages target `net8.0` and `net10.0`.
 - The database projects target **.NET 10** (`net10.0`).
 - LMDB native binaries are supplied by the `LightningDB` package dependency, so no separate
   `liblmdb` install is needed.
-- **Linux needs glibc 2.38 or later** (for example Ubuntu 24.04 or the `aspnet:10.0` image). Debian
-  12, Ubuntu 22.04, RHEL 9 and Amazon Linux 2023 are not supported. See
+- **Linux needs glibc 2.38 or later.** Debian 12 (glibc 2.36) does not meet it. Ubuntu 22.04, RHEL 9
+  and Amazon Linux 2023 ship older glibc versions than 2.38 and do not meet it either. See
   [Upgrading to LMDB 1.0](../phoenixmldb/deployment/lmdb-upgrade.md).
 - ICU globalization must be available. Do not set `DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1`:
   the query engines depend on ICU for `normalize-unicode()`, collations, and regex character
