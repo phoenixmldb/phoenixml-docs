@@ -27,7 +27,7 @@ Other sections are documented with their features:
 | Setting | Default | Notes |
 |---|---|---|
 | `DataPath` | `{ContentRoot}/data` | A relative path resolves against the content root. |
-| `MapSizeMb` | the engine default, 50 GiB on 64-bit | The storage map size in MB. If an existing store already holds that much data or more, the server refuses to start: a smaller map would make it read-only. |
+| `MapSizeMb` | the engine default: 50 GiB in a 64-bit process, 1 GiB in a 32-bit process | The storage map size in MB. If an existing store already holds that much data or more, the server refuses to start: a smaller map would make it read-only. |
 | `MaxReaders` | `126` | Concurrent read transactions. At least 1. |
 | `CreateIfMissing` | `true` | When `false`, a missing data directory stops startup and nothing is created. |
 
@@ -79,7 +79,7 @@ These sections apply to the **REST server** (except `RegexMatchTimeoutMs`, which
 | `DefaultTimeoutSeconds` | `30` | Used when neither the request nor the container sets a timeout. |
 | `MaxTimeoutSeconds` | `300` | Upper bound on any query timeout. |
 | `MaxResults` | `10000` | A request's `MaxResults` is clamped to this. |
-| `DefaultPageSize` | `100` | Also used for document listings (previously 50). |
+| `DefaultPageSize` | `100` | Also used for document listings. |
 | `MaxPageSize` | `1000` | |
 | `EnableCaching` | `false` | Compiled-plan caching isn't available yet; `true` stops startup. |
 | `CacheSize` | `100` | Stored compiled-query handles. An evicted or unknown handle returns `404`. |
@@ -137,9 +137,7 @@ A container's own settings override these. In the API, the container fields `Ver
 `ValidateOnWrite`, `AllowJson`, `MaxDocumentSize`, `QueryTimeoutSeconds` and `MaxVersions` are
 nullable: `null` means "use the server default". A `PUT` merges settings, so a field left out keeps
 its stored value; a field can't be reset to the server default through `PUT`. `DefaultNamespaces`
-are fixed when the container is created, and changing them on a `PUT` returns `400`. Containers
-created before this release keep their stored 10 MB document limit and 30 s query limit until you
-`PUT` new settings.
+are fixed when the container is created, and changing them on a `PUT` returns `400`.
 
 ## Telemetry export
 
