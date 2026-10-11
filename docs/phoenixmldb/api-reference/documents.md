@@ -320,7 +320,19 @@ catch (System.Xml.XmlException ex)
 
 ### Name Validation
 
-A name must not be `null`, empty, or whitespace (`ArgumentException`). The name is not otherwise restricted, and the extension does not determine the content type.
+A document name is a relative name inside its container, at most 507 bytes in UTF-8. When a document is written, a name that breaks the rule throws `PhoenixmlDb.Storage.InvalidDocumentNameException` (an `ArgumentException`) before anything is written; a `null` name throws `ArgumentNullException`. `DocumentNameRules.Validate(name)` and `DocumentNameRules.IsValid(name)` check a name in advance, and `DocumentNameRules.MaxNameBytes` is the length limit. The full rule, with examples and the errors each server returns, is in [Documents & Storage: The name rule](../documents-and-storage.md#the-name-rule). The extension does not determine the content type.
+
+```csharp
+try
+{
+    await container.PutDocumentAsync("a/../b.xml", content);
+}
+catch (InvalidDocumentNameException ex)
+{
+    // Document name 'a/../b.xml' is refused: a document name is not a location. ...
+    Console.WriteLine(ex.Message);
+}
+```
 
 ## Best Practices
 

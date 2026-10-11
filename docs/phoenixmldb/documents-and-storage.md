@@ -91,6 +91,101 @@ await foreach (var doc in container.ListDocumentsAsync("2024/01/"))
 }
 ```
 
+#### The name rule
+
+A document name is a relative name inside its container. It is not a location. When a document is
+**written**, the name is refused if it
+
+1. is empty or only white space, or contains a control character U+0000 to U+001F;
+2. has a segment that is exactly `.` or `..` when split on `/` and `\`;
+3. begins with `/` or `\`;
+4. begins with a drive: one letter and a colon, with or without a separator;
+5. begins with a URI scheme followed by `/` or `\`;
+6. begins with `file:`, `phoenixml:` or `phx-schema:` in any letter case, whatever follows;
+7. is longer than **507 bytes in UTF-8**.
+
+Nothing is decoded or normalised. The length is checked first.
+
+| Refused | Accepted |
+|---|---|
+| `a/../b`, `..`, `./x`, `a/./b`, `a\..\b` | `a/b/c.xml`, `a..b`, `..x`, `x..`, `...`, `a/.../b`, `.hidden` |
+| `/x`, `\x`, `//host/x`, `\\server\share\x` | `a\b.xml`, names with spaces, Unicode, `%`, `%2e%2e/x` |
+| `C:\x`, `c:/x`, `C:x`, `c:`, `a:b`, `x:doc.xml` | `ab:c`, `ns:doc.xml`, `ns:a/b.xml`, `a/b:c.xml` |
+| `http://x`, `https://x`, `custom:/y`, `custom:\y` | `http:x.xml`, `urn:x`, `urn:isbn:0451450523` |
+| `file:///x`, `file:x.xml`, `FILE:x.xml`, `phoenixml:container/c/x`, `phx-schema:x` | `log-2026-10-10T10:00:00.xml`, `report:2026.xml`, `2026-01-02T10:30.xml` |
+
+Accepted names are stored and read back exactly as written. For accepted names with a colon,
+`doc(name)`, `doc-available(name)`, `collection(name)` and `uri-collection(name)` find the stored
+document.
+
+The engine's document URI, `phoenixml:container/<container>/<name>`, is a URI for a document. It is
+refused as a name. `doc()` by that URI works.
+
+**Maximum length.** 507 bytes of UTF-8 (`DocumentNameRules.MaxNameBytes`): 507 ASCII characters,
+253 two-byte characters, 169 three-byte characters. Container names and metadata names have their
+own limits (511 and 499 bytes).
+
+To check a name in advance, call `PhoenixmlDb.Storage.DocumentNameRules.Validate(name)` or
+`IsValid(name)`.
+
+**Where the rule is checked:**
+
+| Host | Operations |
+|---|---|
+| Embedded | `PutDocumentAsync` (string and stream), `PutDocumentsAsync` (each document), `PutDocumentWithMetadataValuesAsync`, the same puts on a write transaction (at the put call), `DocumentDatabase.UpdateDocumentByIdAsync`; XML and JSON |
+| gRPC server | `PutDocument` (with and without a transaction), `UpdateDocument` (by name and by id), `BulkPutDocuments`. With Raft, on the node that proposes the write. |
+| REST server | `POST api/containers/{id}/documents`, `PUT …/documents/{docId}`, `PUT …/documents/{docId}/content`, `POST …/versions/{v}/restore` |
+
+The rule is not checked by reads, deletes, listings, metadata reads and writes, queries, index
+maintenance and rebuild, opening a database, or the apply of a replicated command. The engine has
+no rename, move or copy of a document.
+
+**Errors:**
+
+| Host | Answer |
+|---|---|
+| Embedded | `PhoenixmlDb.Storage.InvalidDocumentNameException` (an `ArgumentException`). A null name is `ArgumentNullException`. `PutDocumentAsync(name, Stream)` checks the name before it reads the stream. |
+| gRPC `PutDocument`, `UpdateDocument` | `success = false`, `error` = `INVALID_DOCUMENT_NAME: ` + the message |
+| gRPC `BulkPutDocuments` | the document is listed in the per-document `errors` with the same text; the other documents are stored |
+| Client SDK (`PhoenixmlDb.Client`) | `PhoenixmlException` with that text |
+| REST server | HTTP `400`, `application/problem+json`: `title: "Validation Error"`, `errorCode: "VALIDATION_ERROR"`, `detail` = the message, `errors: [{ field: "name", message, code: "INVALID_DOCUMENT_NAME" }]`. An empty name on create is this `400` too. |
+
+The message has this form:
+
+```
+Document name 'a/../b' is refused: a document name is not a location. A name must not have a segment that is '.' or '..'.
+```
+
+- The name is shown as written. Control characters are shown escaped. A name over 80 characters is
+  cut and its length given. No text is longer than 400 characters.
+- Over-long: `A name is at most 507 bytes in UTF-8; this one is 508.`
+- In a `PutDocumentsAsync` batch, a refused name fails the call. The current uncommitted batch (up to
+  1000 documents) is not stored. Batches committed earlier in the same call stay stored.
+- The gRPC server logs a refused name as a warning.
+
+**Documents stored under a name the rule refuses:**
+
+- They stay readable, listable, queryable and deletable by their exact name: get, exists, list, get
+  by id, `doc()`, `doc-available()`, `collection()`, metadata set / get / query / delete, delete,
+  index rebuild. A database that holds such names opens with no warning.
+- They cannot be written again under that name. A put, an update by id, a gRPC `PutDocument` /
+  `UpdateDocument`, a REST `PUT` or a version restore is refused with the error above and changes
+  nothing.
+- A REST `PUT …/documents/{docId}` of such a document is refused even when only its metadata
+  differs. `PUT …/documents/{docId}/metadata` has no name check.
+- To change such a document: read it, put its content under an accepted name, and delete the old
+  one by its exact name. A put does not carry metadata; copy it too if needed.
+- Two stored names that `doc(name)` does not find by bare name: a name of the form
+  `phoenixml:container/c/x`, and `C:x`. Both are found by their own document URI and by get, list
+  and delete.
+
+**Tools and the Mobile store:**
+
+- Tools that derive document names from file paths must pass relative names without `.` or `..`
+  segments. An absolute path, a `file:` URI, a drive path or a path with `..` is refused as a
+  document name.
+- `PhoenixmlDb.Mobile` keeps its own local store. The rule does not apply there.
+
 ### Storing Documents
 
 Each put runs in its own write transaction: the document is parsed into nodes, stored and (when

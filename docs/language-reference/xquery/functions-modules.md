@@ -207,7 +207,7 @@ declare function pricing:discount(
 
 ### Importing Modules
 
-Main queries import library modules:
+Main queries import library modules. In the database, modules are read from allowed directories and origins only; see [XQuery Library Modules](../../phoenixmldb/xquery-modules.md).
 
 ```xquery
 import module namespace pricing = "http://example.com/pricing"

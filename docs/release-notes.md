@@ -6,6 +6,191 @@ sort: 5
 
 ## Unreleased: database server
 
+### 1.0.0-preview.2 (unreleased)
+
+The database packages are not yet published on NuGet.
+
+This version contains:
+
+- **XQuery library modules.** A query can `import module … at` a file or an http(s) URL, and call
+  `fn:load-xquery-module`, in the embedded engine, the gRPC server and the REST server. See
+  [XQuery Library Modules](phoenixmldb/xquery-modules.md).
+- **One resource access allowlist**, `PhoenixmlDb:ResourceAccess`, for queries and stylesheets:
+  allowed directories, allowed http(s) origins, and six size and count limits. See
+  [Resource Access](phoenixmldb/resource-access.md).
+- **Stylesheets read inside the allowlist** on the REST server: `xsl:import`, `xsl:include`, `doc`,
+  `document`, the `unparsed-text` functions, `json-doc`, `xsl:source-document` and `xsl:merge`
+  sources, from files and from http(s).
+- **Schema imports in queries** (`import schema … at`), and `validate` returning typed nodes.
+- **A document name rule**: a document name is a relative name inside its container, at most
+  507 bytes in UTF-8. See [Documents & Storage: The name rule](phoenixmldb/documents-and-storage.md#the-name-rule).
+- **LMDB 1.0.1 storage** (LightningDB 0.23.1), with detection of databases in the LMDB 0.9 format
+  and the `PhoenixmlDb.Migrate` tool. See [Upgrading to LMDB 1.0](phoenixmldb/deployment/lmdb-upgrade.md).
+- **Libraries**: PhoenixmlDb.Core 2.4.0, PhoenixmlDb.XQuery 2.8.0, PhoenixmlDb.Xslt 2.8.0. See
+  [Installation](getting-started/installation.md).
+- **Server configuration** under one root, `PhoenixmlDb:*`, validated at startup, with a startup
+  summary of the effective configuration. See
+  [Server Configuration](phoenixmldb/deployment/server-configuration.md).
+- **REST server**: error answers that lead with the XQuery/XSLT error code, schema locations for the
+  validators, a transformation concurrency limit, and request variables for queries. See
+  [Server Mode: Requests and errors](phoenixmldb/deployment/server-mode.md#requests-and-errors).
+- **gRPC server**: error text that leads with the error code.
+
+#### Behaviour you can see
+
+With PhoenixmlDb.XQuery 2.8.0, PhoenixmlDb.Xslt 2.8.0 and PhoenixmlDb.Core 2.4.0:
+
+| Area | Behaviour |
+|---|---|
+| `validate` in a query | Returns typed nodes: atomization, comparisons, arithmetic, `instance of element(*, T)`, `schema-element()` and `attribute(*, T)` follow the schema type. Stored documents stay untyped; validate in the query to get typed values. |
+| Atomizing a validated element with element-only content | `FOTY0012` (`string()` works) |
+| `validate strict` of an element with no declaration, including with no schema import | `XQDY0084` |
+| `validate` of invalid content | `XQDY0027` |
+| `. instance of schema-element(E)` on an unvalidated node | `false` |
+| A value cast to, or atomized from, a schema-defined type | Is an instance of that type: `(t:qty cast as t:Qty) instance of t:Qty` is `true` |
+| A date or dateTime outside the supported range | `FODT0001` |
+| A reserved name in a named function reference (`attribute#0`, `element#1`, `if#1`) | `XPST0003` |
+| `fn:unparsed-text`, `fn:unparsed-text-lines` with a requested encoding, characters XML does not allow | `FOUT1190` |
+| `fn:unparsed-text-available(f, 'utf-7')` | `false` |
+| `fn:load-xquery-module` of a module that needs a context item, none supplied | `XPDY0002` |
+| An import chain longer than 64 modules | `XQST0059` at any `MaxModuleDepth` |
+| `$err:code` and other qualified local variables inside a library module | Work |
+| A map constructor entry whose value begins with a prefixed name (`map { 1: fn:true#0 }`) | Keeps its value |
+| Schema import: binding `xml`/`xmlns`, a prefix with an empty target namespace, two imports of one namespace | Refused: `XPST0003`, with a message leading with `XQST0070` / `XQST0057` / `XQST0058` |
+| `import schema` inside a library module | `XQST0009` |
+| An unavailable stylesheet module | `XTSE0165: Cannot find stylesheet module '<href>'` |
+
+For code that calls the engine's stylesheet resolver directly: a stylesheet module that is not
+supplied is answered with `PhoenixmlDb.Storage.Security.StylesheetModuleRefusedException` (an
+`UnauthorizedAccessException` that carries the engine's error); a relative module reference with no
+base is answered with null.
+
+#### Known limits
+
+- **Modules:** no modules stored in the database; no compiled-module cache; a predicate inside a
+  module function is not answered from a value index; a module loaded only at run time does not
+  change how the query is run; `fn:unparsed-text` and `fn:json-doc` in queries read files only;
+  XSLT cannot import XQuery modules. See
+  [XQuery Library Modules: Known limits](phoenixmldb/xquery-modules.md#known-limits).
+- **Stylesheets on the REST server:** the constructs listed in
+  [Not available in stylesheets](phoenixmldb/resource-access.md#not-available-in-stylesheets) are
+  refused, and the limits in [Resource Access: Known limits](phoenixmldb/resource-access.md#known-limits)
+  apply. A `match` pattern with a syntax error inside a predicate (`a[`, `a[1 +]`) is accepted by
+  the library.
+- **Validators:** `sch:extends href` and RELAX NG `externalRef` / `include` are not implemented.
+- **A cluster write that reports "Failed to reach consensus" may still be applied.** The leader
+  appends the entry to its log, then waits up to 5 seconds for it to be applied. When that time
+  passes it answers `Success = false`, `Error = "Failed to reach consensus"`, and the entry stays in
+  the log; it can be committed and applied afterwards. A client that gets this answer should read
+  before it retries.
+- Reads in a cluster are node-local and not linearizable.
+- The Raft log format has no version number.
+- `PhoenixmlDb:Query:EnableCaching` cannot be turned on.
+- Migration tool: only linux-x64 is run; there is no disk-space check up front; a single value of
+  about 2 GiB or more is untested.
+
+#### Compatibility checklist for operators
+
+Storage and platform:
+
+- If your Linux host has glibc older than 2.38, the storage library does not load. Use a host with
+  glibc 2.38 or newer, or the `aspnet:10.0` image.
+- If you have a database, Raft log or backup written with LMDB 0.9, opening it throws
+  `LmdbMigrationRequiredException`. Run `PhoenixmlDb.Migrate`; see
+  [Upgrading to LMDB 1.0](phoenixmldb/deployment/lmdb-upgrade.md).
+- An over-long or otherwise refused document name throws `InvalidDocumentNameException` (an
+  `ArgumentException`) before anything is written.
+
+Configuration:
+
+- `Phoenixml:DataPath`, `PhoenixmlDb:DataPath`, `Phoenixml:MaxVersionsPerDocument` and
+  `Validation:*` apply for this release, with warning 3002. Rename them; see
+  [Legacy keys](phoenixmldb/deployment/server-configuration.md#legacy-keys).
+- `XrxServer:*` keys are ignored, with a warning. Set the `PhoenixmlDb:*` key the warning names.
+- `PhoenixmlDb:Query:EnableCaching: true` stops startup. Remove it.
+- `PhoenixmlDb:ResourceAccess:AllowStylesheetFileAccess` in the configuration stops startup.
+  Remove it.
+- Any `PhoenixmlDb:*` value out of range stops startup with a message that names the key.
+- Container versioning on the REST server is off by default. Set
+  `PhoenixmlDb:Containers:Defaults:VersioningEnabled: true` or enable it per container.
+- On the gRPC server, `/healthz` is a deprecated alias of `/health` for one release. Use `/health`.
+
+Queries:
+
+- `fn:doc`, `fn:doc-available`, `fn:collection` and `fn:uri-collection` resolve stored documents
+  only. A file path or URL that names no stored document is `FODC0002` / `false`.
+- A relative location with no base in a query or module is `XQST0059` / `FOQM0002` / `FOUT1170`.
+  Use an absolute location or `declare base-uri`.
+- A query that reads files or imports modules needs the directories in
+  `PhoenixmlDb:ResourceAccess:AllowedFileRoots` and the origins in `AllowedHttpOrigins`.
+- Every `at` location of an `import module` must exist and hold the module.
+- `import schema` in a library module is `XQST0009`. Move the import to the query.
+- A missing context item for `fn:load-xquery-module` is `XPDY0002`.
+- A requested encoding that cannot decode a file is `FOUT1190`.
+- An out-of-range date is `FODT0001`.
+- `attribute#0` and similar named function references are `XPST0003`.
+- The result of `validate` is typed: comparing it as untyped (`qty = '012'`) is `XPTY0004`.
+  `validate strict` of an undeclared element is `XQDY0084`.
+- A module graph that chains more than 64 modules is `XQST0059`.
+- A query or transformation that imports a module over http(s) reads no files. Fetch the files over
+  http(s) too, or keep the module as a file; see
+  [Modules read over HTTP](phoenixmldb/resource-access.md#modules-read-over-http).
+
+Stylesheets (REST server):
+
+- A stylesheet that reads files or URLs needs them listed in `AllowedFileRoots` /
+  `AllowedHttpOrigins`.
+- A stylesheet that uses `fn:collection`, `fn:uri-collection`, `fn:load-xquery-module`,
+  `fn:stream-available`, `fn:transform`, `fn:function-lookup`, `xsl:import-schema` with a location,
+  `xsl:use-package`, `xsl:result-document href`, `parameter-document`, `xsl:merge-source streamable`,
+  a computed shadow attribute, or the environment functions in a static expression is answered
+  HTTP `400` before it runs.
+- A relative `xsl:import` / `xsl:include` in a stylesheet with no `xml:base` is `XTSE0165`. Add
+  `xml:base` or use an absolute href.
+- Inside a file module, `static-base-uri()` and `base-uri()` are `phoenixmldb-file:///root-N/…`; see
+  [How stylesheet modules read from files are named](phoenixmldb/resource-access.md#how-stylesheet-modules-read-from-files-are-named).
+- An XPath syntax error in a stylesheet is HTTP `400` with `XPST0003` (`XTSE0340` for a pattern).
+- Transform error details begin with the error code.
+- Requests past `PhoenixmlDb:Transform:MaxConcurrentTransforms` (default two per processor, 4 to
+  16) are answered `503`.
+
+Validation (REST server):
+
+- A schema location (`Schemas[].Uri`, `xs:include`, `xs:import`, `xs:redefine`, `sch:include`) that
+  is not registered, not in `PhoenixmlDb:Validation:BasePath` and not allowed by
+  `PhoenixmlDb:ResourceAccess` is HTTP `400` `SCHEMA_LOCATION_NOT_AVAILABLE`.
+- Schemas kept outside the schema directory and named by absolute path need that directory in
+  `PhoenixmlDb:ResourceAccess:AllowedFileRoots`.
+- `PhoenixmlDb:Validation:AllowHttpResolution: true` also needs the origin in
+  `PhoenixmlDb:ResourceAccess:AllowedHttpOrigins`.
+- An unknown schema type is HTTP `400`.
+- A batch that names a schema that is not registered fails every document with `SCHEMA_NOT_FOUND`.
+- `POST /api/v1/schemas` answers `201`.
+- Updating, deleting or activating schemas on `/api/schemas` needs an admin key; a write key gets
+  `403`.
+- A document nested more than 1024 elements deep is a validation error; a schema nested more than
+  512 deep is refused.
+
+Documents:
+
+- Document names with a leading `/`, a drive, a URI scheme followed by `/`, `file:`, `phoenixml:`,
+  `phx-schema:`, a `.` or `..` segment, a control character, or more than 507 bytes are refused on
+  write. One-letter prefixes such as `a:b` are the drive form and are refused.
+- Documents already stored under such names stay readable and deletable; put them under an accepted
+  name to update them.
+- Tools that derive names from file paths must pass relative names without `.` or `..`.
+
+gRPC clients:
+
+- The `error` text of a failed query with an error code begins with the code.
+- A write answered "Failed to reach consensus" may have been applied; read before you retry.
+
+Cluster:
+
+- Migrate each node's database directory and Raft log directory. A node on the new build refuses a
+  Raft snapshot sent by a node still on LMDB 0.9.
+- A Raft-enabled server needs API keys and a Raft port different from both client ports.
+
 ### Storage engine on LMDB 1.0
 
 Since phoenixml `main` ee0c056, the storage engine uses LightningDB 0.23.1 (LMDB 1.0.1). LMDB 0.9
@@ -238,7 +423,7 @@ and HTTP stylesheet imports from allowed origins, and computed `xsl:source-docum
 now governed by `PhoenixmlDb:ResourceAccess` instead of being refused outright. A stylesheet that
 reads a denied resource is now refused when it runs (`400`), not when it's registered.
 `fn:transform`, `fn:function-lookup`, `xsl:evaluate` and `xsl:result-document` are still refused.
-See [Resource Access](phoenixmldb/resource-access.md#stylesheets-on-the-rest-server).
+See [Resource Access](phoenixmldb/resource-access.md#what-a-stylesheet-may-read-rest-server).
 
 ### The database runs on the 2.5.1 engines
 
