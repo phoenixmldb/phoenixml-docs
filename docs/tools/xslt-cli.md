@@ -45,6 +45,7 @@ command | xslt [options] <stylesheet>
 | `--dry-run` | | Parse and compile only — validate without executing |
 | `--stream` | | Use streaming for large files (lower memory usage) |
 | `--no-stream` | | Evaluate against an in-memory tree even when the stylesheet's initial mode is streamable |
+| `--strict-streaming` | | Report `XTSE3430` for a template in a streamable mode that is not guaranteed streamable, instead of running it on a buffered copy. No effect with `--no-stream`. |
 | `--verbose` | `-v` | Show detailed error information (stack traces) |
 | `--help` | `-h` | Show help message |
 | `--version` | | Show version information |
@@ -177,14 +178,14 @@ that way, regenerate it.
 
 ## Streaming
 
-For large XML files where memory is a concern, use `--stream` to process input without loading the entire document into memory. This uses `TransformAsync(Stream, Stream)` under the hood — forward-only XmlReader-based processing rather than building a full in-memory tree.
+For large XML files where memory is a concern, streaming processes the input without loading the whole document into memory. It is selected automatically for a file input when the stylesheet declares a streamable mode (`xsl:mode streamable="yes"`); `--stream` forces it, and `--no-stream` turns it off.
 
 ```bash
 xslt --stream style.xsl large-input.xml
 xslt --stream -o result.html style.xsl large-input.xml
 ```
 
-Streaming requires the stylesheet to be written for streamability (`xsl:mode streamable="yes"` or `xsl:source-document streamable="yes"`). Non-streamable constructs will cause a compile-time error.
+A template in a streamable mode that is not streamable does not stop the transformation: by default it runs on a buffered copy of the subtree it matched, with the same result, so memory use grows with that subtree. `--strict-streaming` reports such a template as `XTSE3430` instead. In 2.8.0 that check finds one pattern, a template with more than one instruction that reads the children of the matched node; it is not the complete streamability analysis of the specification, so a stylesheet it accepts may still not be guaranteed streamable.
 
 ## Real-World Workflows
 

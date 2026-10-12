@@ -6,7 +6,7 @@ sort: 6
 
 # XSLT API
 
-The `XsltTransformer` class (`PhoenixmlDb.Xslt`, in the published `PhoenixmlDb.Xslt` package; this page describes version 2.7.0) is the primary .NET API for executing XSLT transformations. It provides a string-in/string-out interface for simple cases, plus `TextReader`, `Stream` and `TextWriter` overloads, a callback for secondary result documents, and control over the initial context, mode and match selection.
+The `XsltTransformer` class (`PhoenixmlDb.Xslt`, in the published `PhoenixmlDb.Xslt` package; this page describes version 2.8.0) is the primary .NET API for executing XSLT transformations. It provides a string-in/string-out interface for simple cases, plus `TextReader`, `Stream` and `TextWriter` overloads, a callback for secondary result documents, and control over the initial context, mode and match selection.
 
 ## Contents
 
@@ -295,6 +295,7 @@ public sealed class XsltTransformer
     bool AllowDtdProcessing { get; set; }             // default false
     ResourcePolicy? ResourcePolicy { get; set; }      // see resource-policy.md
     bool DisableStreaming { get; set; }               // evaluate on a tree even for a streamable initial mode
+    bool StrictStreamability { get; set; }            // XTSE3430 for a template that is not streamable (off by default)
     TimeSpan? RegexMatchTimeout { get; set; }         // null = .NET's process-wide default
     IReadOnlySet<OutputMethod>? AllowedOutputMethods { get; set; }   // null = any method
     IReadOnlyDictionary<string, IReadOnlyList<string>>? XQueryModules { get; set; }
@@ -308,6 +309,15 @@ public sealed class XsltTransformer
 ```
 
 `TransformAsync` throws `InvalidOperationException` if no stylesheet has been loaded, and `XsltException` (`PhoenixmlDb.Xslt.Engine`) for errors in the stylesheet or during the transformation. There is no API for registering extension functions on `XsltTransformer`.
+
+### New in 2.8.0
+
+- **`StrictStreamability`** (also on `XsltTransformOptions`; default `false`): report `XTSE3430` for
+  a template rule of a streamable mode that is not guaranteed streamable, instead of running it on a
+  buffered copy of the matched subtree, which gives the same result. No effect together with
+  `DisableStreaming`. In 2.8.0 the check finds a rule with more than one instruction that reads the
+  children of the matched node; it is not the complete streamability analysis of the specification,
+  so a stylesheet it accepts may still not be guaranteed streamable.
 
 ### New in 2.7.0
 
