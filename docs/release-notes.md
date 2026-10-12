@@ -224,9 +224,11 @@ are unaffected.
 a compiler, a cache, a validator, XML Catalogs), and in 2.8.0 the engines read every schema
 through it (see [Schemas and Validation](phoenixmldb/api-reference/schemas.md)):
 
-- Schemas imported with `import schema` / `xsl:import-schema` are **compiled once and shared**
-  across queries and transformations; a changed schema file or included file is picked up on the
-  next use. Importing a 705 KB schema: 39.7 ms per query before, 1.6 ms now.
+- Schemas imported with `import schema` are **compiled once and shared** across queries; a changed
+  schema file or included file is picked up on the next use. Importing a 705 KB schema: 39.7 ms per
+  query before, 1.6 ms now. In 2.8.0 `xsl:import-schema` with `XsltTransformer`'s default schema
+  provider compiles its schemas per transformer; to share one compiled schema, give the transformer
+  an `XsdSchemaProvider` made from a `CompiledSchema` (see [Schemas and Validation](phoenixmldb/api-reference/schemas.md)).
 - **Stricter loading, check on upgrade:** a schema include or import that cannot be read fails the
   load (`XQST0059`) instead of being skipped; a schema document with a DOCTYPE is refused; schema
   text without a base URI no longer resolves relative locations against the current directory.
