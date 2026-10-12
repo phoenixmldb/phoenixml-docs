@@ -108,6 +108,10 @@ alert on the id or name, not the message.
 | 2015 | DeleteMetadataMalformedEntrySkipped | Warning |
 | 2016 | DeleteMetadataNamesEmpty | Warning |
 | 2017 | DeleteMetadataDocumentNotFound | Warning |
+| 2018 | ProposalOutcomeUnknown | Warning |
+| 2019 | ProposalNotApplied | Warning |
+| 2022 | AppendFromOwnTermRefused | Warning |
+| 2023 | CommitAdvanceFailed | Error |
 | 2090 | StaleTimeoutNowIgnored | Debug |
 | 2091 | RequestVoteReceived | Debug |
 | 2092 | VoteGranted | Debug |
@@ -119,8 +123,9 @@ the peer. A node that is shutting down doesn't report its own shutdown as a peer
 
 ### Server (3000–3099)
 
-The server startup events 3001–3007 are listed in the
-[Server Configuration reference](deployment/server-configuration.md#startup-events).
+The server startup events are listed in the
+[Server Configuration reference](deployment/server-configuration.md#startup-events). Events 3010 and
+3011 report the implicit timezone; see [Dates and Times](dates-and-times.md#startup-log).
 
 ## Metrics and traces
 

@@ -36,6 +36,12 @@ This version contains:
   [Server Mode: Requests and errors](phoenixmldb/deployment/server-mode.md#requests-and-errors).
 - **gRPC server**: error text that leads with the error code.
 
+- **UTC everywhere.** A date-time without a timezone is UTC wherever the database stores, indexes or
+  compares it; both servers run queries and stylesheets in UTC. Typed dateTime metadata, dateTime
+  index keys and API key `Expires` accept a fixed set of forms. See [Dates and Times](phoenixmldb/dates-and-times.md).
+- **The result of a write on a cluster** is one of applied, not applied, or result not known, with
+  `Raft:ProposalTimeoutMs` (default 5000). See [Cluster Mode](phoenixmldb/deployment/cluster-mode.md#the-result-of-a-write).
+
 #### Behaviour you can see
 
 With PhoenixmlDb.XQuery 2.8.0, PhoenixmlDb.Xslt 2.8.0 and PhoenixmlDb.Core 2.4.0:

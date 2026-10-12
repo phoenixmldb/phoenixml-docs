@@ -43,7 +43,7 @@ opts.Indexes
 
 ### Value Index
 
-A value index records the typed values found at a path, so equality and range lookups compare them as numbers, dates and so on rather than as text.
+A value index records the typed values found at a path, so equality and range lookups compare them as numbers and so on rather than as text. Value indexes on dates and times follow other rules; see [Dates and Times](dates-and-times.md#value-indexes-on-dates-and-times).
 
 ```csharp
 // Numeric value index on an attribute
@@ -67,7 +67,7 @@ opts.Indexes.AddValueIndex("/customer/name", XdmValueType.XdmString);
 | `XdmLong` | Large whole number ranges |
 | `XdmDecimal` | Precise decimal ranges |
 | `XdmDouble` / `XdmFloat` | Scientific calculations |
-| `Date` / `DateTime` / `Time` | Date and time ranges |
+| `Date` / `DateTime` / `Time` | Equality with a string literal of the index's type; every other comparison is a scan. See [Dates and Times](dates-and-times.md#value-indexes-on-dates-and-times) |
 | `Boolean` | True/false filtering |
 | `Duration`, `AnyUri`, `QName`, `Base64Binary`, `HexBinary` | Typed equality and ordering for the corresponding XSD type |
 

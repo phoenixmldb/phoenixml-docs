@@ -213,6 +213,8 @@ server won't start.
 | 3007 | `TransformConcurrencyLimit`: the transform concurrency limit in force, and whether it was configured or derived from the processor count |
 | 3008 | `HealthCheckFailed` (Error): a health check failed; the details are logged, not returned to the probe |
 | 3009 | `TelemetryExportEnabled`: OTLP export is on; logs the endpoint's scheme, host and port only |
+| 3010 | `ImplicitTimezone` (Information): queries and stylesheets use UTC |
+| 3011 | `ImplicitTimezoneNotUtc` (Warning): Windows only, the machine's time zone is not UTC; see [Dates and Times](../dates-and-times.md#windows) |
 
 Client errors (`4xx`) are logged at Information. Deliberate refusals, such as a schema type that
 isn't supported for validation, return `501`.
