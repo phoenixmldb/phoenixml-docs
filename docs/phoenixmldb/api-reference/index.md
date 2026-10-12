@@ -142,6 +142,9 @@ ACID transactions and concurrent access control.
 ### [XSLT API](xslt-api.md)
 XsltTransformer — stream-based transforms, result document handling, source/mode selection, and collection binding.
 
+### [Schemas and Validation](schemas.md)
+XSD schemas from XQuery and XSLT, `XsdSchemaProvider`, and the `PhoenixmlDb.Core.Schema` layer for compiling, caching and validating.
+
 ## Quick Reference
 
 ### Common Operations

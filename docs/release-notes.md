@@ -222,7 +222,7 @@ are unaffected.
 
 **The shared schema layer.** Core 2.3.0 added `PhoenixmlDb.Core.Schema` (sources, an access gate,
 a compiler, a cache, a validator, XML Catalogs), and in 2.8.0 the engines read every schema
-through it:
+through it (see [Schemas and Validation](phoenixmldb/api-reference/schemas.md)):
 
 - Schemas imported with `import schema` / `xsl:import-schema` are **compiled once and shared**
   across queries and transformations; a changed schema file or included file is picked up on the
