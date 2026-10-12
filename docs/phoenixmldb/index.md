@@ -26,5 +26,6 @@ PhoenixmlDb is a modern, cross-platform embedded XML/JSON document database for 
 - **[Transactions](transactions.md)** — ACID guarantees, MVCC, and transaction patterns
 - **[Resource Access](resource-access.md)** — What queries and stylesheets may read beyond the stored documents
 - **[XQuery Library Modules](xquery-modules.md)** — Importing library modules from files and http(s) URLs
+- **[Dates and Times](dates-and-times.md)** — UTC everywhere; accepted date-time forms, API key expiry, date value indexes
 - **[Deployment](deployment/index.md)** — Embedded, server, and cluster modes
 - **[API Reference](api-reference/index.md)** — Interfaces, classes, and patterns

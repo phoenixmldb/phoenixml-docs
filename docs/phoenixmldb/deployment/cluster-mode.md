@@ -66,6 +66,7 @@ Every setting can also come from the environment, which is often easier per node
 | `Raft:LogPath` | `<DataPath>/raft` | The Raft log's own storage environment. |
 | `Raft:ElectionTimeoutMinMs` / `MaxMs` | `150` / `300` | Randomised between the two, so they must differ. |
 | `Raft:HeartbeatIntervalMs` | `50` | Must be well under the election timeout. |
+| `Raft:ProposalTimeoutMs` | `5000` | Must be positive; the server does not start otherwise. How long a write waits to be applied on the node that took it before it is answered "result not known". |
 
 Configuration is validated at **startup**, and bad values stop the server rather than degrading
 it. Rejected: a missing `NodeId`, a node listing itself as a peer, duplicate peer ids or
@@ -118,6 +119,44 @@ authentication.
 
 Keys, scopes, rotation and the other startup checks are described in
 [Server Mode: gRPC server](server-mode.md#grpc-server).
+
+## The result of a write
+
+A write on a cluster has one of three results.
+
+| Result | Meaning | What the caller receives |
+|---|---|---|
+| Applied | The write is committed and applied on the node that took it | Success |
+| Not applied | The write did not happen and will not happen | `NotLeaderException` with the id of the leader; over gRPC `success = false` with the "not the leader" text |
+| Result not known | The entry of the write is in the log of the node and can still be applied | `WriteOutcomeUnknownException` (`LeaderId`, `Index`, `Term`); over gRPC `success = false` with an error text that begins `WRITE_OUTCOME_UNKNOWN:`; the client library throws `PhoenixmlWriteOutcomeUnknownException` |
+
+The result is "not known" when the node lost its term, shut down, met an error after it stored the
+entry, when the caller cancelled after the entry was stored, or when the write was not applied within
+`Raft:ProposalTimeoutMs`. A cancel before the entry is stored is an `OperationCanceledException` and
+stores nothing. The text for "result not known" names the index and the term of the entry and the
+leader, if one is known; the detail is in the server log (event 2018).
+
+**What a caller does:**
+
+- After "not applied": send the write to the leader that the error names. Sending it again is safe.
+- After "result not known": read first, to find whether the write happened. Do not send it again
+  without that check; a write that is sent twice can be applied twice. Requests carry no identifier
+  that lets the cluster recognise a repeat.
+- Neither the server nor the client library sends a write again. `PhoenixmlClientOptions.EnableRetry`
+  and `MaxRetries` have no effect.
+
+While a write waits, the node answers vote requests and replication requests. Log events 2018–2023
+are listed in [Logging and Telemetry](../logging.md#cluster-2000-2099).
+
+**Known limits:**
+
+- In a cluster of one node, a write whose apply step fails is answered "result not known".
+- A node that fails to apply a committed entry continues with the next entry; the other nodes apply
+  that entry. Nothing marks the node as faulty.
+- Calls of the index service and the transaction service are not replicated; they act on the node
+  that receives them.
+- A leadership transfer makes the node answer no vote request and no replication request until the
+  transfer ends or its time limit passes.
 
 ## What this does not do yet
 

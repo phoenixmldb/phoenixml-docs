@@ -148,7 +148,7 @@ Each entry in `Auth:ApiKey:Clients` describes one key:
 | `Key` | The key itself, supplied as a configuration **value** (a Kubernetes `secretKeyRef`, a Docker secret). Hashed once at startup. |
 | `Permission` | `read`, `write`, `admin` or `full` |
 | `Enabled` | Default `true`. |
-| `Expires` | Optional date and time, e.g. `2027-01-01T00:00:00Z`. |
+| `Expires` | Optional. A date-time in one of the [accepted forms](../dates-and-times.md#api-key-expiry); without a timezone it is UTC. Absent: never expires. Empty or not in an accepted form: startup stops. |
 | `ContainerPermissions` | Must be empty: per-container permissions aren't implemented yet, and startup fails if it's set. |
 
 Store the hash, not the key, wherever configuration gets committed or backed up:
