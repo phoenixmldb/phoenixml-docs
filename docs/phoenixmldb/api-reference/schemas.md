@@ -167,8 +167,9 @@ If you compile queries you didn't write, set it to the same value as
 - **A bare `<xsl:import-schema/>`**, with no namespace and no location, loads nothing but makes
   the stylesheet schema-aware. In a stylesheet with no `xsl:import-schema` at all,
   `validation="strict"` or `"type"` and `default-validation="strict"` are `XTSE1660`.
-- **`validation=`** on instructions such as `xsl:element`, `xsl:document` and `xsl:copy-of`,
-  and **`xsl:validation`** on literal result elements, are applied.
+- **`validation=`** on `xsl:document` and `xsl:copy-of` is applied wherever the result goes.
+  **`xsl:validation`** on a literal result element and `validation=` on `xsl:element` are applied
+  only when the element is written to the principal result; see [Known limits](#known-limits).
 - **Constructor functions of imported schema types** can be called (`o:size('8')`,
   `o:size#1`), and `function-available` answers for them. `cast as o:size` and
   `castable as o:size` work.
@@ -563,6 +564,11 @@ the Core layer and so to both engines. In XQuery and XSLT, a load failure is `XQ
   case.
 - **Without a pattern limit, matches are unbounded.** A pattern that backtracks catastrophically
   takes as long as the value makes it.
+- **XSLT validation in 2.8.0 (XSLT engine issues #353, #354).** An element built with
+  `xsl:validation="strict"` or `xsl:element validation="strict"` is validated only when it is
+  written to the principal result. In a variable it is not validated and has no type annotation,
+  so `instance of schema-element(...)` and `element(*, T)` tests on it are false. A validation
+  failure is reported with the code `XQDY0027`, not the XSLT codes `XTTE1510` to `XTTE1555`.
 - **No network gate is included.** The layer ships `SuppliedOnly` and `LocalFiles` only.
 - **The `LocalFiles` roots must be writable only by the operator.** Anyone who can write inside a
   root can choose what a schema is compiled from.
