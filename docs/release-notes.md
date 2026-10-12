@@ -519,20 +519,16 @@ concurrent namespace interning).
 Figures in this period predate the 2026-09-04 harness correction. Each version's notes are in
 the [Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt/blob/main/RELEASES.md) and [XQuery](https://github.com/phoenixmldb/phoenixmldb-xquery/blob/main/RELEASES.md) repos.
 
-## Deprecation Policy
-
-- Major versions supported for 3 years
-- Minor versions supported for 1 year
-- Security patches for supported versions
-- Migration guides provided for breaking changes
-
 ## Contributing
 
-We welcome contributions! See our [Contributing Guide](https://github.com/endpointsystems/phoenixml/blob/main/CONTRIBUTING.md) for details.
+Contributions to the open-source XQuery and XSLT engines are welcome. See the
+[contributing guide](https://github.com/phoenixmldb/.github/blob/main/CONTRIBUTING.md).
 
 ## License
 
-PhoenixmlDb is licensed under the Apache 2.0 License.
+PhoenixmlDb.Core, PhoenixmlDb.XQuery and PhoenixmlDb.Xslt, with their command-line tools and MCP
+servers, are licensed under the Apache License 2.0. The PhoenixmlDb database engine is licensed under
+the PhoenixmlDb Developer License Agreement from Endpoint Systems.
 
 ## Acknowledgments
 
