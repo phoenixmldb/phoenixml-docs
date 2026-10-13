@@ -43,42 +43,143 @@ opts.Indexes
 
 ### Value Index
 
-A value index records the typed values found at a path, so equality and range lookups compare them as numbers and so on rather than as text. Value indexes on dates and times follow other rules; see [Dates and Times](dates-and-times.md#value-indexes-on-dates-and-times).
+A value index records the typed values found at a path.
 
 ```csharp
 // Numeric value index on an attribute
 opts.Indexes.AddValueIndex("/catalog/product/@price", XdmValueType.XdmDecimal);
 
 // Date value index
-opts.Indexes.AddValueIndex("/order/orderDate", XdmValueType.Date);
+opts.Indexes.AddValueIndex("/order/@orderDate", XdmValueType.Date);
 
 // String value index
-opts.Indexes.AddValueIndex("/customer/name", XdmValueType.XdmString);
+opts.Indexes.AddValueIndex("/customer/@name", XdmValueType.XdmString);
 ```
 
 `AddValueIndex` also takes an optional `collation` argument.
 
-**Supported value types** (`PhoenixmlDb.Core.XdmValueType`):
+**Value types** (`PhoenixmlDb.Core.XdmValueType`): `XdmString`, `XdmInteger`, `XdmLong`,
+`XdmDecimal`, `XdmDouble`, `XdmFloat`, `Boolean`, `Date`, `DateTime`, `Time`, `Duration`, `AnyUri`,
+`QName`, `Base64Binary`, `HexBinary`. Which comparisons each one answers is in the table below.
 
-| XdmValueType | Use Case |
-|--------------|----------|
-| `XdmString` | Text comparisons, sorting |
-| `XdmInteger` | Whole number ranges |
-| `XdmLong` | Large whole number ranges |
-| `XdmDecimal` | Precise decimal ranges |
-| `XdmDouble` / `XdmFloat` | Scientific calculations |
-| `Date` / `DateTime` / `Time` | Equality with a string literal of the index's type; every other comparison is a scan. See [Dates and Times](dates-and-times.md#value-indexes-on-dates-and-times) |
-| `Boolean` | True/false filtering |
-| `Duration`, `AnyUri`, `QName`, `Base64Binary`, `HexBinary` | Typed equality and ordering for the corresponding XSD type |
+A value index changes how fast a query answers, never the answer: the same items, in the same order,
+or the same error, as on a container with no index. A container query is evaluated once per
+document; with a value index, the index names the documents that can hold a match and the query is
+evaluated on those only.
 
-**Queries that use it:** only one shape, today. The index must be declared on an attribute at the end of a path of plain child steps (`/catalog/product/@price`, not `//product/@price` or `/catalog/*/@price`), and the query must be an absolute path to those same elements with a single predicate comparing that attribute to a literal or a variable, using `=`, `eq`, `<`, `<=`, `>`, `>=`, `lt`, `le`, `gt` or `ge`:
+**Queries that use it.** An index declared on `/order/@total` is used by a query that is a path from
+the document root to `order` with one predicate on its last step, comparing `@total` with a literal or
+a variable:
 
 ```xquery
-/catalog/product[@price > 100]
-/catalog/product[@price = $price]
+/order[@total = 100]
+/order[100 <= @total]
+declare variable $v external; /order[@total = $v]
+let $v := xs:decimal('99.50') return /order[@total = $v]
+/order[@total = 100] ! string(@id)
+/order[@total = 100]/string(@id)
 ```
 
-Anything else, including a value index on element content such as `/order/orderDate`, a `//` step, a second predicate, `order by`, or a path that starts from `collection()`, is evaluated by scanning. A value index on element content is still maintained, and `IndexManager.QueryByValue` can read it directly; XQuery does not use it yet.
+- The steps are child steps with element names: no `//`, no `*`, no name in a namespace.
+- The operator is `=`, `<`, `<=`, `>` or `>=`; or `eq` with a string literal.
+- The path may be followed by `!` or by further steps, and may stand under `let` clauses and prolog
+  variables. Every variable and `let` of the query has a constant value: a literal; a sequence,
+  cast, arithmetic operation or concatenation of constants; an `xs:` constructor call on constants;
+  another constant variable of the query; or it is external.
+- Function declarations are allowed.
+- A query that imports a module uses the index when the comparand is a literal, the query has no
+  variable and no `let`, and every variable the imported modules declare has a constant value.
+
+| Index type | Comparisons that use the index |
+|---|---|
+| `xs:integer`, `xs:long`, `xs:decimal`, `xs:double`, `xs:float` | `=` with a number or with text; `<`, `<=`, `>`, `>=` with a number |
+| `xs:boolean` | `=` with a boolean or with text |
+| `xs:string` | `=` with text |
+| `xs:dateTime`, `xs:date`, `xs:time` | `=` with a string literal that is a value of the type ([Dates and Times](dates-and-times.md#value-indexes-on-dates-and-times)) |
+| `xs:duration`, `xs:anyURI`, `xs:QName`, `xs:hexBinary`, `xs:base64Binary` | none |
+
+A number is an `xs:integer`, `xs:decimal`, `xs:double` or `xs:float` value; text is an `xs:string`
+or `xs:untypedAtomic` value; a variable is decided by the value it holds when the query runs. Whether
+the index is used for a query it can answer is the planner's choice by cost: a comparison that selects
+a large part of the container is evaluated on every document.
+
+**Evaluated on every document**, with the answer of a container without the index:
+
+- `count(/order[@total = 100])`, `exists(…)`, `if (…) then … else …` and any other expression around
+  the path;
+- `for $o in /order[@total = 100] return …`, with or without `order by`;
+- a query with `fn:collection()` and an aggregate or `order by`;
+- two predicates, `and` / `or`, a function of the attribute (`starts-with(@id, 'a')`), a predicate on
+  a step that is not the last, a path that continues with `/` and a name after the predicate
+  (`/order[@total = 100]/item`);
+- `eq`, `lt`, `le`, `gt`, `ge` with a number or a variable; `!=`, `ne`;
+- a typed constructor, arithmetic or a function call as the comparand (`@total = xs:decimal('100')`,
+  `@flag = true()`);
+- a name in a namespace, `*:order`, a query with `declare default element namespace`;
+- `declare default collation` with any collation but the Unicode codepoint collation, also on an
+  index declared with a collation;
+- `<`, `<=`, `>`, `>=` on a string index, and with text on any index;
+- a comparand that is a sequence, the empty sequence, a node, an `xs:anyURI`, a date, time or
+  duration, or a CLR value of a type the XQuery library does not compare as a number (`Int16`,
+  `Char`, `Uri`, `byte[]`);
+- a number or boolean comparand while some document holds, at the indexed path, text that is not a
+  number (not a boolean on a boolean index): the comparison raises `FORG0001`, with or without the
+  index. An equality with text still uses the index;
+- a variable or `let` whose value is not a constant, used in the comparison or not: a function call
+  (`uri-collection()`, `collection()`, `doc()`, `current-dateTime()`, a declared or imported
+  function), a path, a variable of an imported module, an external variable with a default that is
+  not a constant;
+- a query that declares the prefix `xs`, or a context item (`declare context item`);
+- any query on a container whose indexes are stale (below).
+
+A query that used an index is also evaluated on the first document of the container. An error the
+query raises on every document (`let $v := xs:integer('abc')`) is raised with an index as without.
+
+**Numeric and boolean indexes.** A numeric index holds every attribute value the XQuery library reads
+as a number in a comparison: white space around it, a sign, a decimal point, an exponent, `INF`,
+`-INF`, `NaN`. `1.5`, `+1.5`, `1.50`, `01.5` and `15E-1` are one value; `-0` and `0` are one value;
+`NaN` equals no value and is in no range. A comparison of an attribute with a number also reads these
+forms as numbers, with a value index and without one: a thousands separator (`1,000` is 1000),
+`Infinity` and `-Infinity`, a number in parentheses (`(5)` is -5) and the generic currency sign
+U+00A4 (`¤5` is 5). `$5` and `+INF` are not numbers. The five numeric index types hold the same values
+and answer the same comparisons; values are compared as `xs:double`. A boolean index holds `true`,
+`1`, `false` and `0`, with white space around them. `/order[@total = '1.50']` compares text: it
+returns the documents whose attribute is written `1.50`.
+
+**Writes.** A write is never refused because of a value index. A string longer than an index key is
+stored and found by `=`. A value that is not of the index's type is stored; while a numeric or boolean
+index covers such a value, comparisons with a number or boolean on that path are evaluated on every
+document. The empty string is indexed in a string index.
+
+**Result order.** The answer of a query that used an index is in the order of the answer without the
+index: documents in the order of their names (the bytes of the UTF-8 name), and within a document in
+document order. `QueryMetadataAsync` and `QueryMetadataRangeAsync` on a name with a metadata index
+return documents in the order they return them without the index.
+
+#### Indexes created by an earlier build
+
+Value indexes have a key format, recorded per container; this build writes format 2. A container with
+a value index created by an earlier build has format 1. On such a container:
+
+- queries are evaluated on every document, and answer as they do without an index;
+- the container's metadata and full-text indexes are used as before;
+- writes are accepted and indexed;
+- `DocumentDatabase.ContainersWithStaleIndexes()` lists the container;
+- opening the database logs warning 1025 `ValueIndexesOutdated` once per container, naming the
+  rebuild operations.
+
+A rebuild writes the container's indexes in the current format; its queries then use them. A rebuild
+holds the database write lock, so writes wait until it ends.
+
+| Host | Rebuild |
+|---|---|
+| gRPC server | at startup, in the background, for every container with stale indexes; or `IndexService.RebuildIndex` |
+| EPS REST server | `POST /api/containers/{containerId}/indexes/rebuild` |
+| Embedded | `DocumentDatabase.RebuildIndexesAsync(containerName)`, or `RebuildStaleIndexesAsync()` for all |
+
+A container without a value index is not affected. This build writes container records in record
+format 5; an earlier build that reads a format 5 record fails with
+`Unsupported container record version: 5`.
 
 ### Full-Text Index
 

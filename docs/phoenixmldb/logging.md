@@ -77,6 +77,7 @@ alert on the id or name, not the message.
 | 1019 | MigrationInterruptedRunRecovered | Warning |
 | 1020 | MigrationCleanupFailed | Warning |
 | 1021 | MigrationDirectorySyncFailed | Warning |
+| 1025 | ValueIndexesOutdated | Warning |
 
 ### Indexing (1100–1199)
 
