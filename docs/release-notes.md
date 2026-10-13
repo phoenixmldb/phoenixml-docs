@@ -39,6 +39,9 @@ This version contains:
 - **UTC everywhere.** A date-time without a timezone is UTC wherever the database stores, indexes or
   compares it; both servers run queries and stylesheets in UTC. Typed dateTime metadata, dateTime
   index keys and API key `Expires` accept a fixed set of forms. See [Dates and Times](phoenixmldb/dates-and-times.md).
+- **Value indexes** change how fast a query answers, never the answer, and are used only by the
+  query shapes listed in [Indexing](phoenixmldb/indexing.md#value-index). A value index created by an
+  earlier build is not used until it is rebuilt (warning 1025).
 - **The result of a write on a cluster** is one of applied, not applied, or result not known, with
   `Raft:ProposalTimeoutMs` (default 5000). See [Cluster Mode](phoenixmldb/deployment/cluster-mode.md#the-result-of-a-write).
 
