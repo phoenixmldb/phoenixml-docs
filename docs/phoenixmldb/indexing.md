@@ -103,6 +103,14 @@ or `xs:untypedAtomic` value; a variable is decided by the value it holds when th
 the index is used for a query it can answer is the planner's choice by cost: a comparison that selects
 a large part of the container is evaluated on every document.
 
+An index on element content, such as `/order/orderDate`, is maintained on every write, but no XQuery
+query uses it: the planner offers a value index only for a predicate on an attribute of the last step
+of the path, and a query that compares element content is answered by a scan. An embedded host that
+holds the `IndexManager` (`PhoenixmlDb.Indexing`) can read any value index directly with
+`IndexManager.QueryByValue(tx, container, pathPattern, value)`, which returns node ids; the two
+servers do not expose it. On a container whose value indexes are in an earlier key format it throws
+`InvalidOperationException` naming `DocumentDatabase.RebuildIndexesAsync`.
+
 **Evaluated on every document**, with the answer of a container without the index:
 
 - `count(/order[@total = 100])`, `exists(…)`, `if (…) then … else …` and any other expression around
