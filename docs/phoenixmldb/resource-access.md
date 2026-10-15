@@ -293,6 +293,10 @@ A stylesheet with no `xml:base` can import or include a module by an absolute lo
   per-document evaluations and everything it loads).
 - http(s) locations on allowed origins keep working. Stored documents are not files.
 - With no http(s) module, nothing in this section applies.
+- A module that a `use-when` excludes (on its `xsl:import` or `xsl:include`, or on the root of the
+  module that names it) is not read. An http(s) module excluded that way does not count.
+- Under an `xml:base`, a relative `href` names the module under that base. Nothing else is read for
+  it.
 - `ResourceAccessPolicy.Unrestricted` is not held to this rule.
 
 A stylesheet or query that needs both a library from an http(s) origin and files can fetch the
