@@ -88,10 +88,10 @@ All settings are under `PhoenixmlDb:ResourceAccess`. Each is also a property of 
 |---|---|---|
 | `AllowedFileRoots` | empty | Absolute paths of existing directories. A query or stylesheet may read their files, at any depth. Nothing is writable. |
 | `AllowedHttpOrigins` | empty | Origins a query or stylesheet may fetch from: `http` or `https`, `scheme://host[:port]`, with no path, query, fragment or user info. Scheme, host and port must all match. |
-| `MaxModuleDepth` | `32` | How many imports or loads deep a module may be, counted from the query (a module the query imports is 1). Also bounds chains of schema documents. |
-| `MaxModules` | `256` | 1–1024. How many distinct module files and schema documents one query brings in. |
+| `MaxModuleDepth` | `32` | How many imports or loads deep a module may be, counted from the query (a module the query imports is 1). Also bounds chains of schema documents a query imports. Not applied to a transformation: stylesheet modules and the schema documents of `xsl:import-schema` are not counted by depth. |
+| `MaxModules` | `256` | 1–1024. How many distinct module files and schema documents one query or transformation brings in. |
 | `MaxModuleBytes` | `4194304` (4 MiB) | 1–268435456. Largest module file, schema document, or external entity fetched over http(s). |
-| `MaxTotalModuleBytes` | `33554432` (32 MiB) | `MaxModuleBytes`–4294967296. Module and schema text one query brings in altogether. |
+| `MaxTotalModuleBytes` | `33554432` (32 MiB) | `MaxModuleBytes`–4294967296. Module and schema text one query or transformation brings in altogether. |
 | `MaxTextResourceBytes` | `67108864` (64 MiB) | 1–1073741824. Largest file read by `fn:unparsed-text`, `fn:unparsed-text-lines`, `fn:unparsed-text-available` and `fn:json-doc`. For a transformation, also the largest document read. |
 | `MaxTotalTextResourceBytes` | `268435456` (256 MiB) | `MaxTextResourceBytes`–68719476736. Text one query or transformation reads altogether. Each distinct file counts once. |
 
@@ -189,7 +189,9 @@ Result: `EUR 12`, `EUR 24`, `EUR 36`, `EUR 48`, `EUR 60`.
   `collection()`. A function that uses `/` with no argument is `XPDY0002`.
 - A query whose answer depends on one document at a time runs once per document.
 - A query that reaches `collection()`, in its own text or inside an imported module function it
-  calls, runs once over the whole container.
+  calls, runs once over the whole container, except a query whose every answer depends on one
+  document at a time (`collection()/book[price > 15]/title`), which runs once per document. See
+  [Once per document or once over the container](documents-and-storage.md#once-per-document-or-once-over-the-container).
 - A module that is only loaded at run time with `fn:load-xquery-module` is not looked into when the
   engine decides how to run the query. `count(collection())` inside a loaded function answers once
   per document. Read the collection in the query text to get one answer.

@@ -98,7 +98,7 @@ text that comes from users.
 | `import schema … at`, and the documents a schema document names | Files inside `AllowedFileRoots`; URLs on `AllowedHttpOrigins`. |
 | `fn:unparsed-text`, `fn:unparsed-text-lines`, `fn:unparsed-text-available`, `fn:json-doc` | Files inside `AllowedFileRoots`. An http(s) reference is `FOUT1170` (`false` from the availability function). |
 | External entities and DTDs in `fn:parse-xml` input | Files inside `AllowedFileRoots`; URLs on `AllowedHttpOrigins`. |
-| `fn:transform` | Not available: `FOXT0004`. |
+| `fn:transform` | Not available: `FOXT0004`. See [fn:transform](#fn-transform). |
 
 A module is held to the same rules as the query that brings it in.
 
@@ -129,7 +129,7 @@ A stylesheet reads what a query may: files inside `AllowedFileRoots` and URLs on
 
 | Construct | Available |
 |---|---|
-| `xsl:import`, `xsl:include` | Yes; file or http(s). Modules count against `MaxModules`, `MaxModuleBytes`, `MaxTotalModuleBytes`. |
+| `xsl:import`, `xsl:include` | Yes; file or http(s). Modules count against `MaxModules`, `MaxModuleBytes`, `MaxTotalModuleBytes`; `MaxModuleDepth` does not apply. |
 | `doc()`, `document()`, `doc-available()` | Yes; file or http(s). |
 | `unparsed-text()`, `unparsed-text-lines()`, `unparsed-text-available()` | Yes. |
 | `json-doc()` | Yes; file or http(s). |
@@ -143,6 +143,8 @@ A stylesheet reads what a query may: files inside `AllowedFileRoots` and URLs on
 - A registered stylesheet is checked again at every transformation, with its modules as they are then.
 - A stylesheet that reads a location outside the allowlist at run time registers, and is refused
   when it runs.
+- `xsi:schemaLocation` and `xsi:noNamespaceSchemaLocation` in a document a stylesheet validates are
+  not read.
 
 ### Not available in stylesheets
 
@@ -218,6 +220,51 @@ first). Example with root 0 = `/srv/xsl`:
   names that file under that allowed root.
 - `file:/x` (one slash), `file://localhost/x`, UNC paths, and schemes other than `file` and
   http(s) name no module (`XTSE0165`). Write `file:///…` or a relative href.
+- Inside a module, `doc('file:/abs/x.xml')` and `unparsed-text('file:/abs/x.txt')` are answered like
+  any location that is not available: HTTP `400` with `FODC0002` / `FOUT1170`.
+
+## fn:transform
+
+No nested transformation runs under a policy made with `ResourceAccessPolicy.Create` or under
+`DenyAll`, in a query or in a stylesheet:
+
+| Where | Answer |
+|---|---|
+| A query (embedded, gRPC, REST), any call form | `FOXT0004: fn:transform is disabled by the resource access policy (PhoenixmlDb:ResourceAccess): the nested transformation would run outside it.` |
+| A stylesheet on the REST server | HTTP `400` ([Not available in stylesheets](#not-available-in-stylesheets)) |
+| A stylesheet run by an embedded application with the policy object of `ResourceAccessPolicy.ToStylesheetResourcePolicy` (direct call, `transform#1`, partial application, a variable, in an imported module) | `FOXT0001: fn:transform is not available: the host's resource policy does not allow it` |
+| `function-available('transform')`, also in `use-when` | `false` |
+| `function-lookup(xs:QName('fn:transform'), 1)` in a stylesheet | The empty sequence |
+
+The policy objects the database gives the XQuery and XSLT libraries have `AllowTransformFunction`
+off. Under `ResourceAccessPolicy.Unrestricted` the database builds no policy object and
+`fn:transform` is not restricted.
+
+## Stylesheets in embedded applications
+
+These rules hold for an application that runs a stylesheet with the database's stylesheet policy
+(`ResourceAccessPolicy.ToStylesheetResourcePolicy`).
+
+- **`xsl:import-schema` with a `schema-location`.** The schema document, and each document it
+  includes or imports, is read once, inside `AllowedFileRoots` / `AllowedHttpOrigins`. A location
+  that is not supplied is `XTSE0165: Cannot find stylesheet module '<location>'`. A relative
+  location with no base is `XTSE0165 … is relative and the stylesheet has no base URI to resolve it
+  against`. The REST server refuses this construct ([Not available in stylesheets](#not-available-in-stylesheets)).
+- **Limits.** Schema documents count, with the stylesheet modules, against `MaxModules`,
+  `MaxModuleBytes` and `MaxTotalModuleBytes`. `MaxModuleDepth` does not apply to them or to
+  stylesheet modules.
+- `xsi:schemaLocation` and `xsi:noNamespaceSchemaLocation` in a document a stylesheet validates are
+  not read.
+- **The stylesheet resolver.** The `ResourceResolver` of `ResourceAccessPolicy.ToStylesheetResourcePolicy`
+  answers a stylesheet module that is not supplied (not allowed, not there, not readable, past a
+  module limit, or a relative reference with no base) with
+  `PhoenixmlDb.XQuery.Functions.XQueryException`: `XTSE0165` in its `ErrorCode` and the engine's
+  text as its message. A document that is not supplied is answered the same way with `FODC0002`,
+  and text with `FOUT1170`. A module past a module limit is refused each time it is asked for. A
+  caller of `XsltTransformer` sees that exception as the error of the load.
+- **Implicit timezone.** An application that runs its own `XsltTransformer` with this policy sets
+  `ImplicitTimezone` itself, to `DocumentDatabase.ImplicitTimezone`. Without it the library takes
+  the zone of the host. See [Dates and Times](dates-and-times.md).
 
 ## Relative references with no base
 
@@ -246,6 +293,10 @@ A stylesheet with no `xml:base` can import or include a module by an absolute lo
   per-document evaluations and everything it loads).
 - http(s) locations on allowed origins keep working. Stored documents are not files.
 - With no http(s) module, nothing in this section applies.
+- A module that a `use-when` excludes (on its `xsl:import` or `xsl:include`, or on the root of the
+  module that names it) is not read. An http(s) module excluded that way does not count.
+- Under an `xml:base`, a relative `href` names the module under that base. Nothing else is read for
+  it.
 - `ResourceAccessPolicy.Unrestricted` is not held to this rule.
 
 A stylesheet or query that needs both a library from an http(s) origin and files can fetch the
@@ -373,16 +424,10 @@ Neither bound is a setting.
 
 ## Known limits
 
-- With PhoenixmlDb.Xslt 2.8.0, a module named by an `xsl:import` is read and checked even when a
-  `use-when` excludes the import or the module that names it. An `xsl:include` whose `use-when` can
-  already be judged is not read.
-- With an `xml:base` on an importing module, a module of the same name beside the importing module
-  is also read and checked, and so are the modules it names. A stylesheet can fail because of them.
-  The module compiled is the one the `xml:base` names.
-- One-slash `file:/` locations inside a module (`doc('file:/abs/x.xml')`,
-  `unparsed-text('file:/abs/x.txt')`, `xml:base='file:/one/slash/'` on `xsl:import`) and a
-  malformed `xml:base` such as `http://[not-a-host/` answer HTTP `500`, detail `Invalid URI: …`.
-  The same in the stylesheet of the request is a `400`. Write `file:///`.
+- Inside a module, an `xml:base` that is a one-slash `file:/` location (`xml:base='file:/one/slash/'`
+  on `xsl:import`) or is not a URI (`http://[not-a-host/`, on `xsl:import` or on a literal result
+  element) answers HTTP `500`, detail `Invalid URI: …`. The same in the stylesheet of the request
+  is a `400`. Write `file:///`.
 - The two-argument `unparsed-text-available($uri, $encoding)` answers from whether the resource is
   readable; it does not test the encoding.
 - `xsl:use-package` is not offered.

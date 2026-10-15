@@ -78,6 +78,18 @@ alert on the id or name, not the message.
 | 1020 | MigrationCleanupFailed | Warning |
 | 1021 | MigrationDirectorySyncFailed | Warning |
 | 1025 | ValueIndexesOutdated | Warning |
+| 1026 | UnknownQueryAstNodeType | Warning |
+| 1027 | UnknownPlanOperatorType | Warning |
+
+Events 1026 and 1027 occur with a `PhoenixmlDb.XQuery` library of another version than the one the
+database is pinned to, when a type in a query or a query plan is unknown to the database. Each event
+is logged one time for each type in a process. Neither event occurs with the pinned version
+([Installation](../getting-started/installation.md)).
+
+| Event | When | Effect |
+|---|---|---|
+| 1026 | A query holds a node of a type that this build does not know | The query is evaluated once over the whole container; a query that reads the context item fails |
+| 1027 | A query plan holds an operator of a type that this build does not know | An index lookup beneath that operator is not found; the query scans every document and gives the same answer |
 
 ### Indexing (1100–1199)
 

@@ -14,11 +14,13 @@ mean another zone. There is no time-zone setting.
 |---|---|---|
 | Typed dateTime metadata, value-index keys, JSON index keys | UTC | UTC |
 | API key `Expires` | UTC | not applicable |
-| Comparison in a query or stylesheet (`implicit-timezone()`, `current-dateTime()`, comparing a value that has a timezone with one that has not) | UTC | the zone of the host process ([below](#embedded-engine-in-a-host-that-is-not-in-utc)) |
+| Comparison in a query or stylesheet (`implicit-timezone()`, `current-dateTime()`, comparing a value that has a timezone with one that has not) | UTC | UTC |
 
-In both servers `implicit-timezone()` is `PT0S`, and
+In both servers and in the embedded engine `implicit-timezone()` is `PT0S`, and
 `xs:dateTime('1996-12-12T13:13:00') < xs:dateTime('1996-12-12T13:13:00-02:00')` is `true`, whatever
-the time zone of the machine.
+the time zone of the machine or of the host process. The engine gives UTC to every query engine and
+XSLT transformer it makes (`DocumentDatabase.ImplicitTimezone`). A stylesheet's static expressions
+(`use-when`, static parameters and variables) are in UTC too.
 
 A server process runs in UTC: it sets the `TZ` environment variable of its own process to `UTC` at
 startup. Console log timestamps, when turned on without `UseUtcTimestamp`, are UTC. A configuration key
@@ -74,7 +76,7 @@ server):
 | Event | Level | Text |
 |---|---|---|
 | 3010 `ImplicitTimezone` | Information | `The implicit timezone of queries and stylesheets is UTC.` |
-| 3011 `ImplicitTimezoneNotUtc` | Warning | Windows only, when the machine's time zone is not UTC ([below](#windows)) |
+| 3011 `ImplicitTimezoneNotUtc` | Warning | Windows only, when the machine's time zone is not UTC ([below](#windows)): `The machine's time zone is <zone>, not UTC, and on this platform a process cannot be given its own time zone. Queries and stylesheets use UTC; times taken from the local clock, such as console log timestamps without UseUtcTimestamp, are in the machine's zone. Set the machine's time zone to UTC.` |
 
 For each API key with an expiry still ahead, one Information line gives the instant in UTC, the entry
 and its Id, for example
@@ -117,25 +119,34 @@ does not change it.
 
 ## Embedded engine in a host that is not in UTC
 
-The embedded engine does not change the time zone of its host process. In a host that is not in UTC,
-what the engine stores and indexes is UTC, and a comparison in a query reads a date-time without a
-timezone in the host's zone. With rows a `2024-01-15T12:00:00` and b `2024-01-15T12:00:00Z`, in a host
-in America/New_York:
+The embedded engine does not change the time zone of its host process. Its queries are in UTC all
+the same. With rows a `2024-01-15T12:00:00` and b `2024-01-15T12:00:00Z`, in a host in
+America/New_York or Pacific/Kiritimati:
 
-| | Answer in the host | Answer in a UTC process |
-|---|---|---|
-| `/e[@t = xs:dateTime('2024-01-15T12:00:00')]` | a | a, b |
-| `/e[@t = xs:dateTime('2024-01-15T12:00:00Z')]` | b | a, b |
-| metadata query for `2024-01-15T12:00:00` | a, b | a, b |
+| | Answer |
+|---|---|
+| `/e[@t = xs:dateTime('2024-01-15T12:00:00')]` | a, b |
+| `/e[@t = xs:dateTime('2024-01-15T12:00:00Z')]` | a, b |
+| metadata query for `2024-01-15T12:00:00` | a, b |
+| `implicit-timezone()`, the timezone of `current-dateTime()`, `current-date()`, `current-time()` | `PT0S` |
+| `order by` and `max` over date-times with and without a timezone | by instant, no timezone read as UTC |
 
-Run the host in UTC (`TZ=UTC`), or write date-times with a timezone.
+A query gives the same answer in such a host as in a UTC process, whether it is evaluated once per
+document or once over the container ([Documents & Storage](documents-and-storage.md#once-per-document-or-once-over-the-container)).
+
+An application that runs its own `XsltTransformer` with the database's stylesheet policy sets
+`ImplicitTimezone` itself, to `DocumentDatabase.ImplicitTimezone`. Without it the library takes the
+zone of the host.
 
 ## Windows
 
 On Windows a process cannot set its own time zone. A server on a Windows machine whose time zone is
-UTC logs event 3010. On a machine in another zone it logs warning 3011 and starts; queries and
-stylesheets then compare a date-time without a timezone in the machine's zone. What is stored, indexed
-and read from configuration is UTC on Windows as elsewhere. Set the machine's time zone to UTC.
+UTC logs event 3010. On a machine in another zone it logs warning 3011 and starts. Queries and
+stylesheets are in UTC there as elsewhere: the engine gives each query engine and transformer UTC as
+its implicit timezone, whatever the zone of the process. What is stored, indexed and read from
+configuration is UTC on Windows as elsewhere. Times the process takes from the local clock, such as
+console log timestamps without `UseUtcTimestamp`, are in the machine's zone. Set the machine's time
+zone to UTC.
 
 See also: [Metadata](metadata.md) · [Indexing](indexing.md) ·
 [Server Mode](deployment/server-mode.md) · [Logging and Telemetry](logging.md)

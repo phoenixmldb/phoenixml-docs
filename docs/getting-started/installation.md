@@ -24,9 +24,9 @@ packages. The database is built against these versions:
 
 | Package | Version |
 |---|---|
-| `PhoenixmlDb.Core` | 2.4.0 |
-| `PhoenixmlDb.XQuery` | 2.8.0 |
-| `PhoenixmlDb.Xslt` | 2.8.0 |
+| `PhoenixmlDb.Core` | 2.5.0 |
+| `PhoenixmlDb.XQuery` | 2.9.0 |
+| `PhoenixmlDb.Xslt` | 2.9.0 |
 | `LightningDB` (LMDB 1.0.1) | 0.23.1 |
 
 For code that uses `PhoenixmlDb.Core` directly, `NodeReader` takes a string-value resolver:

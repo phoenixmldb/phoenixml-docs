@@ -26,7 +26,7 @@ This version contains:
   507 bytes in UTF-8. See [Documents & Storage: The name rule](phoenixmldb/documents-and-storage.md#the-name-rule).
 - **LMDB 1.0.1 storage** (LightningDB 0.23.1), with detection of databases in the LMDB 0.9 format
   and the `PhoenixmlDb.Migrate` tool. See [Upgrading to LMDB 1.0](phoenixmldb/deployment/lmdb-upgrade.md).
-- **Libraries**: PhoenixmlDb.Core 2.4.0, PhoenixmlDb.XQuery 2.8.0, PhoenixmlDb.Xslt 2.8.0. See
+- **Libraries**: PhoenixmlDb.Core 2.5.0, PhoenixmlDb.XQuery 2.9.0, PhoenixmlDb.Xslt 2.9.0. See
   [Installation](getting-started/installation.md).
 - **Server configuration** under one root, `PhoenixmlDb:*`, validated at startup, with a startup
   summary of the effective configuration. See
@@ -37,7 +37,7 @@ This version contains:
 - **gRPC server**: error text that leads with the error code.
 
 - **UTC everywhere.** A date-time without a timezone is UTC wherever the database stores, indexes or
-  compares it; both servers run queries and stylesheets in UTC. Typed dateTime metadata, dateTime
+  compares it; both servers and the embedded engine run queries and stylesheets in UTC. Typed dateTime metadata, dateTime
   index keys and API key `Expires` accept a fixed set of forms. See [Dates and Times](phoenixmldb/dates-and-times.md).
 - **Value indexes** change how fast a query answers, never the answer, and are used only by the
   query shapes listed in [Indexing](phoenixmldb/indexing.md#value-index). A value index created by an
@@ -47,10 +47,20 @@ This version contains:
 
 #### Behaviour you can see
 
-With PhoenixmlDb.XQuery 2.8.0, PhoenixmlDb.Xslt 2.8.0 and PhoenixmlDb.Core 2.4.0:
+With PhoenixmlDb.XQuery 2.9.0, PhoenixmlDb.Xslt 2.9.0 and PhoenixmlDb.Core 2.5.0:
 
 | Area | Behaviour |
 |---|---|
+| Implicit timezone of a query or stylesheet | UTC on every path, embedded included. See [Dates and Times](phoenixmldb/dates-and-times.md). |
+| `fn:transform` in a stylesheet run with the database's stylesheet policy | `FOXT0001: fn:transform is not available: the host's resource policy does not allow it`; `function-available('transform')` is `false`. See [Resource Access: fn:transform](phoenixmldb/resource-access.md#fn-transform). |
+| The XSLT processor | Schema-aware: `system-property('xsl:is-schema-aware')` is `yes`; `xsl:import-schema` with an inline schema compiles it, and `validation=` / `type=` validate against the schemas imported. `validation=` and `type=` are not `XTSE1660`. |
+| `xsl:import-schema` with a `schema-location` (embedded use of the database's stylesheet policy; the REST server refuses it) | The schema document, and each document it includes or imports, is read once, inside `AllowedFileRoots` / `AllowedHttpOrigins`. Schema documents count, with the stylesheet modules, against `MaxModules`, `MaxModuleBytes` and `MaxTotalModuleBytes`; `MaxModuleDepth` does not apply to them or to stylesheet modules. See [Resource Access: Stylesheets in embedded applications](phoenixmldb/resource-access.md#stylesheets-in-embedded-applications). |
+| `xsi:schemaLocation` / `xsi:noNamespaceSchemaLocation` in a document a stylesheet validates | Not read |
+| An `xsl:import` / `xsl:include` that a `use-when` excludes, and the modules named by a module whose root `use-when` excludes it | Not read, not checked, not counted against the module limits |
+| A relative `href` under an `xml:base` in an imported module | Only the module under that base is read |
+| `doc('file:/abs/x.xml')`, `unparsed-text('file:/abs/x.txt')` inside a stylesheet module | Answered like any location that is not available: HTTP `400` with `FODC0002` / `FOUT1170` |
+| `doc('file:/x')` in a query | Asks for the document `file:///x`; a document stored under the name `file:/x` is found by its document URI |
+| `validate type T { e }` with a simple type `T` and content valid against it | The element is valid; its typed value is an instance of `T` |
 | `validate` in a query | Returns typed nodes: atomization, comparisons, arithmetic, `instance of element(*, T)`, `schema-element()` and `attribute(*, T)` follow the schema type. Stored documents stay untyped; validate in the query to get typed values. |
 | Atomizing a validated element with element-only content | `FOTY0012` (`string()` works) |
 | `validate strict` of an element with no declaration, including with no schema import | `XQDY0084` |
@@ -69,10 +79,12 @@ With PhoenixmlDb.XQuery 2.8.0, PhoenixmlDb.Xslt 2.8.0 and PhoenixmlDb.Core 2.4.0
 | `import schema` inside a library module | `XQST0009` |
 | An unavailable stylesheet module | `XTSE0165: Cannot find stylesheet module '<href>'` |
 
-For code that calls the engine's stylesheet resolver directly: a stylesheet module that is not
-supplied is answered with `PhoenixmlDb.Storage.Security.StylesheetModuleRefusedException` (an
-`UnauthorizedAccessException` that carries the engine's error); a relative module reference with no
-base is answered with null.
+For code that calls the engine's stylesheet resolver directly (the `ResourceResolver` of
+`ResourceAccessPolicy.ToStylesheetResourcePolicy`): a stylesheet module that is not supplied (not
+allowed, not there, not readable, past a module limit, or a relative reference with no base) is
+answered with `PhoenixmlDb.XQuery.Functions.XQueryException` (`XTSE0165`), as a document
+(`FODC0002`) or text (`FOUT1170`) that is not supplied is. A module past a module limit is refused
+each time it is asked for.
 
 #### Known limits
 
