@@ -94,7 +94,22 @@ transformer.ResourcePolicy = ResourcePolicy.CreateBuilder()
     .AllowDtdProcessing()
     .AllowXslEvaluate()
     .Build();
+
+// fn:transform is on unless turned off (2.9.0)
+transformer.ResourcePolicy = ResourcePolicy.CreateBuilder()
+    .AllowReadFrom("file", pathPrefix: "/data/")
+    .AllowTransformFunction(false)
+    .Build();
 ```
+
+**`AllowTransformFunction(bool allow = true)`** (2.9.0, read back as
+`ResourcePolicy.AllowTransformFunction`). `fn:transform` runs a stylesheet the caller supplies.
+It is allowed unless a host turns it off, in every preset and with no policy at all, so nothing
+changes for a host that does not call this. Turned off, every way to call the function (by name,
+through a function item, `function-lookup`, partial application, `fn:apply`, and in XSLT
+`xsl:evaluate` and static expressions) fails with `FOXT0001` before the stylesheet is read, and
+`function-lookup` and `function-available` do not report the function, at run time or in
+`use-when`. A function the host can turn off this way implements `IHostGatedFunction`.
 
 ### How rules match
 
@@ -202,13 +217,28 @@ resolver. Supplied content is the host's own decision and is not checked against
 rules. Hosts that run untrusted queries or stylesheets should supply content this way and set
 `SuppliesAllContent`.
 
+### Which module asks (2.9.0)
+
+`ResourceRequest.ModuleUri` (`Uri?`) is where the module that makes a request was loaded from: the
+location the host gave for the query or stylesheet, the URI an import named, or the base URI the
+host gave with content it supplied. The module cannot change it; `xml:base` and `declare base-uri`
+do not. It is null when no module makes the request (a document another document includes, a
+redirect) or the engine knows no location for the module.
+
+Since 2.9.0 it is set for a document, a text or a module that a query asks for, and for the requests
+the XSLT compiler makes: `xsl:import`, `xsl:include`, the schema documents of `xsl:import-schema`,
+and the `parameter-document` of `xsl:output`. An XPath expression in a stylesheet carries its
+module's location (`XQueryExpression.EmbeddedInModule`, set by the XSLT compiler), so its loads
+report it too. `XsdSchemaProvider` passes the importing module with each schema document it asks
+for.
+
 ## What Gets Controlled
 
 | Access point | Checked as |
 |---|---|
 | `doc()`, `document()`, `collection()`, `xsl:source-document`, `xsl:merge` sources, parameter documents | read |
 | `unparsed-text`, `unparsed-text-lines`, `unparsed-text-available`, `json-doc` | read (`FOUT1170` when refused) |
-| `fn:transform` | import for the stylesheet, read for the source; the nested transformation runs under the caller's policy |
+| `fn:transform` | import for the stylesheet, read for the source; the nested transformation runs under the caller's policy. Off with `AllowTransformFunction(false)` (`FOXT0001`). |
 | `xsl:import`, `xsl:include`, `import module … at`, `load-xquery-module` | import (`XQST0059` for XQuery modules) |
 | `xsl:import-schema`, `import schema … at`, and every document a schema includes or imports | import |
 | External DTDs and entities in `fn:parse-xml` and stylesheets | only with `AllowDtdProcessing`, then read |

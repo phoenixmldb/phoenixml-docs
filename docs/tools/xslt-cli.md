@@ -45,7 +45,7 @@ command | xslt [options] <stylesheet>
 | `--dry-run` | | Parse and compile only — validate without executing |
 | `--stream` | | Use streaming for large files (lower memory usage) |
 | `--no-stream` | | Evaluate against an in-memory tree even when the stylesheet's initial mode is streamable |
-| `--strict-streaming` | | Report `XTSE3430` for a template in a streamable mode that is not guaranteed streamable, instead of running it on a buffered copy. No effect with `--no-stream`. |
+| `--strict-streaming` | | Report `XTSE3430` for a template in a streamable mode, or an `xsl:source-document streamable="yes"` body, that is not guaranteed streamable by the rules of XSLT 3.0 §19.8, instead of running it on a buffered copy. No effect with `--no-stream`. |
 | `--verbose` | `-v` | Show detailed error information (stack traces) |
 | `--help` | `-h` | Show help message |
 | `--version` | | Show version information |
@@ -185,7 +185,9 @@ xslt --stream style.xsl large-input.xml
 xslt --stream -o result.html style.xsl large-input.xml
 ```
 
-A template in a streamable mode that is not streamable does not stop the transformation: by default it runs on a buffered copy of the subtree it matched, with the same result, so memory use grows with that subtree. `--strict-streaming` reports such a template as `XTSE3430` instead. In 2.8.0 that check finds one pattern, a template with more than one instruction that reads the children of the matched node; it is not the complete streamability analysis of the specification, so a stylesheet it accepts may still not be guaranteed streamable.
+A template in a streamable mode that is not streamable does not stop the transformation: by default it runs on a buffered copy of the subtree it matched, with the same result, so memory use grows with that subtree. `--strict-streaming` reports such a template as `XTSE3430` instead.
+
+Since 2.9.0, `--strict-streaming` applies the streamability analysis of the specification (the posture and sweep rules of XSLT 3.0 §19.8) to every template rule of a streamable mode and to every `xsl:source-document streamable="yes"` body: a `preceding-sibling` or other roaming axis, `reverse()`, sorting streamed nodes, a step down from a parent (`../item`) or a leading `/` in the rule of an element are reported. It accepts a few constructs beyond those rules that the engine streams correctly (a union of two child selections, one `xsl:fork` branch that returns streamed nodes while no other branch reads the input, `current-group()` anywhere in a group of copied nodes). It does not check stylesheet functions against their `streamability` category, nor that `xsl:apply-templates` names a streamable mode. In 2.8.0 the check found one pattern only, a template with more than one instruction that reads the children of the matched node, so a stylesheet that passed it can fail in 2.9.0.
 
 ## Real-World Workflows
 
@@ -252,4 +254,4 @@ foreach (var (href, content) in transformer.SecondaryResultDocuments)
     File.WriteAllText(Path.Combine(outputDir, href), content);
 ```
 
-See [XSLT Extensibility](/language-reference/xslt/extensibility.md) for details on programmatic usage.
+See [XSLT Extensibility](../language-reference/xslt/extensibility.md) for details on programmatic usage.

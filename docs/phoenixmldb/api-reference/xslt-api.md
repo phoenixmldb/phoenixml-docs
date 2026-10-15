@@ -6,7 +6,7 @@ sort: 6
 
 # XSLT API
 
-The `XsltTransformer` class (`PhoenixmlDb.Xslt`, in the published `PhoenixmlDb.Xslt` package; this page describes version 2.8.0) is the primary .NET API for executing XSLT transformations. It provides a string-in/string-out interface for simple cases, plus `TextReader`, `Stream` and `TextWriter` overloads, a callback for secondary result documents, and control over the initial context, mode and match selection.
+The `XsltTransformer` class (`PhoenixmlDb.Xslt`, in the published `PhoenixmlDb.Xslt` package; this page describes version 2.9.0) is the primary .NET API for executing XSLT transformations. It provides a string-in/string-out interface for simple cases, plus `TextReader`, `Stream` and `TextWriter` overloads, a callback for secondary result documents, and control over the initial context, mode and match selection.
 
 ## Contents
 
@@ -295,29 +295,72 @@ public sealed class XsltTransformer
     bool AllowDtdProcessing { get; set; }             // default false
     ResourcePolicy? ResourcePolicy { get; set; }      // see resource-policy.md
     bool DisableStreaming { get; set; }               // evaluate on a tree even for a streamable initial mode
-    bool StrictStreamability { get; set; }            // XTSE3430 for a template that is not streamable (off by default)
+    bool StrictStreamability { get; set; }            // XTSE3430 for what is not guaranteed-streamable (off by default)
+    TimeSpan? ImplicitTimezone { get; set; }          // null = the machine's timezone
     TimeSpan? RegexMatchTimeout { get; set; }         // null = .NET's process-wide default
     IReadOnlySet<OutputMethod>? AllowedOutputMethods { get; set; }   // null = any method
     IReadOnlyDictionary<string, IReadOnlyList<string>>? XQueryModules { get; set; }
     PreloadedResources? PreloadedResources { get; set; }
     ISchemaProvider? SchemaProvider { get; set; }
+    bool SchemaAware { get; set; }                    // default true; false = basic processor
+    ValidationMode? SourceValidation { get; set; }    // Strict or Lax validates the source; null = untyped
 
     // Inspection
     IReadOnlyList<XsltOutputDeclaration> OutputDeclarations { get; }  // xsl:output declarations, after LoadStylesheetAsync
     bool HasStreamableMode { get; }
+    XsltResultTree? PrincipalResultTree { get; }      // the validated principal result as a tree, or null
 }
 ```
 
 `TransformAsync` throws `InvalidOperationException` if no stylesheet has been loaded, and `XsltException` (`PhoenixmlDb.Xslt.Engine`) for errors in the stylesheet or during the transformation. There is no API for registering extension functions on `XsltTransformer`.
+
+### New in 2.9.0
+
+| Member | Also on `XsltTransformOptions` | Default | Meaning |
+|---|---|---|---|
+| `ImplicitTimezone` | yes | `null` | The timezone a date, time or dateTime with none of its own is taken to be in (comparison, `xsl:sort`, `xsl:for-each-group`, `key()`), and the timezone of `current-dateTime()` and `implicit-timezone()`. `null` is the machine's timezone, as before (on `XsltTransformOptions`, what the host set with `PhoenixmlDb.Xdm.ImplicitTimezone.Use`, or else the machine's). `TimeSpan.Zero` gives the same result on every machine. A whole number of minutes between -14:00 and +14:00; any other value fails the transformation with `ArgumentOutOfRangeException`. Transformations that run at the same time each have their own. Static expressions (`use-when`, static variables) are evaluated when the stylesheet is compiled, in the timezone in effect then. |
+| `SchemaAware` | no | `true` | Stylesheets are compiled as by a schema-aware processor: `type` and `validation="strict"` are accepted in any stylesheet. `false` gives a basic processor (XSLT 3.0 §27.1), where they are `XTSE1660` in a stylesheet with no `xsl:import-schema`. Read when a stylesheet is loaded. See [Schemas and Validation](schemas.md#using-schemas-from-xslt). |
+| `SourceValidation` | yes | `null` | `ValidationMode.Strict` or `Lax` validates the source against the schema provider's schemas before the transformation; the stylesheet sees typed nodes. A validated source is not streamed. See [Schemas and Validation](schemas.md#xslttransformer-sourcevalidation). |
+| `PrincipalResultTree` | no | `null` | The principal result as an `XsltResultTree` with its type annotations, when the whole result was validated as it was built. See [Schemas and Validation](schemas.md#xslttransformer-principalresulttree). |
+
+Also new: `XsltStylesheetSchema`, the schema for XSLT 3.0 stylesheets as an XSD 1.0 copy (see
+[Schemas and Validation](schemas.md#xsltstylesheetschema)), and
+`ResourcePolicyBuilder.AllowTransformFunction(false)` to turn `fn:transform` off (see
+[Resource Policy](resource-policy.md#builder-api)).
+
+**`StrictStreamability` is the streamability analysis of the specification.** It applies the
+posture and sweep rules of XSLT 3.0 §19.8 to every template rule of a streamable mode and to the body
+of every `xsl:source-document streamable="yes"`, and reports `XTSE3430` for what is not
+guaranteed-streamable: a `preceding-sibling` or other roaming axis, `reverse()`, sorting streamed
+nodes, a step down from a parent or an ancestor (`../item`), a leading `/` in the rule of an element,
+a comma with two consuming operands, and so on. A template rule is reported when the transformation
+starts; an `xsl:source-document` body when that instruction runs. It is still off by default, and
+without it such a construct runs on a buffered copy and gives the same result. A stylesheet that
+passed the 2.8.0 check can fail this one. Where it differs from the specification:
+
+- It accepts a little more than the specification guarantees, where the engine is known to give the
+  right result: a union of two child selections, one branch of `xsl:fork` that returns streamed
+  nodes while no other branch reads the input, and `current-group()` anywhere in a group of copied
+  nodes.
+- It does not check the body of a stylesheet function against its `streamability` category, nor
+  that `xsl:apply-templates` names a streamable mode.
+
+**Behaviour changes in 2.9.0** that a host can see: a validation failure in a stylesheet is
+`XTTE1510`, `XTTE1512` or `XTTE1515` instead of `XQDY0027` (see
+[Schemas and Validation](schemas.md#validation-error-codes-in-xslt)); `TransformAsync(Stream,
+TextWriter)` makes the same streamability checks as the other overloads and writes the output of the
+rule for the document node when the rule ends; and `xsl:import` and `xsl:include` ask the resolver
+once, for the location resolved against the base URI in effect at the element (`xml:base`). See the
+[release notes](../../release-notes.md#2-9-0-2026-10-15-xquery-and-xslt-2-9-0-core-2-5-0).
 
 ### New in 2.8.0
 
 - **`StrictStreamability`** (also on `XsltTransformOptions`; default `false`): report `XTSE3430` for
   a template rule of a streamable mode that is not guaranteed streamable, instead of running it on a
   buffered copy of the matched subtree, which gives the same result. No effect together with
-  `DisableStreaming`. In 2.8.0 the check finds a rule with more than one instruction that reads the
-  children of the matched node; it is not the complete streamability analysis of the specification,
-  so a stylesheet it accepts may still not be guaranteed streamable.
+  `DisableStreaming`. In 2.8.0 the check found one pattern only, a rule with more than one
+  instruction that reads the children of the matched node; 2.9.0 replaces it with the complete
+  analysis described above.
 
 ### New in 2.7.0
 
