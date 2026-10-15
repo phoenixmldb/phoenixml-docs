@@ -328,7 +328,7 @@ Also new: `XsltStylesheetSchema`, the schema for XSLT 3.0 stylesheets as an XSD 
 `ResourcePolicyBuilder.AllowTransformFunction(false)` to turn `fn:transform` off (see
 [Resource Policy](resource-policy.md#builder-api)).
 
-**`StrictStreamability` is now the streamability analysis of the specification.** It applies the
+**`StrictStreamability` is the streamability analysis of the specification.** It applies the
 posture and sweep rules of XSLT 3.0 §19.8 to every template rule of a streamable mode and to the body
 of every `xsl:source-document streamable="yes"`, and reports `XTSE3430` for what is not
 guaranteed-streamable: a `preceding-sibling` or other roaming axis, `reverse()`, sorting streamed

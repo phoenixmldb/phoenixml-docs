@@ -47,8 +47,7 @@ validate strict { <o:order><o:qty>3</o:qty></o:order> } instance of schema-eleme
 - **`validate`** (`strict`, `lax`, or `type`) validates a node against the imported schemas.
   `validate strict` of an element that has no declaration is `XQDY0084`.
 - **`validate type T { … }`** validates the element against `T`, whatever is declared for its
-  name, and the result has the type annotations of `T` and of its content. Before 2.9.0 the type
-  was not used.
+  name, and the result has the type annotations of `T` and of its content.
 - **An element is validated without the constraints on a document as a whole.** The same ID
   twice, or an IDREF to no ID, does not make a validated element invalid (XQuery 3.1 §3.21.2).
 
@@ -216,7 +215,7 @@ If you compile queries you didn't write, set it to the same value as
   `[xsl:]validation="strict"` or `"lax"` built in a variable, a parameter or a function is
   validated there, and the variable holds the validated, annotated element. `xsl:copy-of` with
   `validation="strict"` or `"lax"` in a variable validates the copy (a document node as a
-  document). Before 2.9.0 only the principal result was validated.
+  document).
 - **Element and document constraints.** A validated element is not held to the ID constraints of
   a document (XSLT 3.0 §25.4.1). A document node validated by `xsl:document` or
   `xsl:result-document` must have one element child (`XTTE1550`) and satisfy the ID and IDREF
@@ -255,13 +254,12 @@ The schema-aware typing described [for XQuery](#in-the-query) applies to XPath i
   `xs:untypedAtomic` (`XTTE3100`), `typed="no"` refuses a typed one (`XTTE3110`), and
   `typed="strict"` refuses a rule whose pattern names an undeclared element (`XTSE3105`).
 - **`json-to-xml` with `validate: true()`** gives a tree validated against the built-in schema
-  for the XML representation of JSON; it was `FOJS0004`.
+  for the XML representation of JSON.
 
 ### Validation error codes in XSLT
 
-Since 2.9.0 a validation failure in a stylesheet has the error code of XSLT (XSLT 3.0 §25.4). It
-was `XQDY0027`, so `xsl:catch errors="err:XTTE1510"` did not catch it. **A stylesheet or host that
-tests for `XQDY0027` must test for these codes.**
+A validation failure in a stylesheet has the error code of XSLT (XSLT 3.0 §25.4), and
+`xsl:catch errors="err:XTTE1510"` catches it. A validation failure is not `XQDY0027` in XSLT.
 
 | Code | When |
 |---|---|
@@ -274,7 +272,7 @@ tests for `XQDY0027` must test for these codes.**
 | `XTTE1550` | a validated document node without exactly one element child |
 | `XTTE1555` | a validated document with duplicate IDs or an IDREF to no ID |
 | `XTSE1505` | `type` together with `validation` |
-| `XTSE1520` | a `type` that no imported schema declares, that is not an EQName, or that uses an undeclared prefix (was `XTSE0280`) |
+| `XTSE1520` | a `type` that no imported schema declares, that is not an EQName, or that uses an undeclared prefix |
 | `XTSE1530` | `xsl:attribute type=` naming a complex type |
 
 ### XsltTransformer.SchemaProvider

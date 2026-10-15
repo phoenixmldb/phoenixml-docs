@@ -503,7 +503,7 @@ continues off its UI thread after that `await`. See
 
 New API: `XsltTransformer.DisableStreaming`, `AllowedOutputMethods`, `OutputDeclarations` and
 `XQueryModules`; Core `XdmValue.From(DateTime)`. See the
-[XSLT API](phoenixmldb/api-reference/xslt-api.md#new-in-260).
+[XSLT API](phoenixmldb/api-reference/xslt-api.md#new-in-2-6-0).
 
 ### 2.5.1 (2026-10-01): XQuery 2.5.0 and 2.5.1, Xslt 2.5.1
 
