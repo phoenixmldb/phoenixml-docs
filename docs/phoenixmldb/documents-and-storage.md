@@ -299,10 +299,8 @@ See [Database Extensions](database-extensions.md) for the full reference.
 
 ### Querying Documents
 
-`QueryAsync` runs an XQuery over the container's documents. A query that does not use
-`fn:collection()` runs once per document with that document as the context item, and the results
-are concatenated. Queries that fold across documents through `collection()` (aggregates,
-`order by`, `group by`, `distinct-values` and similar) run once over the whole container.
+`QueryAsync` runs an XQuery over the container's documents, once per document or once over the
+container ([below](#once-per-document-or-once-over-the-container)).
 
 ```csharp
 await foreach (var item in container.QueryAsync("//product[price > 20]/name/string()"))
@@ -320,6 +318,50 @@ await foreach (var item in container.QueryAsync(
 ```
 
 Inside a container query, `doc('name.xml')` resolves a document of the same container by name.
+
+### Once per document or once over the container
+
+A container query is evaluated in one of two ways:
+
+- **Once per document**, with that document as the context item, the answers concatenated in
+  document order: a query that does not read `fn:collection()`, and a query that reads it but whose
+  every answer depends on one document at a time (`collection()/book[price > 15]/title`).
+- **Once over the container**, with `fn:collection()` returning every document: any other query that
+  reads `fn:collection()`. That is an aggregate (`count`, `sum`, `string-join`, `distinct-values`,
+  …), an `order by` or `group by`, a positional filter over the collection
+  (`(collection()/book)[last()]`), or a shape the engine cannot prove to depend on one document at a
+  time.
+
+In the evaluation once per document, `fn:collection()` returns only the current document. In the
+evaluation once over the container there is no context item: a query that starts from the context
+item (`/book`, `./title`) and also reads `fn:collection()` where the evaluation over the container is
+required raises `XPDY0002` ("the context item is absent"). Write such a query from the collection
+(`collection()/book`), not from the context item.
+
+A query reads the collection wherever `fn:collection()` is written in it, and inside an imported
+module function or variable it reaches. That includes `fn:collection()` written only inside:
+
+- a quantified expression's `in` clause (`some $x in collection()/book satisfies …`);
+- a `typeswitch` case or default, a `switch` case value or result;
+- a `catch` clause;
+- a map constructor's key or value, a record constructor's field;
+- a string constructor's `` `{…}` `` interpolation;
+- a `copy` binding of a transform expression;
+- a window clause's `start` or `end` `when` condition;
+- an expression embedded in a full-text selection (`contains text { … }`).
+
+The same holds for an aggregate, `position()` or `last()` written there: the query is evaluated as it
+would be with that expression written at the top level.
+
+| Query (three documents, one `book` each) | Answer |
+|---|---|
+| `some $x in collection()/book satisfies $x/price > 25` | `true` |
+| `typeswitch (1) case xs:integer return count(collection()/book) default return 0` | `3` |
+| `map { 'n': count(collection()/book) }?n` | `3` |
+| `switch (1) case 1 return count(collection()/book) default return 0` | `3` |
+
+A query nested deeper than the parser accepts (92 nested parentheses and more) is refused by the
+parser with `XPST0003`. A query the parser accepts is evaluated by these rules whatever its depth.
 
 ### Updating Documents
 
