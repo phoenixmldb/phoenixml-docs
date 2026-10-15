@@ -13,12 +13,13 @@ way whichever engine asked. XSD 1.1 is not supported. The only 1.1 features the 
 are the `vc:` version-control markers and the 1.1 duration types (see
 [XSD 1.1](#xsd-1-1)). A schema that requires XSD 1.1 is refused with a message that says so.
 
-This page describes PhoenixmlDb.Core 2.4.0, PhoenixmlDb.XQuery 2.8.0 and PhoenixmlDb.Xslt 2.8.0.
+This page describes PhoenixmlDb.Core 2.5.0, PhoenixmlDb.XQuery 2.9.0 and PhoenixmlDb.Xslt 2.9.0.
 
 ## Contents
 
 - [Using schemas from XQuery](#using-schemas-from-xquery)
 - [Using schemas from XSLT](#using-schemas-from-xslt)
+- [Validation error codes in XSLT](#validation-error-codes-in-xslt)
 - [The Core schema layer](#the-core-schema-layer)
 - [Stricter than System.Xml](#stricter-than-system-xml)
 - [Known limits](#known-limits)
@@ -45,6 +46,11 @@ validate strict { <o:order><o:qty>3</o:qty></o:order> } instance of schema-eleme
   target namespace is `XQST0057`, and two imports of the same namespace are `XQST0058`.
 - **`validate`** (`strict`, `lax`, or `type`) validates a node against the imported schemas.
   `validate strict` of an element that has no declaration is `XQDY0084`.
+- **`validate type T { … }`** validates the element against `T`, whatever is declared for its
+  name, and the result has the type annotations of `T` and of its content. Before 2.9.0 the type
+  was not used.
+- **An element is validated without the constraints on a document as a whole.** The same ID
+  twice, or an IDREF to no ID, does not make a validated element invalid (XQuery 3.1 §3.21.2).
 
 Once a node has been validated, it carries its schema type:
 
@@ -56,6 +62,10 @@ Once a node has been validated, it carries its schema type:
   schema type: `o:size('8') instance of o:size` is true. Casts to schema-defined list and union
   types work.
 - `fn:idref` finds nodes that the schema types as `xs:IDREF` or `xs:IDREFS`.
+- A validated element of a type with element-only content has no whitespace text children
+  (XDM 3.1 §6.2.3). Whitespace in mixed and simple content stays.
+- A nilled element (`xsi:nil="true"`) atomizes to the empty sequence.
+- `fn:distinct-values` of validated nodes compares their typed values.
 
 Nodes that were not validated are unaffected.
 
@@ -90,7 +100,13 @@ var engine = new QueryEngine(
 | `Add(string targetNamespace, TextReader reader, ResourcePolicy policy)` | Schema text. The documents it includes, imports or redefines are read only where `policy` allows imports. `ResourcePolicy.InMemoryOnly` resolves nothing. |
 | `AddFromString(string targetNamespace, string xsdContent, ResourcePolicy policy)` | Same as above, from a string. |
 | `AddFromString(string targetNamespace, string xsdContent, Uri baseUri, ResourcePolicy? policy = null)` | Schema text that came from `baseUri`, so a relative `schemaLocation` in it resolves against that URI. With a `null` policy, the documents it refers to are read with no restriction. |
-| `ImportSchema(string targetNamespace, IReadOnlyList<string>? locationHints = null)` | What `import schema` calls. There is also an overload that takes a `ResourcePolicy?`. |
+| `ImportSchema(string targetNamespace, IReadOnlyList<string>? locationHints = null)` | What `import schema` calls. There is also an overload that takes a `ResourcePolicy?`, and one that also takes the importing module's URI (`Uri? importingModule`). |
+| `AddSchemaText(string targetNamespace, string schemaText, Uri? baseUri, ResourcePolicy? policy)` | Schema text (an inline `xs:schema` in XSLT). There is also an overload that takes the importing module's URI. |
+
+The overloads that take `importingModule` (new in 2.9.0, on `ISchemaProvider` as well) pass it to
+the host's resolver as `ResourceRequest.ModuleUri` with each schema document the provider asks
+for (see [Resource Policy](resource-policy.md#which-module-asks-2-9-0)). On `ISchemaProvider`
+each defaults to the form without the module, so a custom provider compiles unchanged.
 
 The overloads that take no policy resolve a schema's own references with no restriction: any
 file the process can read, and any URL it can reach. If you vetted the schema text but not what
@@ -107,6 +123,28 @@ provider.AddFromString("urn:example:order", xsdText,
 | `ImportCache` (static) | `SchemaCache` | `CheckInterval = TimeSpan.Zero` | Where `import schema` keeps compiled schemas for every provider in the process. See below. |
 | `Catalog` | `XmlCatalog?` | `null` | Says where the documents a schema names are really read from (see [XmlCatalog](#xmlcatalog)). What it maps a name to is still read under the load's resource policy. |
 | `PatternMatchTimeout` | `TimeSpan?` | `null` | The most time one match of an `xs:pattern` facet may take, in casts, in validation and while a schema compiles. `null` leaves .NET's process-wide default, which is infinite unless the host sets it. Set it before you add a schema. |
+| `KnowsXmlNamespace` (init only, 2.9.0) | `bool` | `false` | The provider knows the schema of the XML namespace (`xml:lang`, `xml:space`, `xml:base`, `xml:id`), so a schema may import that namespace with no `schemaLocation` (XSD 1.0 §4.2.6.2). System.Xml does not know `xml:id`, so a schema with `ref="xml:id"` did not compile without it. A schema imported from files is still taken from `ImportCache`. `XsltTransformer`'s default provider sets it. |
+
+**`DeclaringEntities` (static, 2.9.0).**
+`XsdSchemaProvider.DeclaringEntities(IReadOnlyCollection<string> names)` validates as if the
+document type declaration of the document declared those entities, on the calling thread, until
+the returned `IDisposable` is disposed. The validating parse reads no DTD, so without it every
+`xs:ENTITY` value is "Reference to an undeclared entity". A host that read the document with its
+DTD passes the names of the entities the DTD declares:
+
+```csharp
+using (XsdSchemaProvider.DeclaringEntities(["logo", "banner"]))
+{
+    // validate here
+}
+```
+
+**`ValidateElementAndAnnotate` (2.9.0).** On `ISchemaProvider` and `XsdSchemaProvider`: validates
+and annotates an element as `ValidateAndAnnotate` does, without the constraints on a document as a
+whole (ID uniqueness, IDREF targets). The interface's default implementation applies them, as
+`ValidateAndAnnotate` does. With a type name, `ValidateXml`, `ValidateXmlFragment` and
+`ValidateAndAnnotate` validate against that type, whatever is declared for the element's name, and
+`ValidateXmlFragment` validates each element of the fragment against it.
 
 **`ImportCache`.** A schema loaded from files is compiled once and shared by every provider that
 imports the same files. On each use, the cache checks the size and time of **every** document of
@@ -163,18 +201,81 @@ If you compile queries you didn't write, set it to the same value as
   allowed for import. If none is allowed, the error is `XTSE0220`.
 - **An inline `xs:schema`** child of `xsl:import-schema` is read through the provider. A relative
   `schemaLocation` inside it is relative to the stylesheet. A provider that cannot take schema
-  text gives `XTSE0220`.
-- **A bare `<xsl:import-schema/>`**, with no namespace and no location, loads nothing but makes
-  the stylesheet schema-aware. In a stylesheet with no `xsl:import-schema` at all,
-  `validation="strict"` or `"type"` and `default-validation="strict"` are `XTSE1660`.
-- **`validation=`** on `xsl:document` and `xsl:copy-of` is applied wherever the result goes.
-  **`xsl:validation`** on a literal result element and `validation=` on `xsl:element` are applied
-  only when the element is written to the principal result; see [Known limits](#known-limits).
+  text gives `XTSE0220`. Since 2.9.0 an inline schema with no target namespace is loaded too.
+- **A relative schema location in a stylesheet with no base URI is an error** (2.9.0), not a
+  location resolved against the working directory.
+- **The processor is schema-aware by default** (2.9.0). A `type` attribute and
+  `validation="strict"` are accepted in a stylesheet with no `xsl:import-schema`, and validate
+  against the built-in types and the schemas of the schema provider.
+  `system-property('xsl:is-schema-aware')` is `yes`. With `XsltTransformer.SchemaAware = false`
+  the processor is a basic one (XSLT 3.0 §27.1): those attributes are `XTSE1660` in a stylesheet
+  that has no `xsl:import-schema` (a bare `<xsl:import-schema/>`, which loads nothing, is enough
+  to make it schema-aware). `default-validation` other than `preserve` or `strip` is
+  `XTSE0020`.
+- **Validation is applied where the node is built** (2.9.0). An element with
+  `[xsl:]validation="strict"` or `"lax"` built in a variable, a parameter or a function is
+  validated there, and the variable holds the validated, annotated element. `xsl:copy-of` with
+  `validation="strict"` or `"lax"` in a variable validates the copy (a document node as a
+  document). Before 2.9.0 only the principal result was validated.
+- **Element and document constraints.** A validated element is not held to the ID constraints of
+  a document (XSLT 3.0 §25.4.1). A document node validated by `xsl:document` or
+  `xsl:result-document` must have one element child (`XTTE1550`) and satisfy the ID and IDREF
+  constraints (`XTTE1555`); `xsl:copy-of` of a document node with validation validates it as a
+  document (`XTTE1555`). `xsl:result-document validation=` with no `href` validates the principal
+  result as a document.
+- **The `type` attribute validates against the type** (2.9.0). `type` on `xsl:element`,
+  `xsl:attribute`, `xsl:copy`, `xsl:copy-of`, `xsl:document` and `xsl:result-document`, and
+  `xsl:type` on a literal result element, validate the node against the named type whatever is
+  declared for its name. `type="xs:untyped"` asks for no validation.
+- **`xsl:source-document validation="strict"` or `"lax"`** validates the document it reads
+  (2.9.0). Such a document is read into a tree and not streamed.
+- **The source document can be validated** with `XsltTransformer.SourceValidation` (see
+  [below](#xslttransformer-sourcevalidation)), and `input-type-annotations="strip"` removes the
+  type annotations of a validated source.
 - **Constructor functions of imported schema types** can be called (`o:size('8')`,
   `o:size#1`), and `function-available` answers for them. `cast as o:size` and
   `castable as o:size` work.
 
-The schema-aware typing described [for XQuery](#in-the-query) applies to XPath in stylesheets.
+The schema-aware typing described [for XQuery](#in-the-query) applies to XPath in stylesheets. In
+2.9.0 also:
+
+- **A match pattern that names a type matches by the type**: `element(*, T)`, `element(N, T)`,
+  `attribute(N, T)`, `schema-element(N)` and `schema-attribute(N)` test the type as `instance of`
+  does. Before 2.9.0 the rule matched every node of the name.
+- **Kind tests take their prefixes from the stylesheet**, and a type name with no prefix is in the
+  default namespace for elements and types (`xpath-default-namespace`, or no namespace), so a type
+  of a schema with no target namespace can be named (`as="small"`, `castable as small`).
+- **`as=` checks derived built-in types** (`xs:int`, `xs:NMTOKEN`) and atomic types a schema
+  defines, and a typed node bound with an atomic `as` type keeps its type.
+- **`xsl:value-of` of a validated node gives its typed value**: an element of type `xs:decimal`
+  with the text `  1.10  ` gives `1.1`.
+- **`fn:copy-of`, `fn:snapshot` and `xsl:copy-of validation="preserve"`** keep the type
+  annotations of what they copy.
+- **Typed modes**: `typed="yes"` refuses an element or attribute of type `xs:untyped` or
+  `xs:untypedAtomic` (`XTTE3100`), `typed="no"` refuses a typed one (`XTTE3110`), and
+  `typed="strict"` refuses a rule whose pattern names an undeclared element (`XTSE3105`).
+- **`json-to-xml` with `validate: true()`** gives a tree validated against the built-in schema
+  for the XML representation of JSON; it was `FOJS0004`.
+
+### Validation error codes in XSLT
+
+Since 2.9.0 a validation failure in a stylesheet has the error code of XSLT (XSLT 3.0 §25.4). It
+was `XQDY0027`, so `xsl:catch errors="err:XTTE1510"` did not catch it. **A stylesheet or host that
+tests for `XQDY0027` must test for these codes.**
+
+| Code | When |
+|---|---|
+| `XTTE1510` | `validation="strict"` and the node is not valid; an invalid `xsi:type`, under lax validation too |
+| `XTTE1512` | `validation="strict"` and no top-level declaration. A strictly validated element with an `xsi:type` is validated against that type instead. |
+| `XTTE1515` | `validation="lax"` and the node is not valid |
+| `XTTE1535` | an attribute copied with a complex `type` |
+| `XTTE1540` | a node not valid against its `type`; an element typed `xs:untypedAtomic` with element children |
+| `XTTE1545` | a new attribute validated against `xs:QName` or `xs:NOTATION` |
+| `XTTE1550` | a validated document node without exactly one element child |
+| `XTTE1555` | a validated document with duplicate IDs or an IDREF to no ID |
+| `XTSE1505` | `type` together with `validation` |
+| `XTSE1520` | a `type` that no imported schema declares, that is not an EQName, or that uses an undeclared prefix (was `XTSE0280`) |
+| `XTSE1530` | `xsl:attribute type=` naming a complex type |
 
 ### XsltTransformer.SchemaProvider
 
@@ -182,16 +283,17 @@ The schema-aware typing described [for XQuery](#in-the-query) applies to XPath i
 public PhoenixmlDb.XQuery.ISchemaProvider? SchemaProvider { get; set; }
 ```
 
-By default this is a new `XsdSchemaProvider` that already holds a schema for the XML namespace,
-so a schema can `xs:import` that namespace with no `schemaLocation`. Replace it before calling
+By default this is `new XsdSchemaProvider { KnowsXmlNamespace = true }`, so a schema can
+`xs:import` the XML namespace with no `schemaLocation`. Replace it before calling
 `LoadStylesheetAsync`. If you set it to `null`, every `schema-element`/`schema-attribute`
 reference becomes `XPST0008` and every `validation="strict"` raises a run-time error.
 
-Because the default provider is never empty, it doesn't share compiled schemas through
-`XsdSchemaProvider.ImportCache`. Each transformer compiles its own `xsl:import-schema`. To
-compile once and share across transformers, give each one a provider on a `CompiledSchema`. An
-`xsl:import-schema` for a namespace that schema declares is then satisfied without loading
-anything:
+Since 2.9.0 the default provider takes schemas from `XsdSchemaProvider.ImportCache`: an
+`xsl:import-schema` from files is compiled once for all transformers and used until one of its
+documents changes, under the conditions listed for [`ImportCache`](#xsdschemaprovider). In 2.8.0
+each transformer compiled its own. A host that supplies schema documents itself can give each
+transformer a provider on a `CompiledSchema`. An `xsl:import-schema` for a namespace that schema
+declares is then satisfied without loading anything:
 
 ```csharp
 var transformer = new XsltTransformer { SchemaProvider = new XsdSchemaProvider(compiledSchema) };
@@ -200,6 +302,57 @@ await transformer.LoadStylesheetAsync(stylesheetXml);
 
 `XsltTransformer.RegexMatchTimeout` is passed to the provider before the first schema import, so
 it also bounds pattern facets while the stylesheet's schemas compile.
+
+### XsltTransformer.SourceValidation
+
+```csharp
+public PhoenixmlDb.Xslt.Ast.ValidationMode? SourceValidation { get; set; }   // also on XsltTransformOptions
+```
+
+New in 2.9.0. With `ValidationMode.Strict` or `ValidationMode.Lax`, the source document is
+validated against the schemas of `SchemaProvider` (those the stylesheet imports and any the host
+added) before the transformation. A source that is not valid fails the transformation. A valid one
+has the type annotations of the schema, so `. instance of schema-element(o:order)`,
+`data(@n) instance of xs:integer` and a mode with `typed="yes"` work on it. `null`, the default,
+and the other two modes leave the source untyped. A validated source is built into a tree and not
+streamed.
+
+### XsltTransformer.PrincipalResultTree
+
+```csharp
+public XsltResultTree? PrincipalResultTree { get; }
+public sealed record XsltResultTree(XdmDocument Document, XdmInMemoryStore Nodes);
+```
+
+New in 2.9.0. After a transformation whose whole result was validated as it was built (an element
+with `xsl:validation`, `validation=` or `type=` at its top), this is the principal result as a tree
+with the type annotations validation gave it; otherwise `null`. The serialized result is text, and
+text read again is untyped. An XQuery engine built over `Nodes` can evaluate expressions against
+`Document`.
+
+### XsltStylesheetSchema
+
+`PhoenixmlDb.Xslt.XsltStylesheetSchema` (static) is the schema for XSLT 3.0 stylesheets, for a host
+that wants to check a stylesheet's structure before compiling it. The W3C publishes that schema in
+XSD 1.1; this is a copy an XSD 1.0 processor loads, and the file states every change made to it.
+
+| Member | Meaning |
+|---|---|
+| `TargetNamespace` (const) | `http://www.w3.org/1999/XSL/Transform` |
+| `DocumentUri` | `urn:phoenixmldb:xslt:schema-for-xslt30-xsd10`, the URI the document is known by |
+| `Source` | The schema document as a [`SchemaSource`](#schemasource) |
+| `Open()` | Opens the schema document as a `Stream` |
+| `Compile()` | Compiles it with `SchemaAccessGate.SuppliedOnly`; nothing outside the assembly is read. The result is immutable and can be kept and shared. |
+
+```csharp
+CompiledSchema xsltSchema = XsltStylesheetSchema.Compile();
+var result = SchemaValidator.Validate(xsltSchema, stylesheetText, new Uri("file:///srv/xsl/main.xsl"));
+```
+
+It checks less than the original: the 71 rules the original states as assertions (for example,
+`xsl:value-of` has a `select` attribute or content, not both) are not checked, since XSD 1.0 has no
+assertions. A stylesheet it accepts can still have a static error, and a simplified stylesheet (a
+literal result element as the root) is outside what it describes.
 
 ---
 
@@ -393,7 +546,7 @@ cache.Invalidate(new Uri("file:///srv/schemas/common.xsd"));   // drops every sc
 | `Invalidate(Uri uri)` | Drops every compiled schema that has `uri` anywhere in its closure. |
 | `Clear()` | Drops every compiled schema. |
 | `Count` | How many compiled schemas the cache holds. |
-| `SchemaCache.Default` | A process-wide instance. The 2.8.0 engines don't use it: `import schema` uses `XsdSchemaProvider.ImportCache`. |
+| `SchemaCache.Default` | A process-wide instance. The 2.9.0 engines don't use it: `import schema` and `xsl:import-schema` use `XsdSchemaProvider.ImportCache`. |
 
 When several requests for the same schema arrive together, it is compiled once. A failed
 compilation is not kept. `CheckInterval` must not be negative unless it is infinite, and
@@ -494,6 +647,24 @@ Members:
 - `Identity` and `Documents` describe what was loaded. `XmlCatalog.Empty` is a catalog with no
   entries.
 
+### Characters outside the Basic Multilingual Plane
+
+XML Schema counts characters by code point; .NET strings count UTF-16 units. Since Core 2.5.0 the
+layer makes facets count as XML Schema does, for a character such as an emoji or a mathematical
+letter:
+
+- **Pattern facets.** `.`, a negated class (`[^a]`) and a negated category (`\P{L}`, `\S`, `\D`,
+  `\W`) match one such character, not half of one. The category it belongs to (`\p{L}`, `\d`,
+  `\w`), and a class or range that names it, match it. A value with no such character is matched
+  by the pattern as written.
+- **Length facets.** `length`, `minLength` and `maxLength` on a type derived from `xs:string` or
+  `xs:anyURI` count characters: `maxLength="1"` accepts one such character. The facets of a list
+  type (a number of items) and a binary type (a number of octets) are unchanged. A diagnostic
+  keeps the message and rule of the facet (`cvc-maxLength-valid`). A schema with such facets takes
+  about twice as long to compile; a compiled schema is cached.
+
+A validation result can therefore change for a value that contains such characters.
+
 ### XSD 1.1
 
 The schema processor is System.Xml's, which implements XSD 1.0. With
@@ -564,11 +735,8 @@ the Core layer and so to both engines. In XQuery and XSLT, a load failure is `XQ
   case.
 - **Without a pattern limit, matches are unbounded.** A pattern that backtracks catastrophically
   takes as long as the value makes it.
-- **XSLT validation in 2.8.0 (XSLT engine issues #353, #354).** An element built with
-  `xsl:validation="strict"` or `xsl:element validation="strict"` is validated only when it is
-  written to the principal result. In a variable it is not validated and has no type annotation,
-  so `instance of schema-element(...)` and `element(*, T)` tests on it are false. A validation
-  failure is reported with the code `XQDY0027`, not the XSLT codes `XTTE1510` to `XTTE1555`.
+- **A validated source is not streamed.** A source validated with `SourceValidation`, or read by
+  `xsl:source-document` with `validation="strict"` or `"lax"`, is built into a tree.
 - **No network gate is included.** The layer ships `SuppliedOnly` and `LocalFiles` only.
 - **The `LocalFiles` roots must be writable only by the operator.** Anyone who can write inside a
   root can choose what a schema is compiled from.

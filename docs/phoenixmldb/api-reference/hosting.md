@@ -84,3 +84,32 @@ async methods. They are not available on browser WebAssembly, which cannot block
 Blazor WebAssembly has no threads, so the engines run inline on the browser's single thread and the
 continuation stays there. Since 2.6.0 XSLT works in Blazor WebAssembly again, and deep recursion
 there no longer exhausts the stack. A long transformation blocks the page while it runs.
+
+## The implicit timezone (2.9.0)
+
+A date, time or dateTime with no timezone of its own is compared, sorted, grouped and used as a key
+as if it were in the *implicit timezone*, which is also the timezone of `current-dateTime()`. Unless
+a host sets it, it is the timezone of the machine, so two servers in different zones can give
+different answers to `xs:dateTime('2020-01-01T12:00:00') lt xs:dateTime('2020-01-01T12:00:00+01:00')`.
+Since 2.9.0 a host can set it; `TimeSpan.Zero` gives the same answers on every machine.
+
+| Setting | Applies to |
+|---|---|
+| `QueryEngine.ImplicitTimezone` (`TimeSpan?`, init) | Every query the engine runs. |
+| `QueryExecutionContext.ImplicitTimezone` (`TimeSpan?`) | One execution. Set it before the query reads the current date or time. |
+| `XsltTransformer.ImplicitTimezone` (`TimeSpan?`) | Each transformation the transformer runs. |
+| `XsltTransformOptions.ImplicitTimezone` (`TimeSpan?`, init) | One transformation. |
+| `PhoenixmlDb.Xdm.ImplicitTimezone.Use(TimeSpan? offset)` (Core 2.5.0) | The code that runs until the returned scope is disposed. `ImplicitTimezone.Current` is the value in effect; `ImplicitTimezone.Configured` is what a host set, or null. |
+
+Left at `null`, the default, the engines use the timezone of the machine (or, for
+`QueryExecutionContext` and `XsltTransformOptions`, what the host set around the call with
+`ImplicitTimezone.Use`), so nothing changes for a host that sets nothing. The value is a whole
+number of minutes between -14:00 and +14:00; anything else is an `ArgumentOutOfRangeException`.
+Queries and transformations that run at the same time each have their own. In XSLT, static
+expressions (`use-when`, static variables) are evaluated when the stylesheet is compiled, in the
+timezone in effect then.
+
+```csharp
+var engine = new QueryEngine { ImplicitTimezone = TimeSpan.Zero };
+var transformer = new XsltTransformer { ImplicitTimezone = TimeSpan.Zero };
+```

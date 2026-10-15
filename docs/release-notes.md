@@ -213,6 +213,130 @@ each repo: [Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt/blob/main/RELE
 > exact for its own release; subtracting across a harness change compares different
 > measurements.
 
+### 2.9.0 (2026-10-15): XQuery and Xslt 2.9.0, Core 2.5.0
+
+**W3C QT3: 207 failing of 31,331** (251 at 2.8.0) · **W3C XSLT 3.0: 216 failing of 11,539**.
+
+> **The XSLT figure is not comparable with 2.8.0's.** From this release the conformance runner
+> measures a schema-aware processor, so the suite includes about 700 schema-aware cases that the run
+> for 2.8.0 (131 failing of 10,839, as a basic processor) skipped. When the runner first measured the
+> schema-aware suite it was 437 failing; the schema work in this release brought it to 216.
+
+XQuery 2.9.0 requires Core 2.5.0; Xslt 2.9.0 requires XQuery 2.9.0 and Core 2.5.0.
+
+**Behaviour changes, check before upgrading:**
+
+- **The XSLT processor is schema-aware by default.** A `type` attribute and `validation="strict"`
+  are accepted in a stylesheet with no `xsl:import-schema`, and `system-property('xsl:is-schema-aware')`
+  is `yes`. A stylesheet that relied on `XTSE1660` now compiles. `XsltTransformer.SchemaAware = false`
+  gives the basic processor again.
+- **`xsl:value-of` of a validated node gives its typed value**: an element of type `xs:decimal`
+  with the text `  1.10  ` gives `1.1`.
+- **`order by` compares dates, times and durations by value.** They were ordered as text: `P10D`
+  before `P9D`. `eq` on `xs:gYear`, `xs:gYearMonth`, `xs:gMonth`, `xs:gMonthDay` and `xs:gDay` uses
+  the implicit timezone for a value with none (it took UTC), and XSLT `key()` finds dates and times
+  as `eq` compares them.
+- **XSLT validates where the node is built, with XSLT error codes** (#353, #354). An element with
+  `[xsl:]validation` in a variable, a parameter or a function is validated there and keeps its type
+  annotations. A failure is `XTTE1510`, `XTTE1512` or `XTTE1515`, not `XQDY0027`: **a stylesheet or
+  host that tests for `XQDY0027` must test for the new codes.** `default-validation="strict"` is
+  `XTSE0020` (was `XTSE1660`), a malformed `type` is `XTSE1520` (was `XTSE0280`), and an invalid
+  `xsi:type` under lax validation is `XTTE1510` (was `XTTE1515`). See
+  [Validation error codes in XSLT](phoenixmldb/api-reference/schemas.md#validation-error-codes-in-xslt).
+- **`validate type T { … }` and the XSLT `type` attribute validate against the type**, whatever is
+  declared for the element's name. The type was not used, and an element with no declaration passed
+  with any content. In XSLT a node that is not valid is `XTTE1540`, and a type no imported schema
+  declares is `XTSE1520`.
+- **A match pattern that names a type matches by the type** (`element(*, T)`, `schema-element(N)`
+  and the like). The rule matched every node of the name.
+- **A validated element is not held to the ID constraints of a document** (XQuery `validate`,
+  XSLT `[xsl:]validation`), and a validated element of a type with element-only content has no
+  whitespace text children.
+- **`attribute(name)` with an unprefixed name matches only an attribute in no namespace.**
+- **`StrictStreamability` / `--strict-streaming` is now the complete analysis of XSLT 3.0 §19.8.** A
+  stylesheet that passed the 2.8.0 check can fail it. Off by default as before. See
+  [XSLT API](phoenixmldb/api-reference/xslt-api.md#new-in-2-9-0) for what it accepts beyond the
+  specification and what it does not check.
+- **Streamed bodies of a shape not known to stream correctly are buffered.** Of about 600 distinct
+  streamed bodies in the W3C streaming sets, 28 now buffer the whole input. A source validated with
+  `SourceValidation` or by `xsl:source-document validation=` is not streamed.
+- **The timezone settings default to the machine.** `QueryEngine.ImplicitTimezone` and the XSLT
+  settings are `null` unless a host sets them, which is the machine's timezone as before.
+- **Imports and module base URIs.** `xsl:import` and `xsl:include` are resolved against the base URI
+  in effect at the element (`xml:base`), and the resolver is asked once (2.8.0 asked twice, the first
+  time for a location the stylesheet does not name). A module that `use-when` excludes is not read. A
+  relative schema location in a stylesheet with no base URI is an error. An XQuery library module has
+  its own static base URI (#223); it used the main module's.
+- **Error codes where a .NET exception came out** (#241): a function of the wrong arity given to
+  `for-each`, `filter`, `array:for-each`, `array:filter`, `fold-left` or `fold-right` is `XPTY0004`;
+  `array:head` or `array:tail` of an empty array, and an array index too large for an integer, are
+  `FOAY0001`; too large an arity in a named function reference is `FOAR0002`; a function item given
+  to `concat` is `FOTY0013`.
+- **Core 2.5.0: pattern and length facets count characters by code point**, so a validation result
+  can change for a value with a character outside the Basic Multilingual Plane.
+
+**Changes to serialized output:**
+
+- `xsl:value-of` of a validated node writes its typed value (`  1.10  ` as `xs:decimal` writes `1.1`).
+- `order by` on dates, times and durations can put results in a different order.
+- A validated element whose type has element-only content has no whitespace text children, so the
+  whitespace between its children is not in the output.
+- XSLT streamed output that was wrong with no error is right: template rules of a streamable mode
+  that lost end tags or values (#340), and three more shapes (#343), among them a streamed
+  `xsl:for-each select="foo"` that ran for every child element.
+- `TransformAsync(Stream, TextWriter)` holds the output of the rule for the document node until the
+  rule ends: `<out>1;2;</out>` came out as `1;2;<out/>`.
+- What a failing global variable that nothing used wrote is no longer ahead of the result.
+- Core 2.5.0 does not change serialized output.
+
+**Fixed** (selected; the [Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt/blob/main/RELEASES.md)
+and [XQuery](https://github.com/phoenixmldb/phoenixmldb-xquery/blob/main/RELEASES.md) notes list all):
+
+- **XSLT schema-aware processing.** `as=` checks derived built-in types (`xs:int`) and schema-defined
+  atomic types; `fn:copy-of`, `fn:snapshot` and `xsl:copy-of validation="preserve"` keep annotations;
+  `xsl:source-document validation=`, `input-type-annotations="strip"`, typed modes and `type` on
+  `xsl:attribute`, `xsl:copy` and `xsl:copy-of` (#364) are applied; `json-to-xml` with
+  `validate: true()` gives a typed tree; an inline schema with no target namespace is loaded; a type
+  of a schema with no target namespace can be named (#359).
+- **An imported schema is compiled once for all transformers** (#355); each `XsltTransformer`
+  compiled every `xsl:import-schema` again.
+- **XQuery schema-aware typing:** `fn:distinct-values`, `fn:data`, `sum`, `avg`, `min` and `max` of
+  validated and list-typed nodes; `xs:unsignedLong` above `long`; `xs:NOTATION` typed values; union
+  types in `element(*, U)`; negative and five-digit years in dates; a nilled element atomizes to the
+  empty sequence (#236); kind tests in host-language expressions take the host's prefixes and default
+  namespace.
+- **XSLT streaming:** `xsl:iterate` and `xsl:for-each-group` under the document node read the input
+  record by record, and `xsl:break` stops the reading; `xsl:on-completion` is not run after
+  `xsl:break`; `count(//item)` in a variable is no longer `XTSE3430`; `lang()` and
+  `xsl:for-each select="head(//x)"` are streamable.
+- `xsl:with-param` with a body and a one-node `as` type passes that node (#358).
+- `file:/abs/path` works in `doc`, `doc-available` and `json-doc` (#229).
+- `group by` finds a tuple's group by hash, not by comparing with every group (#232).
+
+**New API** (see [Schemas and Validation](phoenixmldb/api-reference/schemas.md),
+[XSLT API](phoenixmldb/api-reference/xslt-api.md#new-in-2-9-0),
+[Hosting the Engines](phoenixmldb/api-reference/hosting.md#the-implicit-timezone-2-9-0) and
+[Resource Policy](phoenixmldb/api-reference/resource-policy.md#builder-api)):
+
+- Implicit timezone: `QueryEngine.ImplicitTimezone`, `QueryExecutionContext.ImplicitTimezone`,
+  `XsltTransformer.ImplicitTimezone`, `XsltTransformOptions.ImplicitTimezone`.
+- XSLT: `XsltTransformer.SchemaAware`, `SourceValidation` (also on `XsltTransformOptions`),
+  `PrincipalResultTree` (`XsltResultTree`), and `XsltStylesheetSchema`, an XSD 1.0 schema for XSLT
+  3.0 stylesheets.
+- `ResourcePolicyBuilder.AllowTransformFunction(false)` / `ResourcePolicy.AllowTransformFunction`
+  turn `fn:transform` off (`FOXT0001`); on by default. `IHostGatedFunction`.
+- Schemas: `XsdSchemaProvider.KnowsXmlNamespace`, `XsdSchemaProvider.DeclaringEntities`,
+  `ISchemaProvider.ValidateElementAndAnnotate`, and `ImportSchema` / `AddSchemaText` overloads that
+  take the importing module's URI.
+- `ResourceRequest.ModuleUri` is set for the requests a query or the XSLT compiler makes (#227,
+  #335), and `XQueryExpression.EmbeddedInModule` (#230).
+
+**Core 2.5.0** adds `PhoenixmlDb.Xdm.ImplicitTimezone` (`Current`, `Use(offset)`), which the date
+and time types read where they read the machine's offset; nothing changes for a host that does not
+set it. Pattern facets and the `length`, `minLength` and `maxLength` facets of string types count
+characters by code point (see
+[Schemas and Validation](phoenixmldb/api-reference/schemas.md#characters-outside-the-basic-multilingual-plane)).
+
 ### 2.8.0 (2026-10-09): XQuery and Xslt 2.8.0, Core 2.4.0
 
 **W3C QT3: 251 failing of 31,331** (257 at 2.7.0) · **W3C XSLT 3.0: 131 failing**.
