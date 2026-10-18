@@ -117,6 +117,14 @@ IXdmNode root = await doc.GetRootNodeAsync();
 Console.WriteLine(root.NodeKind);    // Document
 ```
 
+### Header, Content and Metadata of One Version
+
+`ReadDocumentAsync(name)` (`ContainerReadExtensions`, namespace `PhoenixmlDb.Storage`) returns a
+`StoredDocument` with `Info`, `Content` and `Metadata`, all of one version, or `null` when no document
+has the name. `ReadContentAsync(name)` returns the content alone. A read through an `IDocument`
+reads the version that is current when that read starts. See
+[Reads During Writes](../reads-during-writes.md#a-document-in-one-call).
+
 ### Check Existence
 
 ```csharp

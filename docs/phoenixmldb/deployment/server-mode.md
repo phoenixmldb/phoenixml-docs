@@ -288,6 +288,13 @@ certificate, and needs no API key.
 - **Query errors** are HTTP `400` with a problem body that carries `xqueryErrorCode` and `detail`.
   `POST /api/query/validate` reports each static error with its own code, including errors in
   imported modules; `POST /api/query/compile` answers `400` with `xqueryErrorCode`.
+- **Query limits.** A query past its time limit is `504` with `errorCode` `QUERY_TIMEOUT`. A query
+  over `PhoenixmlDb:Query:MaxConcurrentQueriesPerApiKey` is `503` with `errorCode`
+  `QUERY_LIMIT_API_KEY`. A read refused at a reader limit is `503` with `errorCode` `READER_LIMIT`
+  and `setting` with the key of the limit. See
+  [Reads During Writes](../reads-during-writes.md#queries).
+- **A document deleted during a request** that reads it again is `404` with `errorCode` `NOT_FOUND`
+  and `resourceType` `Document`.
 
 ### REST server: transformations
 
@@ -335,6 +342,10 @@ library.
   `success = false`. The streaming query answers status `InvalidArgument` with the same text.
 - A regular-expression match that runs past `PhoenixmlDb:Query:RegexMatchTimeoutMs` is answered
   `DeadlineExceeded`.
+- A query that runs past its limit (`timeout_ms`, at most `PhoenixmlDb:Query:MaxTimeoutSeconds`) is
+  answered `DeadlineExceeded`. A query over `PhoenixmlDb:Query:MaxConcurrentQueriesPerApiKey`, a read
+  refused at a reader limit, and a `BeginTransaction` over the transaction limits are answered
+  `ResourceExhausted`. See [Reads During Writes](../reads-during-writes.md#queries).
 - `PutDocument` and `UpdateDocument` answer a refused document name with `success = false` and
   `error` beginning `INVALID_DOCUMENT_NAME: `. `BulkPutDocuments` lists it in the per-document
   `errors`. See [the name rule](../documents-and-storage.md#the-name-rule).

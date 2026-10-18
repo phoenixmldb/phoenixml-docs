@@ -158,6 +158,8 @@ IReadOnlyList<string> ContainersWithStaleIndexes()
 
 Names every container whose indexes may be missing entries, so queries against it scan instead of using the indexes until it is rebuilt: a container written to while indexing was not enabled, a container last written by an engine that predates stale-tracking, or one whose persisted full-text index was analyzed differently from how the current process analyzes (`EnableIndexing()` marks those).
 
+It also names a container whose full-text index cannot be read; the full-text indexer marks those. See [Full-Text Search: An index that cannot be read](../full-text-search.md#an-index-that-cannot-be-read).
+
 ### `DocumentDatabase.RebuildStaleIndexesAsync`
 
 ```csharp
@@ -172,7 +174,7 @@ These members live on the `IndexManager` returned by `EnableIndexing()`. Full de
 
 | Member | Signature | Purpose |
 |--------|-----------|---------|
-| `SearchFullText` | `IReadOnlyList<FullTextSearchHit> SearchFullText(ContainerId container, string text, int limit = 100)` | Search; throws `InvalidOperationException` if the container's indexes are stale. |
+| `SearchFullText` | `IReadOnlyList<FullTextSearchHit> SearchFullText(ContainerId container, string text, int limit = 100)` | Search; throws `InvalidOperationException` if the container's indexes are stale or its full-text index cannot be read. |
 | `PendingFullTextDocuments` | `IReadOnlyCollection<DocumentId> PendingFullTextDocuments(ContainerId container)` | Documents the Lucene index does not yet (or no longer) correctly reflect. |
 | `CountFullTextIndexEntries` | `long CountFullTextIndexEntries(ContainerId container)` | Diagnostic: entries currently held in the Lucene index. |
 | `DrainFullTextQueueAsync` | `Task<int> DrainFullTextQueueAsync(DocumentDatabase db, int batchSize = 500, CancellationToken ct = default)` | Applies up to `batchSize` queued documents in one LMDB write transaction; returns the count indexed. |

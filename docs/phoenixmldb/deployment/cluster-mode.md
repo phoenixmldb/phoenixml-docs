@@ -145,8 +145,26 @@ leader, if one is known; the detail is in the server log (event 2018).
 - Neither the server nor the client library sends a write again. `PhoenixmlClientOptions.EnableRetry`
   and `MaxRetries` have no effect.
 
-While a write waits, the node answers vote requests and replication requests. Log events 2018–2023
+While a write waits, the node answers vote requests and replication requests. Log events 2018–2025
 are listed in [Logging and Telemetry](../logging.md#cluster-2000-2099).
+
+**The start of a term:** a node that becomes the leader appends one empty entry (a no-op) to the log
+at the start of its term. An entry of an earlier term that a majority has stored is then committed
+without another write. The index of each later entry, such as the `Index` that "result not known"
+names, is one higher for each term the cluster has had. If the new leader cannot append that entry,
+it logs event 2024 (`TermStartEntryFailed`), and the next write appends it.
+
+**Term and vote:**
+
+- A node stores its term and its vote in its Raft log first, and then acts on them: when it asks for
+  votes, and when it answers a vote request or a replication request of a higher term. After a
+  restart it continues in the term it stored, and it does not vote a second time in that term.
+- If the store fails, the node does not take the term: it does not ask for votes, it refuses the
+  vote or the replication request that named the term, and it logs event 2025 (`TermNotStored`). A
+  leader or a candidate that learns of a higher term and cannot store it becomes a follower of the
+  term it stored. The node tries again at its next election timeout or the next request.
+- A candidate becomes the leader only of the term of the election that counted a majority of votes,
+  and only while it is still a candidate in that term.
 
 **Known limits:**
 

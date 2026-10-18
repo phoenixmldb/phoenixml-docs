@@ -295,6 +295,8 @@ A container's indexes can become **stale**: written to while indexing was not en
 IReadOnlyList<string> stale = db.ContainersWithStaleIndexes();
 ```
 
+A container whose full-text index cannot be read is listed too ([Full-Text Search: An index that cannot be read](full-text-search.md#an-index-that-cannot-be-read)).
+
 Rebuild a container's indexes from its stored documents:
 
 ```csharp

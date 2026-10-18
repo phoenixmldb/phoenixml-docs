@@ -155,7 +155,7 @@ using (var read = db.BeginRead())
 }
 ```
 
-A transaction's query sees committed data. It does not see writes buffered in an uncommitted `IWriteTransaction`, including the transaction's own, and it is not a snapshot shared across calls: each query reads the committed state at the time it runs. See [Transaction API](transactions.md).
+A transaction's query sees committed data. It does not see writes buffered in an uncommitted `IWriteTransaction`, including the transaction's own. A query in a read transaction from `BeginRead` reads the committed state of `BeginRead`, as every other call on that transaction does; a query in a write transaction reads the committed state at the time it starts. See [Transaction API](transactions.md) and [Reads During Writes: Queries](../reads-during-writes.md#queries).
 
 ## Static Namespaces
 
@@ -171,7 +171,7 @@ await foreach (var id in orders.QueryAsync("/o:order/o:id/string()"))
 
 ## Cancellation
 
-Pass a `CancellationToken` to `QueryAsync` (or with `WithCancellation`) to stop a long-running query; cancellation surfaces as `OperationCanceledException`. There is no built-in query timeout or result limit; apply your own with a token from `CancellationTokenSource.CancelAfter`.
+Pass a `CancellationToken` to `QueryAsync` (or with `WithCancellation`) to stop a long-running query; cancellation surfaces as `OperationCanceledException`. There is no built-in query timeout or result limit; apply your own with a token from `CancellationTokenSource.CancelAfter`. The number of queries running at one moment is limited (`LmdbStorageOptions.MaxConcurrentQueries`): a query that starts at the limit fails with `ReaderLimitException` and does not wait. See [Reads During Writes: Queries](../reads-during-writes.md#queries).
 
 ## Error Handling
 

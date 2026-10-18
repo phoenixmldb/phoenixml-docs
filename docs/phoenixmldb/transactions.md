@@ -48,10 +48,11 @@ using (var txn = db.BeginRead())
 ```
 
 **Characteristics:**
-- **No snapshot across calls.** `IReadTransaction` holds no LMDB read transaction. Each call reads the latest committed state on its own, so two calls on the same read transaction can see different data if a write commits between them.
-- Each individual call reads a consistent committed state.
-- Holds no locks and no LMDB reader slot; disposing it only marks it inactive.
-- The same reads are available directly on `IContainer` (`GetDocumentAsync`, `QueryAsync`, `ListDocumentsAsync`).
+- **One snapshot for every call.** Everything read through the transaction is of the committed state at the moment `BeginRead` is called: documents, their content, node trees and metadata, listings and queries. A write that commits afterwards is not seen through it.
+- It holds one reader slot until it ends, and while it is open the space of every version written afterwards is not reused. Keep it short, and dispose it.
+- It ends when it is disposed, when its maximum lifetime is over (`BeginRead(TimeSpan maxLifetime)`; none unless one is set), or when its database is disposed. Afterwards it raises `ObjectDisposedException`.
+- The number open at one moment is limited (`MaxReadTransactions`). See [Reads During Writes: Read transactions](reads-during-writes.md#read-transactions) for the rules and limits.
+- The same reads are available directly on `IContainer` (`GetDocumentAsync`, `QueryAsync`, `ListDocumentsAsync`); each of those reads one committed state on its own.
 
 ### Write Transactions
 
@@ -102,7 +103,7 @@ Read 2:                           Begin ──── End
                                   Sees: A', B' (committed versions)
 ```
 
-"Read" here is one read call, such as one `GetDocumentAsync`, not an `IReadTransaction` as a whole; see [Read Transactions](#read-transactions).
+"Read" here is one read call, such as one `GetDocumentAsync`, or one query, or everything read through one `IReadTransaction`; see [Read Transactions](#read-transactions) and [Reads During Writes](reads-during-writes.md).
 
 ## Transaction Patterns
 

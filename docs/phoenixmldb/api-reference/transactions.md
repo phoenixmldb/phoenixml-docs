@@ -25,7 +25,7 @@ using (var read = db.BeginRead())
 }
 ```
 
-`BeginRead` is synchronous and holds no lock or resources. Each call on a read transaction reads the committed state at the moment it runs; the transaction does not pin one snapshot across calls, so a commit made between two calls is visible to the second.
+`BeginRead` is synchronous. The transaction reads the committed state at the moment `BeginRead` is called: every call on it, and every read through a document it returns, is of that state, so a commit made between two calls is not visible to the second. It holds one reader slot until it ends; `BeginRead(TimeSpan maxLifetime)` sets the longest it stays open. Limits, costs and errors are in [Reads During Writes: Read transactions](../reads-during-writes.md#read-transactions).
 
 ### Write Transaction
 

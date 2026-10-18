@@ -48,11 +48,11 @@ The default is 50 GiB in a 64-bit process and 1 GiB in a 32-bit one. `MapSize` r
 
 ### "Max readers reached"
 
-**Symptom:** LMDB's `MDB_READERS_FULL`.
+**Symptom:** `ReaderLimitException` (a `PhoenixmlDbStorageException`). Its `SettingName` and `Limit` name the limit reached. Over gRPC it is status `ResourceExhausted`; over REST it is `503` with `errorCode` `READER_LIMIT`.
 
-**Cause:** more concurrent LMDB read transactions than `LmdbStorageOptions.MaxReaders` (default 126).
+**Cause:** one of three limits is reached: `MaxReaders` (reader slots of every kind, default 126), `MaxReadTransactions` (read transactions from `BeginRead`, default 31) or `MaxConcurrentQueries` (running queries, default 63). See [Reads During Writes: Limits on readers](reads-during-writes.md#limits-on-readers).
 
-**Solution:** raise `MaxReaders` when opening the database:
+**Solution:** dispose read transactions and query enumerators when you are done with them, or raise the limit when opening the database:
 
 ```csharp
 using var db = new DocumentDatabase("./data", new LmdbStorageOptions
@@ -61,7 +61,7 @@ using var db = new DocumentDatabase("./data", new LmdbStorageOptions
 });
 ```
 
-`IReadTransaction` itself holds no LMDB reader; reader slots are used by individual operations while they run.
+An open `IReadTransaction` holds one reader slot until it ends, and a running query holds one until its enumeration ends. A refused read changes nothing; it succeeds when a reader has ended.
 
 ### Database Corruption
 

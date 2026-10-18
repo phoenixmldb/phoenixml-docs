@@ -28,7 +28,10 @@ Other sections are documented with their features:
 |---|---|---|
 | `DataPath` | `{ContentRoot}/data` | A relative path resolves against the content root. |
 | `MapSizeMb` | the engine default: 50 GiB in a 64-bit process, 1 GiB in a 32-bit process | The storage map size in MB. If an existing store already holds that much data or more, the server refuses to start: a smaller map would make it read-only. |
-| `MaxReaders` | `126` | Concurrent read transactions. At least 1. |
+| `MaxReaders` | `126` | Reader slots: read transactions of every kind open at one moment. At least 1. See [Reads During Writes: Limits on readers](../reads-during-writes.md#limits-on-readers). |
+| `MaxReadTransactions` | a quarter of `MaxReaders`, at most 32: `31` | Read transactions from `BeginRead` open at one moment. At least 1, at most half of `MaxReaders`; another value stops startup. |
+| `MaxConcurrentQueries` | half of `MaxReaders`: `63` | Queries running at one moment. At least 1, and at most `MaxReaders` less `MaxReadTransactions` and a reserve of an eighth of `MaxReaders` (with the defaults at most 80); another value stops startup. |
+| `ReadTransactionMaxLifetimeSeconds` | unset: no limit | The longest a read transaction from `BeginRead` stays open. |
 | `CreateIfMissing` | `true` | When `false`, a missing data directory stops startup and nothing is created. |
 
 ```json
@@ -70,14 +73,16 @@ serve (registered schemas, files in `BasePath`, and locations allowed by
 
 ## REST server resource limits
 
-These sections apply to the **REST server** (except `RegexMatchTimeoutMs`, which applies to both).
+These sections apply to the **REST server** (except `RegexMatchTimeoutMs`, `MaxTimeoutSeconds` and
+`MaxConcurrentQueriesPerApiKey`, which apply to both).
 
 ### Queries: `PhoenixmlDb:Query`
 
 | Setting | Default | Notes |
 |---|---|---|
 | `DefaultTimeoutSeconds` | `30` | Used when neither the request nor the container sets a timeout. |
-| `MaxTimeoutSeconds` | `300` | Upper bound on any query timeout. |
+| `MaxTimeoutSeconds` | `300` | Upper bound on any query timeout, in both servers. On the gRPC server it is also the limit of a request that names no `timeout_ms`. |
+| `MaxConcurrentQueriesPerApiKey` | `16` | Queries one API key has running at one moment, in both servers (all callers together on a server without keys). One more is answered `503` `QUERY_LIMIT_API_KEY` (REST) or `ResourceExhausted` (gRPC) and does not wait. |
 | `MaxResults` | `10000` | A request's `MaxResults` is clamped to this. |
 | `DefaultPageSize` | `100` | Also used for document listings. |
 | `MaxPageSize` | `1000` | |
@@ -89,6 +94,9 @@ These sections apply to the **REST server** (except `RegexMatchTimeoutMs`, which
 the container's `QueryTimeoutSeconds` and `DefaultTimeoutSeconds`, then capped at
 `MaxTimeoutSeconds`. It's checked between evaluation steps. When it's reached the server returns
 `504 QUERY_TIMEOUT`, and the response's `limitSource` says which limit applied.
+The limit covers the whole call: for a streamed answer it includes the time the client takes to
+read the results. The gRPC server's limit is the request's `timeout_ms`, at most `MaxTimeoutSeconds`;
+see [Reads During Writes: Time limits](../reads-during-writes.md#time-limits).
 
 **Results.** `MaxResults` below 1 or `Skip` below 0 returns `400`. `HasMore` reports whether more
 results exist, and `TotalCount` is the number of items returned.
@@ -138,6 +146,21 @@ A container's own settings override these. In the API, the container fields `Ver
 nullable: `null` means "use the server default". A `PUT` merges settings, so a field left out keeps
 its stored value; a field can't be reset to the server default through `PUT`. `DefaultNamespaces`
 are fixed when the container is created, and changing them on a `PUT` returns `400`.
+
+## gRPC server transactions: `PhoenixmlDb:Transactions`
+
+These settings apply to the transactions of `TransactionService.BeginTransaction` on the **gRPC
+server**, read-only and read-write. The rules are in
+[Reads During Writes: gRPC server: transactions](../reads-during-writes.md#grpc-server-transactions).
+
+| Setting | Default | Rule |
+|---|---|---|
+| `LeaseSeconds` | `30` | A transaction that no call has used for this long is rolled back. A use is a call that names the transaction: a write, a commit, a rollback. `GetTransactionStatus` is not a use. |
+| `MaxLifetimeSeconds` | `300` | A transaction that has been open this long is rolled back, used or not. |
+| `MaxOpen` | `64` | Transactions open at one moment on the server. |
+| `MaxOpenPerApiKey` | `16` | Transactions open at one moment for one API key (for all callers together on a server without keys). At most `MaxOpen`. |
+
+One more `BeginTransaction` at `MaxOpen` or `MaxOpenPerApiKey` is answered `ResourceExhausted`.
 
 ## Telemetry export
 

@@ -40,7 +40,7 @@ with are available as `db.StorageOptions`.
 |--------|------|---------|-------------|
 | `MapSize` | `long` | 50 GiB (64-bit process), 1 GiB (32-bit) | Virtual address space reserved for the memory map, and so the maximum database size. `data.mdb` grows only as data is written |
 | `MaxDatabases` | `int` | 64 | Maximum LMDB named databases in the environment. Containers are not named databases |
-| `MaxReaders` | `int` | 126 | Maximum concurrent read transactions |
+| `MaxReaders` | `int` | 126 | Reader slots: read transactions of every kind open at one moment |
 | `NoSync` | `bool` | `false` | Don't sync to disk on commit (faster; data may be lost on a system crash) |
 | `WriteMap` | `bool` | `false` | Use a writable memory map (`MDB_WRITEMAP`) |
 | `ReadOnly` | `bool` | `false` | Open read-only |
@@ -50,6 +50,12 @@ with are available as `db.StorageOptions`.
 | `RestoreFromStream` | `Func<CancellationToken, Task<Stream>>?` | `null` | Factory for a stream to restore from |
 | `RestoreOverwrite` | `bool` | `false` | Restore even when a database already exists |
 | `LoggerFactory` | `ILoggerFactory?` | `null` | Logger factory the database logs through (see [Logging](logging.md)) |
+
+Three more options limit readers: `MaxReadTransactions` (read transactions from `BeginRead` open at
+one moment; default a quarter of `MaxReaders`, at most 32), `MaxConcurrentQueries` (queries running
+at one moment; default half of `MaxReaders`) and `ReadTransactionMaxLifetime` (the longest a read
+transaction from `BeginRead` stays open; unset, no limit). Their rules, and what is refused at each
+limit, are in [Reads During Writes: Limits on readers](reads-during-writes.md#limits-on-readers).
 
 The engine never grows the map at runtime. When it is full, writes throw
 `PhoenixmlDbStorageException`. Reopening an existing, writable database with a `MapSize` at or below
