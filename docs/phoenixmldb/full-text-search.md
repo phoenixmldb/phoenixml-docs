@@ -244,7 +244,7 @@ and stemming settings, and its stop-word list comes with it. Pluggable analysis 
 **not implemented as of 1.8.0**, so there is currently no supported way to supply your own list —
 `FullTextIndexOptions.StopWords` is accepted and has no effect, and the `using stop words` match
 option is inert (see
-[XQuery Full-Text](../language-reference/xquery/full-text.md#diacritics-wildcards-stop-words-and-thesaurus--parsed-not-applied)).
+[XQuery Full-Text](../language-reference/xquery/full-text.md#diacritics-wildcards-stop-words-and-thesaurus-parsed-not-applied)).
 - **`phx:search` does not exist yet.** A native, non-portable search surface is planned as a later phase.
 - **Analysis, resource providers and scoring are not pluggable yet.** Language, stemming and case-sensitivity are configurable per index (`FullTextIndexOptions`), but the analyzer itself, stop-word/thesaurus resources, and the scorer are fixed.
 - **`FullTextIndexOptions.StopWords` is accepted but has no effect.** You can set it; nothing reads it — no error, no behavior change. This is a real, pre-existing gap (the mapping from the container-facing options to the engine's internal analysis options simply does not carry `StopWords` across), not something this page is glossing over.

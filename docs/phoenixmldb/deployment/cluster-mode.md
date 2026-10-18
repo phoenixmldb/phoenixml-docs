@@ -19,10 +19,6 @@ Replication is **logical**. The leader ships database commands (create container
 delete, …) through the replicated log, and every node applies the same sequence to its own store.
 Storage pages are not shipped.
 
-> **Fixed in phoenixml `main` 1023078 (issue #63):** before this, every incoming Raft call over
-> gRPC was refused, even with the correct cluster secret, so a multi-node cluster could never elect
-> a leader. A two-node cluster over TLS now elects a leader and replicates writes.
-
 ## Configuring a three-node cluster
 
 Each node names itself and lists the *other* nodes. On `node-1`:
@@ -113,9 +109,7 @@ API keys never authenticate Raft, and the cluster secret never authenticates the
 
 **A Raft-enabled server must have at least one API key** (`PhoenixmlDb:Auth:ApiKeys`), or it
 refuses to start. The Raft listener is on every interface, so a Raft-enabled server counts as
-reachable from the network whatever `Endpoints:ListenAddress` says. Before #63, the client API was
-also served on the Raft port, so a cluster with no keys exposed it to the network without
-authentication.
+reachable from the network whatever `Endpoints:ListenAddress` says.
 
 Keys, scopes, rotation and the other startup checks are described in
 [Server Mode: gRPC server](server-mode.md#grpc-server).
