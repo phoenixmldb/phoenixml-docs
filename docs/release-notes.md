@@ -108,11 +108,9 @@ each time it is asked for.
   apply. A `match` pattern with a syntax error inside a predicate (`a[`, `a[1 +]`) is accepted by
   the library.
 - **Validators:** `sch:extends href` and RELAX NG `externalRef` / `include` are not implemented.
-- **A cluster write that reports "Failed to reach consensus" may still be applied.** The leader
-  appends the entry to its log, then waits up to 5 seconds for it to be applied. When that time
-  passes it answers `Success = false`, `Error = "Failed to reach consensus"`, and the entry stays in
-  the log; it can be committed and applied afterwards. A client that gets this answer should read
-  before it retries.
+- **A cluster write answered "result not known" may still be applied.** The three results of a
+  write and what a caller does after each are in
+  [Cluster Mode: the result of a write](phoenixmldb/deployment/cluster-mode.md#the-result-of-a-write).
 - Reads in a cluster are node-local and not linearizable.
 - The Raft log format has no version number.
 - `PhoenixmlDb:Query:EnableCaching` cannot be turned on.
@@ -213,7 +211,7 @@ Documents:
 gRPC clients:
 
 - The `error` text of a failed query with an error code begins with the code.
-- A write answered "Failed to reach consensus" may have been applied; read before you retry.
+- After "result not known" (`WRITE_OUTCOME_UNKNOWN:`), read first; send a write again only after "not applied".
 
 Cluster:
 

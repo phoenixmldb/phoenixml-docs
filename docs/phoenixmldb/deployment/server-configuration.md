@@ -34,6 +34,8 @@ Other sections are documented with their features:
 | `ReadTransactionMaxLifetimeSeconds` | unset: no limit | The longest a read transaction from `BeginRead` stays open. |
 | `CreateIfMissing` | `true` | When `false`, a missing data directory stops startup and nothing is created. |
 
+In an embedded host, `DocumentDatabase` throws `ArgumentException` ("Invalid LmdbStorageOptions: …", naming the option) when it is opened with a value of `MaxReadTransactions` or `MaxConcurrentQueries` outside these limits.
+
 ```json
 {
   "PhoenixmlDb": {
