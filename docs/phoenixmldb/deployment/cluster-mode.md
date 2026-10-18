@@ -19,10 +19,6 @@ Replication is **logical**. The leader ships database commands (create container
 delete, …) through the replicated log, and every node applies the same sequence to its own store.
 Storage pages are not shipped.
 
-> **Fixed in phoenixml `main` 1023078 (issue #63):** before this, every incoming Raft call over
-> gRPC was refused, even with the correct cluster secret, so a multi-node cluster could never elect
-> a leader. A two-node cluster over TLS now elects a leader and replicates writes.
-
 ## Configuring a three-node cluster
 
 Each node names itself and lists the *other* nodes. On `node-1`:
@@ -113,9 +109,7 @@ API keys never authenticate Raft, and the cluster secret never authenticates the
 
 **A Raft-enabled server must have at least one API key** (`PhoenixmlDb:Auth:ApiKeys`), or it
 refuses to start. The Raft listener is on every interface, so a Raft-enabled server counts as
-reachable from the network whatever `Endpoints:ListenAddress` says. Before #63, the client API was
-also served on the Raft port, so a cluster with no keys exposed it to the network without
-authentication.
+reachable from the network whatever `Endpoints:ListenAddress` says.
 
 Keys, scopes, rotation and the other startup checks are described in
 [Server Mode: gRPC server](server-mode.md#grpc-server).
@@ -145,8 +139,26 @@ leader, if one is known; the detail is in the server log (event 2018).
 - Neither the server nor the client library sends a write again. `PhoenixmlClientOptions.EnableRetry`
   and `MaxRetries` have no effect.
 
-While a write waits, the node answers vote requests and replication requests. Log events 2018–2023
+While a write waits, the node answers vote requests and replication requests. Log events 2018–2025
 are listed in [Logging and Telemetry](../logging.md#cluster-2000-2099).
+
+**The start of a term:** a node that becomes the leader appends one empty entry (a no-op) to the log
+at the start of its term. An entry of an earlier term that a majority has stored is then committed
+without another write. The index of each later entry, such as the `Index` that "result not known"
+names, is one higher for each term the cluster has had. If the new leader cannot append that entry,
+it logs event 2024 (`TermStartEntryFailed`), and the next write appends it.
+
+**Term and vote:**
+
+- A node stores its term and its vote in its Raft log first, and then acts on them: when it asks for
+  votes, and when it answers a vote request or a replication request of a higher term. After a
+  restart it continues in the term it stored, and it does not vote a second time in that term.
+- If the store fails, the node does not take the term: it does not ask for votes, it refuses the
+  vote or the replication request that named the term, and it logs event 2025 (`TermNotStored`). A
+  leader or a candidate that learns of a higher term and cannot store it becomes a follower of the
+  term it stored. The node tries again at its next election timeout or the next request.
+- A candidate becomes the leader only of the term of the election that counted a majority of votes,
+  and only while it is still a candidate in that term.
 
 **Known limits:**
 

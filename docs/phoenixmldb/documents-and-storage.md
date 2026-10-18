@@ -253,6 +253,12 @@ if (await container.DocumentExistsAsync("product.xml"))
 fresh serialization, not the original bytes. `GetContentStreamAsync` serializes the whole document
 into memory and returns a read-only stream over it.
 
+Each read returns one committed version of the document, whole, also while the document is
+replaced or deleted. `GetDocumentAsync` followed by `GetContentAsync` is two reads: a document
+deleted between them is a `DocumentNotFoundException` from the second. `ReadDocumentAsync(name)`
+(`ContainerReadExtensions`, namespace `PhoenixmlDb.Storage`) returns the header, the content and the
+metadata of one version in one call. See [Reads During Writes](reads-during-writes.md).
+
 ### Document Metadata
 
 Metadata provides additional information about documents without modifying the document content:
@@ -536,7 +542,8 @@ transaction begins (see [MVCC](transactions.md#mvcc-multi-version-concurrency-co
 A reader transaction can be held open while sub-queries open additional
 short-lived read transactions on the same thread — the engine does not bind
 reader slots to the calling thread, so there is no per-thread reader limit
-beyond `MaxReaders` (default 126).
+beyond `MaxReaders` (default 126). Read transactions from `BeginRead` and running queries have
+limits of their own; see [Reads During Writes: Limits on readers](reads-during-writes.md#limits-on-readers).
 
 **Multi-process pattern:**
 

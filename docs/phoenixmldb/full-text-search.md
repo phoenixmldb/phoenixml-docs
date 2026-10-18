@@ -136,6 +136,59 @@ Until a container is rebuilt, `SearchFullText` on it throws `InvalidOperationExc
 
 **Don't call `EnableIndexing()` while holding a transaction from `BeginWriteAsync`.** If it has to mark a container stale, it takes the write lock, and it can't tell your transaction from another writer's, so it waits forever.
 
+## After a crash
+
+After a process stops at any instant (killed, crashed, or a backup restored), the database opens and
+every full-text call works without a rebuild:
+
+- `SearchFullText` answers what `contains text` answers over the committed documents, both while
+  the background indexer has entries queued and after it has applied them;
+- documents queued at the crash are indexed once, by the background indexer, the next time it runs;
+- a backup taken while the indexer runs restores to a database that opens and searches the same way.
+
+Each indexer batch commits a Lucene commit point that references every Lucene file the batch wrote
+for a container, in the same transaction. Two cases leave files that no commit point references:
+
+- a container whose index is found unusable in that batch
+  ([below](#an-index-that-cannot-be-read)): the files the batch wrote for it are committed and
+  ignored;
+- files left by an earlier build of the engine.
+
+Searches ignore such files. The next indexer batch that touches the container deletes them; a
+rebuild deletes every Lucene file of the container.
+
+## An index that cannot be read
+
+A full-text index with a file that cannot be read (a damaged or missing file, not a crash) is not
+used.
+
+A full-text read of it (`SearchFullText`, `CountFullTextIndexEntries`) fails with
+`InvalidOperationException`: `Container '<name>' has a full-text index that cannot be read (…). The
+full-text indexer marks it stale at its next pass. Call DocumentDatabase.RebuildIndexesAsync("<name>")
+before searching.` The Lucene exception is its inner exception.
+
+At its next pass (after such a read, even with nothing queued, or when opening the index or applying
+a batch to it fails) the background indexer:
+
+- marks the container's indexes stale: `DocumentDatabase.ContainersWithStaleIndexes()` lists it;
+- removes the container's queued entries (the rebuild queues every document again) and goes on with
+  the other containers; their documents are applied in the same pass and are the only ones counted;
+- after that pass has committed, logs event 1103 (`FullTextIndexUnusable`, Error) once
+  ([Logging and Telemetry](logging.md#indexing-1100-1199)).
+
+A host that does not run the background indexer marks the container stale at its next
+`IndexManager.DrainFullTextQueueAsync`.
+
+Until the rebuild, `SearchFullText` and `CountFullTextIndexEntries` on the container fail with
+`InvalidOperationException` naming `DocumentDatabase.RebuildIndexesAsync`, and its other queries scan
+every document. Who rebuilds:
+
+| Host | Rebuild |
+|---|---|
+| gRPC server | At startup only: a container marked stale while the server runs stays refused until the next start or `IndexService.RebuildIndex` |
+| REST server | An operator: `POST /api/containers/{containerId}/indexes/rebuild` |
+| Embedded | The application: `DocumentDatabase.RebuildIndexesAsync(containerName)` or `RebuildStaleIndexesAsync()` |
+
 ## Where the index lives
 
 The Lucene index is stored entirely inside your LMDB environment, through a custom `Directory` that maps each Lucene file to an LMDB value keyed by container and file name. After writing documents to a full-text-indexed container and draining the queue, the on-disk footprint is unchanged from any other PhoenixmlDb database — `data.mdb` and `lock.mdb`, and nothing else. There is no `segments_N`, no `.cfs`, no separate Lucene directory to back up, replicate, or lose track of: it replicates and restores exactly as the rest of your database does.
@@ -191,7 +244,7 @@ and stemming settings, and its stop-word list comes with it. Pluggable analysis 
 **not implemented as of 1.8.0**, so there is currently no supported way to supply your own list —
 `FullTextIndexOptions.StopWords` is accepted and has no effect, and the `using stop words` match
 option is inert (see
-[XQuery Full-Text](../language-reference/xquery/full-text.md#diacritics-wildcards-stop-words-and-thesaurus--parsed-not-applied)).
+[XQuery Full-Text](../language-reference/xquery/full-text.md#diacritics-wildcards-stop-words-and-thesaurus-parsed-not-applied)).
 - **`phx:search` does not exist yet.** A native, non-portable search surface is planned as a later phase.
 - **Analysis, resource providers and scoring are not pluggable yet.** Language, stemming and case-sensitivity are configurable per index (`FullTextIndexOptions`), but the analyzer itself, stop-word/thesaurus resources, and the scorer are fixed.
 - **`FullTextIndexOptions.StopWords` is accepted but has no effect.** You can set it; nothing reads it — no error, no behavior change. This is a real, pre-existing gap (the mapping from the container-facing options to the engine's internal analysis options simply does not carry `StopWords` across), not something this page is glossing over.

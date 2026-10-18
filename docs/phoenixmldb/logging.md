@@ -98,6 +98,13 @@ is logged one time for each type in a process. Neither event occurs with the pin
 | 1100 | FullTextBatchFailed | Error |
 | 1101 | FullTextDocumentDropped | Error |
 | 1102 | CallerCallbackThrew | Error |
+| 1103 | FullTextIndexUnusable | Error |
+
+Event 1103 is logged once for a container, by the full-text indexer, after the pass that marks the
+container stale has committed: `PhoenixmlDb: the full-text index of container '<name>' cannot be
+opened or updated; the container is marked stale. Full-text search refuses it and its other indexes
+are not used until DocumentDatabase.RebuildIndexesAsync rebuilds them.` Who rebuilds it, and when,
+is in [Full-Text Search: An index that cannot be read](full-text-search.md#an-index-that-cannot-be-read).
 
 ### Cluster (2000–2099)
 
@@ -125,6 +132,8 @@ is logged one time for each type in a process. Neither event occurs with the pin
 | 2019 | ProposalNotApplied | Warning |
 | 2022 | AppendFromOwnTermRefused | Warning |
 | 2023 | CommitAdvanceFailed | Error |
+| 2024 | TermStartEntryFailed | Error |
+| 2025 | TermNotStored | Error |
 | 2090 | StaleTimeoutNowIgnored | Debug |
 | 2091 | RequestVoteReceived | Debug |
 | 2092 | VoteGranted | Debug |
@@ -133,6 +142,15 @@ is logged one time for each type in a process. Neither event occurs with the pin
 
 `PeerRequestFailed` (2010) names the request (`RequestVote`, `AppendEntries` or `TimeoutNow`) and
 the peer. A node that is shutting down doesn't report its own shutdown as a peer failure.
+
+| Event | When |
+|---|---|
+| 2022 | A leader refused a replication request that claims its own term |
+| 2023 | An error while the node advanced its commit index or applied an entry after a peer answered |
+| 2024 | A new leader could not append the entry that starts its term; the next write appends it |
+| 2025 | The node could not store a new term or a vote in its Raft log; it stays in the term it stored |
+
+See [Cluster Mode: The result of a write](deployment/cluster-mode.md#the-result-of-a-write).
 
 ### Server (3000–3099)
 

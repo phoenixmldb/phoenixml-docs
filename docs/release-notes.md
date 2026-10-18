@@ -44,6 +44,15 @@ This version contains:
   earlier build is not used until it is rebuilt (warning 1025).
 - **The result of a write on a cluster** is one of applied, not applied, or result not known, with
   `Raft:ProposalTimeoutMs` (default 5000). See [Cluster Mode](phoenixmldb/deployment/cluster-mode.md#the-result-of-a-write).
+  A node stores its term and its vote in its Raft log first, and then acts on them (event 2025 when
+  it cannot); a new leader starts its term with an empty entry (event 2024 when it cannot).
+- **Reads during writes.** Every read of a document returns one committed version, whole. A read
+  transaction from `BeginRead` and a query each read one committed state. Read transactions,
+  running queries and reader slots have limits (`ReaderLimitException`), and both servers limit the
+  queries per API key. See [Reads During Writes](phoenixmldb/reads-during-writes.md).
+- **The full-text index after a crash** opens and searches without a rebuild. An index that cannot
+  be read marks its container stale (event 1103) until it is rebuilt. See
+  [Full-Text Search: After a crash](phoenixmldb/full-text-search.md#after-a-crash).
 
 #### Behaviour you can see
 
