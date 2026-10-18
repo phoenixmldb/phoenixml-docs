@@ -170,6 +170,19 @@ it logs event 2024 (`TermStartEntryFailed`), and the next write appends it.
 - A leadership transfer makes the node answer no vote request and no replication request until the
   transfer ends or its time limit passes.
 
+## Shutdown
+
+When `RaftNode.DisposeAsync` returns, the work the node started itself has ended (elections, the
+entry at the start of a term, heartbeats and replication) and its Raft log is closed, so the same
+directory can be opened again at once.
+
+- `DisposeAsync` does not wait for calls that callers made into the node and that are still running
+  (a write, a leadership transfer). Stop those calls before the node is disposed.
+- A write that is running when the node is disposed is answered "result not known".
+- A vote or replication request that waits for the node during shutdown is cancelled.
+- The gRPC server stops accepting requests and lets running requests end before it disposes the
+  node.
+
 ## What this does not do yet
 
 "It replicates" is easily mistaken for more than it is:
