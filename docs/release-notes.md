@@ -232,6 +232,53 @@ each repo: [Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt/blob/main/RELE
 > exact for its own release; subtracting across a harness change compares different
 > measurements.
 
+### 3.0.0 (2026-11-04): XQuery and Xslt 3.0.0, Core 2.6.0
+
+**W3C QT3: 31 failing of 31,325** (207 at 2.9.0) · **W3C XSLT 3.0: 132 failing of 11,539** (216 at
+2.9.0, measured on a host in UTC). Both figures include corrections to the test harness as well as
+engine changes.
+
+XQuery 3.0.0 requires Core 2.6.0; Xslt 3.0.0 requires XQuery 3.0.0 and Core 2.6.0. The packages
+share one version: the release train moves to 3.0.0 because Xslt 3.0.0 has a breaking API change.
+
+**Security.** Hosts that compile queries, stylesheets or `xsl:evaluate` expressions from untrusted
+parties must upgrade. See
+[GHSA-9qvr-vjmg-m3pf](https://github.com/phoenixmldb/phoenixmldb-xquery/security/advisories/GHSA-9qvr-vjmg-m3pf)
+(XQuery) and
+[GHSA-6342-6rv2-xj9j](https://github.com/phoenixmldb/phoenixmldb-xslt/security/advisories/GHSA-6342-6rv2-xj9j)
+(Xslt) for the details and workarounds.
+
+**Breaking changes, check them when you upgrade:**
+
+- **Xslt: the namespace sets of three AST types are read-only.** `XsltElement.InScopeNamespaces`,
+  `XsltAttribute.InScopeNamespaces` and `XsltLiteralResultElement.NamespaceDeclarations` are
+  `IReadOnlyDictionary<string, string>`. Code that changes them, or takes them as a `Dictionary`,
+  does not compile, and the change is binary-breaking.
+- **XPDY0130 for an expression nested too deeply for the thread's stack.** A caller can catch it.
+  A long chain of arithmetic, comparison, `and`, `or` or `||` operators evaluates on a new stack and
+  does not raise it. In browser WebAssembly and WASI, which cannot start a thread, evaluation stays on
+  the current stack.
+- **`E => f(A)` parses to the function call `f(E, A)`.** Code that walks the AST and looks for
+  `ArrowExpression` to find `=>` must look for the call; `ArrowExpression` is the thin arrow `->`.
+- **FODC0005 for a colon in the first segment of a relative `fn:doc` reference**, for example
+  `doc('2026-01-02T10:30.xml')`. Start the reference with `./` to read such a name:
+  `doc('./2026-01-02T10:30.xml')`.
+- **`as="element(N, T)"` checks the type annotation** in XSLT: a stylesheet that declares a wrong
+  type in this form can fail.
+- **A `document-node(element(N, T))` pattern tests the type of the document element**: a rule for a
+  schema type does not match a source that is not validated. Validate the source
+  (`XsltTransformer.SourceValidation`, or `--validation strict`) to get the typed match.
+- **`CostModel.EstimateCardinality` keeps its results per `CostModel` instance**; do not share one
+  instance between threads. `XQueryExpressionRewriter.Rewrite` and `XQueryExpressionWalker.Walk` can
+  continue on another thread when the stack is low, which matters to a subclass with `[ThreadStatic]`
+  state.
+
+The complete lists are in the release notes of
+[PhoenixmlDb.XQuery 3.0.0](https://github.com/phoenixmldb/phoenixmldb-xquery/releases/tag/v3.0.0)
+and [PhoenixmlDb.Xslt 3.0.0](https://github.com/phoenixmldb/phoenixmldb-xslt/releases/tag/v3.0.0).
+The `xquery4` tool 3.0.0 runs on Xslt 3.0.0, and the `xquery-mcp` and `xslt-mcp` servers follow the
+3.0.0 engines.
+
 ### 2.9.0 (2026-10-15): XQuery and Xslt 2.9.0, Core 2.5.0
 
 **W3C QT3: 207 failing of 31,331** (251 at 2.8.0) · **W3C XSLT 3.0: 216 failing of 11,539**.
