@@ -9,9 +9,12 @@ sort: 8
 The XQuery and XSLT engines compile and validate XSD 1.0 schemas through one shared layer in
 PhoenixmlDb.Core, the `PhoenixmlDb.Core.Schema` namespace. That layer reads every schema
 document, applies the limits, compiles, caches and validates, and it reports problems the same
-way whichever engine asked. XSD 1.1 is not supported. The only 1.1 features the layer handles
-are the `vc:` version-control markers and the 1.1 duration types (see
-[XSD 1.1](#xsd-1-1)). A schema that requires XSD 1.1 is refused with a message that says so.
+way whichever engine asked. The layer compiles schema documents as XSD 1.0: XSD 1.1 schema
+components such as assertions are not supported. The only 1.1 features the layer handles are the
+`vc:` version-control markers and the 1.1 duration types (see [XSD 1.1](#xsd-1-1)). A schema
+that requires XSD 1.1 is refused with a message that says so. The engines themselves follow XSD
+1.1 for the built-in types and regular expressions, which is why
+`system-property('xsl:xsd-version')` is `1.1`.
 
 This page describes PhoenixmlDb.Core 2.5.0, PhoenixmlDb.XQuery 2.9.0 and PhoenixmlDb.Xslt 2.9.0.
 
@@ -664,6 +667,15 @@ letter:
 A validation result can therefore change for a value that contains such characters.
 
 ### XSD 1.1
+
+Two parts of the system use XSD, and they use different versions:
+
+| Part | XSD version |
+|---|---|
+| The XQuery and XSLT engines: built-in types (`xs:dateTimeStamp` and the other 1.1 types), the lexical space of `xs:anyURI` (any string), regular-expression syntax | 1.1. `system-property('xsl:xsd-version')` reports `1.1`. |
+| The schema layer: compiling the schema documents a query or stylesheet imports, and validating against them | 1.0 |
+
+So a stylesheet can see `xsd-version` 1.1 and still have an XSD 1.1 schema refused.
 
 The schema processor is System.Xml's, which implements XSD 1.0. With
 `SchemaCompileOptions.Xsd11Compatibility` (on by default):
