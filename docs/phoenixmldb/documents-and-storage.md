@@ -338,6 +338,12 @@ A container query is evaluated in one of two ways:
   (`(collection()/book)[last()]`), or a shape the engine cannot prove to depend on one document at a
   time.
 
+A query that reads neither the context item nor `fn:collection()` (`1 + 1`, `"hello"`) is also
+evaluated once per document: on a container of three documents `1 + 1` returns `2` three times, and on
+an empty container it returns nothing. An empty container still compiles and checks the query, so an
+error in it is raised as it would be on a populated container (`$undeclared` → `XPST0008`, a syntax
+error → `XPST0003`, a query over a limit → its `PHXQL` code).
+
 In the evaluation once per document, `fn:collection()` returns only the current document. In the
 evaluation once over the container there is no context item: a query that starts from the context
 item (`/book`, `./title`) and also reads `fn:collection()` where the evaluation over the container is
