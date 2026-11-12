@@ -46,6 +46,8 @@ This version contains:
   `Raft:ProposalTimeoutMs` (default 5000). See [Cluster Mode](phoenixmldb/deployment/cluster-mode.md#the-result-of-a-write).
   A node stores its term and its vote in its Raft log first, and then acts on them (event 2025 when
   it cannot); a new leader starts its term with an empty entry (event 2024 when it cannot).
+  The default heartbeat is 100 ms and the default election timeout is 1000–2000 ms, so a leader
+  that fails is replaced in about 1–2 s. See [Cluster Mode: Timing](phoenixmldb/deployment/cluster-mode.md#timing).
 - **Reads during writes.** Every read of a document returns one committed version, whole. A read
   transaction from `BeginRead` and a query each read one committed state. Read transactions,
   running queries and reader slots have limits (`ReaderLimitException`), and both servers limit the

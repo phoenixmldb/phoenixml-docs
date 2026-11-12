@@ -60,8 +60,8 @@ Every setting can also come from the environment, which is often easier per node
 | `Raft:ClusterSecret` | | Required. At least 32 characters, the same on every node. |
 | `Raft:CertificatePath` / `CertificatePassword` | | Required. The TLS certificate this node presents to its peers. |
 | `Raft:LogPath` | `<DataPath>/raft` | The Raft log's own storage environment. |
-| `Raft:ElectionTimeoutMinMs` / `MaxMs` | `150` / `300` | Randomised between the two, so they must differ. |
-| `Raft:HeartbeatIntervalMs` | `50` | Must be well under the election timeout. |
+| `Raft:ElectionTimeoutMinMs` / `MaxMs` | `1000` / `2000` | Randomised between the two, so they must differ. See [Timing](#timing). |
+| `Raft:HeartbeatIntervalMs` | `100` | Must be well under the election timeout. |
 | `Raft:ProposalTimeoutMs` | `5000` | Must be positive; the server does not start otherwise. How long a write waits to be applied on the node that took it before it is answered "result not known". |
 
 Configuration is validated at **startup**, and bad values stop the server rather than degrading
@@ -69,6 +69,27 @@ it. Rejected: a missing `NodeId`, a node listing itself as a peer, duplicate pee
 addresses, a heartbeat interval at or above the election timeout, and identical minimum and
 maximum election timeouts. Raft relies on that randomisation to break ties; in lockstep, nodes
 can split the vote for a long time.
+
+An embedded host sets the same three values on `RaftConfiguration`, with the same defaults.
+
+### Timing
+
+A follower that hears nothing from the leader for its election timeout stands for election. So
+the election timeout must be longer than the **longest** delay on the network between the nodes,
+not only the typical one. With the defaults (a heartbeat every 100 ms, an election timeout of
+1000–2000 ms), a leader that fails is replaced in about 1–2 s.
+
+Measured on three machines on one Wi-Fi network, 20,000 writes per setting. Pings between the
+machines were mostly 2–5 ms, but reached 150–250 ms several times a minute:
+
+| Heartbeat | Election timeout | Elections after the cluster formed | Writes refused |
+|---|---|---|---|
+| 50 ms | 150–300 ms | 31–37 per node in 13 minutes | 47 |
+| 100 ms | 1000–2000 ms | 0 | 1 |
+
+On a network whose delays stay well under 100 ms (one data centre, wired), you may lower the
+election timeout for a faster failover, for example 300–600 ms with a 50 ms heartbeat. Measure the
+network's longest delays under load first. A cluster that sets the three values keeps them.
 
 ## Ports
 
