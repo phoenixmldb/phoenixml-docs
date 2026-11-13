@@ -234,6 +234,37 @@ each repo: [Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt/blob/main/RELE
 > exact for its own release; subtracting across a harness change compares different
 > measurements.
 
+### 3.1.0 (2026-11-12): XQuery and Xslt 3.1.0, Core 2.6.0
+
+**W3C QT3: 31 failing of 31,325** · **W3C XSLT 3.0: 131 failing of 11,539** (132 at 3.0.0,
+measured on a host in UTC).
+
+XQuery 3.1.0 requires Core 2.6.0; Xslt 3.1.0 requires XQuery 3.1.0 and Core 2.6.0. No breaking
+changes.
+
+**Security.** Hosts that compile or run untrusted queries or stylesheets must upgrade. See
+[GHSA-52r3-6pq9-42m5](https://github.com/phoenixmldb/phoenixmldb-xquery/security/advisories/GHSA-52r3-6pq9-42m5)
+(XQuery) and
+[GHSA-55vh-9gg8-hqc4](https://github.com/phoenixmldb/phoenixmldb-xslt/security/advisories/GHSA-55vh-9gg8-hqc4)
+(Xslt) for the details and workarounds.
+
+- **A limit on the length of a built string:** `QueryExecutionLimits.MaxStringLength` (XQuery),
+  `XsltTransformOptions.MaxStringLength` and `XsltTransformer.MaxStringLength` (Xslt). Over the
+  limit is `FOER0000`. See [Resource Policy: String Length](phoenixmldb/api-reference/resource-policy.md#string-length).
+- **`XsltTransformer.LastTransformStreamed`** tells whether the last transformation streamed. The
+  `--timing` label of the CLI comes from it.
+- **Streaming holds memory flat in more stylesheets:** the `TextReader` overloads and the CLI's
+  standard output stream; `accumulator-after()` of the document node, an absolute path in a
+  `match="/"` rule, and an aggregate over a value computed from each element stream. A streamed
+  `xsl:source-document` with `use-accumulators="#all"` runs the accumulators.
+- **A prefixed name parses in linear time:** 10,000 calls such as `fn:abs(1)` compile in 0.19 s.
+- **`fn:function-lookup` inside `xsl:evaluate` raises XTDE3160** for the XSLT-defined functions,
+  as a direct call does.
+
+The complete lists are in the release notes of
+[PhoenixmlDb.XQuery 3.1.0](https://github.com/phoenixmldb/phoenixmldb-xquery/releases/tag/v3.1.0)
+and [PhoenixmlDb.Xslt 3.1.0](https://github.com/phoenixmldb/phoenixmldb-xslt/releases/tag/v3.1.0).
+
 ### 3.0.0 (2026-11-04): XQuery and Xslt 3.0.0, Core 2.6.0
 
 **W3C QT3: 31 failing of 31,325** (207 at 2.9.0) · **W3C XSLT 3.0: 132 failing of 11,539** (216 at

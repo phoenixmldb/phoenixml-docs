@@ -260,6 +260,38 @@ resource, and a refused import reads as "not found", so neither reveals whether 
 | `MaxOutputSize` | 50 MB | 10 MB | Limit primary output size |
 | `MaxUnparsedTextLoads` | 0 (unlimited) | 50 | Limit `unparsed-text()` calls |
 
+## String Length
+
+`MaxOutputSize` limits only the serialized result. An expression can build a very large string
+from no input, faster than a time limit can cancel it, so a host that runs untrusted code sets a
+string-length limit as well as a time limit. The limit is not part of `ResourcePolicy`:
+
+| Engine | Setting | Default |
+|--------|---------|---------|
+| XQuery | `QueryExecutionLimits.MaxStringLength` | `null` (no limit) |
+| XSLT | `XsltTransformOptions.MaxStringLength`, `XsltTransformer.MaxStringLength` | `null` (no limit) |
+
+The value is the longest string, in UTF-16 code units, that one operation may build. An operation
+that goes past it raises `FOER0000`, which a query or stylesheet can catch with `try`/`catch`.
+
+- It applies to `concat`, `string-join`, `||`, string constructors, `codepoints-to-string`,
+  `replace`, `serialize`, `xml-to-json`, the case, URI and `normalize-unicode` functions, and the
+  text that node constructors join.
+- In XSLT it also applies to `xsl:value-of`, the content of `xsl:attribute`, `xsl:comment`,
+  `xsl:processing-instruction` and `xsl:namespace`, and attribute and text value templates.
+  `fn:transform` passes the limit to the transformation it starts.
+- `string-join`, `replace`, string constructors and node constructors stop before the string
+  passes the limit, so they do not allocate the full string.
+- The limit is per string, not per query. `QueryExecutionContext.CheckStringLength(long)` applies
+  it in host code and extension functions.
+
+```csharp
+var engine = new QueryEngine();
+var context = engine.CreateContext(limits: new QueryExecutionLimits { MaxStringLength = 1_000_000 });
+
+var transformer = new XsltTransformer { MaxStringLength = 1_000_000 };
+```
+
 ## XQuery
 
 The same `ResourcePolicy` works on `XQueryFacade`:
