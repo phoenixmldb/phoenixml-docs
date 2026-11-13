@@ -7,7 +7,7 @@ theme: modern
 analytics:
   ga4: G-FSCPKZ7RES
 social:
-  image: img/icon-256.png
-  card: summary
-  image-alt: Phoenixml logo
+  image: img/social-card.png
+  card: summary_large_image
+  image-alt: PhoenixmlDb logo with the text XQuery 4.0, XSLT 3.0 / 4.0, XML database for .NET
 favicon: favicon.png
