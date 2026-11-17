@@ -16,7 +16,7 @@ that requires XSD 1.1 is refused with a message that says so. The engines themse
 1.1 for the built-in types and regular expressions, which is why
 `system-property('xsl:xsd-version')` is `1.1`.
 
-This page describes PhoenixmlDb.Core 2.5.0, PhoenixmlDb.XQuery 2.9.0 and PhoenixmlDb.Xslt 2.9.0.
+This page describes PhoenixmlDb.Core 2.6.0, PhoenixmlDb.XQuery 3.1.0 and PhoenixmlDb.Xslt 3.1.0.
 
 ## Contents
 
@@ -44,7 +44,9 @@ validate strict { <o:order><o:qty>3</o:qty></o:order> } instance of schema-eleme
   directory. Each hint is tried in turn. If none loads, the error is `XQST0059`, and it lists why
   each hint failed. Under a [resource policy](resource-policy.md), each hint must be allowed for
   import, and so must every document the schema itself includes or imports. The exception is a
-  document that the policy's resource resolver supplies.
+  document that the policy's resource resolver supplies. With no resource policy, a schema
+  location is read through the engine's HTTP client, which stops a connect after 10 s; a timeout
+  is `XQST0059`.
 - **Static rules come first:** binding `xml` or `xmlns` is `XQST0070`, a prefix with an empty
   target namespace is `XQST0057`, and two imports of the same namespace are `XQST0058`.
 - **`validate`** (`strict`, `lax`, or `type`) validates a node against the imported schemas.

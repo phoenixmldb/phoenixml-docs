@@ -284,6 +284,8 @@ that goes past it raises `FOER0000`, which a query or stylesheet can catch with 
   passes the limit, so they do not allocate the full string.
 - The limit is per string, not per query. `QueryExecutionContext.CheckStringLength(long)` applies
   it in host code and extension functions.
+- The gRPC and EPS REST servers do not have a setting for this limit. An embedded host sets it in
+  code.
 
 ```csharp
 var engine = new QueryEngine();
