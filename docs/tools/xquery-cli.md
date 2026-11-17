@@ -188,7 +188,8 @@ xquery '
 
 ### Working with JSON Input
 
-Query JSON files using `json-doc()`:
+Query JSON files using `json-doc()`. A JSON object is a map and a JSON array is an array, so
+`?` selects from them. A relative path is resolved against the current directory.
 
 ```bash
 xquery '
@@ -196,6 +197,52 @@ xquery '
   return $data?settings?theme
 '
 ```
+
+Given `orders.json`:
+
+```json
+{"orders":[{"id":1,"total":12.5},{"id":2,"total":30}]}
+```
+
+```bash
+# Sum a field over all array members
+xquery 'sum(json-doc("orders.json")?orders?*?total)'
+# 4.25e1  (JSON numbers are xs:double)
+
+# JSON and XML in one query
+xquery 'count(json-doc("orders.json")?orders?*) || " orders, " || count(doc("catalog.xml")//product) || " products"'
+```
+
+Several JSON files, with `data/a.json` = `{"items":[{"name":"pen","price":2.5},{"name":"ink","price":7}]}`
+and `data/b.json` = `{"items":[{"name":"pad","price":4}]}`:
+
+```bash
+# One name per line, from every file
+xquery 'for $f in ("data/a.json", "data/b.json") return json-doc($f)?items?*?name'
+# pen
+# ink
+# pad
+
+# Filter across files
+xquery 'for $f in ("data/a.json", "data/b.json"), $i in json-doc($f)?items?*
+        where $i?price > 3
+        return $i?name || " " || $i?price'
+# ink 7
+# pad 4
+
+# Merge the items of every file into one JSON array
+xquery -o json 'array { for $f in ("data/a.json", "data/b.json") return json-doc($f)?items?* }'
+# [{"name":"pen","price":2.5},{"name":"ink","price":7},{"name":"pad","price":4}]
+
+# Every .json file in a folder: the shell gives the list as a parameter
+xquery -p "files=$(find data -name '*.json')" '
+  declare variable $files external;
+  for $f in tokenize(normalize-space($files), " ")
+  return json-doc($f)?items?*?name
+'
+```
+
+The `find` form splits the list on spaces, so it needs file names without spaces.
 
 ### Execution Plan
 
@@ -213,12 +260,19 @@ This shows the query plan before execution — useful for understanding performa
 xquery --timing '//product[price > 50]' large-catalog.xml
 ```
 
-Output (to stderr):
+Output (to stderr; the `load` line appears when the query has source documents):
 ```
-  parse:     1.2 ms
-  compile:   3.4 ms
-  execute:  12.8 ms  (15 results)
-  total:    17.4 ms
+  load:       276.6 ms  (1 document(s))
+  compile:   1142.0 ms
+  execute:    355.5 ms
+  total:     2512.0 ms
+  memory:  peak=61.61 MiB  allocated=3.58 MiB
+```
+
+`--timing` works with every source, for example JSON:
+
+```bash
+xquery --timing 'sum(json-doc("orders.json")?orders?*?total)'
 ```
 
 ### Validation Only
