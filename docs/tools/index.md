@@ -10,12 +10,18 @@ sort: 5
 
 | Tool | Purpose | Install |
 |------|---------|---------|
-| **[xslt](xslt-cli.md)** | Run XSLT 3.0/4.0 transformations | `dotnet tool install -g PhoenixmlDb.Xslt.Cli` |
-| **[xquery](xquery-cli.md)** | Execute XQuery expressions against XML | `dotnet tool install -g PhoenixmlDb.XQuery.Cli` |
+| **[xslt](xslt-cli.md)** | Run XSLT 3.0/4.0 transformations | `dotnet tool install -g xslt` |
+| **[xquery](xquery-cli.md)** | Execute XQuery expressions against XML | `dotnet tool install -g xquery4` |
 | **[crucible](crucible.md)** | Generate static documentation sites | `dotnet tool install -g crucible` |
 | **[docmd](docmd.md)** | Convert Word documents to Markdown | `dotnet tool install -g Docmd.Cli` |
 
 All four are .NET global tools — install once, use from anywhere on the command line.
+
+## XQuery and XSLT Modules
+
+| Modules | Purpose |
+|--------|---------|
+| **[JSON, XML, CSV, YAML](xquery-modules.md)** | Load, select, group, count, compare and convert JSON, XML, CSV and YAML; import by URL from `phoenixml.dev/modules/` |
 
 ## MCP Servers
 
@@ -32,8 +38,8 @@ MCP servers are also available as self-contained binaries — no .NET SDK requir
 
 ```bash
 # Install the tools
-dotnet tool install -g PhoenixmlDb.Xslt.Cli
-dotnet tool install -g PhoenixmlDb.XQuery.Cli
+dotnet tool install -g xslt
+dotnet tool install -g xquery4
 dotnet tool install -g Crucible.Cli
 
 # Transform XML to HTML

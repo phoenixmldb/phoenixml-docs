@@ -12,7 +12,7 @@ The `xslt` command-line tool transforms XML documents using XSLT 3.0/4.0 stylesh
 ## Installation
 
 ```bash
-dotnet tool install -g PhoenixmlDb.Xslt.Cli
+dotnet tool install -g xslt
 ```
 
 After installation, the `xslt` command is available globally.
