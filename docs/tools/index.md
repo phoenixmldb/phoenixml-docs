@@ -17,11 +17,11 @@ sort: 5
 
 All four are .NET global tools — install once, use from anywhere on the command line.
 
-## XQuery Modules
+## XQuery and XSLT Modules
 
-| Module | Purpose |
+| Modules | Purpose |
 |--------|---------|
-| **[JSON and XML modules](xquery-modules.md)** | Load, select, group, count and convert JSON and XML; import by URL from `phoenixml.dev/modules/` |
+| **[JSON, XML, CSV, YAML](xquery-modules.md)** | Load, select, group, count, compare and convert JSON, XML, CSV and YAML; import by URL from `phoenixml.dev/modules/` |
 
 ## MCP Servers
 
