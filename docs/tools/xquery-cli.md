@@ -12,7 +12,7 @@ The `xquery` command-line tool executes XQuery expressions against XML files, di
 ## Installation
 
 ```bash
-dotnet tool install -g PhoenixmlDb.XQuery.Cli
+dotnet tool install -g xquery4
 ```
 
 After installation, the `xquery` command is available globally.
