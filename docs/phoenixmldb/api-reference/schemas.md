@@ -16,7 +16,7 @@ that requires XSD 1.1 is refused with a message that says so. The engines themse
 1.1 for the built-in types and regular expressions, which is why
 `system-property('xsl:xsd-version')` is `1.1`.
 
-This page describes PhoenixmlDb.Core 2.6.0, PhoenixmlDb.XQuery 3.1.0 and PhoenixmlDb.Xslt 3.1.0.
+This page describes PhoenixmlDb.Core 2.6.1, PhoenixmlDb.XQuery 3.2.0 and PhoenixmlDb.Xslt 3.2.0.
 
 ## Contents
 
@@ -700,8 +700,9 @@ Such a schema fails with a message that names the document and the constructs:
 
 ```text
 The schema document 'urn:example:v11.xsd' requires XSD 1.1: it uses xs:assert (1) with no
-vc:minVersion guard. This processor implements XSD 1.0 and reads only the parts of a schema
-that are marked for it.
+vc:minVersion guard. This processor uses the XSD 1.1 built-in types, but compiles schema
+documents as XSD 1.0: it reads only the parts that vc:minVersion and vc:maxVersion leave to an
+XSD 1.0 processor.
 ```
 
 ---

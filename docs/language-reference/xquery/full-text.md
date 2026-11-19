@@ -1,213 +1,272 @@
 ---
 title: Full-Text Search
-description: "XQuery Full-Text — the contains text clause, match options, and phx: functions"
+description: "XQuery and XPath Full Text 3.0 — the contains text expression, match options, positional filters, scores and the phx: functions"
 sort: 10
 ---
 
 # Full-Text Search
 
-XQuery's built-in `contains()` function does exact substring matching. It finds `"data"` inside `"database"` but cannot search linguistically. XQuery Full Text adds language-aware matching: stemming, case-insensitive matching, and relevance scoring, evaluated as part of the query itself.
+XQuery's built-in `contains()` function does exact substring matching. It finds `"data"` inside
+`"database"` but cannot search by words. XQuery and XPath Full Text 3.0 adds word-based matching:
+stemming, case and diacritics options, stop words, thesauri, positional filters and relevance
+scores, evaluated as part of the query.
 
-> **Important — verify before relying on this page.** This page was corrected against the engine on `main` as of 2026-09-14. Two things are worth knowing before you use any of it:
->
-> 1. **The entry point is the `contains text` clause, not a function.** Earlier revisions of this page described an `ft:contains($node, "term")` function call. No such function has ever existed — compiling a query that calls it fails with `Unknown function: contains#2`. The real syntax is the W3C XQuery Full Text `contains text` clause shown below.
-> 2. **`contains text` fails at query-compile time before `PhoenixmlDb.XQuery` 1.8.0.** On earlier releases every `contains text` query — with or without match options — throws a `NullReferenceException` from `PhoenixmlDb.XQuery.Analysis.SchemaFeatureChecker.VisitStepExpression`, before the query runs. A plain, non-full-text predicate compiles and runs fine, so the failure is specific to `contains text`. Tracked as [`phoenixmldb-xquery#15`](https://github.com/phoenixmldb/phoenixmldb-xquery/issues/15) and fixed in **1.8.0**, which the engine now pins. On 1.8.0 and later the clause compiles and evaluates; verified by running the examples on this page through the published `xquery4` 1.8.0 tool.
+PhoenixmlDb.XQuery implements all of the Full Text 3.0 grammar and passes the 672 applicable cases
+of the W3C Full Text test suite (XQFTTS 1.0.4). The analyzer is built in: the library has no Lucene
+dependency.
 
-## contains text — The Basic Clause
+## contains text
 
-`contains text` is an XQuery expression, not a function: an operand (the node or nodes to search) on the left, the clause, then a full-text selection (what to look for) on the right.
+`contains text` is an expression, not a function: the nodes or strings to search on the left, then
+the full-text selection (what to look for) on the right.
 
 ```xquery
 (: Search the description element for "database" :)
 //book[description contains text "database"]
-```
 
-```xquery
-(: Search ALL text content of the book element :)
+(: Search all text of the book element :)
 //book[. contains text "xml query"]
-```
 
-```xquery
-(: Search with match options :)
+(: With match options :)
 //book[title contains text "xml" using stemming using case insensitive]
 ```
 
-### Searching Multiple Fields
+A string of several words is a phrase: the words must be adjacent and in order.
+`"the walrus and the carpenter" contains text "walrus carpenter"` is false.
+
+The search term can be computed. Put the expression in braces:
 
 ```xquery
-(: Search title OR description :)
-//book[title contains text "xml" or description contains text "xml"]
+declare variable $query external;
+//article[body contains text { $query }]
 ```
 
-### Using contains text in FLWOR Expressions
+`any`, `all`, `any word`, `all words` and `phrase` after the term choose how its words combine:
 
 ```xquery
-for $article in //article
-where $article/body contains text "machine learning"
-order by phx:score($article/body) descending
-return
-  <result>
-    <title>{ $article/title/text() }</title>
-    <score>{ phx:score($article/body) }</score>
-  </result>
+<b>machine learning</b> contains text { "learning machine" } all words   (: true :)
 ```
 
-`phx:score` takes the node, not the search term — see [phx:score()](#phxscore), below, for why.
+### Tokens and element boundaries
 
-> **This example does not produce useful output on 2.0.0.** `phx:score` returns `0.0` for every
-> node on this release, so the ordering is arbitrary and every `<score>` is `0`. Re-measured on the
-> published `xquery4` 2.0.0 tool: a `contains text` match that succeeds still scores `0`. The shape is
-> correct; the scores are not yet.
+Tokens follow the Unicode word boundaries (UAX #29). Tokens do not cross element tags, except where
+a letter or digit touches the tag on both sides: `<p><b>p</b>rototypes</p> contains text
+"prototypes"` is true. A paragraph ends at an element tag. A sentence ends at `.`, `!`, `?` and at the
+end of a paragraph.
+
+The same rule joins words across a tag: in `<d><p>xml</p><p>database</p></d>` the token is
+`xmldatabase`, so `contains text ("xml" ftand "database")` is false. Put space between the words.
+In a query, the default `declare boundary-space strip` removes the space between two constructed
+elements; write the space inside an element, `<p>xml </p><p> database</p>`.
 
 ---
 
-## Match Options
+## Match options
 
-Match options follow the search string and control how matching is performed, combined with successive `using` clauses. The grammar accepts more options than the engine currently acts on — each subsection below says which.
+Match options follow the search term, one `using` clause for each option. An option can also apply
+to one primary only: `("dog" using stemming) ftand "cat"`.
 
-### Language
+The defaults are those of Full Text 3.0 Appendix C:
 
-```xquery
-//article[. contains text "running" using language "en"]
-```
-
-Affects stemming rules and tokenization. **Functional.**
+| Option | Default | Other values |
+|---|---|---|
+| Stemming | `no stemming` | `using stemming` |
+| Case | `case insensitive` | `case sensitive`, `lowercase`, `uppercase` |
+| Diacritics | `diacritics insensitive` | `diacritics sensitive` |
+| Stop words | `no stop words` | `stop words ("a", …)`, `stop words at "uri"`, `stop words default`, with `union` and `except` |
+| Wildcards | `no wildcards` | `using wildcards` |
+| Thesaurus | `no thesaurus` | `thesaurus at "uri" relationship "…" N levels`, `thesaurus default`, `thesaurus ( … )` |
+| Language | none | `language "en"` |
 
 ### Stemming
 
 ```xquery
-(: Without stemming — only matches literal "running" :)
-//article[. contains text "running"]
-
-(: With stemming — matches "run", "runs", "running", "ran" :)
-//article[. contains text "running" using stemming]
+"running" contains text "run"                   (: false: no stemming by default :)
+"running" contains text "run" using stemming    (: true :)
 ```
 
-**Functional.**
+The stemmer is Porter (1980), for English.
 
-### Case Sensitivity
+### Case and diacritics
 
 ```xquery
-(: Default: case insensitive — matches "XML", "xml", "Xml" :)
-//doc[title contains text "xml"]
-
-(: Case sensitive — only matches exact case :)
-//doc[title contains text "XML" using case sensitive]
+"XML" contains text "xml"                                 (: true :)
+"XML" contains text "xml" using case sensitive            (: false :)
+"café" contains text "cafe"                               (: true :)
+"café" contains text "cafe" using diacritics sensitive    (: false :)
 ```
 
-**Functional.**
-
-### Diacritics, Wildcards, Stop Words, and Thesaurus — parsed, not applied
-
-The grammar also accepts `using diacritics sensitive`/`insensitive`, `using wildcards`/`no wildcards`, `using stop words (...)`/`using no stop words`, and `using thesaurus "file"`. All four parse without error and are carried into the query's AST — but none of them currently reach the analyzer that does the actual matching. A query like:
+### Wildcards
 
 ```xquery
-//doc[name contains text "cafe" using diacritics sensitive]
-//doc[. contains text "data" using wildcards]
-//doc[. contains text "the art of war" using stop words ("the", "of")]
-//doc[. contains text "fast" using thesaurus "thesaurus.xml"]
+"database" contains text "data.*" using wildcards         (: true :)
 ```
 
-compiles but behaves exactly as if the `using` clause were absent: diacritics are always folded,
-no glob expansion happens, no synonym is added, and **the analyzer's own stop-word handling is
-unaffected by what you wrote**. Treat these four as accepted-but-inert until the underlying
-analyzer is wired up.
+`.` matches one character; `.*`, `.+`, `.?` and `.{n,m}` match a number of characters.
 
-> **`using no stop words` does not give you exact phrase matching.** The analyzer removes stop
-> words regardless, and the option does not stop it. Re-measured on 2.0.0, `. contains text 'walrus
-> carpenter'` matches `<p>the walrus and the carpenter</p>` **with and without**
-> `using no stop words` — identical results. If you reach for this option to make a phrase
-> position-exact against the source text, it will silently not do that. See
-> [why the two phrase matchers differ](../../phoenixmldb/full-text-search.md#why-the-two-disagree-about-a-phrase).
+### Stop words
 
-Two syntax forms that look plausible are not supported at all — they fail to parse:
-
-- **There is no `using stop words default`.** The only stop-word forms the grammar accepts are an explicit list (`using stop words ("the", "a", "an")`) or `using no stop words`. There is no keyword for "use the language's built-in list" — and per above, even the explicit-list and no-stop-words forms don't currently change matching.
-- **There is no `using thesaurus at "file" relationship "type"`.** The grammar accepts exactly one string literal: `using thesaurus "thesaurus.xml"`. `at` and `relationship` are not part of it.
-
-### Combining Match Options
-
-Options are composable at the grammar level:
+Stop words apply to the **query** only (Full Text 3.0 §3.4.7). A stop word in the search term
+matches any one token of the text, and the text keeps all its tokens:
 
 ```xquery
-//article[body contains text "running"
-  using stemming
-  using case insensitive
-  using language "en"]
+"the walrus and the carpenter" contains text "the"                                   (: true :)
+"the walrus and the carpenter" contains text "walrus the the carpenter"
+    using stop words default                                                          (: true :)
+"the art of war" contains text "art the war" using stop words ("the")                (: true :)
 ```
+
+`stop words default` uses the host's default list (see [Stop word lists and thesauri](#stop-word-lists-and-thesauri)),
+else the built-in English list.
+
+### Thesaurus
+
+```xquery
+//doc[. contains text "fast" using thesaurus at "urn:example:thesaurus" relationship "UF"]
+```
+
+A thesaurus `at "uri"` comes from the host. With no resource for the URI the query gives FTST0018.
+
+### Defaults for a whole module
+
+`declare ft-option` in the prolog sets the default options of every `contains text` in the module:
+
+```xquery
+declare ft-option using stemming;
+"running" contains text "run"     (: true :)
+```
+
+### Extension options
+
+`using option prefix:name "value"` names an implementation option. The prefix must be declared
+(else XPST0081). Options in a namespace the processor does not know are ignored, as the
+specification requires.
 
 ---
 
-## Positional Filters
+## Logical combinations
 
-Positional filters constrain where and how search terms appear relative to each other, and follow the full-text selection (not the match options):
+`ftand`, `ftor`, `not in` and `ftnot` combine selections inside one `contains text`:
 
 ```xquery
-(: "introduction" must appear before "conclusion" :)
+//doc[. contains text ("xml" ftand "database")]
+//doc[. contains text ("xml" ftor "json")]
+//doc[. contains text ("database" ftand ftnot "relational")]
+//doc[. contains text ("mexico" not in "new mexico")]
+```
+
+`ftnot` is a unary prefix: `("database" ftnot "relational")` is a syntax error (XPST0003). Combine
+it with `ftand`.
+
+## Cardinality and weight
+
+```xquery
+"a b a" contains text "a" occurs at least 2 times                    (: true :)
+//doc[. contains text ("xml" weight {0.8}) ftor ("json" weight {0.2})]
+```
+
+`occurs exactly N times`, `at least`, `at most` and `from N to M times` are available. A weight must be
+between -1000 and 1000; outside it the query gives FTDY0016.
+
+## Positional filters
+
+Positional filters follow the selection, in any combination:
+
+```xquery
+(: "introduction", then "conclusion" :)
 //doc[. contains text ("introduction" ftand "conclusion") ordered]
 
-(: "xml" and "database" within 5 words of each other :)
+(: inside a window of 5 words :)
 //doc[. contains text ("xml" ftand "database") window 5 words]
+
+(: at most 3 words between them :)
+//doc[. contains text ("xml" ftand "database") distance at most 3 words]
+
+//doc[. contains text ("xml" ftand "database") same sentence]
+//doc[. contains text ("xml" ftand "database") different paragraph]
+//doc[title contains text "introduction" at start]
+//doc[title contains text "summary" at end]
+//doc[code contains text "xml" entire content]
 ```
 
-The grammar also defines `distance N words`, `same sentence`, `same paragraph`, `at start`, `at end`, and `entire content`. As with the match options above, this page has not verified which of these actually change matching versus parse-and-ignore — the `contains text` compile failure blocks testing all of them the same way. Confirm behavior against your own build before depending on a specific filter.
+`window N words` matches only words that are inside N words of each other: `"xml a b database"`
+matches `window 5 words`, and `"xml a b c d e f database"` does not.
 
----
+`same paragraph` and `different paragraph` use the paragraphs of the [token rules](#tokens-and-element-boundaries):
+`<d><p>xml </p><p> database</p></d>` matches `("xml" ftand "database") different paragraph`.
 
-## Logical Combinations
+## Ignoring content
 
-`ftand`, `ftor`, and `ftnot` combine search conditions inside a single full-text selection — they are not XPath's `and`/`or`, and don't need a repeated `contains text`:
+`without content` leaves out the text of the nodes that an expression selects. The expression is
+evaluated outside the searched node, so refer to the node by a variable:
 
 ```xquery
-(: Document must contain both "xml" and "database" :)
-//doc[. contains text ("xml" ftand "database")]
-
-(: Document contains "xml" or "json" :)
-//doc[. contains text ("xml" ftor "json")]
-
-(: Contains "database" but NOT "relational" :)
-//doc[. contains text ("database" ftand ftnot "relational")]
+for $a in //article
+where $a contains text "xml" without content $a//footnote
+return $a/title
 ```
 
-**`ftnot` is a unary prefix, not a binary infix.** Writing `("database" ftnot "relational")`
-is a parse error — `XPST0003: mismatched input 'ftnot' expecting ')'`. Combine it with `ftand`
-as above.
+## Extension selections
+
+`(# prefix:name #) { … }` wraps a selection. The prefix must be declared (else XPST0081). A pragma
+that the processor does not know is ignored, and the selection is evaluated as written:
+
+```xquery
+declare namespace ex = "urn:example";
+<a>xml</a> contains text (# ex:fuzzy #) { "xml" }    (: true :)
+```
 
 ---
 
-## Full-Text Functions
+## Scores
 
-These are ordinary functions in `https://schemas.phoenixml.dev/2026/functions` — unlike
-`contains text`, they use normal function-call syntax.
+`score` variables give the relevance of each match, a value between 0 and 1:
 
-> **`phx` is predeclared. You do not declare it.**
-> From `PhoenixmlDb.XQuery` 2.0.0 the engine binds `phx` on every query path, so the calls below
-> work with no prolog. A container's `DefaultNamespaces` and a query's own `declare namespace`
-> still take precedence, but a host can no longer rebind `phx` to a different URI — that is a
-> compile error.
+```xquery
+for $article score $s in //article[body contains text "machine learning"]
+order by $s descending
+return <result score="{ $s }">{ $article/title/text() }</result>
+```
 
-> **Renamed in 2.0.0 — the old names no longer compile.** Releases before 2.0.0 put these
-> functions in `http://www.w3.org/2007/xpath-full-text` with the prefix `ft`, which had to be
-> declared. That namespace is retired and there are no aliases, so a query using it fails at
-> compile time rather than behaving differently.
->
-> | before 2.0.0 | 2.0.0 and later |
-> |---|---|
-> | `phx:stem` | `phx:stem` |
-> | `phx:tokenize` | `phx:tokenize` |
-> | `phx:score` | `phx:score` |
-> | `phx:is-stop-word` | `phx:is-stop-word` |
-> | `phx:thesaurus-lookup` | `phx:thesaurus-lookup` |
-> | `dbxml:metadata` | `phx:metadata` |
->
-> The old namespace was the W3C's own — used by the Full Text specification for its schemas — so
-> it carried a false suggestion that these were standard, portable functions. They never were,
-> and they are not now: **no other XQuery processor provides them.**
+```xquery
+let score $s := $doc contains text "xml"
+return $s
+```
 
-**Provenance.** The examples in this section were **not** covered by this page's original sample
-verification. They were re-verified against engine `4231a6b` with `PhoenixmlDb.XQuery` 1.8.0 on
-2026-09-14, and re-run under the `phx` names against the **published `xquery4` 2.0.0** on
-2026-09-15. The signatures and outputs below are what those runs produced.
+Over `(<p>xml xml</p>, <p>xml</p>)`, the scores are `0.667` and `0.5`.
+
+---
+
+## Stop word lists and thesauri
+
+A stop word list `at "uri"` and a thesaurus `at "uri"` come from the host, through
+`IFullTextResourceResolver` (`QueryEngine.FullTextResources`):
+
+```csharp
+using PhoenixmlDb.XQuery.FullText;
+
+var resources = new FullTextResources()
+    .AddStopWords("urn:example:stop", ["the", "a", "an"])
+    .AddThesaurus("urn:example:thesaurus", FullTextThesaurus.Load(XDocument.Load("thesaurus.xml")));
+resources.StopWordsByDefault = ["the", "a", "an", "of"];   // for "using stop words default"
+
+var engine = new QueryEngine { FullTextResources = resources };
+```
+
+`FullTextThesaurus` loads the W3C test format and its own format. With no resource for a URI, a stop
+word list gives FTST0008 and a thesaurus gives FTST0018.
+
+## Errors
+
+The errors that the specification names: FTST0008, FTST0009, FTST0013, FTST0018, FTST0019, FTDY0016,
+FTDY0017, FTDY0020 and XQST0089, plus XPST0003, XPTY0004 and XPST0081 where they apply.
+
+---
+
+## The phx: functions
+
+These functions are in `https://schemas.phoenixml.dev/2026/functions`, with the prefix `phx`, which
+every query has without a declaration. **No other XQuery processor provides them.**
 
 ### phx:stem()
 
@@ -227,18 +286,14 @@ phx:tokenize($text as xs:string?) as xs:string*
 phx:tokenize($text as xs:string?, $language as xs:string) as xs:string*
 ```
 
-Breaks text into tokens **using the same analyzer `contains text` uses** — which is what makes it
-useful: it shows you the stream your phrase queries are actually matched against.
+Gives the tokens of a full-text **index**: lower case, with stop words removed.
 
 ```xquery
-phx:tokenize("Hello, world! This is a test.")
-(: ("hello", "world", "test") :)
+phx:tokenize("Hello, world! This is a test.")   (: ("hello", "world", "test") :)
 ```
 
-**Tokens are lower-cased, and stop words are dropped.** `This`, `is` and `a` do not survive. If a
-phrase query is matching more than you expect, running the text through `phx:tokenize` will usually
-show you why — see
-[why the two phrase matchers differ](../../phoenixmldb/full-text-search.md#why-the-two-disagree-about-a-phrase).
+`contains text` keeps stop words in the text, so these tokens are not the tokens that a
+`contains text` phrase is matched against.
 
 ### phx:is-stop-word()
 
@@ -246,29 +301,8 @@ show you why — see
 phx:is-stop-word($word as xs:string) as xs:boolean
 ```
 
-**One argument, not two.** A two-argument call fails with `XPST0017: Unknown function:
-is-stop-word#2`.
-
-Re-measured on the published `xquery4` **2.0.0** tool, the result is sharper than "inaccurate":
-the function returns `false` for every stop word and `true` only for input containing no letters.
-
-| call | result | | call | result |
-|---|---|---|---|---|
-| `phx:is-stop-word("the")` | `false` | | `phx:is-stop-word("123")` | `true` |
-| `phx:is-stop-word("a")` | `false` | | `phx:is-stop-word("!!!")` | `true` |
-| `phx:is-stop-word("of")` | `false` | | `phx:is-stop-word("")` | `true` |
-
-Meanwhile `phx:tokenize("the quick brown fox jumps over the lazy dog")` returns
-`quick|brown|fox|jumps|over|lazy|dog` — both instances of `the` removed. **This function and the
-analyzer do not agree**, so do not use it to predict what `phx:tokenize` or `contains text` will
-do. In effect it tests "produced no letters", not "is a stop word". Tracked as
-[`phoenixmldb-xquery#70`](https://github.com/phoenixmldb/phoenixmldb-xquery/issues/70).
-
-**On 2.0.0 this is a wiring bug, not a difference of configuration.** The two paths select
-different built-in analyzers by accident: `phx:is-stop-word` analyzes with stemming off, which
-picks an analyzer that has no stop-word filter at all, so every word produces a token and the
-answer is always `false`. `contains text` and `phx:tokenize` run with stemming on, which picks the
-English analyzer, and that one does remove stop words.
+True for a word in the built-in English stop word list: `phx:is-stop-word("the")` is true,
+`phx:is-stop-word("walrus")` is false.
 
 ### phx:score()
 
@@ -276,13 +310,14 @@ English analyzer, and that one does remove stop words.
 phx:score($node as node()) as xs:double
 ```
 
-Takes **one argument** — the node — not the node and a search term.
+The score of the last `contains text` match on the node. It is `0` for a node that no `contains text`
+matched. A `score` variable gives the same value with standard syntax.
 
-> **Scores are `0.0` on 2.0.0.** `phx:score` returns `0.0` even immediately after a matching
-> `contains text` on the same node, so a `where $score > 0` filter returns nothing at all. Treat
-> scoring as not working on this release. Tracked as
-> [`phoenixmldb-xquery#71`](https://github.com/phoenixmldb/phoenixmldb-xquery/issues/71); not a
-> documentation defect.
+```xquery
+for $p in (<p>xml</p>, <p>json</p>)
+where $p contains text "xml"
+return phx:score($p)    (: 0.5 :)
+```
 
 ### phx:thesaurus-lookup()
 
@@ -291,90 +326,25 @@ phx:thesaurus-lookup($term as xs:string) as xs:string*
 phx:thesaurus-lookup($term as xs:string, $relationship as xs:string) as xs:string*
 ```
 
-**The term comes first.** An earlier revision of this page documented
-`phx:thesaurus-lookup($thesaurus, $term)`, taking a thesaurus file as the first argument. Called
-that way it returns an empty sequence.
+The term comes first. `phx:thesaurus-lookup("fast")` gives `("quick", "rapid", "swift", "speedy")`
+from the built-in list.
 
 ---
 
-## Practical Examples
+## For hosts
 
-> **Every example in this section that uses `phx:score` is shape-correct and does not work on
-> 2.0.0.** Scores come back `0.0` for every node, so an `order by` on them is arbitrary and a
-> `where $score > 0` filter returns **nothing at all**. They are kept because the query shape is
-> right and will start working when scoring does. No prolog declaration is needed: `phx` is predeclared.
-
-### Document Search with Scoring
-
-```xquery
-declare variable $query external;
-
-for $doc in collection("documents")
-where $doc contains text { $query } using stemming using language "en"
-let $score := phx:score($doc)
-where $score > 0
-order by $score descending
-return
-  <result score="{ $score }">
-    <title>{ $doc//title/text() }</title>
-  </result>
-```
-
-Note the `{ $query }` form: a full-text selection can be a computed string (`{ expr }`), not only a string literal, so the search term can come from a variable.
-
-### Content Management — Search and Highlight
-
-```xquery
-declare function local:search-articles(
-  $terms as xs:string,
-  $max-results as xs:integer
-) as element(results) {
-  let $matches :=
-    for $article in collection("cms")/article
-    where $article/body contains text { $terms } using stemming using case insensitive using language "en"
-    let $score := phx:score($article/body)
-    order by $score descending
-    return $article
-  return
-    <results total="{ count($matches) }">
-    {
-      for $m in subsequence($matches, 1, $max-results)
-      return
-        <article id="{ $m/@id }">
-          <title>{ $m/title/text() }</title>
-        </article>
-    }
-    </results>
-};
-
-local:search-articles("machine learning neural networks", 10)
-```
-
-### Multi-Language Search
-
-```xquery
-declare function local:search(
-  $collection as xs:string,
-  $terms as xs:string,
-  $lang as xs:string
-) as element()* {
-  for $doc in collection($collection)
-  where $doc contains text { $terms } using stemming using language { $lang }
-  let $score := phx:score($doc)
-  order by $score descending
-  return $doc
-};
-
-(: English search — "running" matches "run" :)
-local:search("articles-en", "running databases", "en")
-```
-
----
-
-## Full-text index acceleration
-
-On 1.8.0 and later, `contains text` evaluates by scanning; it does not consult PhoenixmlDb's Lucene-backed full-text index. That index exists (see [Full-Text Search](../../phoenixmldb/full-text-search.md) in the PhoenixmlDb section) but is reached through `IndexManager.SearchFullText`, a separate C# entry point — not through this XQuery clause. Accelerating `contains text` with that index is planned but not built, and has a documented prerequisite: the index matches phrases more strictly than `contains text` itself does, so using it as a naive candidate source would silently drop matches the scanning evaluator would otherwise confirm.
+- **Analyzers.** `IFullTextAnalyzer` and `FullTextAnalyzerRegistry` (`QueryEngine.FullTextAnalyzers`)
+  let a host register an analyzer for a language. `contains text`, `phx:tokenize` and `phx:stem`
+  use the registry, and `FullTextEngine.Analyze(text, options, registry)` lets an index use the same
+  one.
+- **Index candidates.** `IFullTextCandidateSource` (`QueryEngine.FullTextCandidates`) lets an index
+  rule out items so that the evaluator does not read them. `contains text` skips only the items that the source rules out,
+  so the results do not change. The source must give at least the candidates that the evaluator
+  matches. `FullTextAnalysisOptions.FoldDiacritics` makes index tokens that find the candidates of
+  a diacritics-insensitive query.
 
 ## See also
 
-- [PhoenixmlDb Full-Text Search](../../phoenixmldb/full-text-search.md) — the Lucene-backed index this page's `contains text` does not (yet) use
+- [PhoenixmlDb Full-Text Search](../../phoenixmldb/full-text-search.md) — the full-text index of the
+  database
+- [W3C XQuery and XPath Full Text 3.0](https://www.w3.org/TR/xpath-full-text-30/)
