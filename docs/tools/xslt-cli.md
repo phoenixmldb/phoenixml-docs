@@ -45,7 +45,8 @@ command | xslt [options] <stylesheet>
 | `--dry-run` | | Parse and compile only — validate without executing |
 | `--stream` | | Use streaming for large files (lower memory usage) |
 | `--no-stream` | | Evaluate against an in-memory tree even when the stylesheet's initial mode is streamable |
-| `--strict-streaming` | | Report `XTSE3430` for a template in a streamable mode, or an `xsl:source-document streamable="yes"` body, that is not guaranteed streamable by the rules of XSLT 3.0 §19.8, instead of running it on a buffered copy. No effect with `--no-stream`. |
+| `--strict-streaming` | | Report `XTSE3430` also where the streamability answer depends on a construct that the analysis does not model. No effect with `--no-stream` or `--streaming-fallback`. |
+| `--streaming-fallback` | | Run a template in a streamable mode, or an `xsl:source-document streamable="yes"` body, that is not guaranteed streamable on a buffer of the input it reads, instead of reporting `XTSE3430`. Memory then grows with what is buffered. |
 | `--verbose` | `-v` | Show detailed error information (stack traces) |
 | `--help` | `-h` | Show help message |
 | `--version` | | Show version information |
@@ -185,9 +186,37 @@ xslt --stream style.xsl large-input.xml
 xslt --stream -o result.html style.xsl large-input.xml
 ```
 
-A template in a streamable mode that is not streamable does not stop the transformation: by default it runs on a buffered copy of the subtree it matched, with the same result, so memory use grows with that subtree. `--strict-streaming` reports such a template as `XTSE3430` instead.
+A template rule in a streamable mode, or an `xsl:source-document streamable="yes"` body, that is
+not guaranteed streamable by the rules of XSLT 3.0 §19.8 gives `XTSE3430` at compile time. The
+analysis applies the posture and sweep rules: a `preceding-sibling` or other roaming axis,
+`reverse()`, sorting streamed nodes, a step down from a parent (`../item`), a leading `/` in the
+rule of an element, and two instructions that read the children of the matched node are reported.
+It accepts a few constructs beyond those rules that the engine streams correctly (a union of two
+child selections, one `xsl:fork` branch that returns streamed nodes while no other branch reads the
+input, `current-group()` anywhere in a group of copied nodes).
 
-Since 2.9.0, `--strict-streaming` applies the streamability analysis of the specification (the posture and sweep rules of XSLT 3.0 §19.8) to every template rule of a streamable mode and to every `xsl:source-document streamable="yes"` body: a `preceding-sibling` or other roaming axis, `reverse()`, sorting streamed nodes, a step down from a parent (`../item`) or a leading `/` in the rule of an element are reported. It accepts a few constructs beyond those rules that the engine streams correctly (a union of two child selections, one `xsl:fork` branch that returns streamed nodes while no other branch reads the input, `current-group()` anywhere in a group of copied nodes). It does not check stylesheet functions against their `streamability` category, nor that `xsl:apply-templates` names a streamable mode. In 2.8.0 the check found one pattern only, a template with more than one instruction that reads the children of the matched node, so a stylesheet that passed it can fail in 2.9.0.
+By default the check reports only the answers that it is certain of; where the answer depends on a
+construct that the analysis does not model, the template runs on a buffered copy.
+`--strict-streaming` reports those too.
+
+A template rule whose body is `xsl:call-template` reads the context node (§19.8.4.9), unless the
+called template declares `<xsl:context-item use="prohibited"/>`. To call such a template from a
+streamable mode, give it a copy of the node:
+
+```xml
+<xsl:template match="item">
+  <xsl:for-each select="copy-of(.)">
+    <xsl:call-template name="render"/>
+  </xsl:for-each>
+</xsl:template>
+```
+
+To run a stylesheet that is not streamable as it is, use `--streaming-fallback`: each such template
+runs on a buffer of the input it reads, with the same result, and memory grows with that buffer.
+
+```bash
+xslt --streaming-fallback style.xsl large-input.xml
+```
 
 ## Real-World Workflows
 

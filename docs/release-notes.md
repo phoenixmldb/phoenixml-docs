@@ -234,6 +234,56 @@ each repo: [Xslt](https://github.com/phoenixmldb/phoenixmldb-xslt/blob/main/RELE
 > exact for its own release; subtracting across a harness change compares different
 > measurements.
 
+### 3.2.0 (2026-11-18): XQuery and Xslt 3.2.0, Core 2.6.1
+
+**W3C QT3: 31 failing of 31,325** · **W3C XSLT 3.0: 57 failing of 11,518 applicable** (131 of
+11,539 at 3.1.0; the applicable count leaves out the XSLT 1.0 and 2.0 cases and the cases ruled not
+applicable) · **W3C Full Text (XQFTTS 1.0.4): 672 of the 672 applicable cases** (271 of 685 at
+3.1.0).
+
+XQuery 3.2.0 requires Core 2.6.1; Xslt 3.2.0 requires XQuery 3.2.0 and Core 2.6.1. The `xquery4`
+and `xslt` tools, `phxspec` and the two MCP servers ship at 3.2.0.
+
+**Security.** Hosts that use a `ResourcePolicy` whose allowed roots untrusted parties can write to,
+and hosts that run queries on a thread with a large stack and no step or depth limit, must upgrade.
+See the release notes of
+[PhoenixmlDb.XQuery 3.2.0](https://github.com/phoenixmldb/phoenixmldb-xquery/releases/tag/v3.2.0)
+and [PhoenixmlDb.Xslt 3.2.0](https://github.com/phoenixmldb/phoenixmldb-xslt/releases/tag/v3.2.0).
+
+**Breaking changes** — read the release notes when you upgrade:
+
+- `contains text` uses the defaults of Full Text 3.0: no stemming, no stop words, diacritics
+  insensitive. `"running" contains text "run"` is false; write `using stemming`. The public
+  full-text syntax tree types change shape.
+- A stylesheet that is not guaranteed streamable gives `XTSE3430` by default. To run it on a buffer,
+  set `StreamingFallback` (`xslt --streaming-fallback`). See [xslt CLI: Streaming](tools/xslt-cli.md#streaming).
+- A component of a used package is visible only as `xsl:use-package` and `xsl:accept` give it
+  (XSLT 3.0 §3.5.3.2), and `xsl:accept` names a function with its arity.
+- An `as=` type name that no schema in scope defines gives `XPST0051`.
+- A relative URI with no base URI gives an error and does not read from the working directory.
+- `fn:serialize` with no method uses the xml method. Indented XML output has the layout of Saxon:
+  an empty element is `<e/>`.
+- The `xquery4` tool gives exit code 1 for a source that cannot be loaded; the `xslt` tool refuses
+  an unknown option.
+- `QueryEngine.Compile` has overloads that take a `CancellationToken` (analyzer warning CA2016 for
+  a caller that does not pass one).
+
+**New:**
+
+- **All of XQuery and XPath Full Text 3.0**, with no Lucene dependency: match options on each
+  primary, `weight`, `occurs … times`, every positional filter, `without content`, `score`
+  variables, stop word lists and thesauri by URI from the host. See
+  [Full-Text Search](language-reference/xquery/full-text.md).
+- **Directory collections:** `collection("file:///data/?select=*.json;recurse=yes")`, with the
+  parameters of Saxon.
+- **JSON sources in the `xquery4` tool:** a `.json` file is its map or array.
+- **Streaming holds memory flat in more stylesheets:** streamed `copy-of()` in a variable,
+  `count(copy-of(…))` and nested `xsl:apply-templates` stay near 100 MiB over 1,000,000 items.
+
+The complete lists are in the release notes of
+[PhoenixmlDb.XQuery 3.2.0](https://github.com/phoenixmldb/phoenixmldb-xquery/releases/tag/v3.2.0)
+and [PhoenixmlDb.Xslt 3.2.0](https://github.com/phoenixmldb/phoenixmldb-xslt/releases/tag/v3.2.0).
+
 ### 3.1.0 (2026-11-12): XQuery and Xslt 3.1.0, Core 2.6.0
 
 **W3C QT3: 31 failing of 31,325** · **W3C XSLT 3.0: 131 failing of 11,539** (132 at 3.0.0,
