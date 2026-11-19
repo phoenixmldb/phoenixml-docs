@@ -52,27 +52,34 @@ command | xquery [options] <expression>
 | Code | Meaning |
 |------|---------|
 | 0 | Success |
-| 1 | Usage error |
+| 1 | Usage error, or a source that cannot be loaded |
 | 2 | Parse error |
 | 3 | Runtime error |
 
+A source that cannot be loaded writes one line, `Error: Cannot load source '<s>': <reason>`, and
+exits with code 1. `--verbose` adds the stack trace.
+
 ## Source Documents
 
-The `xquery` tool supports three types of source input:
+The `xquery` tool supports these types of source input:
 
 | Source | Description |
 |--------|-------------|
-| **File** | Path to an XML file — loaded as a `doc()` target |
-| **Directory** | Path to a directory — all `*.xml` files loaded |
+| **XML file** | Loaded as a document, a `doc()` target |
+| **JSON file** (`.json`) | Loaded as its map or array, as `json-doc()` gives it |
+| **Directory** | All `*.xml` files as documents, then all `*.json` files as maps or arrays, subfolders included |
 | **URL** | HTTP/HTTPS URL — XML fetched from the network |
+| **stdin** | Read as JSON when it starts with `{` or `[`, else as XML |
 
-When a **single source** is provided, it becomes the context item (`.`), so you can write XPath directly:
+The **first source** is the context item (`.`), so you can write a path directly:
 
 ```bash
 xquery '//title' books.xml
+xquery '?items?*?name' data/a.json
 ```
 
-**All sources** are available via `doc($uri)` by their path or URL. `collection()` returns all loaded documents.
+**All sources** are available via `doc($uri)` by their path or URL. `collection()` returns the
+loaded documents, then the JSON items.
 
 ## Examples
 
@@ -234,15 +241,25 @@ xquery 'for $f in ("data/a.json", "data/b.json"), $i in json-doc($f)?items?*
 xquery -o json 'array { for $f in ("data/a.json", "data/b.json") return json-doc($f)?items?* }'
 # [{"name":"pen","price":2.5},{"name":"ink","price":7},{"name":"pad","price":4}]
 
-# Every .json file in a folder: the shell gives the list as a parameter
-xquery -p "files=$(find data -name '*.json')" '
-  declare variable $files external;
-  for $f in tokenize(normalize-space($files), " ")
-  return json-doc($f)?items?*?name
-'
 ```
 
-The `find` form splits the list on spaces, so it needs file names without spaces.
+Every JSON file in a folder, with `a.json` in `data/` and `b.json` in `data/sub/`: give the folder as
+a source, or read it from the query with `uri-collection` and the directory parameters of Saxon
+(`select`, `match`, `recurse`, `on-error`, `content-type`):
+
+```bash
+# The folder as a source: collection() gives its documents, then its JSON items
+xquery 'for $j in collection()[. instance of map(*)] return $j?items?*?name' data
+# pen
+# ink
+# pad
+
+# From the query, with a glob and subfolders
+xquery 'for $u in uri-collection("data/?select=*.json;recurse=yes") return json-doc($u)?items?*?name'
+# pen
+# ink
+# pad
+```
 
 ### Execution Plan
 
